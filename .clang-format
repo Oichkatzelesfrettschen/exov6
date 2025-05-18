@@ -1,0 +1,5 @@
+BasedOnStyle: LLVM
+Language: C
+Standard: c23
+IndentWidth: 2
+
