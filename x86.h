@@ -114,6 +114,16 @@ static inline uint64 rcr2(void) {
 static inline void lcr3(uint64 val) {
   asm volatile("movq %0,%%cr3" : : "r"(val));
 }
+
+static inline uint64 rcr3(void) {
+  uint64 val;
+  asm volatile("movq %%cr3,%0" : "=r"(val));
+  return val;
+}
+
+static inline void invlpg(void *addr) {
+  asm volatile("invlpg (%0)" : : "r"(addr) : "memory");
+}
 #else
 static inline uint rcr2(void) {
   uint val;
@@ -123,6 +133,16 @@ static inline uint rcr2(void) {
 
 static inline void lcr3(uint val) {
   asm volatile("movl %0,%%cr3" : : "r"(val));
+}
+
+static inline uint rcr3(void) {
+  uint val;
+  asm volatile("movl %%cr3,%0" : "=r"(val));
+  return val;
+}
+
+static inline void invlpg(void *addr) {
+  asm volatile("invlpg (%0)" : : "r"(addr) : "memory");
 }
 #endif
 

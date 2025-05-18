@@ -318,6 +318,29 @@ clearpteu(pde_t *pgdir, char *uva)
   *pte &= ~PTE_U;
 }
 
+int
+insert_pte(pde_t *pgdir, void *va,
+#ifdef __x86_64__
+           uint64 pa,
+#else
+           uint pa,
+#endif
+           int perm)
+{
+  pte_t *pte;
+
+  if ((pte = walkpgdir(pgdir, va, 1)) == 0)
+    return -1;
+  pte_t val = pa | PTE_P;
+  if (perm & PERM_W)
+    val |= PTE_W;
+  if (perm & (PERM_R | PERM_W | PERM_X))
+    val |= PTE_U;
+  *pte = val;
+  invlpg(va);
+  return 0;
+}
+
 // Given a parent process's page table, create a copy
 // of it for a child.
 pde_t*

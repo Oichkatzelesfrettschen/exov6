@@ -139,6 +139,11 @@ struct segdesc {
 #define PTE_U 0x004  // User
 #define PTE_PS 0x080 // Page Size
 
+// Permission flags for user page mappings
+#define PERM_R 0x1
+#define PERM_W 0x2
+#define PERM_X 0x4
+
 // Address in page table or page directory entry
 #ifdef __x86_64__
 #define PTE_ADDR(pte) ((uint64)(pte) & ~0xFFF)

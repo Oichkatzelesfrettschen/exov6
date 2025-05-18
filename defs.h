@@ -198,6 +198,11 @@ int             copyout(pde_t*, uint64, void*, uint);
 int             copyout(pde_t*, uint, void*, uint);
 #endif
 void            clearpteu(pde_t *pgdir, char *uva);
+#ifdef __x86_64__
+int             insert_pte(pde_t*, void*, uint64, int);
+#else
+int             insert_pte(pde_t*, void*, uint, int);
+#endif
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
