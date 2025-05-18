@@ -8,7 +8,11 @@
 
 static void startothers(void);
 static void mpmain(void)  __attribute__((noreturn));
+#ifdef __x86_64__
+extern pml4e_t *kpgdir;
+#else
 extern pde_t *kpgdir;
+#endif
 extern char end[]; // first address after kernel loaded from ELF file
 
 // Bootstrap processor starts running C code here.
@@ -57,7 +61,11 @@ mpmain(void)
   scheduler();     // start running processes
 }
 
+#ifdef __x86_64__
+pml4e_t entrypgdir[];  // For entry.S
+#else
 pde_t entrypgdir[];  // For entry.S
+#endif
 
 // Start the non-boot (AP) processors.
 static void
@@ -72,7 +80,11 @@ startothers(void)
   // The linker has placed the image of entryother.S in
   // _binary_entryother_start.
   code = P2V(0x7000);
+#ifdef __x86_64__
+  memmove(code, _binary_entryother_start, (uint64)_binary_entryother_size);
+#else
   memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
+#endif
 
   for(c = cpus; c < cpus+ncpu; c++){
     if(c == mycpu())  // We've started already.
@@ -100,7 +112,11 @@ startothers(void)
 // PTE_PS in a page directory entry enables 4Mbyte pages.
 
 __attribute__((__aligned__(PGSIZE)))
+#ifdef __x86_64__
+pml4e_t entrypgdir[NPDENTRIES] = {
+#else
 pde_t entrypgdir[NPDENTRIES] = {
+#endif
   // Map VA's [0, 4MB) to PA's [0, 4MB)
   [0] = (0) | PTE_P | PTE_W | PTE_PS,
   // Map VA's [KERNBASE, KERNBASE+4MB) to PA's [0, 4MB)
