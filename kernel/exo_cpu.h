@@ -1,5 +1,5 @@
 #pragma once
 #include "exo_mem.h"
-#include <stdint.h>
+#include "../exo.h"
 
-int exo_yield_to(cap_t target);
+int exo_yield_to(exo_cap target);

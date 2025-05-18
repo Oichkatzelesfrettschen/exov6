@@ -16,6 +16,7 @@ struct sleeplock;
 struct stat;
 struct superblock;
 struct exo_cap;
+struct exo_blockcap;
 
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
@@ -207,6 +208,8 @@ int copyout(pde_t *, uint, void *, uint);
 void            clearpteu(pde_t *pgdir, char *uva);
 struct exo_cap  exo_alloc_page(void);
 int             exo_unbind_page(struct exo_cap);
+struct exo_blockcap exo_alloc_block(uint dev);
+void            exo_bind_block(struct exo_blockcap *, struct buf *, int);
 
 void clearpteu(pde_t *pgdir, char *uva);
 

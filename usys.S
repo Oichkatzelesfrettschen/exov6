@@ -41,4 +41,6 @@ SYSCALL(uptime)
 SYSCALL(set_timer_upcall)
 SYSCALL(exo_alloc_page)
 SYSCALL(exo_unbind_page)
+SYSCALL(exo_alloc_block)
+SYSCALL(exo_bind_block)
 

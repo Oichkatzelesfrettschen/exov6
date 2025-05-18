@@ -31,6 +31,8 @@ int uptime(void);
 int set_timer_upcall(void (*handler)(void));
 exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
+int exo_alloc_block(uint dev, exo_blockcap *cap);
+int exo_bind_block(exo_blockcap *cap, void *data, int write);
 
 
 // ulib.c

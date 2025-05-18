@@ -6,6 +6,11 @@ typedef struct exo_cap {
   uint pa;
 } exo_cap;
 
+typedef struct exo_blockcap {
+  uint dev;
+  uint blockno;
+} exo_blockcap;
+
 exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap c);
 

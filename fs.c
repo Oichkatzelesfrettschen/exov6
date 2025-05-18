@@ -20,6 +20,7 @@
 #include "fs.h"
 #include "buf.h"
 #include "file.h"
+#include "exo.h"
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
@@ -75,6 +76,45 @@ balloc(uint dev)
     brelse(bp);
   }
   panic("balloc: out of blocks");
+}
+
+// Allocate a zeroed disk block and return a capability for it.
+struct exo_blockcap
+exo_alloc_block(uint dev)
+{
+  struct exo_blockcap cap = {0, 0};
+  int b, bi, m;
+  struct buf *bp = 0;
+
+  for (b = 0; b < sb.size; b += BPB) {
+    bp = bread(dev, BBLOCK(b, sb));
+    for (bi = 0; bi < BPB && b + bi < sb.size; bi++) {
+      m = 1 << (bi % 8);
+      if ((bp->data[bi / 8] & m) == 0) {
+        bp->data[bi / 8] |= m;
+        log_write(bp);
+        brelse(bp);
+        bzero(dev, b + bi);
+        cap.dev = dev;
+        cap.blockno = b + bi;
+        return cap;
+      }
+    }
+    brelse(bp);
+  }
+
+  panic("exo_alloc_block: out of blocks");
+}
+
+// Perform direct I/O on the given buffer using a capability.
+void
+exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
+{
+  buf->dev = cap->dev;
+  buf->blockno = cap->blockno;
+  if (write)
+    buf->flags |= B_DIRTY;
+  iderw(buf);
 }
 
 // Free a disk block.
