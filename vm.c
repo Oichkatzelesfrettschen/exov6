@@ -67,8 +67,8 @@ mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
   char *a, *last;
   pte_t *pte;
 
-  a = (char*)PGROUNDDOWN((uint)va);
-  last = (char*)PGROUNDDOWN(((uint)va) + size - 1);
+  a = (char*)PGROUNDDOWN((uintptr_t)va);
+  last = (char*)PGROUNDDOWN(((uintptr_t)va) + size - 1);
   for(;;){
     if((pte = walkpgdir(pgdir, a, 1)) == 0)
       return -1;
@@ -132,7 +132,7 @@ setupkvm(void)
     panic("PHYSTOP too high");
   for(k = kmap; k < &kmap[NELEM(kmap)]; k++)
     if(mappages(pgdir, k->virt, k->phys_end - k->phys_start,
-                (uint)k->phys_start, k->perm) < 0) {
+                (uintptr_t)k->phys_start, k->perm) < 0) {
       freevm(pgdir);
       return 0;
     }
@@ -176,7 +176,7 @@ switchuvm(struct proc *p)
                                 sizeof(mycpu()->ts)-1, 0);
   mycpu()->gdt[SEG_TSS].s = 0;
   mycpu()->ts.ss0 = SEG_KDATA << 3;
-  mycpu()->ts.esp0 = (uint)p->kstack + KSTACKSIZE;
+  mycpu()->ts.esp0 = (uintptr_t)p->kstack + KSTACKSIZE;
   // setting IOPL=0 in eflags *and* iomb beyond the tss segment limit
   // forbids I/O instructions (e.g., inb and outb) from user space
   mycpu()->ts.iomb = (ushort) 0xFFFF;
@@ -208,7 +208,7 @@ loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
   uint i, pa, n;
   pte_t *pte;
 
-  if((uint) addr % PGSIZE != 0)
+  if((uintptr_t) addr % PGSIZE != 0)
     panic("loaduvm: addr must be page aligned");
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walkpgdir(pgdir, addr+i, 0)) == 0)
@@ -371,14 +371,27 @@ uva2ka(pde_t *pgdir, char *uva)
 // Most useful when pgdir is not the current page table.
 // uva2ka ensures this only works for PTE_U pages.
 int
+#ifdef __x86_64__
+copyout(pde_t *pgdir, uint64 va, void *p, uint len)
+#else
 copyout(pde_t *pgdir, uint va, void *p, uint len)
+#endif
 {
   char *buf, *pa0;
-  uint n, va0;
+  uint n;
+#ifdef __x86_64__
+  uint64 va0;
+#else
+  uint va0;
+#endif
 
   buf = (char*)p;
   while(len > 0){
+#ifdef __x86_64__
+    va0 = (uint64)PGROUNDDOWN(va);
+#else
     va0 = (uint)PGROUNDDOWN(va);
+#endif
     pa0 = uva2ka(pgdir, (char*)va0);
     if(pa0 == 0)
       return -1;

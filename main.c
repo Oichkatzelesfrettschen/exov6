@@ -80,7 +80,11 @@ startothers(void)
   // The linker has placed the image of entryother.S in
   // _binary_entryother_start.
   code = P2V(0x7000);
+#ifdef __x86_64__
+  memmove(code, _binary_entryother_start, (uint64)_binary_entryother_size);
+#else
   memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
+#endif
 
   for(c = cpus; c < cpus+ncpu; c++){
     if(c == mycpu())  // We've started already.

@@ -72,20 +72,36 @@ struct segdesc {
 
 // page directory index
 #ifdef __x86_64__
+
+#define PDX(va)         (((uint64)(va) >> PDXSHIFT) & 0x3FF)
+#else
+#define PDX(va)         (((uint)(va) >> PDXSHIFT) & 0x3FF)
+#endif
+
+// page table index
+#ifdef __x86_64__
+#define PTX(va)         (((uint64)(va) >> PTXSHIFT) & 0x3FF)
+#else
+
 #define PML4(va)        (((uint64)(va) >> PML4SHIFT) & 0x1FF)
 #define PDPX(va)        (((uint64)(va) >> PDPSHIFT) & 0x1FF)
 #define PDX(va)         (((uint64)(va) >> PDSHIFT) & 0x1FF)
 #define PTX(va)         (((uint64)(va) >> PTSHIFT) & 0x1FF)
 #else
 #define PDX(va)         (((uint)(va) >> PDXSHIFT) & 0x3FF)
+
 #define PTX(va)         (((uint)(va) >> PTXSHIFT) & 0x3FF)
 #endif
 
 // construct virtual address from indexes and offset
 #ifdef __x86_64__
-#define PGADDR(l4, l3, l2, l1, o) \
+
+#define PGADDR(d, t, o) ((uint64)((d) << PDXSHIFT | (t) << PTXSHIFT | (o)))
+=======
+
   ((uint64)((l4) << PML4SHIFT | (l3) << PDPSHIFT | \
             (l2) << PDSHIFT | (l1) << PTSHIFT | (o)))
+
 #else
 #define PGADDR(d, t, o) ((uint)((d) << PDXSHIFT | (t) << PTXSHIFT | (o)))
 #endif
@@ -121,7 +137,11 @@ struct segdesc {
 
 // Address in page table or page directory entry
 #ifdef __x86_64__
+
+#define PTE_ADDR(pte)   ((uint64)(pte) & ~0xFFFULL)
+
 #define PTE_ADDR(pte)   ((uint64)(pte) & ~0xFFF)
+
 #define PTE_FLAGS(pte)  ((uint64)(pte) &  0xFFF)
 #else
 #define PTE_ADDR(pte)   ((uint)(pte) & ~0xFFF)
@@ -131,8 +151,11 @@ struct segdesc {
 #ifndef __ASSEMBLER__
 #ifdef __x86_64__
 typedef uint64 pte_t;
+
+
 typedef uint64 pdpe_t;
 typedef uint64 pml4e_t;
+
 #else
 typedef uint pte_t;
 #endif
