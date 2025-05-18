@@ -94,9 +94,9 @@ filestat(struct file *f, struct stat *st)
 
 // Read from file f.
 int
-fileread(struct file *f, char *addr, int n)
+fileread(struct file *f, char *addr, size_t n)
 {
-  int r;
+int r;
 
   if(f->readable == 0)
     return -1;
@@ -115,7 +115,7 @@ fileread(struct file *f, char *addr, int n)
 //PAGEBREAK!
 // Write to file f.
 int
-filewrite(struct file *f, char *addr, int n)
+filewrite(struct file *f, char *addr, size_t n)
 {
   int r;
 
@@ -131,9 +131,9 @@ filewrite(struct file *f, char *addr, int n)
     // this really belongs lower down, since writei()
     // might be writing a device like the console.
     int max = ((MAXOPBLOCKS-1-1-2) / 2) * 512;
-    int i = 0;
+    size_t i = 0;
     while(i < n){
-      int n1 = n - i;
+      size_t n1 = n - i;
       if(n1 > max)
         n1 = max;
 

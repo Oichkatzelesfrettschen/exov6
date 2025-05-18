@@ -188,7 +188,7 @@ switchuvm(struct proc *p)
 // Load the initcode into address 0 of pgdir.
 // sz must be less than a page.
 void
-inituvm(pde_t *pgdir, char *init, uint sz)
+inituvm(pde_t *pgdir, char *init, size_t sz)
 {
   char *mem;
 
@@ -203,7 +203,7 @@ inituvm(pde_t *pgdir, char *init, uint sz)
 // Load a program segment into pgdir.  addr must be page-aligned
 // and the pages from addr to addr+sz must already be mapped.
 int
-loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
+loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, size_t sz)
 {
   uint i, pa, n;
   pte_t *pte;
@@ -227,7 +227,7 @@ loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
 // Allocate page tables and physical memory to grow process from oldsz to
 // newsz, which need not be page aligned.  Returns new size or 0 on error.
 int
-allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
+allocuvm(pde_t *pgdir, size_t oldsz, size_t newsz)
 {
   char *mem;
   uint a;
@@ -261,7 +261,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 // need to be less than oldsz.  oldsz can be larger than the actual
 // process size.  Returns the new process size.
 int
-deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
+deallocuvm(pde_t *pgdir, size_t oldsz, size_t newsz)
 {
   pte_t *pte;
   uint a, pa;
@@ -321,11 +321,12 @@ clearpteu(pde_t *pgdir, char *uva)
 // Given a parent process's page table, create a copy
 // of it for a child.
 pde_t*
-copyuvm(pde_t *pgdir, uint sz)
+copyuvm(pde_t *pgdir, size_t sz)
 {
   pde_t *d;
   pte_t *pte;
-  uint pa, i, flags;
+  uint pa, flags;
+  size_t i;
   char *mem;
 
   if((d = setupkvm()) == 0)
@@ -372,13 +373,13 @@ uva2ka(pde_t *pgdir, char *uva)
 // uva2ka ensures this only works for PTE_U pages.
 int
 #ifdef __x86_64__
-copyout(pde_t *pgdir, uint64 va, void *p, uint len)
+copyout(pde_t *pgdir, uint64 va, void *p, size_t len)
 #else
-copyout(pde_t *pgdir, uint va, void *p, uint len)
+copyout(pde_t *pgdir, uint va, void *p, size_t len)
 #endif
 {
   char *buf, *pa0;
-  uint n;
+  size_t n;
 #ifdef __x86_64__
   uint64 va0;
 #else

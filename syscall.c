@@ -1,3 +1,4 @@
+// clang-format off
 #include "types.h"
 #include "defs.h"
 #include "param.h"
@@ -6,6 +7,7 @@
 #include "proc.h"
 #include "x86.h"
 #include "syscall.h"
+// clang-format on
 
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
@@ -72,7 +74,7 @@ argint(int n, int *ip)
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
 int
-argptr(int n, char **pp, int size)
+argptr(int n, char **pp, size_t size)
 {
   struct proc *curproc = myproc();
 #ifndef __x86_64__

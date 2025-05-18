@@ -1,3 +1,5 @@
+#include "types.h"
+
 struct buf;
 struct context;
 #ifdef __x86_64__
@@ -36,9 +38,9 @@ struct file*    filealloc(void);
 void            fileclose(struct file*);
 struct file*    filedup(struct file*);
 void            fileinit(void);
-int             fileread(struct file*, char*, int n);
+int             fileread(struct file*, char*, size_t n);
 int             filestat(struct file*, struct stat*);
-int             filewrite(struct file*, char*, int n);
+int             filewrite(struct file*, char*, size_t n);
 
 // fs.c
 void            readsb(int dev, struct superblock *sb);
@@ -55,9 +57,9 @@ void            iupdate(struct inode*);
 int             namecmp(const char*, const char*);
 struct inode*   namei(char*);
 struct inode*   nameiparent(char*, char*);
-int             readi(struct inode*, char*, uint, uint);
+int             readi(struct inode*, char*, uint, size_t);
 void            stati(struct inode*, struct stat*);
-int             writei(struct inode*, char*, uint, uint);
+int             writei(struct inode*, char*, uint, size_t);
 
 // ide.c
 void            ideinit(void);
@@ -104,8 +106,8 @@ void            picinit(void);
 // pipe.c
 int             pipealloc(struct file**, struct file**);
 void            pipeclose(struct pipe*, int);
-int             piperead(struct pipe*, char*, int);
-int             pipewrite(struct pipe*, char*, int);
+int             piperead(struct pipe*, char*, size_t);
+int             pipewrite(struct pipe*, char*, size_t);
 
 //PAGEBREAK: 16
 // proc.c
@@ -146,17 +148,17 @@ int             holdingsleep(struct sleeplock*);
 void            initsleeplock(struct sleeplock*, char*);
 
 // string.c
-int             memcmp(const void*, const void*, uint);
-void*           memmove(void*, const void*, uint);
-void*           memset(void*, int, uint);
-char*           safestrcpy(char*, const char*, int);
-int             strlen(const char*);
-int             strncmp(const char*, const char*, uint);
-char*           strncpy(char*, const char*, int);
+int             memcmp(const void*, const void*, size_t);
+void*           memmove(void*, const void*, size_t);
+void*           memset(void*, int, size_t);
+char*           safestrcpy(char*, const char*, size_t);
+size_t          strlen(const char*);
+int             strncmp(const char*, const char*, size_t);
+char*           strncpy(char*, const char*, size_t);
 
 // syscall.c
 int             argint(int, int*);
-int             argptr(int, char**, int);
+int             argptr(int, char**, size_t);
 int             argstr(int, char**);
 int             fetchint(uint, int*);
 int             fetchstr(uint, char**);
