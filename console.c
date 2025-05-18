@@ -233,9 +233,9 @@ consoleintr(int (*getc)(void))
 }
 
 int
-consoleread(struct inode *ip, char *dst, int n)
+consoleread(struct inode *ip, char *dst, size_t n)
 {
-  uint target;
+  size_t target;
   int c;
 
   iunlock(ip);
@@ -271,9 +271,9 @@ consoleread(struct inode *ip, char *dst, int n)
 }
 
 int
-consolewrite(struct inode *ip, char *buf, int n)
+consolewrite(struct inode *ip, char *buf, size_t n)
 {
-  int i;
+  size_t i;
 
   iunlock(ip);
   acquire(&cons.lock);

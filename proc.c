@@ -15,6 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
+static uint nextpctr_cap = 1;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -88,6 +89,8 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->pctr_cap = nextpctr_cap++;
+  p->pctr_signal = 0;
 
   release(&ptable.lock);
 
