@@ -35,7 +35,7 @@ bootmain(void)
   ph = (struct proghdr*)((uchar*)elf + elf->phoff);
   eph = ph + elf->phnum;
   for(; ph < eph; ph++){
-    pa = (uchar*)ph->paddr;
+    pa = (uchar*)(uintptr_t)ph->paddr;
     readseg(pa, ph->filesz, ph->off);
     if(ph->memsz > ph->filesz)
       stosb(pa + ph->filesz, 0, ph->memsz - ph->filesz);
@@ -43,7 +43,7 @@ bootmain(void)
 
   // Call the entry point from the ELF header.
   // Does not return!
-  entry = (void(*)(void))(elf->entry);
+  entry = (void(*)(void))(uintptr_t)(elf->entry);
   entry();
 }
 
