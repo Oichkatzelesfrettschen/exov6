@@ -2,14 +2,14 @@
 
 struct mp {             // floating pointer
   uchar signature[4];           // "_MP_"
-  void *physaddr;               // phys addr of MP config table
+  uint physaddr;                // phys addr of MP config table
   uchar length;                 // 1
   uchar specrev;                // [14]
   uchar checksum;               // all bytes must add up to 0
   uchar type;                   // MP system config type
   uchar imcrp;
   uchar reserved[3];
-};
+} __attribute__((packed));
 
 struct mpconf {         // configuration table header
   uchar signature[4];           // "PCMP"
@@ -24,7 +24,7 @@ struct mpconf {         // configuration table header
   ushort xlength;               // extended table length
   uchar xchecksum;              // extended table checksum
   uchar reserved;
-};
+} __attribute__((packed));
 
 struct mpproc {         // processor table entry
   uchar type;                   // entry type (0)
@@ -35,7 +35,7 @@ struct mpproc {         // processor table entry
   uchar signature[4];           // CPU signature
   uint feature;                 // feature flags from CPUID instruction
   uchar reserved[8];
-};
+} __attribute__((packed));
 
 struct mpioapic {       // I/O APIC table entry
   uchar type;                   // entry type (2)
@@ -43,7 +43,7 @@ struct mpioapic {       // I/O APIC table entry
   uchar version;                // I/O APIC version
   uchar flags;                  // I/O APIC flags
   uint *addr;                  // I/O APIC address
-};
+} __attribute__((packed));
 
 // Table entry types
 #define MPPROC    0x00  // One per processor
