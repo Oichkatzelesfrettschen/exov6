@@ -1,6 +1,10 @@
 struct stat;
 struct rtcdate;
 
+#include "exo_cpu.h"
+#include "exo.h"
+
+
 // system calls
 int fork(void);
 int exit(void) __attribute__((noreturn));
@@ -24,6 +28,11 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int exo_pctr_transfer(int cap);
+
+int set_timer_upcall(void (*handler)(void));
+exo_cap exo_alloc_page(void);
+int exo_unbind_page(exo_cap);
+
 
 // ulib.c
 int stat(const char*, struct stat*);
