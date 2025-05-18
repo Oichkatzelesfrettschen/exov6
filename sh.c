@@ -53,8 +53,15 @@ int fork1(void);  // Fork but panics on failure.
 void panic(char*);
 struct cmd *parsecmd(char*);
 
+// Annotate as noreturn so modern compilers know runcmd exits
+static void runcmd(struct cmd *cmd) __attribute__((noreturn));
+
 // Execute cmd.  Never returns.
+
+static void
+
 static void __attribute__((noreturn))
+
 runcmd(struct cmd *cmd)
 {
   int p[2];
