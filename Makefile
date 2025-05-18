@@ -98,7 +98,7 @@ OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 
 # Output file names depend on the target architecture
-KERNEL_FILE := kernel
+KERNEL_FILE := vkernel
 KERNELMEMFS_FILE := kernelmemfs
 FS_IMG := fs.img
 XV6_IMG := xv6.img
@@ -110,6 +110,7 @@ ARCHFLAG := -m32
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
 
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD)
+CFLAGS += -isystem /usr/include/x86_64-linux-gnu -Iinclude -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide
 
@@ -180,7 +181,7 @@ tags: $(OBJS) $(ENTRYOTHERASM) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o swtch.o
+ULIB = ulib.o usys.o printf.o umalloc.o swtch.o libos.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -218,6 +219,7 @@ UPROGS=\
         _usertests\
         _wc\
         _zombie\
+        _libosdemo\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))
@@ -231,7 +233,7 @@ $(FS_IMG): mkfs README $(UPROGS)
 clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother entryother64 \
-	initcode initcode.out kernel kernel64 xv6.img xv6-64.img \
+       initcode initcode.out $(KERNEL_FILE) kernel64 xv6.img xv6-64.img \
 	fs.img fs64.img kernelmemfs kernelmemfs64 xv6memfs.img \
 	xv6memfs-64.img mkfs .gdbinit \
 	$(UPROGS)
@@ -291,8 +293,8 @@ qemu-nox-gdb: $(FS_IMG) $(XV6_IMG) .gdbinit
 
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
-	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c\
+        ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
+        printf.c umalloc.c libos.c libosdemo.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

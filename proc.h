@@ -1,3 +1,5 @@
+#include "mmu.h"
+
 // Context used for kernel context switches.
 #ifdef __x86_64__
 struct context64;

@@ -1,13 +1,12 @@
 #include "date.h"
 #include "defs.h"
+#include "exo.h"
 #include "memlayout.h"
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
 #include "types.h"
 #include "x86.h"
-#include "exo.h"
-
 
 int sys_fork(void) { return fork(); }
 
@@ -70,29 +69,41 @@ int sys_uptime(void) {
   return xticks;
 }
 
-
 int sys_set_timer_upcall(void) {
   void (*handler)(void);
   if (argptr(0, (char **)&handler, sizeof(handler)) < 0)
     return -1;
   myproc()->timer_upcall = handler;
   return 0;
+}
 
 // allocate a physical page and return its capability
-int
-sys_exo_alloc_page(void)
-{
+int sys_exo_alloc_page(void) {
   exo_cap cap = exo_alloc_page();
   return cap.pa;
 }
 
 // unbind and free a physical page by capability
-int
-sys_exo_unbind_page(void)
-{
+int sys_exo_unbind_page(void) {
   exo_cap cap;
-  if(argint(0, (int*)&cap.pa) < 0)
+  if (argint(0, (int *)&cap.pa) < 0)
     return -1;
   return exo_unbind_page(cap);
+}
 
+int sys_exo_bind_page(void) {
+  exo_cap cap;
+  void *va;
+  int perm;
+  if (argint(0, (int *)&cap.pa) < 0 ||
+      argptr(1, (char **)&va, sizeof(void *)) < 0 || argint(2, &perm) < 0)
+    return -1;
+  return exo_bind_page(cap, va, perm);
+}
+
+int sys_exo_yield_to(void) {
+  exo_cap cap;
+  if (argint(0, (int *)&cap.pa) < 0)
+    return -1;
+  return exo_yield_to(cap);
 }

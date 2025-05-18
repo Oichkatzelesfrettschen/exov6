@@ -32,6 +32,8 @@ int exo_pctr_transfer(int cap);
 int set_timer_upcall(void (*handler)(void));
 exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
+int exo_bind_page(exo_cap, void *, int);
+int exo_yield_to(exo_cap);
 
 
 // ulib.c

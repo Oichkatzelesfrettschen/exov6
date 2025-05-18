@@ -140,47 +140,37 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 
 extern int sys_set_timer_upcall(void);
-
-static int (*syscalls[])(void) = {
-    [SYS_fork] sys_fork,     [SYS_exit] sys_exit,
-    [SYS_wait] sys_wait,     [SYS_pipe] sys_pipe,
-    [SYS_read] sys_read,     [SYS_kill] sys_kill,
-    [SYS_exec] sys_exec,     [SYS_fstat] sys_fstat,
-    [SYS_chdir] sys_chdir,   [SYS_dup] sys_dup,
-    [SYS_getpid] sys_getpid, [SYS_sbrk] sys_sbrk,
-    [SYS_sleep] sys_sleep,   [SYS_uptime] sys_uptime,
-    [SYS_open] sys_open,     [SYS_write] sys_write,
-    [SYS_mknod] sys_mknod,   [SYS_unlink] sys_unlink,
-    [SYS_link] sys_link,     [SYS_mkdir] sys_mkdir,
-    [SYS_close] sys_close,   [SYS_set_timer_upcall] sys_set_timer_upcall,
-
 extern int sys_exo_alloc_page(void);
 extern int sys_exo_unbind_page(void);
+extern int sys_exo_bind_page(void);
+extern int sys_exo_yield_to(void);
 
 static int (*syscalls[])(void) = {
-[SYS_fork]    sys_fork,
-[SYS_exit]    sys_exit,
-[SYS_wait]    sys_wait,
-[SYS_pipe]    sys_pipe,
-[SYS_read]    sys_read,
-[SYS_kill]    sys_kill,
-[SYS_exec]    sys_exec,
-[SYS_fstat]   sys_fstat,
-[SYS_chdir]   sys_chdir,
-[SYS_dup]     sys_dup,
-[SYS_getpid]  sys_getpid,
-[SYS_sbrk]    sys_sbrk,
-[SYS_sleep]   sys_sleep,
-[SYS_uptime]  sys_uptime,
-[SYS_open]    sys_open,
-[SYS_write]   sys_write,
-[SYS_mknod]   sys_mknod,
-[SYS_unlink]  sys_unlink,
-[SYS_link]    sys_link,
-[SYS_mkdir]   sys_mkdir,
-[SYS_close]   sys_close,
-[SYS_exo_alloc_page] sys_exo_alloc_page,
-[SYS_exo_unbind_page] sys_exo_unbind_page,
+    [SYS_fork] sys_fork,
+    [SYS_exit] sys_exit,
+    [SYS_wait] sys_wait,
+    [SYS_pipe] sys_pipe,
+    [SYS_read] sys_read,
+    [SYS_kill] sys_kill,
+    [SYS_exec] sys_exec,
+    [SYS_fstat] sys_fstat,
+    [SYS_chdir] sys_chdir,
+    [SYS_dup] sys_dup,
+    [SYS_getpid] sys_getpid,
+    [SYS_sbrk] sys_sbrk,
+    [SYS_sleep] sys_sleep,
+    [SYS_uptime] sys_uptime,
+    [SYS_open] sys_open,
+    [SYS_write] sys_write,
+    [SYS_mknod] sys_mknod,
+    [SYS_unlink] sys_unlink,
+    [SYS_link] sys_link,
+    [SYS_mkdir] sys_mkdir,
+    [SYS_close] sys_close,
+    [SYS_exo_alloc_page] sys_exo_alloc_page,
+    [SYS_exo_unbind_page] sys_exo_unbind_page,
+    [SYS_exo_bind_page] sys_exo_bind_page,
+    [SYS_exo_yield_to] sys_exo_yield_to,
 
 };
 
