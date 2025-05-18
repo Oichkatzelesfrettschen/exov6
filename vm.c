@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "exo.h"
 #include "elf.h"
 
 extern char data[];  // defined by kernel.ld
@@ -413,4 +414,38 @@ copyout(pde_t *pgdir, uint va, void *p, size_t len)
 // Blank page.
 //PAGEBREAK!
 // Blank page.
+
+// Allocate a page and return a capability referencing its physical address.
+exo_cap
+exo_alloc_page(void)
+{
+  char *mem = kalloc();
+  exo_cap cap;
+  cap.pa = mem ? V2P(mem) : 0;
+  return cap;
+}
+
+// Remove any mappings to the page referenced by cap and free it.
+int
+exo_unbind_page(exo_cap cap)
+{
+  struct proc *p = myproc();
+  pde_t *pgdir = p->pgdir;
+  pte_t *pte;
+  uint a;
+  uint pa = cap.pa;
+
+  for(a = 0; a < p->sz; a += PGSIZE){
+    if((pte = walkpgdir(pgdir, (void*)a, 0)) != 0 && (*pte & PTE_P)){
+      if(PTE_ADDR(*pte) == pa){
+        *pte = 0;
+        kfree(P2V(pa));
+        return 0;
+      }
+    }
+  }
+  // No mapping found, just free the page.
+  kfree(P2V(pa));
+  return 0;
+}
 

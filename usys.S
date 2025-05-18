@@ -38,3 +38,24 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
+
+
+#ifndef __x86_64__
+  .globl exo_pctr_transfer
+exo_pctr_transfer:
+  movl 4(%esp), %eax
+  int $T_PCTR_TRANSFER
+  ret
+#else
+  .globl exo_pctr_transfer
+exo_pctr_transfer:
+  movq %rdi, %rax
+  int $T_PCTR_TRANSFER
+  ret
+#endif
+
+SYSCALL(set_timer_upcall)
+SYSCALL(exo_alloc_page)
+SYSCALL(exo_unbind_page)
+
+
