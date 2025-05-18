@@ -25,7 +25,11 @@ OBJS = \
 	trap.o\
 	uart.o\
 	vectors.o\
-	vm.o\
+        vm.o\
+
+ifeq ($(ARCH),x86_64)
+OBJS += mmu64.o
+endif
 
 # Cross-compiling (e.g., on Mac OS X)
 # TOOLPREFIX = i386-jos-elf

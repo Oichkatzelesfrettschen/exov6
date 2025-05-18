@@ -180,6 +180,9 @@ void            uartputc(int);
 void            seginit(void);
 void            kvmalloc(void);
 pde_t*          setupkvm(void);
+#ifdef __x86_64__
+pml4e_t*        setupkvm64(void);
+#endif
 char*           uva2ka(pde_t*, char*);
 int             allocuvm(pde_t*, uint, uint);
 int             deallocuvm(pde_t*, uint, uint);
@@ -189,7 +192,11 @@ int             loaduvm(pde_t*, char*, struct inode*, uint, uint);
 pde_t*          copyuvm(pde_t*, uint);
 void            switchuvm(struct proc*);
 void            switchkvm(void);
+#ifdef __x86_64__
+int             copyout(pde_t*, uint64, void*, uint);
+#else
 int             copyout(pde_t*, uint, void*, uint);
+#endif
 void            clearpteu(pde_t *pgdir, char *uva);
 
 // number of elements in fixed-size array
