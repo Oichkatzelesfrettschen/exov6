@@ -8,6 +8,7 @@
 #define KERNBASE 0x80000000         // First kernel virtual address
 #define KERNLINK (KERNBASE+EXTMEM)  // Address where kernel is linked
 
+
 // 64-bit memory layout parameters
 #define KERNBASE64 0xffffffff80000000ULL
 #define KERNLINK64 (KERNBASE64+EXTMEM)
@@ -28,6 +29,15 @@
 
 #define V2P(a) ((uintptr_t)(a) - KERNBASE)
 #define P2V(a) ((void *)((char *)(uintptr_t)(a) + KERNBASE))
+
+#ifdef __x86_64__
+#define V2P(a) (((uint64)(a)) - KERNBASE)
+#define P2V(a) ((void *)(((char *)(a)) + KERNBASE))
+#else
+#define V2P(a) (((uint) (a)) - KERNBASE)
+#define P2V(a) ((void *)(((char *) (a)) + KERNBASE))
+#endif
+
 
 #define V2P_WO(x) ((x) - KERNBASE)    // same as V2P, but without casts
 #define P2V_WO(x) ((x) + KERNBASE)    // same as P2V, but without casts

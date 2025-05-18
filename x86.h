@@ -65,8 +65,18 @@ lgdt(struct segdesc *p, int size)
   volatile ushort pd[3];
 
   pd[0] = size-1;
+
+#ifdef __x86_64__
+  pd[1] = (uint64)p;
+  pd[2] = (uint64)p >> 16;
+#else
+  pd[1] = (uint)p;
+  pd[2] = (uint)p >> 16;
+#endif
+
   pd[1] = (uintptr_t)p;
   pd[2] = (uintptr_t)p >> 16;
+
 
   asm volatile("lgdt (%0)" : : "r" (pd));
 }
@@ -79,8 +89,18 @@ lidt(struct gatedesc *p, int size)
   volatile ushort pd[3];
 
   pd[0] = size-1;
+
+#ifdef __x86_64__
+  pd[1] = (uint64)p;
+  pd[2] = (uint64)p >> 16;
+#else
+  pd[1] = (uint)p;
+  pd[2] = (uint)p >> 16;
+#endif
+
   pd[1] = (uintptr_t)p;
   pd[2] = (uintptr_t)p >> 16;
+
 
   asm volatile("lidt (%0)" : : "r" (pd));
 }
@@ -130,6 +150,21 @@ xchg(volatile uint *addr, uint newval)
   return result;
 }
 
+#ifdef __x86_64__
+static inline uint64
+rcr2(void)
+{
+  uint64 val;
+  asm volatile("movq %%cr2,%0" : "=r" (val));
+  return val;
+}
+
+static inline void
+lcr3(uint64 val)
+{
+  asm volatile("movq %0,%%cr3" : : "r" (val));
+}
+#else
 static inline uint
 rcr2(void)
 {
@@ -143,10 +178,12 @@ lcr3(uint val)
 {
   asm volatile("movl %0,%%cr3" : : "r" (val));
 }
+#endif
 
 //PAGEBREAK: 36
 // Layout of the trap frame built on the stack by the
 // hardware and by trapasm.S, and passed to trap().
+#ifndef __x86_64__
 struct trapframe {
   // registers as pushed by pusha
   uint edi;
@@ -181,3 +218,29 @@ struct trapframe {
   ushort ss;
   ushort padding6;
 };
+#else
+struct trapframe {
+  uint64 r15;
+  uint64 r14;
+  uint64 r13;
+  uint64 r12;
+  uint64 r11;
+  uint64 r10;
+  uint64 r9;
+  uint64 r8;
+  uint64 rdi;
+  uint64 rsi;
+  uint64 rbp;
+  uint64 rbx;
+  uint64 rdx;
+  uint64 rcx;
+  uint64 rax;
+  uint64 trapno;
+  uint64 err;
+  uint64 rip;
+  uint64 cs;
+  uint64 eflags;
+  uint64 rsp;
+  uint64 ss;
+};
+#endif

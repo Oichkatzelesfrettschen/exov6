@@ -1,12 +1,21 @@
 #include "syscall.h"
 #include "traps.h"
 
+#ifndef __x86_64__
 #define SYSCALL(name) \
   .globl name; \
   name: \
     movl $SYS_ ## name, %eax; \
     int $T_SYSCALL; \
     ret
+#else
+#define SYSCALL(name) \
+  .globl name; \
+  name: \
+    movq $SYS_ ## name, %rax; \
+    syscall; \
+    ret
+#endif
 
 SYSCALL(fork)
 SYSCALL(exit)
