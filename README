@@ -88,3 +88,12 @@ range starting at ``DEVSPACE64``.  ``PHYSTOP64`` specifies the upper
 limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
+
+CODE FORMATTING
+---------------
+The project includes a ``.clang-format`` file configured for the LLVM
+style with two-space indentation and the C23 language standard.  Before
+submitting patches, run ``clang-format`` on any modified sources:
+
+    clang-format -i file.c
+

@@ -2,7 +2,7 @@
 #include "x86.h"
 
 void*
-memset(void *dst, int c, uint n)
+memset(void *dst, int c, size_t n)
 {
   if ((int)dst%4 == 0 && n%4 == 0){
     c &= 0xFF;
@@ -13,7 +13,7 @@ memset(void *dst, int c, uint n)
 }
 
 int
-memcmp(const void *v1, const void *v2, uint n)
+memcmp(const void *v1, const void *v2, size_t n)
 {
   const uchar *s1, *s2;
 
@@ -29,7 +29,7 @@ memcmp(const void *v1, const void *v2, uint n)
 }
 
 void*
-memmove(void *dst, const void *src, uint n)
+memmove(void *dst, const void *src, size_t n)
 {
   const char *s;
   char *d;
@@ -50,13 +50,13 @@ memmove(void *dst, const void *src, uint n)
 
 // memcpy exists to placate GCC.  Use memmove.
 void*
-memcpy(void *dst, const void *src, uint n)
+memcpy(void *dst, const void *src, size_t n)
 {
   return memmove(dst, src, n);
 }
 
 int
-strncmp(const char *p, const char *q, uint n)
+strncmp(const char *p, const char *q, size_t n)
 {
   while(n > 0 && *p && *p == *q)
     n--, p++, q++;
@@ -66,7 +66,7 @@ strncmp(const char *p, const char *q, uint n)
 }
 
 char*
-strncpy(char *s, const char *t, int n)
+strncpy(char *s, const char *t, size_t n)
 {
   char *os;
 
@@ -80,7 +80,7 @@ strncpy(char *s, const char *t, int n)
 
 // Like strncpy but guaranteed to NUL-terminate.
 char*
-safestrcpy(char *s, const char *t, int n)
+safestrcpy(char *s, const char *t, size_t n)
 {
   char *os;
 
@@ -93,10 +93,10 @@ safestrcpy(char *s, const char *t, int n)
   return os;
 }
 
-int
+size_t
 strlen(const char *s)
 {
-  int n;
+  size_t n;
 
   for(n = 0; s[n]; n++)
     ;

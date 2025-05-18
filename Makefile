@@ -22,10 +22,11 @@ OBJS = \
 	sysfile.o\
 	sysproc.o\
 	trapasm.o\
-	trap.o\
-	uart.o\
-	vectors.o\
+        trap.o\
+        uart.o\
+        vectors.o\
         vm.o\
+        exo.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
@@ -108,7 +109,7 @@ XV6_MEMFS_IMG := xv6memfs.img
 ARCHFLAG := -m32
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD)
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide
 
@@ -118,6 +119,9 @@ CFLAGS += -fno-pie -no-pie
 endif
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
+endif
+endif
+
 endif
 
 $(XV6_IMG): bootblock kernel
@@ -179,7 +183,7 @@ tags: $(OBJS) $(ENTRYOTHERASM) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o
+ULIB = ulib.o usys.o printf.o umalloc.o swtch.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
