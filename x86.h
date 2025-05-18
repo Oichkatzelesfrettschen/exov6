@@ -65,8 +65,8 @@ lgdt(struct segdesc *p, int size)
   volatile ushort pd[3];
 
   pd[0] = size-1;
-  pd[1] = (uint)p;
-  pd[2] = (uint)p >> 16;
+  pd[1] = (uintptr_t)p;
+  pd[2] = (uintptr_t)p >> 16;
 
   asm volatile("lgdt (%0)" : : "r" (pd));
 }
@@ -79,8 +79,8 @@ lidt(struct gatedesc *p, int size)
   volatile ushort pd[3];
 
   pd[0] = size-1;
-  pd[1] = (uint)p;
-  pd[2] = (uint)p >> 16;
+  pd[1] = (uintptr_t)p;
+  pd[2] = (uintptr_t)p >> 16;
 
   asm volatile("lidt (%0)" : : "r" (pd));
 }

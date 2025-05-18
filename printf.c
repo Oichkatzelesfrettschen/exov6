@@ -41,10 +41,10 @@ printf(int fd, const char *fmt, ...)
 {
   char *s;
   int c, i, state;
-  uint *ap;
+  unsigned long *ap;
 
   state = 0;
-  ap = (uint*)(void*)&fmt + 1;
+  ap = (unsigned long*)(void*)&fmt + 1;
   for(i = 0; fmt[i]; i++){
     c = fmt[i] & 0xff;
     if(state == 0){
