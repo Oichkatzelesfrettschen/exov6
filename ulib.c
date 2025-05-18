@@ -23,7 +23,7 @@ strcmp(const char *p, const char *q)
   return (uchar)*p - (uchar)*q;
 }
 
-uint
+size_t
 strlen(const char *s)
 {
   int n;
@@ -34,7 +34,7 @@ strlen(const char *s)
 }
 
 void*
-memset(void *dst, int c, uint n)
+memset(void *dst, int c, size_t n)
 {
   stosb(dst, c, n);
   return dst;
@@ -50,9 +50,9 @@ strchr(const char *s, char c)
 }
 
 char*
-gets(char *buf, int max)
+gets(char *buf, size_t max)
 {
-  int i, cc;
+  size_t i, cc;
   char c;
 
   for(i=0; i+1 < max; ){
@@ -93,7 +93,7 @@ atoi(const char *s)
 }
 
 void*
-memmove(void *vdst, const void *vsrc, int n)
+memmove(void *vdst, const void *vsrc, size_t n)
 {
   char *dst;
   const char *src;

@@ -121,6 +121,8 @@ ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
 endif
 
+endif
+
 $(XV6_IMG): bootblock kernel
 	dd if=/dev/zero of=$(XV6_IMG) count=10000
 	dd if=bootblock of=$(XV6_IMG) conv=notrunc
