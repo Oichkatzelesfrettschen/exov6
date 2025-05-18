@@ -176,6 +176,7 @@ void idtinit(void);
 extern uint ticks;
 void tvinit(void);
 extern struct spinlock tickslock;
+void            exo_pctr_transfer(struct trapframe *);
 
 // uart.c
 void uartinit(void);

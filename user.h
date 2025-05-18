@@ -27,6 +27,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int exo_pctr_transfer(int cap);
 
 int set_timer_upcall(void (*handler)(void));
 exo_cap exo_alloc_page(void);
