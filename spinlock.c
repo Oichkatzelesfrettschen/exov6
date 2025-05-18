@@ -71,6 +71,21 @@ release(struct spinlock *lk)
 void
 getcallerpcs(void *v, uint pcs[])
 {
+#ifdef __x86_64__
+  unsigned long *rbp;
+  int i;
+
+  rbp = (unsigned long*)v - 2;
+  for(i = 0; i < 10; i++){
+    if(rbp == 0 || rbp < (unsigned long*)KERNBASE ||
+       rbp == (unsigned long*)-1)
+      break;
+    pcs[i] = rbp[1];     // saved %rip
+    rbp = (unsigned long*)rbp[0]; // saved %rbp
+  }
+  for(; i < 10; i++)
+    pcs[i] = 0;
+#else
   uint *ebp;
   int i;
 
@@ -83,6 +98,7 @@ getcallerpcs(void *v, uint pcs[])
   }
   for(; i < 10; i++)
     pcs[i] = 0;
+#endif
 }
 
 // Check whether this cpu is holding the lock.

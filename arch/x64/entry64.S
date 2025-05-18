@@ -41,3 +41,60 @@ gdtdesc:
     .word (gdtdesc - gdt - 1)
     .long gdt
     .long 0
+
+# 64-bit system call entry. Saves registers in a trap frame and
+# invokes the common trap handler. This implementation is minimal
+# and omits some details such as saving the user stack pointer.
+
+.globl syscallentry
+syscallentry:
+    swapgs
+    # push general registers
+    pushq %r15
+    pushq %r14
+    pushq %r13
+    pushq %r12
+    pushq %r11
+    pushq %r10
+    pushq %r9
+    pushq %r8
+    pushq %rdi
+    pushq %rsi
+    pushq %rbp
+    pushq %rbx
+    pushq %rdx
+    pushq %rcx
+    pushq %rax
+    # trap number and minimal frame information
+    pushq $T_SYSCALL
+    pushq $0
+    pushq %rcx        # saved RIP from RCX
+    pushq $0          # CS placeholder
+    pushq %r11        # EFLAGS from R11
+    pushq %rsp        # current RSP (approximate)
+    pushq $0          # SS placeholder
+
+    movq %rsp, %rdi   # argument: pointer to trap frame
+    call trap
+    jmp trapret
+
+.globl trapret
+trapret:
+    addq $7*8, %rsp    # skip ss,rsp,eflags,cs,rip,err,trapno
+    addq $8, %rsp      # drop saved rax
+    popq %rcx
+    popq %rdx
+    popq %rbx
+    popq %rbp
+    popq %rsi
+    popq %rdi
+    popq %r8
+    popq %r9
+    popq %r10
+    popq %r11
+    popq %r12
+    popq %r13
+    popq %r14
+    popq %r15
+    swapgs
+    iretq

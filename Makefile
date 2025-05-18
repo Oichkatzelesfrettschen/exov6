@@ -18,7 +18,6 @@ OBJS = \
 	sleeplock.o\
 	spinlock.o\
 	string.o\
-	swtch.o\
 	syscall.o\
 	sysfile.o\
 	sysproc.o\
@@ -26,7 +25,11 @@ OBJS = \
 	trap.o\
 	uart.o\
 	vectors.o\
-	vm.o\
+        vm.o\
+
+ifeq ($(ARCH),x86_64)
+OBJS += mmu64.o
+endif
 
 # Cross-compiling (e.g., on Mac OS X)
 # TOOLPREFIX = i386-jos-elf
@@ -73,6 +76,15 @@ endif
 
 ARCH ?= i686
 CSTD ?= gnu2x
+
+
+
+ifeq ($(ARCH),x86_64)
+OBJS += main64.o swtch64.o
+BOOTASM := arch/x64/bootasm64.S
+ENTRYASM := arch/x64/entry64.S
+else
+OBJS += swtch.o
 
 BOOTASM := bootasm.S
 ENTRYASM := entry.S

@@ -58,6 +58,15 @@ static void __attribute__((noreturn)) runcmd(struct cmd *cmd);
 
 // Execute cmd.  Never returns.
 
+
+
+
+
+
+static void
+
+
+
 static void __attribute__((noreturn))
 runcmd(struct cmd *cmd)
 {
