@@ -71,21 +71,44 @@ struct segdesc {
 //  \--- PDX(va) --/ \--- PTX(va) --/
 
 // page directory index
+#ifdef __x86_64__
+#define PML4(va)        (((uint64)(va) >> PML4SHIFT) & 0x1FF)
+#define PDPX(va)        (((uint64)(va) >> PDPSHIFT) & 0x1FF)
+#define PDX(va)         (((uint64)(va) >> PDSHIFT) & 0x1FF)
+#define PTX(va)         (((uint64)(va) >> PTSHIFT) & 0x1FF)
+#else
 #define PDX(va)         (((uint)(va) >> PDXSHIFT) & 0x3FF)
-
-// page table index
 #define PTX(va)         (((uint)(va) >> PTXSHIFT) & 0x3FF)
+#endif
 
 // construct virtual address from indexes and offset
+#ifdef __x86_64__
+#define PGADDR(l4, l3, l2, l1, o) \
+  ((uint64)((l4) << PML4SHIFT | (l3) << PDPSHIFT | \
+            (l2) << PDSHIFT | (l1) << PTSHIFT | (o)))
+#else
 #define PGADDR(d, t, o) ((uint)((d) << PDXSHIFT | (t) << PTXSHIFT | (o)))
+#endif
 
 // Page directory and page table constants.
+#ifdef __x86_64__
+#define NPDENTRIES      512     // entries per page directory
+#define NPTENTRIES      512     // PTEs per page table
+#else
 #define NPDENTRIES      1024    // # directory entries per page directory
 #define NPTENTRIES      1024    // # PTEs per page table
+#endif
 #define PGSIZE          4096    // bytes mapped by a page
 
+#ifdef __x86_64__
+#define PTSHIFT         12
+#define PDSHIFT         21
+#define PDPSHIFT        30
+#define PML4SHIFT       39
+#else
 #define PTXSHIFT        12      // offset of PTX in a linear address
 #define PDXSHIFT        22      // offset of PDX in a linear address
+#endif
 
 #define PGROUNDUP(sz)  (((sz)+PGSIZE-1) & ~(PGSIZE-1))
 #define PGROUNDDOWN(a) (((a)) & ~(PGSIZE-1))
@@ -97,11 +120,22 @@ struct segdesc {
 #define PTE_PS          0x080   // Page Size
 
 // Address in page table or page directory entry
+#ifdef __x86_64__
+#define PTE_ADDR(pte)   ((uint64)(pte) & ~0xFFF)
+#define PTE_FLAGS(pte)  ((uint64)(pte) &  0xFFF)
+#else
 #define PTE_ADDR(pte)   ((uint)(pte) & ~0xFFF)
 #define PTE_FLAGS(pte)  ((uint)(pte) &  0xFFF)
+#endif
 
 #ifndef __ASSEMBLER__
+#ifdef __x86_64__
+typedef uint64 pte_t;
+typedef uint64 pdpe_t;
+typedef uint64 pml4e_t;
+#else
 typedef uint pte_t;
+#endif
 
 // Task state segment format
 struct taskstate {

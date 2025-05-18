@@ -65,8 +65,13 @@ lgdt(struct segdesc *p, int size)
   volatile ushort pd[3];
 
   pd[0] = size-1;
+#ifdef __x86_64__
+  pd[1] = (uint64)p;
+  pd[2] = (uint64)p >> 16;
+#else
   pd[1] = (uint)p;
   pd[2] = (uint)p >> 16;
+#endif
 
   asm volatile("lgdt (%0)" : : "r" (pd));
 }
@@ -79,8 +84,13 @@ lidt(struct gatedesc *p, int size)
   volatile ushort pd[3];
 
   pd[0] = size-1;
+#ifdef __x86_64__
+  pd[1] = (uint64)p;
+  pd[2] = (uint64)p >> 16;
+#else
   pd[1] = (uint)p;
   pd[2] = (uint)p >> 16;
+#endif
 
   asm volatile("lidt (%0)" : : "r" (pd));
 }
@@ -130,6 +140,21 @@ xchg(volatile uint *addr, uint newval)
   return result;
 }
 
+#ifdef __x86_64__
+static inline uint64
+rcr2(void)
+{
+  uint64 val;
+  asm volatile("movq %%cr2,%0" : "=r" (val));
+  return val;
+}
+
+static inline void
+lcr3(uint64 val)
+{
+  asm volatile("movq %0,%%cr3" : : "r" (val));
+}
+#else
 static inline uint
 rcr2(void)
 {
@@ -143,6 +168,7 @@ lcr3(uint val)
 {
   asm volatile("movl %0,%%cr3" : : "r" (val));
 }
+#endif
 
 //PAGEBREAK: 36
 // Layout of the trap frame built on the stack by the
