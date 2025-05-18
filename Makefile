@@ -22,10 +22,11 @@ OBJS = \
 	sysfile.o\
 	sysproc.o\
 	trapasm.o\
-	trap.o\
-	uart.o\
-	vectors.o\
+        trap.o\
+        uart.o\
+        vectors.o\
         vm.o\
+        exo.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
@@ -120,6 +121,8 @@ ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
 endif
 
+endif
+
 $(XV6_IMG): bootblock kernel
 	dd if=/dev/zero of=$(XV6_IMG) count=10000
 	dd if=bootblock of=$(XV6_IMG) conv=notrunc
@@ -179,7 +182,7 @@ tags: $(OBJS) $(ENTRYOTHERASM) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o
+ULIB = ulib.o usys.o printf.o umalloc.o swtch.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
