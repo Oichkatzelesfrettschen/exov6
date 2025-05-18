@@ -490,9 +490,9 @@ stati(struct inode *ip, struct stat *st)
 // Read data from inode.
 // Caller must hold ip->lock.
 int
-readi(struct inode *ip, char *dst, uint off, uint n)
+readi(struct inode *ip, char *dst, uint off, size_t n)
 {
-  uint tot, m;
+  size_t tot, m;
   struct buf *bp;
 
   if(ip->type == T_DEV){
@@ -519,9 +519,9 @@ readi(struct inode *ip, char *dst, uint off, uint n)
 // Write data to inode.
 // Caller must hold ip->lock.
 int
-writei(struct inode *ip, char *src, uint off, uint n)
+writei(struct inode *ip, char *src, uint off, size_t n)
 {
-  uint tot, m;
+  size_t tot, m;
   struct buf *bp;
 
   if(ip->type == T_DEV){

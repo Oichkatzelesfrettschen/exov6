@@ -62,11 +62,6 @@ static void __attribute__((noreturn)) runcmd(struct cmd *cmd);
 
 
 
-
-static void
-
-
-
 static void __attribute__((noreturn))
 runcmd(struct cmd *cmd)
 {

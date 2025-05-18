@@ -1,9 +1,11 @@
+#pragma once
+
 struct buf {
   int flags;
   uint dev;
   uint blockno;
   struct sleeplock lock;
-  uint refcnt;
+  size_t refcnt;
   struct buf *prev; // LRU cache list
   struct buf *next;
   struct buf *qnext; // disk queue

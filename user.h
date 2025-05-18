@@ -1,3 +1,5 @@
+#pragma once
+
 struct stat;
 struct rtcdate;
 
@@ -7,11 +9,11 @@ struct rtcdate;
 
 // system calls
 int fork(void);
-int exit(void) __attribute__((noreturn));
+[[noreturn]] int exit(void);
 int wait(void);
 int pipe(int*);
-int write(int, const void*, int);
-int read(int, void*, int);
+int write(int, const void*, size_t);
+int read(int, void*, size_t);
 int close(int);
 int kill(int);
 int exec(char*, char**);
@@ -27,6 +29,9 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int mappte(void *, void *, int);
+
+int exo_pctr_transfer(int cap);
 
 int set_timer_upcall(void (*handler)(void));
 exo_cap exo_alloc_page(void);
@@ -38,13 +43,13 @@ int exo_bind_block(exo_blockcap *cap, void *data, int write);
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
-void *memmove(void*, const void*, int);
+void *memmove(void*, const void*, size_t);
 char* strchr(const char*, char c);
 int strcmp(const char*, const char*);
 void printf(int, const char*, ...);
-char* gets(char*, int max);
-uint strlen(const char*);
-void* memset(void*, int, uint);
-void* malloc(uint);
+char* gets(char*, size_t max);
+size_t strlen(const char*);
+void* memset(void*, int, size_t);
+void* malloc(size_t);
 void free(void*);
 int atoi(const char*);

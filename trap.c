@@ -17,9 +17,15 @@ uint ticks;
 void tvinit(void) {
   int i;
 
+
+  for(i = 0; i < 256; i++)
+    SETGATE(idt[i], 0, SEG_KCODE<<3, vectors[i], 0);
+  SETGATE(idt[T_SYSCALL], 1, SEG_KCODE<<3, vectors[T_SYSCALL], DPL_USER);
+  SETGATE(idt[T_PCTR_TRANSFER], 1, SEG_KCODE<<3, vectors[T_PCTR_TRANSFER], DPL_USER);
   for (i = 0; i < 256; i++)
     SETGATE(idt[i], 0, SEG_KCODE << 3, vectors[i], 0);
   SETGATE(idt[T_SYSCALL], 1, SEG_KCODE << 3, vectors[T_SYSCALL], DPL_USER);
+
 
   initlock(&tickslock, "time");
 }
@@ -78,6 +84,9 @@ void trap(struct trapframe *tf) {
   case T_IRQ0 + IRQ_SPURIOUS:
     cprintf("cpu%d: spurious interrupt at %x:%x\n", cpuid(), tf->cs, tf->eip);
     lapiceoi();
+    break;
+  case T_PCTR_TRANSFER:
+    exo_pctr_transfer(tf);
     break;
 
   // PAGEBREAK: 13

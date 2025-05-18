@@ -1,3 +1,5 @@
+#pragma once
+
 // This file contains definitions for the
 // x86 memory management unit (MMU).
 
@@ -38,6 +40,8 @@ struct segdesc {
   uint g : 1;          // Granularity: limit scaled by 4K when set
   uint base_31_24 : 8; // High bits of segment base address
 };
+// Ensure the descriptor is exactly 8 bytes so assembly structures match
+_Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
 
 // Normal segment
 #define SEG(type, base, lim, dpl)                                              \
@@ -138,6 +142,11 @@ struct segdesc {
 #define PTE_W 0x002  // Writeable
 #define PTE_U 0x004  // User
 #define PTE_PS 0x080 // Page Size
+
+// Permission flags for user page mappings
+#define PERM_R 0x1
+#define PERM_W 0x2
+#define PERM_X 0x4
 
 // Address in page table or page directory entry
 #ifdef __x86_64__

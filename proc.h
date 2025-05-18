@@ -1,3 +1,5 @@
+#pragma once
+
 // Context used for kernel context switches.
 #ifdef __x86_64__
 struct context64;
@@ -40,6 +42,8 @@ struct context {
   uint ebp;
   uint eip;
 };
+// Check that context saved by swtch.S matches this layout (5 registers)
+_Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
 #ifdef __x86_64__
 struct context64 {
@@ -58,7 +62,7 @@ enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
 struct proc {
-  uint sz;                     // Size of process memory (bytes)
+  size_t sz;                     // Size of process memory (bytes)
   pde_t* pgdir;                // Page table
   char *kstack;                // Bottom of kernel stack for this process
   enum procstate state;        // Process state
@@ -72,7 +76,11 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  uint pctr_cap;               // Capability for exo_pctr_transfer
+  volatile uint pctr_signal;   // Signal counter for exo_pctr_transfer
 };
+// Ensure scheduler and utilities rely on fixed proc size (124 bytes)
+_Static_assert(sizeof(struct proc) == 124, "struct proc size incorrect");
 
 // Process memory is laid out contiguously, low addresses first:
 //   text

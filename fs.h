@@ -1,3 +1,5 @@
+#pragma once
+
 // On-disk file system format.
 // Both the kernel and user programs use this header file.
 
@@ -12,13 +14,13 @@
 // mkfs computes the super block and builds an initial file system. The
 // super block describes the disk layout:
 struct superblock {
-  uint size;         // Size of file system image (blocks)
-  uint nblocks;      // Number of data blocks
-  uint ninodes;      // Number of inodes.
-  uint nlog;         // Number of log blocks
-  uint logstart;     // Block number of first log block
-  uint inodestart;   // Block number of first inode block
-  uint bmapstart;    // Block number of first free map block
+  size_t size;         // Size of file system image (blocks)
+  size_t nblocks;      // Number of data blocks
+  size_t ninodes;      // Number of inodes.
+  size_t nlog;         // Number of log blocks
+  size_t logstart;     // Block number of first log block
+  size_t inodestart;   // Block number of first inode block
+  size_t bmapstart;    // Block number of first free map block
 };
 
 #define NDIRECT 12
@@ -31,7 +33,7 @@ struct dinode {
   short major;          // Major device number (T_DEV only)
   short minor;          // Minor device number (T_DEV only)
   short nlink;          // Number of links to inode in file system
-  uint size;            // Size of file (bytes)
+  size_t size;            // Size of file (bytes)
   uint addrs[NDIRECT+1];   // Data block addresses
 };
 

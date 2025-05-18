@@ -1,3 +1,5 @@
+#pragma once
+
 // x86 trap and interrupt constants.
 
 // Processor-defined:
@@ -25,6 +27,7 @@
 // These are arbitrarily chosen, but with care not to overlap
 // processor defined exceptions or interrupt vectors.
 #define T_SYSCALL       64      // system call
+#define T_PCTR_TRANSFER 65      // exo_pctr_transfer trap
 #define T_DEFAULT      500      // catchall
 
 #define T_IRQ0          32      // IRQ 0 corresponds to int T_IRQ
