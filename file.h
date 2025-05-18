@@ -24,6 +24,8 @@ struct inode {
   uint size;
   uint addrs[NDIRECT+1];
 };
+// Must match on-disk inode layout; inode is expected to be 144 bytes
+_Static_assert(sizeof(struct inode) == 144, "struct inode size incorrect");
 
 // table mapping major device number to
 // device functions

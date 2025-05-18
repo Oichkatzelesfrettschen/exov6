@@ -38,6 +38,8 @@ struct segdesc {
   uint g : 1;          // Granularity: limit scaled by 4K when set
   uint base_31_24 : 8; // High bits of segment base address
 };
+// Ensure the descriptor is exactly 8 bytes so assembly structures match
+_Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
 
 // Normal segment
 #define SEG(type, base, lim, dpl)                                              \

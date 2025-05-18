@@ -40,6 +40,8 @@ struct context {
   uint ebp;
   uint eip;
 };
+// Check that context saved by swtch.S matches this layout (5 registers)
+_Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
 #ifdef __x86_64__
 struct context64 {
@@ -72,6 +74,8 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 };
+// Ensure scheduler and utilities rely on fixed proc size (124 bytes)
+_Static_assert(sizeof(struct proc) == 124, "struct proc size incorrect");
 
 // Process memory is laid out contiguously, low addresses first:
 //   text
