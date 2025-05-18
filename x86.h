@@ -147,6 +147,7 @@ lcr3(uint val)
 //PAGEBREAK: 36
 // Layout of the trap frame built on the stack by the
 // hardware and by trapasm.S, and passed to trap().
+#ifndef __x86_64__
 struct trapframe {
   // registers as pushed by pusha
   uint edi;
@@ -181,3 +182,29 @@ struct trapframe {
   ushort ss;
   ushort padding6;
 };
+#else
+struct trapframe {
+  uint64 r15;
+  uint64 r14;
+  uint64 r13;
+  uint64 r12;
+  uint64 r11;
+  uint64 r10;
+  uint64 r9;
+  uint64 r8;
+  uint64 rdi;
+  uint64 rsi;
+  uint64 rbp;
+  uint64 rbx;
+  uint64 rdx;
+  uint64 rcx;
+  uint64 rax;
+  uint64 trapno;
+  uint64 err;
+  uint64 rip;
+  uint64 cs;
+  uint64 eflags;
+  uint64 rsp;
+  uint64 ss;
+};
+#endif

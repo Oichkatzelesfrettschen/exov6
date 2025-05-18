@@ -49,7 +49,23 @@ fetchstr(uint addr, char **pp)
 int
 argint(int n, int *ip)
 {
+#ifndef __x86_64__
   return fetchint((myproc()->tf->esp) + 4 + 4*n, ip);
+#else
+  uint64 val;
+  struct trapframe *tf = myproc()->tf;
+  switch(n){
+  case 0: val = tf->rdi; break;
+  case 1: val = tf->rsi; break;
+  case 2: val = tf->rdx; break;
+  case 3: val = tf->r10; break;
+  case 4: val = tf->r8; break;
+  case 5: val = tf->r9; break;
+  default: return -1;
+  }
+  *ip = val;
+  return 0;
+#endif
 }
 
 // Fetch the nth word-sized system call argument as a pointer
@@ -58,15 +74,24 @@ argint(int n, int *ip)
 int
 argptr(int n, char **pp, int size)
 {
-  int i;
   struct proc *curproc = myproc();
- 
+#ifndef __x86_64__
+  int i;
   if(argint(n, &i) < 0)
     return -1;
   if(size < 0 || (uint)i >= curproc->sz || (uint)i+size > curproc->sz)
     return -1;
   *pp = (char*)i;
   return 0;
+#else
+  uint64 addr;
+  if(argint(n, (int*)&addr) < 0)
+    return -1;
+  if(size < 0 || addr >= curproc->sz || addr+size > curproc->sz)
+    return -1;
+  *pp = (char*)addr;
+  return 0;
+#endif
 }
 
 // Fetch the nth word-sized system call argument as a string pointer.
@@ -76,10 +101,17 @@ argptr(int n, char **pp, int size)
 int
 argstr(int n, char **pp)
 {
+#ifndef __x86_64__
   int addr;
   if(argint(n, &addr) < 0)
     return -1;
   return fetchstr(addr, pp);
+#else
+  uint64 addr;
+  if(argint(n, (int*)&addr) < 0)
+    return -1;
+  return fetchstr(addr, pp);
+#endif
 }
 
 extern int sys_chdir(void);
@@ -133,13 +165,24 @@ syscall(void)
 {
   int num;
   struct proc *curproc = myproc();
-
+#ifndef __x86_64__
   num = curproc->tf->eax;
+#else
+  num = curproc->tf->rax;
+#endif
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+#ifndef __x86_64__
     curproc->tf->eax = syscalls[num]();
+#else
+    curproc->tf->rax = syscalls[num]();
+#endif
   } else {
     cprintf("%d %s: unknown sys call %d\n",
             curproc->pid, curproc->name, num);
+#ifndef __x86_64__
     curproc->tf->eax = -1;
+#else
+    curproc->tf->rax = -1;
+#endif
   }
 }
