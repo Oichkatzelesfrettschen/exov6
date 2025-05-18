@@ -71,13 +71,25 @@ struct segdesc {
 //  \--- PDX(va) --/ \--- PTX(va) --/
 
 // page directory index
+#ifdef __x86_64__
+#define PDX(va)         (((uint64)(va) >> PDXSHIFT) & 0x3FF)
+#else
 #define PDX(va)         (((uint)(va) >> PDXSHIFT) & 0x3FF)
+#endif
 
 // page table index
+#ifdef __x86_64__
+#define PTX(va)         (((uint64)(va) >> PTXSHIFT) & 0x3FF)
+#else
 #define PTX(va)         (((uint)(va) >> PTXSHIFT) & 0x3FF)
+#endif
 
 // construct virtual address from indexes and offset
+#ifdef __x86_64__
+#define PGADDR(d, t, o) ((uint64)((d) << PDXSHIFT | (t) << PTXSHIFT | (o)))
+#else
 #define PGADDR(d, t, o) ((uint)((d) << PDXSHIFT | (t) << PTXSHIFT | (o)))
+#endif
 
 // Page directory and page table constants.
 #define NPDENTRIES      1024    // # directory entries per page directory
@@ -97,11 +109,20 @@ struct segdesc {
 #define PTE_PS          0x080   // Page Size
 
 // Address in page table or page directory entry
+#ifdef __x86_64__
+#define PTE_ADDR(pte)   ((uint64)(pte) & ~0xFFFULL)
+#define PTE_FLAGS(pte)  ((uint64)(pte) &  0xFFF)
+#else
 #define PTE_ADDR(pte)   ((uint)(pte) & ~0xFFF)
 #define PTE_FLAGS(pte)  ((uint)(pte) &  0xFFF)
+#endif
 
 #ifndef __ASSEMBLER__
+#ifdef __x86_64__
+typedef uint64 pte_t;
+#else
 typedef uint pte_t;
+#endif
 
 // Task state segment format
 struct taskstate {

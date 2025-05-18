@@ -130,6 +130,21 @@ xchg(volatile uint *addr, uint newval)
   return result;
 }
 
+#ifdef __x86_64__
+static inline uint64
+rcr2(void)
+{
+  uint64 val;
+  asm volatile("movq %%cr2,%0" : "=r" (val));
+  return val;
+}
+
+static inline void
+lcr3(uint64 val)
+{
+  asm volatile("movq %0,%%cr3" : : "r" (val));
+}
+#else
 static inline uint
 rcr2(void)
 {
@@ -143,6 +158,7 @@ lcr3(uint val)
 {
   asm volatile("movl %0,%%cr3" : : "r" (val));
 }
+#endif
 
 //PAGEBREAK: 36
 // Layout of the trap frame built on the stack by the
