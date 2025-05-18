@@ -74,6 +74,15 @@ endif
 ARCH ?= i686
 CSTD ?= gnu2x
 
+ifeq ($(ARCH),x86_64)
+OBJS += main64.o
+BOOTASM := arch/x64/bootasm64.S
+ENTRYASM := arch/x64/entry64.S
+else
+BOOTASM := bootasm.S
+ENTRYASM := entry.S
+endif
+
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)gas
 LD = $(TOOLPREFIX)ld
@@ -125,13 +134,16 @@ $(XV6_MEMFS_IMG): bootblock kernelmemfs
 	dd if=bootblock of=$(XV6_MEMFS_IMG) conv=notrunc
 	dd if=$(KERNELMEMFS_FILE) of=$(XV6_MEMFS_IMG) seek=1 conv=notrunc
 
-bootblock: bootasm.S bootmain.c
+bootblock: $(BOOTASM) bootmain.c
 	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(BOOTASM) -o bootasm.o
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 	$(OBJDUMP) -S bootblock.o > bootblock.asm
 	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
 	./sign.pl bootblock
+entry.o: $(ENTRYASM)
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(ENTRYASM) -o entry.o
+
 
 entryother: entryother.S
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
