@@ -80,3 +80,11 @@ The 64-bit port currently differs from the 32-bit version in a few
 ways.  It is less thoroughly tested and some user-space tests may not
 pass.  The memory layout also differs slightly in order to support 64-bit
 addresses.
+
+In 64-bit mode the kernel lives in the higher half of the address
+space.  ``memlayout.h`` defines ``KERNBASE64`` at
+``0xffffffff80000000`` with devices mapped near the top of the canonical
+range starting at ``DEVSPACE64``.  ``PHYSTOP64`` specifies the upper
+limit of usable physical memory.  When building for 64-bit these values
+are selected automatically via conditional compilation and replace the
+32-bit constants.
