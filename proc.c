@@ -104,13 +104,22 @@ found:
 
   // Set up new context to start executing at forkret,
   // which returns to trapret.
+#ifdef __x86_64__
+  sp -= sizeof(unsigned long);
+  *(unsigned long*)sp = (unsigned long)trapret;
+#else
   sp -= 4;
   *(uint*)sp = (uint)trapret;
+#endif
 
   sp -= sizeof *p->context;
-  p->context = (struct context*)sp;
+  p->context = (context_t*)sp;
   memset(p->context, 0, sizeof *p->context);
+#ifdef __x86_64__
+  p->context->rip = (unsigned long)forkret;
+#else
   p->context->eip = (uint)forkret;
+#endif
 
   return p;
 }
@@ -525,7 +534,11 @@ procdump(void)
       state = "???";
     cprintf("%d %s %s", p->pid, state, p->name);
     if(p->state == SLEEPING){
+#ifdef __x86_64__
+      getcallerpcs((void*)p->context->rbp + 2*sizeof(uintptr_t), pc);
+#else
       getcallerpcs((uint*)p->context->ebp+2, pc);
+#endif
       for(i=0; i<10 && pc[i] != 0; i++)
         cprintf(" %p", pc[i]);
     }

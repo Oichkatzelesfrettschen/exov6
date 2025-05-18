@@ -18,7 +18,6 @@ OBJS = \
 	sleeplock.o\
 	spinlock.o\
 	string.o\
-	swtch.o\
 	syscall.o\
 	sysfile.o\
 	sysproc.o\
@@ -79,10 +78,11 @@ ARCH ?= i686
 CSTD ?= gnu2x
 
 ifeq ($(ARCH),x86_64)
-OBJS += main64.o
+OBJS += main64.o swtch64.o
 BOOTASM := arch/x64/bootasm64.S
 ENTRYASM := arch/x64/entry64.S
 else
+OBJS += swtch.o
 BOOTASM := bootasm.S
 ENTRYASM := entry.S
 endif
