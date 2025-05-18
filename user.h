@@ -1,5 +1,6 @@
 struct stat;
 struct rtcdate;
+#include "exo_cpu.h"
 
 // system calls
 int fork(void);
@@ -23,6 +24,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int set_timer_upcall(void (*handler)(void));
 
 // ulib.c
 int stat(const char*, struct stat*);

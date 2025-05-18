@@ -66,6 +66,7 @@ struct proc {
   struct proc *parent;         // Parent process
   struct trapframe *tf;        // Trap frame for current syscall
   context_t *context;          // swtch() here to run process
+  void (*timer_upcall)(void);  // user-mode timer interrupt handler
   void *chan;                  // If non-zero, sleeping on chan
   int killed;                  // If non-zero, have been killed
   struct file *ofile[NOFILE];  // Open files
