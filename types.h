@@ -7,5 +7,12 @@ typedef unsigned long long uint64;
 typedef uint64 pde_t;
 #else
 typedef uint pde_t;
+
 #endif
+
+
+#endif
+
+
 typedef unsigned long uintptr_t;
+

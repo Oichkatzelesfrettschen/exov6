@@ -8,7 +8,11 @@
 #include "elf.h"
 
 extern char data[];  // defined by kernel.ld
+#ifdef __x86_64__
+pml4e_t *kpgdir;  // for use in scheduler()
+#else
 pde_t *kpgdir;  // for use in scheduler()
+#endif
 
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
@@ -140,7 +144,11 @@ setupkvm(void)
 void
 kvmalloc(void)
 {
+#ifdef __x86_64__
+  kpgdir = setupkvm64();
+#else
   kpgdir = setupkvm();
+#endif
   switchkvm();
 }
 
