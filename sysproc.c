@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "exo.h"
 
 int
 sys_fork(void)
@@ -88,4 +89,22 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+// allocate a physical page and return its capability
+int
+sys_exo_alloc_page(void)
+{
+  exo_cap cap = exo_alloc_page();
+  return cap.pa;
+}
+
+// unbind and free a physical page by capability
+int
+sys_exo_unbind_page(void)
+{
+  exo_cap cap;
+  if(argint(0, (int*)&cap.pa) < 0)
+    return -1;
+  return exo_unbind_page(cap);
 }

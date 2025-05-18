@@ -15,6 +15,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct exo_cap;
 
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
@@ -202,7 +203,13 @@ int copyout(pde_t *, uint64, void *, uint);
 #else
 int copyout(pde_t *, uint, void *, uint);
 #endif
+
+void            clearpteu(pde_t *pgdir, char *uva);
+struct exo_cap  exo_alloc_page(void);
+int             exo_unbind_page(struct exo_cap);
+
 void clearpteu(pde_t *pgdir, char *uva);
+
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
