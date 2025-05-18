@@ -77,15 +77,17 @@ endif
 ARCH ?= i686
 CSTD ?= gnu2x
 
+
+
 ifeq ($(ARCH),x86_64)
 OBJS += main64.o swtch64.o
 BOOTASM := arch/x64/bootasm64.S
 ENTRYASM := arch/x64/entry64.S
 else
 OBJS += swtch.o
+
 BOOTASM := bootasm.S
 ENTRYASM := entry.S
-endif
 
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)gas
@@ -100,21 +102,10 @@ FS_IMG := fs.img
 XV6_IMG := xv6.img
 XV6_MEMFS_IMG := xv6memfs.img
 
-ifeq ($(ARCH),x86_64)
-KERNEL_FILE := kernel64
-KERNELMEMFS_FILE := kernelmemfs64
-FS_IMG := fs64.img
-XV6_IMG := xv6-64.img
-XV6_MEMFS_IMG := xv6memfs-64.img
-endif
 
-ifeq ($(ARCH),x86_64)
-ARCHFLAG := -m64
-LDFLAGS += -m $(shell $(LD) -V | grep elf_x86_64 2>/dev/null | head -n 1)
-else
+
 ARCHFLAG := -m32
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
-endif
 
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
@@ -149,11 +140,14 @@ entry.o: $(ENTRYASM)
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(ENTRYASM) -o entry.o
 
 
-entryother: entryother.S
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
+ENTRYOTHERASM := entryother.S
+ENTRYOTHERBIN := entryother
+
+$(ENTRYOTHERBIN): $(ENTRYOTHERASM)
+	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(ENTRYOTHERASM) -o entryother.o
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
-	$(OBJCOPY) -S -O binary -j .text bootblockother.o entryother
-	$(OBJDUMP) -S bootblockother.o > entryother.asm
+	$(OBJCOPY) -S -O binary -j .text bootblockother.o $(ENTRYOTHERBIN)
+	$(OBJDUMP) -S bootblockother.o > $(ENTRYOTHERBIN).asm
 
 initcode: initcode.S
 	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
@@ -161,25 +155,25 @@ initcode: initcode.S
 	$(OBJCOPY) -S -O binary initcode.out initcode
 	$(OBJDUMP) -S initcode.o > initcode.asm
 
-kernel: $(OBJS) entry.o entryother initcode kernel.ld
-	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL_FILE) entry.o $(OBJS) -b binary initcode entryother
-	$(OBJDUMP) -S $(KERNEL_FILE) > kernel.asm
+kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld
+	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL_FILE) entry.o $(OBJS) -b binary initcode $(ENTRYOTHERBIN)
+		$(OBJDUMP) -S $(KERNEL_FILE) > kernel.asm
 	$(OBJDUMP) -t $(KERNEL_FILE) | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
 # kernelmemfs is a copy of kernel that maintains the
 # disk image in memory instead of writing to a disk.
 # This is not so useful for testing persistent storage or
 # exploring disk buffering implementations, but it is
-# great for testing the kernel on real hardware without
+	# great for testing the kernel on real hardware without
 # needing a scratch disk.
 MEMFSOBJS = $(filter-out ide.o,$(OBJS)) memide.o
-kernelmemfs: $(MEMFSOBJS) entry.o entryother initcode kernel.ld $(FS_IMG)
-	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNELMEMFS_FILE) entry.o  $(MEMFSOBJS) -b binary initcode entryother $(FS_IMG)
+kernelmemfs: $(MEMFSOBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld $(FS_IMG)
+	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNELMEMFS_FILE) entry.o  $(MEMFSOBJS) -b binary initcode $(ENTRYOTHERBIN) $(FS_IMG)
 	$(OBJDUMP) -S $(KERNELMEMFS_FILE) > kernelmemfs.asm
 	$(OBJDUMP) -t $(KERNELMEMFS_FILE) | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernelmemfs.sym
 
-tags: $(OBJS) entryother.S _init
-	etags *.S *.c
+tags: $(OBJS) $(ENTRYOTHERASM) _init
+		etags *.S *.c
 
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
@@ -234,7 +228,7 @@ $(FS_IMG): mkfs README $(UPROGS)
 
 clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
-	*.o *.d *.asm *.sym vectors.S bootblock entryother \
+	*.o *.d *.asm *.sym vectors.S bootblock entryother entryother64 \
 	initcode initcode.out kernel kernel64 xv6.img xv6-64.img \
 	fs.img fs64.img kernelmemfs kernelmemfs64 xv6memfs.img \
 	xv6memfs-64.img mkfs .gdbinit \

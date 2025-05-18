@@ -71,7 +71,11 @@ pde_t entrypgdir[];  // For entry.S
 static void
 startothers(void)
 {
+#ifdef __x86_64__
+  extern uchar _binary_entryother64_start[], _binary_entryother64_size[];
+#else
   extern uchar _binary_entryother_start[], _binary_entryother_size[];
+#endif
   uchar *code;
   struct cpu *c;
   char *stack;
@@ -81,7 +85,11 @@ startothers(void)
   // _binary_entryother_start.
   code = P2V(0x7000);
 #ifdef __x86_64__
+
+  memmove(code, _binary_entryother64_start, (uint)_binary_entryother64_size);
+
   memmove(code, _binary_entryother_start, (uint64)_binary_entryother_size);
+
 #else
   memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
 #endif
@@ -94,9 +102,14 @@ startothers(void)
     // pgdir to use. We cannot use kpgdir yet, because the AP processor
     // is running in low  memory, so we use entrypgdir for the APs too.
     stack = kalloc();
+#ifdef __x86_64__
+    *(uint64*)(code-8) = (uint64)stack + KSTACKSIZE;
+    *(void(**)(void))(code-16) = mpenter;
+#else
     *(void**)(code-4) = stack + KSTACKSIZE;
     *(void(**)(void))(code-8) = mpenter;
     *(int**)(code-12) = (void *) V2P(entrypgdir);
+#endif
 
     lapicstartap(c->apicid, V2P(code));
 
