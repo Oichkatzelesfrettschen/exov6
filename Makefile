@@ -88,6 +88,7 @@ OBJS += swtch.o
 
 BOOTASM := bootasm.S
 ENTRYASM := entry.S
+endif
 
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)gas

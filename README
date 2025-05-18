@@ -88,3 +88,8 @@ range starting at ``DEVSPACE64``.  ``PHYSTOP64`` specifies the upper
 limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
+
+EXOKERNEL VARIANT
+-----------------
+For information about the experimental exokernel version of xv6 see ``xv6-exo.md``. Build it by passing ``EXO=1`` to ``make`` and run it with ``make EXO=1 qemu``.
+
