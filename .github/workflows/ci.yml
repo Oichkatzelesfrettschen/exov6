@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install build dependencies
+      run: sudo apt-get update -y && sudo apt-get install -y build-essential qemu-system-i386
+    - name: Build
+      run: make QEMU=echo qemu-nox
+    - name: Clean
+      run: make clean
