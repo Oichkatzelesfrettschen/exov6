@@ -57,11 +57,7 @@ struct cmd *parsecmd(char*);
 static void runcmd(struct cmd *cmd) __attribute__((noreturn));
 
 // Execute cmd.  Never returns.
-
-static void
-
 static void __attribute__((noreturn))
-
 runcmd(struct cmd *cmd)
 {
   int p[2];

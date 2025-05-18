@@ -1,5 +1,11 @@
 struct buf;
 struct context;
+#ifdef __x86_64__
+struct context64;
+typedef struct context64 context_t;
+#else
+typedef struct context context_t;
+#endif
 struct file;
 struct inode;
 struct pipe;
@@ -122,7 +128,7 @@ void            wakeup(void*);
 void            yield(void);
 
 // swtch.S
-void            swtch(struct context**, struct context*);
+void            swtch(context_t**, context_t*);
 
 // spinlock.c
 void            acquire(struct spinlock*);
