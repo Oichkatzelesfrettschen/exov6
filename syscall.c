@@ -147,6 +147,7 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_mappte(void);
 
 extern int sys_set_timer_upcall(void);
 
@@ -188,6 +189,7 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_mappte]  sys_mappte,
 [SYS_exo_alloc_page] sys_exo_alloc_page,
 [SYS_exo_unbind_page] sys_exo_unbind_page,
 

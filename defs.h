@@ -285,11 +285,15 @@ int copyout(pde_t *, uint, void *, uint);
 #endif
 
 void            clearpteu(pde_t *pgdir, char *uva);
+#ifdef __x86_64__
+int             insert_pte(pde_t*, void*, uint64, int);
+#else
+int             insert_pte(pde_t*, void*, uint, int);
+#endif
 struct exo_cap  exo_alloc_page(void);
 int             exo_unbind_page(struct exo_cap);
 
 void clearpteu(pde_t *pgdir, char *uva);
-
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))

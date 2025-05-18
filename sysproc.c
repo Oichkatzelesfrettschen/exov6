@@ -70,6 +70,15 @@ int sys_uptime(void) {
   return xticks;
 }
 
+int
+sys_mappte(void)
+{
+  int va, pa, perm;
+
+  if (argint(0, &va) < 0 || argint(1, &pa) < 0 || argint(2, &perm) < 0)
+    return -1;
+  return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
+
 
 int sys_set_timer_upcall(void) {
   void (*handler)(void);

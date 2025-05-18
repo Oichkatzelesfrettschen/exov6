@@ -27,6 +27,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int mappte(void *, void *, int);
+
 int exo_pctr_transfer(int cap);
 
 int set_timer_upcall(void (*handler)(void));

@@ -38,6 +38,7 @@ SYSCALL(getpid)
 SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
+SYSCALL(mappte)
 
 
 #ifndef __x86_64__
