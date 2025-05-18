@@ -1,5 +1,6 @@
 struct stat;
 struct rtcdate;
+#include "exo.h"
 
 // system calls
 int fork(void);
@@ -23,6 +24,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+exo_cap exo_alloc_page(void);
+int exo_unbind_page(exo_cap);
 
 // ulib.c
 int stat(const char*, struct stat*);
