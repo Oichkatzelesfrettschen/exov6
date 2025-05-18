@@ -91,8 +91,8 @@ OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 
 # Output file names depend on the target architecture
-KERNEL_FILE := kernel
-KERNELMEMFS_FILE := kernelmemfs
+KERNEL_FILE := kernel.bin
+KERNELMEMFS_FILE := kernelmemfs.bin
 FS_IMG := fs.img
 XV6_IMG := xv6.img
 XV6_MEMFS_IMG := xv6memfs.img
@@ -227,8 +227,8 @@ $(FS_IMG): mkfs README $(UPROGS)
 clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother entryother64 \
-	initcode initcode.out kernel kernel64 xv6.img xv6-64.img \
-	fs.img fs64.img kernelmemfs kernelmemfs64 xv6memfs.img \
+       initcode initcode.out kernel.bin kernel64 xv6.img xv6-64.img \
+       fs.img fs64.img kernelmemfs.bin kernelmemfs64 xv6memfs.img \
 	xv6memfs-64.img mkfs .gdbinit \
 	$(UPROGS)
 

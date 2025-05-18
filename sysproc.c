@@ -1,5 +1,5 @@
-#include "date.h"
 #include "defs.h"
+#include "date.h"
 #include "memlayout.h"
 #include "mmu.h"
 #include "param.h"
@@ -7,6 +7,10 @@
 #include "types.h"
 #include "x86.h"
 #include "exo.h"
+#include "fs.h"
+#include "spinlock.h"
+#include "sleeplock.h"
+#include "buf.h"
 
 
 int sys_fork(void) { return fork(); }
@@ -86,6 +90,7 @@ int sys_set_timer_upcall(void) {
     return -1;
   myproc()->timer_upcall = handler;
   return 0;
+}
 
 // allocate a physical page and return its capability
 int
@@ -103,5 +108,39 @@ sys_exo_unbind_page(void)
   if(argint(0, (int*)&cap.pa) < 0)
     return -1;
   return exo_unbind_page(cap);
+}
 
+int sys_exo_alloc_block(void) {
+  int dev;
+  struct exo_blockcap *ucap;
+  struct exo_blockcap cap;
+  if (argint(0, &dev) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  cap = exo_alloc_block(dev);
+  ucap->dev = cap.dev;
+  ucap->blockno = cap.blockno;
+  return 0;
+}
+
+int sys_exo_bind_block(void) {
+  struct exo_blockcap *ucap, cap;
+  char *data;
+  int write;
+  struct buf b;
+
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
+      argptr(1, &data, BSIZE) < 0 || argint(2, &write) < 0)
+    return -1;
+
+  cap = *ucap;
+  memset(&b, 0, sizeof(b));
+  initsleeplock(&b.lock, "exoblk");
+  acquiresleep(&b.lock);
+  if (write)
+    memmove(b.data, data, BSIZE);
+  exo_bind_block(&cap, &b, write);
+  if (!write)
+    memmove(data, b.data, BSIZE);
+  releasesleep(&b.lock);
+  return 0;
 }
