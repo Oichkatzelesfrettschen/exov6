@@ -1,3 +1,5 @@
+#pragma once
+
 // Routines to let C code use special x86 instructions.
 
 static inline uchar inb(ushort port) {

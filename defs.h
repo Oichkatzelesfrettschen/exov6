@@ -1,3 +1,5 @@
+#pragma once
+
 struct buf;
 struct context;
 #ifdef __x86_64__
