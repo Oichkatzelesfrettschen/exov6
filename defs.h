@@ -31,6 +31,10 @@ void brelse(struct buf *);
 void bwrite(struct buf *);
 
 // console.c
+void            consoleinit(void);
+void            cprintf(char*, ...);
+void            consoleintr(int(*)(void));
+[[noreturn]] void panic(char*);
 void consoleinit(void);
 void cprintf(char *, ...);
 void consoleintr(int (*)(void));
@@ -155,7 +159,7 @@ struct cpu*     mycpu(void);
 struct proc*    myproc();
 void            pinit(void);
 void            procdump(void);
-void            scheduler(void) __attribute__((noreturn));
+[[noreturn]] void scheduler(void);
 void            sched(void);
 void            setproc(struct proc*);
 void            sleep(void*, struct spinlock*);
