@@ -1,18 +1,16 @@
 #pragma once
 
-typedef unsigned int uint;
-typedef unsigned short ushort;
-typedef unsigned char  uchar;
-typedef unsigned long long uint64;
-typedef uint pde_t;
+#include <stdint.h>
 
-typedef unsigned char uchar;
-typedef unsigned long long uint64;
+typedef uint8_t  uchar;
+typedef uint16_t ushort;
+typedef uint32_t uint;
+typedef uint64_t uint64;
 
-typedef unsigned long uintptr_t;
-
-#ifdef __x86_64__i
-typedef unsigned long long pde_t;
+#ifdef __x86_64__
+typedef uint64_t pde_t;
+typedef uint64_t uintptr_t;
 #else
-typedef unsigned int pde_t;
+typedef uint32_t pde_t;
+typedef uint32_t uintptr_t;
 #endif
