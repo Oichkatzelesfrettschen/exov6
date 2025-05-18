@@ -22,10 +22,11 @@ OBJS = \
 	sysfile.o\
 	sysproc.o\
 	trapasm.o\
-	trap.o\
-	uart.o\
-	vectors.o\
+        trap.o\
+        uart.o\
+        vectors.o\
         vm.o\
+        exo.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
