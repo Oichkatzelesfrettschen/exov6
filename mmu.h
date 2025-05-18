@@ -144,6 +144,50 @@ struct taskstate {
   ushort iomb;       // I/O map base address
 };
 
+#ifdef __x86_64__
+struct taskstate64 {
+  uint link;
+  unsigned long rsp0;
+  ushort ss0;
+  ushort padding1;
+  unsigned long rsp1;
+  ushort ss1;
+  ushort padding2;
+  unsigned long rsp2;
+  ushort ss2;
+  ushort padding3;
+  unsigned long cr3;
+  unsigned long rip;
+  unsigned long rflags;
+  unsigned long rax;
+  unsigned long rcx;
+  unsigned long rdx;
+  unsigned long rbx;
+  unsigned long rsp;
+  unsigned long rbp;
+  unsigned long rsi;
+  unsigned long rdi;
+  ushort es;
+  ushort padding4;
+  ushort cs;
+  ushort padding5;
+  ushort ss;
+  ushort padding6;
+  ushort ds;
+  ushort padding7;
+  ushort fs;
+  ushort padding8;
+  ushort gs;
+  ushort padding9;
+  ushort ldt;
+  ushort padding10;
+  ushort t;
+  ushort iomb;
+};
+
+#define taskstate taskstate64
+#endif
+
 // Gate descriptors for interrupts and traps
 struct gatedesc {
   uint off_15_0 : 16;   // low 16 bits of offset in segment

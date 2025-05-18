@@ -92,8 +92,8 @@ gdtdesc32:
 .p2align 2
 gdt64:
     SEG_NULLASM
-    SEG_ASM64(STA_X|STA_R,0,0xffffffff)
-    SEG_ASM64(STA_W,0,0xffffffff)
+    SEG_ASM64 STA_X|STA_R,0,0xffffffff
+    SEG_ASM64 STA_W,0,0xffffffff
 
 gdtdesc64:
     .word (gdtdesc64 - gdt64 - 1)
@@ -103,10 +103,10 @@ gdtdesc64:
 # Minimal identity-mapped page tables
 .p2align 12
 pml4:
-    .quad pdpt | 0x3
+    .quad pdpt + 0x3
 .p2align 12
 pdpt:
-    .quad pd | 0x3
+    .quad pd + 0x3
 .p2align 12
 pd:
     .quad 0x00000000 | 0x83  # 2MB page

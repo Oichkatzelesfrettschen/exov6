@@ -181,3 +181,42 @@ struct trapframe {
   ushort ss;
   ushort padding6;
 };
+
+#ifdef __x86_64__
+struct trapframe64 {
+  unsigned long r15;
+  unsigned long r14;
+  unsigned long r13;
+  unsigned long r12;
+  unsigned long r11;
+  unsigned long r10;
+  unsigned long r9;
+  unsigned long r8;
+  unsigned long rdi;
+  unsigned long rsi;
+  unsigned long rbp;
+  unsigned long rbx;
+  unsigned long rdx;
+  unsigned long rcx;
+  unsigned long rax;
+  ushort gs;
+  ushort padding1;
+  ushort fs;
+  ushort padding2;
+  ushort es;
+  ushort padding3;
+  ushort ds;
+  ushort padding4;
+  unsigned long trapno;
+  unsigned long err;
+  unsigned long rip;
+  ushort cs;
+  ushort padding5;
+  unsigned long eflags;
+  unsigned long rsp;
+  ushort ss;
+  ushort padding6;
+};
+
+#define trapframe trapframe64
+#endif

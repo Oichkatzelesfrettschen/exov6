@@ -34,8 +34,8 @@ entry64:
 .p2align 2
 gdt:
     SEG_NULLASM
-    SEG_ASM64(STA_X|STA_R,0,0xffffffff)  # code
-    SEG_ASM64(STA_W,0,0xffffffff)        # data
+    SEG_ASM64 STA_X|STA_R,0,0xffffffff  # code
+    SEG_ASM64 STA_W,0,0xffffffff        # data
 
 gdtdesc:
     .word (gdtdesc - gdt - 1)

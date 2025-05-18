@@ -18,12 +18,12 @@ OBJS = \
 	sleeplock.o\
 	spinlock.o\
 	string.o\
-	swtch.o\
-	syscall.o\
-	sysfile.o\
-	sysproc.o\
-	trapasm.o\
-	trap.o\
+       swtch.o\
+       syscall.o\
+       sysfile.o\
+       sysproc.o\
+       $(TRAPASM_OBJ)\
+       trap.o\
 	uart.o\
 	vectors.o\
 	vm.o\
@@ -78,9 +78,11 @@ ifeq ($(ARCH),x86_64)
 OBJS += main64.o
 BOOTASM := arch/x64/bootasm64.S
 ENTRYASM := arch/x64/entry64.S
+TRAPASM_OBJ := trapasm64.o
 else
 BOOTASM := bootasm.S
 ENTRYASM := entry.S
+TRAPASM_OBJ := trapasm.o
 endif
 
 CC = $(TOOLPREFIX)gcc
@@ -178,7 +180,7 @@ tags: $(OBJS) entryother.S _init
 	etags *.S *.c
 
 vectors.S: vectors.pl
-	./vectors.pl > vectors.S
+ARCH=$(ARCH) ./vectors.pl > vectors.S
 
 ULIB = ulib.o usys.o printf.o umalloc.o
 
