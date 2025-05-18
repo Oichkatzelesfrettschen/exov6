@@ -54,3 +54,24 @@ Experimental support for building with the C23 standard and for
 cross-compiling a 64-bit version is available. Set
 ``ARCH=x86_64`` when invoking make to enable 64-bit builds and adjust
 ``CSTD`` to use a different C standard if desired.
+
+64-BIT BUILD REQUIREMENTS
+-------------------------
+Building a 64-bit kernel requires a cross-compiler capable of producing
+``x86_64-elf`` binaries.  On most Linux systems this means installing
+``x86_64-elf-gcc`` and the matching ``x86_64-elf`` binutils package.
+If such packages are not available from your distribution you can build
+them from source using the standard GNU build process.
+
+Once a cross-compiler is installed, build the kernel with::
+
+    make ARCH=x86_64
+
+The resulting ``kernel.img`` can be run under QEMU with::
+
+    make qemu ARCH=x86_64
+
+The 64-bit port currently differs from the 32-bit version in a few
+ways.  It is less thoroughly tested and some user-space tests may not
+pass.  The memory layout also differs slightly in order to support 64-bit
+addresses.
