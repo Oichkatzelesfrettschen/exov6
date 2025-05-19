@@ -14,6 +14,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
+#include "fastipc.h"
 
 static void consputc(int);
 
@@ -218,6 +219,12 @@ consoleintr(int (*getc)(void))
         c = (c == '\r') ? '\n' : c;
         input.buf[input.e++ % INPUT_BUF] = c;
         consputc(c);
+        {
+          zipc_msg_t m = {0};
+          m.badge = 1;
+          m.w0 = c;
+          fastipc_send(&m);
+        }
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
           input.w = input.e;
           wakeup(&input.r);
