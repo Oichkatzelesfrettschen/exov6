@@ -5,12 +5,7 @@
 
 #define CR4_PAE 0x00000020
 
-# Build a 64-bit segment descriptor
-.macro SEG_ASM64 type base lim
-    .word (((\lim) >> 12) & 0xffff), ((\base) & 0xffff)
-    .byte (((\base) >> 16) & 0xff), (0x90 | (\type))
-    .byte (0xA0 | (((\lim) >> 28) & 0xf)), (((\base) >> 24) & 0xff)
-.endm
+# 64-bit segment descriptor helper provided by asm.h
 
 .code16
 .globl start
@@ -94,10 +89,10 @@ gdtdesc64:
 
 .p2align 12
 pml4:
-    .quad pdpt | 0x3
+    .quad pdpt + 0x3
 .p2align 12
 pdpt:
-    .quad pd | 0x3
+    .quad pd + 0x3
 .p2align 12
 pd:
-    .quad 0x00000000 | 0x83
+    .quad 0x00000000 + 0x83

@@ -3,12 +3,7 @@
 #include "mmu.h"
 #include "param.h"
 
-# Build a 64-bit segment descriptor
-.macro SEG_ASM64 type base lim
-    .word (((\lim) >> 12) & 0xffff), ((\base) & 0xffff)
-    .byte (((\base) >> 16) & 0xff), (0x90 | (\type))
-    .byte (0xA0 | (((\lim) >> 28) & 0xf)), (((\base) >> 24) & 0xff)
-.endm
+# 64-bit segment descriptor helper provided by asm.h
 
 .p2align 2
 .globl _start

@@ -30,7 +30,7 @@
 
 #ifdef __x86_64__
 #define V2P(a) (((uint64)(a)) - KERNBASE)
-#define P2V(a) ((void *)(((char *)(a)) + KERNBASE))
+#define P2V(a) ((void *)((uint64)(a) + KERNBASE))
 #else
 #define V2P(a) (((uint)(a)) - KERNBASE)
 #define P2V(a) ((void *)(((char *)(a)) + KERNBASE))

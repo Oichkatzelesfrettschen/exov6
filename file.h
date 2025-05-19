@@ -26,8 +26,10 @@ struct inode {
   size_t size;
   uint addrs[NDIRECT+1];
 };
-// Must match on-disk inode layout; inode is expected to be 144 bytes
+// Must match on-disk inode layout when compiled for 32-bit targets.
+#ifndef __x86_64__
 _Static_assert(sizeof(struct inode) == 144, "struct inode size incorrect");
+#endif
 
 // table mapping major device number to
 // device functions

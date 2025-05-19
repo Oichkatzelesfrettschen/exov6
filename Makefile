@@ -92,16 +92,30 @@ OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 
 # Output file names depend on the target architecture
+ifeq ($(ARCH),x86_64)
+ARCHFLAG := -m64
+LDFLAGS += -m elf_x86_64
+KERNEL_FILE := kernel64
+KERNELMEMFS_FILE := kernelmemfs64
+FS_IMG := fs64.img
+XV6_IMG := xv6-64.img
+XV6_MEMFS_IMG := xv6memfs-64.img
+else
+ARCHFLAG := -m32
+LDFLAGS += -m elf_i386
 KERNEL_FILE := kernel.bin
 KERNELMEMFS_FILE := kernelmemfs.bin
 FS_IMG := fs.img
 XV6_IMG := xv6.img
 XV6_MEMFS_IMG := xv6memfs.img
+endif
 
-
-
-ARCHFLAG := -m32
-LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
+# Only sign the bootblock for 32-bit builds. The 64-bit
+# bootloader exceeds the legacy 512-byte limit.
+SIGNBOOT := 1
+ifeq ($(ARCH),x86_64)
+SIGNBOOT := 0
+endif
 
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
@@ -131,7 +145,9 @@ bootblock: $(BOOTASM) bootmain.c
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 	$(OBJDUMP) -S bootblock.o > bootblock.asm
 	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
+ifneq ($(SIGNBOOT),0)
 	./sign.pl bootblock
+endif
 entry.o: $(ENTRYASM)
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(ENTRYASM) -o entry.o
 

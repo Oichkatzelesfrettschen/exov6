@@ -62,7 +62,7 @@ mpmain(void)
 }
 
 #ifdef __x86_64__
-pml4e_t entrypgdir[];  // For entry.S
+// 64-bit boot code does not use a statically allocated entry page table.
 #else
 pde_t entrypgdir[];  // For entry.S
 #endif
@@ -86,7 +86,8 @@ startothers(void)
   code = P2V(0x7000);
 #ifdef __x86_64__
 
-  memmove(code, _binary_entryother64_start, (uint)_binary_entryother64_size);
+  memmove(code, _binary_entryother64_start,
+          (size_t)_binary_entryother64_size);
 
 #else
   memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
@@ -124,17 +125,15 @@ startothers(void)
 // hence the __aligned__ attribute.
 // PTE_PS in a page directory entry enables 4Mbyte pages.
 
+#ifndef __x86_64__
 __attribute__((__aligned__(PGSIZE)))
-#ifdef __x86_64__
-pml4e_t entrypgdir[NPDENTRIES] = {
-#else
 pde_t entrypgdir[NPDENTRIES] = {
-#endif
   // Map VA's [0, 4MB) to PA's [0, 4MB)
   [0] = (0) | PTE_P | PTE_W | PTE_PS,
   // Map VA's [KERNBASE, KERNBASE+4MB) to PA's [0, 4MB)
   [KERNBASE>>PDXSHIFT] = (0) | PTE_P | PTE_W | PTE_PS,
 };
+#endif
 
 //PAGEBREAK!
 // Blank page.

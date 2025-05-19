@@ -81,11 +81,19 @@ static inline void lidt(struct gatedesc *p, int size) {
 
 static inline void ltr(ushort sel) { asm volatile("ltr %0" : : "r"(sel)); }
 
+#ifdef __x86_64__
+static inline uint readeflags(void) {
+  uint64 eflags;
+  asm volatile("pushfq; popq %0" : "=r"(eflags));
+  return (uint)eflags;
+}
+#else
 static inline uint readeflags(void) {
   uint eflags;
   asm volatile("pushfl; popl %0" : "=r"(eflags));
   return eflags;
 }
+#endif
 
 static inline void loadgs(ushort v) {
   asm volatile("movw %0, %%gs" : : "r"(v));
