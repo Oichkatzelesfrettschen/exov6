@@ -85,14 +85,12 @@ struct proc {
   volatile uint pctr_signal;   // Signal counter for exo_pctr_transfer
 };
 
-// Ensure scheduler and utilities rely on fixed proc size (124 bytes)
+// Ensure scheduler relies on fixed struct proc size
 #ifdef __x86_64__
 _Static_assert(sizeof(struct proc) == 240, "struct proc size incorrect");
 #else
 _Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
 #endif
-// Ensure scheduler and utilities rely on fixed proc size (136 bytes)
-_Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
 
 
 // Process memory is laid out contiguously, low addresses first:
