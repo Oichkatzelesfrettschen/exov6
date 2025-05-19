@@ -115,3 +115,12 @@ usual with ``make``; the resulting ``fs.img`` will contain the new
 ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
 
+ENDPOINTS
+---------
+Endpoints are lightweight message channels inspired by Mach ports and
+seL4 endpoints.  Each endpoint maintains an internal queue of
+``zipc_msg_t`` values.  The ``endpoint_send`` and ``endpoint_recv``
+system calls enqueue and dequeue messages, with receivers sleeping until
+a message is available.  This allows asynchronous waiting similar to the
+channel primitives in those microkernels.
+

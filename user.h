@@ -5,6 +5,7 @@ struct rtcdate;
 
 #include "exo.h"
 #include "exo_cpu.h"
+#include "ipc.h"
 
 // system calls
 int fork(void);
@@ -42,6 +43,8 @@ int exo_read_disk(exo_cap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_cap cap, const void *src, uint64 off, uint64 n);
 int exo_send(exo_cap dest, const void *buf, uint64 len);
 int exo_recv(exo_cap src, void *buf, uint64 len);
+int endpoint_send(zipc_msg_t *msg);
+int endpoint_recv(zipc_msg_t *msg);
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 
