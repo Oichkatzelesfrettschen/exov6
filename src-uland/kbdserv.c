@@ -2,6 +2,7 @@
 #include "user.h"
 #include "ipc.h"
 #include "fcntl.h"
+#include "stdint.h"
 
 int
 main(int argc, char *argv[])
@@ -14,7 +15,7 @@ main(int argc, char *argv[])
     for(;;){
         m.badge = 1;
         zipc_call(&m);
-        if((int64)m.w0 >= 0){
+        if((int64_t)m.w0 >= 0){
             char c = m.w0;
             write(fd, &c, 1);
         }
