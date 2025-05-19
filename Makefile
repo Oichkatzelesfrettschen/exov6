@@ -35,9 +35,6 @@ OBJS = \
        $(KERNEL_DIR)/kernel/exo_ipc.o\
        $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/fastipc.o\
-       $(KERNEL_DIR)/exo/exo_cpu.o\
-       $(KERNEL_DIR)/exo/exo_disk.o\
-       $(KERNEL_DIR)/exo/exo_ipc.o\
        $(KERNEL_DIR)/endpoint.o\
 
 
@@ -203,10 +200,11 @@ ULIB = \
         $(ULAND_DIR)/usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-        $(ULAND_DIR)/swtch.o \
-        $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/chan.o \
-        $(ULAND_DIR)/math_core.o
+$(ULAND_DIR)/swtch.o \
+$(ULAND_DIR)/caplib.o \
+$(ULAND_DIR)/chan.o \
+$(ULAND_DIR)/math_core.o \
+$(ULAND_DIR)/libos/sched.o
 
 _%: $(ULAND_DIR)/%.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
