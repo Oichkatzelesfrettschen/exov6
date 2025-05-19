@@ -88,8 +88,6 @@ startothers(void)
 
   memmove(code, _binary_entryother64_start, (uint)_binary_entryother64_size);
 
-  memmove(code, _binary_entryother_start, (uint64)_binary_entryother_size);
-
 #else
   memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
 #endif
@@ -102,6 +100,8 @@ startothers(void)
     // pgdir to use. We cannot use kpgdir yet, because the AP processor
     // is running in low  memory, so we use entrypgdir for the APs too.
     stack = kalloc();
+    if(stack == 0)
+      panic("startothers: out of memory");
 #ifdef __x86_64__
     *(uint64*)(code-8) = (uint64)stack + KSTACKSIZE;
     *(void(**)(void))(code-16) = mpenter;
