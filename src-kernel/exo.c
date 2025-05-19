@@ -13,12 +13,9 @@ void exo_pctr_transfer(struct trapframe *tf) {
   struct proc *p;
 
   acquire(&ptable.lock);
-  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-    if (p->state != UNUSED && p->pctr_cap == cap) {
-      p->pctr_signal++;
-      break;
-    }
-  }
+  p = pctr_lookup(cap);
+  if (p && p->state != UNUSED)
+    p->pctr_signal++;
   release(&ptable.lock);
 }
 

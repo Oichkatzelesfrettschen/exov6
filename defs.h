@@ -40,6 +40,7 @@ extern struct ptable ptable;
 #include "kernel/exo_disk.h"
 #include "kernel/exo_ipc.h"
 #include "kernel/exo_mem.h"
+#include "fastipc.h"
 
 // bio.c
 void binit(void);
@@ -154,6 +155,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+struct proc*    pctr_lookup(uint);
 
 
 
