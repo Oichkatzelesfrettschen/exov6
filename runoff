@@ -115,8 +115,9 @@ perl -e '
 # make definition list
 cd fmt
 perl -e '
-	while(<>) {
-		chomp;
+        $in_enum = 0;
+        while(<>) {
+                chomp;
 
 		s!//.*!!;
 		s!/\*([^*]|[*][^/])*\*/!!g;
@@ -154,14 +155,58 @@ perl -e '
 			next;
 		}
 
-		if (/^([0-9]+) (((static|struct|extern|union|enum) +)*([A-Za-z0-9_]+))( .*)? +([A-Za-z_][A-Za-z0-9_]*)(,|;|=| =)/) {
-			print "$1 $7\n";
-		}
-		
-		elsif(/^([0-9]+) (enum|struct|union) +([A-Za-z0-9_]+) +{/){ 
-			print "$1 $3\n";
-		}
-		# TODO: enum members
+                if($in_enum){
+                        ($ln) = /^([0-9]+)/;
+                        $rest = $_;
+                        $rest =~ s/^\d+ //;
+                        $end = ($rest =~ /}/);
+                        $rest =~ s/}.*//;
+                        foreach $m (split /,/, $rest){
+                                $m =~ s/=.*//;
+                                $m =~ s/^\s+//; $m =~ s/\s+$//;
+                                if($m =~ /^[A-Za-z_][A-Za-z0-9_]*$/){
+                                        print "$ln $m\n";
+                                }
+                        }
+                        $in_enum = 0 if $end;
+                        next;
+                }
+
+                if (/^([0-9]+) (((static|struct|extern|union|enum) +)*([A-Za-z0-9_]+))( .*)? +([A-Za-z_][A-Za-z0-9_]*)(,|;|=| =)/) {
+                        $ln = $1;
+                        print "$ln $7\n";
+                        $tmp = $_;
+                        $tmp =~ s/^\d+ //;
+                        if($tmp =~ /\benum\b[^\{]*{(.*)/){
+                                $rest = $1;
+                                $end = ($rest =~ /}/);
+                                $rest =~ s/}.*//;
+                                foreach $m (split /,/, $rest){
+                                        $m =~ s/=.*//;
+                                        $m =~ s/^\s+//; $m =~ s/\s+$//;
+                                        if($m =~ /^[A-Za-z_][A-Za-z0-9_]*$/){
+                                                print "$ln $m\n";
+                                        }
+                                }
+                                $in_enum = 1 unless $end;
+                        }
+                }
+
+                elsif(/^([0-9]+) (enum|struct|union) +([A-Za-z0-9_]+) +{(.*)/){
+                        $ln = $1;
+                        print "$ln $3\n";
+                        $rest = $4;
+                        $end = ($rest =~ /}/);
+                        $rest =~ s/}.*//;
+                        foreach $m (split /,/, $rest){
+                                $m =~ s/=.*//;
+                                $m =~ s/^\s+//; $m =~ s/\s+$//;
+                                if($m =~ /^[A-Za-z_][A-Za-z0-9_]*$/){
+                                        print "$ln $m\n";
+                                }
+                        }
+                        $in_enum = 1 unless $end;
+                }
 	}
 ' $files >defs
 

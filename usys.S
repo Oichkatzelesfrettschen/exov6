@@ -60,5 +60,8 @@ SYSCALL(exo_alloc_page)
 SYSCALL(exo_unbind_page)
 SYSCALL(exo_alloc_block)
 SYSCALL(exo_bind_block)
+SYSCALL(exo_yield_to)
+SYSCALL(exo_read_disk)
+SYSCALL(exo_write_disk)
 
 

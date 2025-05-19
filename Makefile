@@ -30,6 +30,9 @@ OBJS = \
         exo/exo_cpu.o\
         exo/exo_disk.o\
         exo/exo_ipc.o\
+        exo_stream.o\
+        kernel/exo_cpu.o\
+        kernel/exo_disk.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
@@ -188,6 +191,10 @@ _forktest: forktest.o $(ULIB)
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
+exo_stream_demo.o: user/exo_stream_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
 # that disk image changes after first build are persistent until clean.  More
 # details:
@@ -211,6 +218,7 @@ UPROGS=\
         _wc\
         _zombie\
         _phi\
+        _exo_stream_demo\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))
@@ -306,6 +314,7 @@ EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
         ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
         phi.c\
+        user/exo_stream_demo.c\
         printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
