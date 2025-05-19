@@ -27,6 +27,9 @@ OBJS = \
 	vectors.o\
         vm.o\
         exo.o\
+        exo/exo_cpu.o\
+        exo/exo_disk.o\
+        exo/exo_ipc.o\
         exo_stream.o\
         kernel/exo_cpu.o\
         kernel/exo_disk.o\
