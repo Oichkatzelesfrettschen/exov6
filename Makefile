@@ -169,7 +169,7 @@ tags: $(OBJS) $(ENTRYOTHERASM) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o swtch.o caplib.o
+ULIB = ulib.o usys.o printf.o umalloc.o swtch.o caplib.o math_core.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -206,6 +206,7 @@ UPROGS=\
 	_stressfs\
 	_usertests\
 	_wc\
+        _phi\
 	_zombie\
 
 ifeq ($(ARCH),x86_64)

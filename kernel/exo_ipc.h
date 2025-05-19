@@ -1,5 +1,6 @@
 #pragma once
 #include "exo_mem.h"
+#include "../stdint.h"
 #include "../exo.h"
 
 int exo_send(exo_cap dest, const void *buf, uint64_t len);
