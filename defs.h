@@ -2,6 +2,9 @@
 #pragma once
 
 #include "types.h"
+#include "param.h"
+#include "spinlock.h"
+#include "proc.h"
 
 
 struct buf;
@@ -16,6 +19,7 @@ struct file;
 struct inode;
 struct pipe;
 struct proc;
+struct trapframe;
 struct rtcdate;
 struct spinlock;
 struct sleeplock;
@@ -24,6 +28,9 @@ struct superblock;
 struct exo_cap;
 struct exo_blockcap;
 struct trapframe;
+
+// process table defined in proc.c
+extern struct ptable ptable;
 
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
@@ -41,10 +48,6 @@ void            consoleinit(void);
 void            cprintf(char*, ...);
 void            consoleintr(int(*)(void));
 [[noreturn]] void panic(char*);
-void consoleinit(void);
-void cprintf(char *, ...);
-void consoleintr(int (*)(void));
-void panic(char *) __attribute__((noreturn));
 
 // exec.c
 int exec(char *, char **);
@@ -77,10 +80,12 @@ struct inode*   nameiparent(char*, char*);
 int             readi(struct inode*, char*, uint, size_t);
 void            stati(struct inode*, struct stat*);
 int             writei(struct inode*, char*, uint, size_t);
+
 struct file *filealloc(void);
 void fileclose(struct file *);
 struct file *filedup(struct file *);
 void fileinit(void);
+
 
 
 // ide.c
@@ -152,6 +157,7 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 
+
 // PAGEBREAK: 16
 //  proc.c
 int cpuid(void);
@@ -171,6 +177,8 @@ void userinit(void);
 int wait(void);
 void wakeup(void *);
 void yield(void);
+
+
 
 
 // swtch.S
@@ -208,7 +216,6 @@ int             argstr(int, char**);
 int             fetchint(uint, int*);
 int             fetchstr(uint, char**);
 void            syscall(void);
-
 
 
 

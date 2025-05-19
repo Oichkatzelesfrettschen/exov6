@@ -1,5 +1,10 @@
 #pragma once
 
+#include "param.h"
+#include "mmu.h"
+#include "x86.h"
+#include "spinlock.h"
+
 // Context used for kernel context switches.
 #ifdef __x86_64__
 struct context64;
@@ -87,3 +92,8 @@ _Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+
+struct ptable {
+  struct spinlock lock;
+  struct proc proc[NPROC];
+};
