@@ -19,10 +19,12 @@ uint64 fib(uint n) {
 
 // Compute the greatest common divisor using Euclid's algorithm.
 uint64 gcd(uint64 a, uint64 b) {
-  while (b != 0) {
-    uint64 t = b;
-    b = a % b;
-    a = t;
+  // Euclid's algorithm without division to avoid libgcc helpers
+  while (a != b) {
+    if (a > b)
+      a -= b;
+    else
+      b -= a;
   }
   return a;
 }
