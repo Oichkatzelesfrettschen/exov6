@@ -14,6 +14,10 @@ int cap_bind_block(exo_blockcap *cap, void *data, int write) {
   return exo_bind_block(cap, data, write);
 }
 
+int cap_flush_block(exo_blockcap *cap, void *data) {
+  return exo_flush_block(cap, data);
+}
+
 int cap_set_timer(void (*handler)(void)) { return set_timer_upcall(handler); }
 
 void cap_yield_to(context_t **old, context_t *target) {

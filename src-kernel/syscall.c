@@ -7,9 +7,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
-#include "types.h"
 #include "x86.h"
-#include "syscall.h"
 // clang-format on
 
 
@@ -153,6 +151,7 @@ extern int sys_exo_alloc_page(void);
 extern int sys_exo_unbind_page(void);
 extern int sys_exo_alloc_block(void);
 extern int sys_exo_bind_block(void);
+extern int sys_exo_flush_block(void);
 extern int sys_exo_yield_to(void);
 extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
@@ -160,6 +159,7 @@ extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
 extern int sys_endpoint_send(void);
 extern int sys_endpoint_recv(void);
+extern int sys_proc_alloc(void);
 extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
@@ -190,6 +190,7 @@ static int (*syscalls[])(void) = {
     [SYS_exo_unbind_page] sys_exo_unbind_page,
     [SYS_exo_alloc_block] sys_exo_alloc_block,
     [SYS_exo_bind_block] sys_exo_bind_block,
+    [SYS_exo_flush_block] sys_exo_flush_block,
     [SYS_exo_yield_to] sys_exo_yield_to,
     [SYS_exo_read_disk] sys_exo_read_disk,
     [SYS_exo_write_disk] sys_exo_write_disk,
@@ -197,6 +198,7 @@ static int (*syscalls[])(void) = {
     [SYS_exo_recv] sys_exo_recv,
     [SYS_endpoint_send] sys_endpoint_send,
     [SYS_endpoint_recv] sys_endpoint_recv,
+    [SYS_proc_alloc] sys_proc_alloc,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 

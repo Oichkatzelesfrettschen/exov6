@@ -17,12 +17,23 @@ endpoint_init(struct endpoint *ep)
 }
 
 void
+endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size)
+{
+    endpoint_init(ep);
+    acquire(&ep->lock);
+    ep->q = buf;
+    ep->size = size;
+    ep->r = ep->w = 0;
+    release(&ep->lock);
+}
+
+void
 endpoint_send(struct endpoint *ep, zipc_msg_t *m)
 {
     endpoint_init(ep);
     acquire(&ep->lock);
-    if(ep->w - ep->r < ENDPOINT_BUFSZ){
-        ep->q[ep->w % ENDPOINT_BUFSZ] = *m;
+    if(ep->q && ep->size && ep->w - ep->r < ep->size){
+        ep->q[ep->w % ep->size] = *m;
         ep->w++;
         wakeup(&ep->r);
     }
@@ -34,10 +45,14 @@ endpoint_recv(struct endpoint *ep, zipc_msg_t *m)
 {
     endpoint_init(ep);
     acquire(&ep->lock);
-    while(ep->r == ep->w){
+    while(ep->q && ep->r == ep->w){
         sleep(&ep->r, &ep->lock);
     }
-    *m = ep->q[ep->r % ENDPOINT_BUFSZ];
+    if(!ep->q){
+        release(&ep->lock);
+        return -1;
+    }
+    *m = ep->q[ep->r % ep->size];
     ep->r++;
     release(&ep->lock);
     return 0;

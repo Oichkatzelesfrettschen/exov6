@@ -140,6 +140,25 @@ int sys_exo_bind_block(void) {
   return 0;
 }
 
+int sys_exo_flush_block(void) {
+  struct exo_blockcap *ucap, cap;
+  char *data;
+  struct buf b;
+
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
+      argptr(1, &data, BSIZE) < 0)
+    return -1;
+
+  cap = *ucap;
+  memset(&b, 0, sizeof(b));
+  initsleeplock(&b.lock, "exoflush");
+  acquiresleep(&b.lock);
+  memmove(b.data, data, BSIZE);
+  exo_bind_block(&cap, &b, 1);
+  releasesleep(&b.lock);
+  return 0;
+}
+
 int sys_exo_yield_to(void) {
   exo_cap cap;
   if (argint(0, (int *)&cap.pa) < 0)
@@ -195,6 +214,44 @@ int sys_exo_recv(void) {
       argptr(1, &dst, n) < 0)
     return -1;
   return exo_recv(cap, dst, n);
+}
+
+int sys_proc_alloc(void) {
+  struct proc *np;
+  struct proc *curproc = myproc();
+  int i;
+
+  if ((np = allocproc()) == 0)
+    return -1;
+
+  if ((np->pgdir = copyuvm(curproc->pgdir, curproc->sz)) == 0) {
+    kfree(np->kstack);
+    np->kstack = 0;
+    np->state = UNUSED;
+    return -1;
+  }
+  np->sz = curproc->sz;
+  np->parent = curproc;
+  *np->tf = *curproc->tf;
+#ifndef __x86_64__
+  np->tf->eax = 0;
+#else
+  np->tf->rax = 0;
+#endif
+
+  for (i = 0; i < NOFILE; i++)
+    if (curproc->ofile[i])
+      np->ofile[i] = filedup(curproc->ofile[i]);
+  np->cwd = idup(curproc->cwd);
+
+  safestrcpy(np->name, curproc->name, sizeof(curproc->name));
+
+  acquire(&ptable.lock);
+  np->state = RUNNABLE;
+  release(&ptable.lock);
+
+  exo_cap cap = { V2P(np->context) };
+  return cap.pa;
 }
 
 // Provided by fastipc.c
