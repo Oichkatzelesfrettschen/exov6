@@ -11,6 +11,8 @@ entryother
 initcode
 initcode.out
 kernel
+kernel.bin
+libos.a
 kernelmemfs
 mkfs
 .gdbinit
