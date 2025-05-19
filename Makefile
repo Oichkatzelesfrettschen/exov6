@@ -1,40 +1,43 @@
+KERNEL_DIR := src-kernel
+ULAND_DIR := src-uland
+
 OBJS = \
-	bio.o\
-	console.o\
-	exec.o\
-	file.o\
-	fs.o\
-	ide.o\
-	ioapic.o\
-	kalloc.o\
-	kbd.o\
-	lapic.o\
-	log.o\
-	main.o\
-	mp.o\
-	picirq.o\
-	pipe.o\
-	proc.o\
-	sleeplock.o\
-	spinlock.o\
-	string.o\
-	syscall.o\
-	sysfile.o\
-	sysproc.o\
-	trapasm.o\
-	trap.o\
-	uart.o\
-	vectors.o\
-        vm.o\
-       exo.o\
-       exo/exo_ipc.o\
-       exo_stream.o\
-        kernel/exo_cpu.o\
-        kernel/exo_disk.o\
-        kernel/exo_ipc.o\
+        $(KERNEL_DIR)/bio.o\
+        $(KERNEL_DIR)/console.o\
+        $(KERNEL_DIR)/exec.o\
+        $(KERNEL_DIR)/file.o\
+        $(KERNEL_DIR)/fs.o\
+        $(KERNEL_DIR)/ide.o\
+        $(KERNEL_DIR)/ioapic.o\
+        $(KERNEL_DIR)/kalloc.o\
+        $(KERNEL_DIR)/kbd.o\
+        $(KERNEL_DIR)/lapic.o\
+        $(KERNEL_DIR)/log.o\
+        $(KERNEL_DIR)/main.o\
+        $(KERNEL_DIR)/mp.o\
+        $(KERNEL_DIR)/picirq.o\
+        $(KERNEL_DIR)/pipe.o\
+        $(KERNEL_DIR)/proc.o\
+        $(KERNEL_DIR)/sleeplock.o\
+        $(KERNEL_DIR)/spinlock.o\
+        $(KERNEL_DIR)/string.o\
+        $(KERNEL_DIR)/syscall.o\
+        $(KERNEL_DIR)/sysfile.o\
+        $(KERNEL_DIR)/sysproc.o\
+        $(KERNEL_DIR)/trapasm.o\
+        $(KERNEL_DIR)/trap.o\
+        $(KERNEL_DIR)/uart.o\
+        $(KERNEL_DIR)/vectors.o\
+        $(KERNEL_DIR)/vm.o\
+       $(KERNEL_DIR)/exo.o\
+       $(KERNEL_DIR)/exo/exo_ipc.o\
+       $(KERNEL_DIR)/exo_stream.o\
+        $(KERNEL_DIR)/kernel/exo_cpu.o\
+        $(KERNEL_DIR)/kernel/exo_disk.o\
+        $(KERNEL_DIR)/kernel/exo_ipc.o\
 
 ifeq ($(ARCH),x86_64)
-OBJS += mmu64.o
+OBJS += $(KERNEL_DIR)/mmu64.o
 endif
 
 # Cross-compiling (e.g., on Mac OS X)
@@ -75,14 +78,14 @@ CSTD ?= gnu2x
 
 
 ifeq ($(ARCH),x86_64)
-OBJS += main64.o swtch64.o
-BOOTASM := arch/x64/bootasm64.S
-ENTRYASM := arch/x64/entry64.S
+OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o
+BOOTASM := $(KERNEL_DIR)/arch/x64/bootasm64.S
+ENTRYASM := $(KERNEL_DIR)/arch/x64/entry64.S
 else
-OBJS += swtch.o
+OBJS += $(KERNEL_DIR)/swtch.o
 
-BOOTASM := bootasm.S
-ENTRYASM := entry.S
+BOOTASM := $(KERNEL_DIR)/bootasm.S
+ENTRYASM := $(KERNEL_DIR)/entry.S
 endif
 
 CC = $(TOOLPREFIX)gcc
@@ -117,7 +120,7 @@ ifeq ($(ARCH),x86_64)
 SIGNBOOT := 0
 endif
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I.
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide
 
@@ -139,8 +142,8 @@ $(XV6_MEMFS_IMG): bootblock kernelmemfs
 	dd if=bootblock of=$(XV6_MEMFS_IMG) conv=notrunc
 	dd if=$(KERNELMEMFS_FILE) of=$(XV6_MEMFS_IMG) seek=1 conv=notrunc
 
-bootblock: $(BOOTASM) bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
+bootblock: $(BOOTASM) $(KERNEL_DIR)/bootmain.c
+	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c $(KERNEL_DIR)/bootmain.c
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(BOOTASM) -o bootasm.o
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 	$(OBJDUMP) -S bootblock.o > bootblock.asm
@@ -152,7 +155,7 @@ entry.o: $(ENTRYASM)
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(ENTRYASM) -o entry.o
 
 
-ENTRYOTHERASM := entryother.S
+ENTRYOTHERASM := $(KERNEL_DIR)/entryother.S
 ENTRYOTHERBIN := entryother
 
 $(ENTRYOTHERBIN): $(ENTRYOTHERASM)
@@ -161,8 +164,8 @@ $(ENTRYOTHERBIN): $(ENTRYOTHERASM)
 	$(OBJCOPY) -S -O binary -j .text bootblockother.o $(ENTRYOTHERBIN)
 	$(OBJDUMP) -S bootblockother.o > $(ENTRYOTHERBIN).asm
 
-initcode: initcode.S
-	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+initcode: $(KERNEL_DIR)/initcode.S
+	$(CC) $(CFLAGS) -nostdinc -I. -c $(KERNEL_DIR)/initcode.S
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
 	$(OBJCOPY) -S -O binary initcode.out initcode
 	$(OBJDUMP) -S initcode.o > initcode.asm
@@ -186,27 +189,33 @@ kernelmemfs: $(MEMFSOBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld $(FS_IMG)
 
 tags: $(OBJS) $(ENTRYOTHERASM) _init
 		etags *.S *.c
+$(KERNEL_DIR)/vectors.S: vectors.pl
+	./vectors.pl > $@
 
-vectors.S: vectors.pl
-	./vectors.pl > vectors.S
+ULIB = \
+        $(ULAND_DIR)/ulib.o \
+        $(ULAND_DIR)/usys.o \
+        $(ULAND_DIR)/printf.o \
+        $(ULAND_DIR)/umalloc.o \
+        $(ULAND_DIR)/swtch.o \
+        $(ULAND_DIR)/caplib.o \
+        $(ULAND_DIR)/math_core.o
 
-ULIB = ulib.o usys.o printf.o umalloc.o swtch.o caplib.o math_core.o
-
-_%: %.o $(ULIB)
+_%: $(ULAND_DIR)/%.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
 	$(OBJDUMP) -S $@ > $*.asm
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
-_forktest: forktest.o $(ULIB)
-	# forktest has less library code linked in - needs to be small
+_forktest: $(ULAND_DIR)/forktest.o $(ULIB)
+	        # forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
-	$(OBJDUMP) -S _forktest > forktest.asm
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
+		$(OBJDUMP) -S _forktest > forktest.asm
 
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
-exo_stream_demo.o: user/exo_stream_demo.c
+exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
@@ -247,7 +256,7 @@ $(FS_IMG): mkfs README $(UPROGS)
 
 clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
-	*.o *.d *.asm *.sym vectors.S bootblock entryother entryother64 \
+       *.o *.d *.asm *.sym $(KERNEL_DIR)/vectors.S bootblock entryother entryother64 \
        initcode initcode.out kernel.bin kernel64 xv6.img xv6-64.img \
        fs.img fs64.img kernelmemfs.bin kernelmemfs64 xv6memfs.img \
 	xv6memfs-64.img mkfs .gdbinit \
@@ -327,11 +336,15 @@ qemu-nox-gdb: $(FS_IMG) $(XV6_IMG) .gdbinit
 # check in that version.
 
 EXTRA=\
-	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
-        ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-        phi.c\
-        user/exo_stream_demo.c\
-        printf.c umalloc.c\
+        mkfs.c $(ULAND_DIR)/ulib.c user.h \
+        $(ULAND_DIR)/cat.c $(ULAND_DIR)/echo.c $(ULAND_DIR)/forktest.c \
+        $(ULAND_DIR)/grep.c $(ULAND_DIR)/kill.c \
+        $(ULAND_DIR)/ln.c $(ULAND_DIR)/ls.c $(ULAND_DIR)/mkdir.c \
+        $(ULAND_DIR)/rm.c $(ULAND_DIR)/stressfs.c $(ULAND_DIR)/usertests.c \
+        $(ULAND_DIR)/wc.c $(ULAND_DIR)/zombie.c \
+        $(ULAND_DIR)/phi.c \
+        $(ULAND_DIR)/user/exo_stream_demo.c \
+        $(ULAND_DIR)/printf.c $(ULAND_DIR)/umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

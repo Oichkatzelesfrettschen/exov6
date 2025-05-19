@@ -108,7 +108,7 @@ with ``exo_stream_register`` and call ``exo_stream_yield`` or
 
 USER DEMO: EXO_YIELD_TO AND STREAMS
 -----------------------------------
-The example program ``exo_stream_demo`` under ``user/`` is a minimal
+The example program ``exo_stream_demo`` under ``src-uland/user/`` is a minimal
 illustration of switching contexts with ``exo_yield_to`` and using the
 placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system as
 usual with ``make``; the resulting ``fs.img`` will contain the new
