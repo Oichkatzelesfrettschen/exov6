@@ -175,3 +175,25 @@ int sys_exo_write_disk(void) {
     return -1;
   return exo_write_disk(cap, src, off, n);
 }
+
+int sys_exo_send(void) {
+  exo_cap cap;
+  char *src;
+  uint n;
+  if (argint(0, (int *)&cap.pa) < 0 ||
+      argint(2, (int *)&n) < 0 ||
+      argptr(1, &src, n) < 0)
+    return -1;
+  return exo_send(cap, src, n);
+}
+
+int sys_exo_recv(void) {
+  exo_cap cap;
+  char *dst;
+  uint n;
+  if (argint(0, (int *)&cap.pa) < 0 ||
+      argint(2, (int *)&n) < 0 ||
+      argptr(1, &dst, n) < 0)
+    return -1;
+  return exo_recv(cap, dst, n);
+}

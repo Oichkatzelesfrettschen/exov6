@@ -63,5 +63,7 @@ SYSCALL(exo_bind_block)
 SYSCALL(exo_yield_to)
 SYSCALL(exo_read_disk)
 SYSCALL(exo_write_disk)
+SYSCALL(exo_send)
+SYSCALL(exo_recv)
 
 
