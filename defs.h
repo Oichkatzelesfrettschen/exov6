@@ -27,7 +27,8 @@ struct stat;
 struct superblock;
 struct exo_cap;
 struct exo_blockcap;
-struct trapframe;
+struct exo_sched_ops;
+struct exo_stream;
 
 // process table defined in proc.c
 extern struct ptable ptable;
@@ -80,11 +81,6 @@ struct inode*   nameiparent(char*, char*);
 int             readi(struct inode*, char*, uint, size_t);
 void            stati(struct inode*, struct stat*);
 int             writei(struct inode*, char*, uint, size_t);
-
-struct file *filealloc(void);
-void fileclose(struct file *);
-struct file *filedup(struct file *);
-void fileinit(void);
 
 
 
@@ -156,28 +152,6 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-
-
-// PAGEBREAK: 16
-//  proc.c
-int cpuid(void);
-void exit(void);
-int fork(void);
-int growproc(int);
-int kill(int);
-struct cpu *mycpu(void);
-struct proc *myproc();
-void pinit(void);
-void procdump(void);
-void scheduler(void) __attribute__((noreturn));
-void sched(void);
-void setproc(struct proc *);
-void sleep(void *, struct spinlock *);
-void userinit(void);
-int wait(void);
-void wakeup(void *);
-void yield(void);
-
 
 
 
@@ -266,6 +240,9 @@ struct exo_cap  exo_alloc_page(void);
 int             exo_unbind_page(struct exo_cap);
 struct exo_blockcap exo_alloc_block(uint dev);
 void            exo_bind_block(struct exo_blockcap *, struct buf *, int);
+void            exo_stream_register(struct exo_stream *);
+void            exo_stream_halt(void);
+void            exo_stream_yield(void);
 
 
 // number of elements in fixed-size array

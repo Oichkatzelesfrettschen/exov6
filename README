@@ -97,3 +97,10 @@ submitting patches, run ``clang-format`` on any modified sources:
 
     clang-format -i file.c
 
+EXO STREAMS
+-----------
+``struct exo_stream`` links scheduler modules together.  Register a stream
+with ``exo_stream_register`` and call ``exo_stream_yield`` or
+``exo_stream_halt`` to invoke the registered callbacks.  See the
+``EXO_STREAM`` design note for details.
+

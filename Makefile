@@ -25,8 +25,9 @@ OBJS = \
 	trap.o\
 	uart.o\
 	vectors.o\
-	vm.o\
-	exo.o\
+        vm.o\
+        exo.o\
+        exo_stream.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
