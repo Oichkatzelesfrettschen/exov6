@@ -205,7 +205,11 @@ void syscall(void) {
   num = curproc->tf->rax;
 #endif
   if(num == 0x30){
+#ifdef __x86_64__
     curproc->tf->rax = sys_ipc_fast();
+#else
+    curproc->tf->eax = sys_ipc_fast();
+#endif
     return;
   }
   if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {

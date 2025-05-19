@@ -33,7 +33,7 @@ OBJS = \
        $(KERNEL_DIR)/exo/exo_cpu.o\
        $(KERNEL_DIR)/exo/exo_disk.o\
        $(KERNEL_DIR)/exo/exo_ipc.o\
-       $(KERNEL_DIR)/exo_stream.o\=======
+       $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/fastipc.o\
         $(KERNEL_DIR)/kernel/exo_cpu.o\
         $(KERNEL_DIR)/kernel/exo_disk.o\
@@ -203,6 +203,7 @@ ULIB = \
         $(ULAND_DIR)/umalloc.o \
         $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
+        $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o
 
 _%: $(ULAND_DIR)/%.o $(ULIB)
