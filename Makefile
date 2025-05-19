@@ -33,7 +33,12 @@ OBJS = \
        $(KERNEL_DIR)/exo/exo_cpu.o\
        $(KERNEL_DIR)/exo/exo_disk.o\
        $(KERNEL_DIR)/exo/exo_ipc.o\
-       $(KERNEL_DIR)/exo_stream.o\
+       $(KERNEL_DIR)/exo_stream.o\=======
+       $(KERNEL_DIR)/fastipc.o\
+        $(KERNEL_DIR)/kernel/exo_cpu.o\
+        $(KERNEL_DIR)/kernel/exo_disk.o\
+        $(KERNEL_DIR)/kernel/exo_ipc.o\
+
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -243,6 +248,8 @@ UPROGS=\
         _phi\
         _exo_stream_demo\
         _ipc_test\
+        _kbdserv\
+        _rcrs\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))
