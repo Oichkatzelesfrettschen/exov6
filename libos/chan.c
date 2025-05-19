@@ -17,13 +17,13 @@ chan_destroy(chan_t *c)
 }
 
 int
-endpoint_send(chan_t *c, exo_cap dest, const void *msg)
+chan_send(chan_t *c, exo_cap dest, const void *msg)
 {
     return cap_send(dest, msg, c->msg_size);
 }
 
 int
-endpoint_recv(chan_t *c, exo_cap src, void *msg)
+chan_recv(chan_t *c, exo_cap src, void *msg)
 {
     return cap_recv(src, msg, c->msg_size);
 }
