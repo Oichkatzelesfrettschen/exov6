@@ -47,11 +47,9 @@ exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
 }
 
 
-int __attribute__((weak)) exo_write_disk(exo_blockcap cap, const void *src,
-                                         uint64_t off, uint64_t n) {
 int __attribute__((weak))
-
-exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t n)
+exo_write_disk(struct exo_blockcap cap, const void *src,
+               uint64_t off, uint64_t n)
 {
 
   (void)cap;
@@ -61,7 +59,7 @@ exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t 
   return -1;
 }
 
-int
+int __attribute__((weak))
 exo_send(exo_cap dest, const void *buf, uint64_t len)
 {
   (void)dest;
@@ -70,7 +68,7 @@ exo_send(exo_cap dest, const void *buf, uint64_t len)
   return -1;
 }
 
-int
+int __attribute__((weak))
 exo_recv(exo_cap src, void *buf, uint64_t len)
 {
   (void)src;
