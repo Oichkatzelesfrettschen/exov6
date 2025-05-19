@@ -156,6 +156,8 @@ extern int sys_exo_bind_block(void);
 extern int sys_exo_yield_to(void);
 extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
+extern int sys_exo_send(void);
+extern int sys_exo_recv(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -188,6 +190,8 @@ static int (*syscalls[])(void) = {
     [SYS_exo_yield_to] sys_exo_yield_to,
     [SYS_exo_read_disk] sys_exo_read_disk,
     [SYS_exo_write_disk] sys_exo_write_disk,
+    [SYS_exo_send] sys_exo_send,
+    [SYS_exo_recv] sys_exo_recv,
 };
 
 void syscall(void) {
