@@ -7,6 +7,7 @@
 #include "proc.h"
 
 
+
 struct buf;
 struct context;
 #ifdef __x86_64__
@@ -25,6 +26,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct trapframe;
 struct exo_cap;
 struct exo_blockcap;
 struct exo_sched_ops;
@@ -32,6 +34,7 @@ struct exo_stream;
 
 // process table defined in proc.c
 extern struct ptable ptable;
+
 
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
@@ -81,7 +84,6 @@ struct inode*   nameiparent(char*, char*);
 int             readi(struct inode*, char*, uint, size_t);
 void            stati(struct inode*, struct stat*);
 int             writei(struct inode*, char*, uint, size_t);
-
 
 
 // ide.c
@@ -152,6 +154,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+
 
 
 

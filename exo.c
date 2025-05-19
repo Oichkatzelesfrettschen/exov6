@@ -6,7 +6,6 @@
 #include "types.h"
 #include "x86.h"
 
-extern struct ptable ptable;
 
 void exo_pctr_transfer(struct trapframe *tf) {
   uint cap = tf->eax;

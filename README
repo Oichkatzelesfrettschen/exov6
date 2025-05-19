@@ -97,10 +97,21 @@ submitting patches, run ``clang-format`` on any modified sources:
 
     clang-format -i file.c
 
+
 EXO STREAMS
 -----------
 ``struct exo_stream`` links scheduler modules together.  Register a stream
 with ``exo_stream_register`` and call ``exo_stream_yield`` or
 ``exo_stream_halt`` to invoke the registered callbacks.  See the
 ``EXO_STREAM`` design note for details.
+
+
+USER DEMO: EXO_YIELD_TO AND STREAMS
+-----------------------------------
+The example program ``exo_stream_demo`` under ``user/`` is a minimal
+illustration of switching contexts with ``exo_yield_to`` and using the
+placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system as
+usual with ``make``; the resulting ``fs.img`` will contain the new
+``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
+functions printing messages that indicate the expected invocation order.
 
