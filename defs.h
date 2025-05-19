@@ -5,6 +5,7 @@
 #include "param.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "ipc.h"
 
 
 
@@ -31,6 +32,7 @@ struct exo_cap;
 struct exo_blockcap;
 struct exo_sched_ops;
 struct exo_stream;
+struct endpoint;
 
 // process table defined in proc.c
 extern struct ptable ptable;
@@ -249,6 +251,8 @@ void            exo_stream_halt(void);
 void            exo_stream_yield(void);
 void            fastipc_send(zipc_msg_t *);
 int             sys_ipc_fast(void);
+void            endpoint_send(struct endpoint *, zipc_msg_t *);
+int             endpoint_recv(struct endpoint *, zipc_msg_t *);
 
 
 // number of elements in fixed-size array
