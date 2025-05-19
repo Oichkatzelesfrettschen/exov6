@@ -33,7 +33,7 @@ exo_yield_to(exo_cap target)
 }
 
 int
-exo_read_disk(exo_cap cap, void *dst, uint64_t off, uint64_t n)
+exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
 {
   (void)cap;
   (void)dst;
@@ -43,11 +43,29 @@ exo_read_disk(exo_cap cap, void *dst, uint64_t off, uint64_t n)
 }
 
 int
-exo_write_disk(exo_cap cap, const void *src, uint64_t off, uint64_t n)
+exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t n)
 {
   (void)cap;
   (void)src;
   (void)off;
   (void)n;
+  return -1;
+}
+
+int
+exo_send(exo_cap dest, const void *buf, uint64_t len)
+{
+  (void)dest;
+  (void)buf;
+  (void)len;
+  return -1;
+}
+
+int
+exo_recv(exo_cap src, void *buf, uint64_t len)
+{
+  (void)src;
+  (void)buf;
+  (void)len;
   return -1;
 }

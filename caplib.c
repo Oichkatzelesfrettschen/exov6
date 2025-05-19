@@ -29,3 +29,11 @@ int cap_read_disk(exo_cap cap, void *dst, uint64 off, uint64 n) {
 int cap_write_disk(exo_cap cap, const void *src, uint64 off, uint64 n) {
   return exo_write_disk(cap, src, off, n);
 }
+
+int cap_send(exo_cap dest, const void *buf, uint64 len) {
+  return exo_send(dest, buf, len);
+}
+
+int cap_recv(exo_cap src, void *buf, uint64 len) {
+  return exo_recv(src, buf, len);
+}

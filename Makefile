@@ -33,6 +33,7 @@ OBJS = \
         exo_stream.o\
         kernel/exo_cpu.o\
         kernel/exo_disk.o\
+        kernel/exo_ipc.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
@@ -219,6 +220,7 @@ UPROGS=\
         _zombie\
         _phi\
         _exo_stream_demo\
+        _ipc_test\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))

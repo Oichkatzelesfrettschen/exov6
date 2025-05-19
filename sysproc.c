@@ -153,10 +153,10 @@ int sys_exo_yield_to(void) {
 }
 
 int sys_exo_read_disk(void) {
-  exo_cap cap;
+  struct exo_blockcap cap;
   char *dst;
   uint off, n;
-  if (argint(0, (int *)&cap.pa) < 0 ||
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
       argint(2, (int *)&off) < 0 ||
       argint(3, (int *)&n) < 0 ||
       argptr(1, &dst, n) < 0)
@@ -165,13 +165,35 @@ int sys_exo_read_disk(void) {
 }
 
 int sys_exo_write_disk(void) {
-  exo_cap cap;
+  struct exo_blockcap cap;
   char *src;
   uint off, n;
-  if (argint(0, (int *)&cap.pa) < 0 ||
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
       argint(2, (int *)&off) < 0 ||
       argint(3, (int *)&n) < 0 ||
       argptr(1, &src, n) < 0)
     return -1;
   return exo_write_disk(cap, src, off, n);
+}
+
+int sys_exo_send(void) {
+  exo_cap cap;
+  char *src;
+  uint n;
+  if (argint(0, (int *)&cap.pa) < 0 ||
+      argint(2, (int *)&n) < 0 ||
+      argptr(1, &src, n) < 0)
+    return -1;
+  return exo_send(cap, src, n);
+}
+
+int sys_exo_recv(void) {
+  exo_cap cap;
+  char *dst;
+  uint n;
+  if (argint(0, (int *)&cap.pa) < 0 ||
+      argint(2, (int *)&n) < 0 ||
+      argptr(1, &dst, n) < 0)
+    return -1;
+  return exo_recv(cap, dst, n);
 }
