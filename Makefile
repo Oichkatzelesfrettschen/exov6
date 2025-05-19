@@ -337,6 +337,10 @@ _forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
+exo_stream_demo.o: user/exo_stream_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+
 $(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
