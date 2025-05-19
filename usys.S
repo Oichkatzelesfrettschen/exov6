@@ -65,5 +65,7 @@ SYSCALL(exo_read_disk)
 SYSCALL(exo_write_disk)
 SYSCALL(exo_send)
 SYSCALL(exo_recv)
+SYSCALL(endpoint_send)
+SYSCALL(endpoint_recv)
 
 
