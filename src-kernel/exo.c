@@ -1,4 +1,7 @@
 #include "defs.h"
+#include "kernel/exo_cpu.h"
+#include "kernel/exo_disk.h"
+#include "kernel/exo_ipc.h"
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
@@ -13,66 +16,8 @@ void exo_pctr_transfer(struct trapframe *tf) {
   struct proc *p;
 
   acquire(&ptable.lock);
-  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-    if (p->state != UNUSED && p->pctr_cap == cap) {
-      p->pctr_signal++;
-      break;
-    }
-  }
+  p = pctr_lookup(cap);
+  if (p && p->state != UNUSED)
+    p->pctr_signal++;
   release(&ptable.lock);
-}
-
-// Stubs for capability syscalls. Real implementations may reside in
-// platform-specific code, but we provide simple versions so that the
-// kernel links successfully.
-
-int __attribute__((weak))
-exo_yield_to(exo_cap target)
-{
-
-  (void)target;
-  return -1;
-}
-
-int __attribute__((weak))
-
-exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
-{
-
-  (void)cap;
-  (void)dst;
-  (void)off;
-  (void)n;
-  return -1;
-}
-
-
-int __attribute__((weak))
-exo_write_disk(struct exo_blockcap cap, const void *src,
-               uint64_t off, uint64_t n)
-{
-
-  (void)cap;
-  (void)src;
-  (void)off;
-  (void)n;
-  return -1;
-}
-
-int __attribute__((weak))
-exo_send(exo_cap dest, const void *buf, uint64_t len)
-{
-  (void)dest;
-  (void)buf;
-  (void)len;
-  return -1;
-}
-
-int __attribute__((weak))
-exo_recv(exo_cap src, void *buf, uint64_t len)
-{
-  (void)src;
-  (void)buf;
-  (void)len;
-  return -1;
 }
