@@ -41,6 +41,7 @@ extern struct ptable ptable;
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
 #include "kernel/exo_ipc.h"
+#include "ipc.h"
 #include "kernel/exo_mem.h"
 #include "fastipc.h"
 #include "ipc.h"
