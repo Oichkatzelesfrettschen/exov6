@@ -22,10 +22,10 @@ void cap_yield_to(context_t **old, context_t *target) {
 
 int cap_yield_to_cap(exo_cap target) { return exo_yield_to(target); }
 
-int cap_read_disk(exo_cap cap, void *dst, uint64 off, uint64 n) {
+int cap_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n) {
   return exo_read_disk(cap, dst, off, n);
 }
 
-int cap_write_disk(exo_cap cap, const void *src, uint64 off, uint64 n) {
+int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n) {
   return exo_write_disk(cap, src, off, n);
 }
