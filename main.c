@@ -88,8 +88,6 @@ startothers(void)
 
   memmove(code, _binary_entryother64_start, (uint)_binary_entryother64_size);
 
-  memmove(code, _binary_entryother_start, (uint64)_binary_entryother_size);
-
 #else
   memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
 #endif
