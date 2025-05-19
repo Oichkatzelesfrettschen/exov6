@@ -22,12 +22,8 @@
 #define SYS_link   19
 #define SYS_mkdir  20
 #define SYS_close  21
-#define SYS_mappte 22
 #define SYS_set_timer_upcall 22
 #define SYS_exo_alloc_page 23
 #define SYS_exo_unbind_page 24
 #define SYS_exo_alloc_block 25
 #define SYS_exo_bind_block 26
-#define SYS_exo_alloc_page 22
-#define SYS_exo_unbind_page 23
-

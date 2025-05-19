@@ -109,9 +109,7 @@ endif
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
 endif
-endif
 
-endif
 
 $(XV6_IMG): bootblock kernel
 	dd if=/dev/zero of=$(XV6_IMG) count=10000
@@ -172,7 +170,7 @@ tags: $(OBJS) $(ENTRYOTHERASM) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o swtch.o
+ULIB = ulib.o usys.o printf.o umalloc.o swtch.o math_core.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -206,10 +204,11 @@ UPROGS=\
 	_mkdir\
 	_rm\
 	_sh\
-	_stressfs\
-	_usertests\
-	_wc\
-	_zombie\
+        _stressfs\
+        _usertests\
+        _wc\
+        _zombie\
+        _phi\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))

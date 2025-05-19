@@ -7,9 +7,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
-#include "types.h"
 #include "x86.h"
-#include "syscall.h"
 // clang-format on
 
 
@@ -87,7 +85,6 @@ int argint(int n, int *ip) {
 int
 argptr(int n, char **pp, size_t size)
 {
-int argptr(int n, char **pp, int size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;

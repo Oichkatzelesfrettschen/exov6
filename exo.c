@@ -1,9 +1,15 @@
 #include "defs.h"
 #include "param.h"
+#include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
 #include "types.h"
 #include "x86.h"
+
+extern struct {
+  struct spinlock lock;
+  struct proc proc[NPROC];
+} ptable;
 
 void exo_pctr_transfer(struct trapframe *tf) {
   uint cap = tf->eax;

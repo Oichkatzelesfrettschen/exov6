@@ -38,4 +38,3 @@ static inline void cap_yield(context_t **old, context_t *target) {
   swtch(old, target);
 }
 
-#endif // EXO_CPU_H

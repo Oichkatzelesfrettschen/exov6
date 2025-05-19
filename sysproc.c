@@ -83,6 +83,7 @@ sys_mappte(void)
     return -1;
   return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
 
+}
 
 int sys_set_timer_upcall(void) {
   void (*handler)(void);
