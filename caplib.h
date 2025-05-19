@@ -16,3 +16,4 @@ int cap_recv(exo_cap src, void *buf, uint64 len);
 int cap_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 
+
