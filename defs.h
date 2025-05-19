@@ -161,6 +161,7 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 struct proc*    pctr_lookup(uint);
+struct proc*    allocproc(void);
 
 
 

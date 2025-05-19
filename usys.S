@@ -67,5 +67,6 @@ SYSCALL(exo_send)
 SYSCALL(exo_recv)
 SYSCALL(endpoint_send)
 SYSCALL(endpoint_recv)
+SYSCALL(proc_alloc)
 
 

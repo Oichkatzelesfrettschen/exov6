@@ -197,4 +197,42 @@ int sys_exo_recv(void) {
   return exo_recv(cap, dst, n);
 }
 
+int sys_proc_alloc(void) {
+  struct proc *np;
+  struct proc *curproc = myproc();
+  int i;
+
+  if ((np = allocproc()) == 0)
+    return -1;
+
+  if ((np->pgdir = copyuvm(curproc->pgdir, curproc->sz)) == 0) {
+    kfree(np->kstack);
+    np->kstack = 0;
+    np->state = UNUSED;
+    return -1;
+  }
+  np->sz = curproc->sz;
+  np->parent = curproc;
+  *np->tf = *curproc->tf;
+#ifndef __x86_64__
+  np->tf->eax = 0;
+#else
+  np->tf->rax = 0;
+#endif
+
+  for (i = 0; i < NOFILE; i++)
+    if (curproc->ofile[i])
+      np->ofile[i] = filedup(curproc->ofile[i]);
+  np->cwd = idup(curproc->cwd);
+
+  safestrcpy(np->name, curproc->name, sizeof(curproc->name));
+
+  acquire(&ptable.lock);
+  np->state = RUNNABLE;
+  release(&ptable.lock);
+
+  exo_cap cap = { V2P(np->context) };
+  return cap.pa;
+}
+
 // Provided by fastipc.c
