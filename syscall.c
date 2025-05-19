@@ -153,6 +153,9 @@ extern int sys_exo_alloc_page(void);
 extern int sys_exo_unbind_page(void);
 extern int sys_exo_alloc_block(void);
 extern int sys_exo_bind_block(void);
+extern int sys_exo_yield_to(void);
+extern int sys_exo_read_disk(void);
+extern int sys_exo_write_disk(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -182,6 +185,9 @@ static int (*syscalls[])(void) = {
     [SYS_exo_unbind_page] sys_exo_unbind_page,
     [SYS_exo_alloc_block] sys_exo_alloc_block,
     [SYS_exo_bind_block] sys_exo_bind_block,
+    [SYS_exo_yield_to] sys_exo_yield_to,
+    [SYS_exo_read_disk] sys_exo_read_disk,
+    [SYS_exo_write_disk] sys_exo_write_disk,
 };
 
 void syscall(void) {

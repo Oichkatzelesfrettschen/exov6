@@ -6,10 +6,7 @@
 #include "types.h"
 #include "x86.h"
 
-extern struct {
-  struct spinlock lock;
-  struct proc proc[NPROC];
-} ptable;
+extern struct ptable ptable;
 
 void exo_pctr_transfer(struct trapframe *tf) {
   uint cap = tf->eax;
@@ -23,4 +20,34 @@ void exo_pctr_transfer(struct trapframe *tf) {
     }
   }
   release(&ptable.lock);
+}
+
+// Stubs for capability syscalls. Real implementations may reside in
+// platform-specific code, but we provide simple versions so that the
+// kernel links successfully.
+int
+exo_yield_to(exo_cap target)
+{
+  (void)target;
+  return -1;
+}
+
+int
+exo_read_disk(exo_cap cap, void *dst, uint64_t off, uint64_t n)
+{
+  (void)cap;
+  (void)dst;
+  (void)off;
+  (void)n;
+  return -1;
+}
+
+int
+exo_write_disk(exo_cap cap, const void *src, uint64_t off, uint64_t n)
+{
+  (void)cap;
+  (void)src;
+  (void)off;
+  (void)n;
+  return -1;
 }
