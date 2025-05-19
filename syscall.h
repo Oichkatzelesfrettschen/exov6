@@ -28,4 +28,7 @@
 #define SYS_exo_unbind_page 25
 #define SYS_exo_alloc_block 26
 #define SYS_exo_bind_block 27
+#define SYS_exo_yield_to 28
+#define SYS_exo_read_disk 29
+#define SYS_exo_write_disk 30
 
