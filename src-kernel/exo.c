@@ -10,10 +10,7 @@
 #include "types.h"
 #include "x86.h"
 
-extern struct {
-  struct spinlock lock;
-  struct proc proc[NPROC];
-} ptable;
+extern struct ptable ptable;
 
 extern struct ptable ptable;
 
