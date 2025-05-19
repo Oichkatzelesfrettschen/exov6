@@ -40,6 +40,7 @@ extern struct ptable ptable;
 #include "kernel/exo_disk.h"
 #include "kernel/exo_ipc.h"
 #include "kernel/exo_mem.h"
+#include "ipc.h"
 
 // bio.c
 void binit(void);
