@@ -115,3 +115,8 @@ usual with ``make``; the resulting ``fs.img`` will contain the new
 ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
 
+
+IPC DESIGN NOTE
+---------------
+See ``IPC.md`` for an overview of the fast-path call, capability badges,
+and the proposed endpoint and typed channel features.
