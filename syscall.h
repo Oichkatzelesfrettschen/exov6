@@ -31,4 +31,6 @@
 #define SYS_exo_yield_to 28
 #define SYS_exo_read_disk 29
 #define SYS_exo_write_disk 30
+#define SYS_exo_send 31
+#define SYS_exo_recv 32
 
