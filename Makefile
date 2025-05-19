@@ -35,9 +35,6 @@ OBJS = \
        $(KERNEL_DIR)/kernel/exo_ipc.o\
        $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/fastipc.o\
-       $(KERNEL_DIR)/exo/exo_cpu.o\
-       $(KERNEL_DIR)/exo/exo_disk.o\
-       $(KERNEL_DIR)/exo/exo_ipc.o\
        $(KERNEL_DIR)/endpoint.o\
 
 
@@ -126,7 +123,7 @@ ifeq ($(ARCH),x86_64)
 SIGNBOOT := 0
 endif
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Iinclude -I$(KERNEL_DIR) -I$(ULAND_DIR)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
 
