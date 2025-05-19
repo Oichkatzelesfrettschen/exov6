@@ -197,23 +197,4 @@ int sys_exo_recv(void) {
   return exo_recv(cap, dst, n);
 }
 
-int sys_ipc_fast(void) {
-#ifdef __x86_64__
-  struct trapframe *tf = myproc()->tf;
-  uint64_t badge = tf->rdi;
-  uint64_t w0 = tf->rsi;
-  uint64_t w1 = tf->rdx;
-  uint64_t w2 = tf->rcx;
-  uint64_t w3 = tf->r8;
-
-  (void)badge; // placeholder for future access control
-
-  tf->rsi = w0;
-  tf->rdx = w1;
-  tf->rcx = w2;
-  tf->r8 = w3;
-  return 0;
-#else
-  return -1;
-#endif
-}
+// Provided by fastipc.c

@@ -81,14 +81,16 @@ runcmd(struct cmd *cmd)
     panic("runcmd");
 
   case EXEC:
-    ecmd = (struct execcmd*)cmd;
-    if(ecmd->argv[0] == 0)
+    ecmd = (struct execcmd *)cmd;
+    if (ecmd->argv[0] == 0)
       exit();
+    if (runbuiltin(cmd))
+      break;
     exec(ecmd->argv[0], ecmd->argv);
-    if(ecmd->argv[0][0] != '/'){
+    if (ecmd->argv[0][0] != '/') {
       char path[512];
       strcpy(path, "/");
-      strcpy(path+1, ecmd->argv[0]);
+      strcpy(path + 1, ecmd->argv[0]);
       exec(path, ecmd->argv);
     }
     printf(2, "exec %s failed\n", ecmd->argv[0]);
@@ -201,6 +203,19 @@ fork1(void)
   if(pid == -1)
     panic("fork");
   return pid;
+}
+
+static int isbuiltin(struct cmd *cmd) {
+  struct execcmd *ecmd;
+
+  if (cmd->type != EXEC)
+    return 0;
+
+  ecmd = (struct execcmd *)cmd;
+  if (ecmd->argv[0] == 0)
+    return 0;
+
+  return strcmp(ecmd->argv[0], "cd") == 0;
 }
 
 int
