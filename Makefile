@@ -1,36 +1,39 @@
 OBJS = \
-	bio.o\
-	console.o\
-	exec.o\
-	file.o\
-	fs.o\
-	ide.o\
-	ioapic.o\
-	kalloc.o\
-	kbd.o\
-	lapic.o\
-	log.o\
-	main.o\
-	mp.o\
-	picirq.o\
-	pipe.o\
-	proc.o\
-	sleeplock.o\
-	spinlock.o\
-	string.o\
-	syscall.o\
-	sysfile.o\
-	sysproc.o\
-	trapasm.o\
-	trap.o\
-	uart.o\
-	vectors.o\
-	vm.o\
+        bio.o\
+        console.o\
+        exec.o\
+        file.o\
+        fs.o\
+        ide.o\
+        ioapic.o\
+        kalloc.o\
+        kbd.o\
+        lapic.o\
+        log.o\
+        main.o\
+        mp.o\
+        picirq.o\
+        pipe.o\
+        proc.o\
+        sleeplock.o\
+        spinlock.o\
+        string.o\
+        syscall.o\
+        sysfile.o\
+        sysproc.o\
+        trapasm.o\
+        trap.o\
+        uart.o\
+        vectors.o\
+        vm.o\
         trap.o\
         uart.o\
         vectors.o\
         vm.o\
         exo.o\
+
+# Search path for source files
+VPATH := src-kernel src-uland
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
@@ -75,13 +78,13 @@ CSTD ?= gnu2x
 
 ifeq ($(ARCH),x86_64)
 OBJS += main64.o swtch64.o
-BOOTASM := arch/x64/bootasm64.S
-ENTRYASM := arch/x64/entry64.S
+BOOTASM := src-kernel/arch/x64/bootasm64.S
+ENTRYASM := src-kernel/arch/x64/entry64.S
 else
 OBJS += swtch.o
 
-BOOTASM := bootasm.S
-ENTRYASM := entry.S
+BOOTASM := src-kernel/bootasm.S
+ENTRYASM := src-kernel/entry.S
 endif
 
 CC = $(TOOLPREFIX)gcc
@@ -102,7 +105,7 @@ XV6_MEMFS_IMG := xv6memfs.img
 ARCHFLAG := -m32
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null | head -n 1)
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I.
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-kernel -Isrc-uland
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide
 
@@ -112,9 +115,6 @@ CFLAGS += -fno-pie -no-pie
 endif
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
-endif
-endif
-
 endif
 
 $(XV6_IMG): bootblock kernel
@@ -127,8 +127,8 @@ $(XV6_MEMFS_IMG): bootblock kernelmemfs
 	dd if=bootblock of=$(XV6_MEMFS_IMG) conv=notrunc
 	dd if=$(KERNELMEMFS_FILE) of=$(XV6_MEMFS_IMG) seek=1 conv=notrunc
 
-bootblock: $(BOOTASM) bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
+bootblock: $(BOOTASM) src-kernel/bootmain.c
+	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c src-kernel/bootmain.c
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(BOOTASM) -o bootasm.o
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 	$(OBJDUMP) -S bootblock.o > bootblock.asm
@@ -138,7 +138,7 @@ entry.o: $(ENTRYASM)
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(ENTRYASM) -o entry.o
 
 
-ENTRYOTHERASM := entryother.S
+ENTRYOTHERASM := src-kernel/entryother.S
 ENTRYOTHERBIN := entryother
 
 $(ENTRYOTHERBIN): $(ENTRYOTHERASM)
@@ -147,14 +147,14 @@ $(ENTRYOTHERBIN): $(ENTRYOTHERASM)
 	$(OBJCOPY) -S -O binary -j .text bootblockother.o $(ENTRYOTHERBIN)
 	$(OBJDUMP) -S bootblockother.o > $(ENTRYOTHERBIN).asm
 
-initcode: initcode.S
-	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+initcode: src-kernel/initcode.S
+	$(CC) $(CFLAGS) -nostdinc -I. -c src-kernel/initcode.S
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
 	$(OBJCOPY) -S -O binary initcode.out initcode
 	$(OBJDUMP) -S initcode.o > initcode.asm
 
-kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld
-	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL_FILE) entry.o $(OBJS) -b binary initcode $(ENTRYOTHERBIN)
+kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode src-kernel/kernel.ld
+	$(LD) $(LDFLAGS) -T src-kernel/kernel.ld -o $(KERNEL_FILE) entry.o $(OBJS) -b binary initcode $(ENTRYOTHERBIN)
 		$(OBJDUMP) -S $(KERNEL_FILE) > kernel.asm
 	$(OBJDUMP) -t $(KERNEL_FILE) | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
@@ -165,16 +165,16 @@ kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld
 	# great for testing the kernel on real hardware without
 # needing a scratch disk.
 MEMFSOBJS = $(filter-out ide.o,$(OBJS)) memide.o
-kernelmemfs: $(MEMFSOBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld $(FS_IMG)
-	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNELMEMFS_FILE) entry.o  $(MEMFSOBJS) -b binary initcode $(ENTRYOTHERBIN) $(FS_IMG)
+kernelmemfs: $(MEMFSOBJS) entry.o $(ENTRYOTHERBIN) initcode src-kernel/kernel.ld $(FS_IMG)
+	$(LD) $(LDFLAGS) -T src-kernel/kernel.ld -o $(KERNELMEMFS_FILE) entry.o  $(MEMFSOBJS) -b binary initcode $(ENTRYOTHERBIN) $(FS_IMG)
 	$(OBJDUMP) -S $(KERNELMEMFS_FILE) > kernelmemfs.asm
 	$(OBJDUMP) -t $(KERNELMEMFS_FILE) | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernelmemfs.sym
 
 tags: $(OBJS) $(ENTRYOTHERASM) _init
 		etags *.S *.c
 
-vectors.S: vectors.pl
-	./vectors.pl > vectors.S
+vectors.S: src-kernel/vectors.pl
+	./src-kernel/vectors.pl > vectors.S
 
 ULIB = ulib.o usys.o printf.o umalloc.o swtch.o
 
@@ -189,8 +189,8 @@ _forktest: forktest.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
 	$(OBJDUMP) -S _forktest > forktest.asm
 
-mkfs: mkfs.c fs.h
-	gcc -Werror -Wall -o mkfs mkfs.c
+mkfs: mkfs.c src-kernel/fs.h
+	gcc -Werror -Wall -Isrc-kernel -o mkfs mkfs.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
 # that disk image changes after first build are persistent until clean.  More
@@ -306,11 +306,11 @@ qemu-nox-gdb: $(FS_IMG) $(XV6_IMG) .gdbinit
 # check in that version.
 
 EXTRA=\
-	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
-	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c\
-	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
-	.gdbinit.tmpl gdbutil\
+        mkfs.c src-uland/ulib.c src-uland/user.h src-uland/cat.c src-uland/echo.c src-uland/forktest.c src-uland/grep.c src-uland/kill.c\
+        src-uland/ln.c src-uland/ls.c src-uland/mkdir.c src-uland/rm.c src-uland/stressfs.c src-uland/usertests.c src-uland/wc.c src-uland/zombie.c\
+        src-uland/printf.c src-uland/umalloc.c\
+        README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
+        .gdbinit.tmpl gdbutil\
 
 dist:
 	rm -rf dist
