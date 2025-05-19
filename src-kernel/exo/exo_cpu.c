@@ -1,11 +1,15 @@
 #include "kernel/exo_cpu.h"
 #include "defs.h"
+#include "mmu.h"
+#include "proc.h"
+#include "memlayout.h"
 
-int __attribute__((weak)) exo_yield_to(exo_cap target) {
-  // TODO: implement context switch to the capability
-  (void)target;
-  return -1;
-    // TODO: implement context switch to the capability
-    (void)target;
+int exo_yield_to(exo_cap target)
+{
+  if(target.pa == 0)
     return -1;
+
+  context_t *newctx = (context_t*)P2V(target.pa);
+  swtch(&myproc()->context, newctx);
+  return 0;
 }

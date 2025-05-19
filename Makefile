@@ -30,12 +30,15 @@ OBJS = \
         $(KERNEL_DIR)/vectors.o\
         $(KERNEL_DIR)/vm.o\
        $(KERNEL_DIR)/exo.o\
+       $(KERNEL_DIR)/exo/exo_cpu.o\
+       $(KERNEL_DIR)/exo/exo_disk.o\
        $(KERNEL_DIR)/exo/exo_ipc.o\
-       $(KERNEL_DIR)/exo_stream.o\
+       $(KERNEL_DIR)/exo_stream.o\=======
        $(KERNEL_DIR)/fastipc.o\
         $(KERNEL_DIR)/kernel/exo_cpu.o\
         $(KERNEL_DIR)/kernel/exo_disk.o\
         $(KERNEL_DIR)/kernel/exo_ipc.o\
+
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -123,7 +126,7 @@ endif
 
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide
+ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
 
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
