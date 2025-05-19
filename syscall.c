@@ -87,7 +87,6 @@ int argint(int n, int *ip) {
 int
 argptr(int n, char **pp, size_t size)
 {
-int argptr(int n, char **pp, int size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;
