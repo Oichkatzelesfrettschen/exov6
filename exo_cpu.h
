@@ -57,5 +57,9 @@ void swtch(context_t **old, context_t *new);
 static inline void cap_yield(context_t **old, context_t *target) {
   swtch(old, target);
 }
+<<<<<<< HEAD:exo_cpu.h
+
 
 int exo_yield_to(exo_cap target);
+=======
+>>>>>>> 7c57433 (Fix Makefile and headers for clean build):exo_cpu.h
