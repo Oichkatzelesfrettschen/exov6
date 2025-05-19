@@ -7,7 +7,6 @@
 #include "x86.h"
 
 
-
 void exo_pctr_transfer(struct trapframe *tf) {
   uint cap = tf->eax;
   struct proc *p;
