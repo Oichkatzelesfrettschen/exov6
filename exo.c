@@ -1,5 +1,6 @@
 #include "defs.h"
 #include "param.h"
+#include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
 #include "types.h"

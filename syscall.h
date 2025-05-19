@@ -28,6 +28,4 @@
 #define SYS_exo_unbind_page 24
 #define SYS_exo_alloc_block 25
 #define SYS_exo_bind_block 26
-#define SYS_exo_alloc_page 22
-#define SYS_exo_unbind_page 23
 

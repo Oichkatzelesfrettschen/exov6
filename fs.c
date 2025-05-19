@@ -78,11 +78,11 @@ balloc(uint dev)
   panic("balloc: out of blocks");
 }
 
-// Allocate a zeroed disk block and return a capability for it.
-struct exo_blockcap
-exo_alloc_block(uint dev)
+// Allocate a zeroed disk block and store its capability.
+int
+exo_alloc_block(uint dev, struct exo_blockcap *cap)
 {
-  struct exo_blockcap cap = {0, 0};
+  struct exo_blockcap tmp = {0, 0};
   int b, bi, m;
   struct buf *bp = 0;
 
@@ -95,26 +95,30 @@ exo_alloc_block(uint dev)
         log_write(bp);
         brelse(bp);
         bzero(dev, b + bi);
-        cap.dev = dev;
-        cap.blockno = b + bi;
-        return cap;
+        tmp.dev = dev;
+        tmp.blockno = b + bi;
+        *cap = tmp;
+        return 0;
       }
     }
     brelse(bp);
   }
 
   panic("exo_alloc_block: out of blocks");
+  return -1; // not reached
 }
 
 // Perform direct I/O on the given buffer using a capability.
-void
-exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
+int
+exo_bind_block(struct exo_blockcap *cap, void *data, int write)
 {
+  struct buf *buf = (struct buf *)data;
   buf->dev = cap->dev;
   buf->blockno = cap->blockno;
   if (write)
     buf->flags |= B_DIRTY;
   iderw(buf);
+  return 0;
 }
 
 // Free a disk block.

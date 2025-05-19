@@ -82,7 +82,7 @@ sys_mappte(void)
   if (argint(0, &va) < 0 || argint(1, &pa) < 0 || argint(2, &perm) < 0)
     return -1;
   return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
-
+}
 
 int sys_set_timer_upcall(void) {
   void (*handler)(void);
@@ -116,7 +116,8 @@ int sys_exo_alloc_block(void) {
   struct exo_blockcap cap;
   if (argint(0, &dev) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
     return -1;
-  cap = exo_alloc_block(dev);
+  if (exo_alloc_block(dev, &cap) < 0)
+    return -1;
   ucap->dev = cap.dev;
   ucap->blockno = cap.blockno;
   return 0;
