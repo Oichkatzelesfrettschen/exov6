@@ -35,6 +35,8 @@ struct exo_cap;
 struct exo_blockcap;
 <<<<<<< HEAD:defs.h
 
+<<<<<<< HEAD:defs.h
+
 struct exo_sched_ops;
 struct dag_node;
 struct exo_stream;
@@ -50,6 +52,13 @@ extern struct ptable ptable;
 #include "exo_disk.h"
 #include "exo_ipc.h"
 #include "fastipc.h"
+=======
+#include "kernel/exo_cpu.h"
+#include "kernel/exo_disk.h"
+#include "kernel/exo_ipc.h"
+#include "ipc.h"
+#include "kernel/exo_mem.h"
+>>>>>>> cf21a53 (Add typed channel interface):defs.h
 
 // bio.c
 void binit(void);
