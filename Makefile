@@ -33,7 +33,7 @@ OBJS = \
        $(KERNEL_DIR)/exo/exo_cpu.o\
        $(KERNEL_DIR)/exo/exo_disk.o\
        $(KERNEL_DIR)/exo/exo_ipc.o\
-       $(KERNEL_DIR)/exo_stream.o\=======
+       $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/fastipc.o\
         $(KERNEL_DIR)/kernel/exo_cpu.o\
         $(KERNEL_DIR)/kernel/exo_disk.o\
