@@ -9,5 +9,5 @@ int cap_bind_block(exo_blockcap *cap, void *data, int write);
 int cap_set_timer(void (*handler)(void));
 void cap_yield_to(context_t **old, context_t *target);
 int cap_yield_to_cap(exo_cap target);
-int cap_read_disk(exo_cap cap, void *dst, uint64 off, uint64 n);
-int cap_write_disk(exo_cap cap, const void *src, uint64 off, uint64 n);
+int cap_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
+int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
