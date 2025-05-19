@@ -158,6 +158,8 @@ extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
 extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
+extern int sys_endpoint_send(void);
+extern int sys_endpoint_recv(void);
 extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
@@ -193,6 +195,8 @@ static int (*syscalls[])(void) = {
     [SYS_exo_write_disk] sys_exo_write_disk,
     [SYS_exo_send] sys_exo_send,
     [SYS_exo_recv] sys_exo_recv,
+    [SYS_endpoint_send] sys_endpoint_send,
+    [SYS_endpoint_recv] sys_endpoint_recv,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 
@@ -205,7 +209,11 @@ void syscall(void) {
   num = curproc->tf->rax;
 #endif
   if(num == 0x30){
+#ifdef __x86_64__
     curproc->tf->rax = sys_ipc_fast();
+#else
+    curproc->tf->eax = sys_ipc_fast();
+#endif
     return;
   }
   if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
