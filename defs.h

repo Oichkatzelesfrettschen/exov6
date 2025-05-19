@@ -33,10 +33,15 @@ struct stat;
 struct superblock;
 struct exo_cap;
 struct exo_blockcap;
+<<<<<<< HEAD:defs.h
+
 struct exo_sched_ops;
 struct dag_node;
 struct exo_stream;
 struct endpoint;
+=======
+struct trapframe;
+>>>>>>> b31b5a6 (Fix build by cleaning headers and adding includes):defs.h
 
 // process table defined in proc.c
 extern struct ptable ptable;

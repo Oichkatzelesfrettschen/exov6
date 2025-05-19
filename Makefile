@@ -1,4 +1,4 @@
-KERNEL_DIR := src-kernel
+	KERNEL_DIR := src-kernel
 ULAND_DIR  := src-uland
 LIBOS_DIR  := libos
 

@@ -10,6 +10,11 @@
 #include "types.h"
 #include "x86.h"
 
+extern struct {
+  struct spinlock lock;
+  struct proc proc[NPROC];
+} ptable;
+
 extern struct ptable ptable;
 
 void exo_pctr_transfer(struct trapframe *tf) {
@@ -22,4 +27,3 @@ void exo_pctr_transfer(struct trapframe *tf) {
     p->pctr_signal++;
   release(&ptable.lock);
 }
-
