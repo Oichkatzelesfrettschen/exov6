@@ -16,6 +16,60 @@ static uint nextpctr_cap = 1;
 extern void forkret(void);
 extern void trapret(void);
 
+// Map exo_pctr capabilities directly to owning processes.
+#define PCTR_HASHSIZE (NPROC * 2)
+struct pctr_entry {
+  uint cap;
+  struct proc *p;
+};
+static struct pctr_entry pctr_table[PCTR_HASHSIZE];
+
+static void
+pctr_insert(struct proc *p)
+{
+  uint cap = p->pctr_cap;
+  uint idx = cap % PCTR_HASHSIZE;
+  while(pctr_table[idx].p)
+    idx = (idx + 1) % PCTR_HASHSIZE;
+  pctr_table[idx].cap = cap;
+  pctr_table[idx].p = p;
+}
+
+static void
+pctr_remove(uint cap)
+{
+  uint idx = cap % PCTR_HASHSIZE;
+  while(pctr_table[idx].p){
+    if(pctr_table[idx].cap == cap){
+      pctr_table[idx].p = 0;
+      pctr_table[idx].cap = 0;
+      // Rehash subsequent entries to fill potential holes.
+      idx = (idx + 1) % PCTR_HASHSIZE;
+      while(pctr_table[idx].p){
+        struct proc *tmp = pctr_table[idx].p;
+        pctr_table[idx].p = 0;
+        pctr_table[idx].cap = 0;
+        pctr_insert(tmp);
+        idx = (idx + 1) % PCTR_HASHSIZE;
+      }
+      return;
+    }
+    idx = (idx + 1) % PCTR_HASHSIZE;
+  }
+}
+
+struct proc *
+pctr_lookup(uint cap)
+{
+  uint idx = cap % PCTR_HASHSIZE;
+  while(pctr_table[idx].p){
+    if(pctr_table[idx].cap == cap)
+      return pctr_table[idx].p;
+    idx = (idx + 1) % PCTR_HASHSIZE;
+  }
+  return 0;
+}
+
 static void wakeup1(void *chan);
 
 void
@@ -88,6 +142,7 @@ found:
   p->pid = nextpid++;
   p->pctr_cap = nextpctr_cap++;
   p->pctr_signal = 0;
+  pctr_insert(p);
 
   release(&ptable.lock);
 
@@ -258,6 +313,8 @@ exit(void)
   curproc->cwd = 0;
 
   acquire(&ptable.lock);
+
+  pctr_remove(curproc->pctr_cap);
 
   // Parent might be sleeping in wait().
   wakeup1(curproc->parent);
