@@ -24,3 +24,33 @@ void exo_pctr_transfer(struct trapframe *tf) {
     p->pctr_signal++;
   release(&ptable.lock);
 }
+
+// Stubs for capability syscalls. Real implementations may reside in
+// platform-specific code, but we provide simple versions so that the
+// kernel links successfully.
+int
+exo_yield_to(exo_cap target)
+{
+  (void)target;
+  return -1;
+}
+
+int
+exo_read_disk(exo_cap cap, void *dst, uint64_t off, uint64_t n)
+{
+  (void)cap;
+  (void)dst;
+  (void)off;
+  (void)n;
+  return -1;
+}
+
+int
+exo_write_disk(exo_cap cap, const void *src, uint64_t off, uint64_t n)
+{
+  (void)cap;
+  (void)src;
+  (void)off;
+  (void)n;
+  return -1;
+}
