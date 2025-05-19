@@ -2,6 +2,7 @@ formatting:
 	need to fix PAGEBREAK mechanism
 
 sh:
-	can't always runcmd in child -- breaks cd.
-	maybe should hard-code PATH=/ ?
+       built-ins (e.g. cd) now run correctly within lists, pipes, and
+       background commands.
+       maybe should hard-code PATH=/ ?
 
