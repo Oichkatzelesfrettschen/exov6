@@ -103,7 +103,11 @@ EXO STREAMS
 ``struct exo_stream`` links scheduler modules together.  Register a stream
 with ``exo_stream_register`` and call ``exo_stream_yield`` or
 ``exo_stream_halt`` to invoke the registered callbacks.  See the
-``EXO_STREAM`` design note for details.
+``EXO_STREAM`` design note for details.  ``yield()`` invokes
+``exo_stream_yield`` before scheduling another process.  When the
+scheduler has no runnable tasks it calls ``exo_stream_halt`` rather
+than spinning; the default implementation issues ``hlt`` if no stream
+is registered.
 
 
 USER DEMO: EXO_YIELD_TO AND STREAMS
@@ -114,4 +118,3 @@ placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system as
 usual with ``make``; the resulting ``fs.img`` will contain the new
 ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
-
