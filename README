@@ -116,7 +116,19 @@ usual with ``make``; the resulting ``fs.img`` will contain the new
 functions printing messages that indicate the expected invocation order.
 
 
+
 IPC DESIGN NOTE
 ---------------
 See ``IPC.md`` for an overview of the fast-path call, capability badges,
 and the proposed endpoint and typed channel features.
+
+ENDPOINTS
+---------
+Endpoints are lightweight message channels inspired by Mach ports and
+seL4 endpoints.  Each endpoint maintains an internal queue of
+``zipc_msg_t`` values.  The ``endpoint_send`` and ``endpoint_recv``
+system calls enqueue and dequeue messages, with receivers sleeping until
+a message is available.  This allows asynchronous waiting similar to the
+channel primitives in those microkernels.
+
+
