@@ -30,10 +30,11 @@ OBJS = \
         $(KERNEL_DIR)/uart.o\
         $(KERNEL_DIR)/vectors.o\
         $(KERNEL_DIR)/vm.o\
-        $(KERNEL_DIR)/exo.o\
-        $(KERNEL_DIR)/kernel/exo_cpu.o\
-        $(KERNEL_DIR)/kernel/exo_disk.o\
-        $(KERNEL_DIR)/kernel/exo_ipc.o\
+       $(KERNEL_DIR)/exo.o\
+       $(KERNEL_DIR)/exo/exo_cpu.o\
+       $(KERNEL_DIR)/exo/exo_disk.o\
+       $(KERNEL_DIR)/exo/exo_ipc.o\
+       $(KERNEL_DIR)/fastipc.o\
         $(KERNEL_DIR)/exo_stream.o\
         $(KERNEL_DIR)/fastipc.o\
         $(KERNEL_DIR)/endpoint.o\

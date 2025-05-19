@@ -7,9 +7,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
-#include "types.h"
 #include "x86.h"
-#include "syscall.h"
 // clang-format on
 
 
