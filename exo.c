@@ -25,14 +25,18 @@ void exo_pctr_transfer(struct trapframe *tf) {
 // Stubs for capability syscalls. Real implementations may reside in
 // platform-specific code, but we provide simple versions so that the
 // kernel links successfully.
-int
+int __attribute__((weak))
 exo_yield_to(exo_cap target)
 {
   (void)target;
   return -1;
 }
 
-int
+
+
+
+int __attribute__((weak))
+
 exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
 {
   (void)cap;
@@ -42,7 +46,9 @@ exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
   return -1;
 }
 
-int
+
+int __attribute__((weak))
+
 exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t n)
 {
   (void)cap;

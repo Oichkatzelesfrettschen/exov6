@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         linter:
-          - { id: "shellcheck", cmd: "shellcheck -f gcc $(git ls-files '*.sh')" }
+          - { id: "shellcheck", cmd: "files=$(git ls-files '*.sh'); [ -n \"$files\" ] && shellcheck -f gcc $files" }
     steps:
       - uses: actions/checkout@v4
       - name: Install linter runtime deps
@@ -28,8 +28,6 @@ jobs:
       - name: Run ${{ matrix.linter.id }} & feed Reviewdog
 
         uses: reviewdog/reviewdog@v0.17.4
-
-        uses: reviewdog/reviewdog@master
 
         with:
           name: ${{ matrix.linter.id }}

@@ -43,6 +43,9 @@ int exo_read_disk(exo_cap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_cap cap, const void *src, uint64 off, uint64 n);
 int exo_send(exo_cap dest, const void *buf, uint64 len);
 int exo_recv(exo_cap src, void *buf, uint64 len);
+int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
+int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
+
 
 
 // ulib.c
