@@ -117,6 +117,18 @@ exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
   iderw(buf);
 }
 
+void
+exo_flush_block(struct exo_blockcap *cap, void *data)
+{
+  struct buf b;
+  memset(&b, 0, sizeof(b));
+  initsleeplock(&b.lock, "exoflush");
+  acquiresleep(&b.lock);
+  memmove(b.data, data, BSIZE);
+  exo_bind_block(cap, &b, 1);
+  releasesleep(&b.lock);
+}
+
 // Free a disk block.
 static void
 bfree(int dev, uint b)

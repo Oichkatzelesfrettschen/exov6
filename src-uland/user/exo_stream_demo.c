@@ -2,11 +2,6 @@
 #include "types.h"
 #include "user.h"
 
-// Stub function since kernel support is unavailable
-int exo_yield_to(exo_cap target) {
-  printf(1, "exo_yield_to called with cap %p\n", (void *)target.pa);
-  return 0;
-}
 
 // Simplified STREAMS API stubs
 void streams_stop(void) { printf(1, "streams_stop called\n"); }
