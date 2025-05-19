@@ -67,12 +67,15 @@ syscallentry:
     pushq %rax
     # trap number and minimal frame information
     pushq $T_SYSCALL
-    pushq $0
+    pushq $0          # dummy error code
     pushq %rcx        # saved RIP from RCX
-    pushq $0          # CS placeholder
+    pushq $(SEG_KCODE<<3) # CS = 0x08, kernel code segment
     pushq %r11        # EFLAGS from R11
     pushq %rsp        # current RSP (approximate)
-    pushq $0          # SS placeholder
+    pushq $(SEG_KDATA<<3) # SS = 0x10, kernel stack segment
+    # Trap frame layout now matches struct trapframe in trap.c:
+    # r15..r8, rdi, rsi, rbp, rbx, rdx, rcx, rax,
+    # trapno, err, rip, cs, eflags, rsp, ss
 
     movq %rsp, %rdi   # argument: pointer to trap frame
     call trap
