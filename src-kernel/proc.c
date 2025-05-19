@@ -392,6 +392,7 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
+  int found;
   
   for(;;){
     // Enable interrupts on this processor.
@@ -399,9 +400,11 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+    found = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
+      found = 1;
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -418,6 +421,8 @@ scheduler(void)
       c->proc = 0;
     }
     release(&ptable.lock);
+    if(!found)
+      exo_stream_halt();
 
   }
 }
@@ -453,6 +458,7 @@ void
 yield(void)
 {
   acquire(&ptable.lock);  //DOC: yieldlock
+  exo_stream_yield();
   myproc()->state = RUNNABLE;
   sched();
   release(&ptable.lock);
