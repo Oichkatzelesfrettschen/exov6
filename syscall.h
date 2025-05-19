@@ -28,13 +28,13 @@
 #define SYS_exo_unbind_page 25
 #define SYS_exo_alloc_block 26
 #define SYS_exo_bind_block 27
-#define SYS_exo_flush_block 28
-#define SYS_exo_yield_to 29
-#define SYS_exo_read_disk 30
-#define SYS_exo_write_disk 31
-#define SYS_exo_send 32
-#define SYS_exo_recv 33
-#define SYS_endpoint_send 34
-#define SYS_endpoint_recv 35
+#define SYS_exo_yield_to 28
+#define SYS_exo_read_disk 29
+#define SYS_exo_write_disk 30
+#define SYS_exo_send 31
+#define SYS_exo_recv 32
+#define SYS_endpoint_send 33
+#define SYS_endpoint_recv 34
+#define SYS_proc_alloc 35
 #define SYS_ipc_fast 0x30
 
