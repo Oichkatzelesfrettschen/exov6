@@ -4,6 +4,14 @@
 
 // zero-copy micro-IPC interface
 // ISA: x86-64; syscall number 0x30 == ipc_fast
+//
+// Calling convention:
+//   rdi - capability badge
+//   rsi - w0
+//   rdx - w1
+//   rcx - w2
+//   r8  - w3
+// On return from the syscall, rsi..r8 contain the reply words.
 
 typedef struct {
   uint64_t badge; // capability badge
