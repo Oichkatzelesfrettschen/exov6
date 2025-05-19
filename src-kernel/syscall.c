@@ -158,6 +158,7 @@ extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
 extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
+extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -192,6 +193,7 @@ static int (*syscalls[])(void) = {
     [SYS_exo_write_disk] sys_exo_write_disk,
     [SYS_exo_send] sys_exo_send,
     [SYS_exo_recv] sys_exo_recv,
+    [SYS_ipc_fast] sys_ipc_fast,
 };
 
 void syscall(void) {
