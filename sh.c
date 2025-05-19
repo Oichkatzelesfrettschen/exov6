@@ -52,6 +52,7 @@ struct backcmd {
 int fork1(void);  // Fork but panics on failure.
 void panic(char*);
 struct cmd *parsecmd(char*);
+int runbuiltin(struct cmd*);
 
 // Annotate as noreturn so modern compilers know runcmd exits
 static void __attribute__((noreturn)) runcmd(struct cmd *cmd);
@@ -84,6 +85,12 @@ runcmd(struct cmd *cmd)
     if(ecmd->argv[0] == 0)
       exit();
     exec(ecmd->argv[0], ecmd->argv);
+    if(ecmd->argv[0][0] != '/'){
+      char path[512];
+      strcpy(path, "/");
+      strcpy(path+1, ecmd->argv[0]);
+      exec(path, ecmd->argv);
+    }
     printf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
 
@@ -165,15 +172,14 @@ main(void)
 
   // Read and run input commands.
   while(getcmd(buf, sizeof(buf)) >= 0){
-    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
-      // Chdir must be called by the parent, not the child.
-      buf[strlen(buf)-1] = 0;  // chop \n
-      if(chdir(buf+3) < 0)
-        printf(2, "cannot cd %s\n", buf+3);
+    struct cmd *cmd;
+
+    cmd = parsecmd(buf);
+    if(runbuiltin(cmd))
       continue;
-    }
+
     if(fork1() == 0)
-      runcmd(parsecmd(buf));
+      runcmd(cmd);
     wait();
   }
   exit();
@@ -195,6 +201,31 @@ fork1(void)
   if(pid == -1)
     panic("fork");
   return pid;
+}
+
+int
+runbuiltin(struct cmd *cmd)
+{
+  struct execcmd *ecmd;
+
+  if(cmd->type != EXEC)
+    return 0;
+
+  ecmd = (struct execcmd*)cmd;
+  if(ecmd->argv[0] == 0)
+    return 0;
+
+  if(strcmp(ecmd->argv[0], "cd") == 0){
+    if(ecmd->argv[1] == 0){
+      if(chdir("/") < 0)
+        printf(2, "cannot cd /\n");
+    } else if(chdir(ecmd->argv[1]) < 0){
+      printf(2, "cannot cd %s\n", ecmd->argv[1]);
+    }
+    return 1;
+  }
+
+  return 0;
 }
 
 //PAGEBREAK!
