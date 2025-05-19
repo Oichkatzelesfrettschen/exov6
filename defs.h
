@@ -58,7 +58,12 @@ extern struct ptable ptable;
 #include "kernel/exo_ipc.h"
 #include "ipc.h"
 #include "kernel/exo_mem.h"
+<<<<<<< HEAD:defs.h
+
 >>>>>>> cf21a53 (Add typed channel interface):defs.h
+=======
+#include "ipc.h"
+>>>>>>> 52b8687 (Add IPC implementation with zipc messages):defs.h
 
 // bio.c
 void binit(void);
