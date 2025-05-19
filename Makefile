@@ -95,6 +95,7 @@ AS = $(TOOLPREFIX)gas
 LD = $(TOOLPREFIX)ld
 OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
+AR = $(TOOLPREFIX)ar
 
 # Output file names depend on the target architecture
 ifeq ($(ARCH),x86_64)
@@ -135,7 +136,7 @@ ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
 endif
 
-$(XV6_IMG): bootblock kernel
+$(XV6_IMG): bootblock exo-kernel
 	dd if=/dev/zero of=$(XV6_IMG) count=10000
 	dd if=bootblock of=$(XV6_IMG) conv=notrunc
 	dd if=$(KERNEL_FILE) of=$(XV6_IMG) seek=1 conv=notrunc
@@ -173,10 +174,12 @@ initcode: $(KERNEL_DIR)/initcode.S
 	$(OBJCOPY) -S -O binary initcode.out initcode
 	$(OBJDUMP) -S initcode.o > initcode.asm
 
-kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld
+exo-kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld
 	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL_FILE) entry.o $(OBJS) -b binary initcode $(ENTRYOTHERBIN)
-		$(OBJDUMP) -S $(KERNEL_FILE) > kernel.asm
+	$(OBJDUMP) -S $(KERNEL_FILE) > kernel.asm
 	$(OBJDUMP) -t $(KERNEL_FILE) | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
+
+kernel: exo-kernel
 
 # kernelmemfs is a copy of kernel that maintains the
 # disk image in memory instead of writing to a disk.
@@ -195,25 +198,32 @@ tags: $(OBJS) $(ENTRYOTHERASM) _init
 $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl > $@
 
-ULIB = \
+LIBOS_OBJS = \
         $(ULAND_DIR)/ulib.o \
-        $(ULAND_DIR)/usys.o \
+       usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-        $(ULAND_DIR)/swtch.o \
+       $(KERNEL_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
+        $(ULAND_DIR)/math_core.o
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
         $(ULAND_DIR)/libos/sched.o
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
-_%: $(ULAND_DIR)/%.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+libos: libos.a
+
+libos.a: $(LIBOS_OBJS)
+	$(AR) rcs $@ $^
+	
+_%: $(ULAND_DIR)/%.o libos.a
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $< libos.a
 	$(OBJDUMP) -S $@ > $*.asm
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
-_forktest: $(ULAND_DIR)/forktest.o $(ULIB)
+
+_forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
 	        # forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
@@ -268,7 +278,7 @@ clean:
        *.o *.d *.asm *.sym $(KERNEL_DIR)/vectors.S bootblock entryother entryother64 \
        initcode initcode.out kernel.bin kernel64 xv6.img xv6-64.img \
        fs.img fs64.img kernelmemfs.bin kernelmemfs64 xv6memfs.img \
-	xv6memfs-64.img mkfs .gdbinit \
+        xv6memfs-64.img mkfs .gdbinit libos.a \
 	$(UPROGS)
 
 # make a printout
