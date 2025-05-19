@@ -19,6 +19,13 @@ main(void)
   dup(0);  // stdout
   dup(0);  // stderr
 
+  if(fork() == 0){
+    char *kv[] = {"rcrs", 0};
+    exec("rcrs", kv);
+    printf(1, "init: exec rcrs failed\n");
+    exit();
+  }
+
   for(;;){
     printf(1, "init: starting sh\n");
     pid = fork();

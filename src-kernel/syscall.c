@@ -158,6 +158,7 @@ extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
 extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
+extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -202,6 +203,10 @@ void syscall(void) {
 #else
   num = curproc->tf->rax;
 #endif
+  if(num == 0x30){
+    curproc->tf->rax = sys_ipc_fast();
+    return;
+  }
   if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
 #ifndef __x86_64__
     curproc->tf->eax = syscalls[num]();
