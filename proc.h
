@@ -1,8 +1,12 @@
 #pragma once
 
+<<<<<<< HEAD:proc.h
+
 #include "param.h"
 #include "mmu.h"
 #include "x86.h"
+=======
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):proc.h
 #include "spinlock.h"
 
 // Context used for kernel context switches.
@@ -106,6 +110,8 @@ struct proc {
   int out_of_gas;                // Flag set when gas runs out
 };
 
+<<<<<<< HEAD:proc.h
+
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
 _Static_assert(sizeof(struct proc) == 256, "struct proc size incorrect");
@@ -113,6 +119,15 @@ _Static_assert(sizeof(struct proc) == 256, "struct proc size incorrect");
 _Static_assert(sizeof(struct proc) == 156, "struct proc size incorrect");
 #endif
 
+=======
+struct ptable {
+  struct spinlock lock;
+  struct proc proc[NPROC];
+};
+extern struct ptable ptable;
+// Ensure scheduler and utilities rely on fixed proc size (124 bytes)
+_Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):proc.h
 
 // Process memory is laid out contiguously, low addresses first:
 //   text

@@ -1,3 +1,5 @@
+<<<<<<< HEAD:defs.h
+
 
 #pragma once
 
@@ -8,6 +10,8 @@
 #include "ipc.h"
 #include "cap.h"
 
+=======
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 struct buf;
 struct context;
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -58,7 +62,11 @@ void consoleintr(int (*)(void));
 int exec(char *, char **);
 
 // file.c
+<<<<<<< HEAD:defs.h
 
+
+=======
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 struct file *filealloc(void);
 void fileclose(struct file *);
 struct file *filedup(struct file *);
@@ -84,7 +92,12 @@ struct inode *namei(char *);
 struct inode *nameiparent(char *, char *);
 int readi(struct inode *, char *, uint, size_t);
 void stati(struct inode *, struct stat *);
+<<<<<<< HEAD:defs.h
+
 int writei(struct inode *, char *, uint, size_t);
+=======
+int writei(struct inode *, char *, uint, uint);
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 
 // ide.c
 void ideinit(void);
@@ -129,11 +142,19 @@ void picenable(int);
 void picinit(void);
 
 // pipe.c
+<<<<<<< HEAD:defs.h
+
 
 [[nodiscard]] int pipealloc(struct file **, struct file **);
 void pipeclose(struct pipe *, int);
 int piperead(struct pipe *, struct file *, char *, size_t);
 int pipewrite(struct pipe *, struct file *, char *, size_t);
+=======
+int pipealloc(struct file **, struct file **);
+void pipeclose(struct pipe *, int);
+int piperead(struct pipe *, char *, size_t);
+int pipewrite(struct pipe *, char *, size_t);
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 
 // PAGEBREAK: 16
 //  proc.c
@@ -155,8 +176,12 @@ void userinit(void);
 int wait(void);
 void wakeup(void *);
 void yield(void);
+<<<<<<< HEAD:defs.h
+
 struct proc *pctr_lookup(uint);
 struct proc *allocproc(void);
+=======
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 
 // swtch.S
 void swtch(context_t **, context_t *);
@@ -180,7 +205,11 @@ int holdingsleep(struct sleeplock *);
 void initsleeplock(struct sleeplock *, char *);
 
 // string.c
+<<<<<<< HEAD:defs.h
 
+
+=======
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
@@ -229,10 +258,17 @@ pde_t *copyuvm(pde_t *, uint);
 void switchuvm(struct proc *);
 void switchkvm(void);
 #ifdef __x86_64__
+int insert_pte(pde_t *, void *, uint64, int);
+#else
+int insert_pte(pde_t *, void *, uint, int);
+#endif
+#ifdef __x86_64__
 int copyout(pde_t *, uint64, void *, uint);
 #else
 int copyout(pde_t *, uint, void *, uint);
 #endif
+
+<<<<<<< HEAD:defs.h
 
 void clearpteu(pde_t *pgdir, char *uva);
 #ifdef __x86_64__
@@ -293,6 +329,14 @@ void rcuinit(void);
 void rcu_read_lock(void);
 void rcu_read_unlock(void);
 void rcu_synchronize(void);
+=======
+void            clearpteu(pde_t *pgdir, char *uva);
+struct exo_cap  exo_alloc_page(void);
+int             exo_unbind_page(struct exo_cap);
+int             exo_alloc_block(uint dev, struct exo_blockcap *);
+int             exo_bind_block(struct exo_blockcap *, void *, int);
+
+>>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
