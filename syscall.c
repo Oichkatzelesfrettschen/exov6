@@ -87,7 +87,6 @@ int argint(int n, int *ip) {
 int
 argptr(int n, char **pp, size_t size)
 {
-int argptr(int n, char **pp, int size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;
@@ -177,6 +176,7 @@ static int (*syscalls[])(void) = {
     [SYS_link] sys_link,
     [SYS_mkdir] sys_mkdir,
     [SYS_close] sys_close,
+    [SYS_mappte] sys_mappte,
     [SYS_set_timer_upcall] sys_set_timer_upcall,
     [SYS_exo_alloc_page] sys_exo_alloc_page,
     [SYS_exo_unbind_page] sys_exo_unbind_page,
