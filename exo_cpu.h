@@ -11,7 +11,7 @@
  * execution resumes on the context pointed to by *old.
  */
 
-#ifdef __x86_64__
+#if defined(__x86_64__)
 struct context64 {
   uint64 r15;
   uint64 r14;
@@ -20,6 +20,22 @@ struct context64 {
   uint64 rbx;
   uint64 rbp;
   uint64 rip;
+};
+typedef struct context64 context_t;
+#elif defined(__aarch64__)
+struct context64 {
+  uint64 x19;
+  uint64 x20;
+  uint64 x21;
+  uint64 x22;
+  uint64 x23;
+  uint64 x24;
+  uint64 x25;
+  uint64 x26;
+  uint64 x27;
+  uint64 x28;
+  uint64 fp;
+  uint64 lr;
 };
 typedef struct context64 context_t;
 #else

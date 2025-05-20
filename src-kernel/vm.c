@@ -9,7 +9,7 @@
 #include "elf.h"
 
 extern char data[];  // defined by kernel.ld
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 pml4e_t *kpgdir;  // for use in scheduler()
 #else
 pde_t *kpgdir;  // for use in scheduler()
@@ -145,7 +145,7 @@ setupkvm(void)
 void
 kvmalloc(void)
 {
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
   kpgdir = setupkvm64();
 #else
   kpgdir = setupkvm();
@@ -321,7 +321,7 @@ clearpteu(pde_t *pgdir, char *uva)
 
 int
 insert_pte(pde_t *pgdir, void *va,
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
            uint64 pa,
 #else
            uint pa,
@@ -396,7 +396,7 @@ uva2ka(pde_t *pgdir, char *uva)
 // Most useful when pgdir is not the current page table.
 // uva2ka ensures this only works for PTE_U pages.
 int
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 copyout(pde_t *pgdir, uint64 va, void *p, size_t len)
 #else
 copyout(pde_t *pgdir, uint va, void *p, size_t len)
@@ -443,20 +443,28 @@ exo_cap
 exo_alloc_page(void)
 {
   char *mem = kalloc();
+
   exo_cap cap;
   cap.pa = mem ? V2P(mem) : 0;
+  cap.owner = myproc()->pid;
   return cap;
+  uint id = mem ? V2P(mem) : 0;
+  return cap_new(id, 0, myproc()->pid);
 }
 
 // Remove any mappings to the page referenced by cap and free it.
 int
 exo_unbind_page(exo_cap cap)
 {
+  if (!cap_verify(cap.owner))
+    return -1;
   struct proc *p = myproc();
+  if(cap.owner != p->pid)
+    return -1;
   pde_t *pgdir = p->pgdir;
   pte_t *pte;
   uint a;
-  uint pa = cap.pa;
+  uint pa = cap.id;
 
   for(a = 0; a < p->sz; a += PGSIZE){
     if((pte = walkpgdir(pgdir, (void*)a, 0)) != 0 && (*pte & PTE_P)){

@@ -11,7 +11,7 @@
 
 struct buf;
 struct context;
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 struct context64;
 typedef struct context64 context_t;
 #else
@@ -31,6 +31,7 @@ struct trapframe;
 struct exo_cap;
 struct exo_blockcap;
 struct exo_sched_ops;
+struct dag_node;
 struct exo_stream;
 struct endpoint;
 struct dag_node;
@@ -162,6 +163,7 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 struct proc*    pctr_lookup(uint);
+int             cap_verify(uint);
 struct proc*    allocproc(void);
 
 
@@ -250,12 +252,16 @@ int             insert_pte(pde_t*, void*, uint, int);
 #endif
 struct exo_cap  exo_alloc_page(void);
 int             exo_unbind_page(struct exo_cap);
+struct exo_cap  cap_new(uint id, uint rights, uint owner);
+int             cap_verify(struct exo_cap);
 struct exo_blockcap exo_alloc_block(uint dev);
 void            exo_bind_block(struct exo_blockcap *, struct buf *, int);
 void            exo_flush_block(struct exo_blockcap *, void *);
 void            exo_stream_register(struct exo_stream *);
 void            exo_stream_halt(void);
 void            exo_stream_yield(void);
+void dag_sched_init(struct exo_stream *);
+void dag_submit(struct dag_node *);
 void            fastipc_send(zipc_msg_t *);
 int             sys_ipc_fast(void);
 void            endpoint_send(struct endpoint *, zipc_msg_t *);
@@ -264,6 +270,12 @@ void            dag_sched_init(void);
 void            dag_node_init(struct dag_node *, exo_cap);
 void            dag_node_add_dep(struct dag_node *, struct dag_node *);
 void            dag_sched_submit(struct dag_node *);
+
+// rcu.c
+void            rcuinit(void);
+void            rcu_read_lock(void);
+void            rcu_read_unlock(void);
+void            rcu_synchronize(void);
 
 
 // number of elements in fixed-size array

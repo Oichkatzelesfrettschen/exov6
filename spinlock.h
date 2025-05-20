@@ -1,8 +1,14 @@
 #pragma once
 
-// Mutual exclusion lock.
+
+// Ticket-based mutual exclusion lock.
+struct ticketlock {
+  _Atomic uint16_t head;
+  _Atomic uint16_t tail;
+};
+
 struct spinlock {
-  uint locked;       // Is the lock held?
+  struct ticketlock ticket; // Ticket lock implementation
 
   // For debugging:
   char *name;        // Name of lock.

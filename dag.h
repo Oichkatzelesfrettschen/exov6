@@ -14,9 +14,15 @@ struct dag_node {
   int pending;
   struct dag_node_list *children;
   struct dag_node *next;
+  struct dag_node **deps;
+    int ndeps;
+    int done;
 };
 
 void dag_node_init(struct dag_node *n, exo_cap ctx);
 void dag_node_add_dep(struct dag_node *parent, struct dag_node *child);
 void dag_sched_submit(struct dag_node *node);
 void dag_sched_init(void);
+void dag_sched_init(struct exo_stream *stream);
+void dag_submit(struct dag_node *list);
+
