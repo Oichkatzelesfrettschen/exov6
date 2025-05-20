@@ -8,6 +8,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "spinlock.h"
+#include "proc.h"
 
 void freerange(void *vstart, void *vend);
 extern char end[]; // first address after kernel loaded from ELF file
@@ -17,10 +18,16 @@ struct run {
   struct run *next;
 };
 
+static inline int
+node_of(uintptr_t pa)
+{
+  return (pa / PGSIZE) % NNODES;
+}
+
 struct {
-  struct spinlock lock;
+  struct spinlock lock[NNODES];
   int use_lock;
-  struct run *freelist;
+  struct run *freelist[NNODES];
 } kmem;
 
 // Initialization happens in two phases.
@@ -31,7 +38,8 @@ struct {
 void
 kinit1(void *vstart, void *vend)
 {
-  initlock(&kmem.lock, "kmem");
+  for(int i=0;i<NNODES;i++)
+    initlock(&kmem.lock[i], "kmem");
   kmem.use_lock = 0;
   freerange(vstart, vend);
 }
@@ -67,13 +75,14 @@ kfree(char *v)
   // Fill with junk to catch dangling refs.
   memset(v, 1, PGSIZE);
 
+  int node = node_of(V2P(v));
   if(kmem.use_lock)
-    acquire(&kmem.lock);
+    acquire(&kmem.lock[node]);
   r = (struct run*)v;
-  r->next = kmem.freelist;
-  kmem.freelist = r;
+  r->next = kmem.freelist[node];
+  kmem.freelist[node] = r;
   if(kmem.use_lock)
-    release(&kmem.lock);
+    release(&kmem.lock[node]);
 }
 
 // Allocate one 4096-byte page of physical memory.
@@ -82,15 +91,25 @@ kfree(char *v)
 char*
 kalloc(void)
 {
-  struct run *r;
-
-  if(kmem.use_lock)
-    acquire(&kmem.lock);
-  r = kmem.freelist;
-  if(r)
-    kmem.freelist = r->next;
-  if(kmem.use_lock)
-    release(&kmem.lock);
+  struct run *r = 0;
+  int start = 0;
+  struct proc *p = myproc();
+  if(p)
+    start = p->preferred_node % NNODES;
+  for(int i=0;i<NNODES;i++){
+    int node = (start + i) % NNODES;
+    if(kmem.use_lock)
+      acquire(&kmem.lock[node]);
+    r = kmem.freelist[node];
+    if(r){
+      kmem.freelist[node] = r->next;
+      if(kmem.use_lock)
+        release(&kmem.lock[node]);
+      break;
+    }
+    if(kmem.use_lock)
+      release(&kmem.lock[node]);
+  }
   return (char*)r;
 }
 
