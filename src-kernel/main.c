@@ -4,6 +4,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "dag.h"
 #include "x86.h"
 #include "exo_stream.h"
 #include "dag.h"
@@ -38,6 +39,7 @@ main(void)
   binit();         // buffer cache
   fileinit();      // file table
   ideinit();       // disk
+  initialize DAG scheduler
   static struct exo_stream stream = {0};
   dag_sched_init(&stream);
   exo_stream_register(&stream);

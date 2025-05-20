@@ -34,6 +34,7 @@ struct exo_sched_ops;
 struct dag_node;
 struct exo_stream;
 struct endpoint;
+struct dag_node;
 
 // process table defined in proc.c
 extern struct ptable ptable;
@@ -265,6 +266,10 @@ void            fastipc_send(zipc_msg_t *);
 int             sys_ipc_fast(void);
 void            endpoint_send(struct endpoint *, zipc_msg_t *);
 int             endpoint_recv(struct endpoint *, zipc_msg_t *);
+void            dag_sched_init(void);
+void            dag_node_init(struct dag_node *, exo_cap);
+void            dag_node_add_dep(struct dag_node *, struct dag_node *);
+void            dag_sched_submit(struct dag_node *);
 
 // rcu.c
 void            rcuinit(void);

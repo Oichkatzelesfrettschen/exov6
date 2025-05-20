@@ -38,6 +38,7 @@ LIBOS_DIR := libos
 $(KERNEL_DIR)/dag_sched.o\
        $(KERNEL_DIR)/fastipc.o\
        $(KERNEL_DIR)/endpoint.o\
+       $(KERNEL_DIR)/dag_sched.o
        $(KERNEL_DIR)/cap.o\
 
 ifeq ($(ARCH),x86_64)
@@ -390,6 +391,7 @@ EXTRA=\
         $(ULAND_DIR)/wc.c $(ULAND_DIR)/zombie.c \
         $(ULAND_DIR)/phi.c \
         $(ULAND_DIR)/user/exo_stream_demo.c \
+        $(ULAND_DIR)/user/dag_demo.c \
         $(ULAND_DIR)/printf.c $(ULAND_DIR)/umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
