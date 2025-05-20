@@ -140,3 +140,4 @@ channel primitives in those microkernels.
 
 
 
+See doc/phoenixkernel.md for a design overview of the Phoenix exokernel.
