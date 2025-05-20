@@ -8,6 +8,11 @@ exo_cap cap_alloc_page(void) {
   return cap;
 }
 
+  exo_cap c;
+  exo_alloc_page(&c);
+  return c;
+}
+
 int cap_unbind_page(exo_cap cap) { return exo_unbind_page(&cap); }
 
 int cap_alloc_block(uint dev, exo_blockcap *cap) {
@@ -23,6 +28,8 @@ int cap_flush_block(exo_blockcap *cap, void *data) {
 }
 
 int cap_set_timer(void (*handler)(void)) { return set_timer_upcall(handler); }
+int cap_set_gas(uint64 amount) { return set_gas(amount); }
+int cap_get_gas(void) { return get_gas(); }
 
 void cap_yield_to(context_t **old, context_t *target) {
   cap_yield(old, target);
@@ -49,7 +56,7 @@ int cap_recv(exo_cap src, void *buf, uint64 len) {
 int cap_ipc_echo_demo(void) {
   const char *msg = "ping";
   char buf[5];
-  exo_cap cap = {0};
+  exo_cap cap = {0, 0};
   cap_send(cap, msg, 4);
   cap_recv(cap, buf, 4);
   buf[4] = '\0';

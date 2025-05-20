@@ -82,7 +82,7 @@ balloc(uint dev)
 struct exo_blockcap
 exo_alloc_block(uint dev)
 {
-  struct exo_blockcap cap = {0, 0};
+  struct exo_blockcap cap = {0, 0, 0};
   int b, bi, m;
   struct buf *bp = 0;
 
@@ -97,6 +97,7 @@ exo_alloc_block(uint dev)
         bzero(dev, b + bi);
         cap.dev = dev;
         cap.blockno = b + bi;
+        cap.owner = myproc()->pid;
         return cap;
       }
     }
@@ -110,6 +111,10 @@ exo_alloc_block(uint dev)
 void
 exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
 {
+  if (!cap_verify(cap->owner))
+  if(cap->owner != myproc()->pid)
+
+    return;
   buf->dev = cap->dev;
   buf->blockno = cap->blockno;
   if (write)
@@ -120,6 +125,8 @@ exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
 void
 exo_flush_block(struct exo_blockcap *cap, void *data)
 {
+  if(cap->owner != myproc()->pid)
+    return;
   struct buf b;
   memset(&b, 0, sizeof(b));
   initsleeplock(&b.lock, "exoflush");
