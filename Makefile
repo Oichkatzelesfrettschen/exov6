@@ -205,10 +205,10 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/umalloc.o \
        $(KERNEL_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o
+        $(ULAND_DIR)/math_core.o \
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-        $(ULAND_DIR)/libos/sched.o
+        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
@@ -223,16 +223,16 @@ _%: $(ULAND_DIR)/%.o libos.a
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
 
-_forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
-	        # forktest has less library code linked in - needs to be small
+_forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
+	# forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
-		$(OBJDUMP) -S _forktest > forktest.asm
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
+	$(OBJDUMP) -S _forktest > forktest.asm
 
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
-exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
+$(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
@@ -260,9 +260,8 @@ UPROGS=\
         _zombie\
         _phi\
         _exo_stream_demo\
-        _ipc_test\
-        _kbdserv\
-        _rcrs\
+       _ipc_test\
+       _rcrs\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))
