@@ -1,3 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+sudo apt-get update -y
+
+sudo apt-get install -y \
+  build-essential=12.9~deb12u1 \
 #!/bin/bash
 set -e
 
@@ -114,6 +121,13 @@ sudo apt-get install -y build-essential=12.9~deb12u1 \
   rustc=1.75.0+dfsg0-1 \
   cargo=1.75.0+dfsg0-1 \
   curl=7.88.1-10
+
+# provide gmake alias if absent
+if ! command -v gmake >/dev/null 2>&1; then
+  sudo ln -sf $(which make) /usr/local/bin/gmake
+fi
+
+curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1
 
 # Install protoc using curl and bash
 curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1

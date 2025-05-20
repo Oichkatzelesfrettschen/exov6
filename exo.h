@@ -2,6 +2,7 @@
 #define EXO_H
 #include "types.h"
 
+
 typedef struct hash256 {
   uint64 parts[4];
 } hash256_t;
@@ -25,7 +26,6 @@ exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap c);
 exo_cap cap_new(uint id, uint rights, uint owner);
 int cap_verify(exo_cap c);
-
 exo_cap cap_new(uint id, uint rights, uint owner);
 int cap_verify(exo_cap c);
 

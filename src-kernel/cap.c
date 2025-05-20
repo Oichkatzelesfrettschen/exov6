@@ -14,6 +14,7 @@ gen_hash(uint id, uint rights, uint owner, hash256_t *out)
 exo_cap
 cap_new(uint id, uint rights, uint owner)
 {
+
 static const uint8_t cap_secret[32] = {
     0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef,
     0xfe,0xdc,0xba,0x98,0x76,0x54,0x32,0x10,
@@ -46,19 +47,21 @@ static void hmac_hash(const void *msg, size_t len, hash256_t *out) {
 }
 
 exo_cap cap_new(uint id, uint rights, uint owner) {
-
     exo_cap c;
     c.id = id;
     c.rights = rights;
     c.owner = owner;
-    struct { uint id; uint rights; uint owner; } tmp = { id, rights, owner };
-    hmac_hash(&tmp, sizeof(tmp), &c.auth_tag);
+    gen_hash(id, rights, owner, &c.auth_tag);
     return c;
 }
 
-int cap_verify(exo_cap c) {
+int
+cap_verify(exo_cap c)
+{
     hash256_t h;
-    struct { uint id; uint rights; uint owner; } tmp = { c.id, c.rights, c.owner };
-    hmac_hash(&tmp, sizeof(tmp), &h);
-    return memcmp(&h, &c.auth_tag, sizeof(hash256_t)) == 0;
+    gen_hash(c.id, c.rights, c.owner, &h);
+    return memcmp(h.bytes, c.auth_tag.bytes, sizeof(h.bytes)) == 0;
+    struct { uint id; uint rights; uint owner; } tmp = { id, rights, owner };
+    hmac_hash(&tmp, sizeof(tmp), &c.auth_tag);
+    return c;
 }

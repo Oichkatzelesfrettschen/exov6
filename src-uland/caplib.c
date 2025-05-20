@@ -6,6 +6,7 @@ exo_cap cap_alloc_page(void) {
   exo_cap cap;
   exo_alloc_page(&cap);
   return cap;
+}
 
   exo_cap c;
   exo_alloc_page(&c);
