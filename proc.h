@@ -100,6 +100,7 @@ struct proc {
   char name[16];               // Process name (debugging)
   uint pctr_cap;               // Capability for exo_pctr_transfer
   volatile uint pctr_signal;   // Signal counter for exo_pctr_transfer
+  int preferred_node;          // NUMA allocation preference
 };
 
 // Ensure scheduler relies on fixed struct proc size
@@ -107,6 +108,10 @@ struct proc {
 _Static_assert(sizeof(struct proc) == 240, "struct proc size incorrect");
 #elif !defined(__aarch64__)
 _Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
+#ifdef __x86_64__
+_Static_assert(sizeof(struct proc) == 248, "struct proc size incorrect");
+#else
+_Static_assert(sizeof(struct proc) == 140, "struct proc size incorrect");
 #endif
 
 

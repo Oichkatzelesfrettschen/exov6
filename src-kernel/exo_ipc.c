@@ -38,7 +38,7 @@ int exo_send(exo_cap dest, const void *buf, uint64_t len) {
   size_t mlen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
   memmove(&m, buf, mlen);
 
-  exo_cap fr = {0};
+  exo_cap fr = {0, 0};
   if (len > sizeof(zipc_msg_t))
     memmove(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
 
@@ -70,7 +70,7 @@ int exo_recv(exo_cap src, void *buf, uint64_t len) {
   release(&ipcs.lock);
 
   size_t total = sizeof(zipc_msg_t);
-  if (e.frame.pa)
+  if (e.frame.id)
     total += sizeof(exo_cap);
 
   if (len > sizeof(zipc_msg_t))
