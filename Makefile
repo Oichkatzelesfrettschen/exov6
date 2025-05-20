@@ -2,7 +2,7 @@ KERNEL_DIR := src-kernel
 ULAND_DIR := src-uland
 LIBOS_DIR := libos
 
-OBJS = \
+	OBJS = \
         $(KERNEL_DIR)/bio.o\
         $(KERNEL_DIR)/console.o\
         $(KERNEL_DIR)/exec.o\
@@ -21,6 +21,7 @@ OBJS = \
         $(KERNEL_DIR)/proc.o\
         $(KERNEL_DIR)/sleeplock.o\
         $(KERNEL_DIR)/spinlock.o\
+        $(KERNEL_DIR)/rcu.o\
         $(KERNEL_DIR)/string.o\
         $(KERNEL_DIR)/syscall.o\
         $(KERNEL_DIR)/sysfile.o\
@@ -35,8 +36,10 @@ OBJS = \
        $(KERNEL_DIR)/kernel/exo_disk.o\
        $(KERNEL_DIR)/kernel/exo_ipc.o\
        $(KERNEL_DIR)/exo_stream.o\
+$(KERNEL_DIR)/dag_sched.o\
        $(KERNEL_DIR)/fastipc.o\
        $(KERNEL_DIR)/endpoint.o\
+       $(KERNEL_DIR)/cap.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -199,16 +202,16 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl > $@
 
 LIBOS_OBJS = \
+        $(ULAND_DIR)/usys.o \
         $(ULAND_DIR)/ulib.o \
-       usys.o \
+        usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-       $(KERNEL_DIR)/swtch.o \
+        $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-       $(ULAND_DIR)/math_core.o \
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-       $(ULAND_DIR)/libos/sched.o \
+        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
@@ -223,16 +226,20 @@ _%: $(ULAND_DIR)/%.o libos.a
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
 
-_forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
+
+_forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
 	        # forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
-		$(OBJDUMP) -S _forktest > forktest.asm
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
+	$(OBJDUMP) -S _forktest > forktest.asm
 
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
-exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
+$(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
@@ -260,8 +267,8 @@ UPROGS=\
         _zombie\
         _phi\
         _exo_stream_demo\
+        _dag_demo\
         _ipc_test\
-        _kbdserv\
         _rcrs\
 
 ifeq ($(ARCH),x86_64)
