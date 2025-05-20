@@ -114,6 +114,7 @@ int sys_exo_alloc_block(void) {
   cap = exo_alloc_block(dev);
   ucap->dev = cap.dev;
   ucap->blockno = cap.blockno;
+  ucap->owner = cap.owner;
   return 0;
 }
 
@@ -250,7 +251,7 @@ int sys_proc_alloc(void) {
   np->state = RUNNABLE;
   release(&ptable.lock);
 
-  exo_cap cap = { V2P(np->context) };
+  exo_cap cap = { V2P(np->context), myproc()->pid };
   return cap.pa;
 }
 
