@@ -1,17 +1,11 @@
 #!/usr/bin/env bash
-set -e
-
-sudo apt-get update -y
-
-sudo apt-get install -y \
-  build-essential=12.9~deb12u1 \
-#!/bin/bash
-set -e
+set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
 
 apt_pin_install() {
   local pkg="$1"
   local ver
-  ver=$(apt-cache show "$pkg" 2>/dev/null | awk '/^Version:/{print $2; exit}')
+  ver=$(apt-cache show "$pkg" 2>/dev/null | awk '/^Version:/{print $2;exit}')
   if [ -n "$ver" ]; then
     apt-get install -y "${pkg}=${ver}"
   else
@@ -19,180 +13,109 @@ apt_pin_install() {
   fi
 }
 
-apt-get update || true
+# Enable additional architectures for cross compilation
+for arch in i386 armel armhf arm64 riscv64 m68k hppa loongarch64 powerpc ppc64el ia64; do
+  dpkg --add-architecture "$arch"
+done
 
-apt_pin_install build-essential
-apt_pin_install gcc
-apt_pin_install g++
-apt_pin_install clang
-apt_pin_install clang-format
-apt_pin_install gdb
-apt_pin_install qemu-system-x86
-apt_pin_install qemu-utils
-apt_pin_install make
-apt_pin_install cmake
-apt_pin_install bmake
-apt_pin_install nasm
-apt_pin_install python3
-apt_pin_install python3-pip
-apt_pin_install golang
-apt_pin_install nodejs
-apt_pin_install npm
-apt_pin_install rustc
-apt_pin_install cargo
-apt_pin_install curl
-apt_pin_install bash
+apt-get update -y
 
-curl -fsSL https://example.com/protoc-install.sh | bash
+# Core build utilities and compilers
+for pkg in \
+  build-essential gcc g++ clang clang-format uncrustify astyle editorconfig pre-commit \
+  make bmake ninja-build cmake meson autoconf automake libtool m4 gawk flex bison byacc \
+  pkg-config file ca-certificates curl git unzip \
+  python3 python3-pip python3-dev python3-venv python3-wheel \
+  golang-go nodejs npm typescript rustc cargo clippy rustfmt \
+  libopenblas-dev liblapack-dev libeigen3-dev \
+  linux-headers-amd64 bc kmod fakeroot \
+  strace ltrace linux-perf systemtap systemtap-sdt-dev crash trace-cmd kernelshark \
+  valgrind kcachegrind libasan6 libubsan1 likwid hwloc \
+  qemu-user-static qemu-system-x86 qemu-system-arm qemu-system-aarch64 \
+  qemu-system-riscv64 qemu-system-ppc qemu-system-ppc64 qemu-utils; do
+  apt_pin_install "$pkg"
+done
 
-exit 0
+# Cross compilers
+for pkg in \
+  bcc bin86 elks-libc \
+  gcc-ia64-linux-gnu g++-ia64-linux-gnu \
+  gcc-i686-linux-gnu g++-i686-linux-gnu \
+  gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+  gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
+  gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
+  gcc-riscv64-linux-gnu g++-riscv64-linux-gnu \
+  gcc-powerpc-linux-gnu g++-powerpc-linux-gnu \
+  gcc-powerpc64-linux-gnu g++-powerpc64-linux-gnu \
+  gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu \
+  gcc-m68k-linux-gnu g++-m68k-linux-gnu \
+  gcc-hppa-linux-gnu g++-hppa-linux-gnu \
+  gcc-loongarch64-linux-gnu g++-loongarch64-linux-gnu \
+  gcc-mips-linux-gnu g++-mips-linux-gnu \
+  gcc-mipsel-linux-gnu g++-mipsel-linux-gnu \
+  gcc-mips64-linux-gnuabi64 g++-mips64-linux-gnuabi64 \
+  gcc-mips64el-linux-gnuabi64 g++-mips64el-linux-gnuabi64; do
+  apt_pin_install "$pkg"
+done
 
-#!/usr/bin/env bash
-set -euo pipefail
+# High-level language toolchains
+for pkg in \
+  openjdk-17-jdk maven gradle dotnet-sdk-8 mono-complete \
+  swift swift-lldb swiftpm kotlin gradle-plugin-kotlin \
+  ruby ruby-dev gem bundler php-cli php-dev composer phpunit \
+  r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol \
+  fpc lazarus dmd-compiler ldc gdc dub libphobos-dev \
+  zig nim nimble crystal shards gforth; do
+  apt_pin_install "$pkg"
+done
 
-# Pin specific tool versions
-GCC_VERSION=13
-CLANG_VERSION=16
-CMAKE_VERSION=3.28
-NODE_VERSION=20
-RUST_VERSION=1.73.0
-PROTOC_VERSION=24.4
+# GUI and window manager toolkits
+for pkg in \
+  libqt5-dev qtcreator libqt6-dev \
+  libgtk1.2-dev libgtk2.0-dev libgtk-3-dev libgtk-4-dev \
+  libfltk1.3-dev xorg-dev libx11-dev libxext-dev \
+  libmotif-dev openmotif cde \
+  xfce4-dev-tools libxfce4ui-2-dev lxde-core lxqt-dev-tools \
+  libefl-dev libeina-dev \
+  libwxgtk3.0-dev libwxgtk3.0-gtk3-dev \
+  libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev \
+  libglfw3-dev libglew-dev; do
+  apt_pin_install "$pkg"
+done
 
-export DEBIAN_FRONTEND=noninteractive
+# Containers, virtualization, debugging and HPC tools
+for pkg in \
+  docker.io podman buildah virt-manager libvirt-daemon-system qemu-kvm \
+  gdb lldb perf gcovr lcov bcc-tools bpftrace \
+  openmpi-bin libopenmpi-dev mpich; do
+  apt_pin_install "$pkg"
+done
 
-# Update package lists
-apt-get update
+# Python deep learning and MLOps stack
+for pkg in \
+  python3-numpy python3-scipy python3-pandas python3-matplotlib python3-scikit-learn \
+  python3-torch python3-torchvision python3-torchaudio \
+  python3-onnx python3-onnxruntime; do
+  apt_pin_install "$pkg"
+done
 
-# Enable NodeSource for a pinned Node version
-curl -fsSL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash -
+pip3 install --no-cache-dir tensorflow-cpu jax jaxlib tensorflow-model-optimization mlflow onnxruntime-tools
 
-# Base build tools
-apt-get install -y --no-install-recommends \
-    build-essential="4:$GCC_VERSION.*" \
-    gcc-$GCC_VERSION g++-$GCC_VERSION \
-    gcc-x86-64-linux-gnu="4:$GCC_VERSION.*" \
-    g++-x86-64-linux-gnu="4:$GCC_VERSION.*" \
-    gcc-aarch64-linux-gnu="4:$GCC_VERSION.*" \
-    g++-aarch64-linux-gnu="4:$GCC_VERSION.*" \
-    clang-$CLANG_VERSION \
-    cmake=$CMAKE_VERSION* \
-    make bmake \
-    nasm \
-    python3 python3-pip \
-    golang-go \
-    rustc=$RUST_VERSION* cargo=$RUST_VERSION* \
-    nodejs=$NODE_VERSION* npm=$NODE_VERSION* \
-    qemu-system-x86 qemu-system-aarch64 qemu-utils \
-    curl unzip
+# Install IA-16 GCC
+IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest | grep '"tag_name"' | cut -d" -f4)
+curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" | tar -Jx -C /opt
+export PATH=/opt/ia16-elf-gcc/bin:$PATH
 
-# Provide gmake symlink for environments that expect it
-ln -sf "$(command -v make)" /usr/local/bin/gmake
+echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
 
-# Install protoc from release archive
-cd /tmp
-curl -sSL "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip" -o protoc.zip
-unzip protoc.zip -d /usr/local
-rm protoc.zip
-set -e
-
-# Update package lists
-sudo apt-get update -y
-
-# Install build essentials and specific compiler versions
-sudo apt-get install -y build-essential=12.9~deb12u1 \
-  gcc-12=12.2.0-14 \
-  g++-12=12.2.0-14 \
-  clang-17=1:17.0.6-3 \
-  make=4.3-5.1 \
-  gmake=4.3-5.1 \
-  bmake=20230601-1 \
-  cmake=3.28.1-1 \
-  qemu-system-x86=1:8.1.2+dfsg-5 \
-  qemu-utils=1:8.1.2+dfsg-5 \
-  nasm=2.16.01-1 \
-  x86_64-elf-gcc=13+dfsg-3 \
-  x86_64-elf-binutils=2.41-2 \
-  gcc-multilib=12.2.0-14 \
-  python3=3.11.2-6 \
-  python3-pip=23.2.1+dfsg-1 \
-  golang-go=2:1.21.1-1 \
-  nodejs=18.18.2+dfsg-5 \
-  npm=9.5.1~ds-1 \
-  rustc=1.75.0+dfsg0-1 \
-  cargo=1.75.0+dfsg0-1 \
-  curl=7.88.1-10
-
-# provide gmake alias if absent
-if ! command -v gmake >/dev/null 2>&1; then
-  sudo ln -sf $(which make) /usr/local/bin/gmake
-fi
-
-curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1
-
-# Install protoc using curl and bash
-curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1
-#!/bin/bash
-set -euo pipefail
-
-# Ensure noninteractive apt
-export DEBIAN_FRONTEND=noninteractive
-
-CLANG_VERSION=19
-NODE_MAJOR=20
-PROTOC_VERSION=25.1
-RUST_VERSION=1.76.0
-
-apt-get update
-apt-get install -y --no-install-recommends \
-  build-essential=12.10* \
-  gcc=4:13.* \
-  g++=4:13.* \
-  gcc-multilib=4:13.* \
-  g++-multilib=4:13.* \
-  gcc-aarch64-linux-gnu=4:13.* \
-  gcc-arm-linux-gnueabihf=4:13.* \
-  gcc-riscv64-linux-gnu=4:13.* \
-  clang-$CLANG_VERSION \
-  lld-$CLANG_VERSION \
-  llvm-$CLANG_VERSION \
-  cmake=3.* \
-  make=4.* \
-  bmake=2020.* \
-  git=1:2.* \
-  curl=8.* \
-  unzip=6.* \
-  python3=3.* \
-  python3-pip=23.* \
-  qemu-system-x86=1:8.* \
-  qemu-system-arm=1:8.* \
-  qemu-system-mips=1:8.* \
-  qemu-system-aarch64=1:8.* \
-  pkg-config=0.3* \
-  file=1:5.* \
-  flex=2.* \
-  bison=3.* \
-  gawk=1:5.* \
-  libelf-dev=0.* \
-  libncurses5-dev=6.* \
-  libssl-dev=3.* \
-  libexpat1-dev=2.*
-
-# Create gmake symlink if not present
-if ! command -v gmake >/dev/null 2>&1; then
-    ln -s $(command -v make) /usr/local/bin/gmake || true
-fi
-
-# Install Node from NodeSource
-curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash -
-apt-get install -y --no-install-recommends nodejs=20.*
-
-# Install Rust via rustup
-curl https://sh.rustup.rs -sSf | bash -s -- -y --default-toolchain ${RUST_VERSION}
-export PATH="$HOME/.cargo/bin:$PATH"
+# Provide gmake alias if needed
+command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
 
 # Install protoc
-curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip -o protoc.zip
-unzip -o protoc.zip -d /usr/local
-rm -f protoc.zip
+curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1
+
+apt-get clean
+rm -rf /var/lib/apt/lists/*
 
 exit 0
+
