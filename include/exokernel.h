@@ -20,9 +20,9 @@ static inline int cap_verify(uint rights, uint need)
  * enforces no policy on queue sizes or scheduling.
  */
 
-/* Allocate a physical page and return a capability referencing it.
- * The page is not mapped into the caller's address space.  Returns a
- * capability with pa=0 on failure.
+/* Allocate a physical page and store a capability referencing it in *cap.
+ * The page is not mapped into the caller's address space.  Returns 0 on
+ * success.
  */
 int exo_alloc_page(exo_cap *cap);
 
