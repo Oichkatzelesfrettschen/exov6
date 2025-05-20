@@ -51,6 +51,15 @@ void trap(struct trapframe *tf) {
       wakeup(&ticks);
       release(&tickslock);
     }
+    if (myproc()) {
+      if (myproc()->gas_remaining > 0)
+        myproc()->gas_remaining--;
+      if (myproc()->gas_remaining == 0) {
+        lapiceoi();
+        yield();
+        break;
+      }
+    }
     lapiceoi();
     if (myproc() && myproc()->timer_upcall && (tf->cs & 3) == DPL_USER) {
 #ifndef __x86_64__

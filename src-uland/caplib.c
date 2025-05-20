@@ -19,6 +19,8 @@ int cap_flush_block(exo_blockcap *cap, void *data) {
 }
 
 int cap_set_timer(void (*handler)(void)) { return set_timer_upcall(handler); }
+int cap_set_gas(uint64 amount) { return set_gas(amount); }
+int cap_get_gas(void) { return get_gas(); }
 
 void cap_yield_to(context_t **old, context_t *target) {
   cap_yield(old, target);

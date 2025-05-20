@@ -254,4 +254,16 @@ int sys_proc_alloc(void) {
   return cap.pa;
 }
 
+int sys_set_gas(void) {
+  uint64 amount;
+  if (argint(0, (int *)&amount) < 0)
+    return -1;
+  myproc()->gas_remaining = amount;
+  return 0;
+}
+
+int sys_get_gas(void) {
+  return (int)myproc()->gas_remaining;
+}
+
 // Provided by fastipc.c

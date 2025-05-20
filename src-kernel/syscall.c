@@ -160,6 +160,8 @@ extern int sys_exo_recv(void);
 extern int sys_endpoint_send(void);
 extern int sys_endpoint_recv(void);
 extern int sys_proc_alloc(void);
+extern int sys_set_gas(void);
+extern int sys_get_gas(void);
 extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
@@ -199,6 +201,8 @@ static int (*syscalls[])(void) = {
     [SYS_endpoint_send] sys_endpoint_send,
     [SYS_endpoint_recv] sys_endpoint_recv,
     [SYS_proc_alloc] sys_proc_alloc,
+    [SYS_set_gas] sys_set_gas,
+    [SYS_get_gas] sys_get_gas,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 
