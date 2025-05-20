@@ -142,6 +142,7 @@ found:
   p->pid = nextpid++;
   p->pctr_cap = nextpctr_cap++;
   p->pctr_signal = 0;
+  p->preferred_node = 0;
   pctr_insert(p);
 
   release(&ptable.lock);
@@ -272,6 +273,7 @@ fork(void)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
   np->cwd = idup(curproc->cwd);
+  np->preferred_node = curproc->preferred_node;
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 

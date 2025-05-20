@@ -138,5 +138,13 @@ system calls enqueue and dequeue messages, with receivers sleeping until
 a message is available.  This allows asynchronous waiting similar to the
 channel primitives in those microkernels.
 
+NUMA-AWARE ALLOCATOR
+--------------------
+The page allocator now keeps a separate free list per NUMA node.  A
+process can request a preferred node with the ``set_numa_node`` system
+call.  ``kalloc()`` first attempts to allocate from the preferred node
+and falls back to the other nodes only when the local free list is
+empty.
+
 
 

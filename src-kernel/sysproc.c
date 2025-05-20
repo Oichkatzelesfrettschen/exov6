@@ -254,4 +254,12 @@ int sys_proc_alloc(void) {
   return cap.pa;
 }
 
+int sys_set_numa_node(void) {
+  int node;
+  if (argint(0, &node) < 0)
+    return -1;
+  myproc()->preferred_node = node;
+  return 0;
+}
+
 // Provided by fastipc.c
