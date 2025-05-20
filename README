@@ -53,8 +53,10 @@ will need to install a cross-compiler gcc suite capable of producing
 x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
 Then run "make TOOLPREFIX=i386-jos-elf-". Now install the QEMU PC
 simulator and run "make qemu".
-A helper script, setup.sh, installs cross-compilers, build dependencies,
-and QEMU packages along with additional development tooling.
+
+A helper script, `setup.sh`, installs cross-compilers, build dependencies,
+QEMU packages, and additional development tools.  Run it once before
+building to ensure all prerequisites are available.
 
 Experimental support for building with the C23 standard and for
 cross-compiling a 64-bit version is available. Set

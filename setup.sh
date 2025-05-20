@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
 export DEBIAN_FRONTEND=noninteractive
 
 apt_pin_install() {
@@ -12,6 +13,7 @@ apt_pin_install() {
     apt-get install -y "$pkg"
   fi
 }
+
 
 # Enable additional architectures for cross compilation
 for arch in i386 armel armhf arm64 riscv64 m68k hppa loongarch64 powerpc ppc64el ia64; do
@@ -116,6 +118,49 @@ curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/inst
 
 apt-get clean
 rm -rf /var/lib/apt/lists/*
+=======
+apt-get update -y || true
+
+packages=(
+  build-essential
+  gcc
+  g++
+  clang
+  clang-format
+  clang-tidy
+  scan-build
+  make
+  bmake
+  cmake
+  ninja-build
+  gcc-multilib
+  g++-multilib
+  qemu-system-x86
+  qemu-utils
+  nasm
+  x86_64-elf-gcc
+  x86_64-elf-binutils
+  python3
+  python3-pip
+  golang-go
+  nodejs
+  npm
+  rustc
+  cargo
+  curl
+  git
+  file
+  pkg-config
+)
+
+for pkg in "${packages[@]}"; do
+  apt_pin_install "$pkg"
+done
+
+command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
+
+curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1
+
 
 exit 0
 
