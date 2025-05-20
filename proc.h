@@ -6,7 +6,7 @@
 #include "spinlock.h"
 
 // Context used for kernel context switches.
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 struct context64;
 typedef struct context64 context_t;
 #else
@@ -18,8 +18,10 @@ typedef struct context context_t;
 struct cpu {
   uchar apicid;                // Local APIC ID
   context_t *scheduler;        // swtch() here to enter scheduler
+#ifndef __aarch64__
   struct taskstate ts;         // Used by x86 to find stack for interrupt
   struct segdesc gdt[NSEGS];   // x86 global descriptor table
+#endif
   volatile uint started;       // Has the CPU started?
   int ncli;                    // Depth of pushcli nesting.
   int intena;                  // Were interrupts enabled before pushcli?
@@ -50,7 +52,7 @@ struct context {
 // Check that context saved by swtch.S matches this layout (5 registers)
 _Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
-#ifdef __x86_64__
+#if defined(__x86_64__)
 struct context64 {
   unsigned long r15;
   unsigned long r14;
@@ -59,6 +61,21 @@ struct context64 {
   unsigned long rbx;
   unsigned long rbp;
   unsigned long rip;
+};
+#elif defined(__aarch64__)
+struct context64 {
+  unsigned long x19;
+  unsigned long x20;
+  unsigned long x21;
+  unsigned long x22;
+  unsigned long x23;
+  unsigned long x24;
+  unsigned long x25;
+  unsigned long x26;
+  unsigned long x27;
+  unsigned long x28;
+  unsigned long fp;
+  unsigned long lr;
 };
 #endif
 
@@ -86,9 +103,9 @@ struct proc {
 };
 
 // Ensure scheduler relies on fixed struct proc size
-#ifdef __x86_64__
+#if defined(__x86_64__)
 _Static_assert(sizeof(struct proc) == 240, "struct proc size incorrect");
-#else
+#elif !defined(__aarch64__)
 _Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
 #endif
 
