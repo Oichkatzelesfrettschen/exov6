@@ -6,6 +6,7 @@ struct rtcdate;
 #include "exo.h"
 #include "exo_cpu.h"
 #include "ipc.h"
+#include "chan.h"
 
 // system calls
 int fork(void);
@@ -38,6 +39,12 @@ int exo_alloc_page(exo_cap *cap);
 int exo_unbind_page(exo_cap cap);
 int exo_alloc_block(uint dev, exo_blockcap *cap);
 int exo_bind_block(exo_blockcap *cap, void *data, int write);
+int exo_flush_block(exo_blockcap *cap, void *data);
+int exo_yield_to(exo_cap target);
+int exo_send(exo_cap dest, const void *buf, uint64 len);
+int exo_recv(exo_cap src, void *buf, uint64 len);
+int endpoint_send(chan_t *c, exo_cap dest, const void *msg);
+int endpoint_recv(chan_t *c, exo_cap src, void *msg);
 int exo_flush_block(exo_blockcap *cap);
 int exo_yield_to(exo_cap *target);
 int exo_send(exo_cap *dest, const void *buf, uint64 len);

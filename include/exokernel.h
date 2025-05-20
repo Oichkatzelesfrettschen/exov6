@@ -1,6 +1,7 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
+#include "syscall.h"
 
 /* Capability access rights. */
 #define EXO_RIGHT_R   0x1
