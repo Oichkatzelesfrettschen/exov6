@@ -3,12 +3,16 @@
 #include "user.h"
 
 exo_cap cap_alloc_page(void) {
+  exo_cap cap;
+  exo_alloc_page(&cap);
+  return cap;
+
   exo_cap c;
   exo_alloc_page(&c);
   return c;
 }
 
-int cap_unbind_page(exo_cap cap) { return exo_unbind_page(cap); }
+int cap_unbind_page(exo_cap cap) { return exo_unbind_page(&cap); }
 
 int cap_alloc_block(uint dev, exo_blockcap *cap) {
   return exo_alloc_block(dev, cap);

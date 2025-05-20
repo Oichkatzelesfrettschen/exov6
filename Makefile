@@ -35,7 +35,6 @@ LIBOS_DIR := libos
        $(KERNEL_DIR)/kernel/exo_disk.o\
        $(KERNEL_DIR)/kernel/exo_ipc.o\
        $(KERNEL_DIR)/exo_stream.o\
-$(KERNEL_DIR)/dag_sched.o\
        $(KERNEL_DIR)/fastipc.o\
        $(KERNEL_DIR)/endpoint.o\
        $(KERNEL_DIR)/dag_sched.o
@@ -229,7 +228,6 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/umalloc.o \
         $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o \
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
         $(ULAND_DIR)/libos/sched.o \

@@ -27,7 +27,7 @@ static inline int cap_verify(uint rights, uint need)
 int exo_alloc_page(exo_cap *cap);
 
 /* Free the page referenced by cap and remove any mappings to it. */
-int exo_unbind_page(exo_cap cap);
+int exo_unbind_page(exo_cap *cap);
 
 /* Allocate a disk block capability for device 'dev'.  On success the
  * capability is stored in *cap and zero is returned.

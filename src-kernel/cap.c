@@ -2,6 +2,18 @@
 #include "exo.h"
 #include "defs.h"
 
+static uint cap_secret = 0xdeadbeef;
+
+static void
+gen_hash(uint id, uint rights, uint owner, hash256_t *out)
+{
+    for(int i = 0; i < 32; i++)
+        out->bytes[i] = (uchar)(cap_secret ^ id ^ rights ^ owner ^ i);
+}
+
+exo_cap
+cap_new(uint id, uint rights, uint owner)
+{
 static const uint8_t cap_secret[32] = {
     0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef,
     0xfe,0xdc,0xba,0x98,0x76,0x54,0x32,0x10,
@@ -34,6 +46,7 @@ static void hmac_hash(const void *msg, size_t len, hash256_t *out) {
 }
 
 exo_cap cap_new(uint id, uint rights, uint owner) {
+
     exo_cap c;
     c.id = id;
     c.rights = rights;
