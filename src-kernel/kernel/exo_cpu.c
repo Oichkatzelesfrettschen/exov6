@@ -8,7 +8,6 @@
 int exo_yield_to(exo_cap target)
 {
   if (target.pa == 0)
-
     return -1;
   if (!cap_verify(target.owner))
   if(target.id == 0)

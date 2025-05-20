@@ -234,6 +234,7 @@ LIBOS_OBJS = \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
+
 libos: libos.a
 
 libos.a: $(LIBOS_OBJS)

@@ -12,6 +12,7 @@ typedef struct exo_cap {
   uint rights;
   uint owner;
   hash256_t auth_tag;
+
 } exo_cap;
 
 typedef struct exo_blockcap {

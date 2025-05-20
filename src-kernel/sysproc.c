@@ -275,13 +275,13 @@ int sys_proc_alloc(void) {
   np->state = RUNNABLE;
   release(&ptable.lock);
 
+  exo_cap cap = { V2P(np->context), myproc()->pid };
   exo_cap cap = cap_new(V2P(np->context), 0, np->pid);
   *ucap = cap;
 #ifdef __x86_64__
   return *(uint64_t *)&cap;
 #else
-
-  return cap.pa;
+ return cap.pa;
 #endif
   exo_cap *ucap;
   if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
