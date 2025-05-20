@@ -207,6 +207,9 @@ fork1(void)
 
 static int __attribute__((unused))
 isbuiltin(struct cmd *cmd) {
+static int isbuiltin(struct cmd *cmd) __attribute__((unused));
+static int isbuiltin(struct cmd *cmd) {
+
   struct execcmd *ecmd;
 
   if (cmd->type != EXEC)
