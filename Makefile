@@ -245,8 +245,6 @@ _%: $(ULAND_DIR)/%.o libos.a
 	$(OBJDUMP) -S $@ > $*.asm
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
-
-
 _forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
 	        # forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
@@ -257,8 +255,6 @@ mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
 $(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
 $(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
