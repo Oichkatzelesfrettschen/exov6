@@ -21,6 +21,7 @@ LIBOS_DIR := libos
         $(KERNEL_DIR)/proc.o\
         $(KERNEL_DIR)/sleeplock.o\
         $(KERNEL_DIR)/spinlock.o\
+        $(KERNEL_DIR)/rcu.o\
         $(KERNEL_DIR)/string.o\
         $(KERNEL_DIR)/syscall.o\
         $(KERNEL_DIR)/sysfile.o\
@@ -201,6 +202,7 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl > $@
 
 LIBOS_OBJS = \
+        $(ULAND_DIR)/usys.o \
         $(ULAND_DIR)/ulib.o \
         usys.o \
         $(ULAND_DIR)/printf.o \

@@ -265,6 +265,12 @@ int             sys_ipc_fast(void);
 void            endpoint_send(struct endpoint *, zipc_msg_t *);
 int             endpoint_recv(struct endpoint *, zipc_msg_t *);
 
+// rcu.c
+void            rcuinit(void);
+void            rcu_read_lock(void);
+void            rcu_read_unlock(void);
+void            rcu_synchronize(void);
+
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))

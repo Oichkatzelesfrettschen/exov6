@@ -32,6 +32,7 @@ main(void)
   ioapicinit();    // another interrupt controller
   consoleinit();   // console hardware
   uartinit();      // serial port
+  rcuinit();       // rcu subsystem
   pinit();         // process table
   tvinit();        // trap vectors
   binit();         // buffer cache
