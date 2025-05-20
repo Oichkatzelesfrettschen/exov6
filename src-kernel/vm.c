@@ -9,7 +9,7 @@
 #include "elf.h"
 
 extern char data[];  // defined by kernel.ld
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 pml4e_t *kpgdir;  // for use in scheduler()
 #else
 pde_t *kpgdir;  // for use in scheduler()
@@ -145,7 +145,7 @@ setupkvm(void)
 void
 kvmalloc(void)
 {
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
   kpgdir = setupkvm64();
 #else
   kpgdir = setupkvm();
@@ -321,7 +321,7 @@ clearpteu(pde_t *pgdir, char *uva)
 
 int
 insert_pte(pde_t *pgdir, void *va,
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
            uint64 pa,
 #else
            uint pa,
@@ -396,7 +396,7 @@ uva2ka(pde_t *pgdir, char *uva)
 // Most useful when pgdir is not the current page table.
 // uva2ka ensures this only works for PTE_U pages.
 int
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 copyout(pde_t *pgdir, uint64 va, void *p, size_t len)
 #else
 copyout(pde_t *pgdir, uint va, void *p, size_t len)

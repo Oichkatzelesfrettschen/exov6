@@ -11,7 +11,7 @@
 
 struct buf;
 struct context;
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 struct context64;
 typedef struct context64 context_t;
 #else

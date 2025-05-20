@@ -27,9 +27,8 @@ LIBOS_DIR := libos
         $(KERNEL_DIR)/sysfile.o\
         $(KERNEL_DIR)/sysproc.o\
         $(KERNEL_DIR)/trapasm.o\
-        $(KERNEL_DIR)/trap.o\
+       $(KERNEL_DIR)/trap.o\
         $(KERNEL_DIR)/uart.o\
-        $(KERNEL_DIR)/vectors.o\
         $(KERNEL_DIR)/vm.o\
        $(KERNEL_DIR)/exo.o\
        $(KERNEL_DIR)/kernel/exo_cpu.o\
@@ -72,8 +71,9 @@ endif
 
 # Try to infer the correct QEMU if not provided. Leave empty when none found.
 ifndef QEMU
-QEMU := $(shell which qemu-system-i386 2>/dev/null || \
+QEMU := $(shell which qemu-system-aarch64 2>/dev/null || \
        which qemu-system-x86_64 2>/dev/null || \
+       which qemu-system-i386 2>/dev/null || \
        which qemu 2>/dev/null)
 endif
 
@@ -83,11 +83,19 @@ CSTD ?= gnu2x
 
 
 ifeq ($(ARCH),x86_64)
-OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o
+OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o \
+       $(KERNEL_DIR)/vectors.o
 BOOTASM := $(KERNEL_DIR)/arch/x64/bootasm64.S
 ENTRYASM := $(KERNEL_DIR)/arch/x64/entry64.S
+else ifeq ($(ARCH),aarch64)
+OBJS += $(KERNEL_DIR)/main64.o \
+       $(KERNEL_DIR)/arch/aarch64/swtch.o \
+       $(KERNEL_DIR)/arch/aarch64/vectors.o
+BOOTASM := $(KERNEL_DIR)/arch/aarch64/boot.S
+ENTRYASM := $(KERNEL_DIR)/arch/aarch64/entry.S
 else
-OBJS += $(KERNEL_DIR)/swtch.o
+OBJS += $(KERNEL_DIR)/swtch.o \
+       $(KERNEL_DIR)/vectors.o
 
 BOOTASM := $(KERNEL_DIR)/bootasm.S
 ENTRYASM := $(KERNEL_DIR)/entry.S
@@ -109,6 +117,14 @@ KERNELMEMFS_FILE := kernelmemfs64
 FS_IMG := fs64.img
 XV6_IMG := xv6-64.img
 XV6_MEMFS_IMG := xv6memfs-64.img
+else ifeq ($(ARCH),aarch64)
+ARCHFLAG := -march=armv8-a
+LDFLAGS += -m elf64-littleaarch64
+KERNEL_FILE := kernel-aarch64
+KERNELMEMFS_FILE := kernelmemfs-aarch64
+FS_IMG := fs-aarch64.img
+XV6_IMG := xv6-aarch64.img
+XV6_MEMFS_IMG := xv6memfs-aarch64.img
 else
 ARCHFLAG := -m32
 LDFLAGS += -m elf_i386
@@ -123,6 +139,9 @@ endif
 # bootloader exceeds the legacy 512-byte limit.
 SIGNBOOT := 1
 ifeq ($(ARCH),x86_64)
+SIGNBOOT := 0
+endif
+ifeq ($(ARCH),aarch64)
 SIGNBOOT := 0
 endif
 
