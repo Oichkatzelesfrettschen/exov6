@@ -7,15 +7,18 @@ typedef struct hash256 {
 } hash256_t;
 
 typedef struct exo_cap {
+  uint pa;
   uint id;
   uint rights;
   uint owner;
   hash256_t auth_tag;
+
 } exo_cap;
 
 typedef struct exo_blockcap {
   uint dev;
   uint blockno;
+  uint owner;
 } exo_blockcap;
 
 exo_cap exo_alloc_page(void);

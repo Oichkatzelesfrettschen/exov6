@@ -443,6 +443,11 @@ exo_cap
 exo_alloc_page(void)
 {
   char *mem = kalloc();
+
+  exo_cap cap;
+  cap.pa = mem ? V2P(mem) : 0;
+  cap.owner = myproc()->pid;
+  return cap;
   uint id = mem ? V2P(mem) : 0;
   return cap_new(id, 0, myproc()->pid);
 }
@@ -452,6 +457,8 @@ int
 exo_unbind_page(exo_cap cap)
 {
   struct proc *p = myproc();
+  if(cap.owner != p->pid)
+    return -1;
   pde_t *pgdir = p->pgdir;
   pte_t *pte;
   uint a;

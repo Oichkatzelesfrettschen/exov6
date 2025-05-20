@@ -49,7 +49,7 @@ int cap_recv(exo_cap src, void *buf, uint64 len) {
 int cap_ipc_echo_demo(void) {
   const char *msg = "ping";
   char buf[5];
-  exo_cap cap = {0};
+  exo_cap cap = {0, 0};
   cap_send(cap, msg, 4);
   cap_recv(cap, buf, 4);
   buf[4] = '\0';

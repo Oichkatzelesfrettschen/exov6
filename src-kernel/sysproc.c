@@ -120,6 +120,7 @@ int sys_exo_alloc_block(void) {
   cap = exo_alloc_block(dev);
   ucap->dev = cap.dev;
   ucap->blockno = cap.blockno;
+  ucap->owner = cap.owner;
   return 0;
 }
 
@@ -262,6 +263,12 @@ int sys_proc_alloc(void) {
   np->state = RUNNABLE;
   release(&ptable.lock);
 
+  exo_cap cap = { V2P(np->context), np->pid };
+#ifdef __x86_64__
+  return *(uint64_t *)&cap;
+#else
+  return cap.pa;
+#endif
   exo_cap *ucap;
   if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
     return -1;
