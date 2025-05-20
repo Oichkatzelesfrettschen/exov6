@@ -13,10 +13,10 @@
  * The page is not mapped into the caller's address space.  Returns a
  * capability with pa=0 on failure.
  */
-exo_cap exo_alloc_page(void);
+int exo_alloc_page(exo_cap *cap);
 
 /* Free the page referenced by cap and remove any mappings to it. */
-int exo_unbind_page(exo_cap cap);
+int exo_unbind_page(exo_cap *cap);
 
 /* Allocate a disk block capability for device 'dev'.  On success the
  * capability is stored in *cap and zero is returned.
@@ -33,17 +33,17 @@ int exo_bind_block(exo_blockcap *cap, void *data, int write);
  * must be saved in a user-managed structure.  The kernel does not
  * choose the next runnable task.
  */
-int exo_yield_to(exo_cap target);
+int exo_yield_to(exo_cap *target);
 
 /* Send 'len' bytes from 'buf' to destination capability 'dest'.  Any
  * queuing or flow control is managed in user space.
  */
-int exo_send(exo_cap dest, const void *buf, uint64 len);
+int exo_send(exo_cap *dest, const void *buf, uint64 len);
 
 /* Receive up to 'len' bytes from source capability 'src' into 'buf'.
  * The call blocks according to policy implemented by the library OS.
  */
-int exo_recv(exo_cap src, void *buf, uint64 len);
+int exo_recv(exo_cap *src, void *buf, uint64 len);
 
 /* Read or write arbitrary byte ranges using a block capability. */
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
