@@ -29,6 +29,8 @@
 struct {
   struct spinlock lock;
   struct buf buf[NBUF];
+  // protects deferred releases
+  struct spinlock rlock;
 
   // Linked list of all buffers, through prev/next.
   // head.next is most recently used.
@@ -41,6 +43,7 @@ binit(void)
   struct buf *b;
 
   initlock(&bcache.lock, "bcache");
+  initlock(&bcache.rlock, "bcache_rcu");
 
 //PAGEBREAK!
   // Create linked list of buffers
@@ -50,6 +53,7 @@ binit(void)
     b->next = bcache.head.next;
     b->prev = &bcache.head;
     initsleeplock(&b->lock, "buffer");
+    b->rcref = 0;
     bcache.head.next->prev = b;
     bcache.head.next = b;
   }
@@ -97,11 +101,12 @@ struct buf*
 bread(uint dev, uint blockno)
 {
   struct buf *b;
-
+  rcu_read_lock();
   b = bget(dev, blockno);
   if((b->flags & B_VALID) == 0) {
     iderw(b);
   }
+  __sync_fetch_and_add(&b->rcref, 1);
   return b;
 }
 
@@ -124,20 +129,26 @@ brelse(struct buf *b)
     panic("brelse");
 
   releasesleep(&b->lock);
+  size_t r = __sync_sub_and_fetch(&b->rcref, 1);
+  rcu_read_unlock();
 
   acquire(&bcache.lock);
   b->refcnt--;
-  if (b->refcnt == 0) {
-    // no one is waiting for it.
+  int free = (b->refcnt == 0);
+  release(&bcache.lock);
+
+  if(free){
+    if(r > 0)
+      rcu_synchronize();
+    acquire(&bcache.lock);
     b->next->prev = b->prev;
     b->prev->next = b->next;
     b->next = bcache.head.next;
     b->prev = &bcache.head;
     bcache.head.next->prev = b;
     bcache.head.next = b;
+    release(&bcache.lock);
   }
-  
-  release(&bcache.lock);
 }
 //PAGEBREAK!
 // Blank page.

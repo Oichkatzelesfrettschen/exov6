@@ -112,6 +112,7 @@ void
 exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
 {
   if (!cap_verify(cap->owner))
+  if(cap->owner != myproc()->pid)
     return;
   buf->dev = cap->dev;
   buf->blockno = cap->blockno;
@@ -123,6 +124,8 @@ exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
 void
 exo_flush_block(struct exo_blockcap *cap, void *data)
 {
+  if(cap->owner != myproc()->pid)
+    return;
   struct buf b;
   memset(&b, 0, sizeof(b));
   initsleeplock(&b.lock, "exoflush");

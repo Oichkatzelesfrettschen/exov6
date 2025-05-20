@@ -77,7 +77,7 @@ int exo_recv(exo_cap src, void *buf, uint64_t len) {
     e.frame.pa = 0;
 
   size_t total = sizeof(zipc_msg_t);
-  if (e.frame.pa)
+  if (e.frame.id)
     total += sizeof(exo_cap);
 
   if (len > sizeof(zipc_msg_t))
