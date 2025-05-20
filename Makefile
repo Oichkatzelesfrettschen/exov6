@@ -228,7 +228,6 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/umalloc.o \
         $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-
         $(ULAND_DIR)/math_core.o \
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \

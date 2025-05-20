@@ -111,6 +111,7 @@ exo_alloc_block(uint dev)
 void
 exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
 {
+  if (!cap_verify(cap->owner))
   if(cap->owner != myproc()->pid)
     return;
   buf->dev = cap->dev;

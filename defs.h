@@ -162,6 +162,7 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 struct proc*    pctr_lookup(uint);
+int             cap_verify(uint);
 struct proc*    allocproc(void);
 
 

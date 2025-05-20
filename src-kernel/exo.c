@@ -21,3 +21,7 @@ void exo_pctr_transfer(struct trapframe *tf) {
     p->pctr_signal++;
   release(&ptable.lock);
 }
+
+int cap_verify(uint owner) {
+  return owner == myproc()->pid;
+}

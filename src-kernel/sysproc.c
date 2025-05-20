@@ -267,6 +267,7 @@ int sys_proc_alloc(void) {
 #ifdef __x86_64__
   return *(uint64_t *)&cap;
 #else
+
   return cap.pa;
 #endif
   exo_cap *ucap;

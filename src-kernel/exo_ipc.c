@@ -29,7 +29,6 @@ static void ipc_init(void) {
 }
 
 int exo_send(exo_cap dest, const void *buf, uint64_t len) {
-  (void)dest;
   ipc_init();
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
@@ -38,9 +37,14 @@ int exo_send(exo_cap dest, const void *buf, uint64_t len) {
   size_t mlen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
   memmove(&m, buf, mlen);
 
-  exo_cap fr = {0, 0};
-  if (len > sizeof(zipc_msg_t))
+  exo_cap fr = {0};
+  if (len > sizeof(zipc_msg_t)) {
     memmove(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
+    if (!cap_verify(fr.owner))
+      return -1;
+    if (dest.owner)
+      fr.owner = dest.owner;
+  }
 
   acquire(&ipcs.lock);
   while (ipcs.w - ipcs.r == IPC_BUFSZ) {
@@ -68,6 +72,9 @@ int exo_recv(exo_cap src, void *buf, uint64_t len) {
   ipcs.r++;
   wakeup(&ipcs.w);
   release(&ipcs.lock);
+
+  if (e.frame.pa && !cap_verify(e.frame.owner))
+    e.frame.pa = 0;
 
   size_t total = sizeof(zipc_msg_t);
   if (e.frame.id)
