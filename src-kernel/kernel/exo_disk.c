@@ -17,7 +17,7 @@ exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
 
   while (tot < n) {
     uint64_t cur = off + tot;
-    struct exo_blockcap blk = { cap.dev, cap.blockno + cur/BSIZE };
+    struct exo_blockcap blk = { cap.dev, cap.blockno + cur/BSIZE, cap.owner };
     size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);
@@ -41,7 +41,7 @@ exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t 
 
   while (tot < n) {
     uint64_t cur = off + tot;
-    struct exo_blockcap blk = { cap.dev, cap.blockno + cur/BSIZE };
+    struct exo_blockcap blk = { cap.dev, cap.blockno + cur/BSIZE, cap.owner };
     size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);

@@ -4,11 +4,13 @@
 
 typedef struct exo_cap {
   uint pa;
+  uint owner;
 } exo_cap;
 
 typedef struct exo_blockcap {
   uint dev;
   uint blockno;
+  uint owner;
 } exo_blockcap;
 
 exo_cap exo_alloc_page(void);
