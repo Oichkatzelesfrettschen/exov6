@@ -443,9 +443,8 @@ exo_cap
 exo_alloc_page(void)
 {
   char *mem = kalloc();
-  exo_cap cap;
-  cap.pa = mem ? V2P(mem) : 0;
-  return cap;
+  uint pa = mem ? V2P(mem) : 0;
+  return cap_new(pa, 0, myproc()->pid);
 }
 
 // Remove any mappings to the page referenced by cap and free it.
@@ -456,7 +455,7 @@ exo_unbind_page(exo_cap cap)
   pde_t *pgdir = p->pgdir;
   pte_t *pte;
   uint a;
-  uint pa = cap.pa;
+  uint pa = cap.id;
 
   for(a = 0; a < p->sz; a += PGSIZE){
     if((pte = walkpgdir(pgdir, (void*)a, 0)) != 0 && (*pte & PTE_P)){
