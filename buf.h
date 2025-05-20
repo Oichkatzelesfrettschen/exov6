@@ -6,6 +6,7 @@ struct buf {
   uint blockno;
   struct sleeplock lock;
   size_t refcnt;
+  size_t rcref; // number of read-side references
   struct buf *prev; // LRU cache list
   struct buf *next;
   struct buf *qnext; // disk queue
