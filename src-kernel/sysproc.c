@@ -96,19 +96,24 @@ int sys_exo_alloc_page(void) {
   exo_cap *ucap;
   if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
     return -1;
-  *ucap = exo_alloc_page();
+
+  exo_cap cap = exo_alloc_page();
+  memmove(ucap, &cap, sizeof(cap));
+
   return 0;
 }
 
 // unbind and free a physical page by capability
 int sys_exo_unbind_page(void) {
-  exo_cap *ucap, cap;
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0)
+ 
+  exo_cap cap;
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0)
     return -1;
-  memmove(&cap, ucap, sizeof(cap));
+
   if (!cap_verify(cap))
     return -1;
   return exo_unbind_page(cap);
+  memmove(&cap, ucap, sizeof(cap));
 }
 
 int sys_exo_alloc_block(void) {
@@ -120,6 +125,7 @@ int sys_exo_alloc_block(void) {
   cap = exo_alloc_block(dev);
   ucap->dev = cap.dev;
   ucap->blockno = cap.blockno;
+  ucap->owner = cap.owner;
   return 0;
 }
 
@@ -221,11 +227,11 @@ int sys_exo_recv(void) {
   exo_cap *ucap, cap;
   char *dst;
   uint n;
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
+
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
       argint(2, (int *)&n) < 0 ||
       argptr(1, &dst, n) < 0)
     return -1;
-  memmove(&cap, ucap, sizeof(cap));
   if (!cap_verify(cap))
     return -1;
   return exo_recv(cap, dst, n);
@@ -271,6 +277,25 @@ int sys_proc_alloc(void) {
 
   exo_cap cap = cap_new(V2P(np->context), 0, np->pid);
   *ucap = cap;
+#ifdef __x86_64__
+  return *(uint64_t *)&cap;
+#else
+
+  return cap.pa;
+#endif
+  exo_cap *ucap;
+  if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = cap_new(V2P(np->context), 0, curproc->pid);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_set_numa_node(void) {
+  int node;
+  if (argint(0, &node) < 0)
+    return -1;
+  myproc()->preferred_node = node;
   return 0;
 }
 

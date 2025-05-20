@@ -932,6 +932,31 @@ bigdir(void)
 }
 
 void
+rcuconcurrent(void)
+{
+  int pid, i, fd;
+  char buf[64];
+
+  printf(1, "rcu concurrent read test\n");
+  for(i = 0; i < 4; i++){
+    pid = fork();
+    if(pid == 0){
+      for(int j = 0; j < 100; j++){
+        fd = open("README", 0);
+        if(fd >= 0){
+          read(fd, buf, sizeof(buf));
+          close(fd);
+        }
+      }
+      exit();
+    }
+  }
+  for(i = 0; i < 4; i++)
+    wait();
+  printf(1, "rcu concurrent read test done\n");
+}
+
+void
 subdir(void)
 {
   int fd, cc;
@@ -1794,6 +1819,7 @@ main(int argc, char *argv[])
   iref();
   forktest();
   bigdir(); // slow
+  rcuconcurrent();
 
   uio();
 
