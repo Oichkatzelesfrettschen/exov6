@@ -21,6 +21,7 @@ OBJS = \
         $(KERNEL_DIR)/proc.o\
         $(KERNEL_DIR)/sleeplock.o\
         $(KERNEL_DIR)/spinlock.o\
+        $(KERNEL_DIR)/rcu.o\
         $(KERNEL_DIR)/string.o\
         $(KERNEL_DIR)/syscall.o\
         $(KERNEL_DIR)/sysfile.o\
@@ -199,16 +200,14 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl > $@
 
 LIBOS_OBJS = \
-        $(ULAND_DIR)/ulib.o \
-       usys.o \
+        $(ULAND_DIR)/usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-       $(KERNEL_DIR)/swtch.o \
+        $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-        $(ULAND_DIR)/libos/sched.o
+        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
