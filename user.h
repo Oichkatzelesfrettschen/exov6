@@ -44,6 +44,8 @@ int exo_alloc_block(uint dev, exo_blockcap *cap);
 int exo_bind_block(exo_blockcap *cap, void *data, int write);
 int exo_flush_block(exo_blockcap *cap, void *data);
 int exo_yield_to(exo_cap target);
+int set_gas(uint64 amount);
+int get_gas(void);
 int exo_send(exo_cap dest, const void *buf, uint64 len);
 int exo_recv(exo_cap src, void *buf, uint64 len);
 int endpoint_send(chan_t *c, exo_cap dest, const void *msg);

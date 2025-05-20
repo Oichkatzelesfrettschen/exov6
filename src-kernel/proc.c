@@ -142,7 +142,9 @@ found:
   p->pid = nextpid++;
   p->pctr_cap = nextpctr_cap++;
   p->pctr_signal = 0;
+  p->gas_remaining = 0;
   p->preferred_node = 0;
+
   pctr_insert(p);
 
   release(&ptable.lock);
@@ -409,7 +411,7 @@ scheduler(void)
     acquire(&ptable.lock);
     found = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
+      if(p->state != RUNNABLE || p->gas_remaining == 0)
         continue;
       found = 1;
 

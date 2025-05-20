@@ -36,6 +36,8 @@
 #define SYS_endpoint_send 33
 #define SYS_endpoint_recv 34
 #define SYS_proc_alloc 35
+#define SYS_set_gas 36
+#define SYS_get_gas 37
 #define SYS_set_numa_node 36
 #define SYS_exo_flush_block 28
 #define SYS_exo_yield_to 29
