@@ -2,6 +2,17 @@
 #include "types.h"
 #include "exo.h"
 
+/* Capability access rights. */
+#define EXO_RIGHT_R   0x1
+#define EXO_RIGHT_W   0x2
+#define EXO_RIGHT_X   0x4
+#define EXO_RIGHT_CTL 0x8
+
+static inline int cap_verify(uint rights, uint need)
+{
+    return (rights & need) == need;
+}
+
 /*
  * Minimal exokernel capability primitives.  Library operating systems
  * build higher level abstractions using only these calls.  The kernel
@@ -54,6 +65,7 @@ enum exo_syscall {
     EXO_SYSCALL_UNBIND_PAGE = SYS_exo_unbind_page,
     EXO_SYSCALL_ALLOC_BLOCK = SYS_exo_alloc_block,
     EXO_SYSCALL_BIND_BLOCK  = SYS_exo_bind_block,
+    EXO_SYSCALL_FLUSH_BLOCK = SYS_exo_flush_block,
     EXO_SYSCALL_YIELD_TO    = SYS_exo_yield_to,
     EXO_SYSCALL_SEND        = SYS_exo_send,
     EXO_SYSCALL_RECV        = SYS_exo_recv,
