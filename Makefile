@@ -37,6 +37,7 @@ OBJS = \
        $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/fastipc.o\
        $(KERNEL_DIR)/endpoint.o\
+       $(KERNEL_DIR)/cap.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -200,15 +201,14 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 
 LIBOS_OBJS = \
         $(ULAND_DIR)/ulib.o \
-       usys.o \
+        usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-       $(KERNEL_DIR)/swtch.o \
+        $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-        $(ULAND_DIR)/libos/sched.o
+        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
