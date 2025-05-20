@@ -3,6 +3,17 @@
 #include "exo.h"
 #include "syscall.h"
 
+/* Capability access rights. */
+#define EXO_RIGHT_R   0x1
+#define EXO_RIGHT_W   0x2
+#define EXO_RIGHT_X   0x4
+#define EXO_RIGHT_CTL 0x8
+
+static inline int cap_verify(uint rights, uint need)
+{
+    return (rights & need) == need;
+}
+
 /*
  * Minimal exokernel capability primitives.  Library operating systems
  * build higher level abstractions using only these calls.  The kernel
