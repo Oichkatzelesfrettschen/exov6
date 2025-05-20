@@ -143,6 +143,8 @@ found:
   p->pctr_cap = nextpctr_cap++;
   p->pctr_signal = 0;
   p->gas_remaining = 0;
+  p->preferred_node = 0;
+
   pctr_insert(p);
 
   release(&ptable.lock);
@@ -160,7 +162,10 @@ found:
 
   // Set up new context to start executing at forkret,
   // which returns to trapret.
-#ifdef __x86_64__
+#if defined(__x86_64__)
+  sp -= sizeof(unsigned long);
+  *(unsigned long*)sp = (unsigned long)trapret;
+#elif defined(__aarch64__)
   sp -= sizeof(unsigned long);
   *(unsigned long*)sp = (unsigned long)trapret;
 #else
@@ -171,8 +176,10 @@ found:
   sp -= sizeof *p->context;
   p->context = (context_t*)sp;
   memset(p->context, 0, sizeof *p->context);
-#ifdef __x86_64__
+#if defined(__x86_64__)
   p->context->rip = (unsigned long)forkret;
+#elif defined(__aarch64__)
+  p->context->lr = (unsigned long)forkret;
 #else
   p->context->eip = (uint)forkret;
 #endif
@@ -273,6 +280,7 @@ fork(void)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
   np->cwd = idup(curproc->cwd);
+  np->preferred_node = curproc->preferred_node;
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
@@ -599,8 +607,10 @@ procdump(void)
       state = "???";
     cprintf("%d %s %s", p->pid, state, p->name);
     if(p->state == SLEEPING){
-#ifdef __x86_64__
+#if defined(__x86_64__)
       getcallerpcs((void*)p->context->rbp + 2*sizeof(uintptr_t), pc);
+#elif defined(__aarch64__)
+      getcallerpcs((void*)p->context->fp + 2*sizeof(uintptr_t), pc);
 #else
       getcallerpcs((uint*)p->context->ebp+2, pc);
 #endif

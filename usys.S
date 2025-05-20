@@ -71,5 +71,7 @@ SYSCALL(endpoint_recv)
 SYSCALL(proc_alloc)
 SYSCALL(set_gas)
 SYSCALL(get_gas)
+SYSCALL(set_numa_node)
+
 
 
