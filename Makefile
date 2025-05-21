@@ -37,6 +37,7 @@ OBJS = \
        $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/fastipc.o\
        $(KERNEL_DIR)/endpoint.o\
+       $(KERNEL_DIR)/dag_sched.o
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -200,15 +201,14 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 
 LIBOS_OBJS = \
         $(ULAND_DIR)/ulib.o \
-       usys.o \
+        usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-       $(KERNEL_DIR)/swtch.o \
+        $(KERNEL_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-        $(ULAND_DIR)/libos/sched.o
+        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 
@@ -260,6 +260,7 @@ UPROGS=\
         _zombie\
         _phi\
         _exo_stream_demo\
+        _dag_demo\
         _ipc_test\
         _kbdserv\
         _rcrs\
@@ -363,6 +364,7 @@ EXTRA=\
         $(ULAND_DIR)/wc.c $(ULAND_DIR)/zombie.c \
         $(ULAND_DIR)/phi.c \
         $(ULAND_DIR)/user/exo_stream_demo.c \
+        $(ULAND_DIR)/user/dag_demo.c \
         $(ULAND_DIR)/printf.c $(ULAND_DIR)/umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
