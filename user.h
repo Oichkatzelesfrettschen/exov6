@@ -43,6 +43,9 @@ int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 exo_cap proc_alloc(void);
 int set_numa_node(int);
+int fcntl(int, int, int);
+int sigsend(int, int);
+int sigcheck(void);
 
 // ulib.c
 int stat(const char *, struct stat *);
