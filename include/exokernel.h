@@ -1,6 +1,7 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
+#include "syscall.h"
 
 /*
  * Minimal exokernel capability primitives.  Library operating systems
@@ -54,6 +55,7 @@ enum exo_syscall {
     EXO_SYSCALL_UNBIND_PAGE = SYS_exo_unbind_page,
     EXO_SYSCALL_ALLOC_BLOCK = SYS_exo_alloc_block,
     EXO_SYSCALL_BIND_BLOCK  = SYS_exo_bind_block,
+    EXO_SYSCALL_FLUSH_BLOCK = SYS_exo_flush_block,
     EXO_SYSCALL_YIELD_TO    = SYS_exo_yield_to,
     EXO_SYSCALL_SEND        = SYS_exo_send,
     EXO_SYSCALL_RECV        = SYS_exo_recv,
