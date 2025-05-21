@@ -144,6 +144,7 @@ found:
   p->pctr_signal = 0;
   p->gas_remaining = 0;
   p->preferred_node = 0;
+  p->out_of_gas = 0;
 
   pctr_insert(p);
 
@@ -281,6 +282,7 @@ fork(void)
       np->ofile[i] = filedup(curproc->ofile[i]);
   np->cwd = idup(curproc->cwd);
   np->preferred_node = curproc->preferred_node;
+  np->out_of_gas = 0;
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
@@ -411,7 +413,7 @@ scheduler(void)
     acquire(&ptable.lock);
     found = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE || p->gas_remaining == 0)
+      if(p->state != RUNNABLE || p->out_of_gas)
         continue;
       found = 1;
 

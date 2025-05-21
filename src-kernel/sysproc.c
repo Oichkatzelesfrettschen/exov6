@@ -300,6 +300,8 @@ int sys_set_gas(void) {
   if (argint(0, (int *)&amount) < 0)
     return -1;
   myproc()->gas_remaining = amount;
+  if (amount > 0)
+    myproc()->out_of_gas = 0;
   return 0;
 }
 
