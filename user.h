@@ -31,7 +31,6 @@ char *sbrk(int);
 int sleep(int);
 int uptime(void);
 int mappte(void *, void *, int);
-to
 int exo_pctr_transfer(int cap);
 
 int set_timer_upcall(void (*handler)(void));
@@ -39,21 +38,18 @@ int exo_alloc_page(exo_cap *cap);
 int exo_unbind_page(exo_cap *cap);
 int exo_alloc_block(uint dev, uint rights, exo_blockcap *cap);
 int exo_bind_block(exo_blockcap *cap, void *data, int write);
-int exo_unbind_page(exo_cap cap);
 int exo_flush_block(exo_blockcap *cap, void *data);
-int exo_yield_to(exo_cap target);
+int exo_yield_to(exo_cap *target);
 int set_gas(uint64 amount);
 int get_gas(void);
-int exo_send(exo_cap dest, const void *buf, uint64 len);
-int exo_recv(exo_cap src, void *buf, uint64 len);
+int exo_send(exo_cap *dest, const void *buf, uint64 len);
+int exo_recv(exo_cap *src, void *buf, uint64 len);
 int endpoint_send(chan_t *c, exo_cap dest, const void *msg);
 int endpoint_recv(chan_t *c, exo_cap src, void *msg);
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 int proc_alloc(exo_cap *cap);
-exo_cap proc_alloc(void);
 int set_numa_node(int);
-int proc_alloc(exo_cap *cap);
 
 // ulib.c
 int stat(const char *, struct stat *);

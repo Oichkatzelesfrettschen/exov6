@@ -3,7 +3,6 @@
 #include "defs.h"
 #include <string.h>
 
-  
 /* Secret key used for capability HMAC */
 static const uint8_t cap_secret[32] = {
     0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef,

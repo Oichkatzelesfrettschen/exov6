@@ -3,12 +3,10 @@
 #include "user.h"
 
 exo_cap cap_alloc_page(void) {
-  exo_cap cap;
-  exo_alloc_page(&cap);
-  return cap;
+  return exo_alloc_page();
 }
 
-int cap_unbind_page(exo_cap cap) { return exo_unbind_page(&cap); }
+int cap_unbind_page(exo_cap cap) { return exo_unbind_page(cap); }
 
 int cap_alloc_block(uint dev, uint rights, exo_blockcap *cap) {
   return exo_alloc_block(dev, rights, cap);
@@ -18,8 +16,8 @@ int cap_bind_block(exo_blockcap *cap, void *data, int write) {
   return exo_bind_block(cap, data, write);
 }
 
-int cap_flush_block(exo_blockcap *cap, void *data) {
-  return exo_flush_block(cap, data);
+void cap_flush_block(exo_blockcap *cap, void *data) {
+  exo_flush_block(cap, data);
 }
 
 int cap_set_timer(void (*handler)(void)) { return set_timer_upcall(handler); }
