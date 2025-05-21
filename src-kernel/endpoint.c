@@ -6,6 +6,12 @@
 
 static struct endpoint global_ep;
 
+static inline size_t
+msg_desc_size(const struct msg_type_desc *d)
+{
+    return d ? d->msg_size : sizeof(zipc_msg_t);
+}
+
 void
 endpoint_init(struct endpoint *ep)
 {
@@ -13,16 +19,19 @@ endpoint_init(struct endpoint *ep)
         initlock(&ep->lock, "endpoint");
         ep->r = ep->w = 0;
         ep->inited = 1;
+        ep->desc = 0;
     }
 }
 
 void
-endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size)
+endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size,
+                const struct msg_type_desc *desc)
 {
     endpoint_init(ep);
     acquire(&ep->lock);
     ep->q = buf;
     ep->size = size;
+    ep->desc = desc;
     ep->r = ep->w = 0;
     release(&ep->lock);
 }
@@ -33,7 +42,13 @@ endpoint_send(struct endpoint *ep, zipc_msg_t *m)
     endpoint_init(ep);
     acquire(&ep->lock);
     if(ep->q && ep->size && ep->w - ep->r < ep->size){
-        ep->q[ep->w % ep->size] = *m;
+        size_t sz = msg_desc_size(ep->desc);
+        const uchar *p = (const uchar *)m;
+        for(size_t i = sz; i < sizeof(zipc_msg_t); i++)
+            if(p[i]){ release(&ep->lock); return; }
+        zipc_msg_t tmp = {0};
+        memmove(&tmp, m, sz);
+        ep->q[ep->w % ep->size] = tmp;
         ep->w++;
         wakeup(&ep->r);
     }
@@ -52,8 +67,11 @@ endpoint_recv(struct endpoint *ep, zipc_msg_t *m)
         release(&ep->lock);
         return -1;
     }
-    *m = ep->q[ep->r % ep->size];
+    zipc_msg_t t = ep->q[ep->r % ep->size];
     ep->r++;
+    size_t sz = msg_desc_size(ep->desc);
+    memmove(m, &t, sz);
+    memset((char *)m + sz, 0, sizeof(zipc_msg_t) - sz);
     release(&ep->lock);
     return 0;
 }

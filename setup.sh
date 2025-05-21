@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-export DEBIAN_FRONTEND=noninteractive
 
-apt_pin_install(){
-  pkg="$1"
+export DEBIAN_FRONTEND=noninteractive
+apt_pin_install() {
+  local pkg="$1"
+  local ver
   ver=$(apt-cache show "$pkg" 2>/dev/null | awk '/^Version:/{print $2; exit}')
   if [ -n "$ver" ]; then
     apt-get install -y "${pkg}=${ver}"
@@ -12,11 +13,14 @@ apt_pin_install(){
   fi
 }
 
+
 for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
 apt-get update -y
+
+# core build tools, formatters, analysis, science libs
 
 for pkg in \
   build-essential gcc g++ clang lld llvm \
@@ -31,6 +35,8 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
+
+# Python & deep-learning / MLOps
 for pkg in \
   python3 python3-pip python3-dev python3-venv python3-wheel \
   python3-numpy python3-scipy python3-pandas \
@@ -44,6 +50,8 @@ pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
 
+
+# QEMU emulation for foreign binaries
 for pkg in \
   qemu-user-static \
   qemu-system-x86 qemu-system-arm qemu-system-aarch64 \
@@ -51,6 +59,7 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
+# multi-arch cross-compilers
 for pkg in \
   bcc bin86 elks-libc \
   gcc-ia64-linux-gnu g++-ia64-linux-gnu \
@@ -72,6 +81,7 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
+
 for pkg in \
   golang-go nodejs npm typescript \
   rustc cargo clippy rustfmt \
@@ -91,16 +101,17 @@ done
 for pkg in \
   libqt5-dev qtcreator libqt6-dev \
   libgtk1.2-dev libgtk2.0-dev libgtk-3-dev libgtk-4-dev \
-  libfltk1.3-dev xorg-dev libx11-dev libxext-dev \
+  libfltk-dev xorg-dev libx11-dev libxext-dev \
   libmotif-dev openmotif cde \
   xfce4-dev-tools libxfce4ui-2-dev lxde-core lxqt-dev-tools \
   libefl-dev libeina-dev \
-  libwxgtk3.0-dev libwxgtk3.0-gtk3-dev \
+  libwxgtk-dev libwxgtk-gtk3-dev \
   libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev \
   libglfw3-dev libglew-dev; do
   apt_pin_install "$pkg"
 done
 
+# containers, virtualization, HPC, debug
 for pkg in \
   docker.io podman buildah virt-manager libvirt-daemon-system qemu-kvm \
   gdb lldb perf gcovr lcov bcc-tools bpftrace \
@@ -122,5 +133,28 @@ command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gm
 
 apt-get clean
 rm -rf /var/lib/apt/lists/*
+
+# IA-16 (8086/286) cross-compiler
+IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
+           | awk -F\" '/tag_name/{print $4; exit}')
+curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
+  | tar -Jx -C /opt
+echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
+export PATH=/opt/ia16-elf-gcc/bin:$PATH
+
+# protoc installer (pinned)
+PROTO_VERSION=25.1
+curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
+  -o /tmp/protoc.zip
+unzip -d /usr/local /tmp/protoc.zip
+rm /tmp/protoc.zip
+
+# gmake alias
+command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
+
+# clean up
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+
 
 exit 0

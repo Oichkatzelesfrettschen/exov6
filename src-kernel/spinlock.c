@@ -13,7 +13,8 @@ void
 initlock(struct spinlock *lk, char *name)
 {
   lk->name = name;
-  lk->locked = 0;
+  lk->ticket.head = 0;
+  lk->ticket.tail = 0;
   lk->cpu = 0;
 }
 
@@ -28,8 +29,8 @@ acquire(struct spinlock *lk)
   if(holding(lk))
     panic("acquire");
 
-  // The xchg is atomic.
-  while(xchg(&lk->locked, 1) != 0)
+  uint16_t ticket = __atomic_fetch_add(&lk->ticket.tail, 1, __ATOMIC_SEQ_CST);
+  while(__atomic_load_n(&lk->ticket.head, __ATOMIC_SEQ_CST) != ticket)
     ;
 
   // Tell the C compiler and the processor to not move loads or stores
@@ -59,10 +60,7 @@ release(struct spinlock *lk)
   // stores; __sync_synchronize() tells them both not to.
   __sync_synchronize();
 
-  // Release the lock, equivalent to lk->locked = 0.
-  // This code can't use a C assignment, since it might
-  // not be atomic. A real OS would use C atomics here.
-  asm volatile("movl $0, %0" : "+m" (lk->locked) : );
+  __atomic_fetch_add(&lk->ticket.head, 1, __ATOMIC_SEQ_CST);
 
   popcli();
 }
@@ -107,7 +105,7 @@ holding(struct spinlock *lock)
 {
   int r;
   pushcli();
-  r = lock->locked && lock->cpu == mycpu();
+  r = lock->cpu == mycpu();
   popcli();
   return r;
 }

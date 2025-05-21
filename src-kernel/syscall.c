@@ -145,13 +145,11 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_mappte(void);
-
 extern int sys_set_timer_upcall(void);
 extern int sys_exo_alloc_page(void);
 extern int sys_exo_unbind_page(void);
 extern int sys_exo_alloc_block(void);
 extern int sys_exo_bind_block(void);
-extern int sys_exo_flush_block(void);
 extern int sys_exo_yield_to(void);
 extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
@@ -160,6 +158,9 @@ extern int sys_exo_recv(void);
 extern int sys_endpoint_send(void);
 extern int sys_endpoint_recv(void);
 extern int sys_proc_alloc(void);
+extern int sys_set_gas(void);
+extern int sys_get_gas(void);
+extern int sys_set_numa_node(void);
 extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
@@ -190,7 +191,6 @@ static int (*syscalls[])(void) = {
     [SYS_exo_unbind_page] sys_exo_unbind_page,
     [SYS_exo_alloc_block] sys_exo_alloc_block,
     [SYS_exo_bind_block] sys_exo_bind_block,
-    [SYS_exo_flush_block] sys_exo_flush_block,
     [SYS_exo_yield_to] sys_exo_yield_to,
     [SYS_exo_read_disk] sys_exo_read_disk,
     [SYS_exo_write_disk] sys_exo_write_disk,
@@ -199,6 +199,9 @@ static int (*syscalls[])(void) = {
     [SYS_endpoint_send] sys_endpoint_send,
     [SYS_endpoint_recv] sys_endpoint_recv,
     [SYS_proc_alloc] sys_proc_alloc,
+    [SYS_set_gas] sys_set_gas,
+    [SYS_get_gas] sys_get_gas,
+    [SYS_set_numa_node] sys_set_numa_node,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 
