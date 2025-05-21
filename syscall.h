@@ -41,4 +41,7 @@
 #define SYS_get_gas 38
 #define SYS_set_numa_node 39
 #define SYS_ipc_fast 0x30
+#define SYS_fcntl 0x31
+#define SYS_sigsend 0x32
+#define SYS_sigcheck 0x33
 

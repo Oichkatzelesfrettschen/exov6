@@ -95,6 +95,7 @@ struct proc {
   void (*timer_upcall)(void);    // user-mode timer interrupt handler
   void *chan;                    // If non-zero, sleeping on chan
   int killed;                    // If non-zero, have been killed
+  int pending_signal;            // Simple signal bitmask
   struct file *ofile[NOFILE];    // Open files
   struct inode *cwd;             // Current directory
   char name[16];                 // Process name (debugging)
@@ -109,7 +110,7 @@ struct proc {
 #if defined(__x86_64__) || defined(__aarch64__)
 _Static_assert(sizeof(struct proc) == 256, "struct proc size incorrect");
 #else
-_Static_assert(sizeof(struct proc) == 152, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 156, "struct proc size incorrect");
 #endif
 
 

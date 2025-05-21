@@ -7,6 +7,7 @@
 #include "spinlock.h"
 #include "sleeplock.h"
 #include "file.h"
+#include "fcntl.h"
 
 #define PIPESIZE 512
 
@@ -38,10 +39,12 @@ pipealloc(struct file **f0, struct file **f1)
   (*f0)->type = FD_PIPE;
   (*f0)->readable = 1;
   (*f0)->writable = 0;
+  (*f0)->flags = 0;
   (*f0)->pipe = p;
   (*f1)->type = FD_PIPE;
   (*f1)->readable = 0;
   (*f1)->writable = 1;
+  (*f1)->flags = 0;
   (*f1)->pipe = p;
   return 0;
 
@@ -76,13 +79,17 @@ pipeclose(struct pipe *p, int writable)
 
 //PAGEBREAK: 40
 int
-pipewrite(struct pipe *p, char *addr, size_t n)
+pipewrite(struct pipe *p, struct file *f, char *addr, size_t n)
 {
   size_t i;
 
   acquire(&p->lock);
   for(i = 0; i < n; i++){
     while(p->nwrite == p->nread + PIPESIZE){  //DOC: pipewrite-full
+      if(f->flags & O_NONBLOCK){
+        release(&p->lock);
+        return i;
+      }
       if(p->readopen == 0 || myproc()->killed){
         release(&p->lock);
         return -1;
@@ -98,12 +105,16 @@ pipewrite(struct pipe *p, char *addr, size_t n)
 }
 
 int
-piperead(struct pipe *p, char *addr, size_t n)
+piperead(struct pipe *p, struct file *f, char *addr, size_t n)
 {
   size_t i;
 
   acquire(&p->lock);
   while(p->nread == p->nwrite && p->writeopen){  //DOC: pipe-empty
+    if(f->flags & O_NONBLOCK){
+      release(&p->lock);
+      return 0;
+    }
     if(myproc()->killed){
       release(&p->lock);
       return -1;

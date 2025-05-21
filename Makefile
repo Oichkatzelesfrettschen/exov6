@@ -285,6 +285,7 @@ UPROGS=\
         _exo_stream_demo\
         _dag_demo\
         _ipc_test\
+        _nbtest\
         _rcrs\
 
 ifeq ($(ARCH),x86_64)

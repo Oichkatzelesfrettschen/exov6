@@ -72,6 +72,9 @@ SYSCALL(proc_alloc)
 SYSCALL(set_gas)
 SYSCALL(get_gas)
 SYSCALL(set_numa_node)
+SYSCALL(fcntl)
+SYSCALL(sigsend)
+SYSCALL(sigcheck)
 
 
 
