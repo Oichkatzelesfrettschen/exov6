@@ -34,6 +34,7 @@ LIBOS_DIR := libos
        $(KERNEL_DIR)/kernel/exo_cpu.o\
        $(KERNEL_DIR)/kernel/exo_disk.o\
        $(KERNEL_DIR)/kernel/exo_ipc.o\
+       $(KERNEL_DIR)/kernel/exo_ipc_queue.o\
        $(KERNEL_DIR)/exo_stream.o\
        $(KERNEL_DIR)/cap.o\
        $(KERNEL_DIR)/fastipc.o\
