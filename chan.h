@@ -22,7 +22,7 @@ int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg);
 // Usage: CHAN_DECLARE(mychan, struct mymsg);
 // Provides mychan_t type with create/send/recv functions
 #define CHAN_DECLARE(name, type)                                    \
-    static const struct msg_type_desc name##_typedesc = { sizeof(type) }; \
+    static const struct msg_type_desc name##_typedesc = { type##_MESSAGE_SIZE }; \
     typedef struct {                                                \
         chan_t base;                                                \
     } name##_t;                                                     \
@@ -33,11 +33,15 @@ int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg);
         chan_destroy(&c->base);                                     \
     }                                                               \
     static inline int name##_send(name##_t *c, exo_cap dest, const type *m){ \
-        if(c->base.msg_size != sizeof(type)) return -1;             \
-        return chan_endpoint_send(&c->base, dest, m);               \
+        unsigned char buf[type##_MESSAGE_SIZE];                     \
+        type##_encode(m, buf);                                      \
+        return chan_endpoint_send(&c->base, dest, buf);             \
     }                                                               \
     static inline int name##_recv(name##_t *c, exo_cap src, type *m){ \
-        if(c->base.msg_size != sizeof(type)) return -1;             \
-        return chan_endpoint_recv(&c->base, src, m);                \
+        unsigned char buf[type##_MESSAGE_SIZE];                     \
+        int r = chan_endpoint_recv(&c->base, src, buf);             \
+        if(r == 0)                                                 \
+            type##_decode(m, buf);                                  \
+        return r;                                                   \
     }
 
