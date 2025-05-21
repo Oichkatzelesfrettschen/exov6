@@ -221,7 +221,6 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl > $@
 
 LIBOS_OBJS = \
-        $(ULAND_DIR)/usys.o \
         $(ULAND_DIR)/ulib.o \
         usys.o \
         $(ULAND_DIR)/printf.o \

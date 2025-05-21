@@ -4,6 +4,8 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "types.h"
+#include <errno.h>
+#include "include/exokernel.h"
 
 #define IPC_BUFSZ 64
 
