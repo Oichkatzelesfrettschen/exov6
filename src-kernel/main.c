@@ -39,6 +39,7 @@ main(void)
   binit();         // buffer cache
   fileinit();      // file table
   ideinit();       // disk
+  dag_sched_init(); // initialize DAG scheduler
   initialize DAG scheduler
   static struct exo_stream stream = {0};
   dag_sched_init(&stream);

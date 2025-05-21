@@ -3,7 +3,9 @@
 #include "spinlock.h"
 #include "dag.h"
 #include "exo_stream.h"
+#include "kernel/exo_cpu.h"
 #include "exo_cpu.h"
+
 
 static struct spinlock dag_lock;
 static struct dag_node *ready_head;
@@ -101,8 +103,6 @@ dag_sched_init(void)
   dag_stream.head = &dag_ops;
   exo_stream_register(&dag_stream);
 
-##AGENTS.MD CODEX REVIEW THIS VS ABOVE AND RESOLVE
-  
 #include "dag.h"
 #include "defs.h"
 #include "spinlock.h"
@@ -167,4 +167,4 @@ void dag_submit(struct dag_node *list) {
     for (struct dag_node *n = list; n; n = n->next)
         n->done = 0;
     release(&dag_lock);
-}
+

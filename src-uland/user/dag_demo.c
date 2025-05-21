@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
   setup();
   exo_stream_yield();
   exit();
+
 static int demo_yield_to(exo_cap target) {
     printf(1, "exo_yield_to %p\n", (void*)target.pa);
     return 0;

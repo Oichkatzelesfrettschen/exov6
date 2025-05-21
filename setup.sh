@@ -2,7 +2,6 @@
 set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
-
 apt_pin_install() {
   local pkg="$1"
   local ver
@@ -14,7 +13,7 @@ apt_pin_install() {
   fi
 }
 
-# enable foreign architectures for cross-compilation
+
 for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
@@ -22,6 +21,7 @@ done
 apt-get update -y
 
 # core build tools, formatters, analysis, science libs
+
 for pkg in \
   build-essential gcc g++ clang lld llvm \
   clang-format uncrustify astyle editorconfig pre-commit \
@@ -34,6 +34,7 @@ for pkg in \
   libasan6 libubsan1 likwid hwloc; do
   apt_pin_install "$pkg"
 done
+
 
 # Python & deep-learning / MLOps
 for pkg in \
@@ -48,6 +49,7 @@ done
 pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
+
 
 # QEMU emulation for foreign binaries
 for pkg in \
@@ -79,7 +81,7 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
-# high-level language runtimes and tools
+
 for pkg in \
   golang-go nodejs npm typescript \
   rustc cargo clippy rustfmt \
@@ -96,15 +98,14 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
-# GUI & desktop-dev frameworks
 for pkg in \
   libqt5-dev qtcreator libqt6-dev \
   libgtk1.2-dev libgtk2.0-dev libgtk-3-dev libgtk-4-dev \
-  libfltk1.3-dev xorg-dev libx11-dev libxext-dev \
+  libfltk-dev xorg-dev libx11-dev libxext-dev \
   libmotif-dev openmotif cde \
   xfce4-dev-tools libxfce4ui-2-dev lxde-core lxqt-dev-tools \
   libefl-dev libeina-dev \
-  libwxgtk3.0-dev libwxgtk3.0-gtk3-dev \
+  libwxgtk-dev libwxgtk-gtk3-dev \
   libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev \
   libglfw3-dev libglew-dev; do
   apt_pin_install "$pkg"
@@ -117,6 +118,21 @@ for pkg in \
   openmpi-bin libopenmpi-dev mpich; do
   apt_pin_install "$pkg"
 done
+
+IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest | awk -F\" '/tag_name/{print $4; exit}')
+curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" | tar -Jx -C /opt
+echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
+export PATH=/opt/ia16-elf-gcc/bin:$PATH
+
+PROTO_VERSION=25.1
+curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" -o /tmp/protoc.zip
+unzip -d /usr/local /tmp/protoc.zip
+rm /tmp/protoc.zip
+
+command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
+
+apt-get clean
+rm -rf /var/lib/apt/lists/*
 
 # IA-16 (8086/286) cross-compiler
 IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
@@ -139,47 +155,6 @@ command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gm
 # clean up
 apt-get clean
 rm -rf /var/lib/apt/lists/*
-=======
-apt-get update -y || true
 
-packages=(
-  build-essential
-  gcc
-  g++
-  clang
-  clang-format
-  clang-tidy
-  scan-build
-  make
-  bmake
-  cmake
-  ninja-build
-  gcc-multilib
-  g++-multilib
-  qemu-system-x86
-  qemu-utils
-  nasm
-  x86_64-elf-gcc
-  x86_64-elf-binutils
-  python3
-  python3-pip
-  golang-go
-  nodejs
-  npm
-  rustc
-  cargo
-  curl
-  git
-  file
-  pkg-config
-)
-
-for pkg in "${packages[@]}"; do
-  apt_pin_install "$pkg"
-done
-
-command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
-
-curl -fsSL https://raw.githubusercontent.com/protocolbuffers/protobuf/v25.1/install.sh | bash -s -- --version v25.1
 
 exit 0

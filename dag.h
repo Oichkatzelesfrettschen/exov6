@@ -17,6 +17,7 @@ struct dag_node {
   struct dag_node **deps;
     int ndeps;
     int done;
+
 };
 
 void dag_node_init(struct dag_node *n, exo_cap ctx);
