@@ -31,7 +31,6 @@ char *sbrk(int);
 int sleep(int);
 int uptime(void);
 int mappte(void *, void *, int);
-to
 int exo_pctr_transfer(int cap);
 
 int set_timer_upcall(void (*handler)(void));
@@ -53,7 +52,6 @@ int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 int proc_alloc(exo_cap *cap);
 exo_cap proc_alloc(void);
 int set_numa_node(int);
-int proc_alloc(exo_cap *cap);
 
 // ulib.c
 int stat(const char *, struct stat *);

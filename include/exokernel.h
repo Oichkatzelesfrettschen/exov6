@@ -25,37 +25,37 @@ static inline int cap_has_rights(uint rights, uint need)
  * The page is not mapped into the caller's address space.  Returns 0 on
  * success.
  */
-int exo_alloc_page(exo_cap *cap);
+exo_cap exo_alloc_page(void);
 
 /* Free the page referenced by cap and remove any mappings to it. */
-int exo_unbind_page(exo_cap *cap);
+int exo_unbind_page(exo_cap cap);
 
 /* Allocate a disk block capability for device 'dev'.  On success the
  * capability is stored in *cap and zero is returned.
  */
-int exo_alloc_block(uint dev, uint rights, exo_blockcap *cap);
+exo_blockcap exo_alloc_block(uint dev, uint rights);
 
 /* Bind the block capability to the buffer 'data'.  If 'write' is non-zero
  * the contents of the buffer are written to disk; otherwise the block is
  * read into the buffer.  Returns 0 on success.
  */
-int exo_bind_block(exo_blockcap *cap, void *data, int write);
+int exo_bind_block(exo_blockcap *cap, struct buf *data, int write);
 
 /* Switch to the context referenced by 'target'.  The caller's context
  * must be saved in a user-managed structure.  The kernel does not
  * choose the next runnable task.
  */
-int exo_yield_to(exo_cap *target);
+int exo_yield_to(exo_cap target);
 
 /* Send 'len' bytes from 'buf' to destination capability 'dest'.  Any
  * queuing or flow control is managed in user space.
  */
-int exo_send(exo_cap *dest, const void *buf, uint64 len);
+int exo_send(exo_cap dest, const void *buf, uint64 len);
 
 /* Receive up to 'len' bytes from source capability 'src' into 'buf'.
  * The call blocks according to policy implemented by the library OS.
  */
-int exo_recv(exo_cap *src, void *buf, uint64 len);
+int exo_recv(exo_cap src, void *buf, uint64 len);
 
 /* Read or write arbitrary byte ranges using a block capability. */
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
