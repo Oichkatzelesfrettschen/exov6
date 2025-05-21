@@ -175,3 +175,11 @@ empty.
 
 
 See doc/phoenixkernel.md for a design overview of the Phoenix exokernel.
+
+Example supervisor usage to manage drivers:
+
+```
+$ supervisor start blk_driver
+... later ...
+$ supervisor restart blk_driver
+```
