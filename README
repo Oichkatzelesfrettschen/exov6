@@ -51,8 +51,12 @@ To build xv6 on an x86 ELF machine (like Linux or FreeBSD), run
 "make". On non-x86 or non-ELF machines (like OS X, even on x86), you
 will need to install a cross-compiler gcc suite capable of producing
 x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
-Then run "make TOOLPREFIX=i386-jos-elf-". Now install the QEMU PC
-simulator and run "make qemu".
+A cross-compiler may not be necessary on a 64-bit Linux host since the
+toolchain can produce 32-bit binaries, but on other systems install a
+cross-compiler suite and invoke ``make TOOLPREFIX=i386-jos-elf-``.  Now
+install the QEMU PC simulator and run ``make qemu``.  The Bochs
+emulator is also supported via ``make bochs`` and is installed by
+``setup.sh``.
 A helper script, `setup.sh`, installs cross-compilers, build dependencies,
 QEMU packages, and additional development tools.  Run it once before
 building to ensure all prerequisites are available.  From the top-level
