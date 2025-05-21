@@ -82,6 +82,13 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
+#— bare-metal ELF cross-compilers
+for pkg in \
+  gcc-i386-elf g++-i386-elf \
+  gcc-x86-64-elf g++-x86-64-elf; do
+  apt_pin_install "$pkg"
+done
+
 #— high-level language runtimes and tools
 for pkg in \
   golang-go nodejs npm typescript \

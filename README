@@ -64,6 +64,10 @@ directory simply execute::
 
     sudo ./setup.sh
 
+This script installs bare-metal cross compiler packages such as
+``gcc-i386-elf``/``g++-i386-elf`` and ``gcc-x86-64-elf``/``g++-x86-64-elf``
+along with the rest of the toolchain.
+
 This only needs to be done after cloning the repository or when
 dependencies change.
 
