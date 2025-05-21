@@ -306,6 +306,7 @@ UPROGS=\
         _ipc_test\
         _nbtest\
         _rcrs\
+        _pingdriver\
         _typed_chan_demo\
         _typed_chan_send\
         _typed_chan_recv\

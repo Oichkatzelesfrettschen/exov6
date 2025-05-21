@@ -15,7 +15,11 @@
 #include "stat.h"
 #include "types.h"
 #include "user.h"
+#include "ipc.h"
 
+#define PING 1
+#define PONG 2
+#define PING_DELAY 20
 #define MAX_DRIVERS 8
 #define MAX_ARGS 8
 #define MAX_LINE 128
