@@ -48,3 +48,84 @@ which produces `libos.a`. Applications link against this archive to access the c
 
 Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
 
+## Capability Primitives
+
+The kernel surface is intentionally small.  Applications manipulate raw
+hardware resources via capability objects and a handful of system calls.
+Each call takes or returns an `exo_cap` structure defined in
+`include/exokernel.h`.
+
+### Memory Pages
+
+- `exo_alloc_page()` – allocate a physical page and obtain a capability
+  describing it.  The page is not automatically mapped.
+- `exo_unbind_page(cap)` – free the page referenced by `cap` and remove
+  any mappings to it.
+
+```c
+// Allocate a page and later release it
+exo_cap page = exo_alloc_page();
+/* map_page is provided by the libOS */
+void *va = map_page(page.id);
+use_memory(va);
+exo_unbind_page(page);
+```
+
+### Disk Blocks
+
+- `exo_alloc_block(dev, rights)` – obtain a capability for a free disk
+  block on device `dev` with the requested access rights.
+- `exo_bind_block(&cap, buf, write)` – perform a block read or write
+  using `buf` as the transfer buffer.  `write` selects the direction.
+- `exo_flush_block(&cap, data)` – helper that writes `data` to the block
+  referenced by `cap`.
+
+### Direct I/O
+
+- `exo_read_disk(cap, dst, off, n)` – read arbitrary byte ranges from a
+  block capability.
+- `exo_write_disk(cap, src, off, n)` – write bytes at the given offset.
+
+### Context Switching
+
+- `exo_yield_to(target)` – switch execution to the context referenced by
+  `target`.  Cooperative schedulers store contexts in user space and
+  resume them with this call.
+
+### IPC
+
+- `exo_send(dest, buf, len)` – enqueue a message to the destination
+  capability.
+- `exo_recv(src, buf, len)` – receive data from the source capability.
+
+The libOS builds higher level abstractions such as processes and files
+by combining these primitives.
+
+## Running the Demos
+
+Two small user programs demonstrate the capability API.  After building
+the repository the filesystem image contains `exo_stream_demo` and
+`dag_demo`.
+
+1. Build everything:
+
+   ```
+   make
+   ```
+
+2. Start the system under QEMU:
+
+   ```
+   make qemu-nox
+   ```
+
+3. At the xv6 shell run either demo:
+
+   ```
+   $ exo_stream_demo
+   $ dag_demo
+   ```
+
+Both programs print messages from their stub implementations showing how
+`exo_yield_to` and the DAG scheduler hooks would be invoked.
+
