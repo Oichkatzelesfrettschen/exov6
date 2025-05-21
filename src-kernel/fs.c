@@ -19,6 +19,7 @@
 #include "sleeplock.h"
 #include "fs.h"
 #include <errno.h>
+#define EXO_KERNEL
 #include "include/exokernel.h"
 #include "buf.h"
 #include "file.h"
