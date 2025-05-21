@@ -16,6 +16,7 @@
 #include "types.h"
 #include "user.h"
 #include "ipc.h"
+#include "libos/driver.h"
 
 #define PING 1
 #define PONG 2
@@ -28,6 +29,8 @@ struct driver {
   char *argv[MAX_ARGS];
   char *buf; // backing storage for argv strings
   int pid;
+  uint last_ping;
+  int awaiting_pong;
 };
 
 static int parse_config(const char *path, struct driver *d, int max) {
@@ -82,12 +85,7 @@ static int parse_config(const char *path, struct driver *d, int max) {
 }
 
 static int start_driver(struct driver *d) {
-  int pid = fork();
-  if (pid == 0) {
-    exec(d->argv[0], d->argv);
-    exit();
-  }
-  return pid;
+  return driver_spawn(d->argv[0], d->argv);
 }
 
 int main(void) {
@@ -97,17 +95,58 @@ int main(void) {
   if (n <= 0)
     exit();
 
-  for (int i = 0; i < n; i++)
+  int p[2];
+  if (pipe(p) < 0)
+    exit();
+
+  if (fork() == 0) {
+    close(p[0]);
+    for (;;) {
+      zipc_msg_t m;
+      if (endpoint_recv(&m) == 0)
+        write(p[1], &m, sizeof(m));
+    }
+    return 0;
+  }
+
+  close(p[1]);
+  fcntl(p[0], F_SETFL, O_NONBLOCK);
+
+  for (int i = 0; i < n; i++) {
     drv[i].pid = start_driver(&drv[i]);
+    drv[i].awaiting_pong = 0;
+    drv[i].last_ping = uptime();
+  }
 
   for (;;) {
-    int pid = wait();
-    if (pid < 0)
-      continue;
+    uint now = uptime();
+
     for (int i = 0; i < n; i++) {
-      if (drv[i].pid == pid) {
+      if (!drv[i].awaiting_pong && now - drv[i].last_ping >= PING_DELAY) {
+        zipc_msg_t m = {0};
+        m.w0 = PING;
+        m.w1 = i;
+        endpoint_send(&m);
+        drv[i].last_ping = now;
+        drv[i].awaiting_pong = 1;
+      }
+    }
+
+    zipc_msg_t m;
+    while (read(p[0], &m, sizeof(m)) == sizeof(m)) {
+      if (m.w0 == PONG && m.w1 < (uint)n)
+        drv[m.w1].awaiting_pong = 0;
+    }
+
+    now = uptime();
+    for (int i = 0; i < n; i++) {
+      if (drv[i].awaiting_pong && now - drv[i].last_ping > PING_DELAY) {
+        printf(1, "rcrs: restarting %s\n", drv[i].argv[0]);
+        kill(drv[i].pid);
+        wait();
         drv[i].pid = start_driver(&drv[i]);
-        break;
+        drv[i].awaiting_pong = 0;
+        drv[i].last_ping = now;
       }
     }
   }
