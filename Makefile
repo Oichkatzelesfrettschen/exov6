@@ -230,9 +230,10 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/caplib.o \
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-        $(ULAND_DIR)/libos/sched.o \
+       $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
-        $(LIBOS_DIR)/file.o
+        $(LIBOS_DIR)/file.o \
+        $(LIBOS_DIR)/driver.o
 
 
 libos: libos.a
