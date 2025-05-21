@@ -140,6 +140,15 @@ usual with ``make``; the resulting ``fs.img`` will contain the new
 ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
 
+USER DEMO: TYPED CHANNELS
+-------------------------
+``typed_chan_demo`` showcases the ``CHAN_DECLARE`` macro that creates a
+typed wrapper around the basic capability IPC functions.  Building with
+``make`` will compile ``typed_chan_demo`` along with ``typed_chan_send``
+and ``typed_chan_recv`` under ``src-uland/user``.  After ``fs.img`` is
+generated, run ``typed_chan_demo`` inside QEMU to see a message sent and
+received through the typed channel API.
+
 
 IPC DESIGN NOTE
 ---------------
