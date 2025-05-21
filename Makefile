@@ -147,9 +147,9 @@ SIGNBOOT := 0
 endif
 
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR)
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR)
+ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto
 
 	#Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
@@ -229,6 +229,7 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
         $(ULAND_DIR)/chan.o \
+        proto/driver.capnp.o \
         $(ULAND_DIR)/math_core.o \
        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
@@ -265,6 +266,15 @@ $(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/user/typed_chan_demo.c
 $(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+	# Generate simple C bindings from Cap'n Proto schemas
+proto/%.capnp.c: proto/%.capnp
+	./scripts/mock_capnpc.sh $<
+proto/%.capnp.h: proto/%.capnp
+	./scripts/mock_capnpc.sh $<
+
+proto/%.capnp.o: proto/%.capnp.c proto/%.capnp.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
