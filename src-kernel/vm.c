@@ -451,7 +451,7 @@ exo_alloc_page(void)
 int
 exo_unbind_page(exo_cap cap)
 {
-  if (!cap_verify(cap.owner))
+  if (!cap_verify(cap))
     return -1;
   struct proc *p = myproc();
   if(cap.owner != p->pid)
