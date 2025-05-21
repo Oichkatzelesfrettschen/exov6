@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "syscall.h"
 
 // zero-copy micro-IPC interface
 // ISA: x86-64; syscall number 0x30 == ipc_fast
@@ -22,7 +23,7 @@ static inline int zipc_call(zipc_msg_t *m) {
   register uint64_t r8 __asm("r8") = m->w3;
   __asm__ volatile("syscall"
                    : "+S"(rsi), "+d"(rdx), "+c"(rcx), "+r"(r8)
-                   : "a"(0x30), "D"(rdi)
+                   : "a"(SYS_ipc_fast), "D"(rdi)
                    : "memory", "r11");
   m->w0 = rsi;
   m->w1 = rdx;

@@ -82,7 +82,7 @@ sys_mappte(void)
   if (argint(0, &va) < 0 || argint(1, &pa) < 0 || argint(2, &perm) < 0)
     return -1;
   return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
-
+}
 
 int sys_set_timer_upcall(void) {
   void (*handler)(void);
@@ -142,5 +142,38 @@ int sys_exo_bind_block(void) {
   if (!write)
     memmove(data, b.data, BSIZE);
   releasesleep(&b.lock);
+  return 0;
+}
+
+int sys_ipc_fast(void) {
+  struct proc *p = myproc();
+  struct proc *r = p->parent;
+  if (r == 0 || r->tf == 0)
+    return -1;
+#ifdef __x86_64__
+  r->tf->rdi = p->tf->rdi;
+  r->tf->rsi = p->tf->rsi;
+  r->tf->rdx = p->tf->rdx;
+  r->tf->rcx = p->tf->rcx;
+  r->tf->r8 = p->tf->r8;
+
+  p->tf->rdi = r->tf->rdi;
+  p->tf->rsi = r->tf->rsi;
+  p->tf->rdx = r->tf->rdx;
+  p->tf->rcx = r->tf->rcx;
+  p->tf->r8 = r->tf->r8;
+#else
+  r->tf->edi = p->tf->edi;
+  r->tf->esi = p->tf->esi;
+  r->tf->edx = p->tf->edx;
+  r->tf->ecx = p->tf->ecx;
+  r->tf->ebx = p->tf->ebx;
+
+  p->tf->edi = r->tf->edi;
+  p->tf->esi = r->tf->esi;
+  p->tf->edx = r->tf->edx;
+  p->tf->ecx = r->tf->ecx;
+  p->tf->ebx = r->tf->ebx;
+#endif
   return 0;
 }

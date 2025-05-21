@@ -84,10 +84,7 @@ int argint(int n, int *ip) {
 // Fetch the nth word-sized system call argument as a pointer
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
-int
-argptr(int n, char **pp, size_t size)
-{
-int argptr(int n, char **pp, int size) {
+int argptr(int n, char **pp, size_t size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;
@@ -154,6 +151,7 @@ extern int sys_exo_alloc_page(void);
 extern int sys_exo_unbind_page(void);
 extern int sys_exo_alloc_block(void);
 extern int sys_exo_bind_block(void);
+extern int sys_ipc_fast(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -182,6 +180,7 @@ static int (*syscalls[])(void) = {
     [SYS_exo_unbind_page] sys_exo_unbind_page,
     [SYS_exo_alloc_block] sys_exo_alloc_block,
     [SYS_exo_bind_block] sys_exo_bind_block,
+    [SYS_ipc_fast] sys_ipc_fast,
 };
 
 void syscall(void) {
