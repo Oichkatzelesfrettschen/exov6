@@ -299,6 +299,8 @@ struct exo_cap  exo_alloc_page(void);
 int             exo_unbind_page(struct exo_cap);
 struct exo_blockcap exo_alloc_block(uint dev);
 void            exo_bind_block(struct exo_blockcap *, struct buf *, int);
+int             exo_send(struct exo_cap, const void *, uint64_t);
+int             exo_recv(struct exo_cap, void *, uint64_t);
 
 void clearpteu(pde_t *pgdir, char *uva);
 

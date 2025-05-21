@@ -21,16 +21,13 @@ OBJS = \
 	syscall.o\
 	sysfile.o\
 	sysproc.o\
-	trapasm.o\
-	trap.o\
-	uart.o\
-	vectors.o\
-	vm.o\
+        trapasm.o\
         trap.o\
         uart.o\
         vectors.o\
         vm.o\
         exo.o\
+        exo_ipc.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += mmu64.o
@@ -112,9 +109,6 @@ CFLAGS += -fno-pie -no-pie
 endif
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
 CFLAGS += -fno-pie -nopie
-endif
-endif
-
 endif
 
 $(XV6_IMG): bootblock kernel

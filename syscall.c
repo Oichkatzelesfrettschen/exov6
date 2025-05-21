@@ -154,6 +154,8 @@ extern int sys_exo_alloc_page(void);
 extern int sys_exo_unbind_page(void);
 extern int sys_exo_alloc_block(void);
 extern int sys_exo_bind_block(void);
+extern int sys_exo_send(void);
+extern int sys_exo_recv(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -182,6 +184,8 @@ static int (*syscalls[])(void) = {
     [SYS_exo_unbind_page] sys_exo_unbind_page,
     [SYS_exo_alloc_block] sys_exo_alloc_block,
     [SYS_exo_bind_block] sys_exo_bind_block,
+    [SYS_exo_send] sys_exo_send,
+    [SYS_exo_recv] sys_exo_recv,
 };
 
 void syscall(void) {

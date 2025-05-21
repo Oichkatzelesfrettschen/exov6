@@ -82,6 +82,7 @@ sys_mappte(void)
   if (argint(0, &va) < 0 || argint(1, &pa) < 0 || argint(2, &perm) < 0)
     return -1;
   return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
+}
 
 
 int sys_set_timer_upcall(void) {
@@ -143,4 +144,26 @@ int sys_exo_bind_block(void) {
     memmove(data, b.data, BSIZE);
   releasesleep(&b.lock);
   return 0;
+}
+
+int sys_exo_send(void) {
+  exo_cap dest;
+  char *buf;
+  uint64_t len;
+  if(argint(0, (int*)&dest.pa) < 0 || argint(2, (int*)&len) < 0)
+    return -1;
+  if(argptr(1, &buf, len) < 0)
+    return -1;
+  return exo_send(dest, buf, len);
+}
+
+int sys_exo_recv(void) {
+  exo_cap src;
+  char *buf;
+  uint64_t len;
+  if(argint(0, (int*)&src.pa) < 0 || argint(2, (int*)&len) < 0)
+    return -1;
+  if(argptr(1, &buf, len) < 0)
+    return -1;
+  return exo_recv(src, buf, len);
 }

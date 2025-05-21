@@ -1,5 +1,7 @@
 #pragma once
 
+#include "exo.h"
+
 // Context used for kernel context switches.
 #ifdef __x86_64__
 struct context64;
@@ -78,9 +80,10 @@ struct proc {
   char name[16];               // Process name (debugging)
   uint pctr_cap;               // Capability for exo_pctr_transfer
   volatile uint pctr_signal;   // Signal counter for exo_pctr_transfer
+  exo_cap ep_cap;              // IPC endpoint capability
 };
-// Ensure scheduler and utilities rely on fixed proc size (124 bytes)
-_Static_assert(sizeof(struct proc) == 124, "struct proc size incorrect");
+// Ensure scheduler and utilities rely on fixed proc size (128 bytes)
+_Static_assert(sizeof(struct proc) == 128, "struct proc size incorrect");
 
 // Process memory is laid out contiguously, low addresses first:
 //   text

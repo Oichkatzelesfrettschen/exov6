@@ -38,6 +38,8 @@ exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
 int exo_alloc_block(uint dev, exo_blockcap *cap);
 int exo_bind_block(exo_blockcap *cap, void *data, int write);
+int exo_send(exo_cap dest, const void *buf, uint64_t len);
+int exo_recv(exo_cap src, void *buf, uint64_t len);
 
 
 // ulib.c

@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "kernel/exo_ipc.h"
 
 struct {
   struct spinlock lock;
@@ -16,6 +17,7 @@ static struct proc *initproc;
 
 int nextpid = 1;
 static uint nextpctr_cap = 1;
+static uint next_ep_cap = 1;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -91,6 +93,7 @@ found:
   p->pid = nextpid++;
   p->pctr_cap = nextpctr_cap++;
   p->pctr_signal = 0;
+  p->ep_cap.pa = 0;
 
   release(&ptable.lock);
 
@@ -124,6 +127,12 @@ found:
   p->context->eip = (uint)forkret;
 #endif
 
+  struct ipc_endpoint *ep = (struct ipc_endpoint*)kalloc();
+  if(ep){
+    memset(ep, 0, sizeof(*ep));
+    p->ep_cap.pa = V2P(ep);
+  }
+
   return p;
 }
 
@@ -153,6 +162,17 @@ userinit(void)
 
   safestrcpy(p->name, "initcode", sizeof(p->name));
   p->cwd = namei("/");
+
+  for(int i=0;i<16;i++){
+    exo_cap cap = exo_alloc_page();
+    if(cap.pa==0)
+      panic("userinit: exo_alloc_page");
+    if(i==0)
+      exo_ipc_frame = (char*)P2V(cap.pa);
+    if(mappages(p->pgdir, (void*)(p->sz + i*PGSIZE), PGSIZE, cap.pa, PTE_W|PTE_U)<0)
+      panic("userinit: mappages");
+  }
+  p->sz += 16*PGSIZE;
 
   // this assignment to p->state lets other cores
   // run this process. the acquire forces the above
