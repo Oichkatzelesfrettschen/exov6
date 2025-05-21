@@ -37,7 +37,7 @@ exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
 int exo_alloc_block(uint dev, exo_blockcap *cap);
 int exo_bind_block(exo_blockcap *cap, void *data, int write);
-int exo_flush_block(exo_blockcap *cap);
+int exo_flush_block(exo_blockcap *cap, void *data);
 int exo_yield_to(exo_cap target);
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);

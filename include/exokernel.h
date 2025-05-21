@@ -1,6 +1,7 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
+#include "syscall.h"
 
 /*
  * Minimal exokernel capability primitives.  Library operating systems
