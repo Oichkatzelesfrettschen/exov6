@@ -129,3 +129,72 @@ the repository the filesystem image contains `exo_stream_demo` and
 Both programs print messages from their stub implementations showing how
 `exo_yield_to` and the DAG scheduler hooks would be invoked.
 
+
+## Driver Processes
+
+Hardware devices are managed entirely from user space. A driver runs as a
+regular Phoenix process holding capabilities that provide access to the
+corresponding I/O regions and interrupts. A crashed or misbehaving driver
+cannot compromise the kernel because it only receives the capabilities it
+needs. Drivers typically export a Cap'n Proto service describing the
+operations they support.
+
+## Supervisor
+
+The supervisor is a small user-space monitor started at boot. It launches
+all driver processes and restarts them if they exit unexpectedly. The
+supervisor passes the initial capability set to each driver and watches for
+death notifications so that dependent clients can reconnect to the newly
+started instance.
+
+## Cap'n Proto IPC
+
+Phoenix uses [Cap'n Proto](https://capnproto.org/) schemas to describe the
+messages exchanged between processes. The fast endpoint-based IPC mechanism
+transports serialized Cap'n Proto messages. Applications define their RPC
+interfaces in `.capnp` files and rely on the Cap'n Proto C bindings to
+generate the encoding and decoding routines.
+
+## libOS APIs
+
+The libOS includes wrappers around the capability syscalls as well as helper
+routines for writing user-level services. Important entry points are
+provided in `caplib.h` and `libos/libfs.h`:
+
+```c
+exo_cap cap_alloc_page(void);
+int cap_unbind_page(exo_cap cap);
+int cap_send(exo_cap dest, const void *buf, uint64 len);
+int cap_recv(exo_cap src, void *buf, uint64 len);
+int fs_alloc_block(uint dev, uint rights, struct exo_blockcap *cap);
+int fs_read_block(struct exo_blockcap cap, void *dst);
+int fs_write_block(struct exo_blockcap cap, const void *src);
+```
+
+These helpers make it straightforward to allocate memory pages, exchange
+messages and perform basic filesystem operations from user space.
+
+## Writing a Simple Driver
+
+A minimal block driver illustrating these APIs is shown below:
+
+```c
+#include "caplib.h"
+#include "libos/libfs.h"
+#include "user.h"
+
+int main(void) {
+    struct exo_blockcap blk;
+    fs_alloc_block(1, EXO_RIGHT_R | EXO_RIGHT_W, &blk);
+    char buf[BSIZE] = "Phoenix";
+    fs_write_block(blk, buf);
+    memset(buf, 0, sizeof(buf));
+    fs_read_block(blk, buf);
+    printf(1, "driver read: %s\n", buf);
+    return 0;
+}
+```
+
+Compile the file with `make` and add the resulting binary to the disk image.
+The supervisor can then spawn the driver at boot time or restart it if it
+exits.
