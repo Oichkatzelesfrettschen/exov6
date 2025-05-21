@@ -8,12 +8,14 @@ typedef struct exo_cap {
 
 // Minimal stub implementations used when kernel support is absent.
 int exo_yield_to(exo_cap *target) {
-    printf("exo_yield_to called with cap %u\n", target->id);
-    return 0;
+  printf("exo_yield_to called with cap %u\n", target->id);
+  return 0;
 }
 
-int exo_yield_to_demo(exo_cap target) {
-    printf("exo_yield_to_demo called with cap %u\n", target.id);
+// Simple user-level demonstration for exo_yield_to
+int exo_yield_to_demo(exo_cap target)
+{
+    printf(1, "exo_yield_to called with cap %p\n", (void *)target.id);
     return 0;
 }
 
