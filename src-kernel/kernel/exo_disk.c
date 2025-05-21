@@ -5,6 +5,7 @@
 #include "buf.h"
 #include "kernel/exo_disk.h"
 #include <errno.h>
+#define EXO_KERNEL
 #include "include/exokernel.h"
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))

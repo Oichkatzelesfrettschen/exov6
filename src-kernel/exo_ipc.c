@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "types.h"
 #include <errno.h>
+#define EXO_KERNEL
 #include "include/exokernel.h"
 
 #define IPC_BUFSZ 64
