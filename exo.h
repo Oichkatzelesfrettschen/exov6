@@ -19,6 +19,7 @@ typedef struct exo_cap {
 typedef struct exo_blockcap {
   uint dev;
   uint blockno;
+  uint rights;
   uint owner;
 } exo_blockcap;
 
