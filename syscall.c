@@ -84,10 +84,7 @@ int argint(int n, int *ip) {
 // Fetch the nth word-sized system call argument as a pointer
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
-int
-argptr(int n, char **pp, size_t size)
-{
-int argptr(int n, char **pp, int size) {
+int argptr(int n, char **pp, size_t size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;
@@ -177,6 +174,7 @@ static int (*syscalls[])(void) = {
     [SYS_link] sys_link,
     [SYS_mkdir] sys_mkdir,
     [SYS_close] sys_close,
+    [SYS_mappte] sys_mappte,
     [SYS_set_timer_upcall] sys_set_timer_upcall,
     [SYS_exo_alloc_page] sys_exo_alloc_page,
     [SYS_exo_unbind_page] sys_exo_unbind_page,
