@@ -203,12 +203,11 @@ LIBOS_OBJS = \
        usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
-       $(KERNEL_DIR)/swtch.o \
+        $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/math_core.o \
-        $(ULAND_DIR)/libos/sched.o
+        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o
 

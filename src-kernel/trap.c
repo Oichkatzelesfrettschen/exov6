@@ -8,6 +8,8 @@
 #include "types.h"
 #include "x86.h"
 
+extern void proc_tick(void);
+
 // Interrupt descriptor table (shared by all CPUs).
 struct gatedesc idt[256];
 extern uint vectors[]; // in vectors.S: array of 256 entry pointers
@@ -52,6 +54,7 @@ void trap(struct trapframe *tf) {
       release(&tickslock);
     }
     lapiceoi();
+    proc_tick();
     if (myproc() && myproc()->timer_upcall && (tf->cs & 3) == DPL_USER) {
 #ifndef __x86_64__
       tf->esp -= 4;

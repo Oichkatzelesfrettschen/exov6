@@ -142,6 +142,7 @@ found:
   p->pid = nextpid++;
   p->pctr_cap = nextpctr_cap++;
   p->pctr_signal = 0;
+  p->gas_remaining = 0;
   pctr_insert(p);
 
   release(&ptable.lock);
@@ -462,6 +463,18 @@ yield(void)
   myproc()->state = RUNNABLE;
   sched();
   release(&ptable.lock);
+}
+
+// Called from timer interrupt each tick to charge running process.
+void
+proc_tick(void)
+{
+  struct proc *p = myproc();
+  if(p && p->state == RUNNING && p->gas_remaining > 0){
+    p->gas_remaining--;
+    if(p->gas_remaining == 0)
+      yield();
+  }
 }
 
 // A fork child's very first scheduling by scheduler()

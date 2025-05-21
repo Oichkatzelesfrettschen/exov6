@@ -83,13 +83,14 @@ struct proc {
   char name[16];               // Process name (debugging)
   uint pctr_cap;               // Capability for exo_pctr_transfer
   volatile uint pctr_signal;   // Signal counter for exo_pctr_transfer
+  uint64 gas_remaining;        // Remaining CPU budget in ticks
 };
 
 // Ensure scheduler relies on fixed struct proc size
 #ifdef __x86_64__
-_Static_assert(sizeof(struct proc) == 240, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 248, "struct proc size incorrect");
 #else
-_Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 144, "struct proc size incorrect");
 #endif
 
 
