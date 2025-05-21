@@ -9,7 +9,7 @@
 #define EXO_RIGHT_X   0x4
 #define EXO_RIGHT_CTL 0x8
 
-static inline int cap_verify(uint rights, uint need)
+static inline int cap_has_rights(uint rights, uint need)
 {
     return (rights & need) == need;
 }
@@ -33,7 +33,7 @@ int exo_unbind_page(exo_cap *cap);
 /* Allocate a disk block capability for device 'dev'.  On success the
  * capability is stored in *cap and zero is returned.
  */
-int exo_alloc_block(uint dev, exo_blockcap *cap);
+int exo_alloc_block(uint dev, uint rights, exo_blockcap *cap);
 
 /* Bind the block capability to the buffer 'data'.  If 'write' is non-zero
  * the contents of the buffer are written to disk; otherwise the block is

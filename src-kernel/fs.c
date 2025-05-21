@@ -80,9 +80,9 @@ balloc(uint dev)
 
 // Allocate a zeroed disk block and return a capability for it.
 struct exo_blockcap
-exo_alloc_block(uint dev)
+exo_alloc_block(uint dev, uint rights)
 {
-  struct exo_blockcap cap = {0, 0, 0};
+  struct exo_blockcap cap = {0, 0, 0, 0};
   int b, bi, m;
   struct buf *bp = 0;
 
@@ -97,6 +97,7 @@ exo_alloc_block(uint dev)
         bzero(dev, b + bi);
         cap.dev = dev;
         cap.blockno = b + bi;
+        cap.rights = rights;
         cap.owner = myproc()->pid;
         return cap;
       }
@@ -108,18 +109,21 @@ exo_alloc_block(uint dev)
 }
 
 // Perform direct I/O on the given buffer using a capability.
-void
+int
 exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write)
 {
-  if (!cap_verify(cap->owner))
   if(cap->owner != myproc()->pid)
+    return -EPERM;
+  uint need = write ? EXO_RIGHT_W : EXO_RIGHT_R;
+  if(!cap_has_rights(cap->rights, need))
+    return -EPERM;
 
-    return;
   buf->dev = cap->dev;
   buf->blockno = cap->blockno;
   if (write)
     buf->flags |= B_DIRTY;
   iderw(buf);
+  return 0;
 }
 
 void

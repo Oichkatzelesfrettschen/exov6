@@ -30,6 +30,8 @@ static void ipc_init(void) {
 
 int exo_send(exo_cap dest, const void *buf, uint64_t len) {
   ipc_init();
+  if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
+    return -EPERM;
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
 
@@ -40,8 +42,10 @@ int exo_send(exo_cap dest, const void *buf, uint64_t len) {
   exo_cap fr = {0};
   if (len > sizeof(zipc_msg_t)) {
     memmove(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
-    if (!cap_verify(fr.owner))
-      return -1;
+    if (!cap_verify(fr))
+      return -EPERM;
+    if(!cap_has_rights(fr.rights, EXO_RIGHT_R))
+      return -EPERM;
     if (dest.owner)
       fr.owner = dest.owner;
   }
@@ -61,7 +65,8 @@ int exo_send(exo_cap dest, const void *buf, uint64_t len) {
 }
 
 int exo_recv(exo_cap src, void *buf, uint64_t len) {
-  (void)src;
+  if(!cap_has_rights(src.rights, EXO_RIGHT_R))
+    return -EPERM;
   ipc_init();
   acquire(&ipcs.lock);
   while (ipcs.r == ipcs.w) {
@@ -73,7 +78,8 @@ int exo_recv(exo_cap src, void *buf, uint64_t len) {
   wakeup(&ipcs.w);
   release(&ipcs.lock);
 
-  if (e.frame.pa && !cap_verify(e.frame.owner))
+  if (e.frame.pa && (!cap_verify(e.frame) ||
+                     !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
     e.frame.pa = 0;
 
   size_t total = sizeof(zipc_msg_t);

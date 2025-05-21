@@ -113,14 +113,16 @@ int sys_exo_unbind_page(void) {
 }
 
 int sys_exo_alloc_block(void) {
-  int dev;
+  int dev, rights;
   struct exo_blockcap *ucap;
   struct exo_blockcap cap;
-  if (argint(0, &dev) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+  if (argint(0, &dev) < 0 || argint(1, &rights) < 0 ||
+      argptr(2, (void *)&ucap, sizeof(*ucap)) < 0)
     return -1;
-  cap = exo_alloc_block(dev);
+  cap = exo_alloc_block(dev, rights);
   ucap->dev = cap.dev;
   ucap->blockno = cap.blockno;
+  ucap->rights = cap.rights;
   ucap->owner = cap.owner;
   return 0;
 }
@@ -141,11 +143,11 @@ int sys_exo_bind_block(void) {
   acquiresleep(&b.lock);
   if (write)
     memmove(b.data, data, BSIZE);
-  exo_bind_block(&cap, &b, write);
+  int r = exo_bind_block(&cap, &b, write);
   if (!write)
     memmove(data, b.data, BSIZE);
   releasesleep(&b.lock);
-  return 0;
+  return r;
 }
 
 int sys_exo_flush_block(void) {
@@ -162,9 +164,9 @@ int sys_exo_flush_block(void) {
   initsleeplock(&b.lock, "exoflush");
   acquiresleep(&b.lock);
   memmove(b.data, data, BSIZE);
-  exo_bind_block(&cap, &b, 1);
+  int r = exo_bind_block(&cap, &b, 1);
   releasesleep(&b.lock);
-  return 0;
+  return r;
 }
 
 int sys_exo_yield_to(void) {

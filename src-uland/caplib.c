@@ -15,8 +15,8 @@ exo_cap cap_alloc_page(void) {
 
 int cap_unbind_page(exo_cap cap) { return exo_unbind_page(&cap); }
 
-int cap_alloc_block(uint dev, exo_blockcap *cap) {
-  return exo_alloc_block(dev, cap);
+int cap_alloc_block(uint dev, uint rights, exo_blockcap *cap) {
+  return exo_alloc_block(dev, rights, cap);
 }
 
 int cap_bind_block(exo_blockcap *cap, void *data, int write) {
