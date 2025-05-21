@@ -14,6 +14,7 @@ static inline int cap_verify(uint rights, uint need)
     return (rights & need) == need;
 }
 
+
 /*
  * Minimal exokernel capability primitives.  Library operating systems
  * build higher level abstractions using only these calls.  The kernel

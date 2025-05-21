@@ -45,13 +45,13 @@ ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
 endif
 
-# Cross-compiling (e.g., on Mac OS X)
-# TOOLPREFIX = i386-jos-elf
+	#Cross-compiling (e.g., on Mac OS X)
+	#TOOLPREFIX = i386-jos-elf
 
-# Using native tools (e.g., on X86 Linux)
+	#Using native tools (e.g., on X86 Linux)
 #TOOLPREFIX = 
 
-# Try to infer the correct TOOLPREFIX if not set
+	#Try to infer the correct TOOLPREFIX if not set
 ifndef TOOLPREFIX
 TOOLPREFIX := $(shell if i386-jos-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/dev/null 2>&1; \
 	then echo 'i386-jos-elf-'; \
@@ -67,10 +67,10 @@ TOOLPREFIX := $(shell if i386-jos-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/d
 	echo "***" 1>&2; exit 1; fi)
 endif
 
-# If the makefile can't find QEMU, specify its path here
-# QEMU = qemu-system-i386
+	#If the makefile can't find QEMU, specify its path here
+	#QEMU = qemu-system-i386
 
-# Try to infer the correct QEMU if not provided. Leave empty when none found.
+	#Try to infer the correct QEMU if not provided. Leave empty when none found.
 ifndef QEMU
 QEMU := $(shell which qemu-system-aarch64 2>/dev/null || \
        which qemu-system-x86_64 2>/dev/null || \
@@ -78,7 +78,7 @@ QEMU := $(shell which qemu-system-aarch64 2>/dev/null || \
        which qemu 2>/dev/null)
 endif
 
-ARCH ?= i686
+ARCH ?= x86_64
 CSTD ?= gnu2x
 
 
@@ -109,7 +109,7 @@ OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 AR = $(TOOLPREFIX)ar
 
-# Output file names depend on the target architecture
+	#Output file names depend on the target architecture
 ifeq ($(ARCH),x86_64)
 ARCHFLAG := -m64
 LDFLAGS += -m elf_x86_64
@@ -136,8 +136,8 @@ XV6_IMG := xv6.img
 XV6_MEMFS_IMG := xv6memfs.img
 endif
 
-# Only sign the bootblock for 32-bit builds. The 64-bit
-# bootloader exceeds the legacy 512-byte limit.
+	#Only sign the bootblock for 32-bit builds. The 64-bit
+	#bootloader exceeds the legacy 512-byte limit.
 SIGNBOOT := 1
 ifeq ($(ARCH),x86_64)
 SIGNBOOT := 0
@@ -151,7 +151,7 @@ CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb 
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
 
-# Disable PIE when possible (for Ubuntu 16.10 toolchain)
+	#Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
 CFLAGS += -fno-pie -no-pie
 endif
@@ -204,12 +204,12 @@ exo-kernel: $(OBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld
 
 kernel: exo-kernel
 
-# kernelmemfs is a copy of kernel that maintains the
-# disk image in memory instead of writing to a disk.
-# This is not so useful for testing persistent storage or
-# exploring disk buffering implementations, but it is
+	#kernelmemfs is a copy of kernel that maintains the
+	#disk image in memory instead of writing to a disk.
+	#This is not so useful for testing persistent storage or
+	#exploring disk buffering implementations, but it is
 	# great for testing the kernel on real hardware without
-# needing a scratch disk.
+	#needing a scratch disk.
 MEMFSOBJS = $(filter-out ide.o,$(OBJS)) memide.o
 kernelmemfs: $(MEMFSOBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld $(FS_IMG)
 	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNELMEMFS_FILE) entry.o  $(MEMFSOBJS) -b binary initcode $(ENTRYOTHERBIN) $(FS_IMG)
@@ -247,8 +247,9 @@ _%: $(ULAND_DIR)/%.o libos.a
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
 _forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
-	        # forktest has less library code linked in - needs to be small
-	# in order to be able to max out the proc table.
+	#forktest has less library code linked in - needs to be small
+	#in order to be able to max out the proc table.
+
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
 	$(OBJDUMP) -S _forktest > forktest.asm
 
@@ -260,10 +261,10 @@ $(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
-# Prevent deletion of intermediate files, e.g. cat.o, after first build, so
-# that disk image changes after first build are persistent until clean.  More
-# details:
-# http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
+	#Prevent deletion of intermediate files, e.g. cat.o, after first build, so
+	#that disk image changes after first build are persistent until clean.  More
+	#details:
+	#http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
 
 UPROGS=\
@@ -305,7 +306,7 @@ clean:
         xv6memfs-64.img mkfs .gdbinit libos.a \
 	$(UPROGS)
 
-# make a printout
+	#make a printout
 FILES = $(shell grep -v '^\#' runoff.list)
 PRINT = runoff.list runoff.spec README toc.hdr toc.ftr $(FILES)
 
@@ -315,15 +316,15 @@ xv6.pdf: $(PRINT)
 
 print: xv6.pdf
 
-# run in emulators
+	#run in emulators
 
 bochs : $(FS_IMG) $(XV6_IMG)
 	if [ ! -e .bochsrc ]; then ln -s dot-bochsrc .bochsrc; fi
 	bochs -q
 
-# try to generate a unique GDB port
+	#try to generate a unique GDB port
 GDBPORT = $(shell expr `id -u` % 5000 + 25000)
-# QEMU's gdb stub command line changed in 0.11
+	#QEMU's gdb stub command line changed in 0.11
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 	then echo "-gdb tcp::$(GDBPORT)"; \
 	else echo "-s -p $(GDBPORT)"; fi)
@@ -372,11 +373,11 @@ qemu-nox-gdb: $(FS_IMG) $(XV6_IMG) .gdbinit
 	        $(QEMU) -nographic $(QEMUOPTS) -S $(QEMUGDB); \
 	fi
 
-# CUT HERE
-# prepare dist for students
-# after running make dist, probably want to
-# rename it to rev0 or rev1 or so on and then
-# check in that version.
+	#CUT HERE
+	#prepare dist for students
+	#after running make dist, probably want to
+	#rename it to rev0 or rev1 or so on and then
+	#check in that version.
 
 EXTRA=\
         mkfs.c $(ULAND_DIR)/ulib.c user.h \
@@ -413,8 +414,8 @@ dist-test:
 	cd dist-test; $(MAKE) bochs || true
 	cd dist-test; $(MAKE) qemu
 
-# update this rule (change rev#) when it is time to
-# make a new revision.
+	#update this rule (change rev#) when it is time to
+	#make a new revision.
 tar:
 	rm -rf /tmp/xv6
 	mkdir -p /tmp/xv6

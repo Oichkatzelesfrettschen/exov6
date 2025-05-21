@@ -1,5 +1,6 @@
 #include "chan.h"
 #include "user.h"
+#include "caplib.h"
 
 chan_t *
 chan_create(const struct msg_type_desc *desc)
