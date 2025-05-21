@@ -21,6 +21,7 @@ static inline int cap_has_rights(uint rights, uint need)
  * enforces no policy on queue sizes or scheduling.
  */
 
+#ifndef EXO_KERNEL
 /* Allocate a physical page and store a capability referencing it in *cap.
  * The page is not mapped into the caller's address space.  Returns 0 on
  * success.
@@ -60,6 +61,7 @@ int exo_recv(exo_cap *src, void *buf, uint64 len);
 /* Read or write arbitrary byte ranges using a block capability. */
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
+#endif /* EXO_KERNEL */
 
 /* Enumeration of syscall numbers for the primitives. */
 enum exo_syscall {
