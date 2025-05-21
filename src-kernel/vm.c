@@ -445,12 +445,6 @@ exo_alloc_page(void)
   char *mem = kalloc();
   uint pa = mem ? V2P(mem) : 0;
   return cap_new(pa, 0, myproc()->pid);
-  exo_cap cap;
-  cap.pa = mem ? V2P(mem) : 0;
-  cap.owner = myproc()->pid;
-  return cap;
-  uint id = mem ? V2P(mem) : 0;
-  return cap_new(id, 0, myproc()->pid);
 }
 
 // Remove any mappings to the page referenced by cap and free it.
