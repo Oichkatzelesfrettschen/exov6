@@ -256,7 +256,14 @@ mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
 $(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+$(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/user/typed_chan_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+$(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+$(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
@@ -288,6 +295,9 @@ UPROGS=\
         _ipc_test\
         _nbtest\
         _rcrs\
+        _typed_chan_demo\
+        _typed_chan_send\
+        _typed_chan_recv\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))
