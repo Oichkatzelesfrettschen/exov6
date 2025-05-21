@@ -154,17 +154,17 @@ message sent and received through the typed channel API.
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.
-It parses ``/drivers.conf`` where each non-empty line lists a command
+It parses ``drivers.conf`` where each non-empty line lists a command
 and arguments to execute.  Comment lines beginning with ``#`` are
 ignored.  When a driver process exits the supervisor automatically
-restarts it.  Add the desired commands to ``drivers.conf`` and place the
-file in the file system image so ``init`` can launch ``rcrs`` early
+restarts it.  Add the desired commands to ``drivers.conf`` and copy the
+file into the file system image so ``init`` can launch ``rcrs`` early
 during boot.
 
 Example ``drivers.conf``::
 
     kbdserv
-    otherdriver arg1 arg2
+    pingdriver
 
 
 IPC DESIGN NOTE
