@@ -96,20 +96,19 @@ int sys_exo_alloc_page(void) {
   exo_cap *ucap;
   if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
     return -1;
-  *ucap = exo_alloc_page();
   exo_cap cap = exo_alloc_page();
   memmove(ucap, &cap, sizeof(cap));
- return 0;
+  return 0;
 }
 
 // unbind and free a physical page by capability
 int sys_exo_unbind_page(void) {
+  exo_cap cap;
   if (argptr(0, (void *)&cap, sizeof(cap)) < 0)
     return -1;
   if (!cap_verify(cap))
     return -1;
   return exo_unbind_page(cap);
-  memmove(&cap, ucap, sizeof(cap));
 }
 
 int sys_exo_alloc_block(void) {
@@ -273,20 +272,13 @@ int sys_proc_alloc(void) {
   np->state = RUNNABLE;
   release(&ptable.lock);
 
-  exo_cap cap = { V2P(np->context), myproc()->pid };
   exo_cap cap = cap_new(V2P(np->context), 0, np->pid);
   *ucap = cap;
 #ifdef __x86_64__
   return *(uint64_t *)&cap;
 #else
- return cap.pa;
+  return cap.pa;
 #endif
-  exo_cap *ucap;
-  if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
-    return -1;
-  exo_cap cap = cap_new(V2P(np->context), 0, curproc->pid);
-  memmove(ucap, &cap, sizeof(cap));
-  return 0;
 }
 
 int sys_set_numa_node(void) {
