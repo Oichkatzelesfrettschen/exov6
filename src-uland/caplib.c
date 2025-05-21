@@ -30,7 +30,7 @@ void cap_yield_to(context_t **old, context_t *target) {
   cap_yield(old, target);
 }
 
-int cap_yield_to_cap(exo_cap target) { return exo_yield_to(&target); }
+int cap_yield_to_cap(exo_cap target) { return exo_yield_to(target); }
 
 int cap_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n) {
   return exo_read_disk(cap, dst, off, n);
@@ -41,11 +41,11 @@ int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n) {
 }
 
 int cap_send(exo_cap dest, const void *buf, uint64 len) {
-  return exo_send(&dest, buf, len);
+  return exo_send(dest, buf, len);
 }
 
 int cap_recv(exo_cap src, void *buf, uint64 len) {
-  return exo_recv(&src, buf, len);
+  return exo_recv(src, buf, len);
 }
 
 int cap_ipc_echo_demo(void) {
