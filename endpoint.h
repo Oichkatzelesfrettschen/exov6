@@ -8,9 +8,11 @@ struct endpoint {
     uint size;
     uint r, w;
     int inited;
+    struct msg_type_desc *type;
 };
 
 void endpoint_init(struct endpoint *ep);
-void endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size);
-void endpoint_send(struct endpoint *ep, zipc_msg_t *m);
+void endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size,
+                     struct msg_type_desc *type);
+int endpoint_send(struct endpoint *ep, zipc_msg_t *m);
 int endpoint_recv(struct endpoint *ep, zipc_msg_t *m);

@@ -1,10 +1,12 @@
 #pragma once
 #include "types.h"
 #include "caplib.h"
+#include "ipc.h"
 
 // Generic channel descriptor storing expected message size
 typedef struct chan {
     size_t msg_size;
+    struct msg_type_desc desc;
 } chan_t;
 
 // Allocate a channel expecting messages of size msg_size bytes
@@ -14,8 +16,8 @@ chan_t *chan_create(size_t msg_size);
 void chan_destroy(chan_t *c);
 
 // Send and receive through an exo capability endpoint
-int endpoint_send(chan_t *c, exo_cap dest, const void *msg);
-int endpoint_recv(chan_t *c, exo_cap src, void *msg);
+int chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg);
+int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg);
 
 // Helper macro to declare a typed channel wrapper
 // Usage: CHAN_DECLARE(mychan, struct mymsg);
@@ -32,10 +34,10 @@ int endpoint_recv(chan_t *c, exo_cap src, void *msg);
     }                                                               \
     static inline int name##_send(name##_t *c, exo_cap dest, const type *m){ \
         if(c->base.msg_size != sizeof(type)) return -1;             \
-        return endpoint_send(&c->base, dest, m);                    \
+        return chan_endpoint_send(&c->base, dest, m);                \
     }                                                               \
     static inline int name##_recv(name##_t *c, exo_cap src, type *m){ \
         if(c->base.msg_size != sizeof(type)) return -1;             \
-        return endpoint_recv(&c->base, src, m);                     \
+        return chan_endpoint_recv(&c->base, src, m);                 \
     }
 

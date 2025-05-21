@@ -257,7 +257,9 @@ void            exo_stream_halt(void);
 void            exo_stream_yield(void);
 void            fastipc_send(zipc_msg_t *);
 int             sys_ipc_fast(void);
-void            endpoint_send(struct endpoint *, zipc_msg_t *);
+void            endpoint_config(struct endpoint *, zipc_msg_t *, uint,
+                                struct msg_type_desc *);
+int             endpoint_send(struct endpoint *, zipc_msg_t *);
 int             endpoint_recv(struct endpoint *, zipc_msg_t *);
 
 

@@ -21,6 +21,14 @@ typedef struct {
   uint64_t w3;
 } zipc_msg_t;
 
+// Descriptor describing the valid byte width of each message word
+struct msg_type_desc {
+  uint8_t w0_sz;
+  uint8_t w1_sz;
+  uint8_t w2_sz;
+  uint8_t w3_sz;
+};
+
 static inline int zipc_call(zipc_msg_t *m) {
   register uint64_t rdi __asm("rdi") = m->badge;
   register uint64_t rsi __asm("rsi") = m->w0;
