@@ -60,6 +60,9 @@ done
 #— multi-arch cross-compilers
 for pkg in \
   bcc bin86 elks-libc \
+  gcc-multilib g++-multilib \
+  binutils-i686-linux-gnu binutils-x86-64-linux-gnu \
+  gcc-x86-64-linux-gnu g++-x86-64-linux-gnu \
   gcc-ia64-linux-gnu g++-ia64-linux-gnu \
   gcc-i686-linux-gnu g++-i686-linux-gnu \
   gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
