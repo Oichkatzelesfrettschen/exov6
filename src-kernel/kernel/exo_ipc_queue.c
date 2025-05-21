@@ -31,7 +31,7 @@ static void ipc_init(void) {
   }
 }
 
-int exo_send(exo_cap dest, const void *buf, uint64_t len) {
+int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   ipc_init();
   if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
     return -EPERM;
@@ -67,7 +67,7 @@ int exo_send(exo_cap dest, const void *buf, uint64_t len) {
   return (int)len;
 }
 
-int exo_recv(exo_cap src, void *buf, uint64_t len) {
+int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   if(!cap_has_rights(src.rights, EXO_RIGHT_R))
     return -EPERM;
   ipc_init();
@@ -103,3 +103,8 @@ int exo_recv(exo_cap src, void *buf, uint64_t len) {
 
   return (int)len;
 }
+
+struct exo_ipc_ops exo_ipc_queue_ops = {
+  .send = exo_ipc_queue_send,
+  .recv = exo_ipc_queue_recv,
+};
