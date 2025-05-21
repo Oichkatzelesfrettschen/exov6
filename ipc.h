@@ -25,6 +25,10 @@ typedef struct msg_type_desc {
   size_t msg_size; // total message size in bytes
 } msg_type_desc;
 
+static inline size_t msg_desc_size(const struct msg_type_desc *d) {
+  return d ? d->msg_size : sizeof(zipc_msg_t);
+}
+
 static inline int zipc_call(zipc_msg_t *m) {
   register uint64_t rdi __asm("rdi") = m->badge;
   register uint64_t rsi __asm("rsi") = m->w0;

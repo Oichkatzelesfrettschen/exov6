@@ -8,7 +8,7 @@ chan_create(const struct msg_type_desc *desc)
     chan_t *c = malloc(sizeof(chan_t));
     if(c){
         c->desc = desc;
-        c->msg_size = desc ? desc->msg_size : 0;
+        c->msg_size = msg_desc_size(desc);
     }
     return c;
 }

@@ -6,11 +6,7 @@
 
 static struct endpoint global_ep;
 
-static inline size_t
-msg_desc_size(const struct msg_type_desc *d)
-{
-    return d ? d->msg_size : sizeof(zipc_msg_t);
-}
+
 
 void
 endpoint_init(struct endpoint *ep)
