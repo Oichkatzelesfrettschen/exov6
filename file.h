@@ -8,6 +8,7 @@ struct file {
   struct pipe *pipe;
   struct inode *ip;
   size_t off;
+  int flags;
 };
 
 

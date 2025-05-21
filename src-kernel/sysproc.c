@@ -303,4 +303,17 @@ int sys_get_gas(void) {
   return (int)myproc()->gas_remaining;
 }
 
+int sys_sigsend(void) {
+  int pid, sig;
+  if (argint(0, &pid) < 0 || argint(1, &sig) < 0)
+    return -1;
+  return sigsend(pid, sig);
+}
+
+int sys_sigcheck(void) {
+  int s = myproc()->pending_signal;
+  myproc()->pending_signal = 0;
+  return s;
+}
+
 // Provided by fastipc.c

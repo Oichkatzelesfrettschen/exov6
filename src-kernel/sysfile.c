@@ -329,6 +329,7 @@ sys_open(void)
   f->off = 0;
   f->readable = !(omode & O_WRONLY);
   f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
+  f->flags = omode & O_NONBLOCK;
   return fd;
 }
 
@@ -441,4 +442,26 @@ sys_pipe(void)
   fd[0] = fd0;
   fd[1] = fd1;
   return 0;
+}
+
+int
+sys_fcntl(void)
+{
+  int fd, cmd, arg;
+  struct file *f;
+
+  if(argfd(0, &fd, &f) < 0 || argint(1, &cmd) < 0)
+    return -1;
+  if(argint(2, &arg) < 0)
+    arg = 0;
+
+  switch(cmd){
+  case F_GETFL:
+    return f->flags;
+  case F_SETFL:
+    f->flags = arg;
+    return 0;
+  default:
+    return -1;
+  }
 }

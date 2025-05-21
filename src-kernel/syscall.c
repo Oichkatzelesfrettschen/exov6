@@ -162,6 +162,9 @@ extern int sys_set_gas(void);
 extern int sys_get_gas(void);
 extern int sys_set_numa_node(void);
 extern int sys_ipc_fast(void);
+extern int sys_fcntl(void);
+extern int sys_sigsend(void);
+extern int sys_sigcheck(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -202,6 +205,9 @@ static int (*syscalls[])(void) = {
     [SYS_set_gas] sys_set_gas,
     [SYS_get_gas] sys_get_gas,
     [SYS_set_numa_node] sys_set_numa_node,
+    [SYS_fcntl] sys_fcntl,
+    [SYS_sigsend] sys_sigsend,
+    [SYS_sigcheck] sys_sigcheck,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 

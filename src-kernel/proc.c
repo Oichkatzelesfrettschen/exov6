@@ -145,6 +145,7 @@ found:
   p->gas_remaining = 0;
   p->preferred_node = 0;
   p->out_of_gas = 0;
+  p->pending_signal = 0;
 
   pctr_insert(p);
 
@@ -570,6 +571,24 @@ kill(int pid)
     if(p->pid == pid){
       p->killed = 1;
       // Wake process from sleep if necessary.
+      if(p->state == SLEEPING)
+        p->state = RUNNABLE;
+      release(&ptable.lock);
+      return 0;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int
+sigsend(int pid, int sig)
+{
+  struct proc *p;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      p->pending_signal |= (1<<sig);
       if(p->state == SLEEPING)
         p->state = RUNNABLE;
       release(&ptable.lock);

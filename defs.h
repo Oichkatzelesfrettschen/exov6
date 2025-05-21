@@ -140,8 +140,8 @@ void picinit(void);
 
 int             pipealloc(struct file**, struct file**);
 void            pipeclose(struct pipe*, int);
-int             piperead(struct pipe*, char*, size_t);
-int             pipewrite(struct pipe*, char*, size_t);
+int             piperead(struct pipe*, struct file*, char*, size_t);
+int             pipewrite(struct pipe*, struct file*, char*, size_t);
 
 //PAGEBREAK: 16
 // proc.c
@@ -150,6 +150,7 @@ void            exit(void);
 int             fork(void);
 int             growproc(int);
 int             kill(int);
+int             sigsend(int, int);
 struct cpu*     mycpu(void);
 struct proc*    myproc();
 void            pinit(void);

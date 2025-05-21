@@ -32,6 +32,7 @@ filealloc(void)
   for(f = ftable.file; f < ftable.file + NFILE; f++){
     if(f->ref == 0){
       f->ref = 1;
+      f->flags = 0;
       release(&ftable.lock);
       return f;
     }
@@ -101,7 +102,7 @@ int r;
   if(f->readable == 0)
     return -1;
   if(f->type == FD_PIPE)
-    return piperead(f->pipe, addr, n);
+    return piperead(f->pipe, f, addr, n);
   if(f->type == FD_INODE){
     ilock(f->ip);
     if((r = readi(f->ip, addr, f->off, n)) > 0)
@@ -122,7 +123,7 @@ filewrite(struct file *f, char *addr, size_t n)
   if(f->writable == 0)
     return -1;
   if(f->type == FD_PIPE)
-    return pipewrite(f->pipe, addr, n);
+    return pipewrite(f->pipe, f, addr, n);
   if(f->type == FD_INODE){
     // write a few blocks at a time to avoid exceeding
     // the maximum log transaction size, including
