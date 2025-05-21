@@ -37,5 +37,8 @@
 #define SYS_endpoint_send 34
 #define SYS_endpoint_recv 35
 #define SYS_proc_alloc 36
+#define SYS_set_gas 37
+#define SYS_get_gas 38
+#define SYS_set_numa_node 39
 #define SYS_ipc_fast 0x30
 
