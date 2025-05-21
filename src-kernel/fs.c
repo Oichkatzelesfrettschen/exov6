@@ -18,6 +18,8 @@
 #include "spinlock.h"
 #include "sleeplock.h"
 #include "fs.h"
+#include <errno.h>
+#include "include/exokernel.h"
 #include "buf.h"
 #include "file.h"
 #include "exo.h"

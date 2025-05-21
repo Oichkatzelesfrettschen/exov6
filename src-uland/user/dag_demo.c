@@ -1,12 +1,22 @@
-#include "caplib.h"
-#include "types.h"
-#include "user.h"
-#include "dag.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
 
-// Stub exo_yield_to since kernel support is unavailable
-int exo_yield_to(exo_cap target) {
-  printf(1, "exo_yield_to called with cap %p\n", (void *)target.pa);
-  return 0;
+typedef struct exo_cap { uint32_t pa; } exo_cap;
+
+struct dag_node { int pending; };
+
+static void dag_node_init(struct dag_node *n, exo_cap ctx) {
+  (void)ctx; n->pending = 0;
+}
+static void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
+  (void)parent; (void)child;
+}
+static void dag_sched_submit(struct dag_node *node) {
+  (void)node; printf("dag_sched_submit\n");
+}
+static void exo_stream_yield(void) {
+  printf("exo_stream_yield called\n");
 }
 
 static struct dag_node a, b, c;
@@ -24,8 +34,9 @@ static void setup(void) {
 }
 
 int main(int argc, char *argv[]) {
-  printf(1, "DAG scheduler demo\n");
+  (void)argc; (void)argv;
+  printf("DAG scheduler demo\n");
   setup();
   exo_stream_yield();
-  exit();
+  return 0;
 }
