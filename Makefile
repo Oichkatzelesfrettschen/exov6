@@ -1,43 +1,47 @@
 KERNEL_DIR := src-kernel
 ULAND_DIR := src-uland
+HEADERS_DIR := src-headers
+OBJ_DIR := src-obj
 
 OBJS = \
-        $(KERNEL_DIR)/bio.o\
-        $(KERNEL_DIR)/console.o\
-        $(KERNEL_DIR)/exec.o\
-        $(KERNEL_DIR)/file.o\
-        $(KERNEL_DIR)/fs.o\
-        $(KERNEL_DIR)/ide.o\
-        $(KERNEL_DIR)/ioapic.o\
-        $(KERNEL_DIR)/kalloc.o\
-        $(KERNEL_DIR)/kbd.o\
-        $(KERNEL_DIR)/lapic.o\
-        $(KERNEL_DIR)/log.o\
-        $(KERNEL_DIR)/main.o\
-        $(KERNEL_DIR)/mp.o\
-        $(KERNEL_DIR)/picirq.o\
-        $(KERNEL_DIR)/pipe.o\
-        $(KERNEL_DIR)/proc.o\
-        $(KERNEL_DIR)/sleeplock.o\
-        $(KERNEL_DIR)/spinlock.o\
-        $(KERNEL_DIR)/string.o\
-        $(KERNEL_DIR)/syscall.o\
-        $(KERNEL_DIR)/sysfile.o\
-        $(KERNEL_DIR)/sysproc.o\
-        $(KERNEL_DIR)/trapasm.o\
-        $(KERNEL_DIR)/trap.o\
-        $(KERNEL_DIR)/uart.o\
-        $(KERNEL_DIR)/vectors.o\
-        $(KERNEL_DIR)/vm.o\
-       $(KERNEL_DIR)/exo.o\
-       $(KERNEL_DIR)/exo/exo_ipc.o\
-       $(KERNEL_DIR)/exo_stream.o\
-        $(KERNEL_DIR)/kernel/exo_cpu.o\
-        $(KERNEL_DIR)/kernel/exo_disk.o\
-        $(KERNEL_DIR)/kernel/exo_ipc.o\
+        $(OBJ_DIR)/bio.o\
+        $(OBJ_DIR)/console.o\
+        $(OBJ_DIR)/exec.o\
+        $(OBJ_DIR)/file.o\
+        $(OBJ_DIR)/fs.o\
+        $(OBJ_DIR)/ide.o\
+        $(OBJ_DIR)/ioapic.o\
+        $(OBJ_DIR)/kalloc.o\
+        $(OBJ_DIR)/kbd.o\
+        $(OBJ_DIR)/lapic.o\
+        $(OBJ_DIR)/log.o\
+        $(OBJ_DIR)/main.o\
+        $(OBJ_DIR)/mp.o\
+        $(OBJ_DIR)/picirq.o\
+        $(OBJ_DIR)/pipe.o\
+        $(OBJ_DIR)/proc.o\
+        $(OBJ_DIR)/sleeplock.o\
+        $(OBJ_DIR)/spinlock.o\
+        $(OBJ_DIR)/string.o\
+        $(OBJ_DIR)/syscall.o\
+        $(OBJ_DIR)/sysfile.o\
+        $(OBJ_DIR)/sysproc.o\
+        $(OBJ_DIR)/trapasm.o\
+        $(OBJ_DIR)/trap.o\
+        $(OBJ_DIR)/uart.o\
+        $(OBJ_DIR)/vectors.o\
+        $(OBJ_DIR)/vm.o\
+       $(OBJ_DIR)/exo.o\
+       $(OBJ_DIR)/exo_ipc.o\
+       $(OBJ_DIR)/exo_stream.o\
+        $(OBJ_DIR)/exo_cpu.o\
+        $(OBJ_DIR)/exo_disk.o\
+        $(OBJ_DIR)/exo_ipc_kernel.o\
+        $(OBJ_DIR)/exo_cpu_kernel.o\
+        $(OBJ_DIR)/exo_disk_kernel.o\
 
 ifeq ($(ARCH),x86_64)
-OBJS += $(KERNEL_DIR)/mmu64.o
+OBJS += $(OBJ_DIR)/mmu64.o
 endif
 
 # Cross-compiling (e.g., on Mac OS X)
@@ -88,11 +92,11 @@ BOOTASM := $(KERNEL_DIR)/bootasm.S
 ENTRYASM := $(KERNEL_DIR)/entry.S
 endif
 
-CC = $(TOOLPREFIX)gcc
-AS = $(TOOLPREFIX)gas
-LD = $(TOOLPREFIX)ld
-OBJCOPY = $(TOOLPREFIX)objcopy
-OBJDUMP = $(TOOLPREFIX)objdump
+CC = gcc
+AS = gcc
+LD = ld
+OBJCOPY = objcopy
+OBJDUMP = objdump
 
 # Output file names depend on the target architecture
 ifeq ($(ARCH),x86_64)
@@ -120,11 +124,38 @@ ifeq ($(ARCH),x86_64)
 SIGNBOOT := 0
 endif
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -I$(KERNEL_DIR) -I$(ULAND_DIR)
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(HEADERS_DIR)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide
 
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(KERNEL_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/%.o: $(KERNEL_DIR)/%.S | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/%.o: $(KERNEL_DIR)/exo/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/%.o: $(KERNEL_DIR)/kernel/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/%.o: $(ULAND_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/%.o: $(ULAND_DIR)/%.S | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
+$(OBJ_DIR)/%.o: $(ULAND_DIR)/user/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
+$(OBJ_DIR)/usys.o: usys.S | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
 CFLAGS += -fno-pie -no-pie
 endif
@@ -193,30 +224,29 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl > $@
 
 ULIB = \
-        $(ULAND_DIR)/ulib.o \
-        $(ULAND_DIR)/usys.o \
-        $(ULAND_DIR)/printf.o \
-        $(ULAND_DIR)/umalloc.o \
-        $(ULAND_DIR)/swtch.o \
-        $(ULAND_DIR)/caplib.o \
-        $(ULAND_DIR)/math_core.o
+        $(OBJ_DIR)/ulib.o \
+        $(OBJ_DIR)/usys.o \
+        $(OBJ_DIR)/printf.o \
+        $(OBJ_DIR)/umalloc.o \
+        $(OBJ_DIR)/swtch.o \
+        $(OBJ_DIR)/caplib.o \
+        $(OBJ_DIR)/math_core.o
 
-_%: $(ULAND_DIR)/%.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
-	$(OBJDUMP) -S $@ > $*.asm
-	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
+_%: $(OBJ_DIR)/%.o $(ULIB)
+	       $(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	        $(OBJDUMP) -S $@ > $*.asm
+	        $(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
 
-_forktest: $(ULAND_DIR)/forktest.o $(ULIB)
+_forktest: $(OBJ_DIR)/forktest.o $(ULIB)
 	        # forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o $(ULAND_DIR)/usys.o
-		$(OBJDUMP) -S _forktest > forktest.asm
+	        $(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest $(OBJ_DIR)/forktest.o $(OBJ_DIR)/ulib.o $(OBJ_DIR)/usys.o
+			$(OBJDUMP) -S _forktest > forktest.asm
 
-mkfs: mkfs.c fs.h
-	gcc -Werror -Wall -o mkfs mkfs.c
+mkfs: mkfs.c $(HEADERS_DIR)/fs.h
+	gcc -Werror -Wall -iquote $(HEADERS_DIR) -o mkfs mkfs.c
 
-exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	        $(CC) $(CFLAGS) -c -o $@ $<
 
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
@@ -242,7 +272,6 @@ UPROGS=\
         _wc\
         _zombie\
         _phi\
-        _exo_stream_demo\
         _ipc_test\
 
 ifeq ($(ARCH),x86_64)
@@ -336,14 +365,13 @@ qemu-nox-gdb: $(FS_IMG) $(XV6_IMG) .gdbinit
 # check in that version.
 
 EXTRA=\
-        mkfs.c $(ULAND_DIR)/ulib.c user.h \
+       mkfs.c $(ULAND_DIR)/ulib.c $(HEADERS_DIR)/user.h \
         $(ULAND_DIR)/cat.c $(ULAND_DIR)/echo.c $(ULAND_DIR)/forktest.c \
         $(ULAND_DIR)/grep.c $(ULAND_DIR)/kill.c \
         $(ULAND_DIR)/ln.c $(ULAND_DIR)/ls.c $(ULAND_DIR)/mkdir.c \
         $(ULAND_DIR)/rm.c $(ULAND_DIR)/stressfs.c $(ULAND_DIR)/usertests.c \
         $(ULAND_DIR)/wc.c $(ULAND_DIR)/zombie.c \
         $(ULAND_DIR)/phi.c \
-        $(ULAND_DIR)/user/exo_stream_demo.c \
         $(ULAND_DIR)/printf.c $(ULAND_DIR)/umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
@@ -378,3 +406,6 @@ tar:
 	(cd /tmp; tar cf - xv6) | gzip >xv6-rev10.tar.gz  # the next one will be 10 (9/17)
 
 .PHONY: dist-test dist
+
+tidy:
+	clang-tidy $(KERNEL_DIR)/*.c $(KERNEL_DIR)/exo/*.c $(KERNEL_DIR)/kernel/*.c $(ULAND_DIR)/*.c $(ULAND_DIR)/user/*.c -- -I$(HEADERS_DIR)
