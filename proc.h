@@ -85,37 +85,31 @@ enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 // Per-process state
 struct proc {
   size_t sz;                     // Size of process memory (bytes)
-  pde_t* pgdir;                // Page table
-  char *kstack;                // Bottom of kernel stack for this process
-  enum procstate state;        // Process state
-  int pid;                     // Process ID
-  struct proc *parent;         // Parent process
-  struct trapframe *tf;        // Trap frame for current syscall
-  context_t *context;          // swtch() here to run process
-  void (*timer_upcall)(void);  // user-mode timer interrupt handler
-  void *chan;                  // If non-zero, sleeping on chan
-  int killed;                  // If non-zero, have been killed
-  struct file *ofile[NOFILE];  // Open files
-  struct inode *cwd;           // Current directory
-  char name[16];               // Process name (debugging)
-  uint pctr_cap;               // Capability for exo_pctr_transfer
-  volatile uint pctr_signal;   // Signal counter for exo_pctr_transfer
-  uint64 gas_remaining;        // Remaining CPU budget
-};
-
- int preferred_node;          // NUMA allocation preference
+  pde_t* pgdir;                  // Page table
+  char *kstack;                  // Bottom of kernel stack for this process
+  enum procstate state;          // Process state
+  int pid;                       // Process ID
+  struct proc *parent;           // Parent process
+  struct trapframe *tf;          // Trap frame for current syscall
+  context_t *context;            // swtch() here to run process
+  void (*timer_upcall)(void);    // user-mode timer interrupt handler
+  void *chan;                    // If non-zero, sleeping on chan
+  int killed;                    // If non-zero, have been killed
+  struct file *ofile[NOFILE];    // Open files
+  struct inode *cwd;             // Current directory
+  char name[16];                 // Process name (debugging)
+  uint pctr_cap;                 // Capability for exo_pctr_transfer
+  volatile uint pctr_signal;     // Signal counter for exo_pctr_transfer
+  uint64 gas_remaining;          // Remaining CPU budget
+  int preferred_node;            // NUMA allocation preference
+  int out_of_gas;                // Flag set when gas runs out
 };
 
 // Ensure scheduler relies on fixed struct proc size
-#if defined(__x86_64__)
-_Static_assert(sizeof(struct proc) == 240, "struct proc size incorrect");
-#elif !defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 136, "struct proc size incorrect");
-#ifdef __x86_64__
-_Static_assert(sizeof(struct proc) == 248, "struct proc size incorrect");
+#if defined(__x86_64__) || defined(__aarch64__)
+_Static_assert(sizeof(struct proc) == 256, "struct proc size incorrect");
 #else
-_Static_assert(sizeof(struct proc) == 140, "struct proc size incorrect");
-
+_Static_assert(sizeof(struct proc) == 152, "struct proc size incorrect");
 #endif
 
 

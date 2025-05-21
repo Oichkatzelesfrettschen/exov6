@@ -39,7 +39,6 @@ LIBOS_DIR := libos
        $(KERNEL_DIR)/fastipc.o\
        $(KERNEL_DIR)/endpoint.o\
        $(KERNEL_DIR)/dag_sched.o
-       $(KERNEL_DIR)/cap.o\
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o

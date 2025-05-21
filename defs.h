@@ -163,7 +163,6 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 struct proc*    pctr_lookup(uint);
-int             cap_verify(uint);
 struct proc*    allocproc(void);
 
 
@@ -266,7 +265,6 @@ void            fastipc_send(zipc_msg_t *);
 int             sys_ipc_fast(void);
 void            endpoint_send(struct endpoint *, zipc_msg_t *);
 int             endpoint_recv(struct endpoint *, zipc_msg_t *);
-void            dag_sched_init(void);
 void            dag_node_init(struct dag_node *, exo_cap);
 void            dag_node_add_dep(struct dag_node *, struct dag_node *);
 void            dag_sched_submit(struct dag_node *);

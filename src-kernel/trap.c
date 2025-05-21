@@ -55,6 +55,7 @@ void trap(struct trapframe *tf) {
       if (myproc()->gas_remaining > 0)
         myproc()->gas_remaining--;
       if (myproc()->gas_remaining == 0) {
+        myproc()->out_of_gas = 1;
         lapiceoi();
         yield();
         break;

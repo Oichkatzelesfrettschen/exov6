@@ -17,9 +17,13 @@ static void sched_tick(void) {
         return;
     if(get_gas() > 0)
         return;
-    cur = (cur + 1) % nprocs;
-    set_gas(GAS_SLICE);
-    cap_yield_to_cap(runq[cur]);
+    for(int i = 0; i < nprocs; i++) {
+        cur = (cur + 1) % nprocs;
+        set_gas(GAS_SLICE);
+        cap_yield_to_cap(runq[cur]);
+        if(get_gas() > 0)
+            break;
+    }
 }
 
 void sched_install_timer(void) {
