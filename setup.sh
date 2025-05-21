@@ -116,6 +116,7 @@ done
 #— containers, virtualization, HPC, debug
 for pkg in \
   docker.io podman buildah virt-manager libvirt-daemon-system qemu-kvm \
+  bochs bochs-sdl \
   gdb lldb perf gcovr lcov bcc-tools bpftrace \
   openmpi-bin libopenmpi-dev mpich; do
   apt_pin_install "$pkg"
