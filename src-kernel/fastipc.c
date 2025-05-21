@@ -38,7 +38,7 @@ fastipc_send(zipc_msg_t *m)
 int
 sys_ipc_fast(void)
 {
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
     struct proc *p = myproc();
     fastipc_init();
     acquire(&fastipc.lock);

@@ -205,6 +205,23 @@ fork1(void)
   return pid;
 }
 
+static int __attribute__((unused))
+isbuiltin(struct cmd *cmd) {
+static int isbuiltin(struct cmd *cmd) __attribute__((unused));
+static int isbuiltin(struct cmd *cmd) {
+
+  struct execcmd *ecmd;
+
+  if (cmd->type != EXEC)
+    return 0;
+
+  ecmd = (struct execcmd *)cmd;
+  if (ecmd->argv[0] == 0)
+    return 0;
+
+  return strcmp(ecmd->argv[0], "cd") == 0;
+}
+
 int
 runbuiltin(struct cmd *cmd)
 {

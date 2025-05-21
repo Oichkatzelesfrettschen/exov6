@@ -8,7 +8,7 @@ main(int argc, char *argv[])
   (void)argc; (void)argv;
   char buf[16];
   const char *msg = "hello";
-  exo_cap cap = {0};
+  exo_cap cap = {0, 0};
   cap_send(cap, msg, 5);
   cap_recv(cap, buf, 5);
   buf[5] = '\0';
