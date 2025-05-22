@@ -8,9 +8,15 @@ apt_pin_install(){
   ver=$(apt-cache show "$pkg" 2>/dev/null \
         | awk '/^Version:/{print $2; exit}')
   if [ -n "$ver" ]; then
-    apt-get install -y "${pkg}=${ver}" || true
+    if ! apt-get install -y "${pkg}=${ver}"; then
+      echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
+      exit 1
+    fi
   else
-    apt-get install -y "$pkg" || true
+    if ! apt-get install -y "$pkg"; then
+      echo "Warning: apt-get install $pkg failed" >&2
+      exit 1
+    fi
   fi
 }
 
