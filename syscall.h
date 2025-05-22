@@ -44,4 +44,6 @@
 #define SYS_fcntl 0x31
 #define SYS_sigsend 0x32
 #define SYS_sigcheck 0x33
+#define SYS_cap_inc 0x34
+#define SYS_cap_dec 0x35
 

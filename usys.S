@@ -75,6 +75,8 @@ SYSCALL(set_numa_node)
 SYSCALL(fcntl)
 SYSCALL(sigsend)
 SYSCALL(sigcheck)
+SYSCALL(cap_inc)
+SYSCALL(cap_dec)
 
 
 

@@ -6,6 +6,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "ipc.h"
+#include "cap.h"
 
 
 
@@ -257,6 +258,12 @@ int             cap_verify(exo_cap);
 struct exo_blockcap exo_alloc_block(uint dev, uint rights);
 int             exo_bind_block(struct exo_blockcap *, struct buf *, int);
 void            exo_flush_block(struct exo_blockcap *, void *);
+void            cap_table_init(void);
+int             cap_table_alloc(uint16_t, uint, uint, uint);
+int             cap_table_lookup(uint16_t, struct cap_entry *);
+void            cap_table_inc(uint16_t);
+void            cap_table_dec(uint16_t);
+int             cap_table_remove(uint16_t);
 void            exo_stream_register(struct exo_stream *);
 void            exo_stream_halt(void);
 void            exo_stream_yield(void);
