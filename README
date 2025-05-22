@@ -172,6 +172,29 @@ run::
 It spawns ``typed_chan_recv`` via ``driver_spawn``, sends a typed ping
 message, and yields through the DAG stream before exiting.
 
+
+USER DEMO: BEATTY SCHEDULER
+--------------------------
+``beatty_demo`` exercises the kernel's Beatty scheduler and prints the
+resulting task order. Build with ``make`` so the binary is placed in
+``fs.img`` and run it inside QEMU:
+
+    $ beatty_demo
+
+USER DEMO: HELLO CHANNEL
+------------------------
+``hello_channel`` shows typed channels together with capability
+borrowing. After ``make`` completes, boot with ``make qemu-nox`` and run:
+
+    $ hello_channel
+
+USER DEMO: CHANNELS, BEATTY SCHEDULER AND RCRS
+----------------------------------------------
+``chan_beatty_rcrs_demo`` combines typed channels with the Beatty
+scheduler and relies on ``rcrs`` to restart the helper process if it
+exits. Build the repository and execute the demo after booting:
+
+    $ chan_beatty_rcrs_demo
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.
