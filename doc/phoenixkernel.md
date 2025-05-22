@@ -64,6 +64,17 @@ which produces `libos.a`. Applications link against this archive to access the c
 
 Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
 
+## BSD and SVR4 Compatibility Goals
+
+While the current focus is POSIX emulation, the project also aims to
+support BSD and System&nbsp;V Release&nbsp;4 personalities entirely in user
+space.  Additional modules under `libos/` will translate Phoenix
+capabilities to the expected interfaces.  Planned components include
+`bsd_signals.c` and `bsd_termios.c` for the classic BSD signal and
+terminal APIs, and `svr4_signal.c` along with `svr4_termios.c` to mimic
+their SVR4 counterparts.  Linking these libraries will let applications
+run with a BSD or SVR4 flavour without altering the kernel.
+
 ## Capability Primitives
 
 The kernel surface is intentionally small.  Applications manipulate raw
