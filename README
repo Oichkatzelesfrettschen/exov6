@@ -213,7 +213,9 @@ empty.
 
 
 
-See doc/phoenixkernel.md for a design overview of the Phoenix exokernel.
+See doc/phoenixkernel.md for a design overview of the Phoenix exokernel
+and step-by-step examples of capability allocation, typed channels and
+driver management.
 
 Example supervisor usage to manage drivers:
 

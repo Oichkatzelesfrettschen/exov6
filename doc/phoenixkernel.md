@@ -1,14 +1,28 @@
-# Phoenix Kernel Overview
+#Phoenix Kernel Overview
 
-The Phoenix kernel implements an exokernel research platform built on top of the xv6 code base. Its goal is to expose low-level hardware resources directly to user space while keeping the in-kernel portion as small as possible. Applications link against a library operating system (libOS) that provides traditional services on top of the primitive capability interface.
+The Phoenix kernel implements an exokernel research platform built on top of the
+        xv6 code base.Its goal is to expose low -
+    level hardware resources directly to user space while keeping the in -
+    kernel portion as small as possible.Applications
+        link against a library operating
+        system(libOS)
+that provides traditional services on top of the primitive capability interface.
 
-## Exokernel Philosophy
+    ##Exokernel Philosophy
 
-Phoenix follows the exokernel approach: the kernel multiplexes hardware resources and enforces protection but leaves higher-level abstractions to user-level code. Instead of implementing full POSIX semantics in the kernel, Phoenix exposes capabilities that grant controlled access to memory regions, devices and communication endpoints. User-space runtimes build whatever abstractions they require.
+        Phoenix follows the exokernel approach
+    : the kernel multiplexes hardware resources and
+          enforces protection but leaves higher -
+    level abstractions to user -
+    level code.Instead of implementing full POSIX semantics in the kernel,
+    Phoenix exposes capabilities that grant controlled access to memory regions,
+    devices and communication endpoints.User -
+        space runtimes build whatever abstractions they require.
 
-## DAG Execution Model
+        ##DAG Execution Model
 
-Scheduling is expressed as a directed acyclic graph (DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
+            Scheduling is expressed as a directed acyclic
+            graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
 
 ## Capability System
 
@@ -208,14 +222,14 @@ A minimal block driver illustrating these APIs is shown below:
 #include "user.h"
 
 int main(void) {
-    struct exo_blockcap blk;
-    fs_alloc_block(1, EXO_RIGHT_R | EXO_RIGHT_W, &blk);
-    char buf[BSIZE] = "Phoenix";
-    fs_write_block(blk, buf);
-    memset(buf, 0, sizeof(buf));
-    fs_read_block(blk, buf);
-    printf(1, "driver read: %s\n", buf);
-    return 0;
+  struct exo_blockcap blk;
+  fs_alloc_block(1, EXO_RIGHT_R | EXO_RIGHT_W, &blk);
+  char buf[BSIZE] = "Phoenix";
+  fs_write_block(blk, buf);
+  memset(buf, 0, sizeof(buf));
+  fs_read_block(blk, buf);
+  printf(1, "driver read: %s\n", buf);
+  return 0;
 }
 ```
 
@@ -236,3 +250,112 @@ int driver_connect(int pid, exo_cap ep);
 `driver_spawn` forks and executes the given program while
 `driver_connect` sends an endpoint capability to an already running
 driver.
+
+
+### Affine Runtime
+
+The libOS offers an **affine runtime** for experimenting with linear
+resource tracking.  An affine channel may be used at most once for
+sending and once for receiving.  The helper functions declared in
+`libos/affine_runtime.h` mirror the generic channel API but enforce the
+single-use property:
+
+```c
+affine_chan_t *affine_chan_create(const struct msg_type_desc *desc);
+void affine_chan_destroy(affine_chan_t *c);
+int affine_chan_send(affine_chan_t *c, exo_cap dest,
+                     const void *msg, size_t len);
+int affine_chan_recv(affine_chan_t *c, exo_cap src,
+                     void *msg, size_t len);
+```
+
+Lambda terms are represented by `lambda_term_t` and executed with
+`lambda_run()` which deducts a unit of fuel for every evaluation step:
+
+```c
+typedef int (*lambda_fn)(void *env);
+
+typedef struct lambda_term {
+  lambda_fn fn; // one step evaluator
+  void *env;    // closure environment
+  int steps;    // total steps executed
+} lambda_term_t;
+
+int lambda_run(lambda_term_t *t, int fuel);
+```
+
+This lightweight accounting mechanism allows research into affine
+λ-calculus interpreters while integrating with Phoenix's typed channel
+infrastructure.
+
+## Step-by-Step Examples
+
+The following walkthroughs illustrate how common Phoenix primitives fit
+together.  Each snippet can be compiled as a standalone program and run
+inside the xv6 environment.
+
+### Capability Allocation
+
+1. Allocate a physical page and map it in user space.
+2. Use the memory and then release the capability.
+
+```c
+#include "caplib.h"
+#include "user.h"
+
+int
+main(void)
+{
+    exo_cap page = exo_alloc_page();
+    void *va = map_page(page.id); // provided by the libOS
+    memset(va, 0, PGSIZE);
+    exo_unbind_page(page);
+    return 0;
+}
+```
+
+### Typed Channel Example
+
+1. Declare a typed channel using `CHAN_DECLARE`.
+2. Send a Cap'n Proto message and wait for the reply.
+
+```c
+#include "chan.h"
+#include "proto/ping.capnp.h"
+
+CHAN_DECLARE(ping_chan, ping_MESSAGE_SIZE);
+
+int
+main(void)
+{
+    struct ping msg = ping_init();
+    ping_chan_send(&ping_chan, &msg);
+    ping_chan_recv(&ping_chan, &msg);
+    return 0;
+}
+```
+
+### Driver Management Example
+
+1. Spawn a driver process with `driver_spawn`.
+2. Connect to its endpoint and exchange a test message.
+
+```c
+#include "libos/driver.h"
+
+int
+main(void)
+{
+    int pid = driver_spawn("blk_driver", 0);
+    exo_cap ep = obtain_driver_ep(pid); // helper returning the endpoint
+    driver_connect(pid, ep);
+    return 0;
+}
+```
+
+## Beatty Scheduler and Affine Runtime
+
+Work is underway on a Beatty scheduler that enables affine scheduling of
+tasks.  Once the implementation lands this section will describe its API
+and how the affine runtime integrates with existing DAG scheduling.
+
