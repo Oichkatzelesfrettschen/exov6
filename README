@@ -59,12 +59,6 @@ cross-compiler suite and invoke ``make TOOLPREFIX=i386-jos-elf-``.  Now
 install the QEMU PC simulator and run ``make qemu``.  The Bochs
 emulator is also supported via ``make bochs`` and is installed by
 ``setup.sh``.
-
-Before building user-mode programs you must generate ``libos.a``,
-the user-space runtime library.  This typically happens as an
-implicit prerequisite, but if you see errors about a missing
-``libos.a`` run ``make libos`` explicitly and then rebuild your
-programs.
 A helper script, `setup.sh`, installs cross-compilers, build dependencies,
 QEMU packages, and additional development tools.  Run it once before
 building to ensure all prerequisites are available.  From the top-level
@@ -80,18 +74,11 @@ This only needs to be done after cloning the repository or when
 dependencies change.
 
 The repository uses ``pre-commit`` hooks to automatically run
-``clang-format`` and ``clang-tidy``.  The ``setup.sh`` script attempts to
-install ``pre-commit`` via the distribution package manager and falls
-back to Python's ``pip`` if required.  Once installed, enable the hooks
-with::
+``clang-format`` and ``clang-tidy``.  Install the hooks with::
 
     pre-commit install
 
 The checks will run on every commit.
-
-``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
-generates ``compile_commands.json`` on demand using
-``scripts/gen_compile_commands.py`` if it doesn't already exist.
 
 Experimental support for building with the C23 standard and for
 cross-compiling a 64-bit version is available. Set
@@ -225,12 +212,6 @@ run::
 It spawns ``typed_chan_recv`` via ``driver_spawn``, sends a typed ping
 message, and yields through the DAG stream before exiting.
 
-USER DEMO: SIMPLE DAG
----------------------
-``dag_demo`` constructs a small weighted DAG using the user-space
-scheduler helpers.  Running the demo prints the order nodes are executed
-according to their weights and dependencies.
-
 
 USER DEMO: BEATTY SCHEDULER
 --------------------------
@@ -254,15 +235,6 @@ scheduler and relies on ``rcrs`` to restart the helper process if it
 exits. Build the repository and execute the demo after booting:
 
     $ chan_beatty_rcrs_demo
-
-USER DEMO: BEATTY AND DAG
--------------------------
-``beatty_dag_demo`` composes the Beatty and DAG schedulers through a
-combined exo stream. The demo prints how Beatty selects which task family
-runs while the DAG scheduler walks the dependency graph for that family.
-Build with ``make`` and run inside QEMU::
-
-    $ beatty_dag_demo
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.
@@ -306,8 +278,7 @@ empty.
 
 See doc/phoenixkernel.md for a design overview of the Phoenix exokernel
 and step-by-step examples of capability allocation, typed channels and
-driver management.  The document also outlines the planned BSD and SVR4
-compatibility layers built on top of the libOS.
+driver management.
 
 Example supervisor usage to manage drivers:
 
@@ -341,18 +312,3 @@ $ python3 scripts/swift_fuzz.py -runs=1
 ```
 
 Additional libFuzzer flags may be provided after the script name.
-
-STREAMS STACK
--------------
-A simple simulation of STREAMS modules is provided. The `streams_stack.dot`
-file describes the module layout. Generate an image with Graphviz:
-
-```
-$ dot -Tpng streams_stack.dot -o stack.png
-```
-
-Run the latency harness with Python:
-
-```
-$ python3 scripts/simulate.py
-```
