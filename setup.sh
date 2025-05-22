@@ -8,9 +8,9 @@ apt_pin_install(){
   ver=$(apt-cache show "$pkg" 2>/dev/null \
         | awk '/^Version:/{print $2; exit}')
   if [ -n "$ver" ]; then
-    apt-get install -y "${pkg}=${ver}"
+    apt-get install -y "${pkg}=${ver}" || true
   else
-    apt-get install -y "$pkg"
+    apt-get install -y "$pkg" || true
   fi
 }
 
@@ -24,7 +24,7 @@ apt-get update -y
 #— core build tools, formatters, analysis, science libs
 for pkg in \
   build-essential gcc g++ clang lld llvm \
-  clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig pre-commit \
+  clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip \
@@ -34,6 +34,16 @@ for pkg in \
   libasan6 libubsan1 likwid hwloc; do
   apt_pin_install "$pkg"
 done
+
+# Ensure pre-commit and compiledb are available via pip if missing
+if ! command -v pre-commit >/dev/null 2>&1; then
+  pip3 install --no-cache-dir pre-commit
+fi
+
+# compiledb provides compile_commands.json generation
+if ! command -v compiledb >/dev/null 2>&1; then
+  pip3 install --no-cache-dir compiledb
+fi
 
 #— Python & deep-learning / MLOps
 for pkg in \
@@ -150,9 +160,14 @@ rm /tmp/protoc.zip
 #— gmake alias
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
 
+# Generate compile_commands.json if compiledb is installed
+if command -v compiledb >/dev/null 2>&1; then
+  compiledb -n make >/dev/null || true
+
 # Install pre-commit hooks if possible
 if command -v pre-commit >/dev/null 2>&1; then
   pre-commit install >/dev/null 2>&1 || true
+
 fi
 
 #— clean up
