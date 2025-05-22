@@ -22,16 +22,20 @@ chan_destroy(chan_t *c)
 int
 chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg, size_t len)
 {
-    if(len != c->msg_size)
+    if(len != c->msg_size){
+        printf(2, "chan_endpoint_send: size %d expected %d\n", len, c->msg_size);
         return -1;
+    }
     return cap_send(dest, msg, c->msg_size);
 }
 
 int
 chan_endpoint_recv(chan_t *c, exo_cap src, void *msg, size_t len)
 {
-    if(len != c->msg_size)
+    if(len != c->msg_size){
+        printf(2, "chan_endpoint_recv: size %d expected %d\n", len, c->msg_size);
         return -1;
+    }
     return cap_recv(src, msg, c->msg_size);
 }
 

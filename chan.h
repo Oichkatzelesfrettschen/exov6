@@ -14,7 +14,9 @@ chan_t *chan_create(const struct msg_type_desc *desc);
 // Free a channel allocated with chan_create
 void chan_destroy(chan_t *c);
 
-// Send and receive through an exo capability endpoint
+// Send and receive through an exo capability endpoint.  The helpers
+// validate that the caller supplied length matches `c->msg_size` and
+// print an error to fd 2 when it does not.
 int chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg, size_t len);
 int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg, size_t len);
 

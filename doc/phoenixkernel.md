@@ -193,6 +193,17 @@ and the corresponding `type_encode`/`type_decode` helpers.  A typed channel
 uses these helpers to serialize exactly `msg_size` bytes when interacting
 with an endpoint.  See `typed_chan_demo.c` for an example.
 
+#### Typed Channel Semantics
+
+Each channel instance stores the expected Cap'n Proto message size in its
+descriptor.  The generic helpers `chan_endpoint_send` and
+`chan_endpoint_recv` verify that the caller supplied buffer length matches
+this `msg_size`.  On a mismatch the helpers print a diagnostic to file
+descriptor 2 and return `-1` without transmitting data.  Channels declared
+via `CHAN_DECLARE` automatically populate the descriptor with the
+`type_MESSAGE_SIZE` constant generated from the schema, so typical user code
+benefits from this runtime validation without manually passing sizes.
+
 ## libOS APIs
 
 The libOS includes wrappers around the capability syscalls as well as helper

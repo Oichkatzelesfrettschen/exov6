@@ -21,6 +21,8 @@ main(int argc, char *argv[])
     char bad[1] = {0};
     int r = chan_endpoint_send(&c->base, cap, bad, sizeof(bad));
     printf(1, "bad send result %d\n", r);
+    r = chan_endpoint_recv(&c->base, cap, bad, sizeof(bad));
+    printf(1, "bad recv result %d\n", r);
     ping_chan_destroy(c);
     exit();
 }
