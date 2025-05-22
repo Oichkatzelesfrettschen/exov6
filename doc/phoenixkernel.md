@@ -24,14 +24,7 @@ that provides traditional services on top of the primitive capability interface.
             Scheduling is expressed as a directed acyclic
             graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
 
-            Each DAG node now tracks its parents in a reverse dependency
-            array.  When a node completes, the scheduler marks it as done
-            so children can verify that all prerequisites finished.  Ready
-            nodes are inserted based on a weight derived from their
-            priority so heavier tasks execute first when several nodes are
-            runnable.
-
-A second **Beatty scheduler** now complements the DAG engine. It alternates between two contexts according to the Beatty sequence derived from the golden ratio. Call `beatty_sched_set_tasks` with the capabilities of the tasks to activate it. The scheduler is registered as an exo stream so user-level runtimes can select it on demand.
+A second **Beatty scheduler** now complements the DAG engine. It alternates between an arbitrary number of contexts using Beatty sequences with irrational weights. Call `beatty_sched_set_tasks` with an array of task capabilities and the corresponding weights to activate it. The scheduler is registered as an exo stream so user-level runtimes can select it on demand.
 
 ## Capability System
 
@@ -360,5 +353,5 @@ main(void)
 
 ## Beatty Scheduler and Affine Runtime
 
-The kernel now ships with a Beatty scheduler implementing an affine runtime. It dispatches two cooperating contexts following the golden-ratio Beatty sequence. Enable it with `beatty_sched_set_tasks` after registering the Beatty exo stream. Typed channels can exchange messages whenever the scheduler yields.
+The kernel now ships with a Beatty scheduler implementing an affine runtime. It dispatches multiple cooperating contexts according to irrational weights. Enable it with `beatty_sched_set_tasks` after registering the Beatty exo stream. Typed channels can exchange messages whenever the scheduler yields.
 
