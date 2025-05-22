@@ -28,10 +28,10 @@ apt_pin_install(){
     fi
   fi
 
-  # Fallback to pip for python packages
+  # Fallback to pip for Python packages
   if ! dpkg -s "$pkg" >/dev/null 2>&1; then
     case "$pkg" in
-      python3-*)
+      python3-*|pre-commit)
         pip_pkg="${pkg#python3-}"
         pip_install "$pip_pkg"
         ;;
