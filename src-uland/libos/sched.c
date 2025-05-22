@@ -15,13 +15,13 @@ void sched_add(exo_cap cap) {
 static void sched_tick(void) {
     if(nprocs == 0)
         return;
-    if(get_gas() > 0)
+    if(!cap_out_of_gas())
         return;
     for(int i = 0; i < nprocs; i++) {
         cur = (cur + 1) % nprocs;
         set_gas(GAS_SLICE);
         cap_yield_to_cap(runq[cur]);
-        if(get_gas() > 0)
+        if(!cap_out_of_gas())
             break;
     }
 }
