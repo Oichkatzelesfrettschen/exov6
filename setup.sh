@@ -35,6 +35,10 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
+# Ensure meson is available even if the package was missing
+if ! command -v meson >/dev/null 2>&1; then
+  pip3 install --no-cache-dir meson
+
 # Ensure pre-commit and compiledb are available via pip if missing
 if ! command -v pre-commit >/dev/null 2>&1; then
   pip3 install --no-cache-dir pre-commit
