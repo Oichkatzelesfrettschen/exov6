@@ -255,6 +255,13 @@ scheduler and relies on ``rcrs`` to restart the helper process if it
 exits. Build the repository and execute the demo after booting:
 
     $ chan_beatty_rcrs_demo
+
+USER DEMO: BEATTY AND DAG
+-------------------------
+``beatty_dag_demo`` composes the Beatty and DAG schedulers through a
+combined exo stream. Build with ``make`` and run inside QEMU::
+
+    $ beatty_dag_demo
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.

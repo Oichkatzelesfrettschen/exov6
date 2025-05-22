@@ -261,7 +261,11 @@ void exo_stream_halt(void);
 void exo_stream_yield(void);
 void dag_sched_init(void);
 void beatty_sched_init(void);
-void beatty_sched_set_tasks(const exo_cap *tasks, const double *weights, int n);
+
+struct exo_sched_ops *dag_sched_ops(void);
+struct exo_sched_ops *beatty_sched_ops(void);
+void beatty_dag_stream_init(void);
+void beatty_sched_set_tasks(exo_cap, exo_cap);
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
 void endpoint_send(struct endpoint *, zipc_msg_t *);
