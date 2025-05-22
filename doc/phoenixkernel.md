@@ -251,6 +251,7 @@ int driver_connect(int pid, exo_cap ep);
 `driver_connect` sends an endpoint capability to an already running
 driver.
 
+
 ### Affine Runtime
 
 The libOS offers an **affine runtime** for experimenting with linear
@@ -286,3 +287,75 @@ int lambda_run(lambda_term_t *t, int fuel);
 This lightweight accounting mechanism allows research into affine
 λ-calculus interpreters while integrating with Phoenix's typed channel
 infrastructure.
+
+## Step-by-Step Examples
+
+The following walkthroughs illustrate how common Phoenix primitives fit
+together.  Each snippet can be compiled as a standalone program and run
+inside the xv6 environment.
+
+### Capability Allocation
+
+1. Allocate a physical page and map it in user space.
+2. Use the memory and then release the capability.
+
+```c
+#include "caplib.h"
+#include "user.h"
+
+int
+main(void)
+{
+    exo_cap page = exo_alloc_page();
+    void *va = map_page(page.id); // provided by the libOS
+    memset(va, 0, PGSIZE);
+    exo_unbind_page(page);
+    return 0;
+}
+```
+
+### Typed Channel Example
+
+1. Declare a typed channel using `CHAN_DECLARE`.
+2. Send a Cap'n Proto message and wait for the reply.
+
+```c
+#include "chan.h"
+#include "proto/ping.capnp.h"
+
+CHAN_DECLARE(ping_chan, ping_MESSAGE_SIZE);
+
+int
+main(void)
+{
+    struct ping msg = ping_init();
+    ping_chan_send(&ping_chan, &msg);
+    ping_chan_recv(&ping_chan, &msg);
+    return 0;
+}
+```
+
+### Driver Management Example
+
+1. Spawn a driver process with `driver_spawn`.
+2. Connect to its endpoint and exchange a test message.
+
+```c
+#include "libos/driver.h"
+
+int
+main(void)
+{
+    int pid = driver_spawn("blk_driver", 0);
+    exo_cap ep = obtain_driver_ep(pid); // helper returning the endpoint
+    driver_connect(pid, ep);
+    return 0;
+}
+```
+
+## Beatty Scheduler and Affine Runtime
+
+Work is underway on a Beatty scheduler that enables affine scheduling of
+tasks.  Once the implementation lands this section will describe its API
+and how the affine runtime integrates with existing DAG scheduling.
+

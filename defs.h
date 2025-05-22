@@ -197,7 +197,7 @@ int argstr(int, char **);
 int fetchint(uint, int *);
 int fetchstr(uint, char **);
 void syscall(void);
-         syscall(void);
+syscall(void);
 
 // timer.c
 void timerinit(void);
@@ -259,6 +259,8 @@ void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);
 void dag_sched_init(void);
+void beatty_sched_init(void);
+void beatty_sched_set_tasks(exo_cap, exo_cap);
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
 void endpoint_send(struct endpoint *, zipc_msg_t *);
