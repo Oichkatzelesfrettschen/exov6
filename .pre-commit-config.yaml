@@ -5,10 +5,16 @@ repos:
       name: clang-format
       entry: clang-format -i
       language: system
-      types: [c, h]
-    - id: clang-tidy
-      name: clang-tidy
-      entry: clang-tidy
+      types: [c, h, cpp, cxx, hpp, hxx, cc, hh]
+    - id: clang-tidy-c23
+      name: clang-tidy (C23)
+      entry: clang-tidy --config-file=.clang-tidy
       language: system
       pass_filenames: true
       types: [c, h]
+    - id: clang-tidy-cpp17
+      name: clang-tidy (C++17)
+      entry: clang-tidy --config-file=.clang-tidy-cpp17
+      language: system
+      pass_filenames: true
+      types: [cpp, cxx, cc, c++, hpp, hxx, hh]
