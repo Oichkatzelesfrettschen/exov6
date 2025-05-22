@@ -59,6 +59,9 @@ pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
 
+# Ensure pre-commit is available even if the apt package fails
+pip3 install --no-cache-dir pre-commit
+
 #— QEMU emulation for foreign binaries
 for pkg in \
   qemu-user-static \
@@ -160,6 +163,11 @@ command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gm
 # Generate compile_commands.json if compiledb is installed
 if command -v compiledb >/dev/null 2>&1; then
   compiledb -n make >/dev/null || true
+
+# Install pre-commit hooks if possible
+if command -v pre-commit >/dev/null 2>&1; then
+  pre-commit install >/dev/null 2>&1 || true
+
 fi
 
 #— clean up
