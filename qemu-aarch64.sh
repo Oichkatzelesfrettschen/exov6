@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 # Run xv6 for AArch64 under QEMU
 QEMU=${QEMU:-qemu-system-aarch64}
 KERNEL=${KERNEL:-kernel-aarch64}
