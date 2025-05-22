@@ -3,63 +3,81 @@
 #include "spinlock.h"
 #include "exo_stream.h"
 #include "kernel/exo_cpu.h"
-#include "math_core.h"
 
 static struct spinlock beatty_lock;
 static struct exo_sched_ops beatty_ops;
 static struct exo_stream beatty_stream;
 
-static exo_cap task_a;
-static exo_cap task_b;
-static uint64 na, nb;
-static double alpha;
-static double beta;
-static int weight_a = 1;
-static int weight_b = 1;
+static exo_cap *tasks;
+static double *weights;
+static uint64 *counts;
+static int ntasks;
 
-void beatty_sched_set_tasks(exo_cap a, exo_cap b) {
+void
+beatty_sched_set_tasks(const exo_cap *t, const double *w, int n)
+{
   acquire(&beatty_lock);
-  task_a = a;
-  task_b = b;
-  na = 1;
-  nb = 1;
-  release(&beatty_lock);
-}
 
-void beatty_sched_set_weights(int wa, int wb) {
-  if (wa <= 0)
-    wa = 1;
-  if (wb <= 0)
-    wb = 1;
-  acquire(&beatty_lock);
-  weight_a = wa;
-  weight_b = wb;
-  na = 1;
-  nb = 1;
-  alpha = (double)(wa + wb) / (double)wa;
-  beta = (double)(wa + wb) / (double)wb;
-  release(&beatty_lock);
-}
+  if(tasks)
+    kfree((char*)tasks);
+  if(weights)
+    kfree((char*)weights);
+  if(counts)
+    kfree((char*)counts);
 
-static int beatty_pick(void) {
-  double va = alpha * (double)na;
-  double vb = beta * (double)nb;
-  int ret;
-  if ((uint64)va < (uint64)vb) {
-    na++;
-    ret = 0;
-  } else {
-    nb++;
-    ret = 1;
+  tasks = 0;
+  weights = 0;
+  counts = 0;
+  ntasks = 0;
+
+  if(n <= 0 || n * sizeof(exo_cap) > PGSIZE ||
+     n * sizeof(double) > PGSIZE || n * sizeof(uint64) > PGSIZE){
+    release(&beatty_lock);
+    return;
   }
-  return ret;
+
+  tasks = (exo_cap*)kalloc();
+  weights = (double*)kalloc();
+  counts = (uint64*)kalloc();
+  if(!tasks || !weights || !counts){
+    if(tasks) kfree((char*)tasks);
+    if(weights) kfree((char*)weights);
+    if(counts) kfree((char*)counts);
+    tasks = 0;
+    weights = 0;
+    counts = 0;
+    release(&beatty_lock);
+    return;
+  }
+
+  memmove(tasks, t, n * sizeof(exo_cap));
+  memmove(weights, w, n * sizeof(double));
+  for(int i = 0; i < n; i++)
+    counts[i] = 1;
+
+  ntasks = n;
+
+  release(&beatty_lock);
 }
 
 static void beatty_halt(void) { /* nothing */ }
 
 static void beatty_yield(void) {
   acquire(&beatty_lock);
-  exo_cap next = beatty_pick() == 0 ? task_a : task_b;
+  exo_cap next = {0};
+  if(ntasks > 0){
+    int idx = 0;
+    uint64 best = (uint64)(weights[0] * (double)counts[0]);
+    for(int i = 1; i < ntasks; i++){
+      uint64 v = (uint64)(weights[i] * (double)counts[i]);
+      if(v < best){
+        best = v;
+        idx = i;
+      }
+    }
+    next = tasks[idx];
+    counts[idx]++;
+  }
   release(&beatty_lock);
 
   if (next.pa)
@@ -68,13 +86,13 @@ static void beatty_yield(void) {
 
 void beatty_sched_init(void) {
   initlock(&beatty_lock, "beatty");
-  alpha = phi();
-  beta = alpha / (alpha - 1.0);
+  tasks = 0;
+  weights = 0;
+  counts = 0;
+  ntasks = 0;
   beatty_ops.halt = beatty_halt;
   beatty_ops.yield = beatty_yield;
-  beatty_ops.next = dag_sched_get_ops();
+  beatty_ops.next = 0;
   beatty_stream.head = &beatty_ops;
   exo_stream_register(&beatty_stream);
 }
-
-struct exo_sched_ops *beatty_sched_ops(void) { return &beatty_ops; }
