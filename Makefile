@@ -81,6 +81,8 @@ endif
 
 ARCH ?= x86_64
 CSTD ?= gnu2x
+CLANG_TIDY ?= clang-tidy
+TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
 
 
@@ -455,3 +457,8 @@ src-uland/exo_unit_test: src-uland/exo_unit_test.c
 
 check: src-uland/exo_unit_test
 	./src-uland/exo_unit_test
+
+clang-tidy:
+	@for f in $(TIDY_SRCS); do \
+	$(CLANG_TIDY) $$f -- $(CFLAGS); \
+	done

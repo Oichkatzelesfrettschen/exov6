@@ -19,12 +19,13 @@ jobs:
       matrix:
         linter:
           - { id: "shellcheck", cmd: "files=$(git ls-files '*.sh'); [ -n \"$files\" ] && shellcheck -f gcc $files" }
+          - { id: "clang-tidy", cmd: "files=$(git ls-files '*.c' '*.h'); [ -n \"$files\" ] && clang-tidy $files --" }
     steps:
       - uses: actions/checkout@v4
       - name: Install linter runtime deps
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y shellcheck
+          sudo apt-get install -y shellcheck clang clang-tidy clang-format
       - name: Run ${{ matrix.linter.id }} & feed Reviewdog
 
         uses: reviewdog/reviewdog@master

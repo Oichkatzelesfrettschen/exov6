@@ -73,6 +73,13 @@ along with the rest of the toolchain.
 This only needs to be done after cloning the repository or when
 dependencies change.
 
+The repository uses ``pre-commit`` hooks to automatically run
+``clang-format`` and ``clang-tidy``.  Install the hooks with::
+
+    pre-commit install
+
+The checks will run on every commit.
+
 Experimental support for building with the C23 standard and for
 cross-compiling a 64-bit version is available. Set
 ``ARCH=x86_64`` when invoking make to enable 64-bit builds and adjust
