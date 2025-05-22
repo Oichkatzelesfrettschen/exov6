@@ -207,7 +207,11 @@ command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gm
 
 # Generate compile_commands.json if compiledb is installed
 if command -v compiledb >/dev/null 2>&1; then
-  compiledb -n make >/dev/null || true
+  status=0
+  compiledb -n make >/dev/null || status=$?
+  if [ $status -ne 0 ] || [ ! -f compile_commands.json ]; then
+    echo "Warning: failed to generate compile_commands.json (exit code $status)" >&2
+  fi
 fi
 
 # Install pre-commit hooks if possible
