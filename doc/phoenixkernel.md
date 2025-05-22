@@ -198,3 +198,17 @@ int main(void) {
 Compile the file with `make` and add the resulting binary to the disk image.
 The supervisor can then spawn the driver at boot time or restart it if it
 exits.
+
+### Driver Management Helpers
+
+Convenience functions in `libos/driver.h` assist with launching and
+connecting to drivers:
+
+```c
+int driver_spawn(const char *path, char *const argv[]);
+int driver_connect(int pid, exo_cap ep);
+```
+
+`driver_spawn` forks and executes the given program while
+`driver_connect` sends an endpoint capability to an already running
+driver.

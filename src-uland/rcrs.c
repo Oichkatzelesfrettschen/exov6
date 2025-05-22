@@ -1,7 +1,7 @@
 /*
  * rcrs - restartable driver supervisor
  *
- * This user-level helper reads command lines from /drivers.conf and
+ * This user-level helper reads command lines from drivers.conf and
  * keeps the specified programs running.  Each non-empty line in the
  * configuration file represents one driver.  Lines beginning with '#'
  * are treated as comments.  When a driver process exits the supervisor
@@ -9,7 +9,7 @@
  *
  * Example configuration:
  *   kbdserv
- *   otherdriver arg1 arg2
+ *   pingdriver
  */
 #include "fcntl.h"
 #include "stat.h"
