@@ -74,6 +74,9 @@ endif
 #Try to infer the correct QEMU if not provided.Leave empty when none found.
 ifndef QEMU
 QEMU := $(shell which qemu-system-aarch64 2>/dev/null || \
+    which qemu-system-arm 2>/dev/null || \
+    which qemu-system-ppc64 2>/dev/null || \
+    which qemu-system-ppc 2>/dev/null || \
     which qemu-system-x86_64 2>/dev/null || \
     which qemu-system-i386 2>/dev/null || \
     which qemu 2>/dev/null)
@@ -96,6 +99,28 @@ OBJS += $(KERNEL_DIR)/main64.o \
        $(KERNEL_DIR)/arch/aarch64/vectors.o
 BOOTASM := $(KERNEL_DIR)/arch/aarch64/boot.S
 ENTRYASM := $(KERNEL_DIR)/arch/aarch64/entry.S
+else ifeq ($(ARCH),armv7)
+OBJS += $(KERNEL_DIR)/arch/armv7/swtch.o \
+       $(KERNEL_DIR)/arch/armv7/vectors.o
+BOOTASM := $(KERNEL_DIR)/arch/armv7/boot.S
+ENTRYASM := $(KERNEL_DIR)/arch/armv7/entry.S
+else ifeq ($(ARCH),powerpc)
+OBJS += $(KERNEL_DIR)/arch/ppc/swtch.o \
+       $(KERNEL_DIR)/arch/ppc/vectors.o
+BOOTASM := $(KERNEL_DIR)/arch/ppc/boot.S
+ENTRYASM := $(KERNEL_DIR)/arch/ppc/entry.S
+else ifeq ($(ARCH),powerpc64)
+OBJS += $(KERNEL_DIR)/main64.o \
+       $(KERNEL_DIR)/arch/ppc64/swtch.o \
+       $(KERNEL_DIR)/arch/ppc64/vectors.o
+BOOTASM := $(KERNEL_DIR)/arch/ppc64/boot.S
+ENTRYASM := $(KERNEL_DIR)/arch/ppc64/entry.S
+else ifeq ($(ARCH),powerpc64le)
+OBJS += $(KERNEL_DIR)/main64.o \
+       $(KERNEL_DIR)/arch/ppc64le/swtch.o \
+       $(KERNEL_DIR)/arch/ppc64le/vectors.o
+BOOTASM := $(KERNEL_DIR)/arch/ppc64le/boot.S
+ENTRYASM := $(KERNEL_DIR)/arch/ppc64le/entry.S
 else
 OBJS += $(KERNEL_DIR)/swtch.o \
        $(KERNEL_DIR)/vectors.o
@@ -128,6 +153,38 @@ KERNELMEMFS_FILE := kernelmemfs-aarch64
 FS_IMG := fs-aarch64.img
 XV6_IMG := xv6-aarch64.img
 XV6_MEMFS_IMG := xv6memfs-aarch64.img
+else ifeq ($(ARCH),armv7)
+ARCHFLAG := -march=armv7-a
+LDFLAGS += -m elf32-littlearm
+KERNEL_FILE := kernel-armv7
+KERNELMEMFS_FILE := kernelmemfs-armv7
+FS_IMG := fs-armv7.img
+XV6_IMG := xv6-armv7.img
+XV6_MEMFS_IMG := xv6memfs-armv7.img
+else ifeq ($(ARCH),powerpc)
+ARCHFLAG := -m32
+LDFLAGS += -m elf32ppc
+KERNEL_FILE := kernel-powerpc
+KERNELMEMFS_FILE := kernelmemfs-powerpc
+FS_IMG := fs-powerpc.img
+XV6_IMG := xv6-powerpc.img
+XV6_MEMFS_IMG := xv6memfs-powerpc.img
+else ifeq ($(ARCH),powerpc64)
+ARCHFLAG := -m64
+LDFLAGS += -m elf64ppc
+KERNEL_FILE := kernel-powerpc64
+KERNELMEMFS_FILE := kernelmemfs-powerpc64
+FS_IMG := fs-powerpc64.img
+XV6_IMG := xv6-powerpc64.img
+XV6_MEMFS_IMG := xv6memfs-powerpc64.img
+else ifeq ($(ARCH),powerpc64le)
+ARCHFLAG := -m64
+LDFLAGS += -m elf64lppc
+KERNEL_FILE := kernel-powerpc64le
+KERNELMEMFS_FILE := kernelmemfs-powerpc64le
+FS_IMG := fs-powerpc64le.img
+XV6_IMG := xv6-powerpc64le.img
+XV6_MEMFS_IMG := xv6memfs-powerpc64le.img
 else
 ARCHFLAG := -m32
 LDFLAGS += -m elf_i386
@@ -145,6 +202,18 @@ ifeq ($(ARCH),x86_64)
 SIGNBOOT := 0
 endif
 ifeq ($(ARCH),aarch64)
+SIGNBOOT := 0
+endif
+ifeq ($(ARCH),armv7)
+SIGNBOOT := 0
+endif
+ifeq ($(ARCH),powerpc)
+SIGNBOOT := 0
+endif
+ifeq ($(ARCH),powerpc64)
+SIGNBOOT := 0
+endif
+ifeq ($(ARCH),powerpc64le)
 SIGNBOOT := 0
 endif
 
