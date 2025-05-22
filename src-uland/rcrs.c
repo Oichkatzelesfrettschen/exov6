@@ -88,6 +88,8 @@ static int parse_config(const char *path, struct driver *d, int max) {
 
         if (starts_with(tok, "--timeout="))
           d[idx].ping_timeout = atoi(tok + 10);
+        else if (starts_with(tok, "--ping-timeout="))
+          d[idx].ping_timeout = atoi(tok + 15);
         else
           d[idx].argv[arg++] = tok;
       }
