@@ -54,3 +54,5 @@ void beatty_sched_init(void) {
   beatty_stream.head = &beatty_ops;
   exo_stream_register(&beatty_stream);
 }
+
+struct exo_sched_ops *beatty_sched_ops(void) { return &beatty_ops; }

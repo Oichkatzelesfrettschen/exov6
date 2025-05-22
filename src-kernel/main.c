@@ -39,8 +39,7 @@ int main(void) {
   binit();                           // buffer cache
   fileinit();                        // file table
   ideinit();                         // disk
-  dag_sched_init();                  // initialize DAG scheduler
-  beatty_sched_init();               // initialize Beatty scheduler
+  beatty_dag_stream_init();          // initialize combined Beatty+DAG scheduler
   exo_ipc_register(&exo_ipc_queue_ops);
   startothers();                              // start other processors
   kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()
