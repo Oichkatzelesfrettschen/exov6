@@ -119,6 +119,18 @@ limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
 
+16-BIT BUILD
+------------
+An experimental 16-bit configuration is also available.  ``setup.sh``
+installs the ``ia16-elf-gcc`` cross compiler.  Build the tiny 16-bit
+kernel and run it under Bochs with::
+
+    make ARCH=ia16
+    make bochs ARCH=ia16
+
+This creates ``kernel-ia16`` and ``xv6-ia16.img`` which Bochs can boot
+in real mode.
+
 MESON BUILD
 -----------
 The repository also includes a simple Meson setup.  After running
