@@ -119,6 +119,15 @@ limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
 
+MESON BUILD
+-----------
+The repository also includes a simple Meson setup.  After running
+``setup.sh`` the ``meson`` and ``ninja`` tools are installed.  Configure a
+build directory and compile with::
+
+    meson setup build
+    ninja -C build
+
 CODE FORMATTING
 ---------------
 The project includes a ``.clang-format`` file configured for the LLVM
