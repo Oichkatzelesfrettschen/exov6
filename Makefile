@@ -275,8 +275,9 @@ $(ULAND_DIR)/beatty_demo.o: $(ULAND_DIR)/user/beatty_demo.c
 
 $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-
 $(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/user/chan_dag_supervisor_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+$(ULAND_DIR)/chan_beatty_rcrs_demo.o: $(ULAND_DIR)/user/chan_beatty_rcrs_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 	# Generate simple C bindings from Cap'n Proto schemas
@@ -323,6 +324,7 @@ UPROGS=\
         _typed_chan_send\
         _typed_chan_recv\
         _chan_dag_supervisor_demo\
+        _chan_beatty_rcrs_demo\
         _libos_posix_test\
 
 

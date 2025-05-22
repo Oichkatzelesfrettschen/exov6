@@ -24,6 +24,8 @@ that provides traditional services on top of the primitive capability interface.
             Scheduling is expressed as a directed acyclic
             graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
 
+A second **Beatty scheduler** now complements the DAG engine. It alternates between two contexts according to the Beatty sequence derived from the golden ratio. Call `beatty_sched_set_tasks` with the capabilities of the tasks to activate it. The scheduler is registered as an exo stream so user-level runtimes can select it on demand.
+
 ## Capability System
 
 All privileged operations require an explicit capability token. Capabilities are unforgeable references that encode the rights a holder has over a particular object. They are used to control access to physical memory, I/O ports, endpoints and other resources. Messages may carry badges identifying the sender so that libraries can implement higher-level security policies entirely in user space.
@@ -168,11 +170,7 @@ operations they support.
 
 ## Supervisor
 
-The supervisor is a small user-space monitor started at boot. It launches
-all driver processes and restarts them if they exit unexpectedly. The
-supervisor passes the initial capability set to each driver and watches for
-death notifications so that dependent clients can reconnect to the newly
-started instance.
+The `rcrs` supervisor runs at boot and keeps drivers alive. It launches each program listed in `drivers.conf` and pings them periodically through an endpoint. If a driver fails to respond before the timeout expires `rcrs` kills and restarts it. Status reports show the process IDs and restart counts so clients can reconnect when a driver is replaced.
 
 ## Cap'n Proto IPC
 
@@ -355,7 +353,5 @@ main(void)
 
 ## Beatty Scheduler and Affine Runtime
 
-Work is underway on a Beatty scheduler that enables affine scheduling of
-tasks.  Once the implementation lands this section will describe its API
-and how the affine runtime integrates with existing DAG scheduling.
+The kernel now ships with a Beatty scheduler implementing an affine runtime. It dispatches two cooperating contexts following the golden-ratio Beatty sequence. Enable it with `beatty_sched_set_tasks` after registering the Beatty exo stream. Typed channels can exchange messages whenever the scheduler yields.
 
