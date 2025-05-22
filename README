@@ -245,7 +245,9 @@ exits. Build the repository and execute the demo after booting:
 USER DEMO: BEATTY AND DAG
 -------------------------
 ``beatty_dag_demo`` composes the Beatty and DAG schedulers through a
-combined exo stream. Build with ``make`` and run inside QEMU::
+combined exo stream. The demo prints how Beatty selects which task family
+runs while the DAG scheduler walks the dependency graph for that family.
+Build with ``make`` and run inside QEMU::
 
     $ beatty_dag_demo
 DRIVER SUPERVISOR
