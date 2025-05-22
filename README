@@ -224,3 +224,15 @@ $ supervisor start blk_driver
 ... later ...
 $ supervisor restart blk_driver
 ```
+
+SWIFT EXAMPLE
+-------------
+A small Swift demo is available in the ``swift`` directory. The script
+``swift/build_swift.sh`` compiles and runs ``hello.swift``.
+Execute it from the repository root:
+
+```
+$ ./swift/build_swift.sh
+```
+
+It should print ``Hello, world!``.
