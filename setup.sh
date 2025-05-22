@@ -143,6 +143,35 @@ for pkg in \
   openmpi-bin libopenmpi-dev mpich; do
   apt_pin_install "$pkg"
 done
+# Ensure swiftc is available; install official Swift toolchain if missing
+if ! command -v swiftc >/dev/null 2>&1; then
+  echo "swiftc not found, fetching official Swift toolchain" >&2
+  ARCH=$(uname -m)
+  OS_VERSION=$(. /etc/os-release; echo ${VERSION_ID})
+  SWIFT_VERSION=5.9.2
+  PLATFORM="ubuntu${OS_VERSION}"
+  case "$ARCH" in
+    x86_64|amd64)
+      SWIFT_FILE="swift-${SWIFT_VERSION}-RELEASE-${PLATFORM}.tar.gz"
+      ;;
+    aarch64|arm64)
+      SWIFT_FILE="swift-${SWIFT_VERSION}-RELEASE-${PLATFORM}-aarch64.tar.gz"
+      ;;
+    *)
+      echo "Unsupported architecture: $ARCH" >&2
+      SWIFT_FILE="swift-${SWIFT_VERSION}-RELEASE-${PLATFORM}.tar.gz"
+      ;;
+  esac
+  BASE_URL="https://download.swift.org/swift-${SWIFT_VERSION}-release/${PLATFORM}"
+  mkdir -p /opt/swift
+  curl -fsSL "${BASE_URL}/${SWIFT_FILE}" -o /tmp/swift.tar.gz
+  tar -xzf /tmp/swift.tar.gz -C /opt/swift --strip-components=1
+  rm /tmp/swift.tar.gz
+  echo 'export PATH=/opt/swift/usr/bin:$PATH' > /etc/profile.d/swift.sh
+  export PATH=/opt/swift/usr/bin:$PATH
+fi
+
+swiftc --version || true
 
 #— IA-16 (8086/286) cross-compiler
 IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
