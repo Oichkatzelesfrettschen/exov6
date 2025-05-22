@@ -20,6 +20,12 @@ dag_node_init(struct dag_node *n, exo_cap ctx)
 }
 
 void
+dag_node_set_priority(struct dag_node *n, int priority)
+{
+  n->priority = priority;
+}
+
+void
 dag_node_add_dep(struct dag_node *parent, struct dag_node *child)
 {
   struct dag_node_list *l = (struct dag_node_list *)kalloc();
@@ -34,8 +40,11 @@ dag_node_add_dep(struct dag_node *parent, struct dag_node *child)
 static void
 enqueue_ready(struct dag_node *n)
 {
-  n->next = ready_head;
-  ready_head = n;
+  struct dag_node **pp = &ready_head;
+  while(*pp && (*pp)->priority >= n->priority)
+    pp = &(*pp)->next;
+  n->next = *pp;
+  *pp = n;
 }
 
 void
