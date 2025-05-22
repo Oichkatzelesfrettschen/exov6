@@ -1,0 +1,14 @@
+repos:
+- repo: local
+  hooks:
+    - id: clang-format
+      name: clang-format
+      entry: clang-format -i
+      language: system
+      types: [c, h]
+    - id: clang-tidy
+      name: clang-tidy
+      entry: clang-tidy
+      language: system
+      pass_filenames: true
+      types: [c, h]
