@@ -261,6 +261,7 @@ void exo_stream_halt(void);
 void exo_stream_yield(void);
 void dag_sched_init(void);
 void beatty_sched_init(void);
+
 struct exo_sched_ops *dag_sched_ops(void);
 struct exo_sched_ops *beatty_sched_ops(void);
 void beatty_dag_stream_init(void);
