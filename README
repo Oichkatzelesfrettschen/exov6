@@ -119,17 +119,36 @@ limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
 
-16-BIT BUILD
-------------
-An experimental 16-bit configuration is also available.  ``setup.sh``
-installs the ``ia16-elf-gcc`` cross compiler.  Build the tiny 16-bit
-kernel and run it under Bochs with::
+CROSS-COMPILING
+---------------
+The ``setup.sh`` script installs cross-compilers for several
+architectures such as ARMv7, AArch64, PowerPC and PowerPC64 (both
+big-endian and little-endian).  Use the ``ARCH`` variable when invoking
+``make`` to select the desired target.  The current Makefile implements
+``ARCH=aarch64`` in addition to ``x86`` and ``x86_64``.
 
-    make ARCH=ia16
-    make bochs ARCH=ia16
+Build and run an AArch64 image with::
 
-This creates ``kernel-ia16`` and ``xv6-ia16.img`` which Bochs can boot
-in real mode.
+    make ARCH=aarch64
+    ./qemu-aarch64.sh
+
+Other cross-compilers are ready for experimentation.  Example commands
+for architectures that do not yet have dedicated run scripts are::
+
+    make ARCH=arm        # ARMv7
+    qemu-system-arm -M virt -nographic -kernel kernel-arm
+
+    make ARCH=powerpc    # 32-bit PowerPC
+    qemu-system-ppc -M g3beige -nographic -kernel kernel-powerpc
+
+    make ARCH=ppc64      # PowerPC64 big-endian
+    qemu-system-ppc64 -M pseries -nographic -kernel kernel-ppc64
+
+    make ARCH=ppc64le    # PowerPC64 little-endian
+    qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
+
+When additional ``ARCH`` values are implemented in the Makefile these
+commands will build and boot the corresponding images.
 
 MESON BUILD
 -----------
