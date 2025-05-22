@@ -401,6 +401,7 @@ _wc\
         _chan_dag_supervisor_demo\
         _chan_beatty_rcrs_demo\
         _libos_posix_test\
+        _libos_posix_extra_test\
 
 
 ifeq ($(ARCH),x86_64)
