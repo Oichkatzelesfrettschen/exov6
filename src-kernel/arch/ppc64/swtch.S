@@ -1,0 +1,3 @@
+.globl swtch
+swtch:
+    blr
