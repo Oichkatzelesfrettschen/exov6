@@ -16,6 +16,11 @@ main(int argc, char *argv[])
     DriverPing out = {0};
     ping_chan_recv(c, cap, &out);
     printf(1, "typed channel message %d\n", out.value);
+
+    // Demonstrate size validation by calling the generic endpoint helpers
+    char bad[1] = {0};
+    int r = chan_endpoint_send(&c->base, cap, bad, sizeof(bad));
+    printf(1, "bad send result %d\n", r);
     ping_chan_destroy(c);
     exit();
 }
