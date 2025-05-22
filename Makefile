@@ -1,74 +1,88 @@
-KERNEL_DIR : = src - kernel ULAND_DIR : = src - uland LIBOS_DIR
-    : = libos
+KERNEL_DIR := src-kernel
+ULAND_DIR  := src-uland
+LIBOS_DIR  := libos
 
-          OBJS =
-              $(KERNEL_DIR) / bio.o $(KERNEL_DIR) / console.o $(KERNEL_DIR) /
-              exec.o $(KERNEL_DIR) / file.o $(KERNEL_DIR) / fs.o $(KERNEL_DIR) /
-              ide.o $(KERNEL_DIR) / ioapic.o $(KERNEL_DIR) /
-              kalloc.o $(KERNEL_DIR) / kbd.o $(KERNEL_DIR) /
-              lapic.o $(KERNEL_DIR) / log.o $(KERNEL_DIR) /
-              main.o $(KERNEL_DIR) / mp.o $(KERNEL_DIR) /
-              picirq.o $(KERNEL_DIR) / pipe.o $(KERNEL_DIR) /
-              proc.o $(KERNEL_DIR) / sleeplock.o $(KERNEL_DIR) /
-              spinlock.o $(KERNEL_DIR) / rcu.o $(KERNEL_DIR) /
-              string.o $(KERNEL_DIR) / syscall.o $(KERNEL_DIR) /
-              sysfile.o $(KERNEL_DIR) / sysproc.o $(KERNEL_DIR) /
-              trapasm.o $(KERNEL_DIR) / trap.o $(KERNEL_DIR) /
-              uart.o $(KERNEL_DIR) / vm.o $(KERNEL_DIR) / exo.o $(KERNEL_DIR) /
-              kernel / exo_cpu.o $(KERNEL_DIR) / kernel /
-              exo_disk.o $(KERNEL_DIR) / kernel / exo_ipc.o $(KERNEL_DIR) /
-              kernel / exo_ipc_queue.o $(KERNEL_DIR) /
-              exo_stream.o $(KERNEL_DIR) / cap.o $(KERNEL_DIR) /
-              cap_table.o $(KERNEL_DIR) / fastipc.o $(KERNEL_DIR) /
-              endpoint.o $(KERNEL_DIR) / dag_sched.o $(KERNEL_DIR) /
-              beatty_sched.o
+OBJS = \
+    $(KERNEL_DIR)/bio.o \
+    $(KERNEL_DIR)/console.o \
+    $(KERNEL_DIR)/exec.o \
+    $(KERNEL_DIR)/file.o \
+    $(KERNEL_DIR)/fs.o \
+    $(KERNEL_DIR)/ide.o \
+    $(KERNEL_DIR)/ioapic.o \
+    $(KERNEL_DIR)/kalloc.o \
+    $(KERNEL_DIR)/kbd.o \
+    $(KERNEL_DIR)/lapic.o \
+    $(KERNEL_DIR)/log.o \
+    $(KERNEL_DIR)/main.o \
+    $(KERNEL_DIR)/mp.o \
+    $(KERNEL_DIR)/picirq.o \
+    $(KERNEL_DIR)/pipe.o \
+    $(KERNEL_DIR)/proc.o \
+    $(KERNEL_DIR)/sleeplock.o \
+    $(KERNEL_DIR)/spinlock.o \
+    $(KERNEL_DIR)/rcu.o \
+    $(KERNEL_DIR)/string.o \
+    $(KERNEL_DIR)/syscall.o \
+    $(KERNEL_DIR)/sysfile.o \
+    $(KERNEL_DIR)/sysproc.o \
+    $(KERNEL_DIR)/trapasm.o \
+    $(KERNEL_DIR)/trap.o \
+    $(KERNEL_DIR)/uart.o \
+    $(KERNEL_DIR)/vm.o \
+    $(KERNEL_DIR)/exo.o \
+    $(KERNEL_DIR)/kernel/exo_cpu.o \
+    $(KERNEL_DIR)/kernel/exo_disk.o \
+    $(KERNEL_DIR)/kernel/exo_ipc.o \
+    $(KERNEL_DIR)/kernel/exo_ipc_queue.o \
+    $(KERNEL_DIR)/exo_stream.o \
+    $(KERNEL_DIR)/cap.o \
+    $(KERNEL_DIR)/cap_table.o \
+    $(KERNEL_DIR)/fastipc.o \
+    $(KERNEL_DIR)/endpoint.o \
+    $(KERNEL_DIR)/dag_sched.o \
+    $(KERNEL_DIR)/beatty_sched.o
 
-                  ifeq($(ARCH), x86_64) OBJS +=
-      $(KERNEL_DIR) / mmu64.o endif
+ifeq ($(ARCH),x86_64)
+OBJS += $(KERNEL_DIR)/mmu64.o
+endif
 
 #Cross - compiling(e.g., on Mac OS X)
-#TOOLPREFIX = i386 - jos - elf
+#TOOLPREFIX = i386-jos-elf
 
 #Using native tools(e.g., on X86 Linux)
 #TOOLPREFIX =
 
 #Try to infer the correct TOOLPREFIX if not set
-                          ifndef TOOLPREFIX TOOLPREFIX
-    : = $(shell if i386 - jos - elf - objdump - i 2 > &1 |
-              grep '^elf32-i386$$' > / dev / null 2 > &1;
-          then echo 'i386-jos-elf-';
-          elif objdump - i 2 > &1 | grep 'elf32-i386' > / dev / null 2 > &1;
-          then echo ''; else echo "***" 1 > &2;
-          echo
-          "*** Error: Couldn't find an i386-*-elf version of GCC/binutils." 1 >
-          &2;
-          echo
-          "*** Is the directory with i386-jos-elf-gcc in your PATH?" 1 > &2;
-          echo
-          "*** If your i386-*-elf toolchain is installed with a command" 1 > &2;
-          echo
-          "*** prefix other than 'i386-jos-elf-', set your TOOLPREFIX" 1 > &2;
-          echo
-          "*** environment variable to that prefix and run 'make' again." 1 >
-          &2;
-          echo
-          "*** To turn off this error, run 'gmake TOOLPREFIX= ...'." 1 > &2;
-          echo "***" 1 > &2; exit 1; fi) endif
+ifndef TOOLPREFIX
+TOOLPREFIX := $(shell if i386-jos-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/dev/null 2>&1; \
+    then echo 'i386-jos-elf-'; \
+    elif objdump -i 2>&1 | grep 'elf32-i386' >/dev/null 2>&1; \
+    then echo ''; else echo "***" 1>&2; \
+    echo "*** Error: Couldn't find an i386-*-elf version of GCC/binutils." 1>&2; \
+    echo "*** Is the directory with i386-jos-elf-gcc in your PATH?" 1>&2; \
+    echo "*** If your i386-*-elf toolchain is installed with a command" 1>&2; \
+    echo "*** prefix other than 'i386-jos-elf-', set your TOOLPREFIX" 1>&2; \
+    echo "*** environment variable to that prefix and run 'make' again." 1>&2; \
+    echo "*** To turn off this error, run 'gmake TOOLPREFIX= ...'." 1>&2; \
+    echo "***" 1>&2; exit 1; fi)
+endif
 
 #If the makefile can't find QEMU, specify its path here
-#QEMU = qemu - system - i386
+#QEMU = qemu-system-i386
 
 #Try to infer the correct QEMU if not provided.Leave empty when none found.
-          ifndef QEMU QEMU
-    : = $(shell which qemu - system - aarch64 2 > / dev / null ||
-          which qemu - system - x86_64 2 > / dev / null ||
-          which qemu - system - i386 2 > / dev / null ||
-          which qemu 2 > / dev / null) endif
+ifndef QEMU
+QEMU := $(shell which qemu-system-aarch64 2>/dev/null || \
+    which qemu-system-x86_64 2>/dev/null || \
+    which qemu-system-i386 2>/dev/null || \
+    which qemu 2>/dev/null)
+endif
 
-          ARCH
-      ? = x86_64 CSTD ? = gnu2x CLANG_TIDY ? = clang - tidy TIDY_SRCS
-                                           : = $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
-
+ARCH ?= x86_64
+CSTD ?= gnu2x
+CLANG_TIDY ?= clang-tidy
+TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
 
 ifeq ($(ARCH),x86_64)
@@ -254,10 +268,10 @@ $(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
 $(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/user/typed_chan_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
-        $(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(ULAND_DIR)/beatty_demo.o: $(ULAND_DIR)/user/beatty_demo.c
-       $(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
 	$(CC) $(CFLAGS) -c -o $@ $<
