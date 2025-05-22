@@ -24,7 +24,7 @@ apt-get update -y
 #— core build tools, formatters, analysis, science libs
 for pkg in \
   build-essential gcc g++ clang lld llvm \
-  clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig pre-commit \
+  clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig shellcheck pre-commit \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip \
@@ -53,7 +53,8 @@ done
 
 pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools
+  tensorflow-model-optimization mlflow onnxruntime-tools \
+  black flake8
 
 # Fallback to pip if pre-commit is still missing
 if ! command -v pre-commit >/dev/null 2>&1; then
