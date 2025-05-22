@@ -92,20 +92,31 @@ exo_unbind_page(page);
   `target`.  Cooperative schedulers store contexts in user space and
   resume them with this call.
 
+The scheduler iterates over tasks through the **exo_stream** callbacks
+`exo_stream_yield()` and `exo_stream_halt()`.  Schedulers such as the DAG
+engine register their `struct exo_sched_ops` with
+`exo_stream_register()` so the kernel can invoke the appropriate logic
+whenever the current task yields or no runnable work remains.
+
 ### IPC
 
 - `exo_send(dest, buf, len)` – enqueue a message to the destination
   capability.
 - `exo_recv(src, buf, len)` – receive data from the source capability.
+- `zipc_call(msg)` – perform a fast IPC syscall using the `zipc_msg_t`
+  structure defined in `ipc.h`.
+
+Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
+and automatically serialize Cap'n Proto messages.
 
 The libOS builds higher level abstractions such as processes and files
 by combining these primitives.
 
 ## Running the Demos
 
-Two small user programs demonstrate the capability API.  After building
-the repository the filesystem image contains `exo_stream_demo` and
-`dag_demo`.
+Several user programs demonstrate the capability API.  After building
+the repository the filesystem image contains `exo_stream_demo`,
+`dag_demo`, `typed_chan_demo` and `chan_dag_supervisor_demo`.
 
 1. Build everything:
 
@@ -119,11 +130,13 @@ the repository the filesystem image contains `exo_stream_demo` and
    make qemu-nox
    ```
 
-3. At the xv6 shell run either demo:
+3. At the xv6 shell run one of the demos:
 
    ```
    $ exo_stream_demo
    $ dag_demo
+   $ typed_chan_demo
+   $ chan_dag_supervisor_demo
    ```
 
 Both programs print messages from their stub implementations showing how

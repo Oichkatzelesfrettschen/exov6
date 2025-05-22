@@ -268,7 +268,11 @@ $(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/user/typed_chan_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
 	$(CC) $(CFLAGS) -c -o $@ $<
+
 $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/user/chan_dag_supervisor_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 	# Generate simple C bindings from Cap'n Proto schemas
@@ -313,6 +317,7 @@ UPROGS=\
         _typed_chan_demo\
         _typed_chan_send\
         _typed_chan_recv\
+        _chan_dag_supervisor_demo\
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))

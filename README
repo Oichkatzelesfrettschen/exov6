@@ -160,6 +160,18 @@ serialized when sending.  Building with ``make`` will compile
 generated, run ``typed_chan_demo`` inside QEMU to see a Cap'n Proto
 message sent and received through the typed channel API.
 
+USER DEMO: CHANNELS, DAG SCHEDULER AND SUPERVISOR
+-------------------------------------------------
+``chan_dag_supervisor_demo`` combines typed channels, the DAG scheduler and
+the supervisor helper.  Building the repository with ``make`` compiles the
+demo and its helper ``typed_chan_recv``.  After booting with ``make qemu-nox``
+run::
+
+    $ chan_dag_supervisor_demo
+
+It spawns ``typed_chan_recv`` via ``driver_spawn``, sends a typed ping
+message, and yields through the DAG stream before exiting.
+
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.
