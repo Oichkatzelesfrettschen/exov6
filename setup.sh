@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
+FAIL_LOG=/var/log/setup_failures.log
+: >"$FAIL_LOG"
 export DEBIAN_FRONTEND=noninteractive
 
 #— helper to pin to the repo’s exact version if it exists
+pip_install(){
+  pkg="$1"
+  if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
+    echo "Warning: pip install $pkg failed" >&2
+    echo "pip $pkg" >>"$FAIL_LOG"
+  fi
+}
 apt_pin_install(){
   pkg="$1"
   ver=$(apt-cache show "$pkg" 2>/dev/null \
@@ -10,11 +19,23 @@ apt_pin_install(){
   if [ -n "$ver" ]; then
     if ! apt-get install -y "${pkg}=${ver}"; then
       echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
+      echo "apt ${pkg}=${ver}" >>"$FAIL_LOG"
     fi
   else
     if ! apt-get install -y "$pkg"; then
       echo "Warning: apt-get install $pkg failed" >&2
+      echo "apt $pkg" >>"$FAIL_LOG"
     fi
+  fi
+
+  # Fallback to pip for python packages
+  if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+    case "$pkg" in
+      python3-*)
+        pip_pkg="${pkg#python3-}"
+        pip_install "$pip_pkg"
+        ;;
+    esac
   fi
 }
 
@@ -23,7 +44,7 @@ for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
-apt-get update -y || true
+apt-get update -y || { echo "Warning: apt-get update failed" >&2; echo "apt update" >>"$FAIL_LOG"; }
 
 #— core build tools, formatters, analysis, science libs
 for pkg in \
@@ -41,7 +62,7 @@ done
 
 # Ensure meson is available even if the package was missing
 if ! command -v meson >/dev/null 2>&1; then
-  pip3 install --no-cache-dir meson
+  pip_install meson
 fi
 
 
@@ -55,22 +76,24 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
-pip3 install --no-cache-dir \
+for pip_pkg in \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo pytest pre-commit
+  black flake8 pyperf py-cpuinfo pytest pre-commit; do
+  pip_install "$pip_pkg"
+done
 
 # Fallback to pip if pre-commit is still missing
 if ! command -v pre-commit >/dev/null 2>&1; then
-  pip3 install --no-cache-dir pre-commit || true
+  pip_install pre-commit || true
 fi
 
 if ! command -v pytest >/dev/null 2>&1; then
-  pip3 install --no-cache-dir pytest || true
+  pip_install pytest || true
 fi
 
 if ! command -v compiledb >/dev/null 2>&1; then
-  pip3 install --no-cache-dir compiledb || true
+  pip_install compiledb || true
 fi
 
 #— QEMU emulation for foreign binaries
@@ -180,9 +203,16 @@ if ! command -v swiftc >/dev/null 2>&1; then
   esac
   BASE_URL="https://download.swift.org/swift-${SWIFT_VERSION}-release/${PLATFORM}"
   mkdir -p /opt/swift
-  curl -fsSL "${BASE_URL}/${SWIFT_FILE}" -o /tmp/swift.tar.gz
-  tar -xzf /tmp/swift.tar.gz -C /opt/swift --strip-components=1
-  rm /tmp/swift.tar.gz
+  if ! curl -fsSL "${BASE_URL}/${SWIFT_FILE}" -o /tmp/swift.tar.gz; then
+    echo "Warning: failed to download Swift toolchain" >&2
+    echo "download swift" >>"$FAIL_LOG"
+  else
+    tar -xzf /tmp/swift.tar.gz -C /opt/swift --strip-components=1 || {
+      echo "Warning: extracting Swift toolchain failed" >&2
+      echo "extract swift" >>"$FAIL_LOG"
+    }
+    rm /tmp/swift.tar.gz
+  fi
   echo 'export PATH=/opt/swift/usr/bin:$PATH' > /etc/profile.d/swift.sh
   export PATH=/opt/swift/usr/bin:$PATH
 fi
@@ -192,17 +222,27 @@ swiftc --version || true
 #— IA-16 (8086/286) cross-compiler
 IA16_VER=$(curl -fsSL https://api.github.com/repos/tkchia/gcc-ia16/releases/latest \
            | awk -F\" '/tag_name/{print $4; exit}')
-curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
-  | tar -Jx -C /opt
+if ! curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER}/ia16-elf-gcc-linux64.tar.xz" \
+  | tar -Jx -C /opt; then
+  echo "Warning: failed to install IA16 cross compiler" >&2
+  echo "download ia16" >>"$FAIL_LOG"
+fi
 echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
 export PATH=/opt/ia16-elf-gcc/bin:$PATH
 
 #— protoc installer (pinned)
 PROTO_VERSION=25.1
-curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
-  -o /tmp/protoc.zip
-unzip -d /usr/local /tmp/protoc.zip
-rm /tmp/protoc.zip
+if ! curl -fsSL "https://raw.githubusercontent.com/protocolbuffers/protobuf/v${PROTO_VERSION}/protoc-${PROTO_VERSION}-linux-x86_64.zip" \
+  -o /tmp/protoc.zip; then
+  echo "Warning: failed to download protoc" >&2
+  echo "download protoc" >>"$FAIL_LOG"
+else
+  unzip -d /usr/local /tmp/protoc.zip || {
+    echo "Warning: failed to unzip protoc" >&2
+    echo "unzip protoc" >>"$FAIL_LOG"
+  }
+  rm /tmp/protoc.zip
+fi
 
 #— gmake alias
 command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gmake
@@ -213,12 +253,16 @@ if command -v compiledb >/dev/null 2>&1; then
   compiledb -n make >/dev/null || status=$?
   if [ $status -ne 0 ] || [ ! -f compile_commands.json ]; then
     echo "Warning: failed to generate compile_commands.json (exit code $status)" >&2
+    echo "compiledb" >>"$FAIL_LOG"
   fi
 fi
 
 # Install pre-commit hooks if possible
 if command -v pre-commit >/dev/null 2>&1; then
-  pre-commit install >/dev/null 2>&1 || true
+  if ! pre-commit install >/dev/null 2>&1; then
+    echo "Warning: pre-commit install failed" >&2
+    echo "pre-commit install" >>"$FAIL_LOG"
+  fi
 fi
 
 #— clean up
