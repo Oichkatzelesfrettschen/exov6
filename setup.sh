@@ -10,12 +10,10 @@ apt_pin_install(){
   if [ -n "$ver" ]; then
     if ! apt-get install -y "${pkg}=${ver}"; then
       echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
-      exit 1
     fi
   else
     if ! apt-get install -y "$pkg"; then
       echo "Warning: apt-get install $pkg failed" >&2
-      exit 1
     fi
   fi
 }
@@ -25,7 +23,7 @@ for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
-apt-get update -y
+apt-get update -y || true
 
 #— core build tools, formatters, analysis, science libs
 for pkg in \
@@ -60,11 +58,15 @@ done
 pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo
+  black flake8 pyperf py-cpuinfo pytest pre-commit
 
 # Fallback to pip if pre-commit is still missing
 if ! command -v pre-commit >/dev/null 2>&1; then
   pip3 install --no-cache-dir pre-commit || true
+fi
+
+if ! command -v pytest >/dev/null 2>&1; then
+  pip3 install --no-cache-dir pytest || true
 fi
 
 if ! command -v compiledb >/dev/null 2>&1; then
