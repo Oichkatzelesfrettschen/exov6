@@ -54,7 +54,7 @@ done
 pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8
+  black flake8 pyperf py-cpuinfo
 
 # Fallback to pip if pre-commit is still missing
 if ! command -v pre-commit >/dev/null 2>&1; then
@@ -143,6 +143,12 @@ for pkg in \
   bochs bochs-sdl \
   gdb lldb perf gcovr lcov bcc-tools bpftrace \
   openmpi-bin libopenmpi-dev mpich; do
+  apt_pin_install "$pkg"
+done
+
+#— ISA optimization and benchmarking tools
+for pkg in \
+  nasm yasm cpuid msr-tools numactl oprofile libpfm4-dev; do
   apt_pin_install "$pkg"
 done
 # Ensure swiftc is available; install official Swift toolchain if missing
