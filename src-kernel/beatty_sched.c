@@ -3,24 +3,60 @@
 #include "spinlock.h"
 #include "exo_stream.h"
 #include "kernel/exo_cpu.h"
-#include "math_core.h"
 
 static struct spinlock beatty_lock;
 static struct exo_sched_ops beatty_ops;
 static struct exo_stream beatty_stream;
 
-static exo_cap task_a;
-static exo_cap task_b;
-static uint64 na, nb;
-static double alpha;
-static double beta;
+static exo_cap *tasks;
+static double *weights;
+static uint64 *counts;
+static int ntasks;
 
-void beatty_sched_set_tasks(exo_cap a, exo_cap b) {
+void
+beatty_sched_set_tasks(const exo_cap *t, const double *w, int n)
+{
   acquire(&beatty_lock);
-  task_a = a;
-  task_b = b;
-  na = 1;
-  nb = 1;
+
+  if(tasks)
+    kfree((char*)tasks);
+  if(weights)
+    kfree((char*)weights);
+  if(counts)
+    kfree((char*)counts);
+
+  tasks = 0;
+  weights = 0;
+  counts = 0;
+  ntasks = 0;
+
+  if(n <= 0 || n * sizeof(exo_cap) > PGSIZE ||
+     n * sizeof(double) > PGSIZE || n * sizeof(uint64) > PGSIZE){
+    release(&beatty_lock);
+    return;
+  }
+
+  tasks = (exo_cap*)kalloc();
+  weights = (double*)kalloc();
+  counts = (uint64*)kalloc();
+  if(!tasks || !weights || !counts){
+    if(tasks) kfree((char*)tasks);
+    if(weights) kfree((char*)weights);
+    if(counts) kfree((char*)counts);
+    tasks = 0;
+    weights = 0;
+    counts = 0;
+    release(&beatty_lock);
+    return;
+  }
+
+  memmove(tasks, t, n * sizeof(exo_cap));
+  memmove(weights, w, n * sizeof(double));
+  for(int i = 0; i < n; i++)
+    counts[i] = 1;
+
+  ntasks = n;
+
   release(&beatty_lock);
 }
 
@@ -28,15 +64,19 @@ static void beatty_halt(void) { /* nothing */ }
 
 static void beatty_yield(void) {
   acquire(&beatty_lock);
-  double va = alpha * (double)na;
-  double vb = beta * (double)nb;
-  exo_cap next;
-  if ((uint64)va < (uint64)vb) {
-    next = task_a;
-    na++;
-  } else {
-    next = task_b;
-    nb++;
+  exo_cap next = {0};
+  if(ntasks > 0){
+    int idx = 0;
+    uint64 best = (uint64)(weights[0] * (double)counts[0]);
+    for(int i = 1; i < ntasks; i++){
+      uint64 v = (uint64)(weights[i] * (double)counts[i]);
+      if(v < best){
+        best = v;
+        idx = i;
+      }
+    }
+    next = tasks[idx];
+    counts[idx]++;
   }
   release(&beatty_lock);
 
@@ -46,8 +86,10 @@ static void beatty_yield(void) {
 
 void beatty_sched_init(void) {
   initlock(&beatty_lock, "beatty");
-  alpha = phi();
-  beta = alpha / (alpha - 1.0);
+  tasks = 0;
+  weights = 0;
+  counts = 0;
+  ntasks = 0;
   beatty_ops.halt = beatty_halt;
   beatty_ops.yield = beatty_yield;
   beatty_ops.next = 0;
