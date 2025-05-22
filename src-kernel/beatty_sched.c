@@ -14,6 +14,8 @@ static exo_cap task_b;
 static uint64 na, nb;
 static double alpha;
 static double beta;
+static int weight_a = 1;
+static int weight_b = 1;
 
 void beatty_sched_set_tasks(exo_cap a, exo_cap b) {
   acquire(&beatty_lock);
@@ -24,20 +26,40 @@ void beatty_sched_set_tasks(exo_cap a, exo_cap b) {
   release(&beatty_lock);
 }
 
+void beatty_sched_set_weights(int wa, int wb) {
+  if (wa <= 0)
+    wa = 1;
+  if (wb <= 0)
+    wb = 1;
+  acquire(&beatty_lock);
+  weight_a = wa;
+  weight_b = wb;
+  na = 1;
+  nb = 1;
+  alpha = (double)(wa + wb) / (double)wa;
+  beta = (double)(wa + wb) / (double)wb;
+  release(&beatty_lock);
+}
+
+static int beatty_pick(void) {
+  double va = alpha * (double)na;
+  double vb = beta * (double)nb;
+  int ret;
+  if ((uint64)va < (uint64)vb) {
+    na++;
+    ret = 0;
+  } else {
+    nb++;
+    ret = 1;
+  }
+  return ret;
+}
+
 static void beatty_halt(void) { /* nothing */ }
 
 static void beatty_yield(void) {
   acquire(&beatty_lock);
-  double va = alpha * (double)na;
-  double vb = beta * (double)nb;
-  exo_cap next;
-  if ((uint64)va < (uint64)vb) {
-    next = task_a;
-    na++;
-  } else {
-    next = task_b;
-    nb++;
-  }
+  exo_cap next = beatty_pick() == 0 ? task_a : task_b;
   release(&beatty_lock);
 
   if (next.pa)
@@ -50,7 +72,7 @@ void beatty_sched_init(void) {
   beta = alpha / (alpha - 1.0);
   beatty_ops.halt = beatty_halt;
   beatty_ops.yield = beatty_yield;
-  beatty_ops.next = 0;
+  beatty_ops.next = dag_sched_get_ops();
   beatty_stream.head = &beatty_ops;
   exo_stream_register(&beatty_stream);
 }

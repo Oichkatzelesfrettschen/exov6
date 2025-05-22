@@ -17,12 +17,19 @@ dag_node_init(struct dag_node *n, exo_cap ctx)
 {
   memset(n, 0, sizeof(*n));
   n->ctx = ctx;
+  n->weight = 1;
 }
 
 void
 dag_node_set_priority(struct dag_node *n, int priority)
 {
   n->priority = priority;
+}
+
+void
+dag_node_set_weight(struct dag_node *n, int weight)
+{
+  n->weight = weight > 0 ? weight : 1;
 }
 
 void
@@ -41,7 +48,8 @@ static void
 enqueue_ready(struct dag_node *n)
 {
   struct dag_node **pp = &ready_head;
-  while(*pp && (*pp)->priority >= n->priority)
+  int prio = n->priority * n->weight;
+  while(*pp && ((*pp)->priority * (*pp)->weight) >= prio)
     pp = &(*pp)->next;
   n->next = *pp;
   *pp = n;
@@ -79,19 +87,36 @@ dag_mark_done(struct dag_node *n)
 static void
 dag_yield(void)
 {
-  struct dag_node *n;
+  struct dag_node *a, *b = 0;
 
   acquire(&dag_lock);
-  n = dequeue_ready();
+  a = dequeue_ready();
+  if(a)
+    b = dequeue_ready();
   release(&dag_lock);
 
-  if(!n)
+  if(!a)
     return;
 
-  exo_yield_to(n->ctx);
+  if(!b){
+    exo_yield_to(a->ctx);
+    acquire(&dag_lock);
+    dag_mark_done(a);
+    release(&dag_lock);
+    return;
+  }
+
+  beatty_sched_set_tasks(a->ctx, b->ctx);
+  beatty_sched_set_weights(a->weight, b->weight);
+  int pick = beatty_sched_pick();
+  struct dag_node *run = pick == 0 ? a : b;
+  struct dag_node *rest = pick == 0 ? b : a;
+
+  exo_yield_to(run->ctx);
 
   acquire(&dag_lock);
-  dag_mark_done(n);
+  dag_mark_done(run);
+  enqueue_ready(rest);
   release(&dag_lock);
 }
 
@@ -109,6 +134,10 @@ dag_sched_init(void)
   dag_ops.yield = dag_yield;
   dag_ops.next = 0;
   dag_stream.head = &dag_ops;
-  exo_stream_register(&dag_stream);
+}
+
+struct exo_sched_ops *dag_sched_get_ops(void)
+{
+  return &dag_ops;
 }
 
