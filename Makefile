@@ -324,6 +324,7 @@ UPROGS=\
         _typed_chan_recv\
         _chan_dag_supervisor_demo\
         _libos_posix_test\
+        _libos_posix_ext_test\
 
 
 ifeq ($(ARCH),x86_64)

@@ -93,3 +93,59 @@ int libos_spawn(const char *path, char *const argv[]) {
     }
     return pid;
 }
+
+int libos_fstat(int fd, struct stat *st) {
+    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    return filestat(fd_table[fd], st);
+}
+
+int libos_stat(const char *path, struct stat *st) {
+    int fd = libos_open(path, 0);
+    if(fd < 0)
+        return -1;
+    int r = libos_fstat(fd, st);
+    libos_close(fd);
+    return r;
+}
+
+int libos_unlink(const char *path) {
+    struct vfile *vf = lookup_vfile(path);
+    if(!vf)
+        return -1;
+    vf->used = 0;
+    // close descriptors referring to this vfile
+    for(int i = 0; i < LIBOS_MAXFD; i++) {
+        if(fd_table[i] && fd_table[i]->cap.id == vf->cap.id) {
+            fileclose(fd_table[i]);
+            fd_table[i] = 0;
+        }
+    }
+    return 0;
+}
+
+int libos_lseek(int fd, size_t off, int whence) {
+    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    struct file *f = fd_table[fd];
+    size_t newoff;
+    switch(whence) {
+    case 0: // SEEK_SET
+        newoff = off;
+        break;
+    case 1: // SEEK_CUR
+        newoff = f->off + off;
+        break;
+    case 2: {
+        struct stat st;
+        if(libos_fstat(fd, &st) < 0)
+            return -1;
+        newoff = st.size + off;
+        break;
+    }
+    default:
+        return -1;
+    }
+    f->off = newoff;
+    return newoff;
+}
