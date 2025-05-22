@@ -12,11 +12,20 @@ static struct dag_node *ready_head;
 static struct exo_sched_ops dag_ops;
 static struct exo_stream dag_stream;
 
+static inline int
+node_weight(struct dag_node *n)
+{
+  return n->priority;
+}
+
 void
 dag_node_init(struct dag_node *n, exo_cap ctx)
 {
   memset(n, 0, sizeof(*n));
   n->ctx = ctx;
+  n->deps = 0;
+  n->ndeps = 0;
+  n->done = 0;
 }
 
 void
@@ -35,13 +44,18 @@ dag_node_add_dep(struct dag_node *parent, struct dag_node *child)
   l->next = parent->children;
   parent->children = l;
   child->pending++;
+  if(child->deps == 0)
+    child->deps = (struct dag_node **)kalloc();
+  if(child->deps)
+    child->deps[child->ndeps++] = parent;
 }
 
 static void
 enqueue_ready(struct dag_node *n)
 {
+  int w = node_weight(n);
   struct dag_node **pp = &ready_head;
-  while(*pp && (*pp)->priority >= n->priority)
+  while(*pp && node_weight(*pp) >= w)
     pp = &(*pp)->next;
   n->next = *pp;
   *pp = n;
@@ -51,7 +65,7 @@ void
 dag_sched_submit(struct dag_node *n)
 {
   acquire(&dag_lock);
-  if(n->pending == 0)
+  if(n->pending == 0 && !n->done)
     enqueue_ready(n);
   release(&dag_lock);
 }
@@ -69,6 +83,7 @@ static void
 dag_mark_done(struct dag_node *n)
 {
   struct dag_node_list *l;
+  n->done = 1;
   for(l = n->children; l; l = l->next){
     struct dag_node *child = l->node;
     if(--child->pending == 0)
