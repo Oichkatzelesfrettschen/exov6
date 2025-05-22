@@ -61,6 +61,6 @@ cap_verify(exo_cap c)
 {
     hash256_t h;
     compute_tag(c.id, c.rights, c.owner, &h);
-    return memcmp(h.bytes, c.auth_tag.bytes, sizeof(h.bytes)) == 0;
+    return memcmp(h.parts, c.auth_tag.parts, sizeof(h.parts)) == 0;
 }
 
