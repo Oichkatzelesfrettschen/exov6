@@ -344,6 +344,9 @@ $(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
 $(ULAND_DIR)/beatty_demo.o: $(ULAND_DIR)/user/beatty_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+$(ULAND_DIR)/beatty_dag_demo.o: $(ULAND_DIR)/user/beatty_dag_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
 $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/user/chan_dag_supervisor_demo.c
@@ -381,14 +384,15 @@ UPROGS=\
 	_sh\
 	_stressfs\
 	_usertests\
-        _wc\
-        _zombie\
-        _phi\
-        _exo_stream_demo\
-        _dag_demo\
-        _beatty_demo\
-        _ipc_test\
-        _nbtest\
+_wc\
+	_zombie\
+	_phi\
+	_exo_stream_demo\
+	_dag_demo\
+	_beatty_demo\
+	_beatty_dag_demo\
+	_ipc_test\
+	_nbtest\
         _rcrs\
         _pingdriver\
         _typed_chan_demo\
@@ -499,6 +503,7 @@ EXTRA=\
         $(ULAND_DIR)/phi.c \
         $(ULAND_DIR)/user/exo_stream_demo.c \
         $(ULAND_DIR)/user/dag_demo.c \
+        $(ULAND_DIR)/user/beatty_dag_demo.c \
         $(ULAND_DIR)/printf.c $(ULAND_DIR)/umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
