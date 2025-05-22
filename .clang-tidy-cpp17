@@ -2,4 +2,4 @@ Checks: '-*,bugprone-*,clang-analyzer-*,modernize-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
 FormatStyle: file
-Standard: c23
+Standard: c++17
