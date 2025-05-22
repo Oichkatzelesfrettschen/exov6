@@ -151,7 +151,9 @@ endif
 
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto
+# Optional CPU optimization flags
+CFLAGS += $(CPUFLAGS)
+ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
 
 	#Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
