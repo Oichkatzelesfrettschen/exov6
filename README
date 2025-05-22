@@ -212,6 +212,12 @@ run::
 It spawns ``typed_chan_recv`` via ``driver_spawn``, sends a typed ping
 message, and yields through the DAG stream before exiting.
 
+USER DEMO: SIMPLE DAG
+---------------------
+``dag_demo`` constructs a small weighted DAG using the user-space
+scheduler helpers.  Running the demo prints the order nodes are executed
+according to their weights and dependencies.
+
 
 USER DEMO: BEATTY SCHEDULER
 --------------------------
