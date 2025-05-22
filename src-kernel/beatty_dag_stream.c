@@ -2,6 +2,19 @@
 #include "defs.h"
 #include "exo_stream.h"
 
+/*
+ * Combined Beatty and DAG scheduler stream.
+ *
+ * The kernel first initializes the individual scheduler modules
+ * (dag_sched_init() and beatty_sched_init()) and then registers a
+ * single exo stream that chains them together.  Beatty dispatches
+ * according to its irrational weights and falls through to the DAG
+ * scheduler when nodes become ready.  Call beatty_dag_stream_init()
+ * early during boot before user tasks begin executing so that
+ * libraries can submit DAG nodes and configure Beatty weights via
+ * beatty_sched_set_tasks().
+ */
+
 static struct exo_stream beatty_dag_stream;
 
 void beatty_dag_stream_init(void) {
