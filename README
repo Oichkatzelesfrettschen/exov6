@@ -74,7 +74,10 @@ This only needs to be done after cloning the repository or when
 dependencies change.
 
 The repository uses ``pre-commit`` hooks to automatically run
-``clang-format`` and ``clang-tidy``.  Install the hooks with::
+``clang-format`` and ``clang-tidy``.  The ``setup.sh`` script attempts to
+install ``pre-commit`` via the distribution package manager and falls
+back to Python's ``pip`` if required.  Once installed, enable the hooks
+with::
 
     pre-commit install
 
