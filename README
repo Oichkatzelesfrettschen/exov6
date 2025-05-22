@@ -259,3 +259,16 @@ $ ./swift/build_swift.sh
 ```
 
 It should print ``Hello, world!``.
+
+FUZZING
+-------
+The repository includes a simple Swift libFuzzer harness in ``fuzz.swift``.
+The helper script ``scripts/swift_fuzz.py`` compiles the harness and forwards
+any arguments to the resulting fuzzer executable. A quick smoke test can be
+run as follows:
+
+```
+$ python3 scripts/swift_fuzz.py -runs=1
+```
+
+Additional libFuzzer flags may be provided after the script name.
