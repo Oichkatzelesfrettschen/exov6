@@ -38,16 +38,8 @@ done
 # Ensure meson is available even if the package was missing
 if ! command -v meson >/dev/null 2>&1; then
   pip3 install --no-cache-dir meson
-
-# Ensure pre-commit and compiledb are available via pip if missing
-if ! command -v pre-commit >/dev/null 2>&1; then
-  pip3 install --no-cache-dir pre-commit
 fi
 
-# compiledb provides compile_commands.json generation
-if ! command -v compiledb >/dev/null 2>&1; then
-  pip3 install --no-cache-dir compiledb
-fi
 
 #— Python & deep-learning / MLOps
 for pkg in \
@@ -63,8 +55,14 @@ pip3 install --no-cache-dir \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools
 
-# Ensure pre-commit is available even if the apt package fails
-pip3 install --no-cache-dir pre-commit
+# Fallback to pip if pre-commit is still missing
+if ! command -v pre-commit >/dev/null 2>&1; then
+  pip3 install --no-cache-dir pre-commit || true
+fi
+
+if ! command -v compiledb >/dev/null 2>&1; then
+  pip3 install --no-cache-dir compiledb || true
+fi
 
 #— QEMU emulation for foreign binaries
 for pkg in \
@@ -167,11 +165,11 @@ command -v gmake >/dev/null 2>&1 || ln -s "$(command -v make)" /usr/local/bin/gm
 # Generate compile_commands.json if compiledb is installed
 if command -v compiledb >/dev/null 2>&1; then
   compiledb -n make >/dev/null || true
+fi
 
 # Install pre-commit hooks if possible
 if command -v pre-commit >/dev/null 2>&1; then
   pre-commit install >/dev/null 2>&1 || true
-
 fi
 
 #— clean up
