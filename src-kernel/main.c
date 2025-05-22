@@ -5,6 +5,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "dag.h"
+#include "cap.h"
 #include "x86.h"
 #include "exo_stream.h"
 #include "kernel/exo_ipc.h"
@@ -33,6 +34,7 @@ main(void)
   ioapicinit();    // another interrupt controller
   consoleinit();   // console hardware
   uartinit();      // serial port
+  cap_table_init(); // initialize capability table
   rcuinit();       // rcu subsystem
   pinit();         // process table
   tvinit();        // trap vectors

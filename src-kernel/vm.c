@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "cap.h"
 #include "exo.h"
 #include "elf.h"
 
@@ -443,8 +444,11 @@ exo_cap
 exo_alloc_page(void)
 {
   char *mem = kalloc();
-  uint pa = mem ? V2P(mem) : 0;
-  return cap_new(pa, 0, myproc()->pid);
+  if(!mem)
+    return cap_new(0, 0, 0);
+  uint pa = V2P(mem);
+  int id = cap_table_alloc(CAP_TYPE_PAGE, pa, 0, myproc()->pid);
+  return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
 }
 
 // Remove any mappings to the page referenced by cap and free it.
@@ -453,25 +457,29 @@ exo_unbind_page(exo_cap cap)
 {
   if (!cap_verify(cap))
     return -1;
+  struct cap_entry e;
+  if (cap_table_lookup(cap.id, &e) < 0)
+    return -1;
   struct proc *p = myproc();
-  if(cap.owner != p->pid)
+  if(e.owner != p->pid || e.type != CAP_TYPE_PAGE)
     return -1;
   pde_t *pgdir = p->pgdir;
   pte_t *pte;
   uint a;
-  uint pa = cap.id;
+  uint pa = e.resource;
 
   for(a = 0; a < p->sz; a += PGSIZE){
     if((pte = walkpgdir(pgdir, (void*)a, 0)) != 0 && (*pte & PTE_P)){
       if(PTE_ADDR(*pte) == pa){
         *pte = 0;
         kfree(P2V(pa));
+        cap_table_remove(cap.id);
         return 0;
       }
     }
   }
-  // No mapping found, just free the page.
   kfree(P2V(pa));
+  cap_table_remove(cap.id);
   return 0;
 }
 

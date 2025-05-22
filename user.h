@@ -54,6 +54,8 @@ int set_numa_node(int);
 int fcntl(int, int, int);
 int sigsend(int, int);
 int sigcheck(void);
+int cap_inc(uint16_t id);
+int cap_dec(uint16_t id);
 
 // ulib.c
 int stat(const char *, struct stat *);

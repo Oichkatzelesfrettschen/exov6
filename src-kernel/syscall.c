@@ -165,6 +165,8 @@ extern int sys_ipc_fast(void);
 extern int sys_fcntl(void);
 extern int sys_sigsend(void);
 extern int sys_sigcheck(void);
+extern int sys_cap_inc(void);
+extern int sys_cap_dec(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -208,6 +210,8 @@ static int (*syscalls[])(void) = {
     [SYS_fcntl] sys_fcntl,
     [SYS_sigsend] sys_sigsend,
     [SYS_sigcheck] sys_sigcheck,
+    [SYS_cap_inc] sys_cap_inc,
+    [SYS_cap_dec] sys_cap_dec,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 

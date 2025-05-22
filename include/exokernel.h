@@ -75,5 +75,7 @@ enum exo_syscall {
     EXO_SYSCALL_RECV        = SYS_exo_recv,
     EXO_SYSCALL_READ_DISK   = SYS_exo_read_disk,
     EXO_SYSCALL_WRITE_DISK  = SYS_exo_write_disk,
+    EXO_SYSCALL_CAP_INC     = SYS_cap_inc,
+    EXO_SYSCALL_CAP_DEC     = SYS_cap_dec,
 };
 

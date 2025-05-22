@@ -18,3 +18,5 @@ int cap_yield_to_cap(exo_cap target);
 int cap_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 int cap_ipc_echo_demo(void);
+int cap_inc(uint16_t id);
+int cap_dec(uint16_t id);
