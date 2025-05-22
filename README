@@ -1,5 +1,5 @@
-NOTE: we have stopped maintaining the x86 version of xv6, and switched
-our efforts to the RISC-V version
+NOTE: MIT have stopped maintaining the x86 version of xv6, and switched
+their efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
