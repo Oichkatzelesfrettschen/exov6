@@ -3,6 +3,8 @@
 #include "chan.h"
 #include "libos/driver.h"
 #include "proto/driver.capnp.h"
+#include "beatty_sched.h"
+#include "math_core.h"
 
 CHAN_DECLARE(ping_chan, DriverPing);
 
@@ -33,7 +35,10 @@ main(int argc, char *argv[])
 
     c = ping_chan_create();
 
-    beatty_sched_set_tasks((exo_cap){0}, (exo_cap){0});
+    exo_cap tasks[2] = {{0}, {0}};
+    double phi_val = phi();
+    double weights[2] = {phi_val, phi_val / (phi_val - 1.0)};
+    beatty_sched_set_tasks(tasks, weights, 2);
 
     send_task();
     exo_stream_yield();
