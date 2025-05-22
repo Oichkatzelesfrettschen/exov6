@@ -35,6 +35,11 @@ for pkg in \
   apt_pin_install "$pkg"
 done
 
+# Ensure meson is available even if the package was missing
+if ! command -v meson >/dev/null 2>&1; then
+  pip3 install --no-cache-dir meson
+fi
+
 #— Python & deep-learning / MLOps
 for pkg in \
   python3 python3-pip python3-dev python3-venv python3-wheel \
