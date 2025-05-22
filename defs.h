@@ -202,8 +202,8 @@ char*           strncpy(char*, const char*, size_t);
 int             argint(int, int*);
 int             argptr(int, char**, size_t);
 int             argstr(int, char**);
-int             fetchint(uint, int*);
-int             fetchstr(uint, char**);
+int             fetchint(uintptr_t, int*);
+int             fetchstr(uintptr_t, char**);
 void            syscall(void);
 
 

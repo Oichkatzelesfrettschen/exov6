@@ -18,7 +18,7 @@
 // to a saved program counter, and then the first argument.
 
 // Fetch the int at addr from the current process.
-int fetchint(uint addr, int *ip) {
+int fetchint(uintptr_t addr, int *ip) {
   struct proc *curproc = myproc();
 
   if (addr >= curproc->sz || addr + 4 > curproc->sz)
@@ -30,7 +30,7 @@ int fetchint(uint addr, int *ip) {
 // Fetch the nul-terminated string at addr from the current process.
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
-int fetchstr(uint addr, char **pp) {
+int fetchstr(uintptr_t addr, char **pp) {
   char *s, *ep;
   struct proc *curproc = myproc();
 
