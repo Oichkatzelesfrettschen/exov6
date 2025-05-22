@@ -15,9 +15,12 @@ struct dag_node {
   int priority;
   struct dag_node_list *children;
   struct dag_node *next;
+  /* parents this node depends on */
   struct dag_node **deps;
-    int ndeps;
-    int done;
+  /* number of valid entries in deps */
+  int ndeps;
+  /* set once the node has run */
+  int done;
 
 };
 
