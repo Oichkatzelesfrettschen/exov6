@@ -237,7 +237,8 @@ LIBOS_OBJS = \
        $(ULAND_DIR)/libos/sched.o \
         $(LIBOS_DIR)/fs.o \
         $(LIBOS_DIR)/file.o \
-        $(LIBOS_DIR)/driver.o
+        $(LIBOS_DIR)/driver.o \
+        $(LIBOS_DIR)/posix.o
 
 
 libos: libos.a
@@ -318,6 +319,8 @@ UPROGS=\
         _typed_chan_send\
         _typed_chan_recv\
         _chan_dag_supervisor_demo\
+        _libos_posix_test\
+
 
 ifeq ($(ARCH),x86_64)
 UPROGS := $(filter-out _usertests,$(UPROGS))

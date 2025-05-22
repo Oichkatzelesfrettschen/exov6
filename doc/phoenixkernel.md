@@ -168,6 +168,17 @@ transports serialized Cap'n Proto messages. Applications define their RPC
 interfaces in `.capnp` files and rely on the Cap'n Proto C bindings to
 generate the encoding and decoding routines.
 
+### Typed Channels
+
+For convenience the libOS provides typed channels declared with the
+`CHAN_DECLARE` macro in `chan.h`.  Each typed channel associates a Cap'n
+Proto message type with a channel descriptor so that `send` and `recv`
+automatically encode and decode the messages.  The Cap'n Proto workflow
+generates `<name>.capnp.h` files defining `type_MESSAGE_SIZE` constants
+and the corresponding `type_encode`/`type_decode` helpers.  A typed channel
+uses these helpers to serialize exactly `msg_size` bytes when interacting
+with an endpoint.  See `typed_chan_demo.c` for an example.
+
 ## libOS APIs
 
 The libOS includes wrappers around the capability syscalls as well as helper

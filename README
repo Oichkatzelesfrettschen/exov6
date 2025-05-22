@@ -178,14 +178,15 @@ DRIVER SUPERVISOR
 It parses ``drivers.conf`` where each non-empty line lists a command
 and arguments to execute.  Comment lines beginning with ``#`` are
 ignored.  When a driver process exits the supervisor automatically
-restarts it.  Add the desired commands to ``drivers.conf`` and copy the
-file into the file system image so ``init`` can launch ``rcrs`` early
-during boot.
+restarts it.  The configuration syntax and available flags are
+documented in ``doc/rcrs.md``. Add the desired commands to
+``drivers.conf`` and copy the file into the file system image so ``init``
+can launch ``rcrs`` early during boot.
 
 Example ``drivers.conf``::
 
     kbdserv
-    pingdriver
+    pingdriver --timeout=60
 
 
 IPC DESIGN NOTE
