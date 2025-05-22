@@ -93,3 +93,42 @@ int libos_spawn(const char *path, char *const argv[]) {
     }
     return pid;
 }
+
+int libos_dup(int fd) {
+    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    struct file *f = filedup(fd_table[fd]);
+    for(int i = 0; i < LIBOS_MAXFD; i++) {
+        if(!fd_table[i]) {
+            fd_table[i] = f;
+            return i;
+        }
+    }
+    fileclose(f);
+    return -1;
+}
+
+int libos_pipe(int fd[2]) {
+    return pipe(fd);
+}
+
+int libos_fork(void) {
+    return fork();
+}
+
+int libos_waitpid(int pid) {
+    int w;
+    while((w = wait()) >= 0) {
+        if(w == pid)
+            return w;
+    }
+    return -1;
+}
+
+int libos_sigsend(int pid, int sig) {
+    return sigsend(pid, sig);
+}
+
+int libos_sigcheck(void) {
+    return sigcheck();
+}
