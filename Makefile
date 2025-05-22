@@ -87,6 +87,10 @@ CSTD ?= gnu2x
 CLANG_TIDY ?= clang-tidy
 TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
+ifeq ($(ARCH),ia16)
+TOOLPREFIX ?= ia16-elf-
+endif
+
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o \
@@ -99,6 +103,11 @@ OBJS += $(KERNEL_DIR)/main64.o \
        $(KERNEL_DIR)/arch/aarch64/vectors.o
 BOOTASM := $(KERNEL_DIR)/arch/aarch64/boot.S
 ENTRYASM := $(KERNEL_DIR)/arch/aarch64/entry.S
+else ifeq ($(ARCH),ia16)
+OBJS += $(KERNEL_DIR)/vectors.o
+BOOTASM := $(KERNEL_DIR)/arch/ia16/boot.S
+ENTRYASM := $(KERNEL_DIR)/arch/ia16/entry.S
+
 else ifeq ($(ARCH),armv7)
 OBJS += $(KERNEL_DIR)/arch/armv7/swtch.o \
        $(KERNEL_DIR)/arch/armv7/vectors.o
@@ -153,6 +162,14 @@ KERNELMEMFS_FILE := kernelmemfs-aarch64
 FS_IMG := fs-aarch64.img
 XV6_IMG := xv6-aarch64.img
 XV6_MEMFS_IMG := xv6memfs-aarch64.img
+else ifeq ($(ARCH),ia16)
+ARCHFLAG := -m16
+LDFLAGS += -m elf_i386
+KERNEL_FILE := kernel-ia16
+KERNELMEMFS_FILE := kernelmemfs-ia16
+FS_IMG := fs-ia16.img
+XV6_IMG := xv6-ia16.img
+XV6_MEMFS_IMG := xv6memfs-ia16.img
 else ifeq ($(ARCH),armv7)
 ARCHFLAG := -march=armv7-a
 LDFLAGS += -m elf32-littlearm
@@ -219,10 +236,12 @@ endif
 
 
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+CFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 # Optional CPU optimization flags
 CFLAGS += $(CPUFLAGS)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
+ASFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 
 	#Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
