@@ -114,7 +114,8 @@ for pkg in \
   ldc gdc dmd-compiler dub libphobos-dev \
   chicken-bin libchicken-dev chicken-doc \
   openjdk-17-jdk maven gradle dotnet-sdk-8 mono-complete \
-  swift swift-lldb swiftpm kotlin gradle-plugin-kotlin \
+  swift swift-lldb swiftpm swift-tools-support-core libswiftFuzzer \
+  kotlin gradle-plugin-kotlin \
   ruby ruby-dev gem bundler php-cli php-dev composer phpunit \
   r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol \
   fpc lazarus zig nim nimble crystal shards gforth; do

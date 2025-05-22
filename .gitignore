@@ -16,3 +16,4 @@ libos.a
 kernelmemfs
 mkfs
 .gdbinit
+fuzz
