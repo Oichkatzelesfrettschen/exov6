@@ -7,16 +7,17 @@ if ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
   NETWORK_AVAILABLE=false
   echo "Network unavailable, proceeding in offline mode" >&2
 fi
+LOG_FILE=/var/log/setup.log
 FAIL_LOG=/var/log/setup_failures.log
+mkdir -p /var/log
+: >"$LOG_FILE"
 : >"$FAIL_LOG"
+exec > >(tee -a "$LOG_FILE") 2>&1
 export DEBIAN_FRONTEND=noninteractive
 
 #— helper to pin to the repo’s exact version if it exists
 pip_install(){
   pkg="$1"
-  if [ "$NETWORK_AVAILABLE" = false ]; then
-    return 0
-  fi
   if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
     echo "Warning: pip install $pkg failed" >&2
     echo "pip $pkg" >>"$FAIL_LOG"
@@ -24,9 +25,6 @@ pip_install(){
 }
 apt_pin_install(){
   pkg="$1"
-  if [ "$NETWORK_AVAILABLE" = false ]; then
-    return 0
-  fi
   ver=$(apt-cache show "$pkg" 2>/dev/null \
         | awk '/^Version:/{print $2; exit}')
   if [ -n "$ver" ]; then

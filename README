@@ -341,24 +341,17 @@ borrowing. After ``make`` completes, boot with ``make qemu-nox`` and run:
 
     $ hello_channel
 
-USER DEMO: CHANNELS, BEATTY SCHEDULER AND RCRS
-----------------------------------------------
-``chan_beatty_rcrs_demo`` combines typed channels with the Beatty
-scheduler and relies on ``rcrs`` to restart the helper process if it
-exits. Build the repository and execute the demo after booting:
-
-    $ chan_beatty_rcrs_demo
-
-USER DEMO: BEATTY AND DAG
+USER DEMO: AFFINE CHANNEL
 -------------------------
-``beatty_dag_demo`` composes the Beatty and DAG schedulers through a
-combined exo stream. The demo prints how Beatty selects which task family
-runs while the DAG scheduler walks the dependency graph for that family.
-Build with ``make`` and run inside QEMU::
+``affine_channel_demo`` demonstrates the ``AFFINE_CHAN_DECLARE`` macro
+which restricts a channel to a single send.  After building with ``make`` and booting with ``make qemu-nox`` run:
 
-    $ beatty_dag_demo
+    $ affine_channel_demo
+
+
 The demonstration shows how Beatty's weights pick the family and how the
 DAG scheduler respects node priorities when executing that family.
+
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.

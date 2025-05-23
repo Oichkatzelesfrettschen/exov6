@@ -153,7 +153,8 @@ by combining these primitives.
 
 Several user programs demonstrate the capability API.  After building
 the repository the filesystem image contains `exo_stream_demo`,
-`dag_demo`, `typed_chan_demo` and `chan_dag_supervisor_demo`.
+`dag_demo`, `typed_chan_demo`, `affine_channel_demo` and
+`chan_dag_supervisor_demo`.
 
 1. Build everything:
 
@@ -173,6 +174,7 @@ the repository the filesystem image contains `exo_stream_demo`,
    $ exo_stream_demo
    $ dag_demo
    $ typed_chan_demo
+   $ affine_channel_demo
    $ chan_dag_supervisor_demo
    ```
 
@@ -210,7 +212,8 @@ automatically encode and decode the messages.  The Cap'n Proto workflow
 generates `<name>.capnp.h` files defining `type_MESSAGE_SIZE` constants
 and the corresponding `type_encode`/`type_decode` helpers.  A typed channel
 uses these helpers to serialize exactly `msg_size` bytes when interacting
-with an endpoint.  See `typed_chan_demo.c` for an example.
+with an endpoint.  See `typed_chan_demo.c` and `affine_channel_demo.c`
+for examples.
 
 The underlying helpers `chan_endpoint_send()` and `chan_endpoint_recv()`
 verify that the buffer length matches the `msg_type_desc` before calling
@@ -310,7 +313,8 @@ int lambda_run(lambda_term_t *t, int fuel);
 
 This lightweight accounting mechanism allows research into affine
 λ-calculus interpreters while integrating with Phoenix's typed channel
-infrastructure.
+infrastructure.  See `affine_channel_demo.c` for a simple example
+that sends a message over an affine channel.
 
 ## Step-by-Step Examples
 
