@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
+=======
+>>>>>>> ca87b1b (caplib.h)
 
 #pragma once
 
@@ -10,8 +13,11 @@
 #include "ipc.h"
 #include "cap.h"
 
+<<<<<<< HEAD
 =======
 >>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
+=======
+>>>>>>> ca87b1b (caplib.h)
 struct buf;
 struct context;
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -33,17 +39,23 @@ struct stat;
 struct superblock;
 struct exo_cap;
 struct exo_blockcap;
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
 <<<<<<< HEAD:defs.h
 
+=======
+>>>>>>> ca87b1b (caplib.h)
 struct exo_sched_ops;
 struct dag_node;
 struct exo_stream;
 struct endpoint;
+<<<<<<< HEAD
 =======
 struct trapframe;
 >>>>>>> b31b5a6 (Fix build by cleaning headers and adding includes):defs.h
+=======
+>>>>>>> ca87b1b (caplib.h)
 
 // process table defined in proc.c
 extern struct ptable ptable;
@@ -52,6 +64,7 @@ extern struct ptable ptable;
 #include "exo_disk.h"
 #include "exo_ipc.h"
 #include "fastipc.h"
+<<<<<<< HEAD
 =======
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
@@ -64,6 +77,8 @@ extern struct ptable ptable;
 =======
 #include "ipc.h"
 >>>>>>> 52b8687 (Add IPC implementation with zipc messages):defs.h
+=======
+>>>>>>> ca87b1b (caplib.h)
 
 // bio.c
 void binit(void);
@@ -81,11 +96,15 @@ void consoleintr(int (*)(void));
 int exec(char *, char **);
 
 // file.c
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
 
 =======
 >>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
+=======
+
+>>>>>>> ca87b1b (caplib.h)
 struct file *filealloc(void);
 void fileclose(struct file *);
 struct file *filedup(struct file *);
@@ -111,12 +130,16 @@ struct inode *namei(char *);
 struct inode *nameiparent(char *, char *);
 int readi(struct inode *, char *, uint, size_t);
 void stati(struct inode *, struct stat *);
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
 int writei(struct inode *, char *, uint, size_t);
 =======
 int writei(struct inode *, char *, uint, uint);
 >>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
+=======
+int writei(struct inode *, char *, uint, size_t);
+>>>>>>> ca87b1b (caplib.h)
 
 // ide.c
 void ideinit(void);
@@ -161,19 +184,25 @@ void picenable(int);
 void picinit(void);
 
 // pipe.c
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
+=======
+>>>>>>> ca87b1b (caplib.h)
 
 [[nodiscard]] int pipealloc(struct file **, struct file **);
 void pipeclose(struct pipe *, int);
 int piperead(struct pipe *, struct file *, char *, size_t);
 int pipewrite(struct pipe *, struct file *, char *, size_t);
+<<<<<<< HEAD
 =======
 int pipealloc(struct file **, struct file **);
 void pipeclose(struct pipe *, int);
 int piperead(struct pipe *, char *, size_t);
 int pipewrite(struct pipe *, char *, size_t);
 >>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
+=======
+>>>>>>> ca87b1b (caplib.h)
 
 // PAGEBREAK: 16
 //  proc.c
@@ -195,12 +224,17 @@ void userinit(void);
 int wait(void);
 void wakeup(void *);
 void yield(void);
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
 struct proc *pctr_lookup(uint);
 struct proc *allocproc(void);
 =======
 >>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
+=======
+struct proc *pctr_lookup(uint);
+struct proc *allocproc(void);
+>>>>>>> ca87b1b (caplib.h)
 
 // swtch.S
 void swtch(context_t **, context_t *);
@@ -224,11 +258,15 @@ int holdingsleep(struct sleeplock *);
 void initsleeplock(struct sleeplock *, char *);
 
 // string.c
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
 
 =======
 >>>>>>> 1400ea2 (Fix Makefile and unify exo block API):defs.h
+=======
+
+>>>>>>> ca87b1b (caplib.h)
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
@@ -277,18 +315,24 @@ pde_t *copyuvm(pde_t *, uint);
 void switchuvm(struct proc *);
 void switchkvm(void);
 #ifdef __x86_64__
+<<<<<<< HEAD
 int insert_pte(pde_t *, void *, uint64, int);
 #else
 int insert_pte(pde_t *, void *, uint, int);
 #endif
 #ifdef __x86_64__
+=======
+>>>>>>> ca87b1b (caplib.h)
 int copyout(pde_t *, uint64, void *, uint);
 #else
 int copyout(pde_t *, uint, void *, uint);
 #endif
 
+<<<<<<< HEAD
 <<<<<<< HEAD:defs.h
 
+=======
+>>>>>>> ca87b1b (caplib.h)
 void clearpteu(pde_t *pgdir, char *uva);
 #ifdef __x86_64__
 int insert_pte(pde_t *, void *, uint64, int);
@@ -348,6 +392,7 @@ void rcuinit(void);
 void rcu_read_lock(void);
 void rcu_read_unlock(void);
 void rcu_synchronize(void);
+<<<<<<< HEAD
 =======
 void            clearpteu(pde_t *pgdir, char *uva);
 struct exo_cap  exo_alloc_page(void);
@@ -366,6 +411,8 @@ void            rcu_read_unlock(void);
 void            rcu_synchronize(void);
 
 >>>>>>> 45568eb (Enable RCU based buffer cache):defs.h
+=======
+>>>>>>> ca87b1b (caplib.h)
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
