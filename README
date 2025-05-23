@@ -468,3 +468,16 @@ constant. The ``flow_pid.py`` helpers ``set_kp()``, ``set_ki()`` and
 
 For testing the base directory can be overridden with the environment
 variable ``FLOW_PID_DIR``.
+
+STREAMS LOGGING
+---------------
+Python STREAMS modules log messages using ``strlog_json()`` from
+``streams_log.py``.  The helper outputs a JSON object containing the
+timestamp, log level and message.  Extra keyword arguments become
+fields in the record.  ``strlog()`` continues to print plain text for
+older modules.
+
+Example::
+
+    from streams_log import strlog_json
+    strlog_json("info", "module loaded", name="xor_encrypt")
