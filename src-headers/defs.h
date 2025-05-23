@@ -27,7 +27,6 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
-struct trapframe;
 struct exo_cap;
 struct exo_blockcap;
 struct exo_sched_ops;
