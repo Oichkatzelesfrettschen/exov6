@@ -46,10 +46,6 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
 }
 
 
-static void enqueue_ready(struct dag_node *n) {
-  struct dag_node **pp = &ready_head;
-  while (*pp && (*pp)->priority >= n->priority)
-
 static void
 enqueue_ready(struct dag_node *n)
 {
