@@ -17,10 +17,18 @@ main(int argc, char *argv[])
     ping_chan_recv(c, cap, &out);
     printf(1, "typed channel message %d\n", out.value);
 
-    // Demonstrate size validation by calling the generic endpoint helpers
+    // Demonstrate failure when message sizes do not match
     char bad[1] = {0};
     int r = chan_endpoint_send(&c->base, cap, bad, sizeof(bad));
     printf(1, "bad send result %d\n", r);
+    r = chan_endpoint_recv(&c->base, cap, bad, sizeof(bad));
+    printf(1, "bad recv result %d\n", r);
+
+    // Correct usage again
+    ping_chan_send(c, cap, &msg);
+    memset(&out, 0, sizeof(out));
+    ping_chan_recv(c, cap, &out);
+    printf(1, "typed channel message %d\n", out.value);
     ping_chan_destroy(c);
     exit();
 }
