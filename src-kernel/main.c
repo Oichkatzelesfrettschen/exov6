@@ -8,7 +8,7 @@
 #include "cap.h"
 #include "x86.h"
 #include "exo_stream.h"
-#include "kernel/exo_ipc.h"
+#include "exo_ipc.h"
 
 static void startothers(void);
 static void mpmain(void) __attribute__((noreturn));

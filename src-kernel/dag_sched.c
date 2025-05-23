@@ -3,7 +3,7 @@
 #include "spinlock.h"
 #include "dag.h"
 #include "exo_stream.h"
-#include "kernel/exo_cpu.h"
+#include "exo_cpu.h"
 
 static struct spinlock dag_lock;
 static struct dag_node *ready_head;
@@ -45,10 +45,6 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
     child->deps[child->ndeps++] = parent;
 }
 
-
-static void enqueue_ready(struct dag_node *n) {
-  struct dag_node **pp = &ready_head;
-  while (*pp && (*pp)->priority >= n->priority)
 
 static void
 enqueue_ready(struct dag_node *n)
