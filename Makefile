@@ -44,7 +44,8 @@ OBJS = \
     $(KERNEL_DIR)/fastipc.o \
     $(KERNEL_DIR)/endpoint.o \
     $(KERNEL_DIR)/dag_sched.o \
-    $(KERNEL_DIR)/beatty_sched.o
+    $(KERNEL_DIR)/beatty_sched.o \
+    $(KERNEL_DIR)/beatty_dag_stream.o
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -442,12 +443,13 @@ $(FS_IMG): mkfs README $(UPROGS)
 -include *.d
 
 clean:
+	find . -name '*.o' -o -name '*.d' -o -name '*.asm' -o -name '*.sym' -delete
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
-       *.o *.d *.asm *.sym $(KERNEL_DIR)/vectors.S bootblock entryother entryother64 \
-       initcode initcode.out kernel.bin kernel64 xv6.img xv6-64.img \
-       fs.img fs64.img kernelmemfs.bin kernelmemfs64 xv6memfs.img \
-        xv6memfs-64.img mkfs .gdbinit libos.a \
-	$(UPROGS)
+	  $(KERNEL_DIR)/vectors.S bootblock entryother entryother64 \
+	  initcode initcode.out kernel.bin kernel64 xv6.img xv6-64.img \
+	  fs.img fs64.img kernelmemfs.bin kernelmemfs64 xv6memfs.img \
+	  xv6memfs-64.img mkfs .gdbinit libos.a \
+	  $(UPROGS)
 
 	#make a printout
 FILES = $(shell grep -v '^\#' runoff.list)
