@@ -3,7 +3,11 @@
 #include "types.h"
 #include "defs.h"
 #include "param.h"
+#if defined(__aarch64__)
+#include "aarch64.h"
+#else
 #include "x86.h"
+#endif
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
@@ -31,7 +35,7 @@ acquire(struct spinlock *lk)
 
   uint16_t ticket = __atomic_fetch_add(&lk->ticket.tail, 1, __ATOMIC_SEQ_CST);
   while(__atomic_load_n(&lk->ticket.head, __ATOMIC_SEQ_CST) != ticket)
-    ;
+    cpu_relax();
 
   // Tell the C compiler and the processor to not move loads or stores
   // past this point, to ensure that the critical section's memory

@@ -103,6 +103,8 @@ static inline void cli(void) { asm volatile("cli"); }
 
 static inline void sti(void) { asm volatile("sti"); }
 
+static inline void cpu_relax(void) { asm volatile("pause" ::: "memory"); }
+
 static inline uint xchg(volatile uint *addr, uint newval) {
   uint result;
 
