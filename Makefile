@@ -333,8 +333,9 @@ LIBOS_OBJS = \
         $(LIBOS_DIR)/fs.o \
        $(LIBOS_DIR)/file.o \
        $(LIBOS_DIR)/driver.o \
-        $(LIBOS_DIR)/affine_runtime.o \
-       $(LIBOS_DIR)/posix.o
+       $(LIBOS_DIR)/affine_runtime.o \
+       $(LIBOS_DIR)/posix.o \
+       $(LIBOS_DIR)/unzip.o
 
 
 libos: libos.a
