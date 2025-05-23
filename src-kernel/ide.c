@@ -41,7 +41,7 @@ idewait(int checkerr)
   int r;
 
   while(((r = inb(0x1f7)) & (IDE_BSY|IDE_DRDY)) != IDE_DRDY)
-    ;
+    cpu_relax();
   if(checkerr && (r & (IDE_DF|IDE_ERR)) != 0)
     return -1;
   return 0;

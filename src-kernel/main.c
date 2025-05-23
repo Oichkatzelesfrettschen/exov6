@@ -115,7 +115,7 @@ static void startothers(void) {
 
     // wait for cpu to finish mpmain()
     while (c->started == 0)
-      ;
+      cpu_relax();
   }
 }
 
