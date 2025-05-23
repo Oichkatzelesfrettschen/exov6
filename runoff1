@@ -33,9 +33,9 @@ for($i=0; $i<@lines; ){
 	last if $i>=@lines;
 
 	# If the rest of the file fits, use the whole thing.
-       if(@lines <= $i+50 && !grep { /PAGEBREAK/ } @lines[$i..$#lines]){
-               $breakbefore = @lines;
-       }else{
+        if(@lines - $i <= 50 && !grep { /PAGEBREAK/ } @lines[$i .. $#lines]){
+                $breakbefore = @lines;
+        }else{
 		# Find a good next page break;
 		# Hope for end of function.
 		# but settle for a blank line (but not first blank line

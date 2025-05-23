@@ -10,7 +10,10 @@ but is implemented for a modern x86-based multiprocessor using ANSI C.
 
 The user-level shell supports built-in commands such as ``cd``.  These
 built-ins execute directly in the shell process even when used in command
-lists, pipelines, or background jobs.
+lists, pipelines, or background jobs. Programs invoked by the shell are
+searched for only in the root directory; if a command does not include a
+slash, the shell automatically prefixes ``/`` before executing it. xv6
+does not implement a ``PATH`` environment variable.
 
 ACKNOWLEDGMENTS
 
