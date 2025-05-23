@@ -173,6 +173,9 @@ void initlock(struct spinlock *, char *);
 void release(struct spinlock *);
 void pushcli(void);
 void popcli(void);
+void qspin_lock(struct spinlock *);
+void qspin_unlock(struct spinlock *);
+int qspin_trylock(struct spinlock *);
 
 // sleeplock.c
 void acquiresleep(struct sleeplock *);

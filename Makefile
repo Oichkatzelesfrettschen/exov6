@@ -21,6 +21,7 @@ OBJS = \
     $(KERNEL_DIR)/proc.o \
     $(KERNEL_DIR)/sleeplock.o \
     $(KERNEL_DIR)/spinlock.o \
+    $(KERNEL_DIR)/qspinlock.o \
     $(KERNEL_DIR)/rcu.o \
     $(KERNEL_DIR)/string.o \
     $(KERNEL_DIR)/syscall.o \
@@ -402,6 +403,7 @@ _wc\
         _chan_beatty_rcrs_demo\
         _libos_posix_test\
         _libos_posix_extra_test\
+        _qspin_demo\
 
 
 ifeq ($(ARCH),x86_64)
