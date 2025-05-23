@@ -38,7 +38,6 @@ OBJS = \
     $(KERNEL_DIR)/kernel/exo_ipc.o \
     $(KERNEL_DIR)/kernel/exo_ipc_queue.o \
     $(KERNEL_DIR)/exo_stream.o \
-    $(KERNEL_DIR)/streams.o \
     $(KERNEL_DIR)/cap.o \
     $(KERNEL_DIR)/cap_table.o \
     $(KERNEL_DIR)/fastipc.o \
@@ -365,8 +364,6 @@ $(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/user/typed_chan_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(ULAND_DIR)/streams_demo.o: $(ULAND_DIR)/user/streams_demo.c
-	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(ULAND_DIR)/beatty_demo.o: $(ULAND_DIR)/user/beatty_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -430,7 +427,6 @@ _wc\
         _libos_posix_test\
         _libos_posix_extra_test\
         _qspin_demo\
-        _streams_demo\
 
 
 ifeq ($(ARCH),x86_64)
