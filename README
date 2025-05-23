@@ -355,3 +355,18 @@ $ python3 scripts/swift_fuzz.py -runs=1
 ```
 
 Additional libFuzzer flags may be provided after the script name.
+
+STREAMS STACK
+-------------
+A simple simulation of STREAMS modules is provided. The `streams_stack.dot`
+file describes the module layout. Generate an image with Graphviz:
+
+```
+$ dot -Tpng streams_stack.dot -o stack.png
+```
+
+Run the latency harness with Python:
+
+```
+$ python3 scripts/simulate.py
+```
