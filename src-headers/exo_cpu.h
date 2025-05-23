@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include "exo.h"
 
 /*
  * Exokernel CPU interface used by user-level schedulers.
@@ -11,6 +12,8 @@
  * execution resumes on the context pointed to by *old.
  */
 
+#ifndef EXO_CONTEXT_T
+#define EXO_CONTEXT_T
 #if defined(__x86_64__)
 struct context64 {
   uint64 r15;
@@ -48,8 +51,11 @@ struct context {
 };
 typedef struct context context_t;
 #endif
+#endif /* EXO_CONTEXT_T */
 
 void swtch(context_t **old, context_t *new);
 static inline void cap_yield(context_t **old, context_t *target) {
   swtch(old, target);
 }
+
+int exo_yield_to(exo_cap target);

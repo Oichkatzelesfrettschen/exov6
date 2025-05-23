@@ -3,7 +3,7 @@
 #include "spinlock.h"
 #include "dag.h"
 #include "exo_stream.h"
-#include "kernel/exo_cpu.h"
+#include "exo_cpu.h"
 
 static struct spinlock dag_lock;
 static struct dag_node *ready_head;

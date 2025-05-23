@@ -16,6 +16,7 @@ typedef struct context64 context_t;
 #else
 typedef struct context context_t;
 #endif
+#define EXO_CONTEXT_T
 struct file;
 struct inode;
 struct pipe;
@@ -38,11 +39,11 @@ struct dag_node;
 // process table defined in proc.c
 extern struct ptable ptable;
 
-#include "kernel/exo_cpu.h"
-#include "kernel/exo_disk.h"
-#include "kernel/exo_ipc.h"
+#include "exo_cpu.h"
+#include "exo_disk.h"
+#include "exo_ipc.h"
 #include "ipc.h"
-#include "kernel/exo_mem.h"
+#include "exo_mem.h"
 #include "fastipc.h"
 #include "ipc.h"
 
@@ -197,8 +198,6 @@ int argstr(int, char **);
 int fetchint(uint, int *);
 int fetchstr(uint, char **);
 void syscall(void);
-
-syscall(void);
 
 // timer.c
 void timerinit(void);
