@@ -387,7 +387,11 @@ log: bochsout.txt
 # cause bochs to become unstable.  The panic is a "graceful exit," so
 # if you disable it you may get a spectacular disaster instead.
 #=======================================================================
-panic: action=ask
+# Configure how Bochs reacts to events of each severity.  The
+# optional facility-specific clauses override the global action for the
+# named subsystem.  This example reports panics from the CD-ROM device
+# while still prompting for all other panic events.
+panic: action=ask, cdrom=report
 error: action=report
 info: action=report
 debug: action=ignore

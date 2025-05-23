@@ -7,7 +7,9 @@ import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+import os
 import simulate
+
 
 def test_simulate_harness_completes():
     if not (
@@ -16,4 +18,8 @@ def test_simulate_harness_completes():
         or shutil.which("qemu")
     ):
         pytest.skip("QEMU not installed")
+
+def test_simulate_harness_completes(monkeypatch):
+    monkeypatch.setenv("QEMU", "/bin/true")
+
     assert simulate.main() == 0
