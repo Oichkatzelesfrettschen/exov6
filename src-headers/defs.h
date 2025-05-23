@@ -194,8 +194,8 @@ char *strncpy(char *, const char *, size_t);
 int argint(int, int *);
 int argptr(int, char **, size_t);
 int argstr(int, char **);
-int fetchint(uint, int *);
-int fetchstr(uint, char **);
+int fetchint(uintptr_t, int *);
+int fetchstr(uintptr_t, char **);
 void syscall(void);
 
 // timer.c
@@ -263,7 +263,7 @@ void beatty_sched_init(void);
 struct exo_sched_ops *dag_sched_ops(void);
 struct exo_sched_ops *beatty_sched_ops(void);
 void beatty_dag_stream_init(void);
-void beatty_sched_set_tasks(exo_cap, exo_cap);
+void beatty_sched_set_tasks(const exo_cap *, const double *, int);
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
 void endpoint_send(struct endpoint *, zipc_msg_t *);
