@@ -381,10 +381,10 @@ $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
 $(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/user/chan_dag_supervisor_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/chan_beatty_rcrs_demo.o: $(ULAND_DIR)/user/chan_beatty_rcrs_demo.c
-        $(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(ULAND_DIR)/tty_demo.o: $(ULAND_DIR)/tty_demo.c
-        $(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 	# Generate simple C bindings from Cap'n Proto schemas
 proto/%.capnp.c: proto/%.capnp
@@ -581,6 +581,9 @@ HOSTCFLAGS ?= -Wall -Werror -std=c99
 
 tools/ncc: tools/ncc.c tools/compiler_utils.c tools/compiler_utils.h
 	$(HOSTCC) $(HOSTCFLAGS) -o $@ tools/ncc.c tools/compiler_utils.c
+
+libnstr_graph.so: libnstr_graph/nstr_graph.c libnstr_graph/nstr_graph.h
+	$(HOSTCC) $(HOSTCFLAGS) -fPIC -shared -pthread -o $@ libnstr_graph/nstr_graph.c
 
 src-uland/exo_unit_test: src-uland/exo_unit_test.c
 	$(HOSTCC) $(HOSTCFLAGS) -o $@ $<
