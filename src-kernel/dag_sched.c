@@ -1,6 +1,7 @@
 #include "types.h"
 #include "defs.h"
 #include "spinlock.h"
+#include "qspinlock.h"
 #include "dag.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
@@ -59,14 +60,14 @@ enqueue_ready(struct dag_node *n)
 }
 
 void dag_sched_submit(struct dag_node *n) {
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
 
 
 
   if(n->pending == 0 && !n->done)
 
     enqueue_ready(n);
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 }
 
 static struct dag_node *dequeue_ready(void) {
@@ -90,18 +91,18 @@ static void dag_mark_done(struct dag_node *n) {
 static void dag_yield(void) {
   struct dag_node *n;
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   n = dequeue_ready();
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 
   if (!n)
     return;
 
   exo_yield_to(n->ctx);
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   dag_mark_done(n);
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 }
 
 static void dag_halt(void) {
