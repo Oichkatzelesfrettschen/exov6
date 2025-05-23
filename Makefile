@@ -92,7 +92,9 @@ TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o \
-       $(KERNEL_DIR)/vectors.o
+       $(KERNEL_DIR)/vectors.o \
+       $(KERNEL_DIR)/arch/x64/trapasm64.o
+OBJS := $(filter-out $(KERNEL_DIR)/trapasm.o,$(OBJS))
 BOOTASM := $(KERNEL_DIR)/arch/x64/bootasm64.S
 ENTRYASM := $(KERNEL_DIR)/arch/x64/entry64.S
 else ifeq ($(ARCH),aarch64)
@@ -294,7 +296,7 @@ kernelmemfs: $(MEMFSOBJS) entry.o $(ENTRYOTHERBIN) initcode kernel.ld $(FS_IMG)
 tags: $(OBJS) $(ENTRYOTHERASM) _init
 		etags *.S *.c
 $(KERNEL_DIR)/vectors.S: vectors.pl
-	./vectors.pl > $@
+	./vectors.pl $(ARCH) > $@
 
 LIBOS_OBJS = \
         $(ULAND_DIR)/ulib.o \

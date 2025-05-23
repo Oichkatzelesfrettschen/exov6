@@ -9,12 +9,12 @@
 #include "spinlock.h"
 #include "qspinlock.h"
 
-#if defined(__x86_64__) || defined(__i386__)
-#include <x86intrin.h>
+#if defined(__RDRND__)
+#include <immintrin.h>
 #endif
 
 static inline uint32_t rand32(void) {
-#if defined(__x86_64__) || defined(__i386__)
+#if defined(__RDRND__)
   unsigned int r;
   if (__builtin_ia32_rdrand32_step(&r))
     return r;

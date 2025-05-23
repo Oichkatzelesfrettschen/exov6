@@ -17,14 +17,13 @@ uint ticks;
 void tvinit(void) {
   int i;
 
-
-  for(i = 0; i < 256; i++)
-    SETGATE(idt[i], 0, SEG_KCODE<<3, vectors[i], 0);
+  for (i = 0; i < 256; i++)
+    SETGATE(idt[i], 0, SEG_KCODE << 3, vectors[i], 0);
 
   // User-level traps
-  SETGATE(idt[T_SYSCALL], 1, SEG_KCODE<<3, vectors[T_SYSCALL], DPL_USER);
-  SETGATE(idt[T_PCTR_TRANSFER], 1, SEG_KCODE<<3, vectors[T_PCTR_TRANSFER], DPL_USER);
-
+  SETGATE(idt[T_SYSCALL], 1, SEG_KCODE << 3, vectors[T_SYSCALL], DPL_USER);
+  SETGATE(idt[T_PCTR_TRANSFER], 1, SEG_KCODE << 3, vectors[T_PCTR_TRANSFER],
+          DPL_USER);
 
   initlock(&tickslock, "time");
 }
@@ -92,7 +91,11 @@ void trap(struct trapframe *tf) {
     break;
   case T_IRQ0 + 7:
   case T_IRQ0 + IRQ_SPURIOUS:
+#if defined(__x86_64__)
+    cprintf("cpu%d: spurious interrupt at %x:%lx\n", cpuid(), tf->cs, tf->rip);
+#else
     cprintf("cpu%d: spurious interrupt at %x:%x\n", cpuid(), tf->cs, tf->eip);
+#endif
     lapiceoi();
     break;
   case T_PCTR_TRANSFER:
@@ -103,15 +106,26 @@ void trap(struct trapframe *tf) {
   default:
     if (myproc() == 0 || (tf->cs & 3) == 0) {
       // In kernel, it must be our mistake.
+#if defined(__x86_64__)
+      cprintf("unexpected trap %d from cpu %d rip %lx (cr2=0x%x)\n", tf->trapno,
+              cpuid(), tf->rip, rcr2());
+#else
       cprintf("unexpected trap %d from cpu %d eip %x (cr2=0x%x)\n", tf->trapno,
               cpuid(), tf->eip, rcr2());
+#endif
       panic("trap");
     }
     // In user space, assume process misbehaved.
     cprintf("pid %d %s: trap %d err %d on cpu %d "
+#if defined(__x86_64__)
+            "rip 0x%lx addr 0x%x--kill proc\n",
+            myproc()->pid, myproc()->name, tf->trapno, tf->err, cpuid(),
+            tf->rip, rcr2());
+#else
             "eip 0x%x addr 0x%x--kill proc\n",
             myproc()->pid, myproc()->name, tf->trapno, tf->err, cpuid(),
             tf->eip, rcr2());
+#endif
     myproc()->killed = 1;
   }
 
