@@ -125,7 +125,7 @@ static inline uint64 read_tsc(void) {
 // On real hardware would want to tune this dynamically.
 static const uint64 cycles_per_us = 3000; // ~3 GHz
 
-void microdelay(int us) {
+static void microdelay_of(int us) {
 #if defined(__i386__) || defined(__x86_64__)
   uint64 end = read_tsc() + (uint64)us * cycles_per_us;
   while (read_tsc() < end)
@@ -142,6 +142,10 @@ void microdelay(int us) {
   for (volatile int i = 0; i < us * 100; i++)
     cpu_relax();
 #endif
+}
+
+void microdelay(int us) {
+  microdelay_of(us);
 }
 
 #define CMOS_PORT 0x70
