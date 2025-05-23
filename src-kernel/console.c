@@ -15,6 +15,7 @@
 #include "proc.h"
 #include "x86.h"
 #include "fastipc.h"
+#include "tty.h"
 
 static void consputc(int);
 
@@ -47,7 +48,7 @@ printint(int xx, int base, int sign)
     buf[i++] = '-';
 
   while(--i >= 0)
-    consputc(buf[i]);
+    ttypecho(buf[i], consputc);
 }
 //PAGEBREAK: 50
 
@@ -69,7 +70,7 @@ cprintf(char *fmt, ...)
   argp = (unsigned long*)(void*)(&fmt + 1);
   for(i = 0; (c = fmt[i] & 0xff) != 0; i++){
     if(c != '%'){
-      consputc(c);
+      ttypecho(c, consputc);
       continue;
     }
     c = fmt[++i] & 0xff;
@@ -87,15 +88,15 @@ cprintf(char *fmt, ...)
       if((s = (char*)*argp++) == 0)
         s = "(null)";
       for(; *s; s++)
-        consputc(*s);
+        ttypecho(*s, consputc);
       break;
     case '%':
-      consputc('%');
+      ttypecho('%', consputc);
       break;
     default:
       // Print unknown % sequence to draw attention.
-      consputc('%');
-      consputc(c);
+      ttypecho('%', consputc);
+      ttypecho(c, consputc);
       break;
     }
   }
@@ -179,15 +180,6 @@ consputc(int c)
   cgaputc(c);
 }
 
-#define INPUT_BUF 128
-struct {
-  char buf[INPUT_BUF];
-  uint r;  // Read index
-  uint w;  // Write index
-  uint e;  // Edit index
-} input;
-
-#define C(x)  ((x)-'@')  // Control-x
 
 void
 consoleintr(int (*getc)(void))
@@ -196,85 +188,27 @@ consoleintr(int (*getc)(void))
 
   acquire(&cons.lock);
   while((c = getc()) >= 0){
-    switch(c){
-    case C('P'):  // Process listing.
-      // procdump() locks cons.lock indirectly; invoke later
+    if(c == C('P')){  // Process listing.
       doprocdump = 1;
-      break;
-    case C('U'):  // Kill line.
-      while(input.e != input.w &&
-            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
-        input.e--;
-        consputc(BACKSPACE);
+    } else {
+      ttyintr(c, consputc);
+      if(c != 0){
+        zipc_msg_t m = {0};
+        m.badge = 1;
+        m.w0 = c;
+        fastipc_send(&m);
       }
-      break;
-    case C('H'): case '\x7f':  // Backspace
-      if(input.e != input.w){
-        input.e--;
-        consputc(BACKSPACE);
-      }
-      break;
-    default:
-      if(c != 0 && input.e-input.r < INPUT_BUF){
-        c = (c == '\r') ? '\n' : c;
-        input.buf[input.e++ % INPUT_BUF] = c;
-        consputc(c);
-        {
-          zipc_msg_t m = {0};
-          m.badge = 1;
-          m.w0 = c;
-          fastipc_send(&m);
-        }
-        if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
-          input.w = input.e;
-          wakeup(&input.r);
-        }
-      }
-      break;
     }
   }
   release(&cons.lock);
-  if(doprocdump) {
+  if(doprocdump)
     procdump();  // now call procdump() wo. cons.lock held
-  }
 }
 
 int
 consoleread(struct inode *ip, char *dst, size_t n)
 {
-  size_t target;
-  int c;
-
-  iunlock(ip);
-  target = n;
-  acquire(&cons.lock);
-  while(n > 0){
-    while(input.r == input.w){
-      if(myproc()->killed){
-        release(&cons.lock);
-        ilock(ip);
-        return -1;
-      }
-      sleep(&input.r, &cons.lock);
-    }
-    c = input.buf[input.r++ % INPUT_BUF];
-    if(c == C('D')){  // EOF
-      if(n < target){
-        // Save ^D for next time, to make sure
-        // caller gets a 0-byte result.
-        input.r--;
-      }
-      break;
-    }
-    *dst++ = c;
-    --n;
-    if(c == '\n')
-      break;
-  }
-  release(&cons.lock);
-  ilock(ip);
-
-  return target - n;
+  return ttyread(ip, dst, n);
 }
 
 int
@@ -285,7 +219,7 @@ consolewrite(struct inode *ip, char *buf, size_t n)
   iunlock(ip);
   acquire(&cons.lock);
   for(i = 0; i < n; i++)
-    consputc(buf[i] & 0xff);
+    ttypecho(buf[i] & 0xff, consputc);
   release(&cons.lock);
   ilock(ip);
 
@@ -296,6 +230,8 @@ void
 consoleinit(void)
 {
   initlock(&cons.lock, "console");
+
+  ttyinit();
 
   devsw[CONSOLE].write = consolewrite;
   devsw[CONSOLE].read = consoleread;
