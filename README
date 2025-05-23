@@ -59,6 +59,12 @@ cross-compiler suite and invoke ``make TOOLPREFIX=i386-jos-elf-``.  Now
 install the QEMU PC simulator and run ``make qemu``.  The Bochs
 emulator is also supported via ``make bochs`` and is installed by
 ``setup.sh``.
+
+Before building user-mode programs you must generate ``libos.a``,
+the user-space runtime library.  This typically happens as an
+implicit prerequisite, but if you see errors about a missing
+``libos.a`` run ``make libos`` explicitly and then rebuild your
+programs.
 A helper script, `setup.sh`, installs cross-compilers, build dependencies,
 QEMU packages, and additional development tools.  Run it once before
 building to ensure all prerequisites are available.  From the top-level
