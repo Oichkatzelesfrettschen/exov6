@@ -106,6 +106,12 @@ with::
 
 The checks will run on every commit.
 
+To validate patches before emailing them, enable the
+``sendemail-validate`` hook::
+
+    cp .git/hooks/sendemail-validate.sample .git/hooks/sendemail-validate
+    chmod +x .git/hooks/sendemail-validate
+
 ``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
 generates ``compile_commands.json`` on demand using
 ``scripts/gen_compile_commands.py`` if it doesn't already exist.
