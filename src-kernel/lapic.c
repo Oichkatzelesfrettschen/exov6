@@ -8,7 +8,11 @@
 #include "memlayout.h"
 #include "traps.h"
 #include "mmu.h"
+#if defined(__aarch64__)
+#include "aarch64.h"
+#else
 #include "x86.h"
+#endif
 
 // Local APIC registers, divided by 4 for use as uint[] indices.
 #define ID (0x0020 / 4)    // ID
@@ -106,6 +110,7 @@ void lapiceoi(void) {
 }
 
 // Spin for a given number of microseconds.
+
 // This implementation uses the timestamp counter on x86 as a crude
 // busy wait.  The value of cycles_per_us is only an approximation and
 // is sufficient for the short delays used during early hardware
@@ -114,6 +119,33 @@ static inline uint64 read_tsc(void) {
   uint lo, hi;
   asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
   return ((uint64)hi << 32) | lo;
+
+// On real hardware would want to tune this dynamically.
+void
+microdelay of(int us)
+{
+#if defined(__x86_64__)
+  uint32 lo, hi;
+  asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
+  uint64 start = ((uint64)hi << 32) | lo;
+  const uint64 freq = 2500000000ULL;
+  uint64 ticks = (freq / 1000000ULL) * us;
+  do {
+    asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
+  } while((((uint64)hi << 32) | lo) - start < ticks);
+#elif defined(__aarch64__)
+  uint64 start, cur, freq;
+  asm volatile("mrs %0, cntfrq_el0" : "=r"(freq));
+  asm volatile("mrs %0, cntvct_el0" : "=r"(start));
+  uint64 ticks = (freq / 1000000ULL) * us;
+  do {
+    asm volatile("mrs %0, cntvct_el0" : "=r"(cur));
+  } while(cur - start < ticks);
+#else
+  volatile uint64 i;
+  for(i = 0; i < (uint64)us * 100; i++)
+    cpu_relax();
+#endif
 }
 
 static const uint64 cycles_per_us = 3000; // ~3 GHz

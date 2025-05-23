@@ -1,4 +1,4 @@
-#include "kernel/exo_ipc.h"
+#include "exo_ipc.h"
 #include "defs.h"
 #include "ipc.h"
 #include "proc.h"

@@ -255,6 +255,11 @@ if command -v compiledb >/dev/null 2>&1; then
     echo "Warning: failed to generate compile_commands.json (exit code $status)" >&2
     echo "compiledb" >>"$FAIL_LOG"
   fi
+elif [ -x scripts/gen_compile_commands.py ]; then
+  if ! python3 scripts/gen_compile_commands.py >/dev/null 2>&1; then
+    echo "Warning: gen_compile_commands.py failed" >&2
+    echo "gen_compile_commands" >>"$FAIL_LOG"
+  fi
 fi
 
 # Install pre-commit hooks if possible

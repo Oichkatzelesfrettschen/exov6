@@ -83,6 +83,10 @@ with::
 
 The checks will run on every commit.
 
+``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
+generates ``compile_commands.json`` on demand using
+``scripts/gen_compile_commands.py`` if it doesn't already exist.
+
 Experimental support for building with the C23 standard and for
 cross-compiling a 64-bit version is available. Set
 ``ARCH=x86_64`` when invoking make to enable 64-bit builds and adjust
