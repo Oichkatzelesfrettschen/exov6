@@ -90,8 +90,10 @@ void lapicinit(void) {
   // Send an Init Level De-Assert to synchronise arbitration ID's.
   lapicw(ICRHI, 0);
   lapicw(ICRLO, BCAST | INIT | LEVEL);
-  while (lapic[ICRLO] & DELIVS)
-    ;
+
+  while(lapic[ICRLO] & DELIVS)
+    cpu_relax();
+ master
 
   // Enable interrupts on the APIC (but not on the processor).
   lapicw(TPR, 0);
@@ -239,11 +241,16 @@ void cmostime(struct rtcdate *r) {
   // make sure CMOS doesn't modify time while we read it
   for (;;) {
     fill_rtcdate(&t1);
-    if (cmos_read(CMOS_STATA) & CMOS_UIP)
-      continue;
+
+    if(cmos_read(CMOS_STATA) & CMOS_UIP){
+        cpu_relax();
+        continue;
+    }
+
     fill_rtcdate(&t2);
     if (memcmp(&t1, &t2, sizeof(t1)) == 0)
       break;
+    cpu_relax();
   }
 
   // convert
