@@ -397,6 +397,13 @@ log: bochsout.txt
 #=======================================================================
 panic: action=ask, cdrom=report
 error: action=report, cdrom=ignore
+
+# Configure how Bochs reacts to events of each severity.  The
+# optional facility-specific clauses override the global action for the
+# named subsystem.  This example reports panics from the CD-ROM device
+# while still prompting for all other panic events.
+panic: action=ask, cdrom=report
+error: action=report
 info: action=report
 debug: action=ignore, cdrom=report
 #pass: action=fatal

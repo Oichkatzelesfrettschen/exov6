@@ -1,8 +1,4 @@
-formatting:
-	need to fix PAGEBREAK mechanism
-
 sh:
        built-ins (e.g. cd) now run correctly within lists, pipes, and
        background commands.
-       maybe should hard-code PATH=/ ?
 
