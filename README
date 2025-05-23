@@ -12,12 +12,6 @@ The user-level shell supports built-in commands such as ``cd``.  These
 built-ins execute directly in the shell process even when used in command
 lists, pipelines, or background jobs.
 
-Programs are expected to reside directly under `/`.  If a command
-name does not include a slash, the shell automatically prepends `/`
-when searching for the executable.  xv6 does not support environment
-variables like `PATH`, so the shell's search path is effectively hard
-coded to just `/`.
-
 ACKNOWLEDGMENTS
 
 xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
@@ -125,6 +119,19 @@ limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
 
+
+16-BIT BUILD
+------------
+An experimental 16-bit configuration is also available.  ``setup.sh``
+installs the ``ia16-elf-gcc`` cross compiler.  Build the tiny 16-bit
+kernel and run it under Bochs with::
+
+    make ARCH=ia16
+    make bochs ARCH=ia16
+
+This creates ``kernel-ia16`` and ``xv6-ia16.img`` which Bochs can boot
+in real mode.
+
 CROSS-COMPILING
 ---------------
 The ``setup.sh`` script installs cross-compilers for several
@@ -155,6 +162,22 @@ for architectures that do not yet have dedicated run scripts are::
 
 When additional ``ARCH`` values are implemented in the Makefile these
 commands will build and boot the corresponding images.
+
+
+BOCHS
+-----
+Logging actions in ``dot-bochsrc`` can now be tailored per facility.  A
+default action may be followed by overrides for specific devices.  For
+example::
+
+    panic: action=ask, cdrom=report
+    error: action=report, cdrom=ignore
+    info:  action=report
+    debug: action=ignore, cdrom=report
+
+The above configuration reports panics from the CD-ROM while leaving
+other devices interactive, ignores non-critical CD-ROM errors and still
+prints its debug messages.
 
 MESON BUILD
 -----------
