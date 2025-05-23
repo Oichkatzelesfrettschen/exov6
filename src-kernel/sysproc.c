@@ -77,11 +77,25 @@ int sys_uptime(void) {
 }
 
 int sys_mappte(void) {
-  int va, pa, perm;
+#if defined(__x86_64__)
+  uint64 va, pa;
+  int va32, pa32;
+#else
+  int va, pa;
+#endif
+  int perm;
 
+#if defined(__x86_64__)
+  if (argint(0, &va32) < 0 || argint(1, &pa32) < 0 || argint(2, &perm) < 0)
+    return -1;
+  va = (uint)va32;
+  pa = (uint)pa32;
+  return insert_pte(myproc()->pgdir, (void *)(uintptr_t)va, pa, perm);
+#else
   if (argint(0, &va) < 0 || argint(1, &pa) < 0 || argint(2, &perm) < 0)
     return -1;
   return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
+#endif
 }
 
 int sys_set_timer_upcall(void) {
@@ -155,8 +169,7 @@ int sys_exo_flush_block(void) {
   char *data;
   struct buf b;
 
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
-      argptr(1, &data, BSIZE) < 0)
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argptr(1, &data, BSIZE) < 0)
     return -1;
 
   cap = *ucap;
@@ -184,10 +197,8 @@ int sys_exo_read_disk(void) {
   char *dst;
   uint off, n;
 
-  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&off) < 0 ||
-      argint(3, (int *)&n) < 0 ||
-      argptr(1, &dst, n) < 0)
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 || argint(2, (int *)&off) < 0 ||
+      argint(3, (int *)&n) < 0 || argptr(1, &dst, n) < 0)
 
     return -1;
   return exo_read_disk(cap, dst, off, n);
@@ -198,10 +209,8 @@ int sys_exo_write_disk(void) {
   char *src;
   uint off, n;
 
-  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&off) < 0 ||
-      argint(3, (int *)&n) < 0 ||
-      argptr(1, &src, n) < 0)
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 || argint(2, (int *)&off) < 0 ||
+      argint(3, (int *)&n) < 0 || argptr(1, &src, n) < 0)
 
     return -1;
   return exo_write_disk(cap, src, off, n);
@@ -211,8 +220,7 @@ int sys_exo_send(void) {
   exo_cap *ucap, cap;
   char *src;
   uint n;
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&n) < 0 ||
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argint(2, (int *)&n) < 0 ||
       argptr(1, &src, n) < 0)
     return -1;
   memmove(&cap, ucap, sizeof(cap));
@@ -225,8 +233,7 @@ int sys_exo_recv(void) {
   exo_cap *ucap, cap;
   char *dst;
   uint n;
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&n) < 0 ||
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argint(2, (int *)&n) < 0 ||
       argptr(1, &dst, n) < 0)
     return -1;
   memmove(&cap, ucap, sizeof(cap));
@@ -300,9 +307,7 @@ int sys_set_gas(void) {
   return 0;
 }
 
-int sys_get_gas(void) {
-  return (int)myproc()->gas_remaining;
-}
+int sys_get_gas(void) { return (int)myproc()->gas_remaining; }
 
 int sys_sigsend(void) {
   int pid, sig;

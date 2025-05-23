@@ -91,9 +91,8 @@ void lapicinit(void) {
   lapicw(ICRHI, 0);
   lapicw(ICRLO, BCAST | INIT | LEVEL);
 
-  while(lapic[ICRLO] & DELIVS)
+  while (lapic[ICRLO] & DELIVS)
     cpu_relax();
- master
 
   // Enable interrupts on the APIC (but not on the processor).
   lapicw(TPR, 0);
@@ -121,35 +120,9 @@ static inline uint64 read_tsc(void) {
   uint lo, hi;
   asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
   return ((uint64)hi << 32) | lo;
-
-// On real hardware would want to tune this dynamically.
-void
-microdelay of(int us)
-{
-#if defined(__x86_64__)
-  uint32 lo, hi;
-  asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
-  uint64 start = ((uint64)hi << 32) | lo;
-  const uint64 freq = 2500000000ULL;
-  uint64 ticks = (freq / 1000000ULL) * us;
-  do {
-    asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
-  } while((((uint64)hi << 32) | lo) - start < ticks);
-#elif defined(__aarch64__)
-  uint64 start, cur, freq;
-  asm volatile("mrs %0, cntfrq_el0" : "=r"(freq));
-  asm volatile("mrs %0, cntvct_el0" : "=r"(start));
-  uint64 ticks = (freq / 1000000ULL) * us;
-  do {
-    asm volatile("mrs %0, cntvct_el0" : "=r"(cur));
-  } while(cur - start < ticks);
-#else
-  volatile uint64 i;
-  for(i = 0; i < (uint64)us * 100; i++)
-    cpu_relax();
-#endif
 }
 
+// On real hardware would want to tune this dynamically.
 static const uint64 cycles_per_us = 3000; // ~3 GHz
 
 void microdelay(int us) {
@@ -157,10 +130,17 @@ void microdelay(int us) {
   uint64 end = read_tsc() + (uint64)us * cycles_per_us;
   while (read_tsc() < end)
     cpu_relax();
+#elif defined(__aarch64__)
+  uint64 start, cur, freq;
+  asm volatile("mrs %0, cntfrq_el0" : "=r"(freq));
+  asm volatile("mrs %0, cntvct_el0" : "=r"(start));
+  uint64 ticks = (freq / 1000000ULL) * us;
+  do {
+    asm volatile("mrs %0, cntvct_el0" : "=r"(cur));
+  } while (cur - start < ticks);
 #else
-  // Fallback: simple loop on non-x86 architectures.
   for (volatile int i = 0; i < us * 100; i++)
-    ;
+    cpu_relax();
 #endif
 }
 
@@ -242,9 +222,9 @@ void cmostime(struct rtcdate *r) {
   for (;;) {
     fill_rtcdate(&t1);
 
-    if(cmos_read(CMOS_STATA) & CMOS_UIP){
-        cpu_relax();
-        continue;
+    if (cmos_read(CMOS_STATA) & CMOS_UIP) {
+      cpu_relax();
+      continue;
     }
 
     fill_rtcdate(&t2);

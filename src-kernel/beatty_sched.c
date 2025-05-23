@@ -13,36 +13,37 @@ static double *weights;
 static uint64 *counts;
 static int ntasks;
 
-void
-beatty_sched_set_tasks(const exo_cap *t, const double *w, int n)
-{
+void beatty_sched_set_tasks(const exo_cap *t, const double *w, int n) {
   acquire(&beatty_lock);
 
-  if(tasks)
-    kfree((char*)tasks);
-  if(weights)
-    kfree((char*)weights);
-  if(counts)
-    kfree((char*)counts);
+  if (tasks)
+    kfree((char *)tasks);
+  if (weights)
+    kfree((char *)weights);
+  if (counts)
+    kfree((char *)counts);
 
   tasks = 0;
   weights = 0;
   counts = 0;
   ntasks = 0;
 
-  if(n <= 0 || n * sizeof(exo_cap) > PGSIZE ||
-     n * sizeof(double) > PGSIZE || n * sizeof(uint64) > PGSIZE){
+  if (n <= 0 || n * sizeof(exo_cap) > PGSIZE || n * sizeof(double) > PGSIZE ||
+      n * sizeof(uint64) > PGSIZE) {
     release(&beatty_lock);
     return;
   }
 
-  tasks = (exo_cap*)kalloc();
-  weights = (double*)kalloc();
-  counts = (uint64*)kalloc();
-  if(!tasks || !weights || !counts){
-    if(tasks) kfree((char*)tasks);
-    if(weights) kfree((char*)weights);
-    if(counts) kfree((char*)counts);
+  tasks = (exo_cap *)kalloc();
+  weights = (double *)kalloc();
+  counts = (uint64 *)kalloc();
+  if (!tasks || !weights || !counts) {
+    if (tasks)
+      kfree((char *)tasks);
+    if (weights)
+      kfree((char *)weights);
+    if (counts)
+      kfree((char *)counts);
     tasks = 0;
     weights = 0;
     counts = 0;
@@ -52,7 +53,7 @@ beatty_sched_set_tasks(const exo_cap *t, const double *w, int n)
 
   memmove(tasks, t, n * sizeof(exo_cap));
   memmove(weights, w, n * sizeof(double));
-  for(int i = 0; i < n; i++)
+  for (int i = 0; i < n; i++)
     counts[i] = 1;
 
   ntasks = n;
@@ -65,12 +66,12 @@ static void beatty_halt(void) { /* nothing */ }
 static void beatty_yield(void) {
   acquire(&beatty_lock);
   exo_cap next = {0};
-  if(ntasks > 0){
+  if (ntasks > 0) {
     int idx = 0;
     uint64 best = (uint64)(weights[0] * (double)counts[0]);
-    for(int i = 1; i < ntasks; i++){
+    for (int i = 1; i < ntasks; i++) {
       uint64 v = (uint64)(weights[i] * (double)counts[i]);
-      if(v < best){
+      if (v < best) {
         best = v;
         idx = i;
       }
