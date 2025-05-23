@@ -97,8 +97,13 @@ exec(char *path, char **argv)
   oldpgdir = curproc->pgdir;
   curproc->pgdir = pgdir;
   curproc->sz = sz;
+#if defined(__x86_64__)
+  curproc->tf->rip = elf.entry;  // main
+  curproc->tf->rsp = sp;
+#else
   curproc->tf->eip = elf.entry;  // main
   curproc->tf->esp = sp;
+#endif
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;

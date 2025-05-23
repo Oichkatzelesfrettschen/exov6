@@ -2,7 +2,7 @@
 #include "defs.h"
 #include "spinlock.h"
 #include "exo_stream.h"
-#include "kernel/exo_cpu.h"
+#include "exo_cpu.h"
 
 static struct spinlock beatty_lock;
 static struct exo_sched_ops beatty_ops;
