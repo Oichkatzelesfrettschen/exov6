@@ -144,7 +144,20 @@ whenever the current task yields or no runnable work remains.
   structure defined in `ipc.h`.
 
 Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
-and automatically serialize Cap'n Proto messages.
+and automatically serialize Cap'n Proto messages.  Each channel is
+backed by a `msg_type_desc` describing the size of the Cap'n Proto
+structure it transports.
+
+Schemas written in `.capnp` format are compiled with `capnp` to generate
+`<name>.capnp.h`.  The resulting header defines `type_MESSAGE_SIZE` as
+well as `type_encode()` and `type_decode()` helpers that translate
+between the C struct and its serialized form.
+
+The generic helpers `chan_endpoint_send()` and `chan_endpoint_recv()`
+verify that the buffer length matches the descriptor before invoking the
+underlying capability syscalls.  A mismatch causes the helpers to return
+`-1` (and the kernel variant prints a diagnostic), ensuring that only
+properly sized messages traverse the channel.
 
 The libOS builds higher level abstractions such as processes and files
 by combining these primitives.
