@@ -5,6 +5,7 @@ LIBOS_DIR  := libos
 OBJS = \
     $(KERNEL_DIR)/bio.o \
     $(KERNEL_DIR)/console.o \
+    $(KERNEL_DIR)/tty.o \
     $(KERNEL_DIR)/exec.o \
     $(KERNEL_DIR)/file.o \
     $(KERNEL_DIR)/fs.o \
@@ -377,7 +378,10 @@ $(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
 $(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/user/chan_dag_supervisor_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(ULAND_DIR)/chan_beatty_rcrs_demo.o: $(ULAND_DIR)/user/chan_beatty_rcrs_demo.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+        $(CC) $(CFLAGS) -c -o $@ $<
+
+$(ULAND_DIR)/tty_demo.o: $(ULAND_DIR)/tty_demo.c
+        $(CC) $(CFLAGS) -c -o $@ $<
 
 	# Generate simple C bindings from Cap'n Proto schemas
 proto/%.capnp.c: proto/%.capnp
@@ -428,6 +432,7 @@ _wc\
         _libos_posix_test\
         _libos_posix_extra_test\
         _qspin_demo\
+        _tty_demo\
 
 
 ifeq ($(ARCH),x86_64)
