@@ -8,7 +8,11 @@
 #include "memlayout.h"
 #include "traps.h"
 #include "mmu.h"
+#if defined(__aarch64__)
+#include "aarch64.h"
+#else
 #include "x86.h"
+#endif
 
 // Local APIC registers, divided by 4 for use as uint[] indices.
 #define ID      (0x0020/4)   // ID
@@ -118,6 +122,28 @@ lapiceoi(void)
 void
 microdelay(int us)
 {
+#if defined(__x86_64__)
+  uint32 lo, hi;
+  asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
+  uint64 start = ((uint64)hi << 32) | lo;
+  const uint64 freq = 2500000000ULL;
+  uint64 ticks = (freq / 1000000ULL) * us;
+  do {
+    asm volatile("rdtsc" : "=a"(lo), "=d"(hi));
+  } while((((uint64)hi << 32) | lo) - start < ticks);
+#elif defined(__aarch64__)
+  uint64 start, cur, freq;
+  asm volatile("mrs %0, cntfrq_el0" : "=r"(freq));
+  asm volatile("mrs %0, cntvct_el0" : "=r"(start));
+  uint64 ticks = (freq / 1000000ULL) * us;
+  do {
+    asm volatile("mrs %0, cntvct_el0" : "=r"(cur));
+  } while(cur - start < ticks);
+#else
+  volatile uint64 i;
+  for(i = 0; i < (uint64)us * 100; i++)
+    cpu_relax();
+#endif
 }
 
 #define CMOS_PORT    0x70
