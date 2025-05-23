@@ -1,11 +1,26 @@
 
 """Simulation harness for xv6 testing.
 
+
 The harness boots xv6 under QEMU and executes a short command
 sequence so automated tests can verify that the kernel image boots
 successfully.  The QEMU binary and image paths may be overridden via
 environment variables.  When tests run they set ``QEMU=/bin/true`` so
 the harness exits immediately without launching an emulator.
+
+The original placeholder merely returned success. The harness now
+invokes QEMU to boot the xv6 kernel and issues a trivial command
+sequence to ensure the guest is operational. The exit status from
+QEMU is propagated so CI runs can detect boot failures.
+
+This module's :func:`main` entry point boots xv6 under QEMU, runs a
+short command sequence and returns the emulator's exit status. It is
+intentionally minimal and primarily used by the automated test suite.
+The QEMU binary and image paths can be overridden through environment
+variables. When running under the tests the ``QEMU`` variable is set
+to ``/bin/true`` so the harness completes instantly without launching
+an emulator.
+
 """
 
 from __future__ import annotations

@@ -66,27 +66,18 @@ dequeue_ready(void)
 }
 
 static void
-dag_free_children(struct dag_node *n)
-{
-  struct dag_node_list *l = n->children;
-  while(l){
-    struct dag_node_list *next = l->next;
-    kfree((char *)l);
-    l = next;
-  }
-  n->children = 0;
-}
-
-static void
 dag_mark_done(struct dag_node *n)
 {
-  struct dag_node_list *l;
-  for(l = n->children; l; l = l->next){
+  struct dag_node_list *l = n->children;
+  n->children = 0;
+  while(l){
+    struct dag_node_list *next = l->next;
     struct dag_node *child = l->node;
     if(--child->pending == 0)
       enqueue_ready(child);
+    kfree((char *)l); /* free allocation from dag_node_add_dep */
+    l = next;
   }
-  dag_free_children(n);
 }
 
 static void
