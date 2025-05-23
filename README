@@ -357,6 +357,8 @@ runs while the DAG scheduler walks the dependency graph for that family.
 Build with ``make`` and run inside QEMU::
 
     $ beatty_dag_demo
+The demonstration shows how Beatty's weights pick the family and how the
+DAG scheduler respects node priorities when executing that family.
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.
