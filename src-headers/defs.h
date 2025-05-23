@@ -198,8 +198,6 @@ int fetchint(uint, int *);
 int fetchstr(uint, char **);
 void syscall(void);
 
-syscall(void);
-
 // timer.c
 void timerinit(void);
 
