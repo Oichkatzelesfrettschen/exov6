@@ -27,12 +27,14 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct trapframe;
 struct exo_cap;
 struct exo_blockcap;
 struct exo_sched_ops;
 struct dag_node;
 struct exo_stream;
 struct endpoint;
+struct dag_node;
 
 // process table defined in proc.c
 extern struct ptable ptable;
@@ -40,7 +42,10 @@ extern struct ptable ptable;
 #include "exo_cpu.h"
 #include "exo_disk.h"
 #include "exo_ipc.h"
+#include "ipc.h"
+#include "exo_mem.h"
 #include "fastipc.h"
+#include "ipc.h"
 
 // bio.c
 void binit(void);
@@ -169,9 +174,6 @@ void initlock(struct spinlock *, char *);
 void release(struct spinlock *);
 void pushcli(void);
 void popcli(void);
-void qspin_lock(struct spinlock *);
-void qspin_unlock(struct spinlock *);
-int qspin_trylock(struct spinlock *);
 
 // sleeplock.c
 void acquiresleep(struct sleeplock *);
@@ -257,28 +259,12 @@ void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);
 void dag_sched_init(void);
-<<<<<<< HEAD
-struct exo_sched_ops *dag_sched_get_ops(void);
 void beatty_sched_init(void);
-<<<<<<< HEAD:defs.h
-
-=======
-void beatty_sched_init(void);
->>>>>>> 17ceee6e (caplib.h)
 
 struct exo_sched_ops *dag_sched_ops(void);
 struct exo_sched_ops *beatty_sched_ops(void);
 void beatty_dag_stream_init(void);
 void beatty_sched_set_tasks(const exo_cap *, const double *, int);
-<<<<<<< HEAD
-=======
-void beatty_sched_set_tasks(exo_cap, exo_cap);
-void dag_node_set_weight(struct dag_node *, int);
-void beatty_sched_set_weights(int, int);
-int beatty_sched_pick(void);
->>>>>>> 7ff6ee1c (Add weighted DAG scheduling and Beatty integration):defs.h
-=======
->>>>>>> 17ceee6e (caplib.h)
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
 void endpoint_send(struct endpoint *, zipc_msg_t *);

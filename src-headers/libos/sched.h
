@@ -5,6 +5,7 @@ static inline void dag_node_set_priority(struct dag_node *n, int priority) {
   n->priority = priority;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD:src-headers/libos/sched.h
 
 void libos_setup_beatty_dag(void);
@@ -17,3 +18,6 @@ static inline void dag_node_set_weight(struct dag_node *n, int weight)
 void beatty_sched_set_tasks(exo_cap, exo_cap);
 void beatty_sched_set_weights(int, int);
 >>>>>>> 7ff6ee1c (Add weighted DAG scheduling and Beatty integration):libos/sched.h
+=======
+void libos_setup_beatty_dag(void);
+>>>>>>> 17ceee6e (caplib.h)
