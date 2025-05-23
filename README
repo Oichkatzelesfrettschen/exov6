@@ -206,6 +206,21 @@ When additional ``ARCH`` values are implemented in the Makefile these
 commands will build and boot the corresponding images.
 
 
+BOCHS
+-----
+Logging actions in ``dot-bochsrc`` can now be tailored per facility.  A
+default action may be followed by overrides for specific devices.  For
+example::
+
+    panic: action=ask, cdrom=report
+    error: action=report, cdrom=ignore
+    info:  action=report
+    debug: action=ignore, cdrom=report
+
+The above configuration reports panics from the CD-ROM while leaving
+other devices interactive, ignores non-critical CD-ROM errors and still
+prints its debug messages.
+
 MESON BUILD
 -----------
 The repository also includes a simple Meson setup.  After running

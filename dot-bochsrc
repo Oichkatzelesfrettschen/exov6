@@ -378,8 +378,16 @@ log: bochsout.txt
 #          spit out thousands per second.
 #
 # For events of each level, you can choose to crash, report, or ignore.
-# TODO: allow choice based on the facility: e.g. crash on panics from
-#       everything except the cdrom, and only report those.
+# Actions may be customized per facility by listing overrides after the
+# default action.  The format is::
+#
+#   panic: action=fatal, cdrom=report
+#   error: action=report, cdrom=ignore
+#   info:  action=report
+#   debug: action=ignore, cdrom=report
+#
+# The example above reports CD-ROM panics instead of aborting and ignores
+# CD-ROM errors while still logging debug messages for that device.
 #
 # If you are experiencing many panics, it can be helpful to change
 # the panic action to report instead of fatal.  However, be aware
@@ -387,6 +395,9 @@ log: bochsout.txt
 # cause bochs to become unstable.  The panic is a "graceful exit," so
 # if you disable it you may get a spectacular disaster instead.
 #=======================================================================
+panic: action=ask, cdrom=report
+error: action=report, cdrom=ignore
+
 # Configure how Bochs reacts to events of each severity.  The
 # optional facility-specific clauses override the global action for the
 # named subsystem.  This example reports panics from the CD-ROM device
@@ -394,7 +405,7 @@ log: bochsout.txt
 panic: action=ask, cdrom=report
 error: action=report
 info: action=report
-debug: action=ignore
+debug: action=ignore, cdrom=report
 #pass: action=fatal
 
 #=======================================================================
