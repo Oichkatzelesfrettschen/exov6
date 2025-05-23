@@ -91,7 +91,7 @@ lapicinit(void)
   lapicw(ICRHI, 0);
   lapicw(ICRLO, BCAST | INIT | LEVEL);
   while(lapic[ICRLO] & DELIVS)
-    ;
+    cpu_relax();
 
   // Enable interrupts on the APIC (but not on the processor).
   lapicw(TPR, 0);
@@ -205,11 +205,14 @@ cmostime(struct rtcdate *r)
   // make sure CMOS doesn't modify time while we read it
   for(;;) {
     fill_rtcdate(&t1);
-    if(cmos_read(CMOS_STATA) & CMOS_UIP)
+    if(cmos_read(CMOS_STATA) & CMOS_UIP){
+        cpu_relax();
         continue;
+    }
     fill_rtcdate(&t2);
     if(memcmp(&t1, &t2, sizeof(t1)) == 0)
       break;
+    cpu_relax();
   }
 
   // convert
