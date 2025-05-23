@@ -17,3 +17,5 @@ if clang_tidy.found()
   run_target('clang-tidy', command: [clang_tidy, sources],
              depends: sources)
 endif
+
+subdir('libnstr_graph')
