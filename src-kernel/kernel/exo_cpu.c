@@ -3,7 +3,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "memlayout.h"
-#include "exo_cpu.h"
+#include "kernel/exo_cpu.h"
 
 int exo_yield_to(exo_cap target)
 {
