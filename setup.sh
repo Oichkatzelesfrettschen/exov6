@@ -92,14 +92,14 @@ for pkg in \
   python3-numpy python3-scipy python3-pandas \
   python3-matplotlib python3-scikit-learn \
   python3-torch python3-torchvision python3-torchaudio \
-  python3-onnx python3-onnxruntime; do
+  python3-onnx python3-onnxruntime python3-configuredb; do
   apt_pin_install "$pkg"
 done
 
 for pip_pkg in \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db; do
+  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db configuredb; do
   pip_install "$pip_pkg"
 done
 
