@@ -34,6 +34,8 @@ struct driver {
   uint last_ping;
   int awaiting_pong;
   int ping_timeout;
+  int ping_interval;
+  int max_restarts;
   int restarts;
 };
 
@@ -73,6 +75,8 @@ static int parse_config(const char *path, struct driver *d, int max) {
       strcpy(d[idx].buf, p);
 
       d[idx].ping_timeout = 0;
+      d[idx].ping_interval = PING_DELAY;
+      d[idx].max_restarts = -1;
       int arg = 0;
       char *q = d[idx].buf;
       while (arg < MAX_ARGS - 1) {
@@ -88,12 +92,18 @@ static int parse_config(const char *path, struct driver *d, int max) {
 
         if (starts_with(tok, "--timeout="))
           d[idx].ping_timeout = atoi(tok + 10);
+        else if (starts_with(tok, "--ping-timeout="))
+          d[idx].ping_timeout = atoi(tok + 15);
+        else if (starts_with(tok, "--ping-interval="))
+          d[idx].ping_interval = atoi(tok + 16);
+        else if (starts_with(tok, "--max-restarts="))
+          d[idx].max_restarts = atoi(tok + 15);
         else
           d[idx].argv[arg++] = tok;
       }
       d[idx].argv[arg] = 0;
       if (d[idx].ping_timeout <= 0)
-        d[idx].ping_timeout = DEFAULT_TIMEOUT;
+        d[idx].ping_timeout = d[idx].ping_interval * 2;
       idx++;
     } else {
       line[pos++] = c;
@@ -144,7 +154,8 @@ int main(void) {
     uint now = uptime();
 
     for (int i = 0; i < n; i++) {
-      if (!drv[i].awaiting_pong && now - drv[i].last_ping >= PING_DELAY) {
+      if (drv[i].pid > 0 && !drv[i].awaiting_pong &&
+          now - drv[i].last_ping >= (uint)drv[i].ping_interval) {
         zipc_msg_t m = {0};
         m.w0 = PING;
         m.w1 = i;
@@ -162,22 +173,38 @@ int main(void) {
 
     now = uptime();
     for (int i = 0; i < n; i++) {
-      if (drv[i].awaiting_pong && now - drv[i].last_ping > (uint)drv[i].ping_timeout) {
+      if (drv[i].pid > 0 && drv[i].awaiting_pong &&
+          now - drv[i].last_ping > (uint)drv[i].ping_timeout) {
         printf(1, "rcrs: restarting %s\n", drv[i].argv[0]);
         kill(drv[i].pid);
         wait();
-        drv[i].pid = start_driver(&drv[i]);
-        drv[i].awaiting_pong = 0;
-        drv[i].last_ping = now;
-        drv[i].restarts++;
+        if (drv[i].max_restarts >= 0 &&
+            drv[i].restarts >= drv[i].max_restarts) {
+          printf(1, "rcrs: max restarts reached for %s\n", drv[i].argv[0]);
+          drv[i].pid = 0;
+          drv[i].awaiting_pong = 0;
+          drv[i].last_ping = now;
+        } else {
+          drv[i].pid = start_driver(&drv[i]);
+          drv[i].awaiting_pong = 0;
+          drv[i].last_ping = now;
+          drv[i].restarts++;
+        }
       }
     }
 
     if (now - last_report >= STATUS_INTERVAL) {
       printf(1, "rcrs status:\n");
       for (int i = 0; i < n; i++) {
+        const char *state;
+        if (drv[i].pid == 0)
+          state = "disabled";
+        else if (drv[i].awaiting_pong)
+          state = "waiting";
+        else
+          state = "alive";
         printf(1, "  %s pid %d %s restarts %d\n", drv[i].argv[0], drv[i].pid,
-               drv[i].awaiting_pong ? "waiting" : "alive", drv[i].restarts);
+               state, drv[i].restarts);
       }
       last_report = now;
     }

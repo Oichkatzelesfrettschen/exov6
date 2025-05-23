@@ -9,15 +9,19 @@ Optional flags can follow the command. The current flags are:
 * `--timeout=<ticks>` or `--ping-timeout=<ticks>` – number of clock
   ticks to wait for a driver to respond to a ping before restarting it.
   If omitted, a default timeout twice the ping interval is used.
+* `--ping-interval=<ticks>` – how often to ping the driver. Defaults to
+  20 ticks if unspecified.
+* `--max-restarts=<n>` – stop restarting the driver after it has been
+  relaunched `n` times.
 
 Example `drivers.conf`:
 
 ```
-# launch the keyboard service
-kbdserv
+# launch the keyboard service with a slower ping
+kbdserv --ping-interval=50
 
-# network driver with a custom timeout
-pingdriver --timeout=60
+# network driver with a custom timeout and limited restarts
+pingdriver --timeout=60 --max-restarts=3
 ```
 
 The supervisor periodically prints a status report showing each driver's
