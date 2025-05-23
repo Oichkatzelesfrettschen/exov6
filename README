@@ -348,6 +348,10 @@ which restricts a channel to a single send.  After building with ``make`` and bo
 
     $ affine_channel_demo
 
+
+The demonstration shows how Beatty's weights pick the family and how the
+DAG scheduler respects node priorities when executing that family.
+
 DRIVER SUPERVISOR
 -----------------
 ``rcrs`` is a small supervisor that keeps user-space drivers running.

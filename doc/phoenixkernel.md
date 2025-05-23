@@ -385,5 +385,14 @@ main(void)
 
 The kernel now ships with a Beatty scheduler implementing an affine runtime. It dispatches multiple cooperating contexts according to irrational weights. Enable it with `beatty_sched_set_tasks` after registering the Beatty exo stream. Typed channels can exchange messages whenever the scheduler yields.
 
-When `beatty_dag_stream_init()` is invoked during boot the Beatty scheduler is chained with the DAG scheduler through a single exo stream. Beatty picks the next task family based on its irrational weights and then defers to the DAG scheduler to run the individual ready nodes. This allows user space runtimes to build dependency graphs while still benefiting from the affine time slicing provided by Beatty. Selecting the combined stream merely requires calling the initializer before submitting DAG nodes.
+When `beatty_dag_stream_init()` is invoked during boot the Beatty scheduler is
+chained with the DAG scheduler through a single exo stream.  Beatty picks the
+next task family according to the weights passed to
+`beatty_sched_set_tasks`.  Each family receives time slices proportional to its
+weight following the irrational Beatty sequence.  After a family is chosen the
+DAG scheduler runs the ready nodes of that family ordered by their integer
+priorities so that more important nodes execute first.  This allows user space
+runtimes to build dependency graphs while still benefiting from the affine time
+slicing provided by Beatty. Selecting the combined stream merely requires
+calling the initializer before submitting DAG nodes.
 
