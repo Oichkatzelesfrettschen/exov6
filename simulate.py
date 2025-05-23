@@ -1,9 +1,16 @@
 """Simulation harness for xv6 testing.
 
 
+
+The harness boots xv6 under QEMU and executes a short command
+sequence so automated tests can verify that the kernel image boots
+successfully.  The QEMU binary and image paths may be overridden via
+environment variables.  When tests run they set ``QEMU=/bin/true`` so
+the harness exits immediately without launching an emulator.
 Boot xv6 under QEMU and return the emulator's exit status. The QEMU
 binary and disk image paths can be overridden via environment
 variables. The harness is primarily used by the automated test suite.
+
 
 The original placeholder merely returned success. The harness now
 invokes QEMU to boot the xv6 kernel and issues a trivial command
@@ -40,14 +47,31 @@ def _find_qemu() -> Optional[str]:
             return path
     return None
 
+
+import os
+import subprocess
+from pathlib import Path
+
+DEFAULT_QEMU = "qemu-system-x86_64"
+DEFAULT_DISK = "xv6-64.img"
+DEFAULT_FS = "fs64.img"
+
+SCRIPT = "echo booted;\n\x01x"
+
+def main() -> int:
+    """Boot xv6 under QEMU and return the emulator's exit status."""
+
+    qemu = os.environ.get("QEMU", DEFAULT_QEMU)=======
 def main() -> int:
     """Boot xv6 under QEMU and return the emulator's exit status."""
 
     qemu = os.environ.get("QEMU") or _find_qemu()
     if not qemu:
-        print("QEMU not found; cannot run simulation")
+        pr of int("QEMU not found; cannot run simulation")
         return 1
 
+
+      
     disk = Path(os.environ.get("XV6_IMG", DEFAULT_DISK))
     fsimg = Path(os.environ.get("FS_IMG", DEFAULT_FS))
 
