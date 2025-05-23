@@ -3,11 +3,13 @@
 #include "libfs.h"
 #include "string.h"
 #include "user.h"
+#include "signal.h"
 
 #define LIBOS_MAXFD 16
 #define LIBOS_MAXFILES 8
 
 static struct file *fd_table[LIBOS_MAXFD];
+static void (*sig_handlers[32])(int);
 
 struct vfile {
     char path[32];
@@ -94,6 +96,18 @@ int libos_spawn(const char *path, char *const argv[]) {
     return pid;
 }
 
+int libos_execve(const char *path, char *const argv[]) {
+    return exec((char *)path, (char **)argv);
+}
+
+int libos_mkdir(const char *path) {
+    return mkdir((char *)path);
+}
+
+int libos_rmdir(const char *path) {
+    return unlink((char *)path);
+}
+
 int libos_dup(int fd) {
     if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
         return -1;
@@ -130,5 +144,17 @@ int libos_sigsend(int pid, int sig) {
 }
 
 int libos_sigcheck(void) {
-    return sigcheck();
+    int pending = sigcheck();
+    for(int s = 0; s < 32; s++) {
+        if((pending & (1<<s)) && sig_handlers[s])
+            sig_handlers[s](s);
+    }
+    return pending;
+}
+
+int libos_signal(int sig, void (*handler)(int)) {
+    if(sig < 0 || sig >= 32)
+        return -1;
+    sig_handlers[sig] = handler;
+    return 0;
 }
