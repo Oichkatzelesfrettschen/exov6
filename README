@@ -370,3 +370,6 @@ Run the latency harness with Python:
 ```
 $ python3 scripts/simulate.py
 ```
+
+Further work items related to the STREAMS prototype are tracked in
+`TODO_STREAMS.md`.
