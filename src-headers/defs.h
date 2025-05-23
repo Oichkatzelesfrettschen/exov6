@@ -102,6 +102,13 @@ void kfree(char *);
 void kinit1(void *, void *);
 void kinit2(void *, void *);
 
+// zone.c
+typedef struct zone zone_t;
+void zone_init(zone_t *z, size_t obj_size, char *name);
+void *zalloc(zone_t *z);
+void zfree(zone_t *z, void *ptr);
+void zone_dump(zone_t *z);
+
 // kbd.c
 void kbdintr(void);
 
