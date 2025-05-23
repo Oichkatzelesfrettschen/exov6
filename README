@@ -15,6 +15,12 @@ searched for only in the root directory; if a command does not include a
 slash, the shell automatically prefixes ``/`` before executing it. xv6
 does not implement a ``PATH`` environment variable.
 
+Programs are expected to reside directly under `/`.  If a command
+name does not include a slash, the shell automatically prepends `/`
+when searching for the executable.  xv6 does not support environment
+variables like `PATH`, so the shell's search path is effectively hard
+coded to just `/`.
+
 ACKNOWLEDGMENTS
 
 xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
