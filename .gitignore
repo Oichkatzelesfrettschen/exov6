@@ -17,3 +17,4 @@ kernelmemfs
 mkfs
 .gdbinit
 fuzz
+src-uland/exo_unit_test

@@ -21,6 +21,8 @@ jobs:
       run: swift/build_swift.sh
     - name: Build
       run: make ARCH=${{ matrix.arch }} QEMU=echo qemu-nox
+    - name: Run unit tests
+      run: make check
     - name: Run fuzz smoke test
       run: python3 scripts/swift_fuzz.py -runs=1
     - name: Clean

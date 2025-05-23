@@ -559,6 +559,7 @@ src-uland/exo_unit_test: src-uland/exo_unit_test.c
 
 check: src-uland/exo_unit_test
 	./src-uland/exo_unit_test
+	pytest -q
 
 clang-tidy:
 	@for f in $(TIDY_SRCS); do \
