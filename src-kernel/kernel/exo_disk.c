@@ -3,7 +3,7 @@
 #include "fs.h"
 #include "sleeplock.h"
 #include "buf.h"
-#include "exo_disk.h"
+#include "kernel/exo_disk.h"
 #include <errno.h>
 #define EXO_KERNEL
 #include "include/exokernel.h"

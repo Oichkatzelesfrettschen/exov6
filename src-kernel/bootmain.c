@@ -52,7 +52,7 @@ waitdisk(void)
 {
   // Wait for disk ready.
   while((inb(0x1F7) & 0xC0) != 0x40)
-    cpu_relax();
+    ;
 }
 
 // Read a single sector at offset into dst.

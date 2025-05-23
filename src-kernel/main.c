@@ -8,7 +8,7 @@
 #include "cap.h"
 #include "x86.h"
 #include "exo_stream.h"
-#include "exo_ipc.h"
+#include "kernel/exo_ipc.h"
 
 static void startothers(void);
 static void mpmain(void) __attribute__((noreturn));
@@ -39,7 +39,8 @@ int main(void) {
   binit();                           // buffer cache
   fileinit();                        // file table
   ideinit();                         // disk
-  beatty_dag_stream_init();          // initialize combined Beatty+DAG scheduler
+  dag_sched_init();                  // initialize DAG scheduler
+  beatty_sched_init();               // initialize Beatty scheduler
   exo_ipc_register(&exo_ipc_queue_ops);
   startothers();                              // start other processors
   kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()
@@ -115,7 +116,7 @@ static void startothers(void) {
 
     // wait for cpu to finish mpmain()
     while (c->started == 0)
-      cpu_relax();
+      ;
   }
 }
 
