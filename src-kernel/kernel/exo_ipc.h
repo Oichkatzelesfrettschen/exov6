@@ -1,11 +1,6 @@
 #pragma once
 #include "types.h"
-#include "exo.h"
-
-struct exo_ipc_ops {
-  int (*send)(exo_cap dest, const void *buf, uint64 len);
-  int (*recv)(exo_cap src, void *buf, uint64 len);
-};
+#include <exo_ipc.h>
 
 void exo_ipc_register(struct exo_ipc_ops *ops);
 int exo_send(exo_cap dest, const void *buf, uint64 len);
