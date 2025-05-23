@@ -118,6 +118,8 @@ Once installed, enable the hooks with::
 
 The checks will run on every commit thereafter.
 
+For a quick reference of these steps see ``CONTRIBUTING.md``.
+
 To validate patches before emailing them, enable the
 ``sendemail-validate`` hook::
 
