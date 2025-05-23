@@ -34,7 +34,6 @@ struct exo_sched_ops;
 struct dag_node;
 struct exo_stream;
 struct endpoint;
-struct dag_node;
 
 // process table defined in proc.c
 extern struct ptable ptable;
@@ -42,10 +41,7 @@ extern struct ptable ptable;
 #include "exo_cpu.h"
 #include "exo_disk.h"
 #include "exo_ipc.h"
-#include "ipc.h"
-#include "exo_mem.h"
 #include "fastipc.h"
-#include "ipc.h"
 
 // bio.c
 void binit(void);
