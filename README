@@ -89,6 +89,14 @@ with::
 
 The checks will run on every commit.
 
+A sample ``sendemail-validate`` hook is provided as
+``scripts/sendemail-validate.sample``.  It runs spell checking,
+``checkpatch.pl`` and a quick build in a temporary worktree before
+patches are emailed.  Enable it with::
+
+    cp scripts/sendemail-validate.sample .git/hooks/sendemail-validate
+    chmod +x .git/hooks/sendemail-validate
+
 ``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
 generates ``compile_commands.json`` on demand using
 ``scripts/gen_compile_commands.py`` if it doesn't already exist.
