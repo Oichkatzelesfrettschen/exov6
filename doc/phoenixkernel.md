@@ -202,6 +202,11 @@ and the corresponding `type_encode`/`type_decode` helpers.  A typed channel
 uses these helpers to serialize exactly `msg_size` bytes when interacting
 with an endpoint.  See `typed_chan_demo.c` for an example.
 
+The underlying helpers `chan_endpoint_send()` and `chan_endpoint_recv()`
+verify that the buffer length matches the `msg_type_desc` before calling
+`exo_send` or `exo_recv`.  Both kernel and user space use the same
+validation logic so mismatched messages are rejected early.
+
 ## libOS APIs
 
 The libOS includes wrappers around the capability syscalls as well as helper

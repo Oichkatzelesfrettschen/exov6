@@ -16,7 +16,24 @@ so receivers can authenticate the sender without additional lookup.
 * **Endpoints** act as rendezvous points for message passing. They are intended
   to provide fine-grained control similar to L4's endpoints and Mach ports.
 * **Typed channels** attach metadata describing the expected message format so
-  senders and receivers can verify compatibility at compile time.
+   senders and receivers can verify compatibility at compile time.
+
+### Typed channel API
+Typed channels pair a `chan_t` descriptor with a `msg_type_desc` describing the
+expected message layout.  The helper functions `chan_endpoint_send()` and
+`chan_endpoint_recv()` validate the buffer length against this descriptor before
+forwarding to the underlying capability IPC primitives.  A typical usage is:
+
+```c
+CHAN_DECLARE(ping_chan, DriverPing);
+
+ping_chan_t *c = ping_chan_create();
+DriverPing m = { .value = 7 };
+exo_cap cap = {0};
+ping_chan_send(c, cap, &m);
+ping_chan_recv(c, cap, &m);
+ping_chan_destroy(c);
+```
 
 ### Influences
 The design borrows from several sources:
