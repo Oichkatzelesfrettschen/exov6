@@ -72,7 +72,7 @@ for pkg in \
   clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig shellcheck pre-commit \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
-  pkg-config file ca-certificates curl git unzip \
+  pkg-config file ca-certificates curl git unzip graphviz \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
