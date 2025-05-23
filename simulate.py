@@ -1,21 +1,11 @@
 
 """Simulation harness for xv6 testing.
 
-The original placeholder merely returned success.  The harness now
-invokes QEMU to boot the xv6 kernel and issues a trivial command
-sequence to ensure the guest is operational.  The exit status from
-QEMU is propagated so CI runs can detect boot failures.
-
-"""Simple simulation harness for xv6.
-
-The :func:`main` entry point boots xv6 under QEMU, runs a short
-command sequence and returns QEMU's exit status.  It is intentionally
-minimal and is primarily used by the automated test suite.  The QEMU
-binary and image paths can be overridden through environment
-variables.  When running under the tests the ``QEMU`` variable is set
-to ``/bin/true`` so the harness completes instantly without launching
-an emulator.
-
+The harness boots xv6 under QEMU and executes a short command
+sequence so automated tests can verify that the kernel image boots
+successfully.  The QEMU binary and image paths may be overridden via
+environment variables.  When tests run they set ``QEMU=/bin/true`` so
+the harness exits immediately without launching an emulator.
 """
 
 from __future__ import annotations
@@ -36,36 +26,6 @@ def _find_qemu() -> Optional[str]:
         if path:
             return path
     return None
-
-def main() -> int:
-    """Boot xv6 under QEMU and run a trivial command."""
-
-    qemu = _find_qemu()
-    if qemu is None:
-        print("QEMU not found; cannot run simulation")
-        return 1
-
-    cmd = ["make", "qemu-nox", "CPUS=1", f"QEMU={qemu}"]
-
-    try:
-        result = subprocess.run(
-            cmd,
-            input="echo test\n\x01x",
-            text=True,
-            capture_output=True,
-            timeout=30,
-            check=False,
-        )
-    except subprocess.TimeoutExpired:
-        print("QEMU timed out")
-        return 1
-
-    print(result.stdout)
-    if result.returncode != 0:
-        print(f"QEMU exited with status {result.returncode}")
-        return result.returncode
-
-    return 0
 
 import os
 import subprocess
