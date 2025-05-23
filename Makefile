@@ -554,6 +554,9 @@ tar:
 HOSTCC ?= gcc
 HOSTCFLAGS ?= -Wall -Werror -std=c99
 
+tools/ncc: tools/ncc.c tools/compiler_utils.c tools/compiler_utils.h
+	$(HOSTCC) $(HOSTCFLAGS) -o $@ tools/ncc.c tools/compiler_utils.c
+
 src-uland/exo_unit_test: src-uland/exo_unit_test.c
 	$(HOSTCC) $(HOSTCFLAGS) -o $@ $<
 
