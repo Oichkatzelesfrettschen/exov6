@@ -1,1 +1,2 @@
-../stdint.h
+#pragma once
+#include <stdint.h>
