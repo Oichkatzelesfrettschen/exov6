@@ -99,8 +99,8 @@ done
 for pip_pkg in \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo pytest \
-  pre-commit compiledb configuredb; do
+  black flake8 pyperf py-cpuinfo pytest pre-commit compiledb configuredb \
+  pyyaml pylint pyfuzz; do
   pip_install "$pip_pkg"
 done
 
@@ -125,6 +125,7 @@ fi
 if ! command -v pytest >/dev/null 2>&1; then
   pip_install pytest || true
 fi
+pytest --version || true
 
 if ! command -v compiledb >/dev/null 2>&1; then
   pip_install compiledb || true
@@ -167,6 +168,23 @@ EOF
     chmod +x /usr/local/bin/configuredb
   fi
 fi
+
+# Ensure additional Python tooling is installed
+for tool in pylint pyfuzz; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    pip_install "$tool" || true
+  fi
+done
+
+python3 - <<'EOF' || true
+import yaml
+yaml.safe_load("key: value")
+EOF
+
+if ! command -v configuredb >/dev/null 2>&1; then
+  pip_install configuredb || true
+fi
+configuredb --help >/dev/null 2>&1 || true
 
 #— QEMU emulation for foreign binaries
 for pkg in \
@@ -340,6 +358,7 @@ if command -v pre-commit >/dev/null 2>&1; then
     echo "Warning: pre-commit install failed" >&2
     echo "pre-commit install" >>"$FAIL_LOG"
   fi
+  pre-commit --version || true
 fi
 
 #— clean up
