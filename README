@@ -129,12 +129,16 @@ Once installed, enable the hooks with::
 
 The checks will run on every commit thereafter.
 
+
 TESTING
 -------
 Unit tests live under the ``tests/`` directory and can be executed with
 ``make check``.  This target compiles ``src-uland/exo_unit_test`` and
 runs the Python tests via ``pytest``.  Ensure QEMU is installed if the
 tests require it (``setup.sh`` installs QEMU automatically).
+
+For a quick reference of these steps see ``CONTRIBUTING.md``.
+
 
 To validate patches before emailing them, enable the
 ``sendemail-validate`` hook::
