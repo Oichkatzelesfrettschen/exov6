@@ -99,13 +99,15 @@ done
 for pip_pkg in \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db configuredb; do
+  black flake8 pyperf py-cpuinfo pytest \
+  pre-commit compiledb configuredb; do
   pip_install "$pip_pkg"
 done
 
 # Explicit installation of key tools
 pip_install pre-commit
-pip_install compile-db
+pip_install compiledb
+pip_install configuredb
 
 # Fallback to pip if pre-commit is still missing
 if ! command -v pre-commit >/dev/null 2>&1; then
@@ -126,13 +128,44 @@ fi
 
 if ! command -v compiledb >/dev/null 2>&1; then
   pip_install compiledb || true
+  pip_install compile-db || true
   if ! command -v compiledb >/dev/null 2>&1 && [ -f "$REPO_ROOT/scripts/gen_compile_commands.py" ]; then
     install -m755 "$REPO_ROOT/scripts/gen_compile_commands.py" /usr/local/bin/compiledb
   fi
+  if ! command -v compiledb >/dev/null 2>&1; then
+    cat <<'EOF' >/usr/local/bin/compiledb
+#!/usr/bin/env bash
+echo "compiledb not available in this environment" >&2
+exit 1
+EOF
+    chmod +x /usr/local/bin/compiledb
+  fi
 fi
 
-if ! command -v compile-db >/dev/null 2>&1; then
+if ! command -v compile-db >/dev/null 2>&1 && command -v compiledb >/dev/null 2>&1; then
+  ln -s "$(command -v compiledb)" /usr/local/bin/compile-db 2>/dev/null || true
+elif ! command -v compile-db >/dev/null 2>&1; then
   pip_install compile-db || true
+  if ! command -v compile-db >/dev/null 2>&1; then
+    cat <<'EOF' >/usr/local/bin/compile-db
+#!/usr/bin/env bash
+echo "compile-db not available in this environment" >&2
+exit 1
+EOF
+    chmod +x /usr/local/bin/compile-db
+  fi
+fi
+
+if ! command -v configuredb >/dev/null 2>&1; then
+  pip_install configuredb || true
+  if ! command -v configuredb >/dev/null 2>&1; then
+    cat <<'EOF' >/usr/local/bin/configuredb
+#!/usr/bin/env bash
+echo "configuredb not available in this environment" >&2
+exit 1
+EOF
+    chmod +x /usr/local/bin/configuredb
+  fi
 fi
 
 #— QEMU emulation for foreign binaries
