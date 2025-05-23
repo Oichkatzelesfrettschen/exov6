@@ -82,12 +82,18 @@ dependencies change.
 The repository uses ``pre-commit`` hooks to automatically run
 ``clang-format`` and ``clang-tidy``.  The ``setup.sh`` script attempts to
 install ``pre-commit`` via the distribution package manager and falls
-back to Python's ``pip`` if required.  Once installed, enable the hooks
-with::
+back to Python's ``pip`` if required.  If ``pre-commit`` is missing you
+can install it manually with::
+
+    pip install pre-commit
+
+Once installed, enable the hooks with::
 
     pre-commit install
 
-The checks will run on every commit.
+    pre-commit run --all-files
+
+The checks will run on every commit thereafter.
 
 ``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
 generates ``compile_commands.json`` on demand using
