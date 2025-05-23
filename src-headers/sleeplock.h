@@ -1,12 +1,6 @@
 #pragma once
-
-// Long-term locks for processes
-struct sleeplock {
-  uint locked;       // Is the lock held?
-  struct spinlock lk; // spinlock protecting this sleep lock
-  
-  // For debugging:
-  char *name;        // Name of lock.
-  int pid;           // Process holding lock
-};
-
+#include "spinlock.h"
+struct sleeplock { int locked; struct spinlock lk; };
+static inline void initsleeplock(struct sleeplock *lk, const char *name) { (void)lk; (void)name; }
+static inline void acquiresleep(struct sleeplock *lk) { (void)lk; }
+static inline void releasesleep(struct sleeplock *lk) { (void)lk; }
