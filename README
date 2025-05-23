@@ -12,6 +12,12 @@ The user-level shell supports built-in commands such as ``cd``.  These
 built-ins execute directly in the shell process even when used in command
 lists, pipelines, or background jobs.
 
+Programs are expected to reside directly under `/`.  If a command
+name does not include a slash, the shell automatically prepends `/`
+when searching for the executable.  xv6 does not support environment
+variables like `PATH`, so the shell's search path is effectively hard
+coded to just `/`.
+
 ACKNOWLEDGMENTS
 
 xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
