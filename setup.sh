@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+# Detect basic network connectivity; many CI environments are offline
+NETWORK_AVAILABLE=true
+if ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
+  NETWORK_AVAILABLE=false
+  echo "Network unavailable, proceeding in offline mode" >&2
+fi
 FAIL_LOG=/var/log/setup_failures.log
 : >"$FAIL_LOG"
 export DEBIAN_FRONTEND=noninteractive
@@ -7,6 +14,9 @@ export DEBIAN_FRONTEND=noninteractive
 #— helper to pin to the repo’s exact version if it exists
 pip_install(){
   pkg="$1"
+  if [ "$NETWORK_AVAILABLE" = false ]; then
+    return 0
+  fi
   if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
     echo "Warning: pip install $pkg failed" >&2
     echo "pip $pkg" >>"$FAIL_LOG"
@@ -14,6 +24,9 @@ pip_install(){
 }
 apt_pin_install(){
   pkg="$1"
+  if [ "$NETWORK_AVAILABLE" = false ]; then
+    return 0
+  fi
   ver=$(apt-cache show "$pkg" 2>/dev/null \
         | awk '/^Version:/{print $2; exit}')
   if [ -n "$ver" ]; then
@@ -44,7 +57,14 @@ for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
 
-apt-get update -y || { echo "Warning: apt-get update failed" >&2; echo "apt update" >>"$FAIL_LOG"; }
+if [ "$NETWORK_AVAILABLE" = true ]; then
+  apt-get update -y || {
+    echo "Warning: apt-get update failed" >&2
+    echo "apt update" >>"$FAIL_LOG"
+  }
+else
+  echo "Skipping apt-get update due to offline mode" >&2
+fi
 
 #— core build tools, formatters, analysis, science libs
 for pkg in \
@@ -86,6 +106,14 @@ done
 # Fallback to pip if pre-commit is still missing
 if ! command -v pre-commit >/dev/null 2>&1; then
   pip_install pre-commit || true
+  if ! command -v pre-commit >/dev/null 2>&1; then
+    cat <<'EOF' >/usr/local/bin/pre-commit
+#!/usr/bin/env bash
+echo "pre-commit not available in this environment" >&2
+exit 1
+EOF
+    chmod +x /usr/local/bin/pre-commit
+  fi
 fi
 
 if ! command -v pytest >/dev/null 2>&1; then
@@ -94,6 +122,9 @@ fi
 
 if ! command -v compiledb >/dev/null 2>&1; then
   pip_install compiledb || true
+  if ! command -v compiledb >/dev/null 2>&1 && [ -f "$REPO_ROOT/scripts/gen_compile_commands.py" ]; then
+    install -m755 "$REPO_ROOT/scripts/gen_compile_commands.py" /usr/local/bin/compiledb
+  fi
 fi
 
 #— QEMU emulation for foreign binaries
