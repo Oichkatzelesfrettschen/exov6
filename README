@@ -358,12 +358,14 @@ Additional libFuzzer flags may be provided after the script name.
 
 STREAMS STACK
 -------------
-A simple simulation of STREAMS modules is provided. The `streams_stack.dot`
-file describes the module layout. Generate an image with Graphviz:
+The repository includes a detailed simulation of STREAMS modules.
+The `streams_stack.dot` file describes the expanded module layout. Generate an updated image with Graphviz:
 
 ```
 $ dot -Tpng streams_stack.dot -o stack.png
 ```
+
+The resulting `stack.png` illustrates the module chain.
 
 Run the latency harness with Python:
 
