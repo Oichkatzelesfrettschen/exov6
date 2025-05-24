@@ -14,7 +14,10 @@ struct cap_entry {
     uint resource;
     uint rights;
     uint owner;
+    uint epoch;
 };
+
+extern uint global_epoch;
 
 void cap_table_init(void);
 int cap_table_alloc(uint16_t type, uint resource, uint rights, uint owner);
