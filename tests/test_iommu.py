@@ -37,7 +37,9 @@ def compile_and_run():
         src = pathlib.Path(td)/"test.c"
         src.write_text(C_CODE)
         # headers expected by iommu.c
-        (pathlib.Path(td)/"spinlock.h").write_text('#include "src-headers/spinlock.h"\n')
+        (pathlib.Path(td)/"spinlock.h").write_text(
+            '#include "src-headers/types.h"\n'
+            '#include "src-kernel/include/spinlock.h"\n')
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text('#include "src-headers/types.h"\n#include "src-headers/mmu.h"\n')
         (pathlib.Path(td)/"memlayout.h").write_text('#include "src-headers/memlayout.h"\n')
