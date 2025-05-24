@@ -71,4 +71,4 @@ def test_cap_epoch_wrap():
 
 
 def test_cap_revoke_call():
-    compile_and_run()
+    assert compile_and_run() == 0
