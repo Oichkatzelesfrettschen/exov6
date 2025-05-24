@@ -249,11 +249,10 @@ int exo_bind_block(struct exo_blockcap *, struct buf *, int);
 void exo_flush_block(struct exo_blockcap *, void *);
 void cap_table_init(void);
 int cap_table_alloc(uint16_t, uint, uint, uint);
-int cap_table_lookup(uint, struct cap_entry *);
-void cap_table_inc(uint);
-void cap_table_dec(uint);
-int cap_table_remove(uint);
-int cap_revoke(uint);
+int cap_table_lookup(uint16_t, struct cap_entry *);
+void cap_table_inc(uint16_t);
+void cap_table_dec(uint16_t);
+int cap_table_remove(uint16_t);
 void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);
@@ -278,12 +277,6 @@ void rcuinit(void);
 void rcu_read_lock(void);
 void rcu_read_unlock(void);
 void rcu_synchronize(void);
-
-// iommu.c
-int iommu_map(struct iommu_dom *, uintptr_t, uintptr_t, size_t, int);
-int iommu_unmap(struct iommu_dom *, uintptr_t, size_t);
-void iommu_sync(struct iommu_dom *);
-void iommu_revoke(struct iommu_dom *);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))

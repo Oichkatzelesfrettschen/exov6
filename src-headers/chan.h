@@ -46,3 +46,4 @@ int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg, size_t len);
             type##_decode(m, buf);                                  \
         return r;                                                   \
     }
+
