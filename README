@@ -80,6 +80,11 @@ When adding new user-space utilities place the sources under
 The QEMU PC simulator is installed automatically by ``setup.sh``.
 Bochs is optional but also supported via ``make bochs``.
 
+A few headers used solely by the kernel have been moved under
+``src-kernel/include``.  Files like ``spinlock.h`` and ``sleeplock.h``
+reside here instead of ``src-headers``.  The Makefile and Meson build
+add this directory to the compiler's include path automatically.
+
 BOCHS
 -----
 The file ``dot-bochsrc`` contains the default configuration used when
