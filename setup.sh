@@ -26,7 +26,7 @@ pip_install(){
 apt_pin_install(){
   pkg="$1"
   ver=$(apt-cache show "$pkg" 2>/dev/null \
-        | awk '/^Version:/{print $2; exit}')
+        | awk '/^Version:/{print $2; exit}' || true)
   if [ -n "$ver" ]; then
     if ! apt-get install -y "${pkg}=${ver}"; then
       echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
