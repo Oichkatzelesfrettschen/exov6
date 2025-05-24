@@ -1,5 +1,5 @@
 #include "chan.h"
-#include "kernel/exo_ipc.h"
+#include "exo_ipc.h"
 
 // Kernel variant of chan_endpoint_send validating the message size
 int chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg, size_t len) {
