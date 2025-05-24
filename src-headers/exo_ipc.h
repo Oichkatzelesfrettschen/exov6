@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "exo_mem.h"
-#include "../../exo.h"
+#include "exo.h"
 
 struct exo_ipc_ops {
   int (*send)(exo_cap dest, const void *buf, uint64_t len);
