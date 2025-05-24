@@ -63,4 +63,3 @@ cap_verify(exo_cap c)
     compute_tag(c.id, c.rights, c.owner, &h);
     return memcmp(h.parts, c.auth_tag.parts, sizeof(h.parts)) == 0;
 }
-

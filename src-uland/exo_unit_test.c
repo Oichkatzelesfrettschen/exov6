@@ -80,4 +80,3 @@ int main(void) {
     printf("exo_unit_test passed\n");
     return 0;
 }
-

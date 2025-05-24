@@ -33,4 +33,3 @@ static inline void uv_spinlock_unlock(uv_spinlock_t *sl) {
 }
 
 #define UV_SPINLOCK_INITIALIZER { 0 }
-

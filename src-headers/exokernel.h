@@ -78,4 +78,3 @@ enum exo_syscall {
     EXO_SYSCALL_CAP_INC     = SYS_cap_inc,
     EXO_SYSCALL_CAP_DEC     = SYS_cap_dec,
 };
-

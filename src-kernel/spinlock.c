@@ -137,4 +137,3 @@ popcli(void)
   if(mycpu()->ncli == 0 && mycpu()->intena)
     sti();
 }
-

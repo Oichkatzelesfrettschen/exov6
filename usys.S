@@ -77,6 +77,3 @@ SYSCALL(sigsend)
 SYSCALL(sigcheck)
 SYSCALL(cap_inc)
 SYSCALL(cap_dec)
-
-
-

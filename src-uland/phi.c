@@ -75,4 +75,3 @@ main(int argc, char *argv[])
   printf(1, "fib(%d)=%d 2^%d=%d gcd=%d\n", n, f, m, p, g);
   exit();
 }
-
