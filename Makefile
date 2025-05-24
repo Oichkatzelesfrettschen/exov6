@@ -245,13 +245,13 @@ SIGNBOOT := 0
 endif
 
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(KERNEL_DIR)/include -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
 CFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 # Optional CPU optimization flags
 CFLAGS += $(CPUFLAGS)
 CXXFLAGS = $(CFLAGS) -std=$(CPPSTD)
-ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
+ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(KERNEL_DIR)/include -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
 ASFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 
 	#Disable PIE when possible (for Ubuntu 16.10 toolchain)

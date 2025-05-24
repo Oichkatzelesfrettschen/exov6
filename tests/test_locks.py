@@ -57,6 +57,7 @@ def compile_and_run():
             "gcc","-std=c11","-DSPINLOCK_NO_STUBS",
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
+            "-I", str(ROOT/"src-kernel/include"),
             str(src),
             "-o", str(exe)
         ])
