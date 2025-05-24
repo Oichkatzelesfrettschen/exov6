@@ -329,6 +329,7 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/swtch.o \
         $(ULAND_DIR)/caplib.o \
         $(ULAND_DIR)/chan.o \
+        $(ULAND_DIR)/door.o \
         proto/driver.capnp.o \
         $(ULAND_DIR)/math_core.o \
        $(ULAND_DIR)/libos/sched.o \
