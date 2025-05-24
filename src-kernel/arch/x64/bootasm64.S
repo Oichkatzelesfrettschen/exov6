@@ -1,6 +1,7 @@
 #include "asm.h"
 #include "memlayout.h"
 #include "mmu.h"
+#include "../asm_common.h"
 
 #define CR4_PAE 0x00000020
 
@@ -17,35 +18,14 @@ start:
     movw %ax,%es
     movw %ax,%ss
 
-# Enable A20
-seta20.1:
-    inb $0x64,%al
-    testb $0x2,%al
-    jnz seta20.1
-    movb $0xd1,%al
-    outb %al,$0x64
-seta20.2:
-    inb $0x64,%al
-    testb $0x2,%al
-    jnz seta20.2
-    movb $0xdf,%al
-    outb %al,$0x60
+    # Enable access to memory above 1MB
+    ENABLE_A20
 
-    lgdt gdtdesc32
-    movl %cr0,%eax
-    orl $CR0_PE,%eax
-    movl %eax,%cr0
-    ljmp $(1<<3), $prot32
+    SETUP_PROT_MODE(gdtdesc32, 1<<3, prot32)
 
 .code32
 prot32:
-    movw $(2<<3), %ax
-    movw %ax,%ds
-    movw %ax,%es
-    movw %ax,%ss
-    movw $0,%ax
-    movw %ax,%fs
-    movw %ax,%gs
+    INIT_PROT_MODE_DATA(2<<3)
 
     lgdt gdtdesc64
 
