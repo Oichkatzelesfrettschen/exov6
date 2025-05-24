@@ -2,6 +2,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "param.h"
+#include "../asm_common.h"
 
 #define CR4_PAE 0x00000020
 
@@ -16,21 +17,11 @@ start:
     movw %ax,%es
     movw %ax,%ss
 
-    lgdt gdtdesc32
-    movl %cr0,%eax
-    orl $CR0_PE,%eax
-    movl %eax,%cr0
-    ljmp $(1<<3), $prot32
+    SETUP_PROT_MODE(gdtdesc32, 1<<3, prot32)
 
 .code32
 prot32:
-    movw $(2<<3), %ax
-    movw %ax,%ds
-    movw %ax,%es
-    movw %ax,%ss
-    movw $0,%ax
-    movw %ax,%fs
-    movw %ax,%gs
+    INIT_PROT_MODE_DATA(2<<3)
 
     lgdt gdtdesc64
 
@@ -57,12 +48,7 @@ longmode:
     mov (start-8), %rax
     mov %rax,%rsp
     lgdt gdtdesc64
-    movw $(2<<3), %ax
-    movw %ax,%ds
-    movw %ax,%es
-    movw %ax,%ss
-    movw %ax,%fs
-    movw %ax,%gs
+    INIT_PROT_MODE_DATA(2<<3)
     mov (start-16), %rax
     jmp *%rax
 
