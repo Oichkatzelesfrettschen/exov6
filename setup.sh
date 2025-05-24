@@ -177,7 +177,7 @@ done
 
 #— high-level language runtimes and tools
 for pkg in \
-  golang-go nodejs npm typescript \
+  golang-go \
   rustc cargo clippy rustfmt \
   lua5.4 liblua5.4-dev luarocks \
   ghc cabal-install hlint stylish-haskell \
