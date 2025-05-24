@@ -32,8 +32,11 @@ that provides traditional services on top of the primitive capability interface.
             priority so heavier tasks execute first when several nodes are
             runnable.
 
-A second **Beatty scheduler** now complements the DAG engine. It alternates between two contexts according to the Beatty sequence derived from the golden ratio. Call `beatty_sched_set_tasks` with the capabilities of the tasks to activate it. The scheduler is registered as an exo stream so user-level runtimes can select it on demand.
-A third **Beatty scheduler** now complements the DAG engine. It alternates between an arbitrary number of contexts using Beatty sequences with irrational weights. Call `beatty_sched_set_tasks` with an array of task capabilities and the corresponding weights to activate it. The scheduler is registered as an exo stream so user-level runtimes can select it on demand.
+A **Beatty scheduler** now complements the DAG engine. It alternates among an arbitrary
+number of contexts using Beatty sequences with irrational weights. Call
+`beatty_sched_set_tasks` with an array of task capabilities and their corresponding
+weights to activate it. The scheduler is registered as an exo stream so user-level
+runtimes can select it on demand.
 
 
 ## Capability System
