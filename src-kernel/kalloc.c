@@ -112,4 +112,3 @@ kalloc(void)
   }
   return (char*)r;
 }
-

@@ -482,4 +482,3 @@ exo_unbind_page(exo_cap cap)
   cap_table_remove(cap.id);
   return 0;
 }
-

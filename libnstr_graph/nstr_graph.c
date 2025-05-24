@@ -132,4 +132,3 @@ int nstr_graph_query(nstr_graph* g, int from, int to){
     pthread_mutex_unlock(&g->lock);
     return 0;
 }
-

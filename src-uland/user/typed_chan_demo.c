@@ -32,4 +32,3 @@ main(int argc, char *argv[])
     ping_chan_destroy(c);
     exit();
 }
-
