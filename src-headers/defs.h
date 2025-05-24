@@ -278,5 +278,11 @@ void rcu_read_lock(void);
 void rcu_read_unlock(void);
 void rcu_synchronize(void);
 
+// iommu.c
+int iommu_map(struct iommu_dom *, uintptr_t, uintptr_t, size_t, int);
+int iommu_unmap(struct iommu_dom *, uintptr_t, size_t);
+void iommu_sync(struct iommu_dom *);
+void iommu_revoke(struct iommu_dom *);
+
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
