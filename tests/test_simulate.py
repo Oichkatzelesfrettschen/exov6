@@ -11,13 +11,19 @@ import os
 import simulate
 
 
-def test_simulate_harness_completes():
-    if not (
-        shutil.which("qemu-system-x86_64")
-        or shutil.which("qemu-system-i386")
-        or shutil.which("qemu")
-    ):
-        pytest.skip("QEMU not installed")
+def test_simulate_harness_completes(tmp_path, monkeypatch, capsys):
+    stub = tmp_path / "qemu-system-x86_64"
+    stub.write_text("#!/bin/sh\ncat >/dev/null\necho booted\n")
+    stub.chmod(0o755)
+
+    monkeypatch.setenv("PATH", f"{stub.parent}{os.pathsep}" + os.environ.get("PATH", ""))
+    monkeypatch.delenv("QEMU", raising=False)
+
+    rc = simulate.main()
+    captured = capsys.readouterr().out
+
+    assert rc == 0
+    assert captured == "booted\n"
 
 def test_simulate_harness_runs(monkeypatch):
     monkeypatch.setenv("QEMU", "/bin/true")

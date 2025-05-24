@@ -16,7 +16,6 @@ struct cap_entry {
     uint resource;
     uint rights;
     uint owner;
-    uint epoch;
 };
 
 extern uint global_epoch;
