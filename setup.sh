@@ -88,19 +88,13 @@ if ! command -v meson >/dev/null 2>&1; then
 fi
 
 
-#— Python & deep-learning / MLOps
+#— Python tooling
 for pkg in \
-  python3 python3-pip python3-dev python3-venv python3-wheel \
-  python3-numpy python3-scipy python3-pandas \
-  python3-matplotlib python3-scikit-learn \
-  python3-torch python3-torchvision python3-torchaudio \
-  python3-onnx python3-onnxruntime python3-configuredb; do
+  python3 python3-pip python3-dev python3-venv python3-wheel; do
   apt_pin_install "$pkg"
 done
 
 for pip_pkg in \
-  tensorflow-cpu jax jaxlib \
-  tensorflow-model-optimization mlflow onnxruntime-tools \
   black flake8 pyperf py-cpuinfo pytest pre-commit compiledb configuredb \
   pyyaml pylint pyfuzz; do
   pip_install "$pip_pkg"
