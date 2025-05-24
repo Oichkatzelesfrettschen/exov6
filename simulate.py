@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Simulation harness for xv6 testing.
 
 Boot xv6 under QEMU and return the emulator's exit status. The QEMU
