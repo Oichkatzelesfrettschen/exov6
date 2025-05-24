@@ -54,7 +54,7 @@ def compile_and_run():
         src.write_text(C_CODE)
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc","-std=c11",
+            "gcc","-std=c11","-DSPINLOCK_NO_STUBS",
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
             str(src),
