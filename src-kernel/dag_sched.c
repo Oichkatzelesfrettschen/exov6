@@ -115,4 +115,3 @@ dag_sched_init(void)
   dag_stream.head = &dag_ops;
   exo_stream_register(&dag_stream);
 }
-

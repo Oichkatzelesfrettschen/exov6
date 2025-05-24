@@ -102,4 +102,3 @@ strlen(const char *s)
     ;
   return n;
 }
-

@@ -21,4 +21,3 @@ void exo_pctr_transfer(struct trapframe *tf) {
     p->pctr_signal++;
   release(&ptable.lock);
 }
-

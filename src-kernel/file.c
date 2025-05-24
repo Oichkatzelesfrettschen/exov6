@@ -155,4 +155,3 @@ filewrite(struct file *f, char *addr, size_t n)
   }
   panic("filewrite");
 }
-

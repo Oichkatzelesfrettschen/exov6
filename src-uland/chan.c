@@ -40,4 +40,3 @@ chan_endpoint_recv(chan_t *c, exo_cap src, void *msg, size_t len)
     }
     return cap_recv(src, msg, c->msg_size);
 }
-
