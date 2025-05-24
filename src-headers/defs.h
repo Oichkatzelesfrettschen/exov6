@@ -278,5 +278,10 @@ void rcu_read_lock(void);
 void rcu_read_unlock(void);
 void rcu_synchronize(void);
 
+// memutil.c
+pte_t *pte_lookup(pde_t *, const void *);
+void tlb_flush_page(void *);
+void *atomic_cas_ptr(volatile void **, void *, void *);
+
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
