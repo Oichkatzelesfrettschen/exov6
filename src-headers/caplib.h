@@ -1,7 +1,6 @@
 #pragma once
 #include "exo.h"
 #include "exo_cpu.h"
-#include <stdint.h>
 #include "exokernel.h"
 
 exo_cap cap_alloc_page(void);
@@ -22,4 +21,3 @@ int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 int cap_ipc_echo_demo(void);
 int cap_inc(uint16_t id);
 int cap_dec(uint16_t id);
-int cap_revoke(void);

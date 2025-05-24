@@ -1,8 +1,7 @@
 #pragma once
 
-#include <stdint.h>
-#include "types.h"
 
+// Ticket-based mutual exclusion lock.
 struct ticketlock {
   _Atomic uint16_t head;
   _Atomic uint16_t tail;
@@ -18,12 +17,3 @@ struct spinlock {
                      // that locked the lock.
 };
 
-#ifndef SPINLOCK_NO_STUBS
-static inline void initlock(struct spinlock *l, char *name) { (void)l; (void)name; }
-static inline void acquire(struct spinlock *l) { (void)l; }
-static inline void release(struct spinlock *l) { (void)l; }
-#else
-static inline void initlock(struct spinlock *l, char *name);
-static inline void acquire(struct spinlock *l);
-static inline void release(struct spinlock *l);
-#endif
