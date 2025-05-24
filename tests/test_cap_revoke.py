@@ -1,10 +1,12 @@
-import subprocess, tempfile, pathlib, textwrap
-
+import subprocess
+import tempfile
+import pathlib
+import textwrap
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-C_CODE = textwrap.dedent("""
-
+C_CODE = textwrap.dedent(
+    """
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
@@ -33,15 +35,9 @@ int main(void){
     assert(cap_revoke(id) == -1);
     return 0;
 }
-""")
+"""
+)
 
-
-#include <stdint.h>
-typedef unsigned short uint16_t;
-#include "src-headers/caplib.h"
-int cap_revoke(void){ return 0; }
-int main(void){ return cap_revoke(); }
-""")
 
 def compile_and_run():
     with tempfile.TemporaryDirectory() as td:
@@ -50,11 +46,14 @@ def compile_and_run():
         (pathlib.Path(td)/"spinlock.h").write_text("struct spinlock{int d;};")
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text("")
-        (pathlib.Path(td)/"types.h").write_text("typedef unsigned int uint;\n"\
-                                               "typedef unsigned short ushort;\n"\
-                                               "typedef unsigned char uchar;\n")
+        (pathlib.Path(td)/"types.h").write_text(
+            "typedef unsigned int uint;\n"
+            "typedef unsigned short ushort;\n"
+            "typedef unsigned char uchar;\n"
+        )
         (pathlib.Path(td)/"stdint.h").write_text(
-            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif")
+            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
+        )
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
             "gcc","-std=c11",
@@ -69,17 +68,6 @@ def compile_and_run():
 
 def test_cap_epoch_wrap():
     assert compile_and_run() == 0
-        (pathlib.Path(td)/"include").mkdir()
-        (pathlib.Path(td)/"include"/"exokernel.h").write_text("\n")
-        exe = pathlib.Path(td)/"test"
-        subprocess.check_call([
-            "gcc","-std=c11",
-            "-I", str(ROOT),
-            "-I", str(ROOT/"src-headers"),
-            "-I", str(td),
-            str(src), "-o", str(exe)
-        ])
-        subprocess.check_call([str(exe)])
 
 
 def test_cap_revoke_call():
