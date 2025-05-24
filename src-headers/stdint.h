@@ -1,2 +1,2 @@
 #pragma once
-#include <stdint.h>
+#include_next <stdint.h>
