@@ -11,10 +11,6 @@ C_CODE_TEMPLATE = textwrap.dedent("""
 #include <stdint.h>
 
 // stub implementations expected by zone.c
-static void initlock(struct spinlock *lk, char *name){ (void)lk; (void)name; }
-static void acquire(struct spinlock *lk){ (void)lk; }
-static void release(struct spinlock *lk){ (void)lk; }
-static int holding(struct spinlock *lk){ (void)lk; return 0; }
 struct cpu; static struct cpu* mycpu(void){ return 0; }
 static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
 static void panic(char *msg){ (void)msg; exit(1); }
@@ -52,11 +48,11 @@ def compile_and_run(body):
         src = pathlib.Path(td)/"test.c"
         exe = pathlib.Path(td)/"test"
         src.write_text(C_CODE_TEMPLATE % body)
-        # stub headers expected by zone.c
-        (pathlib.Path(td)/"spinlock.h").write_text("struct spinlock {int dummy;};")
+        # headers expected by zone.c
+        (pathlib.Path(td)/"spinlock.h").write_text('#include "src-headers/spinlock.h"\n')
         (pathlib.Path(td)/"defs.h").write_text("")
-        (pathlib.Path(td)/"mmu.h").write_text("#define PGSIZE 4096")
-        (pathlib.Path(td)/"memlayout.h").write_text("")
+        (pathlib.Path(td)/"mmu.h").write_text('#include "src-headers/types.h"\n#include "src-headers/mmu.h"\n')
+        (pathlib.Path(td)/"memlayout.h").write_text('#include "src-headers/memlayout.h"\n')
         subprocess.check_call([
             "gcc","-std=c11",
             "-I", str(td),

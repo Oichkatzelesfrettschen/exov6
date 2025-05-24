@@ -473,12 +473,12 @@ exo_unbind_page(exo_cap cap)
       if(PTE_ADDR(*pte) == pa){
         *pte = 0;
         kfree(P2V(pa));
-        cap_table_remove(cap.id);
+        cap_revoke(cap.id);
         return 0;
       }
     }
   }
   kfree(P2V(pa));
-  cap_table_remove(cap.id);
+  cap_revoke(cap.id);
   return 0;
 }

@@ -39,6 +39,9 @@ int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n) {
   return exo_write_disk(cap, src, off, n);
 }
 
+extern int cap_revoke_syscall(void);
+int cap_revoke(void) { return cap_revoke_syscall(); }
+
 int cap_send(exo_cap dest, const void *buf, uint64 len) {
   return exo_send(dest, buf, len);
 }

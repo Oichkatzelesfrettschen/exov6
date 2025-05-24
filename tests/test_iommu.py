@@ -10,12 +10,7 @@ C_CODE = textwrap.dedent("""
 #define PGSIZE 4096
 #include "src-headers/iommu.h"
 
-struct spinlock { int dummy; };
 struct cpu; static struct cpu* mycpu(void){ return 0; }
-static void initlock(struct spinlock *l, char *n){ (void)l;(void)n; }
-static void acquire(struct spinlock *l){ (void)l; }
-static void release(struct spinlock *l){ (void)l; }
-static int holding(struct spinlock *l){ (void)l; return 0; }
 static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
 static void panic(char *msg){ (void)msg; assert(0); }
 static void cprintf(const char *f, ...){ (void)f; }
@@ -41,17 +36,18 @@ def compile_and_run():
     with tempfile.TemporaryDirectory() as td:
         src = pathlib.Path(td)/"test.c"
         src.write_text(C_CODE)
-        # stub headers expected by iommu.c
-        (pathlib.Path(td)/"spinlock.h").write_text("struct spinlock{int d;};")
+        # headers expected by iommu.c
+        (pathlib.Path(td)/"spinlock.h").write_text('#include "src-headers/spinlock.h"\n')
         (pathlib.Path(td)/"defs.h").write_text("")
-        (pathlib.Path(td)/"mmu.h").write_text("#define PGSIZE 4096")
-        (pathlib.Path(td)/"memlayout.h").write_text("")
-        (pathlib.Path(td)/"types.h").write_text("typedef unsigned int uint;\ntypedef unsigned short ushort;\ntypedef unsigned char uchar;\ntypedef unsigned long long uint64;")
+        (pathlib.Path(td)/"mmu.h").write_text('#include "src-headers/types.h"\n#include "src-headers/mmu.h"\n')
+        (pathlib.Path(td)/"memlayout.h").write_text('#include "src-headers/memlayout.h"\n')
+        (pathlib.Path(td)/"types.h").write_text('#include "src-headers/types.h"\n')
         (pathlib.Path(td)/"stdint.h").write_text(
-            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif")
+            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif\n"
+        )
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc","-std=c11",
+            "gcc", "-std=c11",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
