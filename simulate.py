@@ -13,9 +13,10 @@ import subprocess
 from pathlib import Path
 from typing import Optional
 
-SCRIPT = "echo booted;\n\x01x"
+DEFAULT_QEMU = "qemu-system-x86_64"
 DEFAULT_DISK = "xv6-64.img"
 DEFAULT_FS = "fs64.img"
+SCRIPT = "echo booted;\n\x01x"
 
 
 def _find_qemu() -> Optional[str]:
