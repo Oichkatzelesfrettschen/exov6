@@ -113,6 +113,11 @@ along with the rest of the toolchain.
 This only needs to be done after cloning the repository or when
 dependencies change.
 
+The script now installs only the packages required for building and running
+the tests: cross-compilers, QEMU and basic Python tooling such as ``pytest`` and
+``pre-commit``.  Heavy machine learning frameworks are intentionally omitted to
+keep the environment small.
+
 The repository uses ``pre-commit`` hooks to automatically run
 ``clang-format`` and ``clang-tidy``.  The ``setup.sh`` script attempts to
 install ``pre-commit`` via the distribution package manager and falls
