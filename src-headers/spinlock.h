@@ -1,4 +1,5 @@
 #pragma once
+#include "types.h"
 
 
 // Ticket-based mutual exclusion lock.

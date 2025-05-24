@@ -18,6 +18,10 @@ static void cprintf(const char *fmt, ...){ (void)fmt; }
 #define PGSIZE 4096
 static void *kalloc(void){ void *p; if(posix_memalign(&p, PGSIZE, PGSIZE)!=0) return NULL; return p; }
 static void kfree(char *p){ free(p); }
+// simple spinlock stubs
+static void initlock(struct spinlock *l, char *n){ (void)l; (void)n; }
+static void acquire(struct spinlock *l){ (void)l; }
+static void release(struct spinlock *l){ (void)l; }
 
 #include "src-kernel/zone.c"
 

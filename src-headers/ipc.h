@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 
 // zero-copy micro-IPC interface
 // ISA: x86-64; syscall number 0x30 == ipc_fast
@@ -45,3 +46,4 @@ static inline int zipc_call(zipc_msg_t *m) {
   m->w3 = r8;
   return 0;
 }
+
