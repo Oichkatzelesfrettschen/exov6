@@ -19,7 +19,7 @@ def test_simulate_harness_completes():
     ):
         pytest.skip("QEMU not installed")
 
-def test_simulate_harness_completes(monkeypatch):
+def test_simulate_harness_runs(monkeypatch):
     monkeypatch.setenv("QEMU", "/bin/true")
 
     assert simulate.main() == 0
