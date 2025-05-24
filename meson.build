@@ -10,7 +10,10 @@ foreach d : src_dirs
 endforeach
 
 executable('kernel', sources,
-           include_directories: include_directories('.', 'src-headers', 'proto'),
+           include_directories: include_directories('.',
+                                            'src-headers',
+                                            'src-kernel/include',
+                                            'proto'),
            install: false)
 
 if clang_tidy.found()
