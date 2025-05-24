@@ -35,9 +35,10 @@ import subprocess
 from pathlib import Path
 from typing import Optional
 
-SCRIPT = "echo booted;\n\x01x"
+DEFAULT_QEMU = "qemu-system-x86_64"
 DEFAULT_DISK = "xv6-64.img"
 DEFAULT_FS = "fs64.img"
+SCRIPT = "echo booted;\n\x01x"
 
 def _find_qemu() -> Optional[str]:
     """Return the first available QEMU binary or ``None``."""
@@ -48,26 +49,12 @@ def _find_qemu() -> Optional[str]:
     return None
 
 
-import os
-import subprocess
-from pathlib import Path
-
-DEFAULT_QEMU = "qemu-system-x86_64"
-DEFAULT_DISK = "xv6-64.img"
-DEFAULT_FS = "fs64.img"
-
-SCRIPT = "echo booted;\n\x01x"
-
-def main() -> int:
-    """Boot xv6 under QEMU and return the emulator's exit status."""
-
-    qemu = os.environ.get("QEMU", DEFAULT_QEMU)=======
 def main() -> int:
     """Boot xv6 under QEMU and return the emulator's exit status."""
 
     qemu = os.environ.get("QEMU") or _find_qemu()
     if not qemu:
-        pr of int("QEMU not found; cannot run simulation")
+        print("QEMU not found; cannot run simulation")
         return 1
 
 
