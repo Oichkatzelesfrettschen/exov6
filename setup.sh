@@ -26,7 +26,7 @@ pip_install(){
 apt_pin_install(){
   pkg="$1"
   if [ "$NETWORK_AVAILABLE" != true ]; then
-    echo "Skipping apt-get install of $pkg due to offline mode" >&2
+    echo "Warning: network unavailable, skipping apt-get install of $pkg" >&2
     return 0
   fi
   ver=$(apt-cache show "$pkg" 2>/dev/null \
