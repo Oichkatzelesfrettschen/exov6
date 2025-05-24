@@ -1,13 +1,11 @@
-import pathlib import subprocess import tempfile import textwrap
+import pathlib, subprocess, tempfile, textwrap
 
-    C_CODE = textwrap.dedent(""
-                             "
+C_CODE = textwrap.dedent(
+    """
 #include <assert.h>
 #include <stddef.h>
 
-                             typedef struct {unsigned int id;
-}
-exo_cap;
+typedef struct {unsigned int id;} exo_cap;
 typedef struct {
   size_t msg_size;
 } msg_type_desc;
@@ -45,8 +43,8 @@ int main(void) {
 
 def compile_and_run():
     with tempfile.TemporaryDirectory() as td:
-        src = pathlib.Path(td)/"test.c"
-        exe = pathlib.Path(td)/"test"
+        src = pathlib.Path(td) / "test.c"
+        exe = pathlib.Path(td) / "test"
         src.write_text(C_CODE)
         subprocess.check_call(["gcc", "-std=c11", str(src), "-o", str(exe)])
         subprocess.check_call([str(exe)])
