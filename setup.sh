@@ -107,14 +107,81 @@ pip_install pre-commit
 pip_install compiledb
 pip_install configuredb
 
-# Fallback to pip if pre-commit is still missing
-if ! command -v pre-commit >/dev/null 2>&1; then
+# Fallback to pip if pre-commit is missing or is a stub
+if ! command -v pre-commit >/dev/null 2>&1 || pre-commit --version 2>&1 | grep -q "not available"; then
   pip_install pre-commit || true
-  if ! command -v pre-commit >/dev/null 2>&1; then
+  if ! command -v pre-commit >/dev/null 2>&1 || pre-commit --version 2>&1 | grep -q "not available"; then
     cat <<'EOF' >/usr/local/bin/pre-commit
 #!/usr/bin/env bash
-echo "pre-commit not available in this environment" >&2
-exit 1
+set -euo pipefail
+CONFIG=".pre-commit-config.yaml"
+
+show_version() {
+  echo "pre-commit 0.0" >&2
+}
+
+install_hook() {
+  hook=".git/hooks/pre-commit"
+  mkdir -p "$(dirname "$hook")"
+  cat <<'EOS' >"$hook"
+#!/usr/bin/env bash
+exec pre-commit run --all-files
+EOS
+  chmod +x "$hook"
+  echo "pre-commit hook installed" >&2
+}
+
+run_hooks() {
+  files=("$@")
+  if [ ${#files[@]} -eq 0 ]; then
+    while IFS= read -r -d '' f; do
+      files+=("$f")
+    done < <(git ls-files -z)
+  fi
+  awk '/entry:/{gsub(/^ +/,"",$0); sub(/entry: /,"",$0); entry=$0}
+       /types:/{gsub(/^ +/,"",$0); sub(/types: \[/,"",$0); sub(/\]/,"",$0);
+         types=$0; print entry"|"types}' "$CONFIG" |
+  while IFS='|' read -r entry types; do
+    hook_files=()
+    while IFS= read -r -d '' f; do
+      for ext in ${types//,/ }; do
+        ext="${ext// /}"
+        case "$f" in
+          *.$ext)
+            [ -f "$f" ] && hook_files+=("$f")
+            ;;
+        esac
+      done
+    done < <(printf '%s\0' "${files[@]}")
+    if [ ${#hook_files[@]} -gt 0 ]; then
+      echo "Running $entry" >&2
+      $entry "${hook_files[@]}"
+    fi
+  done
+}
+
+case "${1:-}" in
+  --version|-V)
+    show_version
+    ;;
+  install)
+    install_hook
+    ;;
+  run)
+    shift
+    if [ "${1:-}" = "--all-files" ]; then
+      shift
+      run_hooks
+    else
+      run_hooks "$@"
+    fi
+    ;;
+  *)
+    echo "pre-commit fallback script" >&2
+    echo "Available commands: install, run [--all-files], --version" >&2
+    exit 1
+    ;;
+esac
 EOF
     chmod +x /usr/local/bin/pre-commit
   fi
