@@ -11,8 +11,7 @@ C_CODE = textwrap.dedent(
 #include <stdint.h>
 #include "src-headers/door.h"
 
-// minimal stub definitions for exo types and caplib helpers
-typedef struct { unsigned pa, id, rights, owner; unsigned long long tag[4]; } exo_cap;
+// stub implementations for caplib helpers
 int cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return 0; }
 int cap_recv(exo_cap src, void *buf, uint64_t len) { (void)src; (void)buf; (void)len; return 0; }
 
