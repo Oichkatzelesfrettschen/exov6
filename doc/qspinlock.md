@@ -1,21 +1,19 @@
-#Quantum - inspired Spinlock(QSpinlock)
+# Quantum-inspired Spinlock (QSpinlock)
 
 The qspinlock API extends xv6's ticket-based spinlocks with a randomized
 back-off strategy. When a CPU fails to immediately acquire the lock, it
 waits for a pseudo-random delay before retrying. On x86 systems with the
 `RDRAND` instruction the delay is derived from hardware randomness;
-otherwise a simple linear congruential generator is
-        used.
+otherwise a simple linear congruential generator is used.
 
-    This approach draws inspiration from quantum algorithms that introduce
-        probabilistic behavior to avoid contention.The
-            random delay reduces cache -
-    line bouncing between cores waiting on the same lock.
+This approach draws inspiration from quantum algorithms that introduce
+probabilistic behavior to avoid contention. The random delay reduces
+cache-line bouncing between cores waiting on the same lock.
 
-    ##Interface
+## Interface
 
-``` void
-    qspin_lock(struct spinlock *lk);
+```
+void qspin_lock(struct spinlock *lk);
 void qspin_unlock(struct spinlock *lk);
 int qspin_trylock(struct spinlock *lk); // returns 1 on success
 ```
