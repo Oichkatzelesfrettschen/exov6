@@ -2,7 +2,7 @@
 #include "exo.h"
 #include "exo_cpu.h"
 #include <stdint.h>
-#include "include/exokernel.h"
+#include "exokernel.h"
 
 exo_cap cap_alloc_page(void);
 int cap_unbind_page(exo_cap cap);
