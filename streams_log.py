@@ -20,8 +20,9 @@ def strlog_json(level: str, message: str, **fields) -> None:
     **fields:
         Additional keyword arguments are included in the output record.
     """
+    iso_ts = datetime.now(UTC).isoformat(timespec="seconds")
     record = {
-        "ts": datetime.now(UTC).isoformat(timespec="seconds"),
+        "ts": iso_ts.replace("+00:00", "Z"),
         "level": level,
         "msg": message,
     }
