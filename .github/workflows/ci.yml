@@ -15,7 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install build dependencies
-      run: sudo apt-get update -y && sudo apt-get install -y build-essential clang clang-tidy clang-format pre-commit qemu-system-i386 qemu-system-x86_64
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y build-essential clang clang-tidy clang-format python3-pip qemu-system-i386 qemu-system-x86_64
+        pip3 install pre-commit
     - uses: pre-commit/action@v3.0.0
     - name: Build Swift components
       run: swift/build_swift.sh
