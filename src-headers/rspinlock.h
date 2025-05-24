@@ -1,5 +1,5 @@
 #pragma once
-#include "spinlock.h"
+#include "../spinlock.h"
 
 struct rspinlock {
   struct spinlock lk;  // underlying spinlock

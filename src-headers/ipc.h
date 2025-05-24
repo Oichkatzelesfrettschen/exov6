@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 
 // zero-copy micro-IPC interface
 // ISA: x86-64; syscall number 0x30 == ipc_fast
