@@ -90,6 +90,7 @@ endif
 
 ARCH ?= x86_64
 CSTD ?= c23
+CPPSTD ?= c++23
 CLANG_TIDY ?= clang-tidy
 TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
@@ -147,6 +148,7 @@ ENTRYASM := $(KERNEL_DIR)/entry.S
 endif
 
 CC = $(TOOLPREFIX)gcc
+CXX ?= $(TOOLPREFIX)g++
 AS = $(TOOLPREFIX)gas
 LD = $(TOOLPREFIX)ld
 OBJCOPY = $(TOOLPREFIX)objcopy
@@ -248,6 +250,7 @@ CFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 # Optional CPU optimization flags
 CFLAGS += $(CPUFLAGS)
+CXXFLAGS = $(CFLAGS) -std=$(CPPSTD)
 ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
 ASFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 
@@ -322,7 +325,7 @@ $(KERNEL_DIR)/vectors.S: vectors.pl
 	./vectors.pl $(ARCH) > $@
 
 LIBOS_OBJS = \
-        $(ULAND_DIR)/ulib.o \
+	$(ULAND_DIR)/ulib.o \
         usys.o \
         $(ULAND_DIR)/printf.o \
         $(ULAND_DIR)/umalloc.o \
@@ -598,3 +601,7 @@ clang-tidy:
 	@for f in $(TIDY_SRCS); do \
 	$(CLANG_TIDY) $$f -- $(CFLAGS); \
 	done
+
+# Example C++ build rule demonstrating CXXFLAGS usage
+foo.o: foo.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
