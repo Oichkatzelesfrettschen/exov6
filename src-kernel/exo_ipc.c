@@ -1,6 +1,6 @@
 #include "types.h"
 #include "defs.h"
-#include "kernel/exo_ipc.h"
+#include "exo_ipc.h"
 
 static struct exo_ipc_ops ipc_ops;
 
