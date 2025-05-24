@@ -321,7 +321,7 @@ int sys_cap_inc(void) {
   int id;
   if (argint(0, &id) < 0)
     return -1;
-  cap_table_inc((uint16_t)id);
+  cap_table_inc((uint)id);
   return 0;
 }
 
@@ -329,7 +329,7 @@ int sys_cap_dec(void) {
   int id;
   if (argint(0, &id) < 0)
     return -1;
-  cap_table_dec((uint16_t)id);
+  cap_table_dec((uint)id);
   return 0;
 }
 
