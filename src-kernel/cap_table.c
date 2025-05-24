@@ -7,10 +7,12 @@
 
 static struct spinlock cap_lock;
 static struct cap_entry cap_table[CAP_MAX];
+uint global_epoch;
 
 void cap_table_init(void) {
     initlock(&cap_lock, "captbl");
     memset(cap_table, 0, sizeof(cap_table));
+    global_epoch = 0;
 }
 
 int cap_table_alloc(uint16_t type, uint resource, uint rights, uint owner) {

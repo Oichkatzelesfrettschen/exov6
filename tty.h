@@ -7,6 +7,9 @@ struct inode;
 
 #define BACKSPACE 0x100
 
+// size of the kernel input buffer used by ttyread
+#define TTY_BUF_SIZE 128
+
 void ttyinit(void);
 void ttyintr(int c, void (*putc)(int));
 void ttypecho(int c, void (*putc)(int));
