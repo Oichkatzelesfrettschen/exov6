@@ -1,4 +1,5 @@
 import json
+import sys
 from datetime import datetime
 
 
@@ -25,4 +26,4 @@ def strlog_json(level: str, message: str, **fields) -> None:
         "msg": message,
     }
     record.update(fields)
-    print(json.dumps(record))
+    print(json.dumps(record), file=sys.stderr)
