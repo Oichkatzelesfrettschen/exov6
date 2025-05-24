@@ -4,8 +4,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 C_CODE = textwrap.dedent("""
 #include <assert.h>
-#include "src-headers/libos/posix.h"
-#include "src-headers/signal.h"
+#include <stddef.h>
+#include "libos/posix.h"
+#include "signal.h"
 
 static int handled = 0;
 
