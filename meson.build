@@ -2,9 +2,13 @@ project('xv6', 'c', default_options: ['c_std=c23'])
 add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 
 use_ticket_lock = get_option('use_ticket_lock')
+ipc_debug = get_option('ipc_debug')
 common_cargs = []
 if use_ticket_lock
   common_cargs += ['-DUSE_TICKET_LOCK']
+endif
+if ipc_debug
+  common_cargs += ['-DIPC_DEBUG']
 endif
 
 clang_tidy = find_program('clang-tidy', required: false)

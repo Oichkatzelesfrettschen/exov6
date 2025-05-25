@@ -23,3 +23,11 @@ Timeouts are encoded as a `timeout_t` value passed to `sys_ipc`. When the wait p
 ## Typed Channels and Capabilities
 
 Typed channels declared with `CHAN_DECLARE` automatically encode and decode Cap'n Proto messages. Each typed channel stores a `msg_type_desc` describing the serialized size and relies on `chan_endpoint_send`/`chan_endpoint_recv` to enforce it. These helpers ultimately call `exo_send` and `exo_recv` using capabilities that reference endpoint mailboxes. Capabilities carry badges identifying the sender so higher level services can implement their own security policies.
+
+## Debug Logging
+
+Setting the `IPC_DEBUG` compile flag enables verbose mailbox tracing. The
+`IPC_LOG()` macro prints details about each send and receive attempt along
+with wait conditions and failures. Meson enables this with `-Dipc_debug=true`
+while CMake uses `-DIPC_DEBUG=ON`. When the flag is unset the macros expand
+to nothing.
