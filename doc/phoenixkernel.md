@@ -194,6 +194,27 @@ cannot compromise the kernel because it only receives the capabilities it
 needs. Drivers typically export a Cap'n Proto service describing the
 operations they support.
 
+## Interrupt Capabilities and Queues
+
+Phoenix exposes hardware interrupt lines through the capability type
+`CAP_TYPE_IRQ` declared in `src-headers/cap.h`.
+Drivers obtain an IRQ capability via `exo_alloc_irq()` and wait for events
+with `exo_irq_wait()` before acknowledging them through `exo_irq_ack()`.
+The kernel implementation lives in `src-kernel/irq.c` where a fixed size
+ring buffer records pending interrupts.  When an interrupt fires,
+`irq_trigger()` appends the number and any task blocked in
+`exo_irq_wait()` is woken once an entry becomes available.
+
+User space code uses the thin wrappers in `libos/irq_client.c` which simply
+forward the calls to the kernel.
+
+IPC messages follow the same queuing approach.  Functions
+`exo_ipc_queue_send()` and `exo_ipc_queue_recv()` manipulate a ring buffer in
+`src-kernel/exo_ipc_queue.c`.  The libOS mirrors this logic in
+`libos/ipc_queue.c` using a userspace lock to serialise access.  These
+functions are registered with `exo_ipc_register()` so `exo_send()` and
+`exo_recv()` share the same semantics.
+
 ## Supervisor
 
 The `rcrs` supervisor runs at boot and keeps drivers alive. It launches each program listed in `drivers.conf` and pings them periodically through an endpoint. If a driver fails to respond before the timeout expires `rcrs` kills and restarts it. Status reports show the process IDs and restart counts so clients can reconnect when a driver is replaced.
