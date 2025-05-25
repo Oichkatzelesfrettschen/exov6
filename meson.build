@@ -9,7 +9,7 @@ foreach d : src_dirs
   sources += files(d + '/*.c')
 endforeach
 
-executable('kernel', sources,
+kernel = executable('kernel', sources,
            include_directories: include_directories('.',
                                             'src-headers',
                                             'src-kernel/include',
@@ -20,6 +20,15 @@ executable('kernel', sources,
 if clang_tidy.found()
   run_target('clang-tidy', command: [clang_tidy, sources],
              depends: sources)
+endif
+
+qemu = find_program('qemu-system-x86_64', 'qemu-system-i386', 'qemu', required: false)
+if qemu.found()
+  run_target('qemu-nox',
+             command: [qemu, '-nographic', '-serial', 'stdio',
+                       '-kernel', kernel.full_path()],
+             depends: kernel,
+             console: true)
 endif
 
 subdir('libnstr_graph')

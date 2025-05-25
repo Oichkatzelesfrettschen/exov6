@@ -313,7 +313,7 @@ USER DEMO: CHANNELS, DAG SCHEDULER AND SUPERVISOR
 -------------------------------------------------
 ``chan_dag_supervisor_demo`` combines typed channels, the DAG scheduler and
 the supervisor helper.  Building the repository with ``make`` compiles the
-demo and its helper ``typed_chan_recv``.  After booting with ``make qemu-nox``
+demo and its helper ``typed_chan_recv``.  After booting with ``ninja -C build qemu-nox``
 run::
 
     $ chan_dag_supervisor_demo
@@ -339,14 +339,14 @@ resulting task order. Build with ``make`` so the binary is placed in
 USER DEMO: HELLO CHANNEL
 ------------------------
 ``hello_channel`` shows typed channels together with capability
-borrowing. After ``make`` completes, boot with ``make qemu-nox`` and run:
+borrowing. After ``make`` completes, boot with ``ninja -C build qemu-nox`` and run:
 
     $ hello_channel
 
 USER DEMO: AFFINE CHANNEL
 -------------------------
 ``affine_channel_demo`` demonstrates the ``AFFINE_CHAN_DECLARE`` macro
-which restricts a channel to a single send.  After building with ``make`` and booting with ``make qemu-nox`` run:
+which restricts a channel to a single send.  After building with ``make`` and booting with ``ninja -C build qemu-nox`` run:
 
     $ affine_channel_demo
 
