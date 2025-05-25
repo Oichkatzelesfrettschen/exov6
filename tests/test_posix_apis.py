@@ -16,12 +16,28 @@ SRC_FILES = [
 def compile_and_run(source: pathlib.Path) -> None:
     with tempfile.TemporaryDirectory() as td:
         exe = pathlib.Path(td) / 'test'
-        subprocess.check_call([
+        inc_dir = pathlib.Path(td) / 'include'
+        inc_dir.mkdir()
+        (inc_dir / 'exokernel.h').write_text(
+            '#include <stddef.h>\n#include "../src-headers/exokernel.h"\n'
+        )
+        cmd = [
             'gcc', '-std=c2x', '-Wall', '-Werror',
+            '-I', str(td),
+            '-I', str(ROOT),
+            '-I', str(ROOT / 'libos/include'),
+            '-I', str(ROOT / 'libos'),
+            '-I', str(ROOT / 'src-headers/libos'),
             '-idirafter', str(ROOT / 'src-headers'),
             str(source),
+            str(ROOT / 'libos/posix.c'),
+            str(ROOT / 'libos/fs.c'),
+            str(ROOT / 'libos/file.c'),
+            str(ROOT / 'libos/fs_ufs.c'),
+            str(ROOT / 'tests/libos_host_stubs.c'),
             '-o', str(exe),
-        ])
+        ]
+        subprocess.check_call(cmd)
         subprocess.check_call([str(exe)])
 
 

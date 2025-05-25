@@ -4,11 +4,6 @@
 #include <string.h>
 #include "libos/posix.h"
 
-int libos_open(const char *path, int flags, int mode) { return open(path, flags, mode); }
-int libos_read(int fd, void *buf, size_t n) { return (int)read(fd, buf, n); }
-int libos_write(int fd, const void *buf, size_t n) { return (int)write(fd, buf, n); }
-int libos_close(int fd) { return close(fd); }
-int libos_dup(int fd) { return dup(fd); }
 
 int main(void) {
     const char *msg = "hello";
