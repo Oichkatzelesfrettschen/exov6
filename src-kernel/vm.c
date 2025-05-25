@@ -8,6 +8,7 @@
 #include "cap.h"
 #include "exo.h"
 #include "elf.h"
+#include <string.h>
 
 extern char data[]; // defined by kernel.ld
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -59,7 +60,8 @@ static pte_t *walkpgdir(pde_t *pgdir, const void *va, int alloc) {
 // Create PTEs for virtual addresses starting at va that refer to
 // physical addresses starting at pa. va and size might not
 // be page-aligned.
-static int mappages(pde_t *pgdir, void *va, uint32_t size, uint32_t pa, int perm) {
+static int mappages(pde_t *pgdir, void *va, uint32_t size, uint32_t pa,
+                    int perm) {
   char *a, *last;
   pte_t *pte;
 
@@ -393,7 +395,7 @@ copyout(pde_t *pgdir, uint32_t va, void *p, size_t len)
     n = PGSIZE - (va - va0);
     if (n > len)
       n = len;
-    memmove(pa0 + (va - va0), buf, n);
+    memcpy(pa0 + (va - va0), buf, n);
     len -= n;
     buf += n;
     va = va0 + PGSIZE;

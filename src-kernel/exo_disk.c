@@ -5,6 +5,7 @@
 #include "buf.h"
 #include "exo_disk.h"
 #include <errno.h>
+#include <string.h>
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
@@ -31,7 +32,7 @@
       releasesleep(&b.lock);
       return r;
     }
-    memmove((char *)dst + tot, b.data + cur % BSIZE, m);
+    memcpy((char *)dst + tot, b.data + cur % BSIZE, m);
     releasesleep(&b.lock);
 
     tot += m;
@@ -56,7 +57,7 @@
     size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);
-    memmove(b.data + cur % BSIZE, (char *)src + tot, m);
+    memcpy(b.data + cur % BSIZE, (char *)src + tot, m);
     int r = exo_bind_block(&blk, &b, 1);
     if (r < 0) {
       releasesleep(&b.lock);
