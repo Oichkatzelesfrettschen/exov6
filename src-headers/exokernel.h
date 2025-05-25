@@ -46,8 +46,8 @@ exo_cap exo_alloc_ioport(uint port);
 /* Allocate a capability for an IRQ line. */
 exo_cap exo_bind_irq(uint irq);
 
-/* Allocate a DMA buffer page and return a capability for it. */
-exo_cap exo_alloc_dma(void);
+/* Allocate a DMA buffer page and return a capability for channel 'chan'. */
+exo_cap exo_alloc_dma(uint chan);
 
 /* Switch to the context referenced by 'target'.  The caller's context must be
  * saved in a user-managed structure.  The kernel does not choose the next
@@ -89,7 +89,4 @@ enum exo_syscall {
     EXO_SYSCALL_ALLOC_DMA    = SYS_exo_alloc_dma,
     EXO_SYSCALL_CAP_INC     = SYS_cap_inc,
     EXO_SYSCALL_CAP_DEC     = SYS_cap_dec,
-    EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,
-    EXO_SYSCALL_BIND_IRQ     = SYS_exo_bind_irq,
-    EXO_SYSCALL_ALLOC_DMA    = SYS_exo_alloc_dma,
 };

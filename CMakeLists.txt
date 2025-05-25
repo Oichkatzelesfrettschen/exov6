@@ -19,6 +19,7 @@ endif()
 file(GLOB_RECURSE KERNEL_SOURCES
   src-kernel/*.c
   src-uland/*.c
+  src-uland/user/*.c
   libos/*.c
 )
 
