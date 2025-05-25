@@ -57,7 +57,7 @@ void
 cprintf(char *fmt, ...)
 {
   int i, c, locking;
-  unsigned long *argp;
+  uintptr_t *argp;
   char *s;
 
   locking = cons.locking;
@@ -67,7 +67,7 @@ cprintf(char *fmt, ...)
   if (fmt == 0)
     panic("null fmt");
 
-  argp = (unsigned long*)(void*)(&fmt + 1);
+  argp = (uintptr_t*)(void*)(&fmt + 1);
   for(i = 0; (c = fmt[i] & 0xff) != 0; i++){
     if(c != '%'){
       ttypecho(c, consputc);
