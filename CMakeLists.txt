@@ -10,6 +10,7 @@ endif()
 project(xv6 LANGUAGES C CXX)
 
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
+option(USE_CAPNP "Enable Cap'n Proto support" ON)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -40,7 +41,6 @@ file(GLOB_RECURSE KERNEL_SOURCES
   src-uland/*.c
   src-uland/user/*.c
   libos/*.c
-  libos/capnp/*.c
 )
 
 add_executable(kernel ${KERNEL_SOURCES})
@@ -63,8 +63,12 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/src-kernel/include
   ${CMAKE_SOURCE_DIR}/proto
   ${CMAKE_SOURCE_DIR}/libos/include
-  ${CMAKE_SOURCE_DIR}/libos/capnp
 )
+if(USE_CAPNP)
+  target_include_directories(kernel PRIVATE ${CMAKE_SOURCE_DIR}/libos/capnp)
+  target_compile_definitions(kernel PRIVATE USE_CAPNP)
+  add_subdirectory(libos/capnp)
+endif()
 
 if(CPUFLAGS)
   target_compile_options(kernel PRIVATE ${CPUFLAGS})

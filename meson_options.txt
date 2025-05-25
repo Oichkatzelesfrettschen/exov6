@@ -1,1 +1,2 @@
 option('use_ticket_lock', type: 'boolean', value : false, description : 'Use ticket-based spinlocks instead of qspinlock')
+option('use_capnp', type: 'boolean', value : true, description : 'Enable Cap\'n Proto support')

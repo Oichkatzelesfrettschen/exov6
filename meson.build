@@ -2,9 +2,14 @@ project('xv6', 'c', default_options: ['c_std=c23'])
 add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 
 use_ticket_lock = get_option('use_ticket_lock')
+use_capnp = get_option('use_capnp')
+libcapnp = []
 common_cargs = []
 if use_ticket_lock
   common_cargs += ['-DUSE_TICKET_LOCK']
+endif
+if use_capnp
+  common_cargs += ['-DUSE_CAPNP']
 endif
 
 clang_tidy = find_program('clang-tidy', required: false)
@@ -38,7 +43,6 @@ libos_sources = [
   'libos/driver.c',
   'libos/affine_runtime.c',
   'libos/posix.c',
-  'libos/capnp/capnp_helpers.c',
 ]
 
 libos = static_library('libos', libos_sources,
@@ -76,6 +80,9 @@ if qemu.found()
              console: true)
 endif
 
+if use_capnp
+  subdir('libos/capnp')
+endif
 subdir('libnstr_graph')
 
 # User-space programs
@@ -118,9 +125,13 @@ uprogs = {
 
 uprogs_targets = []
 foreach name, path : uprogs
+  link_libs = [libos]
+  if use_capnp
+    link_libs += libcapnp
+  endif
   exe = executable('_' + name, path,
                    include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'),
-                   link_with: libos,
+                   link_with: link_libs,
                    install: false,
                    c_args: common_cargs)
   uprogs_targets += exe
