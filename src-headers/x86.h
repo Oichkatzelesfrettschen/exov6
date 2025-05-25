@@ -1,5 +1,4 @@
-#ifndef XV6_X86_H
-#define XV6_X86_H
+#pragma once
 
 static inline uchar
 inb(ushort port)
@@ -47,4 +46,3 @@ stosl(void *addr, int data, int cnt)
                    "memory");
 }
 
-#endif // XV6_X86_H
