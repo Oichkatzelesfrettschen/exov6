@@ -100,6 +100,11 @@ int libos_mkdir(const char *path) {
     return mkdir((char *)path);
 }
 
+int libos_mkfifo(const char *path, int mode){
+    (void)mode;
+    return libfs_mkfifo(path, mode);
+}
+
 int libos_rmdir(const char *path) {
     return unlink((char *)path);
 }

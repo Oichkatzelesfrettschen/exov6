@@ -7,7 +7,7 @@
 #include <string.h>
 #include "libos/posix.h"
 
-int libos_open(const char *path, int flags){ return open(path, flags | O_CREAT, 0600); }
+int libos_open(const char *path, int flags, int mode){ (void)mode; return open(path, flags | O_CREAT, 0600); }
 int libos_close(int fd){ return close(fd); }
 int libos_ftruncate(int fd,long length){ return ftruncate(fd, length); }
 void *libos_mmap(void *addr,size_t len,int prot,int flags,int fd,long off){ return mmap(addr,len,prot,flags,fd,off); }
@@ -19,7 +19,7 @@ int libos_sigaddset(libos_sigset_t *set,int sig){ *set |= 1UL<<sig; return 0; }
 int libos_sigismember(const libos_sigset_t *set,int sig){ return (*set & (1UL<<sig)) != 0; }
 
 int main(void){
-    int fd = libos_open("misc.tmp", O_RDWR);
+    int fd = libos_open("misc.tmp", O_RDWR, 0600);
     assert(fd >= 0);
     assert(libos_ftruncate(fd, 1024) == 0);
     assert(libos_ftruncate(-1, 1) == -1);

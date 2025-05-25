@@ -2,12 +2,20 @@
 
 #include "include/exokernel.h"
 
+struct fifo {
+  char data[512];
+  size_t rpos;
+  size_t wpos;
+  struct exo_blockcap cap;
+};
+
 struct file {
-  enum { FD_NONE, FD_CAP } type;
+  enum { FD_NONE, FD_CAP, FD_FIFO } type;
   size_t ref; // reference count
   char readable;
   char writable;
-  struct exo_blockcap cap; // backing storage capability
+  struct exo_blockcap cap; // backing storage capability for regular files
+  struct fifo *fifo;        // for FIFO files
   size_t off;
 };
 
