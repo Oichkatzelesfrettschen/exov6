@@ -9,7 +9,8 @@
 static struct {
   struct spinlock lock;
   zipc_msg_t buf[FASTIPC_BUFSZ];
-  uint r, w;
+  uint16_t r,
+      w; // hyperspin: 4x 16-bit indices for spinlock per spinning door entry
   int inited;
 } fastipc;
 

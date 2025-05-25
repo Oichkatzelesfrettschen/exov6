@@ -45,7 +45,7 @@ extern struct ptable ptable;
 
 // bio.c
 void binit(void);
-struct buf *bread(uint, uint);
+struct buf *bread(uint32_t, uint32_t);
 void brelse(struct buf *);
 void bwrite(struct buf *);
 
@@ -70,9 +70,9 @@ int filewrite(struct file *, char *, size_t n);
 
 // fs.c
 void readsb(int dev, struct superblock *sb);
-int dirlink(struct inode *, char *, uint);
-struct inode *dirlookup(struct inode *, char *, uint *);
-struct inode *ialloc(uint, short);
+int dirlink(struct inode *, char *, uint32_t);
+struct inode *dirlookup(struct inode *, char *, uint32_t *);
+struct inode *ialloc(uint32_t, short);
 struct inode *idup(struct inode *);
 void iinit(int dev);
 void ilock(struct inode *);
@@ -83,9 +83,9 @@ void iupdate(struct inode *);
 int namecmp(const char *, const char *);
 struct inode *namei(char *);
 struct inode *nameiparent(char *, char *);
-int readi(struct inode *, char *, uint, size_t);
+int readi(struct inode *, char *, uint32_t, size_t);
 void stati(struct inode *, struct stat *);
-int writei(struct inode *, char *, uint, size_t);
+int writei(struct inode *, char *, uint32_t, size_t);
 
 // ide.c
 void ideinit(void);
@@ -94,7 +94,7 @@ void iderw(struct buf *);
 
 // ioapic.c
 void ioapicenable(int irq, int cpu);
-extern uchar ioapicid;
+extern uint8_t ioapicid;
 void ioapicinit(void);
 
 // kalloc.c
@@ -109,10 +109,10 @@ void kbdintr(void);
 // lapic.c
 void cmostime(struct rtcdate *r);
 int lapicid(void);
-extern volatile uint *lapic;
+extern volatile uint32_t *lapic;
 void lapiceoi(void);
 void lapicinit(void);
-void lapicstartap(uchar, uint);
+void lapicstartap(uint8_t, uint32_t);
 void microdelay(int);
 
 // log.c
@@ -156,7 +156,7 @@ void userinit(void);
 int wait(void);
 void wakeup(void *);
 void yield(void);
-struct proc *pctr_lookup(uint);
+struct proc *pctr_lookup(uint32_t);
 struct proc *allocproc(void);
 
 // swtch.S
@@ -164,7 +164,7 @@ void swtch(context_t **, context_t *);
 
 // spinlock.c
 void acquire(struct spinlock *);
-void getcallerpcs(void *, uint *);
+void getcallerpcs(void *, uint32_t *);
 int holding(struct spinlock *);
 void initlock(struct spinlock *, char *);
 void release(struct spinlock *);
@@ -203,7 +203,7 @@ void timerinit(void);
 
 // trap.c
 void idtinit(void);
-extern uint ticks;
+extern uint32_t ticks;
 void tvinit(void);
 extern struct spinlock tickslock;
 void exo_pctr_transfer(struct trapframe *);
@@ -221,39 +221,42 @@ pde_t *setupkvm(void);
 pml4e_t *setupkvm64(void);
 #endif
 char *uva2ka(pde_t *, char *);
-int allocuvm(pde_t *, uint, uint);
-int deallocuvm(pde_t *, uint, uint);
+int allocuvm(pde_t *, uint32_t, uint32_t);
+int deallocuvm(pde_t *, uint32_t, uint32_t);
 void freevm(pde_t *);
-void inituvm(pde_t *, char *, uint);
-int loaduvm(pde_t *, char *, struct inode *, uint, uint);
-pde_t *copyuvm(pde_t *, uint);
+void inituvm(pde_t *, char *, uint32_t);
+int loaduvm(pde_t *, char *, struct inode *, uint32_t, uint32_t);
+pde_t *copyuvm(pde_t *, uint32_t);
 void switchuvm(struct proc *);
 void switchkvm(void);
 #ifdef __x86_64__
-int copyout(pde_t *, uint64, void *, uint);
+int copyout(pde_t *, uint64_t, void *, uint32_t);
 #else
-int copyout(pde_t *, uint, void *, uint);
+int copyout(pde_t *, uint32_t, void *, uint32_t);
 #endif
 
 void clearpteu(pde_t *pgdir, char *uva);
 #ifdef __x86_64__
-int insert_pte(pde_t *, void *, uint64, int);
+int insert_pte(pde_t *, void *, uint64_t, int);
 #else
-int insert_pte(pde_t *, void *, uint, int);
+int insert_pte(pde_t *, void *, uint32_t, int);
 #endif
 exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
-exo_cap cap_new(uint id, uint rights, uint owner);
+exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner);
 int cap_verify(exo_cap);
-struct exo_blockcap exo_alloc_block(uint dev, uint rights);
+struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights);
 int exo_bind_block(struct exo_blockcap *, struct buf *, int);
 void exo_flush_block(struct exo_blockcap *, void *);
-exo_cap exo_alloc_irq(uint irq, uint rights);
-int exo_irq_wait(exo_cap cap, uint *irq);
+exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
+int exo_irq_wait(exo_cap cap, uint32_t *irq);
 int exo_irq_ack(exo_cap cap);
-void irq_trigger(uint irq);
+void irq_trigger(uint32_t irq);
+exo_cap exo_alloc_ioport(uint32_t port);
+exo_cap exo_bind_irq(uint32_t irq);
+exo_cap exo_alloc_dma(uint32_t chan);
 void cap_table_init(void);
-int cap_table_alloc(uint16_t, uint, uint, uint);
+int cap_table_alloc(uint16_t, uint32_t, uint32_t, uint32_t);
 int cap_table_lookup(uint16_t, struct cap_entry *);
 void cap_table_inc(uint16_t);
 void cap_table_dec(uint16_t);

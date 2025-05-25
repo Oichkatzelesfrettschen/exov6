@@ -22,7 +22,7 @@ static void sleep(void *c, struct spinlock *l){ (void)c; (void)l; }
 static void wakeup(void *c){ (void)c; }
 static struct proc cur = {1};
 static struct proc* myproc(void){ return &cur; }
-static exo_cap cap_new(uint id, uint rights, uint owner){
+static exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner){
     exo_cap c; c.pa=id; c.id=id; c.rights=rights; c.owner=owner; return c;
 }
 static int cap_verify(exo_cap c){ (void)c; return 1; }
@@ -53,17 +53,6 @@ def compile_and_run():
         (pathlib.Path(td)/"include/exokernel.h").write_text('#include "../src-headers/exokernel.h"')
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text("")
-        (pathlib.Path(td)/"types.h").write_text(
-            "typedef unsigned int uint;\n"
-            "typedef unsigned short ushort;\n"
-            "typedef unsigned char uchar;\n"
-            "typedef unsigned int uint32;\n"
-            "typedef unsigned long uint64;\n"
-            "typedef unsigned long uintptr;\n"
-        )
-        (pathlib.Path(td)/"stdint.h").write_text(
-            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
-        )
         subprocess.check_call([
             "gcc","-std=c2x",
             "-I", str(td),

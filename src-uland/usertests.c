@@ -768,7 +768,7 @@ concreate(void)
   int i, pid, n, fd;
   char fa[40];
   struct {
-    ushort inum;
+    uint16_t inum;
     char name[14];
   } de;
 
@@ -1441,7 +1441,7 @@ sbrktest(void)
 {
   int fds[2], pid, pids[10], ppid;
   char *a, *b, *c, *lastaddr, *oldbrk, *p, scratch;
-  uint amt;
+  uint32_t amt;
 
   printf(stdout, "sbrk test\n");
   oldbrk = sbrk(0);
@@ -1588,7 +1588,7 @@ void
 validatetest(void)
 {
   int hi, pid;
-  uint p;
+  uint32_t p;
 
   printf(stdout, "validate test\n");
   hi = 1100*1024;
@@ -1726,8 +1726,8 @@ uio()
   #define RTC_ADDR 0x70
   #define RTC_DATA 0x71
 
-  ushort port = 0;
-  uchar val = 0;
+  uint16_t port = 0;
+  uint8_t val = 0;
   int pid;
 
   printf(1, "uio test\n");

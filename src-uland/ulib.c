@@ -20,7 +20,7 @@ strcmp(const char *p, const char *q)
 {
   while(*p && *p == *q)
     p++, q++;
-  return (uchar)*p - (uchar)*q;
+  return (uint8_t)*p - (uint8_t)*q;
 }
 
 size_t

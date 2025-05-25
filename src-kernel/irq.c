@@ -10,9 +10,9 @@
 
 struct irq_queue {
   struct spinlock lock;
-  uint buf[IRQ_BUFSZ];
-  uint r;
-  uint w;
+  uint32_t buf[IRQ_BUFSZ];
+  uint32_t r;
+  uint32_t w;
   int inited;
 } irq_q;
 
@@ -24,14 +24,14 @@ static void irq_init(void) {
   }
 }
 
-exo_cap exo_alloc_irq(uint irq, uint rights) {
+exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights) {
   int id = cap_table_alloc(CAP_TYPE_IRQ, irq, rights, myproc()->pid);
   if (id < 0)
     return cap_new(0, 0, 0);
   return cap_new(id, rights, myproc()->pid);
 }
 
-static int check_irq_cap(exo_cap cap, uint need) {
+static int check_irq_cap(exo_cap cap, uint32_t need) {
   if (!cap_verify(cap))
     return 0;
   struct cap_entry e;
@@ -44,7 +44,7 @@ static int check_irq_cap(exo_cap cap, uint need) {
   return 1;
 }
 
-[[nodiscard]] int exo_irq_wait(exo_cap cap, uint *irq_out) {
+[[nodiscard]] int exo_irq_wait(exo_cap cap, uint32_t *irq_out) {
   if (!check_irq_cap(cap, EXO_RIGHT_R))
     return -EPERM;
   irq_init();
@@ -53,7 +53,7 @@ static int check_irq_cap(exo_cap cap, uint need) {
     wakeup(&irq_q.w);
     sleep(&irq_q.r, &irq_q.lock);
   }
-  uint irq = irq_q.buf[irq_q.r % IRQ_BUFSZ];
+  uint32_t irq = irq_q.buf[irq_q.r % IRQ_BUFSZ];
   irq_q.r++;
   wakeup(&irq_q.w);
   release(&irq_q.lock);
@@ -68,7 +68,7 @@ static int check_irq_cap(exo_cap cap, uint need) {
   return 0;
 }
 
-void irq_trigger(uint irq) {
+void irq_trigger(uint32_t irq) {
   irq_init();
   acquire(&irq_q.lock);
   if (irq_q.w - irq_q.r < IRQ_BUFSZ) {

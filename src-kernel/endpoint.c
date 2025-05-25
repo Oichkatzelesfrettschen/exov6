@@ -15,7 +15,7 @@ void endpoint_init(struct endpoint *ep) {
   }
 }
 
-void endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size,
+void endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint32_t size,
                      const struct msg_type_desc *desc) {
   endpoint_init(ep);
   acquire(&ep->lock);
@@ -31,7 +31,7 @@ void endpoint_send(struct endpoint *ep, zipc_msg_t *m) {
   acquire(&ep->lock);
   if (ep->q && ep->size && ep->w - ep->r < ep->size) {
     size_t sz = msg_desc_size(ep->desc);
-    const uchar *p = (const uchar *)m;
+    const uint8_t *p = (const uint8_t *)m;
     for (size_t i = sz; i < sizeof(zipc_msg_t); i++)
       if (p[i]) {
         release(&ep->lock);

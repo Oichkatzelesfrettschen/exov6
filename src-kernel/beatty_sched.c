@@ -11,7 +11,7 @@ static struct exo_stream beatty_stream;
 
 static exo_cap task_a;
 static exo_cap task_b;
-static uint64 na, nb;
+static uint64_t na, nb;
 static double alpha;
 static double beta;
 
@@ -31,7 +31,7 @@ static void beatty_yield(void) {
   double va = alpha * (double)na;
   double vb = beta * (double)nb;
   exo_cap next;
-  if ((uint64)va < (uint64)vb) {
+  if ((uint64_t)va < (uint64_t)vb) {
     next = task_a;
     na++;
   } else {

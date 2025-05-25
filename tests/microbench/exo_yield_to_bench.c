@@ -4,11 +4,8 @@
 #include <string.h>
 #include <time.h>
 
-typedef unsigned int uint;
-typedef unsigned long uint64;
-
-typedef struct hash256 { uint64 parts[4]; } hash256_t;
-typedef struct exo_cap { uint pa; uint id; uint rights; uint owner; hash256_t auth_tag; } exo_cap;
+typedef struct hash256 { uint64_t parts[4]; } hash256_t;
+typedef struct exo_cap { uint32_t pa; uint32_t id; uint32_t rights; uint32_t owner; hash256_t auth_tag; } exo_cap;
 
 static const uint8_t cap_secret[32] = {
     0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef,
@@ -17,9 +14,9 @@ static const uint8_t cap_secret[32] = {
     0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb
 };
 
-static uint64 fnv64(const uint8_t *data, size_t len, uint64 seed) {
-    const uint64 prime = 1099511628211ULL;
-    uint64 h = seed;
+static uint64_t fnv64(const uint8_t *data, size_t len, uint64_t seed) {
+    const uint64_t prime = 1099511628211ULL;
+    uint64_t h = seed;
     for(size_t i=0;i<len;i++) {
         h ^= data[i];
         h *= prime;
@@ -28,20 +25,20 @@ static uint64 fnv64(const uint8_t *data, size_t len, uint64 seed) {
 }
 
 static void hash256(const uint8_t *data, size_t len, hash256_t *out) {
-    const uint64 basis = 14695981039346656037ULL;
+    const uint64_t basis = 14695981039346656037ULL;
     for(int i=0;i<4;i++)
         out->parts[i] = fnv64(data, len, basis + i);
 }
 
-static void compute_tag(uint id, uint rights, uint owner, hash256_t *out) {
-    struct { uint id; uint rights; uint owner; } tmp = { id, rights, owner };
+static void compute_tag(uint32_t id, uint32_t rights, uint32_t owner, hash256_t *out) {
+    struct { uint32_t id; uint32_t rights; uint32_t owner; } tmp = { id, rights, owner };
     uint8_t buf[sizeof(cap_secret) + sizeof(tmp)];
     memmove(buf, cap_secret, sizeof(cap_secret));
     memmove(buf + sizeof(cap_secret), &tmp, sizeof(tmp));
     hash256(buf, sizeof(buf), out);
 }
 
-static exo_cap cap_new(uint id, uint rights, uint owner) {
+static exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner) {
     exo_cap c;
     c.pa = 0;
     c.id = id;

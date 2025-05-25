@@ -10,9 +10,9 @@
 
 // Interrupt descriptor table (shared by all CPUs).
 struct gatedesc idt[256];
-extern uint vectors[]; // in vectors.S: array of 256 entry pointers
+extern uint32_t vectors[]; // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
-uint ticks;
+uint32_t ticks;
 
 void tvinit(void) {
   int i;
@@ -66,12 +66,12 @@ void trap(struct trapframe *tf) {
     if (myproc() && myproc()->timer_upcall && (tf->cs & 3) == DPL_USER) {
 #ifndef __x86_64__
       tf->esp -= 4;
-      *(uint *)tf->esp = tf->eip;
-      tf->eip = (uint)myproc()->timer_upcall;
+      *(uint32_t *)tf->esp = tf->eip;
+      tf->eip = (uint32_t)myproc()->timer_upcall;
 #else
       tf->rsp -= 8;
-      *(uint64 *)tf->rsp = tf->rip;
-      tf->rip = (uint64)myproc()->timer_upcall;
+      *(uint64_t *)tf->rsp = tf->rip;
+      tf->rip = (uint64_t)myproc()->timer_upcall;
 #endif
     }
     break;

@@ -50,7 +50,7 @@ int argint(int n, int *ip) {
 #ifndef __x86_64__
   return fetchint((myproc()->tf->esp) + 4 + 4 * n, ip);
 #else
-  uint64 val;
+  uint64_t val;
   struct trapframe *tf = myproc()->tf;
   switch (n) {
   case 0:
@@ -90,12 +90,12 @@ argptr(int n, char **pp, size_t size)
   int i;
   if (argint(n, &i) < 0)
     return -1;
-  if (size < 0 || (uint)i >= curproc->sz || (uint)i + size > curproc->sz)
+  if (size < 0 || (uint32_t)i >= curproc->sz || (uint32_t)i + size > curproc->sz)
     return -1;
   *pp = (char *)i;
   return 0;
 #else
-  uint64 addr;
+  uint64_t addr;
   if (argint(n, (int *)&addr) < 0)
     return -1;
   if (size < 0 || addr >= curproc->sz || addr + size > curproc->sz)
@@ -116,7 +116,7 @@ int argstr(int n, char **pp) {
     return -1;
   return fetchstr(addr, pp);
 #else
-  uint64 addr;
+  uint64_t addr;
   if (argint(n, (int *)&addr) < 0)
     return -1;
   return fetchstr(addr, pp);

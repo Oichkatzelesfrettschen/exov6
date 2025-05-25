@@ -10,7 +10,6 @@ C_CODE = r"""
 #include <stdatomic.h>
 #include <stdlib.h>
 
-typedef unsigned int uint;
 
 struct spinlock;
 struct cpu;
