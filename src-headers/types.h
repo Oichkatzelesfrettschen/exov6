@@ -1,5 +1,4 @@
-#ifndef XV6_TYPES_H
-#define XV6_TYPES_H
+#pragma once
 
 typedef unsigned int   uint;
 typedef unsigned short ushort;
@@ -8,4 +7,3 @@ typedef unsigned int   uint32;
 typedef unsigned long  uint64;
 typedef unsigned long  uintptr;
 
-#endif // XV6_TYPES_H
