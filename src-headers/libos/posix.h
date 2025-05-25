@@ -45,3 +45,8 @@ int libos_accept(int fd, struct sockaddr *addr, socklen_t *len);
 int libos_connect(int fd, const struct sockaddr *addr, socklen_t len);
 long libos_send(int fd, const void *buf, size_t len, int flags);
 long libos_recv(int fd, void *buf, size_t len, int flags);
+
+/* Minimal dynamic loader */
+void *libos_dlopen(const char *path);
+void *libos_dlsym(void *handle, const char *name);
+int libos_dlclose(void *handle);

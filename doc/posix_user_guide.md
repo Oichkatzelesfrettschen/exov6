@@ -43,3 +43,14 @@ The behaviour of `read()` matches the Single UNIX Specification; see [`ben-books
 Phoenix exposes low level capabilities such as pages, blocks and endpoints. The libOS translates these primitives into standard file descriptors and process IDs. For example `libos_open()` obtains a block capability for the underlying storage and stores it in an internal table indexed by the returned descriptor. System calls like `libos_fork()` communicate with the scheduler using capability-protected endpoints. Memory mapping wrappers allocate pages with `exo_alloc_page()` before installing the mappings.
 
 By layering these wrappers on top of capabilities the system preserves POSIX semantics in user space while retaining the fine grained control of the exokernel.
+
+## Dynamic Loading
+
+`libos_dlopen()` loads a module file through the capability filesystem and returns a handle. Use `libos_dlsym()` to look up exported symbols and `libos_dlclose()` to release the module. Modules use a very small header describing the available symbols and can be stored alongside regular files.
+
+```c
+void *h = libos_dlopen("sample_mod.bin");
+const char *msg = libos_dlsym(h, "message");
+printf("%s\n", msg);
+libos_dlclose(h);
+```
