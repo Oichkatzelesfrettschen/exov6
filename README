@@ -122,6 +122,13 @@ directory simply execute::
 
     sudo ./setup.sh
 
+When running without internet access place all required `.deb` files under
+`offline_packages/` and use::
+
+    sudo ./setup.sh --offline
+
+The script installs each package from that directory with `dpkg -i`.
+
 This script installs bare-metal cross compiler packages such as
 ``gcc-i386-elf``/``g++-i386-elf`` and ``gcc-x86-64-elf``/``g++-x86-64-elf``
 along with the rest of the toolchain.
