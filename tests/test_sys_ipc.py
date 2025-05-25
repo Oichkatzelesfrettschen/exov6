@@ -70,15 +70,6 @@ def compile_and_run():
         )
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text("")
-        (pathlib.Path(td)/"types.h").write_text(
-            "typedef unsigned int uint;\n"
-            "typedef unsigned long uint64;\n"
-            "typedef unsigned short ushort;\n"
-            "typedef unsigned char uchar;\n"
-        )
-        (pathlib.Path(td)/"stdint.h").write_text(
-            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
-        )
         subprocess.check_call([
             "gcc", "-std=c2x",
             "-I", str(td),

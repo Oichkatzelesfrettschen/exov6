@@ -72,11 +72,11 @@ pde_t entrypgdir[]; // For entry.S
 // Start the non-boot (AP) processors.
 static void startothers(void) {
 #ifdef __x86_64__
-  extern uchar _binary_entryother64_start[], _binary_entryother64_size[];
+  extern uint8_t _binary_entryother64_start[], _binary_entryother64_size[];
 #else
-  extern uchar _binary_entryother_start[], _binary_entryother_size[];
+  extern uint8_t _binary_entryother_start[], _binary_entryother_size[];
 #endif
-  uchar *code;
+  uint8_t *code;
   struct cpu *c;
   char *stack;
 
@@ -89,7 +89,7 @@ static void startothers(void) {
   memmove(code, _binary_entryother64_start, (size_t)_binary_entryother64_size);
 
 #else
-  memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
+  memmove(code, _binary_entryother_start, (uint32_t)_binary_entryother_size);
 #endif
 
   for (c = cpus; c < cpus + ncpu; c++) {
@@ -103,7 +103,7 @@ static void startothers(void) {
     if (stack == 0)
       panic("startothers: out of memory");
 #ifdef __x86_64__
-    *(uint64 *)(code - 8) = (uint64)stack + KSTACKSIZE;
+    *(uint64_t *)(code - 8) = (uint64_t)stack + KSTACKSIZE;
     *(void (**)(void))(code - 16) = mpenter;
 #else
     *(void **)(code - 4) = stack + KSTACKSIZE;

@@ -11,7 +11,7 @@ static struct arbitrate_table default_table;
 static int initialized;
 static struct arbitrate_table *tbl = &default_table;
 
-static int default_policy(uint type, uint res, uint cur, uint newo) {
+static int default_policy(uint32_t type, uint32_t res, uint32_t cur, uint32_t newo) {
     (void)type; (void)res; (void)cur; (void)newo;
     return 0; // keep current owner
 }
@@ -45,7 +45,7 @@ arbitrate_register_policy(arbitrate_policy_t p)
 }
 
 int
-arbitrate_request(uint type, uint resource_id, uint owner)
+arbitrate_request(uint32_t type, uint32_t resource_id, uint32_t owner)
 {
     if(!initialized)
         arbitrate_init(policy);
@@ -88,7 +88,7 @@ arbitrate_request(uint type, uint resource_id, uint owner)
 
     int allow = policy ? policy(type, resource_id, match->owner, owner) : 0;
     if(allow){
-        uint old = match->owner;
+        uint32_t old = match->owner;
         match->owner = owner;
         release(&tbl->lock);
         cprintf("arbitrate: replace %u/%u %u -> %u\n", type, resource_id, old, owner);

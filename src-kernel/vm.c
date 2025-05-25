@@ -59,7 +59,7 @@ static pte_t *walkpgdir(pde_t *pgdir, const void *va, int alloc) {
 // Create PTEs for virtual addresses starting at va that refer to
 // physical addresses starting at pa. va and size might not
 // be page-aligned.
-static int mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm) {
+static int mappages(pde_t *pgdir, void *va, uint32_t size, uint32_t pa, int perm) {
   char *a, *last;
   pte_t *pte;
 
@@ -104,8 +104,8 @@ static int mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm) {
 // every process's page table.
 static struct kmap {
   void *virt;
-  uint phys_start;
-  uint phys_end;
+  uint32_t phys_start;
+  uint32_t phys_end;
   int perm;
 } kmap[] = {
     {(void *)KERNBASE, 0, EXTMEM, PTE_W},            // I/O space
@@ -167,7 +167,7 @@ void switchuvm(struct proc *p) {
   mycpu()->ts.esp0 = (uintptr_t)p->kstack + KSTACKSIZE;
   // setting IOPL=0 in eflags *and* iomb beyond the tss segment limit
   // forbids I/O instructions (e.g., inb and outb) from user space
-  mycpu()->ts.iomb = (ushort)0xFFFF;
+  mycpu()->ts.iomb = (uint16_t)0xFFFF;
   ltr(SEG_TSS << 3);
   lcr3(V2P(p->pgdir)); // switch to process's address space
   popcli();
@@ -188,9 +188,9 @@ void inituvm(pde_t *pgdir, char *init, size_t sz) {
 
 // Load a program segment into pgdir.  addr must be page-aligned
 // and the pages from addr to addr+sz must already be mapped.
-int loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset,
+int loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint32_t offset,
             size_t sz) {
-  uint i, pa, n;
+  uint32_t i, pa, n;
   pte_t *pte;
 
   if ((uintptr_t)addr % PGSIZE != 0)
@@ -213,7 +213,7 @@ int loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset,
 // newsz, which need not be page aligned.  Returns new size or 0 on error.
 int allocuvm(pde_t *pgdir, size_t oldsz, size_t newsz) {
   char *mem;
-  uint a;
+  uint32_t a;
 
   if (newsz >= KERNBASE)
     return 0;
@@ -245,7 +245,7 @@ int allocuvm(pde_t *pgdir, size_t oldsz, size_t newsz) {
 // process size.  Returns the new process size.
 int deallocuvm(pde_t *pgdir, size_t oldsz, size_t newsz) {
   pte_t *pte;
-  uint a, pa;
+  uint32_t a, pa;
 
   if (newsz >= oldsz)
     return oldsz;
@@ -270,7 +270,7 @@ int deallocuvm(pde_t *pgdir, size_t oldsz, size_t newsz) {
 // Free a page table and all the physical memory pages
 // in the user part.
 void freevm(pde_t *pgdir) {
-  uint i;
+  uint32_t i;
 
   if (pgdir == 0)
     panic("freevm: no pgdir");
@@ -297,9 +297,9 @@ void clearpteu(pde_t *pgdir, char *uva) {
 
 int insert_pte(pde_t *pgdir, void *va,
 #if defined(__x86_64__) || defined(__aarch64__)
-               uint64 pa,
+               uint64_t pa,
 #else
-               uint pa,
+               uint32_t pa,
 #endif
                int perm) {
   pte_t *pte;
@@ -321,7 +321,7 @@ int insert_pte(pde_t *pgdir, void *va,
 pde_t *copyuvm(pde_t *pgdir, size_t sz) {
   pde_t *d;
   pte_t *pte;
-  uint pa, flags;
+  uint32_t pa, flags;
   size_t i;
   char *mem;
 
@@ -367,25 +367,25 @@ char *uva2ka(pde_t *pgdir, char *uva) {
 // uva2ka ensures this only works for PTE_U pages.
 int
 #if defined(__x86_64__) || defined(__aarch64__)
-copyout(pde_t *pgdir, uint64 va, void *p, size_t len)
+copyout(pde_t *pgdir, uint64_t va, void *p, size_t len)
 #else
-copyout(pde_t *pgdir, uint va, void *p, size_t len)
+copyout(pde_t *pgdir, uint32_t va, void *p, size_t len)
 #endif
 {
   char *buf, *pa0;
   size_t n;
 #ifdef __x86_64__
-  uint64 va0;
+  uint64_t va0;
 #else
-  uint va0;
+  uint32_t va0;
 #endif
 
   buf = (char *)p;
   while (len > 0) {
 #ifdef __x86_64__
-    va0 = (uint64)PGROUNDDOWN(va);
+    va0 = (uint64_t)PGROUNDDOWN(va);
 #else
-    va0 = (uint)PGROUNDDOWN(va);
+    va0 = (uint32_t)PGROUNDDOWN(va);
 #endif
     pa0 = uva2ka(pgdir, (char *)va0);
     if (pa0 == 0)
@@ -413,7 +413,7 @@ exo_cap exo_alloc_page(void) {
   char *mem = kalloc();
   if (!mem)
     return cap_new(0, 0, 0);
-  uint pa = V2P(mem);
+  uint32_t pa = V2P(mem);
   int id = cap_table_alloc(CAP_TYPE_PAGE, pa, 0, myproc()->pid);
   return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
 }
@@ -430,8 +430,8 @@ exo_cap exo_alloc_page(void) {
     return -1;
   pde_t *pgdir = p->pgdir;
   pte_t *pte;
-  uint a;
-  uint pa = e.resource;
+  uint32_t a;
+  uint32_t pa = e.resource;
 
   for (a = 0; a < p->sz; a += PGSIZE) {
     if ((pte = walkpgdir(pgdir, (void *)a, 0)) != 0 && (*pte & PTE_P)) {
