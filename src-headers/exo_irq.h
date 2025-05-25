@@ -10,7 +10,7 @@ extern "C" {
 exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
 [[nodiscard]] int exo_irq_wait(exo_cap cap, uint32_t *irq);
 [[nodiscard]] int exo_irq_ack(exo_cap cap);
-void irq_trigger(uint32_t irq);
+int irq_trigger(uint32_t irq);
 
 #ifdef __cplusplus
 }
