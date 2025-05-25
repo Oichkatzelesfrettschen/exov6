@@ -168,10 +168,10 @@ found:
   // which returns to trapret.
 #if defined(__x86_64__)
   sp -= sizeof(unsigned long);
-  *(unsigned long*)sp = (unsigned long)trapret;
+  *(uintptr_t*)sp = (uintptr_t)trapret;
 #elif defined(__aarch64__)
   sp -= sizeof(unsigned long);
-  *(unsigned long*)sp = (unsigned long)trapret;
+  *(uintptr_t*)sp = (uintptr_t)trapret;
 #else
   sp -= 4;
   *(uint32_t*)sp = (uint32_t)trapret;
@@ -181,9 +181,9 @@ found:
   p->context = (context_t*)sp;
   memset(p->context, 0, sizeof *p->context);
 #if defined(__x86_64__)
-  p->context->rip = (unsigned long)forkret;
+  p->context->rip = (uintptr_t)forkret;
 #elif defined(__aarch64__)
-  p->context->lr = (unsigned long)forkret;
+  p->context->lr = (uintptr_t)forkret;
 #else
   p->context->eip = (uint32_t)forkret;
 #endif
