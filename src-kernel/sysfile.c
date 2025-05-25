@@ -67,29 +67,12 @@ sys_dup(void)
   return fd;
 }
 
-int
-sys_read(void)
-{
-  struct file *f;
-  size_t n;
-  char *p;
+// The traditional file descriptor based system calls are now implemented in
+// user space by libOS.  The kernel stubs simply return an error so that any
+// lingering direct invocations are caught during development.
+int sys_read(void) { return -1; }
 
-  if(argfd(0, 0, &f) < 0 || argint(2, (int*)&n) < 0 || argptr(1, &p, n) < 0)
-    return -1;
-  return fileread(f, p, n);
-}
-
-int
-sys_write(void)
-{
-  struct file *f;
-  size_t n;
-  char *p;
-
-  if(argfd(0, 0, &f) < 0 || argint(2, (int*)&n) < 0 || argptr(1, &p, n) < 0)
-    return -1;
-  return filewrite(f, p, n);
-}
+int sys_write(void) { return -1; }
 
 int
 sys_close(void)
@@ -116,54 +99,7 @@ sys_fstat(void)
 }
 
 // Create the path new as a link to the same inode as old.
-int
-sys_link(void)
-{
-  char name[DIRSIZ], *new, *old;
-  struct inode *dp, *ip;
-
-  if(argstr(0, &old) < 0 || argstr(1, &new) < 0)
-    return -1;
-
-  begin_op();
-  if((ip = namei(old)) == 0){
-    end_op();
-    return -1;
-  }
-
-  ilock(ip);
-  if(ip->type == T_DIR){
-    iunlockput(ip);
-    end_op();
-    return -1;
-  }
-
-  ip->nlink++;
-  iupdate(ip);
-  iunlock(ip);
-
-  if((dp = nameiparent(new, name)) == 0)
-    goto bad;
-  ilock(dp);
-  if(dp->dev != ip->dev || dirlink(dp, name, ip->inum) < 0){
-    iunlockput(dp);
-    goto bad;
-  }
-  iunlockput(dp);
-  iput(ip);
-
-  end_op();
-
-  return 0;
-
-bad:
-  ilock(ip);
-  ip->nlink--;
-  iupdate(ip);
-  iunlockput(ip);
-  end_op();
-  return -1;
-}
+int sys_link(void) { return -1; }
 
 // Is the directory dp empty except for "." and ".." ?
 static int
@@ -283,56 +219,7 @@ create(char *path, short type, short major, short minor)
   return ip;
 }
 
-int
-sys_open(void)
-{
-  char *path;
-  int fd, omode;
-  struct file *f;
-  struct inode *ip;
-
-  if(argstr(0, &path) < 0 || argint(1, &omode) < 0)
-    return -1;
-
-  begin_op();
-
-  if(omode & O_CREATE){
-    ip = create(path, T_FILE, 0, 0);
-    if(ip == 0){
-      end_op();
-      return -1;
-    }
-  } else {
-    if((ip = namei(path)) == 0){
-      end_op();
-      return -1;
-    }
-    ilock(ip);
-    if(ip->type == T_DIR && omode != O_RDONLY){
-      iunlockput(ip);
-      end_op();
-      return -1;
-    }
-  }
-
-  if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
-    if(f)
-      fileclose(f);
-    iunlockput(ip);
-    end_op();
-    return -1;
-  }
-  iunlock(ip);
-  end_op();
-
-  f->type = FD_INODE;
-  f->ip = ip;
-  f->off = 0;
-  f->readable = !(omode & O_WRONLY);
-  f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
-  f->flags = omode & O_NONBLOCK;
-  return fd;
-}
+int sys_open(void) { return -1; }
 
 int
 sys_mkdir(void)
@@ -395,55 +282,9 @@ sys_chdir(void)
   return 0;
 }
 
-int
-sys_exec(void)
-{
-  char *path, *argv[MAXARG];
-  int i;
-  uint32_t uargv, uarg;
+int sys_exec(void) { return -1; }
 
-  if(argstr(0, &path) < 0 || argint(1, (int*)&uargv) < 0){
-    return -1;
-  }
-  memset(argv, 0, sizeof(argv));
-  for(i=0;; i++){
-    if(i >= NELEM(argv))
-      return -1;
-    if(fetchint(uargv+4*i, (int*)&uarg) < 0)
-      return -1;
-    if(uarg == 0){
-      argv[i] = 0;
-      break;
-    }
-    if(fetchstr(uarg, &argv[i]) < 0)
-      return -1;
-  }
-  return exec(path, argv);
-}
-
-int
-sys_pipe(void)
-{
-  int *fd;
-  struct file *rf, *wf;
-  int fd0, fd1;
-
-  if(argptr(0, (void*)&fd, 2*sizeof(fd[0])) < 0)
-    return -1;
-  if(pipealloc(&rf, &wf) < 0)
-    return -1;
-  fd0 = -1;
-  if((fd0 = fdalloc(rf)) < 0 || (fd1 = fdalloc(wf)) < 0){
-    if(fd0 >= 0)
-      myproc()->ofile[fd0] = 0;
-    fileclose(rf);
-    fileclose(wf);
-    return -1;
-  }
-  fd[0] = fd0;
-  fd[1] = fd1;
-  return 0;
-}
+int sys_pipe(void) { return -1; }
 
 int
 sys_fcntl(void)
