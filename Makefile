@@ -35,7 +35,6 @@ OBJS = \
     $(KERNEL_DIR)/exo_cpu.o \
     $(KERNEL_DIR)/exo_disk.o \
     $(KERNEL_DIR)/exo_ipc.o \
-    $(KERNEL_DIR)/exo_ipc_queue.o \
     $(KERNEL_DIR)/exo_stream.o \
     $(KERNEL_DIR)/cap.o \
     $(KERNEL_DIR)/cap_table.o \
@@ -339,7 +338,9 @@ LIBOS_OBJS = \
        $(LIBOS_DIR)/file.o \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
-       $(LIBOS_DIR)/posix.o
+       $(LIBOS_DIR)/posix.o \
+       $(LIBOS_DIR)/ipc_queue.o 
+
 
 
 libos: libos.a
