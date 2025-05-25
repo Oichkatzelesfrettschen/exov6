@@ -3,6 +3,7 @@ add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 
 use_ticket_lock = get_option('use_ticket_lock')
 ipc_debug = get_option('ipc_debug')
+use_capnp = get_option('use_capnp')
 common_cargs = []
 if use_ticket_lock
   common_cargs += ['-DUSE_TICKET_LOCK']
@@ -22,10 +23,22 @@ endif
 
 # User-space runtime library
 mock_capnpc = find_program('scripts/mock_capnpc.sh')
-driver_capnp = custom_target('driver_capnp',
-    input: 'proto/driver.capnp',
-    output: ['driver.capnp.c', 'driver.capnp.h'],
-    command: [mock_capnpc, '@INPUT@'])
+capnp_targets = []
+if use_capnp
+  driver_capnp = custom_target('driver_capnp',
+      input: 'proto/driver.capnp',
+      output: ['driver.capnp.c', 'driver.capnp.h'],
+      command: [mock_capnpc, '@INPUT@'])
+  hello_capnp = custom_target('hello_capnp',
+      input: 'proto/hello.capnp',
+      output: ['hello.capnp.c', 'hello.capnp.h'],
+      command: [mock_capnpc, '@INPUT@'])
+  capnp_targets += [driver_capnp, hello_capnp]
+  libcapnp = static_library('libcapnp',
+      ['libos/capnp/capnp_helpers.c'] + capnp_targets,
+      include_directories: include_directories('.', 'src-headers', 'proto', 'libos/capnp'),
+      c_args: common_cargs)
+endif
 
 libos_sources = [
   'src-uland/ulib.c',
@@ -34,7 +47,6 @@ libos_sources = [
   'src-uland/caplib.c',
   'src-uland/chan.c',
   'src-uland/door.c',
-  driver_capnp,
   'src-uland/math_core.c',
   'src-uland/libos/sched.c',
   'libos/fs.c',
@@ -46,7 +58,6 @@ libos_sources = [
   'libos/microkernel/msg_router.c',
   'libos/microkernel/resource_account.c',
   'libos/microkernel/registration.c',
-  'libos/capnp/capnp_helpers.c',
 ]
 
 libos = static_library('libos', libos_sources,
@@ -111,24 +122,35 @@ uprogs = {
   'ipc_test': 'src-uland/ipc_test.c',
   'nbtest': 'src-uland/nbtest.c',
   'rcrs': 'src-uland/rcrs.c',
-  'pingdriver': 'src-uland/pingdriver.c',
-  'typed_chan_demo': 'src-uland/user/typed_chan_demo.c',
-  'typed_chan_send': 'src-uland/user/typed_chan_send.c',
-  'typed_chan_recv': 'src-uland/user/typed_chan_recv.c',
-  'affine_channel_demo': 'src-uland/user/affine_channel_demo.c',
-  'chan_dag_supervisor_demo': 'src-uland/user/chan_dag_supervisor_demo.c',
-  'chan_beatty_rcrs_demo': 'src-uland/user/chan_beatty_rcrs_demo.c',
   'libos_posix_test': 'src-uland/libos_posix_test.c',
   'libos_posix_extra_test': 'src-uland/user/libos_posix_extra_test.c',
   'qspin_demo': 'src-uland/user/qspin_demo.c',
   'tty_demo': 'src-uland/tty_demo.c',
 }
 
+if use_capnp
+  uprogs += {
+    'pingdriver': 'src-uland/pingdriver.c',
+    'typed_chan_demo': 'src-uland/user/typed_chan_demo.c',
+    'typed_chan_send': 'src-uland/user/typed_chan_send.c',
+    'typed_chan_recv': 'src-uland/user/typed_chan_recv.c',
+    'affine_channel_demo': 'src-uland/user/affine_channel_demo.c',
+    'chan_dag_supervisor_demo': 'src-uland/user/chan_dag_supervisor_demo.c',
+    'chan_beatty_rcrs_demo': 'src-uland/user/chan_beatty_rcrs_demo.c',
+  }
+endif
+
 uprogs_targets = []
 foreach name, path : uprogs
+  incs = [include_directories('.', 'src-headers', 'proto', 'libos/include')]
+  deps = [libos]
+  if use_capnp
+    incs += include_directories('libos/capnp')
+    deps += libcapnp
+  endif
   exe = executable('_' + name, path,
-                   include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'),
-                   link_with: libos,
+                   include_directories: incs,
+                   link_with: deps,
                    install: false,
                    c_args: common_cargs)
   uprogs_targets += exe

@@ -303,14 +303,18 @@ environment for Meson:
     Optimize locks for single CPU systems. Implies CONFIG_SMP=OFF.
 ``SPINLOCK_DEBUG``
     Enable additional lock sanity checks.
+``USE_CAPNP``
+    Build Cap'n Proto helpers and example programs.
 
 Example CMake usage::
 
     cmake -S . -B build -DUSE_TICKET_LOCK=ON && ninja -C build
+    cmake -S . -B build -DUSE_CAPNP=ON && ninja -C build
 
 Using Meson::
 
     USE_TICKET_LOCK=1 meson setup build && ninja -C build
+    USE_CAPNP=1 meson setup build && ninja -C build
 
 To switch back to qspinlocks::
 
