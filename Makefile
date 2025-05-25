@@ -582,7 +582,7 @@ tar:
 	cp dist/* dist/.gdbinit.tmpl /tmp/xv6
 	(cd /tmp; tar cf - xv6) | gzip >xv6-rev10.tar.gz  # the next one will be 10 (9/17)
 
-.PHONY: dist-test dist check
+.PHONY: dist-test dist check microbench
 
 HOSTCC ?= gcc
 HOSTCFLAGS ?= -Wall -Werror -std=c99
@@ -599,6 +599,9 @@ src-uland/exo_unit_test: src-uland/exo_unit_test.c
 check: src-uland/exo_unit_test
 	./src-uland/exo_unit_test
 	pytest -q
+
+microbench:
+	python3 tests/microbench/run.py
 
 clang-tidy:
 	@for f in $(TIDY_SRCS); do \
