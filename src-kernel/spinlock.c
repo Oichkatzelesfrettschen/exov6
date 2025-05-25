@@ -9,9 +9,8 @@
 #include "proc.h"
 #include "spinlock.h"
 
-void
-initlock(struct spinlock *lk, char *name)
-{
+#if CONFIG_SMP
+void initlock(struct spinlock *lk, char *name) {
   lk->name = name;
   lk->ticket.head = 0;
   lk->ticket.tail = 0;
@@ -22,15 +21,13 @@ initlock(struct spinlock *lk, char *name)
 // Loops (spins) until the lock is acquired.
 // Holding a lock for a long time may cause
 // other CPUs to waste time spinning to acquire it.
-void
-acquire(struct spinlock *lk)
-{
+void acquire(struct spinlock *lk) {
   pushcli(); // disable interrupts to avoid deadlock.
-  if(holding(lk))
+  if (holding(lk))
     panic("acquire");
 
   uint16_t ticket = __atomic_fetch_add(&lk->ticket.tail, 1, __ATOMIC_SEQ_CST);
-  while(__atomic_load_n(&lk->ticket.head, __ATOMIC_SEQ_CST) != ticket)
+  while (__atomic_load_n(&lk->ticket.head, __ATOMIC_SEQ_CST) != ticket)
     ;
 
   // Tell the C compiler and the processor to not move loads or stores
@@ -44,10 +41,8 @@ acquire(struct spinlock *lk)
 }
 
 // Release the lock.
-void
-release(struct spinlock *lk)
-{
-  if(!holding(lk))
+void release(struct spinlock *lk) {
+  if (!holding(lk))
     panic("release");
 
   lk->pcs[0] = 0;
@@ -64,76 +59,82 @@ release(struct spinlock *lk)
 
   popcli();
 }
+#else
+void initlock(struct spinlock *lk, char *name) {
+  (void)lk;
+  (void)name;
+}
+void acquire(struct spinlock *lk) { (void)lk; }
+void release(struct spinlock *lk) { (void)lk; }
+#endif
 
 // Record the current call stack in pcs[] by following the %ebp chain.
-void
-getcallerpcs(void *v, uint pcs[])
-{
+void getcallerpcs(void *v, uint pcs[]) {
 #ifdef __x86_64__
   unsigned long *rbp;
   int i;
 
-  rbp = (unsigned long*)v - 2;
-  for(i = 0; i < 10; i++){
-    if(rbp == 0 || rbp < (unsigned long*)KERNBASE ||
-       rbp == (unsigned long*)-1)
+  rbp = (unsigned long *)v - 2;
+  for (i = 0; i < 10; i++) {
+    if (rbp == 0 || rbp < (unsigned long *)KERNBASE ||
+        rbp == (unsigned long *)-1)
       break;
-    pcs[i] = rbp[1];     // saved %rip
-    rbp = (unsigned long*)rbp[0]; // saved %rbp
+    pcs[i] = rbp[1];               // saved %rip
+    rbp = (unsigned long *)rbp[0]; // saved %rbp
   }
-  for(; i < 10; i++)
+  for (; i < 10; i++)
     pcs[i] = 0;
 #else
   uint *ebp;
   int i;
 
-  ebp = (uint*)v - 2;
-  for(i = 0; i < 10; i++){
-    if(ebp == 0 || ebp < (uint*)KERNBASE || ebp == (uint*)0xffffffff)
+  ebp = (uint *)v - 2;
+  for (i = 0; i < 10; i++) {
+    if (ebp == 0 || ebp < (uint *)KERNBASE || ebp == (uint *)0xffffffff)
       break;
-    pcs[i] = ebp[1];     // saved %eip
-    ebp = (uint*)ebp[0]; // saved %ebp
+    pcs[i] = ebp[1];      // saved %eip
+    ebp = (uint *)ebp[0]; // saved %ebp
   }
-  for(; i < 10; i++)
+  for (; i < 10; i++)
     pcs[i] = 0;
 #endif
 }
 
 // Check whether this cpu is holding the lock.
-int
-holding(struct spinlock *lock)
-{
+#if CONFIG_SMP
+int holding(struct spinlock *lock) {
   int r;
   pushcli();
   r = lock->cpu == mycpu();
   popcli();
   return r;
 }
-
+#else
+int holding(struct spinlock *lock) {
+  (void)lock;
+  return 1;
+}
+#endif
 
 // Pushcli/popcli are like cli/sti except that they are matched:
 // it takes two popcli to undo two pushcli.  Also, if interrupts
 // are off, then pushcli, popcli leaves them off.
 
-void
-pushcli(void)
-{
+void pushcli(void) {
   int eflags;
 
   eflags = readeflags();
   cli();
-  if(mycpu()->ncli == 0)
+  if (mycpu()->ncli == 0)
     mycpu()->intena = eflags & FL_IF;
   mycpu()->ncli += 1;
 }
 
-void
-popcli(void)
-{
-  if(readeflags()&FL_IF)
+void popcli(void) {
+  if (readeflags() & FL_IF)
     panic("popcli - interruptible");
-  if(--mycpu()->ncli < 0)
+  if (--mycpu()->ncli < 0)
     panic("popcli");
-  if(mycpu()->ncli == 0 && mycpu()->intena)
+  if (mycpu()->ncli == 0 && mycpu()->intena)
     sti();
 }
