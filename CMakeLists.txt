@@ -24,6 +24,15 @@ if(CLANG_TIDY_EXE)
   set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_EXE}")
 endif()
 
+find_package(BISON)
+if(BISON_FOUND)
+  BISON_TARGET(example_parser
+    proto/example.y
+    ${CMAKE_CURRENT_BINARY_DIR}/example_parser.c
+    DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/example_parser.h)
+  add_custom_target(example_bison DEPENDS ${BISON_example_parser_OUTPUTS})
+endif()
+
 file(GLOB_RECURSE KERNEL_SOURCES
   src-kernel/*.c
   src-uland/*.c

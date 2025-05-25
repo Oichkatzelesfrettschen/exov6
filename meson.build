@@ -1,6 +1,13 @@
 project('xv6', 'c', default_options: ['c_std=c23'])
 
 clang_tidy = find_program('clang-tidy', required: false)
+bison = find_program('bison', required: false)
+if bison.found()
+  example_parser = custom_target('example_parser',
+    input: 'proto/example.y',
+    output: ['example_parser.c', 'example_parser.h'],
+    command: [bison, '--defines=@OUTPUT1@', '-o', '@OUTPUT0@', '@INPUT@'])
+endif
 
 # User-space runtime library
 mock_capnpc = find_program('scripts/mock_capnpc.sh')
