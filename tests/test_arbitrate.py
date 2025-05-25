@@ -55,7 +55,7 @@ def compile_and_run():
         (pathlib.Path(td)/"defs.h").write_text("")
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc", "-std=c11",
+            "gcc", "-std=c23",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
