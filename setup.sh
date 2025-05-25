@@ -69,6 +69,7 @@ else
 fi
 
 #— core build tools, formatters, analysis, science libs
+echo "CMake build requires clang; GCC is not supported" >&2
 for pkg in \
   build-essential gcc g++ g++-13 clang clang-16 lld llvm \
   clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig shellcheck pre-commit \
