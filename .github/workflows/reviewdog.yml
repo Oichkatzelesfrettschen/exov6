@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install linter runtime deps
         run: |
+          set -euxo pipefail
           sudo apt-get update -y
           sudo apt-get install -y shellcheck clang clang-tidy clang-format
       - name: Run ${{ matrix.linter.id }} & feed Reviewdog
