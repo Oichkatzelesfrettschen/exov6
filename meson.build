@@ -54,6 +54,7 @@ libos_sources = [
   'libos/driver.c',
   'libos/affine_runtime.c',
   'libos/posix.c',
+  'libos/termios.c',
   'libos/microkernel/cap.c',
   'libos/microkernel/msg_router.c',
   'libos/microkernel/resource_account.c',
@@ -126,6 +127,7 @@ uprogs = {
   'libos_posix_extra_test': 'src-uland/user/libos_posix_extra_test.c',
   'qspin_demo': 'src-uland/user/qspin_demo.c',
   'tty_demo': 'src-uland/tty_demo.c',
+  'termios_demo': 'src-uland/termios_demo.c',
 }
 
 if use_capnp
