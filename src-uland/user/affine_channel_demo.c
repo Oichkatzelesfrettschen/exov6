@@ -1,6 +1,7 @@
 #include "types.h"
 #include "user.h"
 #include "affine_runtime.h"
+#include "capnp_helpers.h"
 #include "proto/driver.capnp.h"
 
 AFFINE_CHAN_DECLARE(aff_ping_chan, DriverPing);
