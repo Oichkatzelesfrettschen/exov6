@@ -10,7 +10,7 @@
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
-
+static struct mailbox ipcs;
 
 static void ipc_init(struct mailbox *mb) {
   if (!mb->inited) {
@@ -121,7 +121,7 @@ int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
     IPC_LOG("recv_timed fail: no read rights");
     return -EPERM;
   }
-  ipc_init();
+  ipc_init(&ipcs);
   acquire(&ipcs.lock);
   while (ipcs.r == ipcs.w && timeout > 0) {
     IPC_LOG("recv_timed waiting");
@@ -134,7 +134,7 @@ int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
     release(&ipcs.lock);
     return -ETIMEDOUT;
   }
-  struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
+  struct ipc_entry e = ipcs.buf[ipcs.r % MAILBOX_BUFSZ];
   ipcs.r++;
   wakeup(&ipcs.w);
   release(&ipcs.lock);
