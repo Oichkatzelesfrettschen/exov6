@@ -8,6 +8,9 @@
 #include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
+#ifndef USE_TICKET_LOCK
+#include "qspinlock.h"
+#endif
 
 #if CONFIG_SMP
 void initlock(struct spinlock *lk, char *name) {
@@ -22,6 +25,7 @@ void initlock(struct spinlock *lk, char *name) {
 // Holding a lock for a long time may cause
 // other CPUs to waste time spinning to acquire it.
 void acquire(struct spinlock *lk) {
+#ifdef USE_TICKET_LOCK
   pushcli(); // disable interrupts to avoid deadlock.
   if (holding(lk))
     panic("acquire");
@@ -38,10 +42,14 @@ void acquire(struct spinlock *lk) {
   // Record info about lock acquisition for debugging.
   lk->cpu = mycpu();
   getcallerpcs(&lk, lk->pcs);
+#else
+  qspin_lock(lk);
+#endif
 }
 
 // Release the lock.
 void release(struct spinlock *lk) {
+#ifdef USE_TICKET_LOCK
   if (!holding(lk))
     panic("release");
 
@@ -58,6 +66,9 @@ void release(struct spinlock *lk) {
   __atomic_fetch_add(&lk->ticket.head, 1, __ATOMIC_SEQ_CST);
 
   popcli();
+#else
+  qspin_unlock(lk);
+#endif
 }
 #else
 void initlock(struct spinlock *lk, char *name) {
@@ -92,7 +103,7 @@ void getcallerpcs(void *v, uint32_t pcs[]) {
   for (i = 0; i < 10; i++) {
     if (ebp == 0 || ebp < (uint32_t *)KERNBASE || ebp == (uint32_t *)0xffffffff)
       break;
-    pcs[i] = ebp[1];      // saved %eip
+    pcs[i] = ebp[1];          // saved %eip
     ebp = (uint32_t *)ebp[0]; // saved %ebp
   }
   for (; i < 10; i++)

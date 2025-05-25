@@ -285,6 +285,21 @@ environment for Meson:
 ``SPINLOCK_DEBUG``
     Enable additional lock sanity checks.
 
+Example CMake usage::
+
+    cmake -S . -B build -DUSE_TICKET_LOCK=ON && ninja -C build
+
+Using Meson::
+
+    USE_TICKET_LOCK=1 meson setup build && ninja -C build
+
+To switch back to qspinlocks::
+
+    cmake -S . -B build -DUSE_TICKET_LOCK=OFF && ninja -C build
+
+Disable the option by setting ``OFF`` (or ``0`` for Meson).  The
+default build uses qspinlocks.
+
 CODE FORMATTING
 ---------------
 The project includes a ``.clang-format`` file configured for the LLVM
