@@ -167,7 +167,7 @@ export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
 # for cross-compilers and legacy support.
 for pkg in \
   build-essential gcc g++ g++-13 clang clang-16 lld llvm llvm-bolt \
-  clang-format clang-tidy clangd clang-tools ccache uncrustify astyle editorconfig shellcheck pre-commit \
+  clang-format clang-tidy clangd clang-tools ccache uncrustify astyle editorconfig \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip graphviz \
@@ -191,7 +191,7 @@ for pkg in \
 done
 
 for pip_pkg in \
-  black flake8 pyperf py-cpuinfo pytest pre-commit compiledb configuredb \
+  black flake8 pyperf py-cpuinfo pytest pre-commit shellcheck-py compiledb configuredb \
   pyyaml pylint pyfuzz; do
   pip_install "$pip_pkg"
 done
@@ -277,7 +277,17 @@ case "${1:-}" in
     ;;
 esac
 EOF
-    chmod +x /usr/local/bin/pre-commit
+  chmod +x /usr/local/bin/pre-commit
+  fi
+fi
+
+if ! command -v shellcheck >/dev/null 2>&1; then
+  if python3 -m shellcheck --version >/dev/null 2>&1; then
+    cat <<'EOS' >/usr/local/bin/shellcheck
+#!/usr/bin/env bash
+exec python3 -m shellcheck "$@"
+EOS
+    chmod +x /usr/local/bin/shellcheck
   fi
 fi
 
