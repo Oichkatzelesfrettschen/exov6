@@ -18,10 +18,27 @@ struct spinlock {
                      // that locked the lock.
 };
 
-// Returns the recommended alignment for instances of struct spinlock.
+#ifndef SPINLOCK_NO_STUBS
+extern size_t spinlock_cache_line_size;
 static inline size_t
 spinlock_optimal_alignment(void)
 {
-  return __alignof__(struct spinlock);
+  size_t base = __alignof__(struct spinlock);
+  return spinlock_cache_line_size > base ? spinlock_cache_line_size : base;
 }
+#else
+static inline size_t
+spinlock_optimal_alignment(void)
+{
+#if defined(__i386__) || defined(__x86_64__)
+  unsigned int eax = 1, ebx, ecx, edx;
+  __asm__ volatile("cpuid" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) : "a"(eax));
+  size_t sz = ((ebx >> 8) & 0xff) * 8u;
+#else
+  size_t sz = 0;
+#endif
+  size_t base = __alignof__(struct spinlock);
+  return sz > base ? sz : base;
+}
+#endif
 

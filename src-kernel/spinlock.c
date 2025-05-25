@@ -9,6 +9,30 @@
 #include "proc.h"
 #include "spinlock.h"
 
+// Detected cache line size in bytes. Filled in by main.c during
+// early boot so that spinlock_optimal_alignment() can use it.
+size_t spinlock_cache_line_size = 0;
+
+// Issue CPUID leaf 1 and extract the cache line size information.
+// Returns 0 if the instruction is unavailable or the value cannot be
+// determined.
+size_t
+detect_cache_line_size(void)
+{
+#if defined(__i386__) || defined(__x86_64__)
+  unsigned int eax, ebx, ecx, edx;
+
+  eax = 1;
+  __asm__ volatile("cpuid"
+                   : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
+                   : "a"(eax));
+
+  return ((ebx >> 8) & 0xff) * 8u;
+#else
+  return 0;
+#endif
+}
+
 void
 initlock(struct spinlock *lk, char *name)
 {

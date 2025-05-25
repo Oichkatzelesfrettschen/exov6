@@ -9,6 +9,7 @@
 #include "x86.h"
 #include "exo_stream.h"
 #include "exo_ipc.h"
+#include "spinlock.h"
 
 static void startothers(void);
 static void mpmain(void) __attribute__((noreturn));
@@ -25,6 +26,7 @@ extern char end[]; // first address after kernel loaded from ELF file
 int main(void) {
   kinit1(end, P2V(4 * 1024 * 1024)); // phys page allocator
   kvmalloc();                        // kernel page table
+  spinlock_cache_line_size = detect_cache_line_size();
   mpinit();                          // detect other processors
   lapicinit();                       // interrupt controller
   seginit();                         // segment descriptors

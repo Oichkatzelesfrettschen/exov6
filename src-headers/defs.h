@@ -172,6 +172,7 @@ void popcli(void);
 void qspin_lock(struct spinlock *);
 void qspin_unlock(struct spinlock *);
 int qspin_trylock(struct spinlock *);
+size_t detect_cache_line_size(void);
 
 // sleeplock.c
 void acquiresleep(struct sleeplock *);
