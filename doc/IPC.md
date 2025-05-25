@@ -12,13 +12,14 @@ Timeouts are encoded as a `timeout_t` value passed to `sys_ipc`. When the wait p
 
 ## Status Codes
 
-`IPC_STATUS_SUCCESS`  – operation completed normally.
+All IPC helpers return an `exo_ipc_status` value defined in
+`src-headers/exo_ipc.h`.  The enumeration documents the possible
+outcomes:
 
-`IPC_STATUS_TIMEOUT`  – receiver waited past the specified timeout.
-
-`IPC_STATUS_AGAIN`    – destination mailbox was full.
-
-`IPC_STATUS_BADDEST`  – the destination thread or process id was invalid.
+- `IPC_STATUS_SUCCESS` – operation completed normally.
+- `IPC_STATUS_TIMEOUT` – receiver waited past the specified timeout.
+- `IPC_STATUS_AGAIN`   – destination mailbox was full.
+- `IPC_STATUS_BADDEST` – the destination thread or process id was invalid.
 
 ## Typed Channels and Capabilities
 
