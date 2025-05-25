@@ -44,18 +44,19 @@ Keeping kernel, user programs and the libOS separated helps manage dependencies 
 
 ## Building
 
-The repository uses GNU Make. To build the kernel image run:
+The project now uses CMake and Ninja. To build the kernel image run:
 
 ```
-make kernel
+cmake -S . -B build -G Ninja
+ninja -C build
 ```
 
-This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The default `make` target also assembles a bootable `xv6.img` disk image containing this kernel.
+This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
 
 To build the user-space library operating system invoke:
 
 ```
-make libos
+ninja -C build libos
 ```
 
 which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `libos/` and `src-uland/`.
@@ -161,13 +162,14 @@ the repository the filesystem image contains `exo_stream_demo`,
 1. Build everything:
 
    ```
-   make
+   cmake -S . -B build -G Ninja
+   ninja -C build
    ```
 
 2. Start the system under QEMU:
 
    ```
-   make qemu-nox
+   ninja -C build qemu-nox
    ```
 
 3. At the xv6 shell run one of the demos:
@@ -269,7 +271,7 @@ int main(void) {
 }
 ```
 
-Compile the file with `make` and add the resulting binary to the disk image.
+Compile the file with ``ninja -C build`` and add the resulting binary to the disk image.
 The supervisor can then spawn the driver at boot time or restart it if it
 exits.
 
