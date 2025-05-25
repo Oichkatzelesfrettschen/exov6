@@ -22,7 +22,7 @@ def compile_and_run(use_stub):
         if use_stub:
             (pathlib.Path(td)/"spinlock.h").write_text('#include "src-headers/libos/spinlock.h"\n')
         cmd = [
-            "gcc","-std=c11",
+            "gcc","-std=c23",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
