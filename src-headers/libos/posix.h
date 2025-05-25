@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include "exo.h"
 
 int libos_open(const char *path, int flags, int mode);
 int libos_read(int fd, void *buf, size_t n);
@@ -48,3 +49,11 @@ long libos_recv(int fd, void *buf, size_t len, int flags);
 
 int libos_setenv(const char *name, const char *value);
 const char *libos_getenv(const char *name);
+
+/* IPC helpers */
+int libos_msgq_send(exo_cap dest, const void *buf, size_t len);
+int libos_msgq_recv(exo_cap src, void *buf, size_t len);
+int libos_sem_post(exo_cap sem);
+int libos_sem_wait(exo_cap sem);
+exo_cap libos_shm_alloc(void);
+int libos_shm_free(exo_cap cap);
