@@ -55,7 +55,7 @@ def compile_and_run(body):
         (pathlib.Path(td)/"mmu.h").write_text('#include "src-headers/types.h"\n#include "src-headers/mmu.h"\n')
         (pathlib.Path(td)/"memlayout.h").write_text('#include "src-headers/memlayout.h"\n')
         subprocess.check_call([
-            "gcc","-std=c23",
+            "gcc","-std=c2x",
             "-I", str(td),
             "-I", str(ROOT),
             str(src),
