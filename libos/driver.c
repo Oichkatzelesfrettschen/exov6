@@ -10,6 +10,6 @@
   return pid;
 }
 
-[[nodiscard]] int driver_connect(int pid, exo_cap ep) {
+[[nodiscard]] enum exo_ipc_status driver_connect(int pid, exo_cap ep) {
   return cap_send(ep, &pid, sizeof(pid));
 }

@@ -18,23 +18,23 @@ affine_chan_create(const struct msg_type_desc *desc) {
 void affine_chan_destroy(affine_chan_t *c) { free(c); }
 
 // Send once through the channel
-[[nodiscard]] int affine_chan_send(affine_chan_t *c, exo_cap dest,
-                                   const void *msg, size_t len) {
+[[nodiscard]] enum exo_ipc_status affine_chan_send(affine_chan_t *c, exo_cap dest,
+                                                   const void *msg, size_t len) {
   if (!c || c->used_send)
     return -1;
-  int r = chan_endpoint_send(&c->base, dest, msg, len);
-  if (r == 0)
+  enum exo_ipc_status r = chan_endpoint_send(&c->base, dest, msg, len);
+  if (r == IPC_STATUS_SUCCESS)
     c->used_send = 1;
   return r;
 }
 
 // Receive once through the channel
-[[nodiscard]] int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg,
-                                   size_t len) {
+[[nodiscard]] enum exo_ipc_status affine_chan_recv(affine_chan_t *c, exo_cap src,
+                                                   void *msg, size_t len) {
   if (!c || c->used_recv)
     return -1;
-  int r = chan_endpoint_recv(&c->base, src, msg, len);
-  if (r == 0)
+  enum exo_ipc_status r = chan_endpoint_recv(&c->base, src, msg, len);
+  if (r == IPC_STATUS_SUCCESS)
     c->used_recv = 1;
   return r;
 }

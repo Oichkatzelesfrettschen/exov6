@@ -12,6 +12,9 @@ Timeouts are encoded as a `timeout_t` value passed to `sys_ipc`. When the wait p
 
 ## Status Codes
 
+The following values are defined by the `exo_ipc_status` enumeration in
+`src-headers/exo_ipc.h`.
+
 `IPC_STATUS_SUCCESS`  – operation completed normally.
 
 `IPC_STATUS_TIMEOUT`  – receiver waited past the specified timeout.

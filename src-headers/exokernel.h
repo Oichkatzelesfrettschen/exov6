@@ -2,6 +2,7 @@
 #include "types.h"
 #include "exo.h"
 #include "syscall.h"
+#include "exo_ipc.h"
 
 /* Capability access rights. */
 #define EXO_RIGHT_R 0x1
@@ -54,11 +55,12 @@ exo_cap exo_alloc_dma(uint32_t chan);
 
 /* Send 'len' bytes from 'buf' to destination capability 'dest'.  Any queuing
  * or flow control is managed in user space. */
-[[nodiscard]] int exo_send(exo_cap dest, const void *buf, uint64_t len);
+[[nodiscard]] enum exo_ipc_status exo_send(exo_cap dest, const void *buf,
+                                           uint64_t len);
 
 /* Receive up to 'len' bytes from source capability 'src' into 'buf'.  The call
  * blocks according to policy implemented by the library OS. */
-[[nodiscard]] int exo_recv(exo_cap src, void *buf, uint64_t len);
+[[nodiscard]] enum exo_ipc_status exo_recv(exo_cap src, void *buf, uint64_t len);
 
 /* Read or write arbitrary byte ranges using a block capability. */
 [[nodiscard]] int exo_read_disk(exo_blockcap cap, void *dst, uint64_t off,

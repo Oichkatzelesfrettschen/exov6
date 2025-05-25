@@ -19,7 +19,7 @@ door_t door_create_remote(exo_cap dest) {
   return d;
 }
 
-[[nodiscard]] int door_call(door_t *d, zipc_msg_t *msg) {
+[[nodiscard]] enum exo_ipc_status door_call(door_t *d, zipc_msg_t *msg) {
   if (!d)
     return -1;
   if (d->is_local) {
@@ -27,8 +27,8 @@ door_t door_create_remote(exo_cap dest) {
       d->handler(msg);
     return 0;
   }
-  if (cap_send(d->dest, msg, sizeof(*msg)) < 0)
-    return -1;
+  if (cap_send(d->dest, msg, sizeof(*msg)) != IPC_STATUS_SUCCESS)
+    return IPC_STATUS_BADDEST;
   return cap_recv(d->dest, msg, sizeof(*msg));
 }
 
@@ -37,7 +37,7 @@ void door_server_loop(door_t *d) {
     return;
   while (1) {
     zipc_msg_t msg;
-    if (cap_recv(d->dest, &msg, sizeof(msg)) < 0)
+    if (cap_recv(d->dest, &msg, sizeof(msg)) != IPC_STATUS_SUCCESS)
       continue;
     d->handler(&msg);
     cap_send(d->dest, &msg, sizeof(msg));

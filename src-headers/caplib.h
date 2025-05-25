@@ -8,8 +8,9 @@ exo_cap cap_alloc_page(void);
 [[nodiscard]] int cap_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap);
 [[nodiscard]] int cap_bind_block(exo_blockcap *cap, void *data, int write);
 void cap_flush_block(exo_blockcap *cap, void *data);
-[[nodiscard]] int cap_send(exo_cap dest, const void *buf, uint64_t len);
-[[nodiscard]] int cap_recv(exo_cap src, void *buf, uint64_t len);
+[[nodiscard]] enum exo_ipc_status cap_send(exo_cap dest, const void *buf,
+                                           uint64_t len);
+[[nodiscard]] enum exo_ipc_status cap_recv(exo_cap src, void *buf, uint64_t len);
 [[nodiscard]] int cap_set_timer(void (*handler)(void));
 [[nodiscard]] int cap_set_gas(uint64_t amount);
 [[nodiscard]] int cap_get_gas(void);

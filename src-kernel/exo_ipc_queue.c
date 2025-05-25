@@ -32,10 +32,11 @@ static void ipc_init(void) {
   }
 }
 
-int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
+enum exo_ipc_status exo_ipc_queue_send(exo_cap dest, const void *buf,
+                                       uint64_t len) {
   ipc_init();
   if (!cap_has_rights(dest.rights, EXO_RIGHT_W))
-    return -EPERM;
+    return IPC_STATUS_BADDEST;
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
 
@@ -47,9 +48,9 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   if (len > sizeof(zipc_msg_t)) {
     memcpy(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
     if (!cap_verify(fr))
-      return -EPERM;
+      return IPC_STATUS_BADDEST;
     if (!cap_has_rights(fr.rights, EXO_RIGHT_R))
-      return -EPERM;
+      return IPC_STATUS_BADDEST;
     if (dest.owner)
       fr.owner = dest.owner;
   }
@@ -65,12 +66,12 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   wakeup(&ipcs.r);
   release(&ipcs.lock);
 
-  return (int)len;
+  return IPC_STATUS_SUCCESS;
 }
 
-int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
+enum exo_ipc_status exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   if (!cap_has_rights(src.rights, EXO_RIGHT_R))
-    return -EPERM;
+    return IPC_STATUS_BADDEST;
   ipc_init();
   acquire(&ipcs.lock);
   while (ipcs.r == ipcs.w) {
@@ -102,7 +103,7 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
            len - sizeof(zipc_msg_t));
   }
 
-  return (int)len;
+  return IPC_STATUS_SUCCESS;
 }
 
 struct exo_ipc_ops exo_ipc_queue_ops = {

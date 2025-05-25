@@ -12,8 +12,8 @@ C_CODE = textwrap.dedent(
 #include "src-headers/door.h"
 
 // stub implementations for caplib helpers
-int cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return 0; }
-int cap_recv(exo_cap src, void *buf, uint64_t len) { (void)src; (void)buf; (void)len; return 0; }
+enum exo_ipc_status cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return IPC_STATUS_SUCCESS; }
+enum exo_ipc_status cap_recv(exo_cap src, void *buf, uint64_t len) { (void)src; (void)buf; (void)len; return IPC_STATUS_SUCCESS; }
 
 static int called = 0;
 static void handler(zipc_msg_t *m) { called++; m->w0++; }
@@ -21,7 +21,7 @@ static void handler(zipc_msg_t *m) { called++; m->w0++; }
 int main(void) {
     door_t d = door_create_local(handler);
     zipc_msg_t m = {0, 41, 0, 0, 0};
-    assert(door_call(&d, &m) == 0);
+    assert(door_call(&d, &m) == IPC_STATUS_SUCCESS);
     assert(called == 1);
     assert(m.w0 == 42);
     return 0;

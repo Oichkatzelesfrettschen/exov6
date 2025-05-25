@@ -43,15 +43,18 @@ int lambda_run(lambda_term_t *t, int fuel);
   static inline void name##_destroy(name##_t *c) {                             \
     affine_chan_destroy(&c->base);                                             \
   }                                                                            \
-  static inline int name##_send(name##_t *c, exo_cap dest, const type *m) {    \
+  static inline enum exo_ipc_status name##_send(name##_t *c, exo_cap dest,      \
+                                                const type *m) {               \
     unsigned char buf[type##_MESSAGE_SIZE];                                    \
     type##_encode(m, buf);                                                     \
     return affine_chan_send(&c->base, dest, buf, type##_MESSAGE_SIZE);         \
   }                                                                            \
-  static inline int name##_recv(name##_t *c, exo_cap src, type *m) {           \
+  static inline enum exo_ipc_status name##_recv(name##_t *c, exo_cap src,       \
+                                                type *m) {                    \
     unsigned char buf[type##_MESSAGE_SIZE];                                    \
-    int r = affine_chan_recv(&c->base, src, buf, type##_MESSAGE_SIZE);         \
-    if (r == 0)                                                                \
+    enum exo_ipc_status r =                                                   \
+        affine_chan_recv(&c->base, src, buf, type##_MESSAGE_SIZE);            \
+    if (r == IPC_STATUS_SUCCESS)                                              \
       type##_decode(m, buf);                                                   \
     return r;                                                                  \
   }

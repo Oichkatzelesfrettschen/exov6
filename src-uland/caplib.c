@@ -46,11 +46,12 @@ void cap_yield_to(context_t **old, context_t *target) {
 extern int cap_revoke_syscall(void);
 int cap_revoke(void) { return cap_revoke_syscall(); }
 
-[[nodiscard]] int cap_send(exo_cap dest, const void *buf, uint64_t len) {
+[[nodiscard]] enum exo_ipc_status cap_send(exo_cap dest, const void *buf,
+                                           uint64_t len) {
   return exo_send(dest, buf, len);
 }
 
-[[nodiscard]] int cap_recv(exo_cap src, void *buf, uint64_t len) {
+[[nodiscard]] enum exo_ipc_status cap_recv(exo_cap src, void *buf, uint64_t len) {
   return exo_recv(src, buf, len);
 }
 
