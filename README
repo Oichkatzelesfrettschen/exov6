@@ -83,6 +83,10 @@ new binaries.
 The QEMU PC simulator is installed automatically by ``setup.sh``.
 Bochs is optional but also supported via ``ninja -C build bochs``.
 
+Bison is optional as well and only required when grammar ``.y`` files are
+present. The build system automatically detects ``bison`` and skips grammar
+generation if it is missing.
+
 A few headers used solely by the kernel have been moved under
 ``src-kernel/include``.  Files like ``spinlock.h`` and ``sleeplock.h``
 reside here instead of ``src-headers``.  The CMake build adds this

@@ -24,6 +24,9 @@ if(CLANG_TIDY_EXE)
   set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_EXE}")
 endif()
 
+# Optional parser generator support
+find_package(BISON)
+
 file(GLOB_RECURSE KERNEL_SOURCES
   src-kernel/*.c
   src-uland/*.c
@@ -34,6 +37,13 @@ file(GLOB_RECURSE KERNEL_SOURCES
 add_executable(kernel ${KERNEL_SOURCES})
 
 set(CPUFLAGS "" CACHE STRING "Additional CPU specific compile flags")
+
+if(BISON_FOUND)
+  # Sample rule for future grammars
+  # BISON_TARGET(example ${CMAKE_SOURCE_DIR}/path/to/example.y
+  #               ${CMAKE_CURRENT_BINARY_DIR}/example.tab.c)
+  # add_library(example_parser ${BISON_example_OUTPUTS})
+endif()
 
 target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}
