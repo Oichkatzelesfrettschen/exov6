@@ -75,3 +75,16 @@ Both counters are 32‑bit unsigned integers.  If either variable wraps around, 
 ## Conclusion
 
 Under the stated assumptions about counter wrap‑around, `irq_wait` and `irq_trigger` preserve the queue invariants.  The ring buffer cannot overrun or drop entries while callers use these functions correctly.
+
+## Formal Coq Model
+
+The file [`coq/IRQProof.v`](../coq/IRQProof.v) contains a mechanised
+version of the queue.  It defines the invariant `queue_inv` and two
+lemmas:
+
+- `irq_wait_preserves`
+- `irq_trigger_preserves`
+
+These lemmas formally prove that the C implementations of
+`irq_wait` and `irq_trigger` maintain the invariant under the
+preconditions stated above.
