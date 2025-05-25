@@ -19,3 +19,6 @@ mkfs
 fuzz
 src-uland/exo_unit_test
 *.so
+
+__pycache__/
+*.pyc
