@@ -1,42 +1,24 @@
-#Phoenix Kernel Overview
+# Phoenix Kernel Overview
 
-The Phoenix kernel implements an exokernel research platform built on top of the
-        xv6 code base.Its goal is to expose low -
-    level hardware resources directly to user space while keeping the in -
-    kernel portion as small as possible.Applications
-        link against a library operating
-        system(libOS)
-that provides traditional services on top of the primitive capability interface.
+The Phoenix kernel implements an exokernel research platform built on top of the xv6 code base. Its goal is to expose low-level hardware resources directly to user space while keeping the in-kernel portion as small as possible. Applications link against a library operating system (libOS) that provides traditional services on top of the primitive capability interface.
 
-    ##Exokernel Philosophy
+## Exokernel Philosophy
 
-        Phoenix follows the exokernel approach
-    : the kernel multiplexes hardware resources and
-          enforces protection but leaves higher -
-    level abstractions to user -
-    level code.Instead of implementing full POSIX semantics in the kernel,
-    Phoenix exposes capabilities that grant controlled access to memory regions,
-    devices and communication endpoints.User -
-        space runtimes build whatever abstractions they require.
+Phoenix follows the exokernel approach: the kernel multiplexes hardware resources and enforces protection but leaves higher-level abstractions to user-level code. Instead of implementing full POSIX semantics in the kernel, Phoenix exposes capabilities that grant controlled access to memory regions, devices and communication endpoints. User-space runtimes build whatever abstractions they require.
 
-        ##DAG Execution Model
+## DAG Execution Model
 
-            Scheduling is expressed as a directed acyclic
-            graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
+Scheduling is expressed as a directed acyclic
+graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
 
 
-            Each DAG node now tracks its parents in a reverse dependency
-            array.  When a node completes, the scheduler marks it as done
-            so children can verify that all prerequisites finished.  Ready
-            nodes are inserted based on a weight derived from their
-            priority so heavier tasks execute first when several nodes are
-            runnable.
+Each DAG node now tracks its parents in a reverse dependency
+array.  When a node completes, the scheduler marks it as done
+so children can verify that all prerequisites finished.  Ready
+nodes are inserted based on a weight derived from their
+priority so heavier tasks execute first when several nodes are
+runnable.
 
-A **Beatty scheduler** now complements the DAG engine. It alternates among an arbitrary
-number of contexts using Beatty sequences with irrational weights. Call
-`beatty_sched_set_tasks` with an array of task capabilities and their corresponding
-weights to activate it. The scheduler is registered as an exo stream so user-level
-runtimes can select it on demand.
 
 
 ## Capability System
