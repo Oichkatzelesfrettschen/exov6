@@ -45,6 +45,37 @@ file(GLOB_RECURSE KERNEL_SOURCES
   libos/*.c
 )
 
+set(LIBOS_SOURCES
+  src-uland/ulib.c
+  src-uland/printf.c
+  src-uland/umalloc.c
+  src-uland/caplib.c
+  src-uland/chan.c
+  src-uland/door.c
+  src-uland/math_core.c
+  src-uland/libos/sched.c
+  libos/fs.c
+  libos/file.c
+  libos/driver.c
+  libos/affine_runtime.c
+  libos/env.c
+  libos/ipc.c
+  libos/posix.c
+  libos/termios.c
+  libos/microkernel/cap.c
+  libos/microkernel/msg_router.c
+  libos/microkernel/resource_account.c
+  libos/microkernel/registration.c
+)
+add_library(libos STATIC ${LIBOS_SOURCES})
+target_include_directories(libos PUBLIC
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/src-headers
+  ${CMAKE_SOURCE_DIR}/proto
+  ${CMAKE_SOURCE_DIR}/libos/include
+  ${CMAKE_SOURCE_DIR}/libos/capnp
+)
+
 if(USE_CAPNP)
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.h
@@ -109,4 +140,16 @@ if(QEMU_EXECUTABLE)
     DEPENDS kernel
     USES_TERMINAL
   )
+endif()
+
+add_executable(msgqueue_demo examples/msgqueue_demo.c)
+target_include_directories(msgqueue_demo PRIVATE
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/src-headers
+  ${CMAKE_SOURCE_DIR}/proto
+  ${CMAKE_SOURCE_DIR}/libos/include
+)
+target_link_libraries(msgqueue_demo PRIVATE libos nstr_graph)
+if(USE_CAPNP)
+  target_link_libraries(msgqueue_demo PRIVATE capnp)
 endif()
