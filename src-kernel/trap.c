@@ -52,6 +52,7 @@ void trap(struct trapframe *tf) {
       release(&tickslock);
     }
     if (myproc()) {
+      proc_timer_tick(myproc());
       if (myproc()->gas_remaining > 0)
         myproc()->gas_remaining--;
       if (myproc()->gas_remaining == 0) {

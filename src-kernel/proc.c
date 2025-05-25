@@ -149,6 +149,7 @@ found:
   p->preferred_node = 0;
   p->out_of_gas = 0;
   p->pending_signal = 0;
+  p->timer.ticks = 0;
 
   pctr_insert(p);
 
@@ -668,4 +669,13 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+void proc_timer_tick(struct proc *p) {
+  if (p)
+    p->timer.ticks++;
+}
+
+uint64_t proc_timer_now(struct proc *p) {
+  return p ? p->timer.ticks : 0;
 }

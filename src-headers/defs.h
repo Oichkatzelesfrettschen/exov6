@@ -160,6 +160,8 @@ void wakeup(void *);
 void yield(void);
 struct proc *pctr_lookup(uint32_t);
 struct proc *allocproc(void);
+void proc_timer_tick(struct proc *);
+uint64_t proc_timer_now(struct proc *);
 
 // swtch.S
 void swtch(context_t **, context_t *);

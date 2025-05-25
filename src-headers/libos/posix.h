@@ -48,3 +48,6 @@ long libos_recv(int fd, void *buf, size_t len, int flags);
 
 int libos_setenv(const char *name, const char *value);
 const char *libos_getenv(const char *name);
+
+struct timespec;
+int libos_nanosleep(const struct timespec *req);

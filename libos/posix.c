@@ -6,6 +6,8 @@
 #include "user.h"
 #include "signal.h"
 #include <stdlib.h>
+#include <time.h>
+#include "libos/timer.h"
 #include <fcntl.h>
 #include "stat.h"
 #include <unistd.h>
@@ -261,4 +263,19 @@ long libos_send(int fd,const void *buf,size_t len,int flags){
 
 long libos_recv(int fd,void *buf,size_t len,int flags){
     return recv(fd, buf, len, flags);
+}
+
+uint64_t libos_timer_now(void){
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
+}
+
+int libos_nanosleep(const struct timespec *req){
+    uint64_t start = libos_timer_now();
+    uint64_t dur = (uint64_t)req->tv_sec * 1000000000ULL + req->tv_nsec;
+    struct timespec sl = {0, 1000000};
+    while(libos_timer_now() - start < dur)
+        nanosleep(&sl, NULL);
+    return 0;
 }
