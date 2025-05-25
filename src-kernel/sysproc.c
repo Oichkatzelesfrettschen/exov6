@@ -127,6 +127,36 @@ int sys_exo_alloc_block(void) {
   return 0;
 }
 
+int sys_exo_alloc_ioport(void) {
+  int port;
+  exo_cap *ucap;
+  if (argint(0, &port) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_ioport((uint)port);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_bind_irq(void) {
+  int irq;
+  exo_cap *ucap;
+  if (argint(0, &irq) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_bind_irq((uint)irq);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_alloc_dma(void) {
+  int chan;
+  exo_cap *ucap;
+  if (argint(0, &chan) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_dma((uint)chan);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
 int sys_exo_bind_block(void) {
   struct exo_blockcap *ucap, cap;
   char *data;

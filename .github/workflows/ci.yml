@@ -22,11 +22,15 @@ jobs:
     - uses: pre-commit/action@v3.0.0
     - name: Build Swift components
       run: swift/build_swift.sh
+    - name: Configure
+      run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }}
     - name: Build
-      run: make ARCH=${{ matrix.arch }} QEMU=echo qemu-nox
+      run: ninja -C build qemu-nox
     - name: Run unit tests
-      run: make check
+      run: pytest -q
     - name: Run fuzz smoke test
       run: python3 scripts/swift_fuzz.py -runs=1
+    - name: Run microbenchmarks
+      run: make -C tests/microbench run
     - name: Clean
-      run: make clean
+      run: rm -rf build

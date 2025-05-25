@@ -67,6 +67,7 @@ cap_verify(exo_cap c)
     return memcmp(h.parts, c.auth_tag.parts, sizeof(h.parts)) == 0;
 }
 
+/* Allocate capabilities for additional resource types. */
 exo_cap
 exo_alloc_ioport(uint port)
 {
@@ -78,16 +79,13 @@ exo_cap
 exo_bind_irq(uint irq)
 {
     int id = cap_table_alloc(CAP_TYPE_IRQ, irq, 0, myproc()->pid);
-    return cap_new(id >= 0 ? (uint)id : 0, 0, myproc()->pid);
+
+    return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
 }
 
 exo_cap
-exo_alloc_dma(void)
+exo_alloc_dma(uint chan)
 {
-    char *mem = kalloc();
-    if(!mem)
-        return cap_new(0, 0, 0);
-    uint pa = V2P(mem);
-    int id = cap_table_alloc(CAP_TYPE_DMA, pa, 0, myproc()->pid);
-    return cap_new(id >= 0 ? (uint)id : 0, 0, myproc()->pid);
+    int id = cap_table_alloc(CAP_TYPE_DMA, chan, 0, myproc()->pid);
+    return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
 }
