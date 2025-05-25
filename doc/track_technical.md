@@ -64,3 +64,23 @@ Typed channels declared with `CHAN_DECLARE` automatically serialise Cap'n
 Proto messages for these helpers.
 
 See the project charter for a complete list of supported calls.
+
+## Lambda Capabilities
+
+The affine runtime includes a small framework for **lambda capabilities**.
+These objects pair a capability token with a lambda term.  A lambda
+capability may be *consumed* exactly once via `lambda_cap_use()`.  After the
+lambda executes the underlying capability is considered spent and further
+calls fail.
+
+```c
+lambda_cap_t *lambda_cap_create(lambda_fn fn, void *env, exo_cap cap);
+int lambda_cap_use(lambda_cap_t *cap, int fuel);
+int lambda_cap_delegate(lambda_cap_t *cap, uint16_t new_owner);
+int lambda_cap_revoke(lambda_cap_t *cap);
+```
+
+Delegation increments the reference count so another task can hold the token.
+Revocation uses the kernel to invalidate the capability by bumping its epoch.
+Microkernels can replace these hooks to perform additional checks before a
+capability is transferred or revoked.
