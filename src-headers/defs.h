@@ -250,7 +250,7 @@ int exo_bind_block(struct exo_blockcap *, struct buf *, int);
 void exo_flush_block(struct exo_blockcap *, void *);
 exo_cap exo_alloc_ioport(uint port);
 exo_cap exo_bind_irq(uint irq);
-exo_cap exo_alloc_dma(void);
+exo_cap exo_alloc_dma(uint chan);
 void cap_table_init(void);
 int cap_table_alloc(uint16_t, uint, uint, uint);
 int cap_table_lookup(uint16_t, struct cap_entry *);
