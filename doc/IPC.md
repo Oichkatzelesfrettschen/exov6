@@ -12,13 +12,16 @@ Timeouts are encoded as a `timeout_t` value passed to `sys_ipc`. When the wait p
 
 ## Status Codes
 
-`IPC_STATUS_SUCCESS`  – operation completed normally.
+`IPC_STATUS_SUCCESS`  – operation completed normally and the message buffer now
+contains valid data.
 
 `IPC_STATUS_TIMEOUT`  – receiver waited past the specified timeout.
 
 `IPC_STATUS_AGAIN`    – destination mailbox was full.
 
 `IPC_STATUS_BADDEST`  – the destination thread or process id was invalid.
+
+`IPC_STATUS_ERROR`    – unspecified failure such as invalid arguments.
 
 ## Typed Channels and Capabilities
 

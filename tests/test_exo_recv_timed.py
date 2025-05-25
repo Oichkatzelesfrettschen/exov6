@@ -13,26 +13,26 @@ C_CODE = textwrap.dedent("""
 struct mailbox { int has; char buf[8]; size_t len; };
 static struct mailbox *mb;
 
-static int send_impl(exo_cap dest, const void *buf, uint64_t len){
-    (void)dest; (void)buf; (void)len; return -1;
+static exo_ipc_status send_impl(exo_cap dest, const void *buf, uint64_t len){
+    (void)dest; (void)buf; (void)len; return IPC_STATUS_ERROR;
 }
-static int recv_impl(exo_cap src, void *buf, uint64_t len){
-    if(!cap_has_rights(src.rights, EXO_RIGHT_R)) return -1;
+static exo_ipc_status recv_impl(exo_cap src, void *buf, uint64_t len){
+    if(!cap_has_rights(src.rights, EXO_RIGHT_R)) return IPC_STATUS_ERROR;
     struct mailbox *m = &mb[src.id];
-    if(!m->has) return 0;
+    if(!m->has) return IPC_STATUS_TIMEOUT;
     size_t n = m->len < len ? m->len : len;
     memcpy(buf, m->buf, n);
     m->has = 0;
-    return (int)n;
+    return IPC_STATUS_SUCCESS;
 }
 static struct exo_ipc_ops ops = { send_impl, recv_impl };
 
-static int exo_recv_timed(exo_cap src, void *buf, uint64_t len, unsigned to){
+static exo_ipc_status exo_recv_timed(exo_cap src, void *buf, uint64_t len, unsigned to){
     for(unsigned i=0;i<to;i++){
-        int r = exo_recv(src, buf, len);
-        if(r!=0) return r;
+        exo_ipc_status r = exo_recv(src, buf, len);
+        if(r!=IPC_STATUS_TIMEOUT) return r;
     }
-    return -1;
+    return IPC_STATUS_TIMEOUT;
 }
 
 int main(void){
@@ -43,7 +43,7 @@ int main(void){
     exo_ipc_register(&ops);
     exo_cap src = { .id=0, .rights=EXO_RIGHT_R };
     char buf[8];
-    assert(exo_recv_timed(src, buf, 8, 5) == -1);
+    assert(exo_recv_timed(src, buf, 8, 5) == IPC_STATUS_TIMEOUT);
     return 0;
 }
 """)

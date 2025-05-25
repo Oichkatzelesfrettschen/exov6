@@ -13,22 +13,22 @@ C_CODE = textwrap.dedent("""
 struct mailbox { int has; char buf[8]; size_t len; };
 static struct mailbox *mb;
 
-static int send_impl(exo_cap dest, const void *buf, uint64_t len){
-    if(!cap_has_rights(dest.rights, EXO_RIGHT_W)) return -1;
+static exo_ipc_status send_impl(exo_cap dest, const void *buf, uint64_t len){
+    if(!cap_has_rights(dest.rights, EXO_RIGHT_W)) return IPC_STATUS_ERROR;
     struct mailbox *m = &mb[dest.id];
     m->len = len < sizeof(m->buf) ? len : sizeof(m->buf);
     memcpy(m->buf, buf, m->len);
     m->has = 1;
-    return (int)m->len;
+    return IPC_STATUS_SUCCESS;
 }
-static int recv_impl(exo_cap src, void *buf, uint64_t len){
-    if(!cap_has_rights(src.rights, EXO_RIGHT_R)) return -1;
+static exo_ipc_status recv_impl(exo_cap src, void *buf, uint64_t len){
+    if(!cap_has_rights(src.rights, EXO_RIGHT_R)) return IPC_STATUS_ERROR;
     struct mailbox *m = &mb[src.id];
-    if(!m->has) return 0;
+    if(!m->has) return IPC_STATUS_TIMEOUT;
     size_t n = m->len < len ? m->len : len;
     memcpy(buf, m->buf, n);
     m->has = 0;
-    return (int)n;
+    return IPC_STATUS_SUCCESS;
 }
 static struct exo_ipc_ops ops = { send_impl, recv_impl };
 
@@ -40,12 +40,12 @@ int main(void){
     exo_ipc_register(&ops);
     exo_cap dst0 = { .id=0, .rights=EXO_RIGHT_W };
     char msg[3] = "hi";
-    assert(exo_send(dst0, msg, 2)==2);
+    assert(exo_send(dst0, msg, 2)==IPC_STATUS_SUCCESS);
     exo_cap r1 = { .id=1, .rights=EXO_RIGHT_R };
     char buf[8];
-    assert(exo_recv(r1, buf, 8)==0);
+    assert(exo_recv(r1, buf, 8)==IPC_STATUS_TIMEOUT);
     exo_cap r0 = { .id=0, .rights=EXO_RIGHT_R };
-    assert(exo_recv(r0, buf, 8)==2);
+    assert(exo_recv(r0, buf, 8)==IPC_STATUS_SUCCESS);
     assert(buf[0]=='h' && buf[1]=='i');
     return 0;
 }

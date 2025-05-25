@@ -1,6 +1,7 @@
 #pragma once
 #include "ipc.h"
 #include "caplib.h"
+#include "exo_ipc.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,7 +15,7 @@ typedef struct door {
 
 door_t door_create_local(void (*handler)(zipc_msg_t *msg));
 door_t door_create_remote(exo_cap dest);
-[[nodiscard]] int door_call(door_t *d, zipc_msg_t *msg);
+[[nodiscard]] exo_ipc_status door_call(door_t *d, zipc_msg_t *msg);
 void door_server_loop(door_t *d);
 
 #ifdef __cplusplus

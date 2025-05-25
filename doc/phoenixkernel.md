@@ -264,8 +264,8 @@ provided in `caplib.h` and `libos/libfs.h`:
 ```c
 exo_cap cap_alloc_page(void);
 int cap_unbind_page(exo_cap cap);
-int cap_send(exo_cap dest, const void *buf, uint64 len);
-int cap_recv(exo_cap src, void *buf, uint64 len);
+exo_ipc_status cap_send(exo_cap dest, const void *buf, uint64 len);
+exo_ipc_status cap_recv(exo_cap src, void *buf, uint64 len);
 int fs_alloc_block(uint dev, uint rights, struct exo_blockcap *cap);
 int fs_read_block(struct exo_blockcap cap, void *dst);
 int fs_write_block(struct exo_blockcap cap, const void *src);
@@ -315,7 +315,7 @@ connecting to drivers:
 
 ```c
 int driver_spawn(const char *path, char *const argv[]);
-int driver_connect(int pid, exo_cap ep);
+exo_ipc_status driver_connect(int pid, exo_cap ep);
 ```
 
 `driver_spawn` forks and executes the given program while

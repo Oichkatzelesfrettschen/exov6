@@ -48,8 +48,8 @@ services. Key entry points include:
 ```c
 exo_cap cap_alloc_page(void);
 int cap_unbind_page(exo_cap cap);
-int cap_send(exo_cap dest, const void *buf, uint64 len);
-int cap_recv(exo_cap src, void *buf, uint64 len);
+exo_ipc_status cap_send(exo_cap dest, const void *buf, uint64 len);
+exo_ipc_status cap_recv(exo_cap src, void *buf, uint64 len);
 ```
 
 Typed channels declared with `CHAN_DECLARE` automatically serialise Cap'n

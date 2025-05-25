@@ -20,10 +20,10 @@ void ddekit_yield(void) { yield(); }
 
 exo_cap ddekit_cap_alloc_page(void) { return capwrap_alloc_page(); }
 
-int ddekit_cap_send(exo_cap dest, const void *buf, size_t len) {
+exo_ipc_status ddekit_cap_send(exo_cap dest, const void *buf, size_t len) {
     return capwrap_send(dest, buf, len);
 }
 
-int ddekit_cap_recv(exo_cap src, void *buf, size_t len) {
+exo_ipc_status ddekit_cap_recv(exo_cap src, void *buf, size_t len) {
     return capwrap_recv(src, buf, len);
 }

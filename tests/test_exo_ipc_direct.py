@@ -19,24 +19,24 @@ struct mailbox {
 };
 static struct mailbox *mb;
 
-static int send_impl(exo_cap dest, const void *buf, uint64_t len){
+static exo_ipc_status send_impl(exo_cap dest, const void *buf, uint64_t len){
     if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
-        return -1;
+        return IPC_STATUS_ERROR;
     struct mailbox *m = &mb[dest.id];
     m->len = len < sizeof(m->buf) ? len : sizeof(m->buf);
     memcpy(m->buf, buf, m->len);
     m->has = 1;
-    return (int)m->len;
+    return IPC_STATUS_SUCCESS;
 }
-static int recv_impl(exo_cap src, void *buf, uint64_t len){
+static exo_ipc_status recv_impl(exo_cap src, void *buf, uint64_t len){
     if(!cap_has_rights(src.rights, EXO_RIGHT_R))
-        return -1;
+        return IPC_STATUS_ERROR;
     struct mailbox *m = &mb[src.id];
-    if(!m->has) return 0;
+    if(!m->has) return IPC_STATUS_TIMEOUT;
     size_t n = m->len < len ? m->len : len;
     memcpy(buf, m->buf, n);
     m->has = 0;
-    return (int)n;
+    return IPC_STATUS_SUCCESS;
 }
 static struct exo_ipc_ops ops = { send_impl, recv_impl };
 
@@ -50,14 +50,14 @@ int main(void){
     if(pid==0){
         exo_cap src = { .id=0, .rights=EXO_RIGHT_R };
         char buf[8];
-        int r = exo_recv(src, buf, 2);
-        assert(r==2);
+        exo_ipc_status r = exo_recv(src, buf, 2);
+        assert(r==IPC_STATUS_SUCCESS);
         assert(buf[0]=='o' && buf[1]=='k');
         _exit(0);
     }
     exo_cap dst = { .id=0, .rights=EXO_RIGHT_W };
     char msg[3] = "ok";
-    assert(exo_send(dst, msg, 2)==2);
+    assert(exo_send(dst, msg, 2)==IPC_STATUS_SUCCESS);
     int st; waitpid(pid,&st,0);
     return st==0?0:1;
 }
