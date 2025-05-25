@@ -4,24 +4,6 @@
 #include <sys/wait.h>
 #include "libos/posix.h"
 
-int libos_pipe(int fd[2]) { return pipe(fd); }
-int libos_fork(void) { return fork(); }
-int libos_waitpid(int pid, int *st, int flags) {
-  return waitpid(pid, st, flags);
-}
-int libos_close(int fd) { return close(fd); }
-int libos_read(int fd, void *buf, size_t n) { return (int)read(fd, buf, n); }
-int libos_write(int fd, const void *buf, size_t n) {
-  return (int)write(fd, buf, n);
-}
-int libos_spawn(const char *path, char *const argv[]) {
-  int pid = fork();
-  if (pid == 0) {
-    execv(path, argv);
-    _exit(1);
-  }
-  return pid;
-}
 
 int main(void) {
   int p[2];
