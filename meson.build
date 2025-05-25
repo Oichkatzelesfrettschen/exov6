@@ -1,4 +1,5 @@
 project('xv6', 'c', default_options: ['c_std=c23'])
+add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 
 clang_tidy = find_program('clang-tidy', required: false)
 bison = find_program('bison', required: false)

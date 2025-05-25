@@ -39,6 +39,8 @@ def compile_and_run() -> None:
             [
                 "gcc",
                 "-std=c2x",
+                "-Wall",
+                "-Werror",
                 "-I",
                 str(ROOT),
                 "-I",

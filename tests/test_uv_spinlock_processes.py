@@ -53,7 +53,7 @@ def compile_and_run():
         exe = pathlib.Path(td)/"test"
         src.write_text(C_CODE)
         subprocess.check_call([
-            "gcc","-std=c2x",
+            "gcc","-std=c2x","-Wall","-Werror",
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
             str(src),

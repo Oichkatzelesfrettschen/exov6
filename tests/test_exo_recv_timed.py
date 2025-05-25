@@ -65,7 +65,7 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif\n"
         )
         subprocess.check_call([
-            "gcc","-std=c2x",
+            "gcc","-std=c2x","-Wall","-Werror",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),

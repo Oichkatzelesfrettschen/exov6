@@ -42,6 +42,7 @@ file(GLOB_RECURSE KERNEL_SOURCES
 )
 
 add_executable(kernel ${KERNEL_SOURCES})
+target_compile_options(kernel PRIVATE -Wall -Werror)
 
 # QEMU executable used for run targets
 find_program(QEMU_EXECUTABLE
