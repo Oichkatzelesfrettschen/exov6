@@ -4,6 +4,8 @@
 #include "mmu.h"
 #include "x86.h"
 #include "spinlock.h"
+#include "ipc.h"
+#include "../exo.h"
 
 // Context used for kernel context switches.
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -82,6 +84,22 @@ struct context64 {
 
 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+// Simple mailbox queue used for IPC.
+#define MAILBOX_BUFSZ 64
+
+struct ipc_entry {
+  zipc_msg_t msg;
+  exo_cap frame;
+};
+
+struct mailbox {
+  struct spinlock lock;
+  struct ipc_entry buf[MAILBOX_BUFSZ];
+  uint32_t r;
+  uint32_t w;
+  int inited;
+};
+
 // Per-process state
 struct proc {
   size_t sz;                     // Size of process memory (bytes)
@@ -104,13 +122,14 @@ struct proc {
   uint64_t gas_remaining;          // Remaining CPU budget
   int preferred_node;            // NUMA allocation preference
   int out_of_gas;                // Flag set when gas runs out
+  struct mailbox *mailbox;       // Per-process IPC mailbox
 };
 
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 256, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 264, "struct proc size incorrect");
 #else
-_Static_assert(sizeof(struct proc) == 156, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 160, "struct proc size incorrect");
 #endif
 
 
