@@ -68,13 +68,16 @@ int exo_irq_ack(exo_cap cap) {
   return 0;
 }
 
-void irq_trigger(uint irq) {
+int irq_trigger(uint irq) {
   irq_init();
   acquire(&irq_q.lock);
-  if (irq_q.w - irq_q.r < IRQ_BUFSZ) {
-    irq_q.buf[irq_q.w % IRQ_BUFSZ] = irq;
-    irq_q.w++;
-    wakeup(&irq_q.r);
+  if (irq_q.w - irq_q.r >= IRQ_BUFSZ) {
+    release(&irq_q.lock);
+    return -ENOSPC;
   }
+  irq_q.buf[irq_q.w % IRQ_BUFSZ] = irq;
+  irq_q.w++;
+  wakeup(&irq_q.r);
   release(&irq_q.lock);
+  return 0;
 }

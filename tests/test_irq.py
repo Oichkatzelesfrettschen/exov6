@@ -9,9 +9,13 @@ C_CODE = textwrap.dedent(
     """
 #include <assert.h>
 #include <stdint.h>
+#include <errno.h>
 #include "src-headers/exo_irq.h"
 #include "proc.h"
 #include <string.h>
+#ifndef ENOSPC
+#define ENOSPC 28
+#endif
 
 struct spinlock; struct cpu; static struct cpu* mycpu(void){ return 0; }
 static int holding(struct spinlock *l){ (void)l; return 0; }
@@ -30,14 +34,26 @@ static int cap_verify(exo_cap c){ (void)c; return 1; }
 #include "src-kernel/cap_table.c"
 #include "src-kernel/irq.c"
 
+enum { TEST_BUFSZ = 32 };
+
 int main(void){
     cap_table_init();
     exo_cap cap = exo_alloc_irq(5, EXO_RIGHT_R | EXO_RIGHT_W);
-    irq_trigger(5);
+
+    for(int i = 0; i < TEST_BUFSZ; i++)
+        assert(irq_trigger(i) == 0);
+    assert(irq_trigger(99) == -ENOSPC);
+
     unsigned num = 0;
+    for(int i = 0; i < TEST_BUFSZ; i++){
+        assert(exo_irq_wait(cap, &num) == 0);
+        assert(num == (unsigned)i);
+    }
+    assert(exo_irq_ack(cap) == 0);
+
+    assert(irq_trigger(5) == 0);
     assert(exo_irq_wait(cap, &num) == 0);
     assert(num == 5);
-    assert(exo_irq_ack(cap) == 0);
     return 0;
 }
 """
@@ -65,7 +81,7 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
         )
         subprocess.check_call([
-            "gcc","-std=c23",
+            "gcc","-std=c2x",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),

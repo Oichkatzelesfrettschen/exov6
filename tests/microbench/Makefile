@@ -1,5 +1,5 @@
 HOSTCC ?= clang
-HOSTCFLAGS ?= -Wall -O2 -std=c23 -I../../libos/include -I../../src-headers
+HOSTCFLAGS ?= -Wall -O2 -std=c2x -I../../libos/include -I../../src-headers
 
 PROGS := cap_verify_bench exo_yield_to_bench proc_cap_test
 

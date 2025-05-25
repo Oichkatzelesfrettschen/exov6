@@ -251,7 +251,7 @@ void exo_flush_block(struct exo_blockcap *, void *);
 exo_cap exo_alloc_irq(uint irq, uint rights);
 int exo_irq_wait(exo_cap cap, uint *irq);
 int exo_irq_ack(exo_cap cap);
-void irq_trigger(uint irq);
+int irq_trigger(uint irq);
 exo_cap exo_alloc_ioport(uint port);
 exo_cap exo_bind_irq(uint irq);
 exo_cap exo_alloc_dma(uint chan);
