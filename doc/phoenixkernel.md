@@ -412,3 +412,48 @@ runtimes to build dependency graphs while still benefiting from the affine time
 slicing provided by Beatty. Selecting the combined stream merely requires
 calling the initializer before submitting DAG nodes.
 
+## Locking Patterns for User-Space Drivers and Services
+
+Phoenix exposes several locking primitives that mirror the kernel's spinlock
+implementations.  Most drivers are single threaded, so the default stub locks
+found in `src-headers/libos/spinlock.h` compile to no-ops.  When the
+`CONFIG_SMP` flag is unset or set to `0`, these stubs remove all locking
+overhead.
+
+When building with `CONFIG_SMP=1` the libOS can use either the regular ticket
+lock API or the randomized qspinlock variant.  Ticket locks are invoked through
+`initlock`, `acquire` and `release`.  QSpinlocks provide `qspin_lock`,
+`qspin_unlock` and `qspin_trylock` for situations where many threads contend on
+the same structure.
+
+### Selecting an Implementation
+
+```c
+#include "spinlock.h"
+#ifdef USE_QSPIN
+#include "qspinlock.h"
+#endif
+
+struct spinlock lk;
+
+int main(void) {
+#if CONFIG_SMP
+    initlock(&lk, "demo");
+#ifdef USE_QSPIN
+    qspin_lock(&lk);
+    qspin_unlock(&lk);
+#else
+    acquire(&lk);
+    release(&lk);
+#endif
+#else
+    // locking disabled when CONFIG_SMP=0
+#endif
+    return 0;
+}
+```
+
+Disable locking when a service never runs on more than one CPU or when
+`CONFIG_SMP` is not enabled.  For multi-core systems, prefer qspinlocks when
+heavy contention is expected; otherwise the ticket lock suffices.
+
