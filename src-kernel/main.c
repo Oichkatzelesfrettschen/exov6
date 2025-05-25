@@ -10,6 +10,7 @@
 #include "spinlock.h"
 #include "exo_stream.h"
 #include "exo_ipc.h"
+#include "ipc_queue.h"
 #include <string.h>
 
 static void startothers(void);
@@ -38,6 +39,7 @@ int main(void) {
   cap_table_init();                           // initialize capability table
   rcuinit();                                  // rcu subsystem
   pinit();                                    // process table
+  ipc_timed_init();                           // initialize timed IPC mailbox
   tvinit();                                   // trap vectors
   binit();                                    // buffer cache
   fileinit();                                 // file table
