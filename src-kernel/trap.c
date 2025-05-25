@@ -67,11 +67,11 @@ void trap(struct trapframe *tf) {
 #ifndef __x86_64__
       tf->esp -= 4;
       *(uint32_t *)tf->esp = tf->eip;
-      tf->eip = (uint32_t)myproc()->timer_upcall;
+      tf->eip = (uintptr_t)myproc()->timer_upcall;
 #else
       tf->rsp -= 8;
       *(uint64_t *)tf->rsp = tf->rip;
-      tf->rip = (uint64_t)myproc()->timer_upcall;
+      tf->rip = (uintptr_t)myproc()->timer_upcall;
 #endif
     }
     break;

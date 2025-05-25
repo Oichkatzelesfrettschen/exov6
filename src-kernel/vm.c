@@ -385,9 +385,9 @@ copyout(pde_t *pgdir, uint32_t va, void *p, size_t len)
   buf = (char *)p;
   while (len > 0) {
 #ifdef __x86_64__
-    va0 = (uint64_t)PGROUNDDOWN(va);
+    va0 = (uintptr_t)PGROUNDDOWN(va);
 #else
-    va0 = (uint32_t)PGROUNDDOWN(va);
+    va0 = (uintptr_t)PGROUNDDOWN(va);
 #endif
     pa0 = uva2ka(pgdir, (char *)va0);
     if (pa0 == 0)

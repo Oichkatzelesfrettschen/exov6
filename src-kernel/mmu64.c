@@ -56,8 +56,8 @@ mappages64(pml4e_t *pml4, void *va, uint32_t size, uint64_t pa, int perm)
   char *a, *last;
   pte_t *pte;
 
-  a = (char*)PGROUNDDOWN((uint64_t)va);
-  last = (char*)PGROUNDDOWN(((uint64_t)va) + size - 1);
+  a = (char*)PGROUNDDOWN((uintptr_t)va);
+  last = (char*)PGROUNDDOWN(((uintptr_t)va) + size - 1);
   for(;;){
     if((pte = walkpml4(pml4, a, 1)) == 0)
       return -1;

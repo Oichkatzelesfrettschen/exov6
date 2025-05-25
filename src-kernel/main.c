@@ -105,7 +105,7 @@ static void startothers(void) {
     if (stack == 0)
       panic("startothers: out of memory");
 #ifdef __x86_64__
-    *(uint64_t *)(code - 8) = (uint64_t)stack + KSTACKSIZE;
+    *(uintptr_t *)(code - 8) = (uintptr_t)stack + KSTACKSIZE;
     *(void (**)(void))(code - 16) = mpenter;
 #else
     *(void **)(code - 4) = stack + KSTACKSIZE;
