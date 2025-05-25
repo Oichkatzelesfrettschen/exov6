@@ -30,5 +30,7 @@ jobs:
       run: pytest -q
     - name: Run fuzz smoke test
       run: python3 scripts/swift_fuzz.py -runs=1
+    - name: Run microbenchmarks
+      run: make -C tests/microbench run
     - name: Clean
       run: rm -rf build
