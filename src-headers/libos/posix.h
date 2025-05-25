@@ -45,3 +45,6 @@ int libos_accept(int fd, struct sockaddr *addr, socklen_t *len);
 int libos_connect(int fd, const struct sockaddr *addr, socklen_t len);
 long libos_send(int fd, const void *buf, size_t len, int flags);
 long libos_recv(int fd, void *buf, size_t len, int flags);
+
+int libos_setenv(const char *name, const char *value);
+const char *libos_getenv(const char *name);
