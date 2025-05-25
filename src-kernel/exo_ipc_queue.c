@@ -9,31 +9,19 @@
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
-#define IPC_BUFSZ 64
 
-struct ipc_entry {
-  zipc_msg_t msg;
-  exo_cap frame;
-};
 
-static struct {
-  struct spinlock lock;
-  struct ipc_entry buf[IPC_BUFSZ];
-  uint32_t r;
-  uint32_t w;
-  int inited;
-} ipcs;
-
-static void ipc_init(void) {
-  if (!ipcs.inited) {
-    initlock(&ipcs.lock, "exoipc");
-    ipcs.r = ipcs.w = 0;
-    ipcs.inited = 1;
+static void ipc_init(struct mailbox *mb) {
+  if (!mb->inited) {
+    initlock(&mb->lock, "exoipc");
+    mb->r = mb->w = 0;
+    mb->inited = 1;
   }
 }
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
-  ipc_init();
+  struct mailbox *mb = myproc()->mailbox;
+  ipc_init(mb);
   if (!cap_has_rights(dest.rights, EXO_RIGHT_W))
     return -EPERM;
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
@@ -54,16 +42,16 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
       fr.owner = dest.owner;
   }
 
-  acquire(&ipcs.lock);
-  while (ipcs.w - ipcs.r == IPC_BUFSZ) {
-    wakeup(&ipcs.r);
-    sleep(&ipcs.w, &ipcs.lock);
+  acquire(&mb->lock);
+  while (mb->w - mb->r == MAILBOX_BUFSZ) {
+    wakeup(&mb->r);
+    sleep(&mb->w, &mb->lock);
   }
-  ipcs.buf[ipcs.w % IPC_BUFSZ].msg = m;
-  ipcs.buf[ipcs.w % IPC_BUFSZ].frame = fr;
-  ipcs.w++;
-  wakeup(&ipcs.r);
-  release(&ipcs.lock);
+  mb->buf[mb->w % MAILBOX_BUFSZ].msg = m;
+  mb->buf[mb->w % MAILBOX_BUFSZ].frame = fr;
+  mb->w++;
+  wakeup(&mb->r);
+  release(&mb->lock);
 
   return (int)len;
 }
@@ -71,16 +59,17 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
 int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   if (!cap_has_rights(src.rights, EXO_RIGHT_R))
     return -EPERM;
-  ipc_init();
-  acquire(&ipcs.lock);
-  while (ipcs.r == ipcs.w) {
-    wakeup(&ipcs.w);
-    sleep(&ipcs.r, &ipcs.lock);
+  struct mailbox *mb = myproc()->mailbox;
+  ipc_init(mb);
+  acquire(&mb->lock);
+  while (mb->r == mb->w) {
+    wakeup(&mb->w);
+    sleep(&mb->r, &mb->lock);
   }
-  struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
-  ipcs.r++;
-  wakeup(&ipcs.w);
-  release(&ipcs.lock);
+  struct ipc_entry e = mb->buf[mb->r % MAILBOX_BUFSZ];
+  mb->r++;
+  wakeup(&mb->w);
+  release(&mb->lock);
 
   if (e.frame.pa &&
       (!cap_verify(e.frame) || !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
