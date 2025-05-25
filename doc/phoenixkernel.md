@@ -140,12 +140,12 @@ whenever the current task yields or no runnable work remains.
 
 ### IPC
 
-- `exo_send(dest, buf, len)` – enqueue a message to the destination
-  capability.
-- `exo_recv(src, buf, len)` – receive data from the source capability.
+- `exo_send(dest, buf, len)` – send a message to `dest`; queuing is handled in user space.
+- `exo_recv(src, buf, len)` – receive data from `src` via the libOS queue.
 - `zipc_call(msg)` – perform a fast IPC syscall using the `zipc_msg_t`
   structure defined in `ipc.h`.
 
+IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
 Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
 and automatically serialize Cap'n Proto messages.  Each channel is
 backed by a `msg_type_desc` describing the size of the Cap'n Proto
