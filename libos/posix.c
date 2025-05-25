@@ -8,6 +8,7 @@
 #include "stat.h"
 #include <unistd.h>
 #include <sys/socket.h>
+#include "include/exokernel.h"
 
 #define LIBOS_MAXFD 16
 
@@ -31,11 +32,15 @@ int libos_open(const char *path, int flags) {
 int libos_read(int fd, void *buf, size_t n) {
     if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
         return -1;
+    if(!cap_has_rights(fd_table[fd]->cap.rights, EXO_RIGHT_R))
+        return -1;
     return libfs_read(fd_table[fd], buf, n);
 }
 
 int libos_write(int fd, const void *buf, size_t n) {
     if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    if(!cap_has_rights(fd_table[fd]->cap.rights, EXO_RIGHT_W))
         return -1;
     return libfs_write(fd_table[fd], buf, n);
 }
@@ -155,6 +160,8 @@ long libos_lseek(int fd, long off, int whence) {
 
 int libos_ftruncate(int fd, long length) {
     if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    if(!cap_has_rights(fd_table[fd]->cap.rights, EXO_RIGHT_W))
         return -1;
     (void)length;
     /* The simple in-memory filesystem ignores size changes. */

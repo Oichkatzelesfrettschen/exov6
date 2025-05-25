@@ -8,6 +8,15 @@ Process creation uses capability protected channels to the scheduler but
 returns a traditional PID.  Networking calls are thin wrappers around
 the host socket APIs.
 
+### Virtual filesystem permissions
+
+The toy filesystem keeps a single read/write permission mask for each
+entry.  `libos_open` verifies these bits along with the capability
+rights before returning a descriptor.  Subsequent calls such as
+`libos_read`, `libos_write` and `libos_ftruncate` fail when the backing
+capability lacks the required access.  No ownership or group metadata is
+tracked and permissions do not persist beyond the in-memory table.
+
 ## Implemented Interfaces
 | Interface | Notes |
 |-----------|----------------------------------------------|
