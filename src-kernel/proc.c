@@ -172,7 +172,7 @@ found:
   *(uintptr_t*)sp = (uintptr_t)trapret;
 #else
   sp -= 4;
-  *(uint32_t*)sp = (uint32_t)trapret;
+  *(uintptr_t*)sp = (uintptr_t)trapret;
 #endif
 
   sp -= sizeof *p->context;
@@ -183,7 +183,7 @@ found:
 #elif defined(__aarch64__)
   p->context->lr = (uintptr_t)forkret;
 #else
-  p->context->eip = (uint32_t)forkret;
+  p->context->eip = (uintptr_t)forkret;
 #endif
 
   p->mailbox = (struct mailbox *)kalloc();
