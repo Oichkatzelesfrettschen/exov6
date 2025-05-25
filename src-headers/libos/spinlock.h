@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CONFIG_SMP
+#define CONFIG_SMP 1
+#endif
 
 #include <stddef.h>
 #include <stdint.h>
@@ -17,7 +20,7 @@ struct spinlock {
   uint32_t pcs[10];
 };
 
-#ifdef SPINLOCK_NO_STUBS
+#if defined(SPINLOCK_NO_STUBS) && CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
 
 static inline void initlock(struct spinlock *lk, const char *name) {
   lk->name = (char *)name;

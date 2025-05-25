@@ -14,13 +14,16 @@ struct spinlock {
   struct ticketlock ticket; // Ticket lock implementation
 
   // For debugging:
-  char *name;      // Name of lock.
-  struct cpu *cpu; // The cpu holding the lock.
-  uint32_t pcs[10];    // The call stack (an array of program counters)
-                   // that locked the lock.
+  char *name;       // Name of lock.
+  struct cpu *cpu;  // The cpu holding the lock.
+  uint32_t pcs[10]; // The call stack (an array of program counters)
+                    // that locked the lock.
 };
 
-#if CONFIG_SMP
+extern size_t cache_line_size;
+void detect_cache_line_size(void);
+
+#if CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
 void initlock(struct spinlock *lk, char *name);
 void acquire(struct spinlock *lk);
 void release(struct spinlock *lk);
@@ -40,5 +43,5 @@ static inline int holding(struct spinlock *lk) {
 
 // Returns the recommended alignment for instances of struct spinlock.
 static inline size_t spinlock_optimal_alignment(void) {
-  return __alignof__(struct spinlock);
+  return cache_line_size;
 }
