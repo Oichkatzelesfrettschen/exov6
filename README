@@ -2,7 +2,11 @@ NOTE: MIT have stopped maintaining the x86 version of xv6, and switched
 their efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)
 
-This project experiments with decomposition of the xv6 operating system into an exokernel model. 
+This project experiments with decomposition of the xv6 operating system into an exokernel model.
+
+For the project's goals, contributor guidelines and governance model see
+``doc/charter.md``. Philosophical technical debt entries live in
+``doc/ptd_log.md``.
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
