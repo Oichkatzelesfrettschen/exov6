@@ -52,7 +52,7 @@ def compile_and_run():
         exe = pathlib.Path(td)/"test"
         src.write_text(C_CODE)
         subprocess.check_call([
-            "gcc","-std=c11",
+            "gcc","-std=c23",
             str(src),
             "-o", str(exe)
         ])

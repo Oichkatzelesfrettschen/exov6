@@ -80,7 +80,7 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
         )
         subprocess.check_call([
-            "gcc", "-std=c11",
+            "gcc", "-std=c23",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
