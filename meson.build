@@ -1,4 +1,5 @@
 project('xv6', 'c', default_options: ['c_std=c23'])
+add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 
 use_ticket_lock = get_option('use_ticket_lock')
 common_cargs = []

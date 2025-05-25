@@ -44,6 +44,7 @@ file(GLOB_RECURSE KERNEL_SOURCES
 )
 
 add_executable(kernel ${KERNEL_SOURCES})
+target_compile_options(kernel PRIVATE -Wall -Werror)
 
 if(USE_TICKET_LOCK)
   target_compile_definitions(kernel PRIVATE USE_TICKET_LOCK)

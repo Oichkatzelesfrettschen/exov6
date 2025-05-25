@@ -55,7 +55,7 @@ def compile_and_run():
         (pathlib.Path(td)/"defs.h").write_text("")
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc", "-std=c2x",
+            "gcc", "-std=c2x", "-Wall", "-Werror",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
