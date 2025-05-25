@@ -10,8 +10,9 @@ C_CODE = textwrap.dedent(
 #include <assert.h>
 #include <stdint.h>
 #include "src-headers/exo_irq.h"
+#include </usr/include/errno.h>
 #include "proc.h"
-#include <string.h>
+#include </usr/include/string.h>
 
 struct spinlock; struct cpu; static struct cpu* mycpu(void){ return 0; }
 static int holding(struct spinlock *l){ (void)l; return 0; }
@@ -33,7 +34,7 @@ static int cap_verify(exo_cap c){ (void)c; return 1; }
 int main(void){
     cap_table_init();
     exo_cap cap = exo_alloc_irq(5, EXO_RIGHT_R | EXO_RIGHT_W);
-    irq_trigger(5);
+    assert(irq_trigger(5) == 0);
     unsigned num = 0;
     assert(exo_irq_wait(cap, &num) == 0);
     assert(num == 5);
@@ -43,11 +44,48 @@ int main(void){
 """
 )
 
-def compile_and_run():
+C_OVERFLOW = textwrap.dedent(
+    """
+#include <assert.h>
+#include <stdint.h>
+#include </usr/include/errno.h>
+#include "src-headers/exo_irq.h"
+#include "proc.h"
+#include </usr/include/string.h>
+
+struct spinlock; struct cpu; static struct cpu* mycpu(void){ return 0; }
+static int holding(struct spinlock *l){ (void)l; return 0; }
+static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
+static void panic(char *msg){ (void)msg; assert(0); }
+static void cprintf(const char *f, ...){ (void)f; }
+static void sleep(void *c, struct spinlock *l){ (void)c; (void)l; }
+static void wakeup(void *c){ (void)c; }
+static struct proc cur = {1};
+static struct proc* myproc(void){ return &cur; }
+static exo_cap cap_new(uint id, uint rights, uint owner){
+    exo_cap c; c.pa=id; c.id=id; c.rights=rights; c.owner=owner; return c;
+}
+static int cap_verify(exo_cap c){ (void)c; return 1; }
+
+#include "src-kernel/cap_table.c"
+#include "src-kernel/irq.c"
+
+int main(void){
+    cap_table_init();
+    exo_cap cap = exo_alloc_irq(5, EXO_RIGHT_R | EXO_RIGHT_W);
+    for(unsigned i = 0; i < 32; i++)
+        assert(irq_trigger(5) == 0);
+    assert(irq_trigger(5) == -ENOSPC);
+    return 0;
+}
+"""
+)
+
+def compile_and_run(code=C_CODE):
     with tempfile.TemporaryDirectory() as td:
         src = pathlib.Path(td)/"test.c"
         exe = pathlib.Path(td)/"test"
-        src.write_text(C_CODE)
+        src.write_text(code)
         (pathlib.Path(td)/"proc.h").write_text("#pragma once\nstruct proc{int pid;};")
         (pathlib.Path(td)/"include").mkdir()
         (pathlib.Path(td)/"include/exokernel.h").write_text('#include "../src-headers/exokernel.h"')
@@ -65,7 +103,7 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
         )
         subprocess.check_call([
-            "gcc","-std=c2x",
+            "clang", "-std=c23",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),
@@ -76,3 +114,7 @@ def compile_and_run():
 
 def test_irq_event():
     assert compile_and_run() == 0
+
+
+def test_irq_overflow():
+    assert compile_and_run(C_OVERFLOW) == 0
