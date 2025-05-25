@@ -8,6 +8,9 @@
 #include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
+#ifndef USE_TICKET_LOCK
+#include "qspinlock.h"
+#endif
 
 size_t cache_line_size = __alignof__(struct spinlock);
 
@@ -35,6 +38,7 @@ void initlock(struct spinlock *lk, char *name) {
 // Holding a lock for a long time may cause
 // other CPUs to waste time spinning to acquire it.
 void acquire(struct spinlock *lk) {
+#ifdef USE_TICKET_LOCK
   pushcli(); // disable interrupts to avoid deadlock.
   if (holding(lk))
     panic("acquire");
@@ -51,10 +55,14 @@ void acquire(struct spinlock *lk) {
   // Record info about lock acquisition for debugging.
   lk->cpu = mycpu();
   getcallerpcs(&lk, lk->pcs);
+#else
+  qspin_lock(lk);
+#endif
 }
 
 // Release the lock.
 void release(struct spinlock *lk) {
+#ifdef USE_TICKET_LOCK
   if (!holding(lk))
     panic("release");
 
@@ -71,6 +79,9 @@ void release(struct spinlock *lk) {
   __atomic_fetch_add(&lk->ticket.head, 1, __ATOMIC_SEQ_CST);
 
   popcli();
+#else
+  qspin_unlock(lk);
+#endif
 }
 #else
 void initlock(struct spinlock *lk, char *name) {

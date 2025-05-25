@@ -6,6 +6,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
+struct spinlock; // forward declaration for prototypes below
+#if defined(SPINLOCK_NO_STUBS) && !defined(USE_TICKET_LOCK)
+void qspin_lock(struct spinlock *lk);
+void qspin_unlock(struct spinlock *lk);
+#endif
+
 struct ticketlock {
   _Atomic unsigned short head;
   _Atomic unsigned short tail;
@@ -30,6 +36,7 @@ static inline void initlock(struct spinlock *lk, const char *name) {
 }
 
 static inline void acquire(struct spinlock *lk) {
+#ifdef USE_TICKET_LOCK
   pushcli();
   if (holding(lk))
     panic("acquire");
@@ -42,9 +49,13 @@ static inline void acquire(struct spinlock *lk) {
   __sync_synchronize();
   lk->cpu = mycpu();
   getcallerpcs(&lk, lk->pcs);
+#else
+  qspin_lock(lk);
+#endif
 }
 
 static inline void release(struct spinlock *lk) {
+#ifdef USE_TICKET_LOCK
   if (!holding(lk))
     panic("release");
 
@@ -53,6 +64,9 @@ static inline void release(struct spinlock *lk) {
   __sync_synchronize();
   __atomic_fetch_add(&lk->ticket.head, 1, __ATOMIC_SEQ_CST);
   popcli();
+#else
+  qspin_unlock(lk);
+#endif
 }
 
 #else

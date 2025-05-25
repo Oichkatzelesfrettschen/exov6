@@ -1,5 +1,11 @@
 project('xv6', 'c', default_options: ['c_std=c23'])
 
+use_ticket_lock = get_option('use_ticket_lock')
+common_cargs = []
+if use_ticket_lock
+  common_cargs += ['-DUSE_TICKET_LOCK']
+endif
+
 clang_tidy = find_program('clang-tidy', required: false)
 bison = find_program('bison', required: false)
 if bison.found()
@@ -35,7 +41,8 @@ libos_sources = [
 ]
 
 libos = static_library('libos', libos_sources,
-    include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'))
+    include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'),
+    c_args: common_cargs)
 
 src_dirs = ['src-kernel', 'src-uland', 'src-uland/user', 'libos']
 
@@ -51,7 +58,8 @@ kernel = executable('kernel', sources,
                                             'proto',
                                             'libos/include',
                                             'libos/capnp'),
-           install: false)
+           install: false,
+           c_args: common_cargs)
 
 if clang_tidy.found()
   run_target('clang-tidy', command: [clang_tidy, sources],
@@ -112,7 +120,8 @@ foreach name, path : uprogs
   exe = executable('_' + name, path,
                    include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'),
                    link_with: libos,
-                   install: false)
+                   install: false,
+                   c_args: common_cargs)
   uprogs_targets += exe
 endforeach
 

@@ -9,6 +9,8 @@ endif()
 
 project(xv6 LANGUAGES C CXX)
 
+option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
+
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
@@ -42,6 +44,10 @@ file(GLOB_RECURSE KERNEL_SOURCES
 )
 
 add_executable(kernel ${KERNEL_SOURCES})
+
+if(USE_TICKET_LOCK)
+  target_compile_definitions(kernel PRIVATE USE_TICKET_LOCK)
+endif()
 
 # QEMU executable used for run targets
 find_program(QEMU_EXECUTABLE
