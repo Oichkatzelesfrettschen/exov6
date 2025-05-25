@@ -23,6 +23,7 @@ enum {
   SYS_exo_write_disk,
   SYS_exo_send,
   SYS_exo_recv,
+  SYS_exo_recv_timed,
   SYS_endpoint_send,
   SYS_endpoint_recv,
   SYS_proc_alloc,
