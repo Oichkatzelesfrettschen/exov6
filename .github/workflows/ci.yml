@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         arch: [i686, x86_64]
+        buildsys: [cmake, meson]
     steps:
     - uses: actions/checkout@v4
     - name: Install build dependencies
@@ -48,10 +49,18 @@ jobs:
         set -euxo pipefail
         make clean
       run: swift/build_swift.sh
-    - name: Configure
+    - name: Configure (CMake)
+      if: matrix.buildsys == 'cmake'
       run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }}
-    - name: Build
+    - name: Build (CMake)
+      if: matrix.buildsys == 'cmake'
       run: ninja -C build qemu-nox
+    - name: Configure (Meson)
+      if: matrix.buildsys == 'meson'
+      run: meson setup build --wipe
+    - name: Build (Meson)
+      if: matrix.buildsys == 'meson'
+      run: ninja -C build
     - name: Run unit tests
       run: pytest -q
     - name: Run fuzz smoke test
