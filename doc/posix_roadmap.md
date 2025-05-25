@@ -193,6 +193,19 @@ int k_nanosleep(uint64_t nanoseconds);
 - Design API behavioral consistency testing
 - Establish compatibility matrix documentation
 
+### 9.4 Test Framework Usage
+The test harness relies on `pytest` and a small wrapper that boots the kernel
+under QEMU.  Running ``make check`` from the repository root executes the full
+suite and collects coverage information.  Individual tests can also be run
+directly:
+
+```bash
+$ pytest tests/test_posix_apis.py
+```
+
+Results should be recorded in the compliance matrix located at
+[`doc/posix_progress.md`](posix_progress.md).
+
 ## Phase X: Documentation & Deployment
 
 ### 10.1 Comprehensive Documentation
