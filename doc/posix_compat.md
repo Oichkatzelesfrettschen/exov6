@@ -16,7 +16,8 @@ the host socket APIs.
 | `libos_ftruncate` | Ignored by the demo filesystem but provided for compatibility. |
 | `libos_mmap` / `libos_munmap` | Allocate and free memory using `malloc`. |
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
-| Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |
+| Process groups | Forward to the host's `getpgrp()`, `setpgid()` and `killpg()` calls. |
+| Signal actions | `libos_sigaction` and `libos_sigprocmask` manage handlers and masks. |
 | Socket APIs | Thin wrappers around standard Berkeley sockets. |
 
 

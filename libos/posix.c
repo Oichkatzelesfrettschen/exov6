@@ -4,6 +4,7 @@
 #include "string.h"
 #include "user.h"
 #include "signal.h"
+#include <signal.h>
 #include <stdlib.h>
 #include "stat.h"
 #include <unistd.h>
@@ -12,7 +13,8 @@
 #define LIBOS_MAXFD 16
 
 static struct file *fd_table[LIBOS_MAXFD];
-static void (*sig_handlers[32])(int);
+static struct libos_sigaction sig_table[32];
+static libos_sigset_t sig_mask;
 
 int libos_open(const char *path, int flags) {
     struct file *f = libfs_open(path, flags);
@@ -107,16 +109,47 @@ int libos_sigsend(int pid, int sig) {
 int libos_sigcheck(void) {
     int pending = sigcheck();
     for(int s = 0; s < 32; s++) {
-        if((pending & (1<<s)) && sig_handlers[s])
-            sig_handlers[s](s);
+        if((pending & (1<<s)) && sig_table[s].sa_handler &&
+           !(sig_mask & (1UL<<s)))
+            sig_table[s].sa_handler(s);
     }
     return pending;
 }
 
 int libos_signal(int sig, void (*handler)(int)) {
+    struct libos_sigaction sa = { .sa_handler = handler, .sa_mask = 0, .sa_flags = 0 };
+    return libos_sigaction(sig, &sa, 0);
+}
+
+int libos_sigaction(int sig, const struct libos_sigaction *act,
+                    struct libos_sigaction *old) {
     if(sig < 0 || sig >= 32)
         return -1;
-    sig_handlers[sig] = handler;
+    if(old)
+        *old = sig_table[sig];
+    if(act)
+        sig_table[sig] = *act;
+    return 0;
+}
+
+int libos_sigprocmask(int how, const libos_sigset_t *set, libos_sigset_t *old) {
+    if(old)
+        *old = sig_mask;
+    if(!set)
+        return 0;
+    switch(how){
+    case SIG_BLOCK:
+        sig_mask |= *set;
+        break;
+    case SIG_UNBLOCK:
+        sig_mask &= ~(*set);
+        break;
+    case SIG_SETMASK:
+        sig_mask = *set;
+        break;
+    default:
+        return -1;
+    }
     return 0;
 }
 
@@ -185,6 +218,10 @@ int libos_getpgrp(void){
 
 int libos_setpgid(int pid, int pgid){
     return setpgid(pid, pgid);
+}
+
+int libos_killpg(int pgid, int sig){
+    return killpg(pgid, sig);
 }
 
 int libos_socket(int domain, int type, int protocol){
