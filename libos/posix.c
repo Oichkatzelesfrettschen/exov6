@@ -8,43 +8,114 @@
 #include "stat.h"
 #include <unistd.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 
 #define LIBOS_MAXFD 16
+#define FIFO_MAX    8
+#define FIFO_BUFSZ  512
 
-static struct file *fd_table[LIBOS_MAXFD];
+struct fifo {
+    char name[32];
+    int used;
+    char *buf;
+    size_t r, w;
+};
+
+struct fd_entry {
+    enum { FD_FREE, FD_FILE, FD_FIFO } type;
+    union {
+        struct file *f;
+        struct fifo *fifo;
+    } u;
+};
+
+static struct fd_entry fd_table[LIBOS_MAXFD];
+static struct fifo fifo_table[FIFO_MAX];
 static void (*sig_handlers[32])(int);
 
-int libos_open(const char *path, int flags) {
-    struct file *f = libfs_open(path, flags);
-    if(!f)
-        return -1;
-    for(int i = 0; i < LIBOS_MAXFD; i++) {
-        if(!fd_table[i]) {
-            fd_table[i] = f;
+static int alloc_fd(void) {
+    for(int i=0;i<LIBOS_MAXFD;i++)
+        if(fd_table[i].type==FD_FREE)
             return i;
-        }
-    }
-    fileclose(f);
     return -1;
 }
 
-int libos_read(int fd, void *buf, size_t n) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+static struct fifo *lookup_fifo(const char *name) {
+    for(int i=0;i<FIFO_MAX;i++)
+        if(fifo_table[i].used && strcmp(fifo_table[i].name,name)==0)
+            return &fifo_table[i];
+    return 0;
+}
+
+static struct fifo *create_fifo(const char *name) {
+    for(int i=0;i<FIFO_MAX;i++) {
+        if(!fifo_table[i].used) {
+            struct fifo *f=&fifo_table[i];
+            strncpy(f->name,name,sizeof(f->name)-1);
+            f->name[sizeof(f->name)-1]='\0';
+            f->buf = malloc(FIFO_BUFSZ);
+            if(!f->buf)
+                return 0;
+            f->r=f->w=0;
+            f->used=1;
+            return f;
+        }
+    }
+    return 0;
+}
+
+int libos_open(const char *path, int flags) {
+    struct fifo *fifo = lookup_fifo(path);
+    int fd = alloc_fd();
+    if(fd < 0)
         return -1;
-    return libfs_read(fd_table[fd], buf, n);
+    if(fifo) {
+        fd_table[fd].type = FD_FIFO;
+        fd_table[fd].u.fifo = fifo;
+        return fd;
+    }
+    struct file *f = libfs_open(path, flags);
+    if(!f)
+        return -1;
+    fd_table[fd].type = FD_FILE;
+    fd_table[fd].u.f = f;
+    return fd;
+}
+
+int libos_read(int fd, void *buf, size_t n) {
+    if(fd < 0 || fd >= LIBOS_MAXFD || fd_table[fd].type==FD_FREE)
+        return -1;
+    if(fd_table[fd].type == FD_FILE)
+        return libfs_read(fd_table[fd].u.f, buf, n);
+    struct fifo *f = fd_table[fd].u.fifo;
+    size_t avail = f->w - f->r;
+    if(n > avail) n = avail;
+    for(size_t i=0;i<n;i++)
+        ((char*)buf)[i] = f->buf[(f->r+i)%FIFO_BUFSZ];
+    f->r += n;
+    return (int)n;
 }
 
 int libos_write(int fd, const void *buf, size_t n) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    if(fd < 0 || fd >= LIBOS_MAXFD || fd_table[fd].type==FD_FREE)
         return -1;
-    return libfs_write(fd_table[fd], buf, n);
+    if(fd_table[fd].type == FD_FILE)
+        return libfs_write(fd_table[fd].u.f, buf, n);
+    struct fifo *f = fd_table[fd].u.fifo;
+    size_t space = FIFO_BUFSZ - (f->w - f->r);
+    if(n > space) n = space;
+    for(size_t i=0;i<n;i++)
+        f->buf[(f->w+i)%FIFO_BUFSZ] = ((const char*)buf)[i];
+    f->w += n;
+    return (int)n;
 }
 
 int libos_close(int fd) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    if(fd < 0 || fd >= LIBOS_MAXFD || fd_table[fd].type==FD_FREE)
         return -1;
-    libfs_close(fd_table[fd]);
-    fd_table[fd] = 0;
+    if(fd_table[fd].type == FD_FILE)
+        libfs_close(fd_table[fd].u.f);
+    fd_table[fd].type = FD_FREE;
     return 0;
 }
 
@@ -70,21 +141,26 @@ int libos_rmdir(const char *path) {
 }
 
 int libos_dup(int fd) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    if(fd < 0 || fd >= LIBOS_MAXFD || fd_table[fd].type==FD_FREE)
         return -1;
-    struct file *f = filedup(fd_table[fd]);
-    for(int i = 0; i < LIBOS_MAXFD; i++) {
-        if(!fd_table[i]) {
-            fd_table[i] = f;
-            return i;
-        }
-    }
-    fileclose(f);
-    return -1;
+    int nfd = alloc_fd();
+    if(nfd < 0)
+        return -1;
+    fd_table[nfd] = fd_table[fd];
+    if(fd_table[nfd].type == FD_FILE)
+        filedup(fd_table[nfd].u.f);
+    return nfd;
 }
 
 int libos_pipe(int fd[2]) {
     return pipe(fd);
+}
+
+int libos_mkfifo(const char *path, int mode) {
+    (void)mode;
+    if(lookup_fifo(path))
+        return -1;
+    return create_fifo(path) ? 0 : -1;
 }
 
 int libos_fork(void) {
@@ -130,9 +206,9 @@ int libos_stat(const char *path, struct stat *st) {
 }
 
 long libos_lseek(int fd, long off, int whence) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    if(fd < 0 || fd >= LIBOS_MAXFD || fd_table[fd].type != FD_FILE)
         return -1;
-    struct file *f = fd_table[fd];
+    struct file *f = fd_table[fd].u.f;
     switch(whence){
     case 0: /* SEEK_SET */
         f->off = off;
@@ -154,7 +230,7 @@ long libos_lseek(int fd, long off, int whence) {
 }
 
 int libos_ftruncate(int fd, long length) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    if(fd < 0 || fd >= LIBOS_MAXFD || fd_table[fd].type != FD_FILE)
         return -1;
     (void)length;
     /* The simple in-memory filesystem ignores size changes. */

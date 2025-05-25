@@ -8,6 +8,7 @@ SRC_FILES = [
     ROOT / 'src-uland/posix_file_test.c',
     ROOT / 'src-uland/posix_signal_test.c',
     ROOT / 'src-uland/posix_pipe_test.c',
+    ROOT / 'src-uland/fifo_test.c',
 ]
 
 
