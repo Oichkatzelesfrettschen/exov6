@@ -12,23 +12,13 @@ struct ipc_entry {
     exo_cap frame;
 };
 
-static struct {
-    uv_spinlock_t lock;
-    struct ipc_entry buf[IPC_BUFSZ];
-    unsigned r, w;
-    int inited;
-} ipcs;
-
-static void ipc_init(void) {
-    if (!ipcs.inited) {
-        uv_spinlock_init(&ipcs.lock);
-        ipcs.r = ipcs.w = 0;
-        ipcs.inited = 1;
-    }
+static void mbox_init(struct exo_mailbox *mb) {
+    uv_spinlock_init(&mb->lock);
+    mb->r = mb->w = 0;
 }
 
-int ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
-    ipc_init();
+int ipc_queue_send(struct exo_mailbox *mb, exo_cap dest, const void *buf,
+                   uint64_t len) {
     if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
         return -EPERM;
     if(len > sizeof(zipc_msg_t) + sizeof(exo_cap))
@@ -47,44 +37,47 @@ int ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
             fr.owner = dest.owner;
     }
 
-    uv_spinlock_lock(&ipcs.lock);
-    while(ipcs.w - ipcs.r == IPC_BUFSZ) {
-        uv_spinlock_unlock(&ipcs.lock);
-        uv_spinlock_lock(&ipcs.lock);
+    if(mb->r == 0 && mb->w == 0)
+        mbox_init(mb);
+    uv_spinlock_lock(&mb->lock);
+    while(mb->w - mb->r == IPC_BUFSZ) {
+        uv_spinlock_unlock(&mb->lock);
+        uv_spinlock_lock(&mb->lock);
     }
-    ipcs.buf[ipcs.w % IPC_BUFSZ].msg = m;
-    ipcs.buf[ipcs.w % IPC_BUFSZ].frame = fr;
-    ipcs.w++;
-    uv_spinlock_unlock(&ipcs.lock);
+    mb->buf[mb->w % IPC_BUFSZ].msg = m;
+    mb->buf[mb->w % IPC_BUFSZ].frame = fr;
+    mb->w++;
+    uv_spinlock_unlock(&mb->lock);
 
     return exo_send(dest, buf, len);
 }
 
-int ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
+int ipc_queue_recv(struct exo_mailbox *mb, exo_cap src, void *buf, uint64_t len) {
     if(!cap_has_rights(src.rights, EXO_RIGHT_R))
         return -EPERM;
-    ipc_init();
-    uv_spinlock_lock(&ipcs.lock);
-    while(ipcs.r == ipcs.w) {
-        uv_spinlock_unlock(&ipcs.lock);
+    if(mb->r == 0 && mb->w == 0)
+        mbox_init(mb);
+    uv_spinlock_lock(&mb->lock);
+    while(mb->r == mb->w) {
+        uv_spinlock_unlock(&mb->lock);
         char tmp[sizeof(zipc_msg_t) + sizeof(exo_cap)];
         int r = exo_recv(src, tmp, sizeof(tmp));
         if(r > 0) {
-            uv_spinlock_lock(&ipcs.lock);
-            struct ipc_entry *e = &ipcs.buf[ipcs.w % IPC_BUFSZ];
+            uv_spinlock_lock(&mb->lock);
+            struct ipc_entry *e = &mb->buf[mb->w % IPC_BUFSZ];
             memset(e, 0, sizeof(*e));
             size_t cplen = r < sizeof(zipc_msg_t) ? r : sizeof(zipc_msg_t);
             memmove(&e->msg, tmp, cplen);
             if(r > sizeof(zipc_msg_t))
                 memmove(&e->frame, tmp + sizeof(zipc_msg_t), r - sizeof(zipc_msg_t));
-            ipcs.w++;
+            mb->w++;
         } else {
-            uv_spinlock_lock(&ipcs.lock);
+            uv_spinlock_lock(&mb->lock);
         }
     }
-    struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
-    ipcs.r++;
-    uv_spinlock_unlock(&ipcs.lock);
+    struct ipc_entry e = mb->buf[mb->r % IPC_BUFSZ];
+    mb->r++;
+    uv_spinlock_unlock(&mb->lock);
 
     size_t total = sizeof(zipc_msg_t);
     if(e.frame.id)

@@ -151,6 +151,10 @@ found:
 
   release(&ptable.lock);
 
+  // Initialize per-process mailbox
+  initlock(&p->mbox.lock, "mbox");
+  p->mbox.r = p->mbox.w = 0;
+
   // Allocate kernel stack.
   if((p->kstack = kalloc()) == 0){
     p->state = UNUSED;

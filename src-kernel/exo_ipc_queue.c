@@ -15,26 +15,57 @@ struct ipc_entry {
   exo_cap frame;
 };
 
-static struct {
-  struct spinlock lock;
-  struct ipc_entry buf[IPC_BUFSZ];
-  uint r;
-  uint w;
-  int inited;
-} ipcs;
-
-static void ipc_init(void) {
-  if (!ipcs.inited) {
-    initlock(&ipcs.lock, "exoipc");
-    ipcs.r = ipcs.w = 0;
-    ipcs.inited = 1;
+static struct proc *lookup_pid(int pid) {
+  struct proc *p;
+  acquire(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if (p->pid == pid && p->state != UNUSED) {
+      release(&ptable.lock);
+      return p;
+    }
   }
+  release(&ptable.lock);
+  return 0;
+}
+
+static void mbox_init(struct exo_mailbox *mb) {
+  initlock(&mb->lock, "mbox");
+  mb->r = mb->w = 0;
+}
+
+static void mbox_enqueue(struct exo_mailbox *mb, struct ipc_entry *e) {
+  acquire(&mb->lock);
+  while (mb->w - mb->r == IPC_BUFSZ) {
+    wakeup(&mb->r);
+    sleep(&mb->w, &mb->lock);
+  }
+  mb->buf[mb->w % IPC_BUFSZ] = *e;
+  mb->w++;
+  wakeup(&mb->r);
+  release(&mb->lock);
+}
+
+static void mbox_dequeue(struct exo_mailbox *mb, struct ipc_entry *out) {
+  acquire(&mb->lock);
+  while (mb->r == mb->w) {
+    wakeup(&mb->w);
+    sleep(&mb->r, &mb->lock);
+  }
+  *out = mb->buf[mb->r % IPC_BUFSZ];
+  mb->r++;
+  wakeup(&mb->w);
+  release(&mb->lock);
 }
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
-  ipc_init();
   if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
     return -EPERM;
+  struct proc *p = lookup_pid(dest.owner);
+  if (!p)
+    return -EINVAL;
+  struct exo_mailbox *mb = &p->mbox;
+  if (mb->r == 0 && mb->w == 0) // uninitialized check
+    mbox_init(mb);
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
 
@@ -53,16 +84,8 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
       fr.owner = dest.owner;
   }
 
-  acquire(&ipcs.lock);
-  while (ipcs.w - ipcs.r == IPC_BUFSZ) {
-    wakeup(&ipcs.r);
-    sleep(&ipcs.w, &ipcs.lock);
-  }
-  ipcs.buf[ipcs.w % IPC_BUFSZ].msg = m;
-  ipcs.buf[ipcs.w % IPC_BUFSZ].frame = fr;
-  ipcs.w++;
-  wakeup(&ipcs.r);
-  release(&ipcs.lock);
+  struct ipc_entry e = { .msg = m, .frame = fr };
+  mbox_enqueue(mb, &e);
 
   return (int)len;
 }
@@ -70,16 +93,14 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
 int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   if(!cap_has_rights(src.rights, EXO_RIGHT_R))
     return -EPERM;
-  ipc_init();
-  acquire(&ipcs.lock);
-  while (ipcs.r == ipcs.w) {
-    wakeup(&ipcs.w);
-    sleep(&ipcs.r, &ipcs.lock);
-  }
-  struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
-  ipcs.r++;
-  wakeup(&ipcs.w);
-  release(&ipcs.lock);
+  struct proc *p = lookup_pid(src.owner);
+  if (!p)
+    return -EINVAL;
+  struct exo_mailbox *mb = &p->mbox;
+  if (mb->r == 0 && mb->w == 0)
+    mbox_init(mb);
+  struct ipc_entry e;
+  mbox_dequeue(mb, &e);
 
   if (e.frame.pa && (!cap_verify(e.frame) ||
                      !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
