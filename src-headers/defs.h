@@ -8,6 +8,7 @@
 #include "proc.h"
 #include "ipc.h"
 #include "cap.h"
+#include <stdnoreturn.h>
 
 struct buf;
 struct context;
@@ -54,7 +55,7 @@ void bwrite(struct buf *);
 void consoleinit(void);
 void cprintf(char *, ...);
 void consoleintr(int (*)(void));
-[[noreturn]] void panic(char *);
+_Noreturn void panic(char *);
 
 // exec.c
 int exec(char *, char **);
@@ -149,7 +150,7 @@ struct cpu *mycpu(void);
 struct proc *myproc();
 void pinit(void);
 void procdump(void);
-[[noreturn]] void scheduler(void);
+_Noreturn void scheduler(void);
 void sched(void);
 void setproc(struct proc *);
 void sleep(void *, struct spinlock *);
