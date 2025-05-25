@@ -38,7 +38,7 @@ def compile_and_run() -> None:
         subprocess.check_call(
             [
                 "gcc",
-                "-std=c23",
+                "-std=c2x",
                 "-I",
                 str(ROOT),
                 "-I",
