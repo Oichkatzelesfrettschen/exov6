@@ -54,6 +54,7 @@ libos_sources = [
   'libos/driver.c',
   'libos/affine_runtime.c',
   'libos/posix.c',
+  'libos/pthread.c',
   'libos/microkernel/cap.c',
   'libos/microkernel/msg_router.c',
   'libos/microkernel/resource_account.c',

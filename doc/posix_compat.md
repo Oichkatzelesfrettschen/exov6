@@ -18,8 +18,13 @@ the host socket APIs.
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
 | Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |
 | Socket APIs | Thin wrappers around standard Berkeley sockets. |
+| Threads | `pthread_create` uses `fork()` and mutexes are simple spinlocks. |
 
 
 These wrappers mirror the POSIX names where possible but are not fully
 featured.  They exist so portability layers can build against Phoenix
 without pulling in a real C library.
+
+Thread routines run as separate processes and therefore do not share
+address space.  Return values from thread functions are ignored and
+mutexes provide only basic mutual exclusion without priority handling.

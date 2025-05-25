@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "exo_mem.h"
-#include "../exo.h"
+#include "libos/exo-userland.h"
 
 #ifdef __cplusplus
 extern "C" {
