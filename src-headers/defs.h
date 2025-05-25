@@ -265,6 +265,7 @@ void beatty_dag_stream_init(void);
 void beatty_sched_set_tasks(const exo_cap *, const double *, int);
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
+int sys_ipc(void);
 void endpoint_send(struct endpoint *, zipc_msg_t *);
 int endpoint_recv(struct endpoint *, zipc_msg_t *);
 void dag_node_init(struct dag_node *, exo_cap);

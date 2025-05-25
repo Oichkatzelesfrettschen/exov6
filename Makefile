@@ -39,6 +39,7 @@ OBJS = \
     $(KERNEL_DIR)/cap.o \
     $(KERNEL_DIR)/cap_table.o \
     $(KERNEL_DIR)/fastipc.o \
+    $(KERNEL_DIR)/sys_ipc.o \
     $(KERNEL_DIR)/endpoint.o \
     $(KERNEL_DIR)/chan.o \
     $(KERNEL_DIR)/dag_sched.o \

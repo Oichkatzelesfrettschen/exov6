@@ -34,4 +34,5 @@ enum {
   SYS_sigcheck,
   SYS_cap_inc,
   SYS_cap_dec,
+  SYS_ipc,
 };
