@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdint.h>
 
 // Ticket-based mutual exclusion lock.
 struct ticketlock {
