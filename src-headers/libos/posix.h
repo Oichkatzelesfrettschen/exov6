@@ -1,4 +1,6 @@
 #pragma once
+#include <stddef.h>
+#include <signal.h>
 #include "types.h"
 #include "exo.h"
 
@@ -17,7 +19,6 @@ int libos_fork(void);
 int libos_waitpid(int pid, int *status, int flags);
 int libos_sigsend(int pid, int sig);
 int libos_sigcheck(void);
-struct sigaction;
 int libos_sigaction(int sig, const struct sigaction *act,
                     struct sigaction *oact);
 typedef unsigned long libos_sigset_t;

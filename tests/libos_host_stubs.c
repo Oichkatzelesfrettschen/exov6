@@ -57,3 +57,19 @@ int exo_write_disk(exo_blockcap cap, const void *src, uint64_t off, uint64_t n) 
     return (int)n;
 }
 
+int exec(char *path, char **argv) {
+    (void)path;
+    (void)argv;
+    return -1;
+}
+
+int sigsend(int pid, int sig) {
+    (void)pid;
+    (void)sig;
+    return 0;
+}
+
+int sigcheck(void) {
+    return 0;
+}
+

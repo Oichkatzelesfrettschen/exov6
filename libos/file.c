@@ -5,10 +5,11 @@
 #include "spinlock.h"
 #include "types.h"
 #include "user.h"
+#include <sys/stat.h>
+#include <stdlib.h>
 
 // Basic wrappers to illustrate linking a user-space filesystem library.
 
-static struct file dummy_file;
 
 void fileinit(void) {}
 
@@ -36,7 +37,7 @@ void fileclose(struct file *f) {
 int filestat(struct file *f, struct stat *st) {
   if (!f || !st)
     return -1;
-  st->size = BSIZE; // minimal single-block file
+  st->st_size = BSIZE; // minimal single-block file
   return 0;
 }
 
