@@ -409,6 +409,13 @@ and step-by-step examples of capability allocation, typed channels and
 driver management.  The document also outlines the planned BSD and SVR4
 compatibility layers built on top of the libOS.
 
+Additional documentation lives under the `doc/` directory.  The
+[technical track](doc/track_technical.md) summarizes the kernel API and
+libOS usage, while the [philosophy track](doc/track_philosophy.md)
+explains the broader goals without delving into implementation.  A
+brief [hybrid track](doc/track_hybrid.md) ties the two together.  All
+three reference the Phoenix kernel charter for further context.
+
 Example supervisor usage to manage drivers:
 
 ```
