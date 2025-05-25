@@ -3,6 +3,7 @@
 #include "proc.h"
 #include "defs.h"
 #include "endpoint.h"
+#include <string.h>
 
 static struct endpoint global_ep;
 
@@ -38,7 +39,7 @@ void endpoint_send(struct endpoint *ep, zipc_msg_t *m) {
         return;
       }
     zipc_msg_t tmp = {0};
-    memmove(&tmp, m, sz);
+    memcpy(&tmp, m, sz);
     ep->q[ep->w % ep->size] = tmp;
     ep->w++;
     wakeup(&ep->r);
@@ -59,7 +60,7 @@ void endpoint_send(struct endpoint *ep, zipc_msg_t *m) {
   zipc_msg_t t = ep->q[ep->r % ep->size];
   ep->r++;
   size_t sz = msg_desc_size(ep->desc);
-  memmove(m, &t, sz);
+  memcpy(m, &t, sz);
   memset((char *)m + sz, 0, sizeof(zipc_msg_t) - sz);
   release(&ep->lock);
   return 0;
@@ -79,6 +80,6 @@ int sys_endpoint_recv(void) {
   if (argptr(0, (void *)&udst, sizeof(*udst)) < 0)
     return -1;
   endpoint_recv(&global_ep, &m);
-  memmove(udst, &m, sizeof(m));
+  memcpy(udst, &m, sizeof(m));
   return 0;
 }
