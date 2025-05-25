@@ -58,32 +58,33 @@ We don't process error reports (see note on top of this file).
 
 BUILDING AND RUNNING XV6
 
-To build xv6 on an x86 ELF machine (like Linux or FreeBSD), run
-"make". On non-x86 or non-ELF machines (like OS X, even on x86), you
-will need to install a cross-compiler gcc suite capable of producing
-x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
-A cross-compiler may not be necessary on a 64-bit Linux host since the
-toolchain can produce 32-bit binaries, but on other systems install a
-cross-compiler suite and invoke ``make TOOLPREFIX=i386-jos-elf-``.
+To build xv6 on an x86 ELF machine (like Linux or FreeBSD) using
+``clang`` and ``cmake`` run ``cmake -S . -B build`` followed by
+``cmake --build build``.  On non-x86 or non-ELF machines you may need a
+cross-compiler toolchain capable of producing x86 ELF binaries
+(see https://pdos.csail.mit.edu/6.828/).  A cross-compiler may not be
+necessary on a 64-bit Linux host since the toolchain can produce 32-bit
+binaries.
 
 Step-by-step build and run commands::
 
-    make            # build the kernel and all user programs
-    make qemu       # boot the generated image under QEMU
-    make bochs      # alternatively boot using Bochs
+    cmake -S . -B build
+    cmake --build build
+    cmake --build build --target qemu
 
 When adding new user-space utilities place the sources under
 ``src-uland/user`` and append the corresponding ``_prog`` name to
-``UPROGS`` in ``Makefile``.  Running plain ``make`` then rebuilds
-``fs.img`` with the new binaries.
+``src-uland/user`` and add the corresponding program target to
+``CMakeLists.txt``.  Rebuilding automatically updates ``fs.img`` with the
+new binaries.
 
 The QEMU PC simulator is installed automatically by ``setup.sh``.
 Bochs is optional but also supported via ``make bochs``.
 
 A few headers used solely by the kernel have been moved under
 ``src-kernel/include``.  Files like ``spinlock.h`` and ``sleeplock.h``
-reside here instead of ``src-headers``.  The Makefile and Meson build
-add this directory to the compiler's include path automatically.
+reside here instead of ``src-headers``.  The CMake build adds this
+directory to the compiler's include path automatically.
 
 BOCHS
 -----
@@ -267,14 +268,14 @@ The above configuration reports panics from the CD-ROM while leaving
 other devices interactive, ignores non-critical CD-ROM errors and still
 prints its debug messages.
 
-MESON BUILD
+CMAKE BUILD
 -----------
-The repository also includes a simple Meson setup.  After running
-``setup.sh`` the ``meson`` and ``ninja`` tools are installed.  Configure a
-build directory and compile with::
+A minimal CMake configuration is provided.  After running ``setup.sh``
+``clang`` and ``cmake`` are available.  Configure a build directory and
+compile with::
 
-    meson setup build
-    ninja -C build
+    cmake -S . -B build
+    cmake --build build
 
 CODE FORMATTING
 ---------------
