@@ -54,6 +54,7 @@ libos_sources = [
   'libos/driver.c',
   'libos/affine_runtime.c',
   'libos/env.c',
+  'libos/ipc.c',
   'libos/posix.c',
   'libos/termios.c',
   'libos/microkernel/cap.c',
@@ -129,6 +130,7 @@ uprogs = {
   'qspin_demo': 'src-uland/user/qspin_demo.c',
   'tty_demo': 'src-uland/tty_demo.c',
   'termios_demo': 'src-uland/termios_demo.c',
+  'msgqueue_demo': 'examples/msgqueue_demo.c',
 }
 
 if use_capnp
