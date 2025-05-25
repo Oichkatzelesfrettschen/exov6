@@ -6,7 +6,7 @@
 
 int libos_pipe(int fd[2]) { return pipe(fd); }
 int libos_fork(void) { return fork(); }
-int libos_waitpid(int pid) { int st; return waitpid(pid, &st, 0); }
+int libos_waitpid(int pid, int options) { int st; return waitpid(pid, &st, options); }
 int libos_close(int fd) { return close(fd); }
 int libos_read(int fd, void *buf, size_t n) { return (int)read(fd, buf, n); }
 int libos_write(int fd, const void *buf, size_t n) { return (int)write(fd, buf, n); }
@@ -26,6 +26,6 @@ int main(void) {
     libos_close(p[0]);
     assert(libos_write(p[1], "hello", 5) == 5);
     libos_close(p[1]);
-    libos_waitpid(pid);
+    libos_waitpid(pid, 0);
     return 0;
 }

@@ -57,7 +57,8 @@ int libos_spawn(const char *path, char *const argv[]) {
     return pid;
 }
 
-int libos_execve(const char *path, char *const argv[]) {
+int libos_execve(const char *path, char *const argv[], char *const envp[]) {
+    (void)envp;
     return exec((char *)path, (char **)argv);
 }
 
@@ -91,7 +92,8 @@ int libos_fork(void) {
     return fork();
 }
 
-int libos_waitpid(int pid) {
+int libos_waitpid(int pid, int options) {
+    (void)options;
     int w;
     while((w = wait()) >= 0) {
         if(w == pid)

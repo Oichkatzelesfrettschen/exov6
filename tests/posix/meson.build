@@ -1,6 +1,7 @@
 posix_tests = files('../../src-uland/posix_file_test.c',
                     '../../src-uland/posix_signal_test.c',
-                    '../../src-uland/posix_pipe_test.c')
+                    '../../src-uland/posix_pipe_test.c',
+                    '../../src-uland/posix_spawn_wait_test.c')
 foreach src : posix_tests
   exe_name = src.stem()
   executable(exe_name, src,
