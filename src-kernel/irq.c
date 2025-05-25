@@ -44,7 +44,7 @@ static int check_irq_cap(exo_cap cap, uint need) {
   return 1;
 }
 
-int exo_irq_wait(exo_cap cap, uint *irq_out) {
+[[nodiscard]] int exo_irq_wait(exo_cap cap, uint *irq_out) {
   if (!check_irq_cap(cap, EXO_RIGHT_R))
     return -EPERM;
   irq_init();
@@ -62,7 +62,7 @@ int exo_irq_wait(exo_cap cap, uint *irq_out) {
   return 0;
 }
 
-int exo_irq_ack(exo_cap cap) {
+[[nodiscard]] int exo_irq_ack(exo_cap cap) {
   if (!check_irq_cap(cap, EXO_RIGHT_W))
     return -EPERM;
   return 0;
