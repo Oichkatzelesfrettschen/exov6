@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include "dir.h"
 
 int libos_open(const char *path, int flags);
 int libos_read(int fd, void *buf, size_t n);
@@ -45,3 +46,8 @@ int libos_accept(int fd, struct sockaddr *addr, socklen_t *len);
 int libos_connect(int fd, const struct sockaddr *addr, socklen_t len);
 long libos_send(int fd, const void *buf, size_t len, int flags);
 long libos_recv(int fd, void *buf, size_t len, int flags);
+
+DIR *libos_opendir(const char *path);
+struct dirent *libos_readdir(DIR *d);
+void libos_rewinddir(DIR *d);
+int libos_closedir(DIR *d);

@@ -12,3 +12,6 @@ struct file *libfs_open(const char *path, int flags);
 int libfs_read(struct file *f, void *buf, size_t n);
 int libfs_write(struct file *f, const void *buf, size_t n);
 void libfs_close(struct file *f);
+
+size_t libfs_vfile_count(void);
+const char *libfs_vfile_path(size_t index);

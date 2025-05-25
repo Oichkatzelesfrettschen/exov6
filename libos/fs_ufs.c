@@ -66,3 +66,22 @@ void libfs_close(struct file *f) {
     fileclose(f);
 }
 
+size_t libfs_vfile_count(void) {
+    size_t c = 0;
+    for(int i = 0; i < MAX_VFILES; i++)
+        if(vfiles[i].used)
+            c++;
+    return c;
+}
+
+const char *libfs_vfile_path(size_t index) {
+    for(int i = 0; i < MAX_VFILES; i++) {
+        if(vfiles[i].used) {
+            if(index == 0)
+                return vfiles[i].path;
+            index--;
+        }
+    }
+    return 0;
+}
+

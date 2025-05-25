@@ -1,6 +1,7 @@
 #include "posix.h"
 #include "file.h"
 #include "libfs.h"
+#include "dir.h"
 #include "string.h"
 #include "user.h"
 #include "signal.h"
@@ -213,4 +214,42 @@ long libos_send(int fd,const void *buf,size_t len,int flags){
 
 long libos_recv(int fd,void *buf,size_t len,int flags){
     return recv(fd, buf, len, flags);
+}
+
+DIR *libos_opendir(const char *path){
+    if(strcmp(path, "/") != 0 && strcmp(path, ".") != 0)
+        return NULL;
+    DIR *d = malloc(sizeof(DIR));
+    if(d)
+        d->index = 0;
+    return d;
+}
+
+struct dirent *libos_readdir(DIR *d){
+    if(!d)
+        return NULL;
+    static struct dirent de;
+    size_t total = libfs_vfile_count();
+    while(d->index < total){
+        const char *name = libfs_vfile_path(d->index++);
+        if(!name)
+            continue;
+        de.inum = (uint16_t)d->index;
+        strncpy(de.name, name, DIRSIZ-1);
+        de.name[DIRSIZ-1] = '\0';
+        return &de;
+    }
+    return NULL;
+}
+
+void libos_rewinddir(DIR *d){
+    if(d)
+        d->index = 0;
+}
+
+int libos_closedir(DIR *d){
+    if(!d)
+        return -1;
+    free(d);
+    return 0;
 }
