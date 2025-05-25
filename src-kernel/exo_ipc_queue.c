@@ -6,36 +6,29 @@
 #include "types.h"
 #include <errno.h>
 #include <string.h>
+#include "ipc_debug.h"
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
-#define IPC_BUFSZ 64
 
-struct ipc_entry {
-  zipc_msg_t msg;
-  exo_cap frame;
-};
 
-static struct {
-  struct spinlock lock;
-  struct ipc_entry buf[IPC_BUFSZ];
-  uint32_t r;
-  uint32_t w;
-  int inited;
-} ipcs;
-
-static void ipc_init(void) {
-  if (!ipcs.inited) {
-    initlock(&ipcs.lock, "exoipc");
-    ipcs.r = ipcs.w = 0;
-    ipcs.inited = 1;
+static void ipc_init(struct mailbox *mb) {
+  if (!mb->inited) {
+    initlock(&mb->lock, "exoipc");
+    mb->r = mb->w = 0;
+    mb->inited = 1;
   }
 }
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
-  ipc_init();
+  struct mailbox *mb = myproc()->mailbox;
+  ipc_init(mb);
+  IPC_LOG("send attempt dest=%u len=%llu", dest.id, (unsigned long long)len);
   if (!cap_has_rights(dest.rights, EXO_RIGHT_W))
+    {
+      IPC_LOG("send fail: no write rights");
     return -EPERM;
+    }
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
 
@@ -47,35 +40,99 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   if (len > sizeof(zipc_msg_t)) {
     memcpy(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
     if (!cap_verify(fr))
+      {
+        IPC_LOG("send fail: invalid frame cap");
       return -EPERM;
+      }
     if (!cap_has_rights(fr.rights, EXO_RIGHT_R))
-      return -EPERM;
+      {
+        IPC_LOG("send fail: frame lacks read rights");
+        return -EPERM;
+      }
     if (dest.owner)
       fr.owner = dest.owner;
   }
 
-  acquire(&ipcs.lock);
-  while (ipcs.w - ipcs.r == IPC_BUFSZ) {
-    wakeup(&ipcs.r);
-    sleep(&ipcs.w, &ipcs.lock);
+  acquire(&mb->lock);
+  while (mb->w - mb->r == MAILBOX_BUFSZ) {
+    IPC_LOG("send waiting: mailbox full");
+    wakeup(&mb->r);
+    sleep(&mb->w, &mb->lock);
   }
-  ipcs.buf[ipcs.w % IPC_BUFSZ].msg = m;
-  ipcs.buf[ipcs.w % IPC_BUFSZ].frame = fr;
-  ipcs.w++;
-  wakeup(&ipcs.r);
-  release(&ipcs.lock);
+  mb->buf[mb->w % MAILBOX_BUFSZ].msg = m;
+  mb->buf[mb->w % MAILBOX_BUFSZ].frame = fr;
+  mb->w++;
+  wakeup(&mb->r);
+  release(&mb->lock);
+
+  IPC_LOG("send complete len=%llu", (unsigned long long)len);
 
   return (int)len;
 }
 
 int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
-  if (!cap_has_rights(src.rights, EXO_RIGHT_R))
+  IPC_LOG("recv attempt src=%u", src.id);
+  if (!cap_has_rights(src.rights, EXO_RIGHT_R)) {
+    IPC_LOG("recv fail: no read rights");
     return -EPERM;
+  }
+  struct mailbox *mb = myproc()->mailbox;
+  ipc_init(mb);
+  acquire(&mb->lock);
+  while (mb->r == mb->w) {
+    IPC_LOG("recv waiting: mailbox empty");
+    wakeup(&mb->w);
+    sleep(&mb->r, &mb->lock);
+  }
+  struct ipc_entry e = mb->buf[mb->r % MAILBOX_BUFSZ];
+  mb->r++;
+  wakeup(&mb->w);
+  release(&mb->lock);
+
+  if (e.frame.pa &&
+      (!cap_verify(e.frame) || !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
+    e.frame.pa = 0;
+
+  size_t total = sizeof(zipc_msg_t);
+  if (e.frame.id)
+    total += sizeof(exo_cap);
+
+  if (len > sizeof(zipc_msg_t))
+    len = len < total ? len : total;
+  else
+    len = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
+
+  size_t cplen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
+  memcpy(buf, &e.msg, cplen);
+  if (cplen < len) {
+    memcpy((char *)buf + sizeof(zipc_msg_t), &e.frame,
+           len - sizeof(zipc_msg_t));
+  }
+
+  IPC_LOG("recv complete len=%llu", (unsigned long long)len);
+
+  return (int)len;
+}
+
+int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
+                             unsigned timeout) {
+  IPC_LOG("recv_timed attempt src=%u to=%u", src.id, timeout);
+  if (!cap_has_rights(src.rights, EXO_RIGHT_R)) {
+    IPC_LOG("recv_timed fail: no read rights");
+    return -EPERM;
+  }
   ipc_init();
   acquire(&ipcs.lock);
-  while (ipcs.r == ipcs.w) {
+  while (ipcs.r == ipcs.w && timeout > 0) {
+    IPC_LOG("recv_timed waiting");
     wakeup(&ipcs.w);
     sleep(&ipcs.r, &ipcs.lock);
+    timeout--;
+  }
+  if (ipcs.r == ipcs.w) {
+    IPC_LOG("recv_timed timeout");
+    release(&ipcs.lock);
+    return -ETIMEDOUT;
   }
   struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
   ipcs.r++;
@@ -97,10 +154,10 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
 
   size_t cplen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
   memcpy(buf, &e.msg, cplen);
-  if (cplen < len) {
-    memcpy((char *)buf + sizeof(zipc_msg_t), &e.frame,
-           len - sizeof(zipc_msg_t));
-  }
+  if (cplen < len)
+    memcpy((char *)buf + sizeof(zipc_msg_t), &e.frame, len - sizeof(zipc_msg_t));
+
+  IPC_LOG("recv_timed complete len=%llu", (unsigned long long)len);
 
   return (int)len;
 }

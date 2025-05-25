@@ -144,6 +144,15 @@ queuing is handled in user
                        using the `zipc_msg_t` structure defined in `ipc.h`.
 
                        IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
+
+The helpers return an `exo_ipc_status` value defined in
+`src-headers/exo_ipc.h`:
+
+- `IPC_STATUS_SUCCESS` – operation completed normally.
+- `IPC_STATUS_TIMEOUT` – wait timed out.
+- `IPC_STATUS_AGAIN`   – destination mailbox was full.
+- `IPC_STATUS_BADDEST` – invalid endpoint capability.
+
 Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
 and automatically serialize Cap'n Proto messages.  Each channel is
 backed by a `msg_type_desc` describing the size of the Cap'n Proto

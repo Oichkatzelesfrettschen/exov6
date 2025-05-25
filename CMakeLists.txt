@@ -10,12 +10,14 @@ endif()
 project(xv6 LANGUAGES C CXX)
 
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
+option(IPC_DEBUG "Enable IPC debug logging" OFF)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_options(-Wall -Werror)
 
 if(NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
   message(WARNING "Clang is recommended for building this project")
@@ -44,10 +46,12 @@ file(GLOB_RECURSE KERNEL_SOURCES
 )
 
 add_executable(kernel ${KERNEL_SOURCES})
-target_compile_options(kernel PRIVATE -Wall -Werror)
 
 if(USE_TICKET_LOCK)
   target_compile_definitions(kernel PRIVATE USE_TICKET_LOCK)
+endif()
+if(IPC_DEBUG)
+  target_compile_definitions(kernel PRIVATE IPC_DEBUG)
 endif()
 
 # QEMU executable used for run targets

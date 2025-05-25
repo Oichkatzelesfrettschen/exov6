@@ -10,6 +10,8 @@ exo_cap cap_alloc_page(void);
 void cap_flush_block(exo_blockcap *cap, void *data);
 [[nodiscard]] int cap_send(exo_cap dest, const void *buf, uint64_t len);
 [[nodiscard]] int cap_recv(exo_cap src, void *buf, uint64_t len);
+[[nodiscard]] int cap_recv_timed(exo_cap src, void *buf, uint64_t len,
+                                 unsigned timeout);
 [[nodiscard]] int cap_set_timer(void (*handler)(void));
 [[nodiscard]] int cap_set_gas(uint64_t amount);
 [[nodiscard]] int cap_get_gas(void);

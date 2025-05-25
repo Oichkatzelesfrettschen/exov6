@@ -68,13 +68,18 @@ static int check_irq_cap(exo_cap cap, uint32_t need) {
   return 0;
 }
 
-void irq_trigger(uint32_t irq) {
+int irq_trigger(uint32_t irq) {
   irq_init();
   acquire(&irq_q.lock);
+  int ret = 0;
   if (irq_q.w - irq_q.r < IRQ_BUFSZ) {
     irq_q.buf[irq_q.w % IRQ_BUFSZ] = irq;
     irq_q.w++;
     wakeup(&irq_q.r);
+    ret = 0;
+  } else {
+    ret = -ENOSPC;
   }
   release(&irq_q.lock);
+  return ret;
 }

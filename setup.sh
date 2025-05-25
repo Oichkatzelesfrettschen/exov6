@@ -418,6 +418,22 @@ elif [ -x scripts/gen_compile_commands.py ]; then
   fi
 fi
 
+# Verify the host compiler supports the C2X standard used by standalone tests
+cc_cmd=""
+if command -v clang >/dev/null 2>&1; then
+  cc_cmd=clang
+elif command -v gcc >/dev/null 2>&1; then
+  cc_cmd=gcc
+fi
+if [ -n "$cc_cmd" ]; then
+  if ! echo 'int main(void){return 0;}' | $cc_cmd -std=c2x -x c - \
+      -o /tmp/c2x_test >/dev/null 2>&1; then
+    echo "Error: $cc_cmd lacks -std=c2x support which is required for some tests" >&2
+    echo "$cc_cmd no c2x" >>"$FAIL_LOG"
+  fi
+  rm -f /tmp/c2x_test
+fi
+
 # Install pre-commit hooks if possible
 if command -v pre-commit >/dev/null 2>&1; then
   if ! pre-commit install >/dev/null 2>&1; then

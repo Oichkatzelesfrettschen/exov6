@@ -188,6 +188,10 @@ found:
   p->context->eip = (uint32_t)forkret;
 #endif
 
+  p->mailbox = (struct mailbox *)kalloc();
+  if(p->mailbox)
+    memset(p->mailbox, 0, sizeof(struct mailbox));
+
   return p;
 }
 
@@ -370,6 +374,10 @@ wait(void)
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
+        if(p->mailbox){
+          kfree((char*)p->mailbox);
+          p->mailbox = 0;
+        }
         freevm(p->pgdir);
         p->pid = 0;
         p->parent = 0;

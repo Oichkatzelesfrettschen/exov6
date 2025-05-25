@@ -147,6 +147,7 @@ extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
 extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
+extern int sys_exo_recv_timed(void);
 extern int sys_exo_alloc_ioport(void);
 extern int sys_exo_bind_irq(void);
 extern int sys_exo_alloc_dma(void);
@@ -195,6 +196,7 @@ static int (*syscalls[])(void) = {
     [SYS_exo_alloc_dma] sys_exo_alloc_dma,
     [SYS_exo_send] sys_exo_send,
     [SYS_exo_recv] sys_exo_recv,
+    [SYS_exo_recv_timed] sys_exo_recv_timed,
     [SYS_endpoint_send] sys_endpoint_send,
     [SYS_endpoint_recv] sys_endpoint_recv,
     [SYS_proc_alloc] sys_proc_alloc,
