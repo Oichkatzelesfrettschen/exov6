@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+set -x
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 # Detect basic network connectivity; many CI environments are offline
 NETWORK_AVAILABLE=true
