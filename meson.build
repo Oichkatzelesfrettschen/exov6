@@ -24,10 +24,11 @@ libos_sources = [
   'libos/driver.c',
   'libos/affine_runtime.c',
   'libos/posix.c',
+  'libos/capnp/capnp_helpers.c',
 ]
 
 libos = static_library('libos', libos_sources,
-    include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include'))
+    include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'))
 
 src_dirs = ['src-kernel', 'src-uland', 'src-uland/user', 'libos']
 
@@ -41,7 +42,8 @@ kernel = executable('kernel', sources,
                                             'src-headers',
                                             'src-kernel/include',
                                             'proto',
-                                            'libos/include'),
+                                            'libos/include',
+                                            'libos/capnp'),
            install: false)
 
 if clang_tidy.found()
@@ -101,7 +103,7 @@ uprogs = {
 uprogs_targets = []
 foreach name, path : uprogs
   exe = executable('_' + name, path,
-                   include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include'),
+                   include_directories: include_directories('.', 'src-headers', 'proto', 'libos/include', 'libos/capnp'),
                    link_with: libos,
                    install: false)
   uprogs_targets += exe

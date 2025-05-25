@@ -29,6 +29,7 @@ file(GLOB_RECURSE KERNEL_SOURCES
   src-uland/*.c
   src-uland/user/*.c
   libos/*.c
+  libos/capnp/*.c
 )
 
 add_executable(kernel ${KERNEL_SOURCES})
@@ -46,6 +47,7 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/src-kernel/include
   ${CMAKE_SOURCE_DIR}/proto
   ${CMAKE_SOURCE_DIR}/libos/include
+  ${CMAKE_SOURCE_DIR}/libos/capnp
 )
 
 if(CPUFLAGS)
