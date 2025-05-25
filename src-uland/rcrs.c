@@ -26,6 +26,8 @@
 #define MAX_DRIVERS 8
 #define MAX_ARGS 8
 #define MAX_LINE 128
+#define REGISTER 3
+#define MAX_MICROS 16
 
 struct driver {
   char *argv[MAX_ARGS];
@@ -38,6 +40,13 @@ struct driver {
   int max_restarts;
   int restarts;
 };
+
+struct micro_entry {
+  int pid;
+};
+
+static struct micro_entry microtab[MAX_MICROS];
+static int micro_count = 0;
 
 static int starts_with(const char *s, const char *p) {
   while (*p) {
@@ -167,8 +176,12 @@ int main(void) {
 
     zipc_msg_t m;
     while (read(p[0], &m, sizeof(m)) == sizeof(m)) {
-      if (m.w0 == PONG && m.w1 < (uint32_t)n)
+      if (m.w0 == PONG && m.w1 < (uint32_t)n) {
         drv[m.w1].awaiting_pong = 0;
+      } else if (m.w0 == REGISTER && micro_count < MAX_MICROS) {
+        microtab[micro_count++].pid = m.w1;
+        printf(1, "rcrs: microkernel %d registered\n", (int)m.w1);
+      }
     }
 
     now = uptime();
@@ -205,6 +218,11 @@ int main(void) {
           state = "alive";
         printf(1, "  %s pid %d %s restarts %d\n", drv[i].argv[0], drv[i].pid,
                state, drv[i].restarts);
+      }
+      if (micro_count > 0) {
+        printf(1, "  registered microkernels:\n");
+        for (int j = 0; j < micro_count; j++)
+          printf(1, "    pid %d\n", microtab[j].pid);
       }
       last_report = now;
     }
