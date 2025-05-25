@@ -383,7 +383,7 @@ Example ``drivers.conf``::
 
 IPC DESIGN NOTE
 ---------------
-See ``IPC.md`` for an overview of the fast-path call, capability badges,
+See [doc/IPC.md](doc/IPC.md) for an overview of the fast-path call, capability badges,
 and the proposed endpoint and typed channel features.
 
 ENDPOINTS
