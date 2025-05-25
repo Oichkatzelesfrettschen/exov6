@@ -237,6 +237,15 @@ int fs_write_block(struct exo_blockcap cap, const void *src);
 These helpers make it straightforward to allocate memory pages, exchange
 messages and perform basic filesystem operations from user space.
 
+### User-Space Filesystem
+
+The legacy kernel file system has been moved entirely into the libOS.  Module
+`libos/fs_ufs.c` manages a tiny in-memory directory of files, each backed by a
+block capability obtained with `exo_alloc_block`.  Calls such as
+`libfs_open()` and `libfs_read()` operate on these capabilities with
+`exo_bind_block` so the kernel only sees raw disk accesses.  POSIX wrappers in
+`libos/posix.c` now use this API instead of invoking system calls.
+
 ## Writing a Simple Driver
 
 A minimal block driver illustrating these APIs is shown below:
