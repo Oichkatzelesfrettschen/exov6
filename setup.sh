@@ -49,29 +49,70 @@ apt_pin_install(){
     echo "Warning: network unavailable, skipping apt-get install of $pkg" >&2
     return 0
   fi
+
+  status=0
   ver=$(apt-cache show "$pkg" 2>/dev/null \
         | awk '/^Version:/{print $2; exit}' || true)
   if [ -n "$ver" ]; then
     if ! apt-get install -y "${pkg}=${ver}"; then
       echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
       echo "apt ${pkg}=${ver}" >>"$FAIL_LOG"
+      status=1
     fi
   else
     if ! apt-get install -y "$pkg"; then
       echo "Warning: apt-get install $pkg failed" >&2
       echo "apt $pkg" >>"$FAIL_LOG"
+      status=1
     fi
   fi
 
-  # Fallback to pip for Python packages
   if ! dpkg -s "$pkg" >/dev/null 2>&1; then
     case "$pkg" in
       python3-*|pre-commit)
         pip_pkg="${pkg#python3-}"
         pip_install "$pip_pkg"
+        if command -v "$pip_pkg" >/dev/null 2>&1 || \
+           python3 -c "import $pip_pkg" >/dev/null 2>&1; then
+          status=0
+        fi
         ;;
     esac
   fi
+
+  if [ $status -ne 0 ] && ! command -v "$pkg" >/dev/null 2>&1; then
+    if command -v npm >/dev/null 2>&1; then
+      if ! npm install -g "$pkg" >/dev/null 2>&1; then
+        echo "Warning: npm install $pkg failed" >&2
+        echo "npm $pkg" >>"$FAIL_LOG"
+      else
+        status=0
+      fi
+    fi
+  fi
+
+  if [ $status -ne 0 ]; then
+    case "$pkg" in
+      capnproto|capnp*)
+        if ! command -v capnp >/dev/null 2>&1; then
+          if ! curl -fsSL https://capnproto.org/capnproto-c++-1.0.1.tar.gz \
+              -o /tmp/capnp.tar.gz; then
+            echo "Warning: failed to download capnproto" >&2
+            echo "download capnproto" >>"$FAIL_LOG"
+          else
+            tar -xzf /tmp/capnp.tar.gz -C /tmp
+            (cd /tmp/capnproto-* && ./configure && make -j"$(nproc)" && make install) || {
+              echo "Warning: building capnproto failed" >&2
+              echo "build capnproto" >>"$FAIL_LOG"
+            }
+            rm -rf /tmp/capnproto-* /tmp/capnp.tar.gz
+          fi
+        fi
+        ;;
+    esac
+  fi
+
+  return 0
 }
 
 # Install packages from offline_packages/ when network is unavailable
@@ -101,6 +142,10 @@ if [ "$NETWORK_AVAILABLE" = true ]; then
     echo "Warning: apt-get update failed" >&2
     echo "apt update" >>"$FAIL_LOG"
   }
+  if ! apt-get dist-upgrade -y; then
+    echo "Warning: apt-get dist-upgrade failed" >&2
+    echo "apt dist-upgrade" >>"$FAIL_LOG"
+  fi
 else
   echo "Skipping apt-get update due to offline mode" >&2
 fi
