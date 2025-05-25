@@ -2,44 +2,53 @@
 
 This log tracks implementation status of the POSIX wrappers provided by the Phoenix libOS.  Mark each interface as **Implemented**, **Stubbed**, or **Missing**.  Update the table whenever a new wrapper is merged.
 
-| Interface | Status |
-|-----------|--------|
-| `libos_open` | Implemented |
-| `libos_read` | Implemented |
-| `libos_write` | Implemented |
-| `libos_close` | Implemented |
-| `libos_spawn` | Implemented |
-| `libos_execve` | Implemented |
-| `libos_mkdir` | Implemented |
-| `libos_rmdir` | Implemented |
-| `libos_signal` | Implemented |
-| `libos_dup` | Implemented |
-| `libos_pipe` | Implemented |
-| `libos_fork` | Implemented |
-| `libos_waitpid` | Implemented |
-| `libos_sigsend` | Implemented |
-| `libos_sigcheck` | Implemented |
-| `libos_stat` | Implemented |
-| `libos_lseek` | Implemented |
-| `libos_ftruncate` | Stubbed |
-| `libos_mmap` | Stubbed |
-| `libos_munmap` | Stubbed |
-| `libos_sigemptyset` | Implemented |
-| `libos_sigfillset` | Implemented |
-| `libos_sigaddset` | Implemented |
-| `libos_sigdelset` | Implemented |
-| `libos_sigismember` | Implemented |
-| `libos_getpgrp` | Implemented |
-| `libos_setpgid` | Implemented |
-| `libos_socket` | Implemented |
-| `libos_bind` | Implemented |
-| `libos_listen` | Implemented |
-| `libos_accept` | Implemented |
-| `libos_connect` | Implemented |
-| `libos_send` | Implemented |
-| `libos_recv` | Implemented |
-| `libos_rename` | Missing |
-| `libos_unlink` | Missing |
-| `libos_chdir` | Missing |
-| `libos_getcwd` | Missing |
+| Interface | Status | Spec | Source |
+|-----------|--------|------|--------|
+| `libos_open` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_read` | Implemented | [read](ben-books/susv4-2018/functions/read.html) | [posix.c](../libos/posix.c) |
+| `libos_write` | Implemented | [write](ben-books/susv4-2018/utilities/write.html) | [posix.c](../libos/posix.c) |
+| `libos_close` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_spawn` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_execve` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_mkdir` | Implemented | [mkdir](ben-books/susv4-2018/utilities/mkdir.html) | [posix.c](../libos/posix.c) |
+| `libos_rmdir` | Implemented | [rmdir](ben-books/susv4-2018/utilities/rmdir.html) | [posix.c](../libos/posix.c) |
+| `libos_signal` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_dup` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_pipe` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_fork` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_waitpid` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_sigsend` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_sigcheck` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_stat` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_lseek` | Implemented | [lseek](ben-books/susv4-2018/functions/lseek.html) | [posix.c](../libos/posix.c) |
+| `libos_ftruncate` | Stubbed | N/A | [posix.c](../libos/posix.c) |
+| `libos_mmap` | Stubbed | [mmap](ben-books/susv4-2018/functions/mmap.html) | [posix.c](../libos/posix.c) |
+| `libos_munmap` | Stubbed | N/A | [posix.c](../libos/posix.c) |
+| `libos_sigemptyset` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_sigfillset` | Implemented | [sigfillset](ben-books/susv4-2018/functions/sigfillset.html) | [posix.c](../libos/posix.c) |
+| `libos_sigaddset` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_sigdelset` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_sigismember` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_getpgrp` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_setpgid` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_socket` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_bind` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_listen` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_accept` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_connect` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_send` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_recv` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_rename` | Missing | N/A | N/A |
+| `libos_unlink` | Missing | [unlink](ben-books/susv4-2018/utilities/unlink.html) | N/A |
+| `libos_chdir` | Missing | N/A | N/A |
+| `libos_getcwd` | Missing | N/A | N/A |
+
+## Notes
+
+- Environment variables set with `libos_setenv()` are local to the process.
+  Child processes launched via `libos_spawn()` start with an empty table and do
+  not inherit the parent's values.
+- Locale support is only stubbed.  Functions such as `setlocale()` and
+  `localeconv()` accept arguments but always behave as if the default "C" locale
+  is active.
 

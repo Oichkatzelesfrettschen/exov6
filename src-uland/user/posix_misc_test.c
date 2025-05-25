@@ -7,29 +7,6 @@
 #include <string.h>
 #include "libos/posix.h"
 
-int libos_open(const char *path, int flags, int mode) {
-  return open(path, flags | O_CREAT, mode);
-}
-int libos_close(int fd) { return close(fd); }
-int libos_ftruncate(int fd, long length) { return ftruncate(fd, length); }
-void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd,
-                 long off) {
-  return mmap(addr, len, prot, flags, fd, off);
-}
-int libos_munmap(void *addr, size_t len) { return munmap(addr, len); }
-int libos_getpgrp(void) { return (int)getpgrp(); }
-int libos_setpgid(int pid, int pgid) { return setpgid(pid, pgid); }
-int libos_sigemptyset(libos_sigset_t *set) {
-  *set = 0;
-  return 0;
-}
-int libos_sigaddset(libos_sigset_t *set, int sig) {
-  *set |= 1UL << sig;
-  return 0;
-}
-int libos_sigismember(const libos_sigset_t *set, int sig) {
-  return (*set & (1UL << sig)) != 0;
-}
 
 int main(void) {
   int fd = libos_open("misc.tmp", O_RDWR, 0600);

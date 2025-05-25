@@ -7,14 +7,6 @@
 #include <sys/wait.h>
 #include "libos/posix.h"
 
-int libos_socket(int d,int t,int p){ return socket(d,t,p); }
-int libos_bind(int fd,const struct sockaddr *a,socklen_t l){ return bind(fd,a,l); }
-int libos_listen(int fd,int b){ return listen(fd,b); }
-int libos_accept(int fd,struct sockaddr *a,socklen_t *l){ return accept(fd,a,l); }
-int libos_connect(int fd,const struct sockaddr *a,socklen_t l){ return connect(fd,a,l); }
-long libos_send(int fd,const void *b,size_t l,int f){ return send(fd,b,l,f); }
-long libos_recv(int fd,void *b,size_t l,int f){ return recv(fd,b,l,f); }
-int libos_close(int fd){ return close(fd); }
 
 int main(void){
     int srv = libos_socket(AF_INET, SOCK_STREAM, 0);

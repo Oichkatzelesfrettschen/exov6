@@ -110,8 +110,8 @@ if [ "$NETWORK_AVAILABLE" != true ]; then
 fi
 
 # Default optimization and linker settings
-export CC=${CC:-clang}
-export CXX=${CXX:-clang++}
+export CC=${CC:-"ccache clang"}
+export CXX=${CXX:-"ccache clang++"}
 export CFLAGS="${CFLAGS:--O3 -pipe -march=native}"
 export CXXFLAGS="${CXXFLAGS:--O3 -pipe -march=native}"
 export LDFLAGS="${LDFLAGS:--fuse-ld=lld}"
@@ -121,8 +121,8 @@ export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
 # The project now builds primarily with clang.  GCC packages remain only
 # for cross-compilers and legacy support.
 for pkg in \
-  build-essential gcc g++ g++-13 clang clang-16 lld llvm \
-  clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig shellcheck pre-commit \
+  build-essential gcc g++ g++-13 clang clang-16 lld llvm llvm-bolt \
+  clang-format clang-tidy clangd clang-tools ccache uncrustify astyle editorconfig shellcheck pre-commit \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip graphviz \

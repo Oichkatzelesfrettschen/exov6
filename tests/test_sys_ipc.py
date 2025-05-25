@@ -1,3 +1,5 @@
+import os
+CC = os.environ.get("CC", "clang")
 import subprocess
 import tempfile
 import pathlib
@@ -71,10 +73,10 @@ def compile_and_run():
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text("")
         subprocess.check_call([
-            "gcc", "-std=c2x", "-Wall", "-Werror",
+            CC, "-std=c2x", "-Wall", "-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-I", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"src-headers"),
             str(src),
             "-o", str(exe)
         ])

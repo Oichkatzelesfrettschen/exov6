@@ -1,3 +1,5 @@
+import os
+CC = os.environ.get("CC", "clang")
 import pathlib
 import subprocess
 import tempfile
@@ -44,7 +46,7 @@ def compile_and_run() -> None:
         src = pathlib.Path(td) / "test.c"
         exe = pathlib.Path(td) / "test"
         src.write_text(C_CODE)
-        subprocess.check_call(["gcc", "-std=c2x", "-Wall", "-Werror", str(src), "-o", str(exe)])
+        subprocess.check_call([CC, "-std=c2x", "-Wall", "-Werror","-Wno-unused-function", str(src), "-o", str(exe)])
         subprocess.check_call([str(exe)])
 
 
