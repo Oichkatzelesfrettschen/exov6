@@ -56,6 +56,11 @@ int exo_recv(exo_cap src, void *buf, uint64 len);
 /* Read or write arbitrary byte ranges using a block capability. */
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
+
+/* Allocate and wait/acknowledge interrupt events. */
+exo_cap exo_alloc_irq(uint irq, uint rights);
+int exo_irq_wait(exo_cap cap, uint *irq);
+int exo_irq_ack(exo_cap cap);
 #endif /* EXO_KERNEL */
 
 /* Enumeration of syscall numbers for the primitives. */
@@ -72,4 +77,7 @@ enum exo_syscall {
     EXO_SYSCALL_WRITE_DISK  = SYS_exo_write_disk,
     EXO_SYSCALL_CAP_INC     = SYS_cap_inc,
     EXO_SYSCALL_CAP_DEC     = SYS_cap_dec,
+    EXO_SYSCALL_IRQ_ALLOC   = SYS_exo_irq_alloc,
+    EXO_SYSCALL_IRQ_WAIT    = SYS_exo_irq_wait,
+    EXO_SYSCALL_IRQ_ACK     = SYS_exo_irq_ack,
 };

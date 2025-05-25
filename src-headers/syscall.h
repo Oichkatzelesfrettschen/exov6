@@ -35,4 +35,7 @@ enum {
   SYS_cap_inc,
   SYS_cap_dec,
   SYS_ipc,
+  SYS_exo_irq_alloc,
+  SYS_exo_irq_wait,
+  SYS_exo_irq_ack,
 };
