@@ -8,7 +8,6 @@ OBJS = \
     $(KERNEL_DIR)/tty.o \
     $(KERNEL_DIR)/exec.o \
     $(KERNEL_DIR)/file.o \
-    $(KERNEL_DIR)/fs.o \
     $(KERNEL_DIR)/ide.o \
     $(KERNEL_DIR)/ioapic.o \
     $(KERNEL_DIR)/kalloc.o \
@@ -27,7 +26,6 @@ OBJS = \
     $(KERNEL_DIR)/rcu.o \
     $(KERNEL_DIR)/string.o \
     $(KERNEL_DIR)/syscall.o \
-    $(KERNEL_DIR)/sysfile.o \
     $(KERNEL_DIR)/sysproc.o \
     $(KERNEL_DIR)/trapasm.o \
     $(KERNEL_DIR)/trap.o \
@@ -334,9 +332,10 @@ LIBOS_OBJS = \
         $(ULAND_DIR)/chan.o \
         $(ULAND_DIR)/door.o \
         proto/driver.capnp.o \
-        $(ULAND_DIR)/math_core.o \
-       $(ULAND_DIR)/libos/sched.o \
-        $(LIBOS_DIR)/fs.o \
+       $(ULAND_DIR)/math_core.o \
+      $(ULAND_DIR)/libos/sched.o \
+       $(LIBOS_DIR)/fs.o \
+       $(LIBOS_DIR)/fs_ufs.o \
        $(LIBOS_DIR)/file.o \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
