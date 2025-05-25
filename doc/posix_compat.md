@@ -1,4 +1,4 @@
-# POSIX Compatibility Layer
+#POSIX Compatibility Layer
 
 Phoenix exposes capabilities for blocks, pages and IPC endpoints.
 The libOS translates these primitives into familiar POSIX file and
@@ -18,6 +18,9 @@ the host socket APIs.
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
 | Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |
 | Socket APIs | Thin wrappers around standard Berkeley sockets. |
+| Message queues | `mq_*()` allocate endpoints and exchange data with `cap_send` and `cap_recv`. |
+| Semaphores | `sem_*()` store a counter in a capability-backed page. |
+| Shared memory | `shm_*()` return page capabilities that map to process memory. |
 
 
 These wrappers mirror the POSIX names where possible but are not fully

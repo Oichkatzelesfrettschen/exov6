@@ -45,3 +45,22 @@ int libos_accept(int fd, struct sockaddr *addr, socklen_t *len);
 int libos_connect(int fd, const struct sockaddr *addr, socklen_t len);
 long libos_send(int fd, const void *buf, size_t len, int flags);
 long libos_recv(int fd, void *buf, size_t len, int flags);
+
+/* Basic IPC wrappers backed by Phoenix capabilities */
+typedef struct libos_mq *libos_mqd_t;
+libos_mqd_t mq_open(const char *name, int flags);
+int mq_send(libos_mqd_t q, const char *buf, size_t len, unsigned prio);
+int mq_receive(libos_mqd_t q, char *buf, size_t len, unsigned *prio);
+int mq_close(libos_mqd_t q);
+
+typedef struct libos_sem *libos_sem_t;
+libos_sem_t sem_open(const char *name, int flags, unsigned value);
+int sem_wait(libos_sem_t sem);
+int sem_post(libos_sem_t sem);
+int sem_close(libos_sem_t sem);
+
+typedef struct libos_shm *libos_shm_t;
+libos_shm_t shm_open(const char *name, int flags, size_t size);
+void *shm_map(libos_shm_t shm);
+int shm_unmap(libos_shm_t shm);
+int shm_close(libos_shm_t shm);
