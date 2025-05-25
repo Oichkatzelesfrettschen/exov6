@@ -2,6 +2,9 @@
 set -euo pipefail
 set -x
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+# Directory containing pre-downloaded .deb packages for offline installs.
+# Populate this directory with the .deb files if the machine is offline.
+OFFLINE_PKGS_DIR="$REPO_ROOT/offline_packages"
 # Detect basic network connectivity; many CI environments are offline
 NETWORK_AVAILABLE=true
 if ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
@@ -27,7 +30,19 @@ pip_install(){
 apt_pin_install(){
   pkg="$1"
   if [ "$NETWORK_AVAILABLE" != true ]; then
+    if [ -n "${OFFLINE_PKGS_DIR:-}" ]; then
+      deb_files=("$OFFLINE_PKGS_DIR"/${pkg}_*.deb)
+      if [ -e "${deb_files[0]}" ]; then
+        deb="${deb_files[${#deb_files[@]}-1]}"
+        if ! dpkg -i "$deb" >/dev/null 2>&1; then
+          echo "Warning: dpkg install $deb failed" >&2
+          echo "dpkg $deb" >>"$FAIL_LOG"
+        fi
+        return 0
+      fi
+    fi
     echo "Warning: network unavailable, skipping apt-get install of $pkg" >&2
+    echo "offline $pkg" >>"$FAIL_LOG"
     return 0
   fi
   ver=$(apt-cache show "$pkg" 2>/dev/null \

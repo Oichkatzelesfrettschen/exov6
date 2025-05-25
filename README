@@ -129,6 +129,11 @@ along with the rest of the toolchain.
 This only needs to be done after cloning the repository or when
 dependencies change.
 
+If the machine has no network access, pre-download the required `.deb`
+packages on another system and place them under the `offline_packages/`
+directory before running the script. `setup.sh` will use any matching
+packages found there when it cannot reach the network.
+
 The script now installs only the packages required for building and running
 the tests: cross-compilers, QEMU and basic Python tooling such as ``pytest`` and
 ``pre-commit``.  Heavy machine learning frameworks are intentionally omitted to
