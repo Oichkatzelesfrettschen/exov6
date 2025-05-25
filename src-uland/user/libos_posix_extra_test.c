@@ -6,9 +6,9 @@
 #include <netinet/in.h>
 
 int main(void) {
-    int fd = libos_open("extra", 0);
+    int fd = libos_open("extra", 0, 0);
     if (fd < 0)
-        fd = libos_open("extra", O_CREATE);
+        fd = libos_open("extra", O_CREATE, 0600);
     libos_write(fd, "x", 1);
     libos_ftruncate(fd, 0);
     libos_lseek(fd, 0, 0);
