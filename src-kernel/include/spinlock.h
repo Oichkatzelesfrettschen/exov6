@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 
 // Ticket-based mutual exclusion lock.
 struct ticketlock {
@@ -16,4 +17,11 @@ struct spinlock {
   uint pcs[10];      // The call stack (an array of program counters)
                      // that locked the lock.
 };
+
+// Returns the recommended alignment for instances of struct spinlock.
+static inline size_t
+spinlock_optimal_alignment(void)
+{
+  return __alignof__(struct spinlock);
+}
 
