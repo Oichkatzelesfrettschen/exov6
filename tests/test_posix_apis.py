@@ -8,6 +8,7 @@ SRC_FILES = [
     ROOT / 'src-uland/posix_file_test.c',
     ROOT / 'src-uland/posix_signal_test.c',
     ROOT / 'src-uland/posix_pipe_test.c',
+    ROOT / 'src-uland/posix_net_test.c',
 ]
 
 
@@ -33,3 +34,7 @@ def test_posix_signal_ops():
 
 def test_posix_pipe_ops():
     compile_and_run(SRC_FILES[2])
+
+
+def test_posix_net_ops():
+    compile_and_run(SRC_FILES[3])

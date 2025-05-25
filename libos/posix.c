@@ -8,6 +8,7 @@
 #include "stat.h"
 #include <unistd.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
 #define LIBOS_MAXFD 16
 
@@ -213,4 +214,22 @@ long libos_send(int fd,const void *buf,size_t len,int flags){
 
 long libos_recv(int fd,void *buf,size_t len,int flags){
     return recv(fd, buf, len, flags);
+}
+
+int libos_setsockopt(int fd,int level,int optname,
+                     const void *optval,socklen_t optlen){
+    return setsockopt(fd, level, optname, optval, optlen);
+}
+
+int libos_getsockopt(int fd,int level,int optname,
+                     void *optval,socklen_t *optlen){
+    return getsockopt(fd, level, optname, optval, optlen);
+}
+
+int libos_inet_pton(int af,const char *src,void *dst){
+    return inet_pton(af, src, dst);
+}
+
+const char *libos_inet_ntop(int af,const void *src,char *dst,socklen_t size){
+    return inet_ntop(af, src, dst, size);
 }

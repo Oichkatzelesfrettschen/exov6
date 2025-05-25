@@ -18,6 +18,8 @@ the host socket APIs.
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
 | Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |
 | Socket APIs | Thin wrappers around standard Berkeley sockets. |
+| `libos_setsockopt`/`libos_getsockopt` | Forward to `setsockopt()` and `getsockopt()`. |
+| `libos_inet_pton`/`libos_inet_ntop` | Wrap the host helpers for IP string conversion. |
 
 
 These wrappers mirror the POSIX names where possible but are not fully
