@@ -2,7 +2,8 @@
 #include "ulib.h" // for malloc/free
 
 // Allocate an affine channel
-affine_chan_t *affine_chan_create(const struct msg_type_desc *desc) {
+[[nodiscard]] affine_chan_t *
+affine_chan_create(const struct msg_type_desc *desc) {
   affine_chan_t *c = malloc(sizeof(affine_chan_t));
   if (c) {
     c->base.desc = desc;
@@ -17,8 +18,8 @@ affine_chan_t *affine_chan_create(const struct msg_type_desc *desc) {
 void affine_chan_destroy(affine_chan_t *c) { free(c); }
 
 // Send once through the channel
-int affine_chan_send(affine_chan_t *c, exo_cap dest, const void *msg,
-                     size_t len) {
+[[nodiscard]] int affine_chan_send(affine_chan_t *c, exo_cap dest,
+                                   const void *msg, size_t len) {
   if (!c || c->used_send)
     return -1;
   int r = chan_endpoint_send(&c->base, dest, msg, len);
@@ -28,7 +29,8 @@ int affine_chan_send(affine_chan_t *c, exo_cap dest, const void *msg,
 }
 
 // Receive once through the channel
-int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg, size_t len) {
+[[nodiscard]] int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg,
+                                   size_t len) {
   if (!c || c->used_recv)
     return -1;
   int r = chan_endpoint_recv(&c->base, src, msg, len);

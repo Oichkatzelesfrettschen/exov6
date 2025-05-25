@@ -9,11 +9,13 @@ typedef struct affine_chan {
   int used_recv;
 } affine_chan_t;
 
-affine_chan_t *affine_chan_create(const struct msg_type_desc *desc);
+[[nodiscard]] affine_chan_t *
+affine_chan_create(const struct msg_type_desc *desc);
 void affine_chan_destroy(affine_chan_t *c);
-int affine_chan_send(affine_chan_t *c, exo_cap dest, const void *msg,
-                     size_t len);
-int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg, size_t len);
+[[nodiscard]] int affine_chan_send(affine_chan_t *c, exo_cap dest,
+                                   const void *msg, size_t len);
+[[nodiscard]] int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg,
+                                   size_t len);
 
 // Simple lambda term representation
 typedef int (*lambda_fn)(void *env);
