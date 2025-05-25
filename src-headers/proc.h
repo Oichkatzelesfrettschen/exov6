@@ -123,13 +123,15 @@ struct proc {
   int preferred_node;            // NUMA allocation preference
   int out_of_gas;                // Flag set when gas runs out
   struct mailbox *mailbox;       // Per-process IPC mailbox
+  struct proc *rq_next;          // Run queue next pointer
+  struct proc *rq_prev;          // Run queue previous pointer
 };
 
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 264, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 280, "struct proc size incorrect");
 #else
-_Static_assert(sizeof(struct proc) == 160, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 168, "struct proc size incorrect");
 #endif
 
 

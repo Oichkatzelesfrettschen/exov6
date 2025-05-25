@@ -72,6 +72,7 @@ sources = []
 foreach d : src_dirs
   sources += files(d + '/*.c')
 endforeach
+sources += files('src-kernel/runqueue.c')
 
 kernel = executable('kernel', sources,
            include_directories: include_directories('.',
