@@ -27,13 +27,6 @@ static int recv_impl(exo_cap src, void *buf, uint64_t len){
 }
 static struct exo_ipc_ops ops = { send_impl, recv_impl };
 
-static int exo_recv_timed(exo_cap src, void *buf, uint64_t len, unsigned to){
-    for(unsigned i=0;i<to;i++){
-        int r = exo_recv(src, buf, len);
-        if(r!=0) return r;
-    }
-    return -1;
-}
 
 int main(void){
     mb = mmap(NULL, sizeof(struct mailbox)*2, PROT_READ|PROT_WRITE,

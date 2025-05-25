@@ -105,6 +105,47 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   return (int)len;
 }
 
+int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
+                             unsigned timeout) {
+  if (!cap_has_rights(src.rights, EXO_RIGHT_R))
+    return -EPERM;
+  ipc_init();
+  acquire(&ipcs.lock);
+  while (ipcs.r == ipcs.w && timeout > 0) {
+    wakeup(&ipcs.w);
+    sleep(&ipcs.r, &ipcs.lock);
+    timeout--;
+  }
+  if (ipcs.r == ipcs.w) {
+    release(&ipcs.lock);
+    return -ETIMEDOUT;
+  }
+  struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
+  ipcs.r++;
+  wakeup(&ipcs.w);
+  release(&ipcs.lock);
+
+  if (e.frame.pa &&
+      (!cap_verify(e.frame) || !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
+    e.frame.pa = 0;
+
+  size_t total = sizeof(zipc_msg_t);
+  if (e.frame.id)
+    total += sizeof(exo_cap);
+
+  if (len > sizeof(zipc_msg_t))
+    len = len < total ? len : total;
+  else
+    len = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
+
+  size_t cplen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
+  memcpy(buf, &e.msg, cplen);
+  if (cplen < len)
+    memcpy((char *)buf + sizeof(zipc_msg_t), &e.frame, len - sizeof(zipc_msg_t));
+
+  return (int)len;
+}
+
 struct exo_ipc_ops exo_ipc_queue_ops = {
     .send = exo_ipc_queue_send,
     .recv = exo_ipc_queue_recv,
