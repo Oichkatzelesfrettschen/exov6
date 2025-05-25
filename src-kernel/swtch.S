@@ -5,6 +5,7 @@
 # Save the current registers on the stack, creating
 # a struct context, and save its address in *old.
 # Switch stacks to new and pop previously-saved registers.
+# Scheduler lock state is preserved across context switches.
 
 .globl swtch
 swtch:
