@@ -63,6 +63,7 @@ which produces `libos.a`. Applications link against this archive to access the c
 ## POSIX Compatibility in User Space
 
 Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
+See [posix_user_guide.md](posix_user_guide.md) for build steps and examples of the POSIX wrappers.
 
 ## BSD and SVR4 Compatibility Goals
 
