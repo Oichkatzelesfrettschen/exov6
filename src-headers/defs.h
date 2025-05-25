@@ -274,6 +274,13 @@ void dag_node_set_priority(struct dag_node *, int);
 void dag_node_add_dep(struct dag_node *, struct dag_node *);
 void dag_sched_submit(struct dag_node *);
 
+// irq.c
+void irq_init(void);
+int irq_bind(exo_cap, void (*)(void));
+void irq_queue_event(int);
+void irq_dispatch(struct trapframe *);
+void irq_simulate(int);
+
 // rcu.c
 void rcuinit(void);
 void rcu_read_lock(void);

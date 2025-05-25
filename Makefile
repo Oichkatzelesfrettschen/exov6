@@ -18,6 +18,7 @@ OBJS = \
     $(KERNEL_DIR)/main.o \
     $(KERNEL_DIR)/mp.o \
     $(KERNEL_DIR)/picirq.o \
+    $(KERNEL_DIR)/irq.o \
     $(KERNEL_DIR)/pipe.o \
     $(KERNEL_DIR)/proc.o \
     $(KERNEL_DIR)/sleeplock.o \
@@ -342,7 +343,8 @@ LIBOS_OBJS = \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
        $(LIBOS_DIR)/posix.o \
-       $(LIBOS_DIR)/ipc_queue.o 
+       $(LIBOS_DIR)/ipc_queue.o \
+       $(LIBOS_DIR)/irq_client.o
 
 
 
