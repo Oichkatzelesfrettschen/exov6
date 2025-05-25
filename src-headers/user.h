@@ -1,2 +1,6 @@
 #pragma once
-// placeholder user-space headers
+#include <sys/types.h>
+
+int exec(char *path, char **argv);
+int sigsend(int pid, int sig);
+int sigcheck(void);

@@ -4,10 +4,11 @@
 #include "fs.h"
 #include "string.h"
 #include "user.h"
-#include "signal.h"
+#include <signal.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include "stat.h"
+#include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <sys/socket.h>
 
@@ -38,7 +39,7 @@ int libos_open(const char *path, int flags, int mode) {
   if (flags & O_APPEND) {
     struct stat st;
     if (filestat(f, &st) == 0)
-      f->off = st.size;
+      f->off = st.st_size;
   }
   for (int i = 0; i < fd_table_cap; i++) {
     if (!fd_table[i]) {
@@ -77,18 +78,19 @@ int libos_write(int fd, const void *buf, size_t n) {
 
 int libos_close(int fd) {
   ensure_fd_table();
-  if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
-    return -1;
-  libfs_close(fd_table[fd]);
-  fd_table[fd] = 0;
-  return 0;
+  if (fd >= 0 && fd < fd_table_cap && fd_table[fd]) {
+    libfs_close(fd_table[fd]);
+    fd_table[fd] = 0;
+    return 0;
+  }
+  return close(fd);
 }
 
 int libos_spawn(const char *path, char *const argv[]) {
   int pid = fork();
   if (pid == 0) {
     exec((char *)path, (char **)argv);
-    exit();
+    exit(1);
   }
   return pid;
 }
@@ -98,7 +100,7 @@ int libos_execve(const char *path, char *const argv[], char *const envp[]) {
   return exec((char *)path, (char **)argv);
 }
 
-int libos_mkdir(const char *path) { return mkdir((char *)path); }
+int libos_mkdir(const char *path) { return mkdir(path, 0777); }
 
 int libos_rmdir(const char *path) { return unlink((char *)path); }
 
@@ -136,12 +138,12 @@ int libos_waitpid(int pid, int *status, int flags) {
   (void)flags;
   int w;
   if (pid == -1) {
-    w = wait();
+    w = wait(NULL);
     if (w >= 0 && status)
       *status = 0;
     return w;
   }
-  while ((w = wait()) >= 0) {
+  while ((w = wait(NULL)) >= 0) {
     if (w == pid) {
       if (status)
         *status = 0;
@@ -231,7 +233,7 @@ long libos_lseek(int fd, long off, int whence) {
     struct stat st;
     if (filestat(f, &st) < 0)
       return -1;
-    f->off = st.size + off;
+    f->off = st.st_size + off;
     break;
   }
   default:
