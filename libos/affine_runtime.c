@@ -50,3 +50,42 @@ int lambda_run(lambda_term_t *t, int fuel) {
   }
   return ret;
 }
+
+// Lambda capability helpers
+lambda_cap_t *lambda_cap_create(lambda_fn fn, void *env, exo_cap cap) {
+  lambda_cap_t *lc = malloc(sizeof(lambda_cap_t));
+  if (lc) {
+    lc->term.fn = fn;
+    lc->term.env = env;
+    lc->term.steps = 0;
+    lc->cap = cap;
+    lc->consumed = 0;
+  }
+  return lc;
+}
+
+void lambda_cap_destroy(lambda_cap_t *lc) { free(lc); }
+
+int lambda_cap_use(lambda_cap_t *lc, int fuel) {
+  if (!lc || lc->consumed)
+    return -1;
+  int r = lambda_run(&lc->term, fuel);
+  lc->consumed = 1;
+  return r;
+}
+
+int lambda_cap_delegate(lambda_cap_t *lc, uint16_t new_owner) {
+  if (!lc || lc->consumed)
+    return -1;
+  (void)new_owner; // ownership metadata handled by kernel
+  return cap_inc(lc->cap.id);
+}
+
+int lambda_cap_revoke(lambda_cap_t *lc) {
+  if (!lc || lc->consumed)
+    return -1;
+  int r = cap_revoke(lc->cap.id);
+  if (r == 0)
+    lc->consumed = 1;
+  return r;
+}
