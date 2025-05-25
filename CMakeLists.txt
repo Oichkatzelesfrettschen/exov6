@@ -44,6 +44,7 @@ file(GLOB_RECURSE KERNEL_SOURCES
   src-uland/user/*.c
   libos/*.c
 )
+list(APPEND KERNEL_SOURCES src-kernel/runqueue.c)
 
 set(LIBOS_SOURCES
   src-uland/ulib.c
