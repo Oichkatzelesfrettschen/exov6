@@ -15,6 +15,8 @@ void cap_table_init(void) {
 }
 
 int cap_table_alloc(uint16_t type, uint resource, uint rights, uint owner) {
+    if(type == CAP_TYPE_NONE || type > CAP_TYPE_DMA)
+        return -1;
     acquire(&cap_lock);
     for (int i = 1; i < CAP_MAX; i++) {
         if (cap_table[i].type == CAP_TYPE_NONE) {
