@@ -85,7 +85,10 @@ The checks will run on every commit.
 
 ``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
 generates ``compile_commands.json`` on demand using
-``scripts/gen_compile_commands.py`` if it doesn't already exist.
+``scripts/gen_compile_commands.py`` if it doesn't already exist.  The
+helper script configures a ``build`` directory with ``cmake`` and copies
+``build/compile_commands.json`` to the top-level directory.  Pass
+``--meson <path>`` to use ``meson setup`` instead of ``cmake``.
 
 Experimental support for building with the C23 standard and for
 cross-compiling a 64-bit version is available. Set
