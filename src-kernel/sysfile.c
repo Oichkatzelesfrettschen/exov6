@@ -10,6 +10,7 @@
 #include "stat.h"
 #include "mmu.h"
 #include "proc.h"
+#include <string.h>
 #include "fs.h"
 #include "spinlock.h"
 #include "sleeplock.h"

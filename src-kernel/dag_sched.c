@@ -4,6 +4,7 @@
 #include "dag.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
+#include <string.h>
 
 static struct spinlock dag_lock;
 static struct dag_node *ready_head;

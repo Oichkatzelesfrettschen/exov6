@@ -9,6 +9,7 @@
 #include "mmu.h"
 #include "spinlock.h"
 #include "proc.h"
+#include <string.h>
 
 void freerange(void *vstart, void *vend);
 extern char end[]; // first address after kernel loaded from ELF file
