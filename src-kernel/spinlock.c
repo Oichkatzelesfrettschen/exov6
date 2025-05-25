@@ -9,6 +9,19 @@
 #include "proc.h"
 #include "spinlock.h"
 
+size_t cache_line_size = __alignof__(struct spinlock);
+
+void detect_cache_line_size(void) {
+#if defined(__i386__) || defined(__x86_64__)
+  uint32_t a, b, c, d;
+  cpuid(0x80000006, &a, &b, &c, &d);
+  if (c & 0xff)
+    cache_line_size = c & 0xff;
+#else
+  cache_line_size = __alignof__(struct spinlock);
+#endif
+}
+
 #if CONFIG_SMP
 void initlock(struct spinlock *lk, char *name) {
   lk->name = name;
@@ -92,7 +105,7 @@ void getcallerpcs(void *v, uint32_t pcs[]) {
   for (i = 0; i < 10; i++) {
     if (ebp == 0 || ebp < (uint32_t *)KERNBASE || ebp == (uint32_t *)0xffffffff)
       break;
-    pcs[i] = ebp[1];      // saved %eip
+    pcs[i] = ebp[1];          // saved %eip
     ebp = (uint32_t *)ebp[0]; // saved %ebp
   }
   for (; i < 10; i++)

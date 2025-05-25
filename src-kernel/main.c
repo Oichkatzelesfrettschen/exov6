@@ -7,6 +7,7 @@
 #include "dag.h"
 #include "cap.h"
 #include "x86.h"
+#include "spinlock.h"
 #include "exo_stream.h"
 #include "exo_ipc.h"
 
@@ -25,22 +26,23 @@ extern char end[]; // first address after kernel loaded from ELF file
 int main(void) {
   kinit1(end, P2V(4 * 1024 * 1024)); // phys page allocator
   kvmalloc();                        // kernel page table
-  mpinit();                          // detect other processors
-  lapicinit();                       // interrupt controller
-  seginit();                         // segment descriptors
-  picinit();                         // disable pic
-  ioapicinit();                      // another interrupt controller
-  consoleinit();                     // console hardware
-  uartinit();                        // serial port
-  cap_table_init();                  // initialize capability table
-  rcuinit();                         // rcu subsystem
-  pinit();                           // process table
-  tvinit();                          // trap vectors
-  binit();                           // buffer cache
-  fileinit();                        // file table
-  ideinit();                         // disk
-  dag_sched_init();                  // initialize DAG scheduler
-  beatty_sched_init();               // initialize Beatty scheduler
+  detect_cache_line_size();
+  mpinit();                                   // detect other processors
+  lapicinit();                                // interrupt controller
+  seginit();                                  // segment descriptors
+  picinit();                                  // disable pic
+  ioapicinit();                               // another interrupt controller
+  consoleinit();                              // console hardware
+  uartinit();                                 // serial port
+  cap_table_init();                           // initialize capability table
+  rcuinit();                                  // rcu subsystem
+  pinit();                                    // process table
+  tvinit();                                   // trap vectors
+  binit();                                    // buffer cache
+  fileinit();                                 // file table
+  ideinit();                                  // disk
+  dag_sched_init();                           // initialize DAG scheduler
+  beatty_sched_init();                        // initialize Beatty scheduler
   startothers();                              // start other processors
   kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()
   userinit();                                 // first user process
