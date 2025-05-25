@@ -9,8 +9,9 @@
 #include "ipc_debug.h"
 #define EXO_KERNEL
 #include "include/exokernel.h"
+#include "ipc_queue.h"
 
-static struct mailbox ipcs;
+struct mailbox ipcs;
 
 static void ipc_init(struct mailbox *mb) {
   if (!mb->inited) {
@@ -19,6 +20,8 @@ static void ipc_init(struct mailbox *mb) {
     mb->inited = 1;
   }
 }
+
+void ipc_timed_init(void) { ipc_init(&ipcs); }
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   struct mailbox *mb = myproc()->mailbox;
