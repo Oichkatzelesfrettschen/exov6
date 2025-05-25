@@ -9,7 +9,7 @@
 #define EXO_RIGHT_X 0x4
 #define EXO_RIGHT_CTL 0x8
 
-static inline int cap_has_rights(uint rights, uint need) {
+static inline int cap_has_rights(uint32_t rights, uint32_t need) {
   return (rights & need) == need;
 }
 
@@ -31,7 +31,7 @@ exo_cap exo_alloc_page(void);
 
 /* Allocate a disk block capability for device 'dev'.  On success the
  * capability is stored in *cap and zero is returned. */
-[[nodiscard]] int exo_alloc_block(uint dev, uint rights, exo_blockcap *cap);
+[[nodiscard]] int exo_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap);
 
 /* Bind the block capability to the buffer 'data'.  If 'write' is non-zero the
  * contents of the buffer are written to disk; otherwise the block is read into
@@ -39,13 +39,13 @@ exo_cap exo_alloc_page(void);
 [[nodiscard]] int exo_bind_block(exo_blockcap *cap, void *data, int write);
 
 /* Allocate a capability referencing an I/O port. */
-exo_cap exo_alloc_ioport(uint port);
+exo_cap exo_alloc_ioport(uint32_t port);
 
 /* Allocate a capability for an IRQ line. */
-exo_cap exo_bind_irq(uint irq);
+exo_cap exo_bind_irq(uint32_t irq);
 
 /* Allocate a DMA buffer page and return a capability for channel 'chan'. */
-exo_cap exo_alloc_dma(uint chan);
+exo_cap exo_alloc_dma(uint32_t chan);
 
 /* Switch to the context referenced by 'target'.  The caller's context must be
  * saved in a user-managed structure.  The kernel does not choose the next
@@ -54,26 +54,26 @@ exo_cap exo_alloc_dma(uint chan);
 
 /* Send 'len' bytes from 'buf' to destination capability 'dest'.  Any queuing
  * or flow control is managed in user space. */
-[[nodiscard]] int exo_send(exo_cap dest, const void *buf, uint64 len);
+[[nodiscard]] int exo_send(exo_cap dest, const void *buf, uint64_t len);
 
 /* Receive up to 'len' bytes from source capability 'src' into 'buf'.  The call
  * blocks according to policy implemented by the library OS. */
-[[nodiscard]] int exo_recv(exo_cap src, void *buf, uint64 len);
+[[nodiscard]] int exo_recv(exo_cap src, void *buf, uint64_t len);
 
 /* Read or write arbitrary byte ranges using a block capability. */
-[[nodiscard]] int exo_read_disk(exo_blockcap cap, void *dst, uint64 off,
-                                uint64 n);
-[[nodiscard]] int exo_write_disk(exo_blockcap cap, const void *src, uint64 off,
-                                 uint64 n);
+[[nodiscard]] int exo_read_disk(exo_blockcap cap, void *dst, uint64_t off,
+                                uint64_t n);
+[[nodiscard]] int exo_write_disk(exo_blockcap cap, const void *src, uint64_t off,
+                                 uint64_t n);
 
 /* Allocate and wait/acknowledge interrupt events. */
-exo_cap exo_alloc_irq(uint irq, uint rights);
-[[nodiscard]] int exo_irq_wait(exo_cap cap, uint *irq);
+exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
+[[nodiscard]] int exo_irq_wait(exo_cap cap, uint32_t *irq);
 [[nodiscard]] int exo_irq_ack(exo_cap cap);
 /* Allocate capabilities for I/O ports, IRQs, and DMA channels. */
-exo_cap exo_alloc_ioport(uint port);
-exo_cap exo_bind_irq(uint irq);
-exo_cap exo_alloc_dma(uint chan);
+exo_cap exo_alloc_ioport(uint32_t port);
+exo_cap exo_bind_irq(uint32_t irq);
+exo_cap exo_alloc_dma(uint32_t chan);
 #endif /* EXO_KERNEL */
 
 /* Enumeration of syscall numbers for the primitives. */

@@ -2,6 +2,6 @@
 #include "types.h"
 
 double phi(void);
-uint64 fib(uint n);
-uint64 gcd(uint64 a, uint64 b);
+uint64_t fib(uint32_t n);
+uint64_t gcd(uint64_t a, uint64_t b);
 size_t phi_align(size_t n);

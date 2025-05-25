@@ -21,7 +21,7 @@ static void cprintf(const char *f, ...){ (void)f; }
 
 #include "src-kernel/arbitrate.c"
 
-static int prefer_low(uint t, uint r, uint cur, uint newo){
+static int prefer_low(uint32_t t, uint32_t r, uint32_t cur, uint32_t newo){
     (void)t; (void)r;
     return newo < cur;
 }

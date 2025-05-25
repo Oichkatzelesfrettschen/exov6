@@ -18,8 +18,8 @@ struct ipc_entry {
 static struct {
   struct spinlock lock;
   struct ipc_entry buf[IPC_BUFSZ];
-  uint r;
-  uint w;
+  uint32_t r;
+  uint32_t w;
   int inited;
 } ipcs;
 

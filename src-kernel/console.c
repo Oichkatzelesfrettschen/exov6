@@ -32,7 +32,7 @@ printint(int xx, int base, int sign)
   static char digits[] = "0123456789abcdef";
   char buf[16];
   int i;
-  uint x;
+  uint32_t x;
 
   if(sign && (sign = xx < 0))
     x = -xx;
@@ -109,7 +109,7 @@ void
 panic(char *s)
 {
   int i;
-  uint pcs[10];
+  uint32_t pcs[10];
 
   cli();
   cons.locking = 0;
@@ -128,7 +128,7 @@ panic(char *s)
 //PAGEBREAK: 50
 #define BACKSPACE 0x100
 #define CRTPORT 0x3d4
-static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
+static uint16_t *crt = (uint16_t*)P2V(0xb8000);  // CGA memory
 
 static void
 cgaputc(int c)

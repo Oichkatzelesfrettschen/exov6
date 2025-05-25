@@ -11,7 +11,6 @@ C_CODE = r"""
 #include <pthread.h>
 #include <stdlib.h>
 
-typedef unsigned int uint;
 
 struct spinlock;
 struct cpu;

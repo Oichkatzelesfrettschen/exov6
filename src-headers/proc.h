@@ -16,13 +16,13 @@ typedef struct context context_t;
 
 // Per-CPU state
 struct cpu {
-  uchar apicid;                // Local APIC ID
+  uint8_t apicid;                // Local APIC ID
   context_t *scheduler;        // swtch() here to enter scheduler
 #ifndef __aarch64__
   struct taskstate ts;         // Used by x86 to find stack for interrupt
   struct segdesc gdt[NSEGS];   // x86 global descriptor table
 #endif
-  volatile uint started;       // Has the CPU started?
+  volatile uint32_t started;       // Has the CPU started?
   int ncli;                    // Depth of pushcli nesting.
   int intena;                  // Were interrupts enabled before pushcli?
   struct proc *proc;           // The process running on this cpu or null
@@ -43,11 +43,11 @@ extern int ncpu;
 // at the "Switch stacks" comment. Switch doesn't save eip explicitly,
 // but it is on the stack and allocproc() manipulates it.
 struct context {
-  uint edi;
-  uint esi;
-  uint ebx;
-  uint ebp;
-  uint eip;
+  uint32_t edi;
+  uint32_t esi;
+  uint32_t ebx;
+  uint32_t ebp;
+  uint32_t eip;
 };
 // Check that context saved by swtch.S matches this layout (5 registers)
 _Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
@@ -99,9 +99,9 @@ struct proc {
   struct file *ofile[NOFILE];    // Open files
   struct inode *cwd;             // Current directory
   char name[16];                 // Process name (debugging)
-  uint pctr_cap;                 // Capability for exo_pctr_transfer
-  volatile uint pctr_signal;     // Signal counter for exo_pctr_transfer
-  uint64 gas_remaining;          // Remaining CPU budget
+  uint32_t pctr_cap;                 // Capability for exo_pctr_transfer
+  volatile uint32_t pctr_signal;     // Signal counter for exo_pctr_transfer
+  uint64_t gas_remaining;          // Remaining CPU budget
   int preferred_node;            // NUMA allocation preference
   int out_of_gas;                // Flag set when gas runs out
 };

@@ -14,7 +14,7 @@ printint(int fd, int xx, int base, int sgn)
   static char digits[] = "0123456789ABCDEF";
   char buf[16];
   int i, neg;
-  uint x;
+  uint32_t x;
 
   neg = 0;
   if(sgn && xx < 0){

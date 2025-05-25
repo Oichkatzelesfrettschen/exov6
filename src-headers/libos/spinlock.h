@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdint.h>
 
 struct ticketlock {
   _Atomic unsigned short head;
@@ -13,7 +14,7 @@ struct spinlock {
   struct ticketlock ticket;
   char *name;
   struct cpu *cpu;
-  unsigned int pcs[10];
+  uint32_t pcs[10];
 };
 
 #ifdef SPINLOCK_NO_STUBS

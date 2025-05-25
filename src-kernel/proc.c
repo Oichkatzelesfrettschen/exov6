@@ -12,14 +12,14 @@ struct ptable ptable;
 static struct proc *initproc;
 
 int nextpid = 1;
-static uint nextpctr_cap = 1;
+static uint32_t nextpctr_cap = 1;
 extern void forkret(void);
 extern void trapret(void);
 
 // Map exo_pctr capabilities directly to owning processes.
 #define PCTR_HASHSIZE (NPROC * 2)
 struct pctr_entry {
-  uint cap;
+  uint32_t cap;
   struct proc *p;
 };
 static struct pctr_entry pctr_table[PCTR_HASHSIZE];
@@ -27,8 +27,8 @@ static struct pctr_entry pctr_table[PCTR_HASHSIZE];
 static void
 pctr_insert(struct proc *p)
 {
-  uint cap = p->pctr_cap;
-  uint idx = cap % PCTR_HASHSIZE;
+  uint32_t cap = p->pctr_cap;
+  uint32_t idx = cap % PCTR_HASHSIZE;
   while(pctr_table[idx].p)
     idx = (idx + 1) % PCTR_HASHSIZE;
   pctr_table[idx].cap = cap;
@@ -36,9 +36,9 @@ pctr_insert(struct proc *p)
 }
 
 static void
-pctr_remove(uint cap)
+pctr_remove(uint32_t cap)
 {
-  uint idx = cap % PCTR_HASHSIZE;
+  uint32_t idx = cap % PCTR_HASHSIZE;
   while(pctr_table[idx].p){
     if(pctr_table[idx].cap == cap){
       pctr_table[idx].p = 0;
@@ -59,9 +59,9 @@ pctr_remove(uint cap)
 }
 
 struct proc *
-pctr_lookup(uint cap)
+pctr_lookup(uint32_t cap)
 {
-  uint idx = cap % PCTR_HASHSIZE;
+  uint32_t idx = cap % PCTR_HASHSIZE;
   while(pctr_table[idx].p){
     if(pctr_table[idx].cap == cap)
       return pctr_table[idx].p;
@@ -172,7 +172,7 @@ found:
   *(unsigned long*)sp = (unsigned long)trapret;
 #else
   sp -= 4;
-  *(uint*)sp = (uint)trapret;
+  *(uint32_t*)sp = (uint32_t)trapret;
 #endif
 
   sp -= sizeof *p->context;
@@ -183,7 +183,7 @@ found:
 #elif defined(__aarch64__)
   p->context->lr = (unsigned long)forkret;
 #else
-  p->context->eip = (uint)forkret;
+  p->context->eip = (uint32_t)forkret;
 #endif
 
   return p;
@@ -233,7 +233,7 @@ userinit(void)
 int
 growproc(int n)
 {
-  uint sz;
+  uint32_t sz;
   struct proc *curproc = myproc();
 
   sz = curproc->sz;
@@ -617,7 +617,7 @@ procdump(void)
   int i;
   struct proc *p;
   char *state;
-  uint pc[10];
+  uint32_t pc[10];
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->state == UNUSED)
@@ -633,7 +633,7 @@ procdump(void)
 #elif defined(__aarch64__)
       getcallerpcs((void*)p->context->fp + 2*sizeof(uintptr_t), pc);
 #else
-      getcallerpcs((uint*)p->context->ebp+2, pc);
+      getcallerpcs((uint32_t*)p->context->ebp+2, pc);
 #endif
       for(i=0; i<10 && pc[i] != 0; i++)
         cprintf(" %p", pc[i]);

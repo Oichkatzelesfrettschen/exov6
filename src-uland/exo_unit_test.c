@@ -3,24 +3,24 @@
 #include <string.h>
 #include <assert.h>
 
-typedef uint32_t uint;
+typedef uint32_t uint32_t;
 
 typedef struct exo_cap {
-    uint pa;
-    uint id;
-    uint rights;
-    uint owner;
+    uint32_t pa;
+    uint32_t id;
+    uint32_t rights;
+    uint32_t owner;
 } exo_cap;
 
 typedef struct exo_blockcap {
-    uint dev;
-    uint blockno;
-    uint rights;
-    uint owner;
+    uint32_t dev;
+    uint32_t blockno;
+    uint32_t rights;
+    uint32_t owner;
 } exo_blockcap;
 
-static uint next_page = 1;
-static uint next_block = 1;
+static uint32_t next_page = 1;
+static uint32_t next_block = 1;
 static unsigned char diskbuf[512];
 
 int exo_alloc_page(exo_cap *cap) {
@@ -38,7 +38,7 @@ int exo_unbind_page(exo_cap *cap) {
     return 0;
 }
 
-int exo_alloc_block(uint dev, uint rights, exo_blockcap *cap) {
+int exo_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap) {
     cap->dev = dev;
     cap->blockno = next_block++;
     cap->rights = rights;
