@@ -15,9 +15,16 @@ that provides traditional services on top of the primitive capability interface.
           enforces protection but leaves higher -
     level abstractions to user -
     level code.Instead of implementing full POSIX semantics in the kernel,
-    Phoenix exposes capabilities that grant controlled access to memory regions,
-    devices and communication endpoints.User -
-        space runtimes build whatever abstractions they require.
+Phoenix exposes capabilities that grant controlled access to memory regions,
+devices and communication endpoints.User -
+space runtimes build whatever abstractions they require.
+
+Phoenix's kernel no longer contains higher-level policies. Filesystem
+management, scheduler selection and IPC queueing have all migrated into the
+libOS. The kernel merely multiplexes resources and validates capabilities while
+user-space libraries implement the actual services. Applications therefore link
+against an extended `libos.a` that provides these components on top of the
+primitive system calls.
 
         ##DAG Execution Model
 
@@ -57,13 +64,17 @@ Keeping kernel, user programs and the libOS separated helps manage dependencies 
 
 ## Building
 
-The repository uses GNU Make. To build the kernel image run:
+The repository uses GNU Make. To build the minimal kernel image run:
 
 ```
 make kernel
 ```
 
-This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The default `make` target also assembles a bootable `xv6.img` disk image containing this kernel.
+This compiles everything under `src-kernel/` and links the `exo-kernel` binary.
+The kernel no longer includes filesystem management, scheduler policies or IPC
+queueing, so this step builds only the capability primitives. The default
+`make` target also assembles a bootable `xv6.img` disk image containing this
+kernel.
 
 To build the user-space library operating system invoke:
 
@@ -71,7 +82,9 @@ To build the user-space library operating system invoke:
 make libos
 ```
 
-which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `libos/` and `src-uland/`.
+which produces an extended `libos.a`. Applications link against this archive to
+use the filesystem manager, scheduler implementations and IPC queues now housed
+entirely in the libOS along with the basic capability wrappers.
 
 ## POSIX Compatibility in User Space
 
@@ -210,6 +223,15 @@ operations they support.
 ## Supervisor
 
 The `rcrs` supervisor runs at boot and keeps drivers alive. It launches each program listed in `drivers.conf` and pings them periodically through an endpoint. If a driver fails to respond before the timeout expires `rcrs` kills and restarts it. Status reports show the process IDs and restart counts so clients can reconnect when a driver is replaced.
+
+## Capabilities and Userland Services
+
+With filesystem handling, scheduler policies and IPC queues now residing in the
+libOS, every higher-level service runs in user space.  Services expose endpoint
+capabilities to their clients and exchange messages through the libOS queues.
+The kernel validates each capability and transports the data but otherwise
+remains agnostic about file formats or scheduling decisions.  Services can be
+restarted transparently as long as their capabilities remain valid.
 
 ## Cap'n Proto IPC
 
