@@ -20,6 +20,14 @@ struct cap_entry {
     uint rights;
     uint owner;
 };
+// The capability table layout is part of the public ABI.  All translation
+// units (C and C++) rely on this size and alignment.  Expected size: 20 bytes
+// and expected alignment: 4 bytes.
+#ifdef __cplusplus
+static_assert(sizeof(struct cap_entry) == 20, "ABI mismatch");
+#else
+_Static_assert(sizeof(struct cap_entry) == 20, "ABI mismatch");
+#endif
 
 extern uint global_epoch;
 
