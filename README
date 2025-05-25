@@ -211,19 +211,6 @@ limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
 
-
-16-BIT BUILD
-------------
-An experimental 16-bit configuration is also available.  ``setup.sh``
-installs the ``ia16-elf-gcc`` cross compiler.  Build the tiny 16-bit
-kernel and run it under Bochs with::
-
-    cmake -S . -B build -G Ninja -DARCH=ia16
-    ninja -C build bochs
-
-This creates ``kernel-ia16`` and ``xv6-ia16.img`` which Bochs can boot
-in real mode.
-
 CROSS-COMPILING
 ---------------
 The ``setup.sh`` script installs cross-compilers for several
