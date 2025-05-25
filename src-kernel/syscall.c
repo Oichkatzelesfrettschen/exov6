@@ -147,6 +147,9 @@ extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
 extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
+extern int sys_exo_alloc_ioport(void);
+extern int sys_exo_bind_irq(void);
+extern int sys_exo_alloc_dma(void);
 extern int sys_endpoint_send(void);
 extern int sys_endpoint_recv(void);
 extern int sys_proc_alloc(void);
@@ -163,6 +166,9 @@ extern int sys_ipc(void);
 extern int sys_exo_irq_alloc(void);
 extern int sys_exo_irq_wait(void);
 extern int sys_exo_irq_ack(void);
+extern int sys_exo_alloc_ioport(void);
+extern int sys_exo_bind_irq(void);
+extern int sys_exo_alloc_dma(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -184,6 +190,9 @@ static int (*syscalls[])(void) = {
     [SYS_exo_yield_to] sys_exo_yield_to,
     [SYS_exo_read_disk] sys_exo_read_disk,
     [SYS_exo_write_disk] sys_exo_write_disk,
+    [SYS_exo_alloc_ioport] sys_exo_alloc_ioport,
+    [SYS_exo_bind_irq] sys_exo_bind_irq,
+    [SYS_exo_alloc_dma] sys_exo_alloc_dma,
     [SYS_exo_send] sys_exo_send,
     [SYS_exo_recv] sys_exo_recv,
     [SYS_endpoint_send] sys_endpoint_send,
@@ -201,6 +210,9 @@ static int (*syscalls[])(void) = {
     [SYS_exo_irq_wait] sys_exo_irq_wait,
     [SYS_exo_irq_ack] sys_exo_irq_ack,
     [SYS_ipc] sys_ipc,
+    [SYS_exo_alloc_ioport] sys_exo_alloc_ioport,
+    [SYS_exo_bind_irq]     sys_exo_bind_irq,
+    [SYS_exo_alloc_dma]    sys_exo_alloc_dma,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 

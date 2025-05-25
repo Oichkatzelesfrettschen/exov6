@@ -38,4 +38,7 @@ enum {
   SYS_exo_irq_alloc,
   SYS_exo_irq_wait,
   SYS_exo_irq_ack,
+  SYS_exo_alloc_ioport,
+  SYS_exo_bind_irq,
+  SYS_exo_alloc_dma,
 };
