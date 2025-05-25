@@ -43,3 +43,12 @@ The behaviour of `read()` matches the Single UNIX Specification; see [`ben-books
 Phoenix exposes low level capabilities such as pages, blocks and endpoints. The libOS translates these primitives into standard file descriptors and process IDs. For example `libos_open()` obtains a block capability for the underlying storage and stores it in an internal table indexed by the returned descriptor. System calls like `libos_fork()` communicate with the scheduler using capability-protected endpoints. Memory mapping wrappers allocate pages with `exo_alloc_page()` before installing the mappings.
 
 By layering these wrappers on top of capabilities the system preserves POSIX semantics in user space while retaining the fine grained control of the exokernel.
+
+## Recently Added Interfaces
+
+Version 6 extends the wrapper set with helpers for directory management and
+process control. `libos_getcwd()` and `libos_chdir()` expose a simple notion of
+the current working directory. Link manipulation calls such as `libos_link()`
+and `libos_unlink()` forward to the xv6 implementations while symbolic link
+operations are stubbed out. Programs can pass an explicit environment to new
+`libos_execve_env()` and wait for child exit using `libos_wait()`.

@@ -214,3 +214,45 @@ long libos_send(int fd,const void *buf,size_t len,int flags){
 long libos_recv(int fd,void *buf,size_t len,int flags){
     return recv(fd, buf, len, flags);
 }
+
+int libos_link(const char *oldpath, const char *newpath){
+    return link((char *)oldpath, (char *)newpath);
+}
+
+int libos_unlink(const char *path){
+    return unlink((char *)path);
+}
+
+int libos_symlink(const char *target, const char *linkpath){
+    (void)target; (void)linkpath;
+    /* Symbolic links are unsupported in the toy FS. */
+    return -1;
+}
+
+int libos_readlink(const char *path, char *buf, size_t bufsiz){
+    (void)path; (void)buf; (void)bufsiz;
+    return -1;
+}
+
+char *libos_getcwd(char *buf, size_t size){
+    if(!buf || size < 2)
+        return 0;
+    buf[0] = '/';
+    buf[1] = '\0';
+    return buf;
+}
+
+int libos_chdir(const char *path){
+    (void)path;
+    /* Single directory hierarchy; accept any request. */
+    return 0;
+}
+
+int libos_execve_env(const char *path, char *const argv[], char *const envp[]){
+    (void)envp; /* Environment variables ignored */
+    return exec((char *)path, (char **)argv);
+}
+
+int libos_wait(void){
+    return wait();
+}

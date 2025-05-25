@@ -126,6 +126,7 @@ uprogs = {
   'libos_posix_extra_test': 'src-uland/user/libos_posix_extra_test.c',
   'qspin_demo': 'src-uland/user/qspin_demo.c',
   'tty_demo': 'src-uland/tty_demo.c',
+  'posix_misc_demo': 'src-uland/user/posix_misc_demo.c',
 }
 
 if use_capnp

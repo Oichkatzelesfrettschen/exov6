@@ -18,6 +18,11 @@ the host socket APIs.
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
 | Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |
 | Socket APIs | Thin wrappers around standard Berkeley sockets. |
+| `libos_link`/`libos_unlink` | Hard link helpers backed by the xv6 calls. |
+| `libos_symlink`/`libos_readlink` | Stubbed out; return `-1` on use. |
+| `libos_getcwd`/`libos_chdir` | Report and change the fixed current directory. |
+| `libos_execve_env` | `exec` variant that accepts an environment list. |
+| `libos_wait` | Wrapper for `wait()` returning any exited child. |
 
 
 These wrappers mirror the POSIX names where possible but are not fully

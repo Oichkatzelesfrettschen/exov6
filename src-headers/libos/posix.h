@@ -45,3 +45,13 @@ int libos_accept(int fd, struct sockaddr *addr, socklen_t *len);
 int libos_connect(int fd, const struct sockaddr *addr, socklen_t len);
 long libos_send(int fd, const void *buf, size_t len, int flags);
 long libos_recv(int fd, void *buf, size_t len, int flags);
+
+/* Newly added helpers */
+int libos_link(const char *oldpath, const char *newpath);
+int libos_unlink(const char *path);
+int libos_symlink(const char *target, const char *linkpath);
+int libos_readlink(const char *path, char *buf, size_t bufsiz);
+char *libos_getcwd(char *buf, size_t size);
+int libos_chdir(const char *path);
+int libos_execve_env(const char *path, char *const argv[], char *const envp[]);
+int libos_wait(void);
