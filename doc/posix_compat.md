@@ -38,3 +38,11 @@ available.  Functions like `setlocale()` and `localeconv()` accept any
 input but always behave as if the `"C"` locale is active.  The stubs
 exist so that third-party code expecting these calls can link against the
 libOS without pulling in a full C library.
+
+## Thread Stubs
+
+A basic pthread API is provided for portability. `pthread_create()`
+spawns a new process executing the requested function and
+`pthread_join()` waits on that process. Mutexes spin on an integer and
+only coordinate with other Phoenix pthread calls. Condition variables,
+thread-local storage and other features are not implemented.
