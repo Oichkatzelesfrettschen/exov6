@@ -18,7 +18,7 @@ jobs:
       run: |
         set -euxo pipefail
         sudo apt-get update -y
-        sudo apt-get install -y build-essential clang clang-tidy clang-format python3-pip qemu-system-i386 qemu-system-x86_64
+        sudo apt-get install -y build-essential clang lld llvm clang-tidy clang-format clang-tools python3-pip qemu-system-i386 qemu-system-x86_64
         python3 -m pip install -v pre-commit compiledb configuredb
     - name: Verify tool installation
       run: |
