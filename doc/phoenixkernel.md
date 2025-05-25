@@ -1,15 +1,28 @@
-# Phoenix Kernel Overview
+#Phoenix Kernel Overview
 
-The Phoenix kernel implements an exokernel research platform built on top of the xv6 code base. Its goal is to expose low-level hardware resources directly to user space while keeping the in-kernel portion as small as possible. Applications link against a library operating system (libOS) that provides traditional services on top of the primitive capability interface.
+The Phoenix kernel implements an exokernel research platform built on top of the
+        xv6 code base.Its goal is to expose low -
+    level hardware resources directly to user space while keeping the in -
+    kernel portion as small as possible.Applications
+        link against a library operating
+        system(libOS)
+that provides traditional services on top of the primitive capability interface.
 
-## Exokernel Philosophy
+    ##Exokernel Philosophy
 
-Phoenix follows the exokernel approach: the kernel multiplexes hardware resources and enforces protection but leaves higher-level abstractions to user-level code. Instead of implementing full POSIX semantics in the kernel, Phoenix exposes capabilities that grant controlled access to memory regions, devices and communication endpoints. User-space runtimes build whatever abstractions they require.
+        Phoenix follows the exokernel approach
+    : the kernel multiplexes hardware resources and
+          enforces protection but leaves higher -
+    level abstractions to user -
+    level code.Instead of implementing full POSIX semantics in the kernel,
+    Phoenix exposes capabilities that grant controlled access to memory regions,
+    devices and communication endpoints.User -
+        space runtimes build whatever abstractions they require.
 
-## DAG Execution Model
+        ##DAG Execution Model
 
-Scheduling is expressed as a directed acyclic
-graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
+            Scheduling is expressed as a directed acyclic
+            graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
 
 
 Each DAG node now tracks its parents in a reverse dependency
@@ -62,7 +75,8 @@ Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSI
 ## BSD and SVR4 Compatibility Goals
 
 While the current focus is POSIX emulation, the project also aims to
-support BSD and System&nbsp;V Release&nbsp;4 personalities entirely in user
+support BSD and System&nbsp;
+V Release &nbsp;4 personalities entirely in user
 space.  Additional modules under `libos/` will translate Phoenix
 capabilities to the expected interfaces.  Planned components include
 `bsd_signals.c` and `bsd_termios.c` for the classic BSD signal and
@@ -122,12 +136,14 @@ whenever the current task yields or no runnable work remains.
 
 ### IPC
 
-- `exo_send(dest, buf, len)` – send a message to `dest`; queuing is handled in user space.
-- `exo_recv(src, buf, len)` – receive data from `src` via the libOS queue.
-- `zipc_call(msg)` – perform a fast IPC syscall using the `zipc_msg_t`
-  structure defined in `ipc.h`.
+- `exo_send(dest, buf, len)` – send a message to `dest`;
+queuing is handled in user
+        space.- `exo_recv(src, buf,
+                          len)` – receive data from `src` via the libOS queue
+                    .- `zipc_call(msg)` – perform a fast IPC syscall
+                       using the `zipc_msg_t` structure defined in `ipc.h`.
 
-IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
+                       IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
 Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
 and automatically serialize Cap'n Proto messages.  Each channel is
 backed by a `msg_type_desc` describing the size of the Cap'n Proto
@@ -341,11 +357,11 @@ inside the xv6 environment.
 int
 main(void)
 {
-    exo_cap page = exo_alloc_page();
-    void *va = map_page(page.id); // provided by the libOS
-    memset(va, 0, PGSIZE);
-    exo_unbind_page(page);
-    return 0;
+  exo_cap page = exo_alloc_page();
+  void *va = map_page(page.id); // provided by the libOS
+  memset(va, 0, PGSIZE);
+  exo_unbind_page(page);
+  return 0;
 }
 ```
 
@@ -363,10 +379,10 @@ CHAN_DECLARE(ping_chan, ping_MESSAGE_SIZE);
 int
 main(void)
 {
-    struct ping msg = ping_init();
-    ping_chan_send(&ping_chan, &msg);
-    ping_chan_recv(&ping_chan, &msg);
-    return 0;
+  struct ping msg = ping_init();
+  ping_chan_send(&ping_chan, &msg);
+  ping_chan_recv(&ping_chan, &msg);
+  return 0;
 }
 ```
 
@@ -381,10 +397,10 @@ main(void)
 int
 main(void)
 {
-    int pid = driver_spawn("blk_driver", 0);
-    exo_cap ep = obtain_driver_ep(pid); // helper returning the endpoint
-    driver_connect(pid, ep);
-    return 0;
+  int pid = driver_spawn("blk_driver", 0);
+  exo_cap ep = obtain_driver_ep(pid); // helper returning the endpoint
+  driver_connect(pid, ep);
+  return 0;
 }
 ```
 
@@ -407,9 +423,9 @@ calling the initializer before submitting DAG nodes.
 
 Phoenix exposes several locking primitives that mirror the kernel's spinlock
 implementations.  Most drivers are single threaded, so the default stub locks
-found in `src-headers/libos/spinlock.h` compile to no-ops.  When the
-`CONFIG_SMP` flag is unset or set to `0`, these stubs remove all locking
-overhead.
+found in `src-headers/libos/spinlock.h` compile to no-ops.  Set `CONFIG_SMP` in
+`config.h` to `0` to remove all locking overhead when running on a single
+processor system.
 
 When building with `CONFIG_SMP=1` the libOS can use either the regular ticket
 lock API or the randomized qspinlock variant.  Ticket locks are invoked through
@@ -429,22 +445,21 @@ struct spinlock lk;
 
 int main(void) {
 #if CONFIG_SMP
-    initlock(&lk, "demo");
+  initlock(&lk, "demo");
 #ifdef USE_QSPIN
-    qspin_lock(&lk);
-    qspin_unlock(&lk);
+  qspin_lock(&lk);
+  qspin_unlock(&lk);
 #else
-    acquire(&lk);
-    release(&lk);
+  acquire(&lk);
+  release(&lk);
 #endif
 #else
-    // locking disabled when CONFIG_SMP=0
+// locking disabled when CONFIG_SMP=0
 #endif
-    return 0;
+  return 0;
 }
 ```
 
 Disable locking when a service never runs on more than one CPU or when
 `CONFIG_SMP` is not enabled.  For multi-core systems, prefer qspinlocks when
 heavy contention is expected; otherwise the ticket lock suffices.
-

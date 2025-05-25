@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include "config.h"
 #include "spinlock.h"
 #include "proc.h"
 #include "ipc.h"
