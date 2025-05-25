@@ -50,3 +50,4 @@ endif()
 target_link_libraries(kernel PRIVATE nstr_graph)
 
 add_subdirectory(libnstr_graph)
+add_subdirectory(tests/microbench)

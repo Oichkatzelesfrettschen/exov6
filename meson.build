@@ -23,3 +23,4 @@ if clang_tidy.found()
 endif
 
 subdir('libnstr_graph')
+subdir('tests/microbench')
