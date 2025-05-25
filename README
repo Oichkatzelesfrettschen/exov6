@@ -408,6 +408,11 @@ See doc/phoenixkernel.md for a design overview of the Phoenix exokernel
 and step-by-step examples of capability allocation, typed channels and
 driver management.  The document also outlines the planned BSD and SVR4
 compatibility layers built on top of the libOS.
+Additional notes on the current research direction can be found in
+`doc/track_technical.md`, `doc/track_philosophy.md` and
+`doc/track_hybrid.md`. These summaries reference the project charter
+and provide a short overview of the exposed APIs and guiding
+philosophy.
 
 Example supervisor usage to manage drivers:
 
