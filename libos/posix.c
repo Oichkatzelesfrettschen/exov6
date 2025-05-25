@@ -1,47 +1,82 @@
 #include "posix.h"
 #include "file.h"
 #include "libfs.h"
+#include "fs.h"
 #include "string.h"
 #include "user.h"
 #include "signal.h"
 #include <stdlib.h>
+#include <fcntl.h>
 #include "stat.h"
 #include <unistd.h>
 #include <sys/socket.h>
 
-#define LIBOS_MAXFD 16
+#define LIBOS_INITFD 16
 
-static struct file *fd_table[LIBOS_MAXFD];
+static struct file **fd_table;
+static int fd_table_cap = 0;
+
+static void ensure_fd_table(void) {
+    if(!fd_table) {
+        fd_table_cap = LIBOS_INITFD;
+        fd_table = calloc(fd_table_cap, sizeof(struct file *));
+    }
+}
 static void (*sig_handlers[32])(int);
 
-int libos_open(const char *path, int flags) {
+int libos_open(const char *path, int flags, int mode) {
+    (void)mode; /* mode ignored by simple filesystem */
+    ensure_fd_table();
     struct file *f = libfs_open(path, flags);
     if(!f)
         return -1;
-    for(int i = 0; i < LIBOS_MAXFD; i++) {
+    if(flags & O_TRUNC){
+        char zero[BSIZE] = {0};
+        fs_write_block(f->cap, zero);
+        f->off = 0;
+    }
+    if(flags & O_APPEND){
+        struct stat st;
+        if(filestat(f, &st) == 0)
+            f->off = st.size;
+    }
+    for(int i = 0; i < fd_table_cap; i++) {
         if(!fd_table[i]) {
             fd_table[i] = f;
             return i;
         }
     }
-    fileclose(f);
-    return -1;
+    int new_cap = fd_table_cap * 2;
+    struct file **nt = realloc(fd_table, new_cap * sizeof(struct file*));
+    if(!nt){
+        fileclose(f);
+        return -1;
+    }
+    memset(nt + fd_table_cap, 0, (new_cap - fd_table_cap) * sizeof(struct file*));
+    fd_table = nt;
+    int idx = fd_table_cap;
+    fd_table_cap = new_cap;
+    fd_table[idx] = f;
+    return idx;
 }
 
 int libos_read(int fd, void *buf, size_t n) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    ensure_fd_table();
+    if(fd < 0 || fd >= fd_table_cap || !fd_table[fd])
         return -1;
     return libfs_read(fd_table[fd], buf, n);
 }
 
 int libos_write(int fd, const void *buf, size_t n) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    ensure_fd_table();
+    if(fd < 0 || fd >= fd_table_cap || !fd_table[fd])
         return -1;
     return libfs_write(fd_table[fd], buf, n);
 }
 
 int libos_close(int fd) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    ensure_fd_table();
+    if(fd < 0 || fd >= fd_table_cap || !fd_table[fd])
         return -1;
     libfs_close(fd_table[fd]);
     fd_table[fd] = 0;
@@ -70,17 +105,28 @@ int libos_rmdir(const char *path) {
 }
 
 int libos_dup(int fd) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    ensure_fd_table();
+    if(fd < 0 || fd >= fd_table_cap || !fd_table[fd])
         return -1;
     struct file *f = filedup(fd_table[fd]);
-    for(int i = 0; i < LIBOS_MAXFD; i++) {
+    for(int i = 0; i < fd_table_cap; i++) {
         if(!fd_table[i]) {
             fd_table[i] = f;
             return i;
         }
     }
-    fileclose(f);
-    return -1;
+    int new_cap = fd_table_cap * 2;
+    struct file **nt = realloc(fd_table, new_cap * sizeof(struct file*));
+    if(!nt){
+        fileclose(f);
+        return -1;
+    }
+    memset(nt + fd_table_cap, 0, (new_cap - fd_table_cap) * sizeof(struct file*));
+    fd_table = nt;
+    int idx = fd_table_cap;
+    fd_table_cap = new_cap;
+    fd_table[idx] = f;
+    return idx;
 }
 
 int libos_pipe(int fd[2]) {
@@ -130,7 +176,8 @@ int libos_stat(const char *path, struct stat *st) {
 }
 
 long libos_lseek(int fd, long off, int whence) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    ensure_fd_table();
+    if(fd < 0 || fd >= fd_table_cap || !fd_table[fd])
         return -1;
     struct file *f = fd_table[fd];
     switch(whence){
@@ -154,7 +201,8 @@ long libos_lseek(int fd, long off, int whence) {
 }
 
 int libos_ftruncate(int fd, long length) {
-    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+    ensure_fd_table();
+    if(fd < 0 || fd >= fd_table_cap || !fd_table[fd])
         return -1;
     (void)length;
     /* The simple in-memory filesystem ignores size changes. */

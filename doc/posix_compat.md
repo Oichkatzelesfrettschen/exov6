@@ -11,6 +11,7 @@ the host socket APIs.
 ## Implemented Interfaces
 | Interface | Notes |
 |-----------|----------------------------------------------|
+| `libos_open` | Handles `O_CREAT`, `O_TRUNC` and `O_APPEND` and grows the descriptor table. |
 | `libos_stat` | Returns dummy metadata from the virtual FS. |
 | `libos_lseek` | Adjusts the in-memory file offset. |
 | `libos_ftruncate` | Ignored by the demo filesystem but provided for compatibility. |
