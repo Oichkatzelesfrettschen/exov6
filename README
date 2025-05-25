@@ -278,10 +278,12 @@ Optional flags control the spinlock implementation and debugging
 facilities.  Set them with ``-D<FLAG>=ON`` when invoking CMake or in the
 environment for Meson:
 
+``CONFIG_SMP``
+    Enable multi-core support. When OFF spinlocks compile to no-ops.
 ``USE_TICKET_LOCK``
     Use ticket-based spinlocks instead of the default.
 ``SPINLOCK_UNIPROCESSOR``
-    Optimize locks for single CPU systems.
+    Optimize locks for single CPU systems. Implies CONFIG_SMP=OFF.
 ``SPINLOCK_DEBUG``
     Enable additional lock sanity checks.
 
