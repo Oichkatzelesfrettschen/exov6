@@ -69,6 +69,14 @@ else
   echo "Skipping apt-get update due to offline mode" >&2
 fi
 
+# Default optimization and linker settings
+export CC=${CC:-clang}
+export CXX=${CXX:-clang++}
+export CFLAGS="${CFLAGS:--O3 -pipe -march=native}"
+export CXXFLAGS="${CXXFLAGS:--O3 -pipe -march=native}"
+export LDFLAGS="${LDFLAGS:--fuse-ld=lld}"
+export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
+
 #— core build tools, formatters, analysis, science libs
 # The project now builds primarily with clang.  GCC packages remain only
 # for cross-compilers and legacy support.
@@ -306,7 +314,9 @@ for pkg in \
   kotlin gradle-plugin-kotlin \
   ruby ruby-dev gem bundler php-cli php-dev composer phpunit \
   r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol \
-  fpc lazarus zig nim nimble crystal shards gforth; do
+  fpc lazarus zig nim nimble crystal shards gforth \
+  nodejs npm \
+  coq coqide coq-theories tlaplus; do
   apt_pin_install "$pkg"
 done
 
