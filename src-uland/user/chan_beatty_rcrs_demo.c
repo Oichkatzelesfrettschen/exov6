@@ -1,6 +1,7 @@
 #include "types.h"
 #include "user.h"
 #include "chan.h"
+#include "capnp_helpers.h"
 #include "math_core.h"
 #include "libos/driver.h"
 #include "proto/driver.capnp.h"
