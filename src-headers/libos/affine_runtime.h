@@ -31,6 +31,25 @@ typedef struct lambda_term {
 // step (0 for continue, non-zero to stop).
 int lambda_run(lambda_term_t *t, int fuel);
 
+// Lambda capability that can be consumed exactly once
+typedef struct lambda_cap {
+  lambda_term_t term; // lambda to execute
+  exo_cap cap;        // associated capability token
+  int consumed;       // non-zero once used
+} lambda_cap_t;
+
+[[nodiscard]] lambda_cap_t *lambda_cap_create(lambda_fn fn, void *env,
+                                             exo_cap cap);
+void lambda_cap_destroy(lambda_cap_t *lc);
+// Execute the lambda once and mark the capability consumed
+int lambda_cap_use(lambda_cap_t *lc, int fuel);
+
+// Security hooks for microkernels
+// Delegate duplicates the capability for a new owner
+int lambda_cap_delegate(lambda_cap_t *lc, uint16_t new_owner);
+// Revoke invalidates the capability via the kernel
+int lambda_cap_revoke(lambda_cap_t *lc);
+
 // Macro to declare an affine typed channel using Cap'n Proto helpers
 #define AFFINE_CHAN_DECLARE(name, type)                                        \
   static const struct msg_type_desc name##_typedesc = {type##_MESSAGE_SIZE};   \
