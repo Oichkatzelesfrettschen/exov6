@@ -363,6 +363,13 @@ which restricts a channel to a single send.  After building with ``make`` and bo
 
     $ affine_channel_demo
 
+USER DEMO: FBDEV DRIVER
+-----------------------
+``fbdev_demo`` uses the minimal DDEKit layer to send a simple pattern to
+the framebuffer.  Build the system and after booting run:
+
+    $ fbdev_demo
+
 
 The demonstration shows how Beatty's weights pick the family and how the
 DAG scheduler respects node priorities when executing that family.
