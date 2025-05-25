@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "include/exokernel.h"
 
 struct file {
@@ -37,3 +40,6 @@ struct devsw {
 extern struct devsw devsw[];
 
 #define CONSOLE 1
+#ifdef __cplusplus
+}
+#endif

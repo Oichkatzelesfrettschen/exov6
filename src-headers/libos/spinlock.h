@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <stddef.h>
 
 struct ticketlock {
@@ -63,3 +66,6 @@ static inline void release(struct spinlock *l) { (void)l; }
 static inline size_t spinlock_optimal_alignment(void) {
   return __alignof__(struct spinlock);
 }
+#ifdef __cplusplus
+}
+#endif

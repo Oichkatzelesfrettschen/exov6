@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 #include "exo.h"
 
@@ -21,7 +24,6 @@ struct dag_node {
   int ndeps;
   /* set once the node has run */
   int done;
-
 };
 
 void dag_node_init(struct dag_node *n, exo_cap ctx);
@@ -30,3 +32,6 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child);
 void dag_sched_submit(struct dag_node *node);
 void dag_sched_init(void);
 
+#ifdef __cplusplus
+}
+#endif

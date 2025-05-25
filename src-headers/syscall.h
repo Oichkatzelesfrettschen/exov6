@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 enum {
   SYS_fork = 1,
   SYS_exit,
@@ -42,3 +45,6 @@ enum {
   SYS_exo_bind_irq,
   SYS_exo_alloc_dma,
 };
+#ifdef __cplusplus
+}
+#endif

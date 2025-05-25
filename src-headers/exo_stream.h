@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 
 struct exo_sched_ops {
@@ -20,3 +23,6 @@ struct exo_stream {
 void exo_stream_register(struct exo_stream *stream);
 void exo_stream_halt(void);
 void exo_stream_yield(void);
+#ifdef __cplusplus
+}
+#endif

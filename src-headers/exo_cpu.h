@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 #include "../exo.h"
 
@@ -59,3 +62,6 @@ static inline void cap_yield(context_t **old, context_t *target) {
 }
 
 int exo_yield_to(exo_cap target);
+#ifdef __cplusplus
+}
+#endif

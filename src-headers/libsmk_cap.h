@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 #include "user.h"
 
@@ -9,3 +12,6 @@ typedef struct {
 
 static inline void borrow(cap_t c) { cap_inc(c.id); }
 static inline void drop(cap_t c) { cap_dec(c.id); }
+#ifdef __cplusplus
+}
+#endif

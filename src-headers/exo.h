@@ -1,5 +1,8 @@
 #ifndef EXO_H
 #define EXO_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 
 typedef struct hash256 {
@@ -28,4 +31,7 @@ exo_cap cap_new(uint id, uint rights, uint owner);
 int cap_verify(exo_cap c);
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 #endif // EXO_H

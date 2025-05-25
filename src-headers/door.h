@@ -7,9 +7,9 @@ extern "C" {
 #endif
 
 typedef struct door {
-    exo_cap dest;
-    void (*handler)(zipc_msg_t *msg);
-    int is_local;
+  exo_cap dest;
+  void (*handler)(zipc_msg_t *msg);
+  int is_local;
 } door_t;
 
 door_t door_create_local(void (*handler)(zipc_msg_t *msg));

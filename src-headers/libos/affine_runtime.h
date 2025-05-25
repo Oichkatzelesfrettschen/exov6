@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "chan.h"
 #include "caplib.h"
 
@@ -53,3 +56,6 @@ int lambda_run(lambda_term_t *t, int fuel);
       type##_decode(m, buf);                                                   \
     return r;                                                                  \
   }
+#ifdef __cplusplus
+}
+#endif

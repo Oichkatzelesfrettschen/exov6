@@ -1,19 +1,20 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 #include "exo.h"
 #include "syscall.h"
 
 /* Capability access rights. */
-#define EXO_RIGHT_R   0x1
-#define EXO_RIGHT_W   0x2
-#define EXO_RIGHT_X   0x4
+#define EXO_RIGHT_R 0x1
+#define EXO_RIGHT_W 0x2
+#define EXO_RIGHT_X 0x4
 #define EXO_RIGHT_CTL 0x8
 
-static inline int cap_has_rights(uint rights, uint need)
-{
-    return (rights & need) == need;
+static inline int cap_has_rights(uint rights, uint need) {
+  return (rights & need) == need;
 }
-
 
 /*
  * Minimal exokernel capability primitives.  Library operating systems
@@ -78,22 +79,25 @@ exo_cap exo_alloc_dma(uint chan);
 
 /* Enumeration of syscall numbers for the primitives. */
 enum exo_syscall {
-    EXO_SYSCALL_ALLOC_PAGE  = SYS_exo_alloc_page,
-    EXO_SYSCALL_UNBIND_PAGE = SYS_exo_unbind_page,
-    EXO_SYSCALL_ALLOC_BLOCK = SYS_exo_alloc_block,
-    EXO_SYSCALL_BIND_BLOCK  = SYS_exo_bind_block,
-    EXO_SYSCALL_FLUSH_BLOCK = SYS_exo_flush_block,
-    EXO_SYSCALL_YIELD_TO    = SYS_exo_yield_to,
-    EXO_SYSCALL_SEND        = SYS_exo_send,
-    EXO_SYSCALL_RECV        = SYS_exo_recv,
-    EXO_SYSCALL_READ_DISK   = SYS_exo_read_disk,
-    EXO_SYSCALL_WRITE_DISK  = SYS_exo_write_disk,
-    EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,
-    EXO_SYSCALL_BIND_IRQ     = SYS_exo_bind_irq,
-    EXO_SYSCALL_ALLOC_DMA    = SYS_exo_alloc_dma,
-    EXO_SYSCALL_CAP_INC     = SYS_cap_inc,
-    EXO_SYSCALL_CAP_DEC     = SYS_cap_dec,
-    EXO_SYSCALL_IRQ_ALLOC   = SYS_exo_irq_alloc,
-    EXO_SYSCALL_IRQ_WAIT    = SYS_exo_irq_wait,
-    EXO_SYSCALL_IRQ_ACK     = SYS_exo_irq_ack,
+  EXO_SYSCALL_ALLOC_PAGE = SYS_exo_alloc_page,
+  EXO_SYSCALL_UNBIND_PAGE = SYS_exo_unbind_page,
+  EXO_SYSCALL_ALLOC_BLOCK = SYS_exo_alloc_block,
+  EXO_SYSCALL_BIND_BLOCK = SYS_exo_bind_block,
+  EXO_SYSCALL_FLUSH_BLOCK = SYS_exo_flush_block,
+  EXO_SYSCALL_YIELD_TO = SYS_exo_yield_to,
+  EXO_SYSCALL_SEND = SYS_exo_send,
+  EXO_SYSCALL_RECV = SYS_exo_recv,
+  EXO_SYSCALL_READ_DISK = SYS_exo_read_disk,
+  EXO_SYSCALL_WRITE_DISK = SYS_exo_write_disk,
+  EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,
+  EXO_SYSCALL_BIND_IRQ = SYS_exo_bind_irq,
+  EXO_SYSCALL_ALLOC_DMA = SYS_exo_alloc_dma,
+  EXO_SYSCALL_CAP_INC = SYS_cap_inc,
+  EXO_SYSCALL_CAP_DEC = SYS_cap_dec,
+  EXO_SYSCALL_IRQ_ALLOC = SYS_exo_irq_alloc,
+  EXO_SYSCALL_IRQ_WAIT = SYS_exo_irq_wait,
+  EXO_SYSCALL_IRQ_ACK = SYS_exo_irq_ack,
 };
+#ifdef __cplusplus
+}
+#endif

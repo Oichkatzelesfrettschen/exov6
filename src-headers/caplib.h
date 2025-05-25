@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "exo.h"
 #include "exo_cpu.h"
 #include "exokernel.h"
@@ -21,3 +24,6 @@ int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 int cap_ipc_echo_demo(void);
 int cap_inc(uint16_t id);
 int cap_dec(uint16_t id);
+#ifdef __cplusplus
+}
+#endif

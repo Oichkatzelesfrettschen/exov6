@@ -1,3 +1,6 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #pragma once
 
@@ -294,3 +297,6 @@ void *atomic_cas_ptr(volatile void **, void *, void *);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
+#ifdef __cplusplus
+}
+#endif

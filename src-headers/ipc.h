@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <stdint.h>
 #include <stddef.h>
 
@@ -46,3 +49,6 @@ static inline int zipc_call(zipc_msg_t *m) {
   m->w3 = r8;
   return 0;
 }
+#ifdef __cplusplus
+}
+#endif

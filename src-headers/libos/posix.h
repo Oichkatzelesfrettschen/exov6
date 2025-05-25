@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "types.h"
 
 int libos_open(const char *path, int flags);
@@ -16,3 +19,6 @@ int libos_fork(void);
 int libos_waitpid(int pid);
 int libos_sigsend(int pid, int sig);
 int libos_sigcheck(void);
+#ifdef __cplusplus
+}
+#endif

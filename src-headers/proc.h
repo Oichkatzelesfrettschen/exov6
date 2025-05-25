@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "param.h"
 #include "mmu.h"
 #include "x86.h"
@@ -16,32 +19,32 @@ typedef struct context context_t;
 
 // Per-CPU state
 struct cpu {
-  uchar apicid;                // Local APIC ID
-  context_t *scheduler;        // swtch() here to enter scheduler
+  uchar apicid;         // Local APIC ID
+  context_t *scheduler; // swtch() here to enter scheduler
 #ifndef __aarch64__
-  struct taskstate ts;         // Used by x86 to find stack for interrupt
-  struct segdesc gdt[NSEGS];   // x86 global descriptor table
+  struct taskstate ts;       // Used by x86 to find stack for interrupt
+  struct segdesc gdt[NSEGS]; // x86 global descriptor table
 #endif
-  volatile uint started;       // Has the CPU started?
-  int ncli;                    // Depth of pushcli nesting.
-  int intena;                  // Were interrupts enabled before pushcli?
-  struct proc *proc;           // The process running on this cpu or null
+  volatile uint started; // Has the CPU started?
+  int ncli;              // Depth of pushcli nesting.
+  int intena;            // Were interrupts enabled before pushcli?
+  struct proc *proc;     // The process running on this cpu or null
 };
 
 extern struct cpu cpus[NCPU];
 extern int ncpu;
 
-//PAGEBREAK: 17
-// Saved registers for kernel context switches.
-// Don't need to save all the segment registers (%cs, etc),
-// because they are constant across kernel contexts.
-// Don't need to save %eax, %ecx, %edx, because the
-// x86 convention is that the caller has saved them.
-// Contexts are stored at the bottom of the stack they
-// describe; the stack pointer is the address of the context.
-// The layout of the context matches the layout of the stack in swtch.S
-// at the "Switch stacks" comment. Switch doesn't save eip explicitly,
-// but it is on the stack and allocproc() manipulates it.
+// PAGEBREAK: 17
+//  Saved registers for kernel context switches.
+//  Don't need to save all the segment registers (%cs, etc),
+//  because they are constant across kernel contexts.
+//  Don't need to save %eax, %ecx, %edx, because the
+//  x86 convention is that the caller has saved them.
+//  Contexts are stored at the bottom of the stack they
+//  describe; the stack pointer is the address of the context.
+//  The layout of the context matches the layout of the stack in swtch.S
+//  at the "Switch stacks" comment. Switch doesn't save eip explicitly,
+//  but it is on the stack and allocproc() manipulates it.
 struct context {
   uint edi;
   uint esi;
@@ -79,31 +82,30 @@ struct context64 {
 };
 #endif
 
-
 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
 struct proc {
-  size_t sz;                     // Size of process memory (bytes)
-  pde_t* pgdir;                  // Page table
-  char *kstack;                  // Bottom of kernel stack for this process
-  enum procstate state;          // Process state
-  int pid;                       // Process ID
-  struct proc *parent;           // Parent process
-  struct trapframe *tf;          // Trap frame for current syscall
-  context_t *context;            // swtch() here to run process
-  void (*timer_upcall)(void);    // user-mode timer interrupt handler
-  void *chan;                    // If non-zero, sleeping on chan
-  int killed;                    // If non-zero, have been killed
-  int pending_signal;            // Simple signal bitmask
-  struct file *ofile[NOFILE];    // Open files
-  struct inode *cwd;             // Current directory
-  char name[16];                 // Process name (debugging)
-  uint pctr_cap;                 // Capability for exo_pctr_transfer
-  volatile uint pctr_signal;     // Signal counter for exo_pctr_transfer
-  uint64 gas_remaining;          // Remaining CPU budget
-  int preferred_node;            // NUMA allocation preference
-  int out_of_gas;                // Flag set when gas runs out
+  size_t sz;                  // Size of process memory (bytes)
+  pde_t *pgdir;               // Page table
+  char *kstack;               // Bottom of kernel stack for this process
+  enum procstate state;       // Process state
+  int pid;                    // Process ID
+  struct proc *parent;        // Parent process
+  struct trapframe *tf;       // Trap frame for current syscall
+  context_t *context;         // swtch() here to run process
+  void (*timer_upcall)(void); // user-mode timer interrupt handler
+  void *chan;                 // If non-zero, sleeping on chan
+  int killed;                 // If non-zero, have been killed
+  int pending_signal;         // Simple signal bitmask
+  struct file *ofile[NOFILE]; // Open files
+  struct inode *cwd;          // Current directory
+  char name[16];              // Process name (debugging)
+  uint pctr_cap;              // Capability for exo_pctr_transfer
+  volatile uint pctr_signal;  // Signal counter for exo_pctr_transfer
+  uint64 gas_remaining;       // Remaining CPU budget
+  int preferred_node;         // NUMA allocation preference
+  int out_of_gas;             // Flag set when gas runs out
 };
 
 // Ensure scheduler relies on fixed struct proc size
@@ -112,7 +114,6 @@ _Static_assert(sizeof(struct proc) == 256, "struct proc size incorrect");
 #else
 _Static_assert(sizeof(struct proc) == 156, "struct proc size incorrect");
 #endif
-
 
 // Process memory is laid out contiguously, low addresses first:
 //   text
@@ -124,3 +125,6 @@ struct ptable {
   struct spinlock lock;
   struct proc proc[NPROC];
 };
+#ifdef __cplusplus
+}
+#endif

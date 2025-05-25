@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 // Memory layout
 
 #define EXTMEM 0x100000 // Start of extended memory
@@ -38,3 +41,6 @@
 
 #define V2P_WO(x) ((x) - KERNBASE) // same as V2P, but without casts
 #define P2V_WO(x) ((x) + KERNBASE) // same as P2V, but without casts
+#ifdef __cplusplus
+}
+#endif

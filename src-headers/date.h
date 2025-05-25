@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 struct rtcdate {
   uint second;
   uint minute;
@@ -8,3 +11,6 @@ struct rtcdate {
   uint month;
   uint year;
 };
+#ifdef __cplusplus
+}
+#endif

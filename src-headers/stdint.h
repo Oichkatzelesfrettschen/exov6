@@ -1,7 +1,10 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #if __has_include_next(<stdint.h>)
-# include_next <stdint.h>
+#include_next <stdint.h>
 #else
 typedef signed char int8_t;
 typedef short int16_t;
@@ -15,4 +18,7 @@ typedef unsigned long long uint64_t;
 
 typedef long intptr_t;
 typedef unsigned long uintptr_t;
+#endif
+#ifdef __cplusplus
+}
 #endif

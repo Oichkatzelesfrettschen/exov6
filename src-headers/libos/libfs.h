@@ -1,4 +1,7 @@
 #pragma once
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "file.h"
 #include "fs.h"
 #include "include/exokernel.h"
@@ -12,3 +15,6 @@ struct file *libfs_open(const char *path, int flags);
 int libfs_read(struct file *f, void *buf, size_t n);
 int libfs_write(struct file *f, const void *buf, size_t n);
 void libfs_close(struct file *f);
+#ifdef __cplusplus
+}
+#endif
