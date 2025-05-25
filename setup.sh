@@ -2,9 +2,28 @@
 set -euo pipefail
 set -x
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-# Detect basic network connectivity; many CI environments are offline
+
+# Parse command line arguments
+OFFLINE_MODE=false
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --offline)
+      OFFLINE_MODE=true
+      ;;
+    *)
+      echo "Usage: $0 [--offline]" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# Detect basic network connectivity unless offline mode was requested
 NETWORK_AVAILABLE=true
-if ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
+if [ "$OFFLINE_MODE" = true ]; then
+  NETWORK_AVAILABLE=false
+  echo "Offline mode enabled" >&2
+elif ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
   NETWORK_AVAILABLE=false
   echo "Network unavailable, proceeding in offline mode" >&2
 fi
@@ -55,6 +74,23 @@ apt_pin_install(){
   fi
 }
 
+# Install packages from offline_packages/ when network is unavailable
+install_offline_packages(){
+  dir="$REPO_ROOT/offline_packages"
+  if [ -d "$dir" ]; then
+    shopt -s nullglob
+    for deb in "$dir"/*.deb; do
+      if ! dpkg -i "$deb"; then
+        echo "Warning: dpkg -i $deb failed" >&2
+        echo "dpkg $deb" >>"$FAIL_LOG"
+      fi
+    done
+    shopt -u nullglob
+  else
+    echo "Warning: offline_packages directory not found" >&2
+  fi
+}
+
 #— enable foreign architectures for cross-compilation
 for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
@@ -67,6 +103,10 @@ if [ "$NETWORK_AVAILABLE" = true ]; then
   }
 else
   echo "Skipping apt-get update due to offline mode" >&2
+fi
+
+if [ "$NETWORK_AVAILABLE" != true ]; then
+  install_offline_packages
 fi
 
 # Default optimization and linker settings
