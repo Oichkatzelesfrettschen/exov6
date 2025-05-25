@@ -61,8 +61,8 @@ We don't process error reports (see note on top of this file).
 BUILDING AND RUNNING XV6
 
 To build xv6 on an x86 ELF machine (like Linux or FreeBSD) using
-``clang`` and ``cmake`` run ``cmake -S . -B build -G Ninja`` followed by
-``ninja -C build``.  On non-x86 or non-ELF machines you may need a
+``clang`` and ``cmake`` run ``cmake -S . -B build -G Ninja && ninja -C build``.
+On non-x86 or non-ELF machines you may need a
 cross-compiler toolchain capable of producing x86 ELF binaries
 (see https://pdos.csail.mit.edu/6.828/).  A cross-compiler may not be
 necessary on a 64-bit Linux host since the toolchain can produce 32-bit
@@ -72,8 +72,7 @@ optional example parser included in the build scripts.
 
 Step-by-step build and run commands::
 
-    cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
-    ninja -C build
+    CC=clang cmake -S . -B build -G Ninja && ninja -C build
     ninja -C build qemu
 
 When adding new user-space utilities place the sources under
@@ -196,8 +195,8 @@ them from source using the standard GNU build process.
 
 Once a cross-compiler is installed, build the kernel with::
 
-    cmake -S . -B build -G Ninja -DARCH=x86_64
-    ninja -C build
+    cmake -S . -B build -G Ninja -DARCH=x86_64 \
+        -DCMAKE_C_COMPILER=x86_64-elf-gcc && ninja -C build
 
 The resulting ``kernel.img`` can be run under QEMU with::
 
@@ -226,23 +225,22 @@ addition to ``x86`` and ``x86_64``.
 
 Build and run an AArch64 image with::
 
-    cmake -S . -B build -G Ninja -DARCH=aarch64
-    ninja -C build
+    cmake -S . -B build -G Ninja -DARCH=aarch64 && ninja -C build
     ./qemu-aarch64.sh
 
 Other cross-compilers are ready for experimentation.  Example commands
 for architectures that do not yet have dedicated run scripts are::
 
-    cmake -S . -B build-arm -G Ninja -DARCH=arm        # ARMv7
+    cmake -S . -B build-arm -G Ninja -DARCH=arm && ninja -C build-arm        # ARMv7
     qemu-system-arm -M virt -nographic -kernel kernel-arm
 
-    cmake -S . -B build-ppc -G Ninja -DARCH=powerpc    # 32-bit PowerPC
+    cmake -S . -B build-ppc -G Ninja -DARCH=powerpc && ninja -C build-ppc    # 32-bit PowerPC
     qemu-system-ppc -M g3beige -nographic -kernel kernel-powerpc
 
-    cmake -S . -B build-ppc64 -G Ninja -DARCH=ppc64      # PowerPC64 big-endian
+    cmake -S . -B build-ppc64 -G Ninja -DARCH=ppc64 && ninja -C build-ppc64      # PowerPC64 big-endian
     qemu-system-ppc64 -M pseries -nographic -kernel kernel-ppc64
 
-    cmake -S . -B build-ppc64le -G Ninja -DARCH=ppc64le    # PowerPC64 little-endian
+    cmake -S . -B build-ppc64le -G Ninja -DARCH=ppc64le && ninja -C build-ppc64le    # PowerPC64 little-endian
     qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
 
 When additional ``ARCH`` values are implemented these commands will
@@ -270,8 +268,22 @@ A minimal CMake configuration is provided.  After running ``setup.sh``
 ``clang`` and ``cmake`` are available.  Configure a build directory and
 compile with::
 
-    cmake -S . -B build
-    cmake --build build
+    cmake -S . -B build -G Ninja && ninja -C build
+
+Meson can configure the project as well::
+
+    meson setup build && ninja -C build
+
+Optional flags control the spinlock implementation and debugging
+facilities.  Set them with ``-D<FLAG>=ON`` when invoking CMake or in the
+environment for Meson:
+
+``USE_TICKET_LOCK``
+    Use ticket-based spinlocks instead of the default.
+``SPINLOCK_UNIPROCESSOR``
+    Optimize locks for single CPU systems.
+``SPINLOCK_DEBUG``
+    Enable additional lock sanity checks.
 
 CODE FORMATTING
 ---------------
@@ -298,9 +310,9 @@ USER DEMO: EXO_YIELD_TO AND STREAMS
 -----------------------------------
 The example program ``exo_stream_demo`` under ``src-uland/user/`` is a minimal
 illustration of switching contexts with ``exo_yield_to`` and using the
-placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system as
-usual with ``make``; the resulting ``fs.img`` will contain the new
-``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
+placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system with
+``cmake -S . -B build -G Ninja && ninja -C build``; the resulting
+``fs.img`` will contain the new ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
 
 USER DEMO: TYPED CHANNELS
@@ -308,7 +320,7 @@ USER DEMO: TYPED CHANNELS
 ``typed_chan_demo`` showcases the ``CHAN_DECLARE`` macro that creates a
 typed wrapper around the basic capability IPC functions.  Messages are
 defined using Cap'n Proto schemas under ``proto/`` and automatically
-serialized when sending.  Building with ``make`` will compile
+serialized when sending.  Building with ``cmake -S . -B build -G Ninja && ninja -C build`` will compile
 ``typed_chan_demo`` along with ``typed_chan_send`` and
 ``typed_chan_recv`` under ``src-uland/user``.  After ``fs.img`` is
 generated, run ``typed_chan_demo`` inside QEMU to see a Cap'n Proto
@@ -317,8 +329,8 @@ message sent and received through the typed channel API.
 USER DEMO: CHANNELS, DAG SCHEDULER AND SUPERVISOR
 -------------------------------------------------
 ``chan_dag_supervisor_demo`` combines typed channels, the DAG scheduler and
-the supervisor helper.  Building the repository with ``make`` compiles the
-demo and its helper ``typed_chan_recv``.  After booting with ``ninja -C build qemu-nox``
+the supervisor helper.  Building the repository with the standard command
+compiles the demo and its helper ``typed_chan_recv``.  After booting with ``ninja -C build qemu-nox``
 run::
 
     $ chan_dag_supervisor_demo
@@ -336,7 +348,7 @@ according to their weights and dependencies.
 USER DEMO: BEATTY SCHEDULER
 --------------------------
 ``beatty_demo`` exercises the kernel's Beatty scheduler and prints the
-resulting task order. Build with ``make`` so the binary is placed in
+resulting task order. Build with ``cmake -S . -B build -G Ninja && ninja -C build`` so the binary is placed in
 ``fs.img`` and run it inside QEMU:
 
     $ beatty_demo
@@ -344,14 +356,14 @@ resulting task order. Build with ``make`` so the binary is placed in
 USER DEMO: HELLO CHANNEL
 ------------------------
 ``hello_channel`` shows typed channels together with capability
-borrowing. After ``make`` completes, boot with ``ninja -C build qemu-nox`` and run:
+borrowing. After the build completes, boot with ``ninja -C build qemu-nox`` and run:
 
     $ hello_channel
 
 USER DEMO: AFFINE CHANNEL
 -------------------------
 ``affine_channel_demo`` demonstrates the ``AFFINE_CHAN_DECLARE`` macro
-which restricts a channel to a single send.  After building with ``make`` and booting with ``ninja -C build qemu-nox`` run:
+which restricts a channel to a single send.  After building with ``cmake -S . -B build -G Ninja && ninja -C build`` and booting with ``ninja -C build qemu-nox`` run:
 
     $ affine_channel_demo
 
