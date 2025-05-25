@@ -217,6 +217,12 @@ functions are registered with `exo_ipc_register()` so `exo_send()` and
 
 The `rcrs` supervisor runs at boot and keeps drivers alive. It launches each program listed in `drivers.conf` and pings them periodically through an endpoint. If a driver fails to respond before the timeout expires `rcrs` kills and restarts it. Status reports show the process IDs and restart counts so clients can reconnect when a driver is replaced.
 
+## Cooperating Microkernels
+
+User space may host several small microkernels built on top of the Phoenix capability substrate.  Each microkernel registers itself with `rcrs` by sending a `REGISTER` message to the global endpoint.  The supervisor tracks the PIDs of the registered runtimes and includes them in its periodic status reports.
+
+Registered microkernels share capabilities through the libOS helpers in `libos/microkernel/`.  The capability manager hands out pages and revokes them when a runtime exits.  Messages are routed by the `msg_router` library which simply forwards buffers to the destination capability.  Resource usage may be metered with the lightweight accounting functions in `resource_account.c` so cooperating kernels can enforce quotas on one another.  Because all communication relies on explicit capabilities the kernels remain isolated yet can still collaborate within the same address space.
+
 ## Cap'n Proto IPC
 
 Phoenix uses [Cap'n Proto](https://capnproto.org/) schemas to describe the
