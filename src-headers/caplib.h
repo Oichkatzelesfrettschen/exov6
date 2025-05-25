@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 #include "exo.h"
 #include "exo_cpu.h"
 #include "exokernel.h"

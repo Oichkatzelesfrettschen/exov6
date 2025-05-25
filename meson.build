@@ -23,3 +23,6 @@ if clang_tidy.found()
 endif
 
 subdir('libnstr_graph')
+
+# Build test utilities
+subdir('tests')

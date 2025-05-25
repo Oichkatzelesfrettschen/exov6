@@ -50,3 +50,6 @@ endif()
 target_link_libraries(kernel PRIVATE nstr_graph)
 
 add_subdirectory(libnstr_graph)
+
+# Build test utilities
+add_subdirectory(tests)
