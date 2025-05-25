@@ -4,6 +4,8 @@
 #include "string.h"
 #include "user.h"
 #include "signal.h"
+#include <stdlib.h>
+#include "stat.h"
 
 #define LIBOS_MAXFD 16
 
@@ -115,3 +117,65 @@ int libos_signal(int sig, void (*handler)(int)) {
     sig_handlers[sig] = handler;
     return 0;
 }
+
+int libos_stat(const char *path, struct stat *st) {
+    struct file *f = libfs_open(path, 0);
+    if(!f)
+        return -1;
+    int r = filestat(f, st);
+    libfs_close(f);
+    return r;
+}
+
+long libos_lseek(int fd, long off, int whence) {
+    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    struct file *f = fd_table[fd];
+    switch(whence){
+    case 0: /* SEEK_SET */
+        f->off = off;
+        break;
+    case 1: /* SEEK_CUR */
+        f->off += off;
+        break;
+    case 2: {
+        struct stat st;
+        if(filestat(f, &st) < 0)
+            return -1;
+        f->off = st.size + off;
+        break;
+    }
+    default:
+        return -1;
+    }
+    return f->off;
+}
+
+void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd, long off) {
+    (void)addr; (void)prot; (void)flags; (void)fd; (void)off;
+    void *p = malloc(len);
+    return p ? p : (void*)-1;
+}
+
+int libos_munmap(void *addr, size_t len) {
+    (void)len;
+    free(addr);
+    return 0;
+}
+
+int libos_sigemptyset(libos_sigset_t *set){ *set = 0; return 0; }
+int libos_sigfillset(libos_sigset_t *set){ *set = ~0UL; return 0; }
+int libos_sigaddset(libos_sigset_t *set,int sig){ if(sig<0||sig>=32) return -1; *set |= (1UL<<sig); return 0; }
+int libos_sigdelset(libos_sigset_t *set,int sig){ if(sig<0||sig>=32) return -1; *set &= ~(1UL<<sig); return 0; }
+int libos_sigismember(const libos_sigset_t *set,int sig){ if(sig<0||sig>=32) return 0; return (*set & (1UL<<sig))!=0; }
+
+int libos_getpgrp(void){ return getpid(); }
+int libos_setpgid(int pid, int pgid){ (void)pid; (void)pgid; return 0; }
+
+int libos_socket(int domain, int type, int protocol){ (void)domain;(void)type;(void)protocol; return -1; }
+int libos_bind(int fd,const struct sockaddr *addr,socklen_t len){ (void)fd;(void)addr;(void)len; return -1; }
+int libos_listen(int fd,int backlog){ (void)fd;(void)backlog; return -1; }
+int libos_accept(int fd,struct sockaddr *addr,socklen_t *len){ (void)fd;(void)addr;(void)len; return -1; }
+int libos_connect(int fd,const struct sockaddr *addr,socklen_t len){ (void)fd;(void)addr;(void)len; return -1; }
+long libos_send(int fd,const void *buf,size_t len,int flags){ (void)fd;(void)buf;(void)len;(void)flags; return -1; }
+long libos_recv(int fd,void *buf,size_t len,int flags){ (void)fd;(void)buf;(void)len;(void)flags; return -1; }
