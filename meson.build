@@ -143,3 +143,4 @@ fsimg = custom_target('fs.img',
   build_by_default: true)
 
 subdir('tests/microbench')
+subdir('tests/posix')
