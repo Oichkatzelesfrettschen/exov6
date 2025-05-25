@@ -28,7 +28,7 @@ sum(uchar *addr, int len)
 
 // Look for an MP structure in the len bytes at addr.
 static struct mp*
-mpsearch1(uint a, int len)
+mpsearch1(uint32_t a, int len)
 {
   uchar *e, *p, *addr;
 
@@ -49,7 +49,7 @@ static struct mp*
 mpsearch(void)
 {
   uchar *bda;
-  uint p;
+  uint32_t p;
   struct mp *mp;
 
   bda = (uchar *) P2V(0x400);
@@ -101,7 +101,7 @@ mpinit(void)
   if((conf = mpconfig(&mp)) == 0)
     panic("Expect to run on an SMP");
   ismp = 1;
-  lapic = (uint*)conf->lapicaddr;
+  lapic = (uint32_t*)conf->lapicaddr;
   for(p=(uchar*)(conf+1), e=(uchar*)conf+conf->length; p<e; ){
     switch(*p){
     case MPPROC:

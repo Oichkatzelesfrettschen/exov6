@@ -13,7 +13,7 @@ struct spinlock {
   struct ticketlock ticket;
   char *name;
   struct cpu *cpu;
-  unsigned int pcs[10];
+  uintptr_t pcs[10];
 };
 
 #ifdef SPINLOCK_NO_STUBS

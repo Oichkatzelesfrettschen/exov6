@@ -4,12 +4,12 @@
 double phi(void) { return 1.618033988749895; }
 
 // Compute the n-th Fibonacci number with F(0) = 0 and F(1) = 1.
-uint64 fib(uint n) {
+uint64 fib(uint32_t n) {
   if (n == 0)
     return 0;
   uint64 a = 0;
   uint64 b = 1;
-  for (uint i = 1; i < n; i++) {
+  for (uint32_t i = 1; i < n; i++) {
     uint64 t = a + b;
     a = b;
     b = t;

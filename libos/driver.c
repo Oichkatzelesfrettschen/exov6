@@ -1,5 +1,6 @@
 #include "driver.h"
 #include "user.h"
+#include <stdlib.h>
 
 int driver_spawn(const char *path, char *const argv[])
 {

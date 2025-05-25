@@ -1441,7 +1441,7 @@ sbrktest(void)
 {
   int fds[2], pid, pids[10], ppid;
   char *a, *b, *c, *lastaddr, *oldbrk, *p, scratch;
-  uint amt;
+  uint32_t amt;
 
   printf(stdout, "sbrk test\n");
   oldbrk = sbrk(0);
@@ -1588,7 +1588,7 @@ void
 validatetest(void)
 {
   int hi, pid;
-  uint p;
+  uint32_t p;
 
   printf(stdout, "validate test\n");
   hi = 1100*1024;
@@ -1762,8 +1762,8 @@ void argptest()
   printf(1, "arg test passed\n");
 }
 
-unsigned long randstate = 1;
-unsigned int
+uint32_t randstate = 1;
+uint32_t
 rand()
 {
   randstate = randstate * 1664525 + 1013904223;

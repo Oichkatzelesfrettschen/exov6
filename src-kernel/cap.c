@@ -38,9 +38,9 @@ hash256(const uint8_t *data, size_t len, hash256_t *out)
 
 /* Derive the authentication tag for a capability. */
 static void
-compute_tag(uint id, uint rights, uint owner, hash256_t *out)
+compute_tag(uint32_t id, uint32_t rights, uint32_t owner, hash256_t *out)
 {
-    struct { uint id; uint rights; uint owner; } tmp = { id, rights, owner };
+    struct { uint32_t id; uint32_t rights; uint32_t owner; } tmp = { id, rights, owner };
     uint8_t buf[sizeof(cap_secret) + sizeof(tmp)];
 
     memmove(buf, cap_secret, sizeof(cap_secret));
@@ -49,7 +49,7 @@ compute_tag(uint id, uint rights, uint owner, hash256_t *out)
 }
 
 exo_cap
-cap_new(uint id, uint rights, uint owner)
+cap_new(uint32_t id, uint32_t rights, uint32_t owner)
 {
     exo_cap c;
     c.id = id;
@@ -69,14 +69,14 @@ cap_verify(exo_cap c)
 
 /* Allocate capabilities for additional resource types. */
 exo_cap
-exo_alloc_ioport(uint port)
+exo_alloc_ioport(uint32_t port)
 {
     int id = cap_table_alloc(CAP_TYPE_IOPORT, port, 0, myproc()->pid);
-    return cap_new(id >= 0 ? (uint)id : 0, 0, myproc()->pid);
+    return cap_new(id >= 0 ? (uint32_t)id : 0, 0, myproc()->pid);
 }
 
 exo_cap
-exo_bind_irq(uint irq)
+exo_bind_irq(uint32_t irq)
 {
     int id = cap_table_alloc(CAP_TYPE_IRQ, irq, 0, myproc()->pid);
 
@@ -84,7 +84,7 @@ exo_bind_irq(uint irq)
 }
 
 exo_cap
-exo_alloc_dma(uint chan)
+exo_alloc_dma(uint32_t chan)
 {
     int id = cap_table_alloc(CAP_TYPE_DMA, chan, 0, myproc()->pid);
     return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);

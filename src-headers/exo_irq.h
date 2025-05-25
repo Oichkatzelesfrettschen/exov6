@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "types.h"
 #include "exo_mem.h"
 #include "../exo.h"
 

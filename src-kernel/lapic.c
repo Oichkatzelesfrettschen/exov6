@@ -10,7 +10,7 @@
 #include "mmu.h"
 #include "x86.h"
 
-// Local APIC registers, divided by 4 for use as uint[] indices.
+// Local APIC registers, divided by 4 for use as uint32_t[] indices.
 #define ID      (0x0020/4)   // ID
 #define VER     (0x0030/4)   // Version
 #define TPR     (0x0080/4)   // Task Priority
@@ -41,7 +41,7 @@
 #define TCCR    (0x0390/4)   // Timer Current Count
 #define TDCR    (0x03E0/4)   // Timer Divide Configuration
 
-volatile uint *lapic;  // Initialized in mp.c
+volatile uint32_t *lapic;  // Initialized in mp.c
 
 //PAGEBREAK!
 static void
@@ -126,7 +126,7 @@ microdelay(int us)
 // Start additional processor running entry code at addr.
 // See Appendix B of MultiProcessor Specification.
 void
-lapicstartap(uchar apicid, uint addr)
+lapicstartap(uchar apicid, uint32_t addr)
 {
   int i;
   ushort *wrv;
@@ -171,8 +171,8 @@ lapicstartap(uchar apicid, uint addr)
 #define MONTH   0x08
 #define YEAR    0x09
 
-static uint
-cmos_read(uint reg)
+static uint32_t
+cmos_read(uint32_t reg)
 {
   outb(CMOS_PORT,  reg);
   microdelay(200);

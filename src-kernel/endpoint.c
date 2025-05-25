@@ -20,7 +20,7 @@ endpoint_init(struct endpoint *ep)
 }
 
 void
-endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint size,
+endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint32_t size,
                 const struct msg_type_desc *desc)
 {
     endpoint_init(ep);

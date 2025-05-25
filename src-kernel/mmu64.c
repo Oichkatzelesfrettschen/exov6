@@ -51,7 +51,7 @@ walkpml4(pml4e_t *pml4, const void *va, int alloc)
 }
 
 static int
-mappages64(pml4e_t *pml4, void *va, uint size, uint64 pa, int perm)
+mappages64(pml4e_t *pml4, void *va, uint32_t size, uint64 pa, int perm)
 {
   char *a, *last;
   pte_t *pte;
@@ -76,7 +76,7 @@ pml4e_t*
 setupkvm64(void)
 {
   pml4e_t *pml4;
-  struct kmap { void *virt; uint phys_start; uint phys_end; int perm; };
+  struct kmap { void *virt; uint32_t phys_start; uint32_t phys_end; int perm; };
   static struct kmap kmap[] = {
     { (void*)KERNBASE, 0,             EXTMEM,    PTE_W},
     { (void*)KERNLINK, V2P(KERNLINK), V2P(data), 0},

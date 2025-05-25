@@ -31,7 +31,7 @@ struct driver {
   char *argv[MAX_ARGS];
   char *buf; // backing storage for argv strings
   int pid;
-  uint last_ping;
+  uint32_t last_ping;
   int awaiting_pong;
   int ping_timeout;
   int ping_interval;
@@ -148,14 +148,14 @@ int main(void) {
     drv[i].restarts = 0;
   }
 
-  uint last_report = uptime();
+  uint32_t last_report = uptime();
 
   for (;;) {
-    uint now = uptime();
+    uint32_t now = uptime();
 
     for (int i = 0; i < n; i++) {
       if (drv[i].pid > 0 && !drv[i].awaiting_pong &&
-          now - drv[i].last_ping >= (uint)drv[i].ping_interval) {
+          now - drv[i].last_ping >= (uint32_t)drv[i].ping_interval) {
         zipc_msg_t m = {0};
         m.w0 = PING;
         m.w1 = i;
@@ -167,14 +167,14 @@ int main(void) {
 
     zipc_msg_t m;
     while (read(p[0], &m, sizeof(m)) == sizeof(m)) {
-      if (m.w0 == PONG && m.w1 < (uint)n)
+      if (m.w0 == PONG && m.w1 < (uint32_t)n)
         drv[m.w1].awaiting_pong = 0;
     }
 
     now = uptime();
     for (int i = 0; i < n; i++) {
       if (drv[i].pid > 0 && drv[i].awaiting_pong &&
-          now - drv[i].last_ping > (uint)drv[i].ping_timeout) {
+          now - drv[i].last_ping > (uint32_t)drv[i].ping_timeout) {
         printf(1, "rcrs: restarting %s\n", drv[i].argv[0]);
         kill(drv[i].pid);
         wait();

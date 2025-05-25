@@ -9,7 +9,7 @@
 static struct {
     struct spinlock lock;
     zipc_msg_t buf[FASTIPC_BUFSZ];
-    uint r, w;
+    uint32_t r, w;
     int inited;
 } fastipc;
 

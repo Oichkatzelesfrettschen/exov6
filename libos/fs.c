@@ -1,6 +1,6 @@
 #include "fs.h"
 #include "file.h"
-#include "include/exokernel.h"
+#include "exokernel.h"
 #include "sleeplock.h"
 #include "spinlock.h"
 #include "types.h"

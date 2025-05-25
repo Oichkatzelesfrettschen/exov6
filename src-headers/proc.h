@@ -1,4 +1,5 @@
 #pragma once
+#include "types.h"
 
 #include "param.h"
 #include "mmu.h"

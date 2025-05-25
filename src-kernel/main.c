@@ -89,7 +89,7 @@ static void startothers(void) {
   memmove(code, _binary_entryother64_start, (size_t)_binary_entryother64_size);
 
 #else
-  memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
+  memmove(code, _binary_entryother_start, (uint32_t)_binary_entryother_size);
 #endif
 
   for (c = cpus; c < cpus + ncpu; c++) {

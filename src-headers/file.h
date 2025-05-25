@@ -1,4 +1,8 @@
 #pragma once
+#include "types.h"
+#include <stddef.h>
+#include "spinlock.h"
+#include "sleeplock.h"
 
 struct file {
   enum { FD_NONE, FD_PIPE, FD_INODE } type;

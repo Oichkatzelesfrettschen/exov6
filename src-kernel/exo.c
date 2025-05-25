@@ -12,7 +12,7 @@
 extern struct ptable ptable;
 
 void exo_pctr_transfer(struct trapframe *tf) {
-  uint cap = tf->eax;
+  uint32_t cap = tf->eax;
   struct proc *p;
 
   acquire(&ptable.lock);
