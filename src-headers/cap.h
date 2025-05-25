@@ -7,6 +7,9 @@
 enum cap_type {
     CAP_TYPE_NONE = 0,
     CAP_TYPE_PAGE = 1,
+    CAP_TYPE_IOPORT = 2,
+    CAP_TYPE_IRQ = 3,
+    CAP_TYPE_DMA = 4,
 };
 
 struct cap_entry {

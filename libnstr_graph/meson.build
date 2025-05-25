@@ -1,5 +1,12 @@
-libnstr_graph = library(
+libnstr_graph = static_library(
     'nstr_graph',
+    'nstr_graph.c',
+    include_directories: include_directories('..'),
+    pic: false,
+)
+
+libnstr_graph_shared = shared_library(
+    'nstr_graph_shared',
     'nstr_graph.c',
     include_directories: include_directories('..'),
     install: true,
