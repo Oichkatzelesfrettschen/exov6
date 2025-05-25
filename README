@@ -67,6 +67,8 @@ cross-compiler toolchain capable of producing x86 ELF binaries
 (see https://pdos.csail.mit.edu/6.828/).  A cross-compiler may not be
 necessary on a 64-bit Linux host since the toolchain can produce 32-bit
 binaries.
+``bison`` is detected automatically and only required when building the
+optional example parser included in the build scripts.
 
 Step-by-step build and run commands::
 
