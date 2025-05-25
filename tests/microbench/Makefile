@@ -1,7 +1,7 @@
-HOSTCC ?= gcc
-HOSTCFLAGS ?= -Wall -O2 -std=c99
+HOSTCC ?= clang
+HOSTCFLAGS ?= -Wall -O2 -std=c99 -I../../libos/include -I../../src-headers
 
-PROGS := cap_verify_bench exo_yield_to_bench
+PROGS := cap_verify_bench exo_yield_to_bench proc_cap_test
 
 all: $(PROGS)
 
@@ -9,11 +9,15 @@ cap_verify_bench: cap_verify_bench.c
 	$(HOSTCC) $(HOSTCFLAGS) -o $@ $<
 
 exo_yield_to_bench: exo_yield_to_bench.c
-	$(HOSTCC) $(HOSTCFLAGS) -o $@ $<
+        $(HOSTCC) $(HOSTCFLAGS) -o $@ $<
+
+proc_cap_test: proc_cap_test.c
+        $(HOSTCC) $(HOSTCFLAGS) -o $@ $<
 
 clean:
 	rm -f $(PROGS)
 
 run: all
-	./cap_verify_bench
-	./exo_yield_to_bench
+        ./cap_verify_bench
+        ./exo_yield_to_bench
+        ./proc_cap_test
