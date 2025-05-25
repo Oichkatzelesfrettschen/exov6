@@ -342,7 +342,10 @@ LIBOS_OBJS = \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
        $(LIBOS_DIR)/posix.o \
-       $(LIBOS_DIR)/ipc_queue.o 
+       $(LIBOS_DIR)/ipc_queue.o \
+       $(LIBOS_DIR)/process.o \
+       $(LIBOS_DIR)/capwrap.o \
+       $(LIBOS_DIR)/ddekit/ddekit.o
 
 
 
@@ -445,6 +448,7 @@ _wc\
         _libos_posix_extra_test\
         _qspin_demo\
         _tty_demo\
+        _ddekit_demo\
 
 
 ifeq ($(ARCH),x86_64)
