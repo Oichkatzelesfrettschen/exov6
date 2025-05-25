@@ -1,3 +1,5 @@
+import os
+CC = os.environ.get("CC", "clang")
 import subprocess, tempfile, pathlib, textwrap
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -80,10 +82,10 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif\n"
         )
         subprocess.check_call([
-            "gcc","-std=c2x","-Wall","-Werror",
+            CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-I", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"src-headers"),
             str(src),
             str(ROOT/"src-kernel/exo_ipc.c"),
             "-o", str(exe)
