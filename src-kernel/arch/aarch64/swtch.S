@@ -1,5 +1,6 @@
 # Context switch for AArch64
 # void swtch(struct context64 **old, struct context64 *new);
+# Scheduler lock state is preserved across context switches.
 
 .globl swtch
 swtch:

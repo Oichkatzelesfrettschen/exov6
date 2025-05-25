@@ -37,6 +37,7 @@ struct endpoint;
 
 // process table defined in proc.c
 extern struct ptable ptable;
+extern struct spinlock sched_lock;
 
 #include "exo_cpu.h"
 #include "exo_disk.h"

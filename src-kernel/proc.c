@@ -8,6 +8,7 @@
 #include "spinlock.h"
 
 struct ptable ptable;
+struct spinlock sched_lock;
 
 static struct proc *initproc;
 
@@ -76,6 +77,7 @@ void
 pinit(void)
 {
   initlock(&ptable.lock, "ptable");
+  initlock(&sched_lock, "sched");
 }
 
 // Must be called with interrupts disabled
@@ -418,12 +420,16 @@ scheduler(void)
         continue;
       found = 1;
 
+      acquire(&sched_lock);
+
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+
+      release(&sched_lock);
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -471,7 +477,9 @@ yield(void)
 {
   acquire(&ptable.lock);  //DOC: yieldlock
   exo_stream_yield();
+  acquire(&sched_lock);
   myproc()->state = RUNNABLE;
+  release(&sched_lock);
   sched();
   release(&ptable.lock);
 }
@@ -522,7 +530,9 @@ sleep(void *chan, struct spinlock *lk)
   }
   // Go to sleep.
   p->chan = chan;
+  acquire(&sched_lock);
   p->state = SLEEPING;
+  release(&sched_lock);
 
   sched();
 
@@ -545,8 +555,11 @@ wakeup1(void *chan)
   struct proc *p;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == SLEEPING && p->chan == chan)
+    if(p->state == SLEEPING && p->chan == chan){
+      acquire(&sched_lock);
       p->state = RUNNABLE;
+      release(&sched_lock);
+    }
 }
 
 // Wake up all processes sleeping on chan.
@@ -571,8 +584,11 @@ kill(int pid)
     if(p->pid == pid){
       p->killed = 1;
       // Wake process from sleep if necessary.
-      if(p->state == SLEEPING)
+      if(p->state == SLEEPING){
+        acquire(&sched_lock);
         p->state = RUNNABLE;
+        release(&sched_lock);
+      }
       release(&ptable.lock);
       return 0;
     }
@@ -589,8 +605,11 @@ sigsend(int pid, int sig)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
       p->pending_signal |= (1<<sig);
-      if(p->state == SLEEPING)
+      if(p->state == SLEEPING){
+        acquire(&sched_lock);
         p->state = RUNNABLE;
+        release(&sched_lock);
+      }
       release(&ptable.lock);
       return 0;
     }
