@@ -15,6 +15,7 @@ the host socket APIs.
 | `libos_lseek` | Adjusts the in-memory file offset. |
 | `libos_ftruncate` | Ignored by the demo filesystem but provided for compatibility. |
 | `libos_mmap` / `libos_munmap` | Allocate and free memory using `malloc`. |
+| `libos_mprotect` / `libos_msync` | Track but do not enforce page protections. |
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
 | Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |
 | Socket APIs | Thin wrappers around standard Berkeley sockets. |

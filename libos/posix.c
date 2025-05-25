@@ -10,9 +10,17 @@
 #include <sys/socket.h>
 
 #define LIBOS_MAXFD 16
+#define LIBOS_MAXMMAP 16
+
+struct mmap_region {
+    void *addr;
+    size_t len;
+    int prot;
+};
 
 static struct file *fd_table[LIBOS_MAXFD];
 static void (*sig_handlers[32])(int);
+static struct mmap_region mmap_table[LIBOS_MAXMMAP];
 
 int libos_open(const char *path, int flags) {
     struct file *f = libfs_open(path, flags);
@@ -162,15 +170,54 @@ int libos_ftruncate(int fd, long length) {
 }
 
 void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd, long off) {
-    (void)addr; (void)prot; (void)flags; (void)fd; (void)off;
+    (void)addr; (void)flags; (void)fd; (void)off;
     void *p = malloc(len);
-    return p ? p : (void*)-1;
+    if(!p)
+        return (void*)-1;
+    for(int i = 0; i < LIBOS_MAXMMAP; i++){
+        if(!mmap_table[i].addr){
+            mmap_table[i].addr = p;
+            mmap_table[i].len = len;
+            mmap_table[i].prot = prot;
+            break;
+        }
+    }
+    return p;
 }
 
 int libos_munmap(void *addr, size_t len) {
     (void)len;
+    for(int i = 0; i < LIBOS_MAXMMAP; i++){
+        if(mmap_table[i].addr == addr){
+            mmap_table[i].addr = 0;
+            mmap_table[i].len = 0;
+            mmap_table[i].prot = 0;
+            break;
+        }
+    }
     free(addr);
     return 0;
+}
+
+int libos_mprotect(void *addr, size_t len, int prot){
+    for(int i = 0; i < LIBOS_MAXMMAP; i++){
+        if(mmap_table[i].addr == addr && len <= mmap_table[i].len){
+            mmap_table[i].prot = prot;
+            return 0;
+        }
+    }
+    (void)len; (void)prot;
+    return -1;
+}
+
+int libos_msync(void *addr, size_t len, int flags){
+    (void)flags;
+    for(int i = 0; i < LIBOS_MAXMMAP; i++){
+        if(mmap_table[i].addr == addr && len <= mmap_table[i].len)
+            return 0;
+    }
+    (void)len;
+    return -1;
 }
 
 int libos_sigemptyset(libos_sigset_t *set){ *set = 0; return 0; }
