@@ -59,6 +59,8 @@ exo_cap exo_alloc_dma(uint32_t chan);
 /* Receive up to 'len' bytes from source capability 'src' into 'buf'.  The call
  * blocks according to policy implemented by the library OS. */
 [[nodiscard]] int exo_recv(exo_cap src, void *buf, uint64_t len);
+[[nodiscard]] int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
+                                 unsigned timeout);
 
 /* Read or write arbitrary byte ranges using a block capability. */
 [[nodiscard]] int exo_read_disk(exo_blockcap cap, void *dst, uint64_t off,
@@ -86,6 +88,7 @@ enum exo_syscall {
   EXO_SYSCALL_YIELD_TO = SYS_exo_yield_to,
   EXO_SYSCALL_SEND = SYS_exo_send,
   EXO_SYSCALL_RECV = SYS_exo_recv,
+  EXO_SYSCALL_RECV_TIMED = SYS_exo_recv_timed,
   EXO_SYSCALL_READ_DISK = SYS_exo_read_disk,
   EXO_SYSCALL_WRITE_DISK = SYS_exo_write_disk,
   EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,

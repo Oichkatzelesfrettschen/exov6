@@ -16,6 +16,9 @@
 #include "x86.h"
 // clang-format on
 
+extern int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
+                                    unsigned timeout);
+
 int sys_fork(void) { return fork(); }
 
 int sys_exit(void) {
@@ -286,6 +289,20 @@ int sys_exo_recv(void) {
   if (!cap_verify(cap))
     return -1;
   return exo_recv(cap, dst, n);
+}
+
+int sys_exo_recv_timed(void) {
+  exo_cap *ucap, cap;
+  char *dst;
+  uint32_t n, to;
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
+      argint(2, (int *)&n) < 0 || argptr(1, &dst, n) < 0 ||
+      argint(3, (int *)&to) < 0)
+    return -1;
+  memcpy(&cap, ucap, sizeof(cap));
+  if (!cap_verify(cap))
+    return -1;
+  return exo_ipc_queue_recv_timed(cap, dst, n, to);
 }
 
 int sys_proc_alloc(void) {
