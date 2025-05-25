@@ -1,6 +1,9 @@
 #include "types.h"
 #include "exo.h"
 #include "defs.h"
+#include "cap.h"
+#include "mmu.h"
+#include "proc.h"
 #include <string.h>
 
 /* Secret key used for capability HMAC */
@@ -62,4 +65,27 @@ cap_verify(exo_cap c)
     hash256_t h;
     compute_tag(c.id, c.rights, c.owner, &h);
     return memcmp(h.parts, c.auth_tag.parts, sizeof(h.parts)) == 0;
+}
+
+/* Allocate capabilities for additional resource types. */
+exo_cap
+exo_alloc_ioport(uint port)
+{
+    int id = cap_table_alloc(CAP_TYPE_IOPORT, port, 0, myproc()->pid);
+    return cap_new(id >= 0 ? (uint)id : 0, 0, myproc()->pid);
+}
+
+exo_cap
+exo_bind_irq(uint irq)
+{
+    int id = cap_table_alloc(CAP_TYPE_IRQ, irq, 0, myproc()->pid);
+
+    return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
+}
+
+exo_cap
+exo_alloc_dma(uint chan)
+{
+    int id = cap_table_alloc(CAP_TYPE_DMA, chan, 0, myproc()->pid);
+    return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
 }

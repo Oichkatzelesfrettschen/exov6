@@ -51,8 +51,10 @@ validate_patch () {
 }
 
 validate_series () {
-        # Build the tree to ensure patches compile.
-        make -j"$(nproc)" >/dev/null || return
+        # Build the tree with CMake to ensure patches compile.
+        cmake -S . -B build -G Ninja \
+                -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ >/dev/null
+        ninja -C build >/dev/null || return
         return 0
 }
 
