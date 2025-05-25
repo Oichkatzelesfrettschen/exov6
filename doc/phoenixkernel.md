@@ -59,6 +59,13 @@ cmake -S . -B build -G Ninja
 ninja -C build
 ```
 
+Alternatively, configure the project with Meson:
+
+```
+meson setup build
+ninja -C build
+```
+
 This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
 
 To build the user-space library operating system invoke:
@@ -181,7 +188,7 @@ the repository the filesystem image contains `exo_stream_demo`,
 2. Start the system under QEMU:
 
    ```
-   ninja -C build qemu-nox
+   ninja -C build qemu
    ```
 
 3. At the xv6 shell run one of the demos:
