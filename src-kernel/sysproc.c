@@ -207,6 +207,35 @@ int sys_exo_write_disk(void) {
   return exo_write_disk(cap, src, off, n);
 }
 
+int sys_exo_alloc_ioport(void) {
+  int port;
+  exo_cap *ucap;
+  if (argint(0, &port) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_ioport((uint)port);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_bind_irq(void) {
+  int irq;
+  exo_cap *ucap;
+  if (argint(0, &irq) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_bind_irq((uint)irq);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_alloc_dma(void) {
+  exo_cap *ucap;
+  if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_dma();
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
 int sys_exo_send(void) {
   exo_cap *ucap, cap;
   char *src;

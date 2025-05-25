@@ -35,4 +35,7 @@ enum {
   SYS_cap_inc,
   SYS_cap_dec,
   SYS_ipc,
+  SYS_exo_alloc_ioport,
+  SYS_exo_bind_irq,
+  SYS_exo_alloc_dma,
 };
