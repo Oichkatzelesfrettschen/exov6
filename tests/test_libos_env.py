@@ -1,3 +1,5 @@
+import os
+CC = os.environ.get("CC", "clang")
 import subprocess, tempfile, pathlib, textwrap
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -22,7 +24,7 @@ def compile_and_run():
         exe = pathlib.Path(td)/"test"
         src.write_text(C_CODE)
         subprocess.check_call([
-            "gcc","-std=c2x","-Wall","-Werror",
+            CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-idirafter", str(ROOT/"src-headers"),
             str(src), str(ROOT/"libos/env.c"),
             "-o", str(exe)
