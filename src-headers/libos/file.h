@@ -1,6 +1,10 @@
 #pragma once
 
+#include <stddef.h>
+#include <stdint.h>
 #include "include/exokernel.h"
+#include "fs.h"
+#include "sleeplock.h"
 
 struct file {
   enum { FD_NONE, FD_CAP } type;
@@ -37,3 +41,13 @@ struct devsw {
 extern struct devsw devsw[];
 
 #define CONSOLE 1
+
+#include <sys/stat.h>
+
+void fileinit(void);
+struct file *filealloc(void);
+struct file *filedup(struct file *f);
+void fileclose(struct file *f);
+int filestat(struct file *f, struct stat *st);
+int fileread(struct file *f, char *addr, size_t n);
+int filewrite(struct file *f, char *addr, size_t n);
