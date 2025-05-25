@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
+
+if(NOT DEFINED CMAKE_C_COMPILER)
+  set(CMAKE_C_COMPILER clang)
+endif()
+if(NOT DEFINED CMAKE_CXX_COMPILER)
+  set(CMAKE_CXX_COMPILER clang++)
+endif()
+
 project(xv6 LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 23)
@@ -32,6 +40,7 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/src-headers
   ${CMAKE_SOURCE_DIR}/src-kernel/include
   ${CMAKE_SOURCE_DIR}/proto
+  ${CMAKE_SOURCE_DIR}/libos/include
 )
 
 if(CPUFLAGS)

@@ -13,7 +13,8 @@ executable('kernel', sources,
            include_directories: include_directories('.',
                                             'src-headers',
                                             'src-kernel/include',
-                                            'proto'),
+                                            'proto',
+                                            'libos/include'),
            install: false)
 
 if clang_tidy.found()
