@@ -44,9 +44,6 @@ OBJS = \
     $(KERNEL_DIR)/fastipc.o \
     $(KERNEL_DIR)/endpoint.o \
     $(KERNEL_DIR)/chan.o \
-    $(KERNEL_DIR)/dag_sched.o \
-    $(KERNEL_DIR)/beatty_sched.o \
-    $(KERNEL_DIR)/beatty_dag_stream.o \
     $(KERNEL_DIR)/zone.o
 
 ifeq ($(ARCH),x86_64)
@@ -340,7 +337,11 @@ LIBOS_OBJS = \
        $(LIBOS_DIR)/file.o \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
-       $(LIBOS_DIR)/posix.o
+       $(LIBOS_DIR)/posix.o \
+       $(LIBOS_DIR)/sched/beatty_sched.o \
+       $(LIBOS_DIR)/sched/dag_sched.o \
+       $(LIBOS_DIR)/sched/beatty_dag_stream.o \
+       $(LIBOS_DIR)/sched_helpers.o
 
 
 libos: libos.a

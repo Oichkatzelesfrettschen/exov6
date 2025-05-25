@@ -4,7 +4,6 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
-#include "dag.h"
 #include "cap.h"
 #include "x86.h"
 #include "exo_stream.h"
@@ -39,8 +38,6 @@ int main(void) {
   binit();                           // buffer cache
   fileinit();                        // file table
   ideinit();                         // disk
-  dag_sched_init();                  // initialize DAG scheduler
-  beatty_sched_init();               // initialize Beatty scheduler
   exo_ipc_register(&exo_ipc_queue_ops);
   startothers();                              // start other processors
   kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()

@@ -1,6 +1,5 @@
 #include "types.h"
-#include "defs.h"
-#include "spinlock.h"
+#include "libos/spinlock.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
 #include "math_core.h"
@@ -54,3 +53,5 @@ void beatty_sched_init(void) {
   beatty_stream.head = &beatty_ops;
   exo_stream_register(&beatty_stream);
 }
+
+struct exo_sched_ops *beatty_sched_ops(void) { return &beatty_ops; }

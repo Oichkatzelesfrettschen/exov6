@@ -1,6 +1,6 @@
 #include "types.h"
-#include "defs.h"
-#include "spinlock.h"
+#include "libos/spinlock.h"
+#include <stdlib.h>
 #include "dag.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
@@ -28,7 +28,7 @@ dag_node_set_priority(struct dag_node *n, int priority)
 void
 dag_node_add_dep(struct dag_node *parent, struct dag_node *child)
 {
-  struct dag_node_list *l = (struct dag_node_list *)kalloc();
+  struct dag_node_list *l = (struct dag_node_list *)malloc(sizeof(*l));
   if(!l)
     return;
   l->node = child;
@@ -75,7 +75,7 @@ dag_mark_done(struct dag_node *n)
     struct dag_node *child = l->node;
     if(--child->pending == 0)
       enqueue_ready(child);
-    kfree((char *)l); /* free allocation from dag_node_add_dep */
+    free(l); /* free allocation from dag_node_add_dep */
     l = next;
   }
 }
@@ -115,3 +115,5 @@ dag_sched_init(void)
   dag_stream.head = &dag_ops;
   exo_stream_register(&dag_stream);
 }
+
+struct exo_sched_ops *dag_sched_ops(void) { return &dag_ops; }

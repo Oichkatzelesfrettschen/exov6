@@ -1,6 +1,7 @@
 #include "types.h"
-#include "defs.h"
 #include "exo_stream.h"
+#include "libos/beatty_sched.h"
+#include "libos/dag.h"
 
 /* Initialize the combined Beatty+DAG stream. Call once during boot
  * after both schedulers are registered so Beatty can select which DAG

@@ -1,10 +1,11 @@
 #include "libos/sched.h"
-#include "dag.h"
+#include "libos/dag.h"
+#include "libos/beatty_sched.h"
 #include "user.h"
-#include "defs.h"
 
 void libos_setup_beatty_dag(void) {
-  // Initialize two schedulers already configured in the kernel
-  // and select the combined Beatty+DAG stream.
+  // Initialize user-space schedulers and select the combined stream.
+  dag_sched_init();
+  beatty_sched_init();
   beatty_dag_stream_init();
 }

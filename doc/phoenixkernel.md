@@ -32,11 +32,10 @@ that provides traditional services on top of the primitive capability interface.
             priority so heavier tasks execute first when several nodes are
             runnable.
 
-A **Beatty scheduler** now complements the DAG engine. It alternates among an arbitrary
-number of contexts using Beatty sequences with irrational weights. Call
-`beatty_sched_set_tasks` with an array of task capabilities and their corresponding
-weights to activate it. The scheduler is registered as an exo stream so user-level
-runtimes can select it on demand.
+A **Beatty scheduler** now complements the DAG engine. It alternates among an
+arbitrary number of contexts using Beatty sequences with irrational weights.
+The libOS exposes this scheduler; applications call `beatty_sched_set_tasks`
+and register the resulting exo stream entirely from user space.
 
 
 ## Capability System
@@ -399,9 +398,9 @@ main(void)
 
 ## Beatty Scheduler and Affine Runtime
 
-The kernel now ships with a Beatty scheduler implementing an affine runtime. It dispatches multiple cooperating contexts according to irrational weights. Enable it with `beatty_sched_set_tasks` after registering the Beatty exo stream. Typed channels can exchange messages whenever the scheduler yields.
+The libOS ships with a Beatty scheduler implementing an affine runtime. It dispatches multiple cooperating contexts according to irrational weights. Use `beatty_sched_set_tasks` after registering the Beatty exo stream to enable it entirely in user space. Typed channels can exchange messages whenever the scheduler yields.
 
-When `beatty_dag_stream_init()` is invoked during boot the Beatty scheduler is
+When `beatty_dag_stream_init()` is invoked from the libOS the Beatty scheduler is
 chained with the DAG scheduler through a single exo stream.  Beatty picks the
 next task family according to the weights passed to
 `beatty_sched_set_tasks`.  Each family receives time slices proportional to its

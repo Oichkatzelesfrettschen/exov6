@@ -1,7 +1,8 @@
 #include "types.h"
 #include "user.h"
 #include "math_core.h"
-#include "dag.h"
+#include "libos/dag.h"
+#include "libos/beatty_sched.h"
 #include "libos/sched.h"
 
 static double alpha;
