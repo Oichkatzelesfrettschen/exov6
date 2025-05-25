@@ -6,6 +6,8 @@
 #include "signal.h"
 #include <stdlib.h>
 #include "stat.h"
+#include <unistd.h>
+#include <sys/socket.h>
 
 #define LIBOS_MAXFD 16
 
@@ -151,6 +153,14 @@ long libos_lseek(int fd, long off, int whence) {
     return f->off;
 }
 
+int libos_ftruncate(int fd, long length) {
+    if(fd < 0 || fd >= LIBOS_MAXFD || !fd_table[fd])
+        return -1;
+    (void)length;
+    /* The simple in-memory filesystem ignores size changes. */
+    return 0;
+}
+
 void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd, long off) {
     (void)addr; (void)prot; (void)flags; (void)fd; (void)off;
     void *p = malloc(len);
@@ -169,13 +179,38 @@ int libos_sigaddset(libos_sigset_t *set,int sig){ if(sig<0||sig>=32) return -1; 
 int libos_sigdelset(libos_sigset_t *set,int sig){ if(sig<0||sig>=32) return -1; *set &= ~(1UL<<sig); return 0; }
 int libos_sigismember(const libos_sigset_t *set,int sig){ if(sig<0||sig>=32) return 0; return (*set & (1UL<<sig))!=0; }
 
-int libos_getpgrp(void){ return getpid(); }
-int libos_setpgid(int pid, int pgid){ (void)pid; (void)pgid; return 0; }
+int libos_getpgrp(void){
+    return (int)getpgrp();
+}
 
-int libos_socket(int domain, int type, int protocol){ (void)domain;(void)type;(void)protocol; return -1; }
-int libos_bind(int fd,const struct sockaddr *addr,socklen_t len){ (void)fd;(void)addr;(void)len; return -1; }
-int libos_listen(int fd,int backlog){ (void)fd;(void)backlog; return -1; }
-int libos_accept(int fd,struct sockaddr *addr,socklen_t *len){ (void)fd;(void)addr;(void)len; return -1; }
-int libos_connect(int fd,const struct sockaddr *addr,socklen_t len){ (void)fd;(void)addr;(void)len; return -1; }
-long libos_send(int fd,const void *buf,size_t len,int flags){ (void)fd;(void)buf;(void)len;(void)flags; return -1; }
-long libos_recv(int fd,void *buf,size_t len,int flags){ (void)fd;(void)buf;(void)len;(void)flags; return -1; }
+int libos_setpgid(int pid, int pgid){
+    return setpgid(pid, pgid);
+}
+
+int libos_socket(int domain, int type, int protocol){
+    return socket(domain, type, protocol);
+}
+
+int libos_bind(int fd,const struct sockaddr *addr,socklen_t len){
+    return bind(fd, addr, len);
+}
+
+int libos_listen(int fd,int backlog){
+    return listen(fd, backlog);
+}
+
+int libos_accept(int fd,struct sockaddr *addr,socklen_t *len){
+    return accept(fd, addr, len);
+}
+
+int libos_connect(int fd,const struct sockaddr *addr,socklen_t len){
+    return connect(fd, addr, len);
+}
+
+long libos_send(int fd,const void *buf,size_t len,int flags){
+    return send(fd, buf, len, flags);
+}
+
+long libos_recv(int fd,void *buf,size_t len,int flags){
+    return recv(fd, buf, len, flags);
+}
