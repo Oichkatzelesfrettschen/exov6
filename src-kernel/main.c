@@ -10,6 +10,7 @@
 #include "spinlock.h"
 #include "exo_stream.h"
 #include "exo_ipc.h"
+#include <string.h>
 
 static void startothers(void);
 static void mpmain(void) __attribute__((noreturn));

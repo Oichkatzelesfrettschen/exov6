@@ -10,6 +10,7 @@
 #include "traps.h"
 #include "spinlock.h"
 #include "sleeplock.h"
+#include <string.h>
 #include "fs.h"
 #include "buf.h"
 

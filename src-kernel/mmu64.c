@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include <string.h>
 
 extern char data[];
 

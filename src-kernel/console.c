@@ -13,6 +13,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include <string.h>
 #include "x86.h"
 #include "fastipc.h"
 #include "tty.h"
