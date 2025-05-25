@@ -86,7 +86,7 @@ def compile_and_run():
         src.write_text(C_CODE)
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc","-std=c23","-pthread","-DSPINLOCK_NO_STUBS",
+            "gcc","-std=c2x","-pthread","-DSPINLOCK_NO_STUBS",
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers/libos"),
             "-I", str(ROOT/"src-headers"),
