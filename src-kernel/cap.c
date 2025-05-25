@@ -1,6 +1,9 @@
 #include "types.h"
 #include "exo.h"
 #include "defs.h"
+#include "cap.h"
+#include "mmu.h"
+#include "proc.h"
 #include <string.h>
 
 /* Secret key used for capability HMAC */
@@ -69,13 +72,14 @@ exo_cap
 exo_alloc_ioport(uint port)
 {
     int id = cap_table_alloc(CAP_TYPE_IOPORT, port, 0, myproc()->pid);
-    return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
+    return cap_new(id >= 0 ? (uint)id : 0, 0, myproc()->pid);
 }
 
 exo_cap
 exo_bind_irq(uint irq)
 {
     int id = cap_table_alloc(CAP_TYPE_IRQ, irq, 0, myproc()->pid);
+
     return cap_new(id >= 0 ? id : 0, 0, myproc()->pid);
 }
 
