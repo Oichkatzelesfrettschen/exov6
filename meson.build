@@ -53,6 +53,7 @@ libos_sources = [
   'libos/file.c',
   'libos/driver.c',
   'libos/affine_runtime.c',
+  'libos/env.c',
   'libos/posix.c',
   'libos/microkernel/cap.c',
   'libos/microkernel/msg_router.c',

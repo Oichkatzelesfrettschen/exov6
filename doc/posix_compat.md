@@ -24,3 +24,17 @@ the host socket APIs.
 These wrappers mirror the POSIX names where possible but are not fully
 featured.  They exist so portability layers can build against Phoenix
 without pulling in a real C library.
+
+## Environment Variables
+
+`libos_setenv()` stores a key/value pair in a small internal table.
+`libos_getenv()` retrieves the value or returns `NULL` if the variable is
+unknown.  Variables are not inherited across spawned processes.
+
+## Locale Stubs
+
+Only stub implementations of the standard locale interfaces are
+available.  Functions like `setlocale()` and `localeconv()` accept any
+input but always behave as if the `"C"` locale is active.  The stubs
+exist so that third-party code expecting these calls can link against the
+libOS without pulling in a full C library.
