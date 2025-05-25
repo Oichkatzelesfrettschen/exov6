@@ -127,6 +127,36 @@ int sys_exo_alloc_block(void) {
   return 0;
 }
 
+int sys_exo_alloc_ioport(void) {
+  int port;
+  exo_cap *ucap;
+  if (argint(0, &port) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_ioport((uint)port);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_bind_irq(void) {
+  int irq;
+  exo_cap *ucap;
+  if (argint(0, &irq) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_bind_irq((uint)irq);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_alloc_dma(void) {
+  int chan;
+  exo_cap *ucap;
+  if (argint(0, &chan) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_dma((uint)chan);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
 int sys_exo_bind_block(void) {
   struct exo_blockcap *ucap, cap;
   char *data;
@@ -205,6 +235,35 @@ int sys_exo_write_disk(void) {
 
     return -1;
   return exo_write_disk(cap, src, off, n);
+}
+
+int sys_exo_alloc_ioport(void) {
+  int port;
+  exo_cap *ucap;
+  if (argint(0, &port) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_ioport((uint)port);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_bind_irq(void) {
+  int irq;
+  exo_cap *ucap;
+  if (argint(0, &irq) < 0 || argptr(1, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_bind_irq((uint)irq);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_alloc_dma(void) {
+  exo_cap *ucap;
+  if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_dma();
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
 }
 
 int sys_exo_send(void) {
@@ -331,6 +390,33 @@ int sys_cap_dec(void) {
     return -1;
   cap_table_dec((uint)id);
   return 0;
+}
+
+int sys_exo_irq_alloc(void) {
+  int irq, rights;
+  exo_cap *ucap;
+  if (argint(0, &irq) < 0 || argint(1, &rights) < 0 ||
+      argptr(2, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_irq((uint)irq, (uint)rights);
+  memmove(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_exo_irq_wait(void) {
+  exo_cap cap;
+  uint *irq_out;
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
+      argptr(1, (void *)&irq_out, sizeof(*irq_out)) < 0)
+    return -1;
+  return exo_irq_wait(cap, irq_out);
+}
+
+int sys_exo_irq_ack(void) {
+  exo_cap cap;
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0)
+    return -1;
+  return exo_irq_ack(cap);
 }
 
 // Provided by fastipc.c

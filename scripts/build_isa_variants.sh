@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build xv6 for multiple x86 CPU feature sets.
-# The Makefile accepts CPUFLAGS to extend compiler and assembler flags.
+# Build xv6 for multiple x86 CPU feature sets using CMake and Ninja.
 
 ARCH=${ARCH:-x86_64}
-MAKECMD=${MAKECMD:-make}
 
 # Map variant name -> CPUFLAGS
 declare -A ISA_FLAGS=(
@@ -30,13 +28,15 @@ mkdir -p "$outdir"
 for variant in "${!ISA_FLAGS[@]}"; do
   echo "== Building $variant =="
   flags="${ISA_FLAGS[$variant]}"
-  # Clean before each build to avoid mixing objects
-  $MAKECMD clean >/dev/null || true
-  CPUFLAGS="$flags" ARCH="$ARCH" $MAKECMD -j"$(nproc)" >/dev/null
-  mkdir -p "$outdir/$variant"
-  cp kernel* "$outdir/$variant/" 2>/dev/null || true
-  cp xv6*.img "$outdir/$variant/" 2>/dev/null || true
-  echo "Built $variant with flags: $flags" > "$outdir/$variant/build.info"
+  builddir="$outdir/$variant"
+  cmake -S . -B "$builddir" -G Ninja \
+    -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+    -DCPUFLAGS="$flags" -DARCH="$ARCH"
+  ninja -C "$builddir" >/dev/null
+  mkdir -p "$builddir/artifacts"
+  cp "$builddir"/kernel* "$builddir/artifacts" 2>/dev/null || true
+  cp "$builddir"/xv6*.img "$builddir/artifacts" 2>/dev/null || true
+  echo "Built $variant with flags: $flags" > "$builddir/build.info"
 done
 
 cat <<EOM

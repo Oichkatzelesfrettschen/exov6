@@ -2,7 +2,7 @@ project('xv6', 'c', default_options: ['c_std=c23'])
 
 clang_tidy = find_program('clang-tidy', required: false)
 
-src_dirs = ['src-kernel', 'src-uland', 'libos']
+src_dirs = ['src-kernel', 'src-uland', 'src-uland/user', 'libos']
 
 sources = []
 foreach d : src_dirs
