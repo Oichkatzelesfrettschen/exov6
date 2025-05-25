@@ -91,7 +91,7 @@ ARCH ?= x86_64
 CSTD ?= c23
 CPPSTD ?= c++23
 CLANG_TIDY ?= clang-tidy
-TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
+TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c $(LIBOS_DIR)/ddekit/*.c)
 
 ifeq ($(ARCH),ia16)
 TOOLPREFIX ?= ia16-elf-
@@ -244,7 +244,7 @@ SIGNBOOT := 0
 endif
 
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(KERNEL_DIR)/include -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(KERNEL_DIR)/include -I$(ULAND_DIR) -I$(LIBOS_DIR) -I$(LIBOS_DIR)/include -Iproto
 CFLAGS += -DCONFIG_SMP=$(CONFIG_SMP)
 CFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
@@ -342,7 +342,10 @@ LIBOS_OBJS = \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
        $(LIBOS_DIR)/posix.o \
-       $(LIBOS_DIR)/ipc_queue.o 
+       $(LIBOS_DIR)/ipc_queue.o \
+       $(LIBOS_DIR)/process.o \
+       $(LIBOS_DIR)/capwrap.o \
+       $(LIBOS_DIR)/ddekit/ddekit.o
 
 
 
@@ -445,6 +448,7 @@ _wc\
         _libos_posix_extra_test\
         _qspin_demo\
         _tty_demo\
+        _ddekit_demo\
 
 
 ifeq ($(ARCH),x86_64)
@@ -608,3 +612,6 @@ clang-tidy:
 # Example C++ build rule demonstrating CXXFLAGS usage
 foo.o: foo.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+ddekit: _ddekit_demo
+
