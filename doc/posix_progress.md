@@ -43,3 +43,12 @@ This log tracks implementation status of the POSIX wrappers provided by the Phoe
 | `libos_chdir` | Missing | N/A | N/A |
 | `libos_getcwd` | Missing | N/A | N/A |
 
+## Notes
+
+- Environment variables set with `libos_setenv()` are local to the process.
+  Child processes launched via `libos_spawn()` start with an empty table and do
+  not inherit the parent's values.
+- Locale support is only stubbed.  Functions such as `setlocale()` and
+  `localeconv()` accept arguments but always behave as if the default "C" locale
+  is active.
+
