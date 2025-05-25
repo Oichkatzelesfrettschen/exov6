@@ -1,4 +1,4 @@
-# Technical Track
+#Technical Track
 
 This guide outlines the low level Phoenix interfaces and how programs interact with the libOS. It should be read together with the [Phoenix kernel charter](phoenixkernel.md).
 
@@ -25,7 +25,7 @@ exo_unbind_page(page);
 ```
 
 More detailed examples live in the charter and the source tree under `libos/` and `src-uland/`.
-# Phoenix Technical Track
+#Phoenix Technical Track
 
 This track provides a high level summary of the public APIs exported by Phoenix.
 The charter outlines the full scope and goals of the project.
@@ -36,6 +36,7 @@ The charter outlines the full scope and goals of the project.
 - `exo_alloc_block()` / `exo_bind_block()` – manage disk blocks.
 - `exo_yield_to()` – switch to a user controlled context.
 - `exo_send()` / `exo_recv()` – fast message passing between endpoints.
+- `exo_recv_timed()` – receive with a timeout.
 
 These calls are thin wrappers around the kernel interface.  Higher layers
 are implemented in the libOS.

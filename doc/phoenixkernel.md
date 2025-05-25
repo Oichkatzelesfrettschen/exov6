@@ -138,13 +138,14 @@ whenever the current task yields or no runnable work remains.
 ### IPC
 
 - `exo_send(dest, buf, len)` – send a message to `dest`;
-queuing is handled in user
-        space.- `exo_recv(src, buf,
-                          len)` – receive data from `src` via the libOS queue
-                    .- `zipc_call(msg)` – perform a fast IPC syscall
-                       using the `zipc_msg_t` structure defined in `ipc.h`.
+queuing is handled in user space
+        .- `exo_recv(src, buf, len)` – receive data from `src` via the libOS
+           queue.- `exo_recv_timed(src, buf, len,
+                                   timeout_ms)` – receive with a timeout
+                       .- `zipc_call(msg)` – perform a fast IPC syscall
+                          using the `zipc_msg_t` structure defined in `ipc.h`.
 
-                       IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
+                          IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
 Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
 and automatically serialize Cap'n Proto messages.  Each channel is
 backed by a `msg_type_desc` describing the size of the Cap'n Proto
@@ -225,8 +226,8 @@ IPC messages follow the same queuing approach.  Functions
 `exo_ipc_queue_send()` and `exo_ipc_queue_recv()` manipulate a ring buffer in
 `src-kernel/exo_ipc_queue.c`.  The libOS mirrors this logic in
 `libos/ipc_queue.c` using a userspace lock to serialise access.  These
-functions are registered with `exo_ipc_register()` so `exo_send()` and
-`exo_recv()` share the same semantics.
+functions are registered with `exo_ipc_register()` so `exo_send()`, `exo_recv()`
+and `exo_recv_timed()` share the same semantics.
 
 ## Supervisor
 

@@ -54,6 +54,11 @@ int cap_revoke(void) { return cap_revoke_syscall(); }
   return exo_recv(src, buf, len);
 }
 
+[[nodiscard]] int cap_recv_timed(exo_cap src, void *buf, uint64 len,
+                                 uint32 timeout_ms) {
+  return exo_recv_timed(src, buf, len, timeout_ms);
+}
+
 [[nodiscard]] int cap_ipc_echo_demo(void) {
   const char *msg = "ping";
   char buf[5];

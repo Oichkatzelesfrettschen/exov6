@@ -33,7 +33,7 @@ static void ipc_init(void) {
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   ipc_init();
-  if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
+  if (!cap_has_rights(dest.rights, EXO_RIGHT_W))
     return -EPERM;
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
@@ -47,7 +47,7 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
     memmove(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
     if (!cap_verify(fr))
       return -EPERM;
-    if(!cap_has_rights(fr.rights, EXO_RIGHT_R))
+    if (!cap_has_rights(fr.rights, EXO_RIGHT_R))
       return -EPERM;
     if (dest.owner)
       fr.owner = dest.owner;
@@ -68,7 +68,7 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
 }
 
 int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
-  if(!cap_has_rights(src.rights, EXO_RIGHT_R))
+  if (!cap_has_rights(src.rights, EXO_RIGHT_R))
     return -EPERM;
   ipc_init();
   acquire(&ipcs.lock);
@@ -81,8 +81,57 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   wakeup(&ipcs.w);
   release(&ipcs.lock);
 
-  if (e.frame.pa && (!cap_verify(e.frame) ||
-                     !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
+  if (e.frame.pa &&
+      (!cap_verify(e.frame) || !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
+    e.frame.pa = 0;
+
+  size_t total = sizeof(zipc_msg_t);
+  if (e.frame.id)
+    total += sizeof(exo_cap);
+
+  if (len > sizeof(zipc_msg_t))
+    len = len < total ? len : total;
+  else
+    len = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
+
+  size_t cplen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
+  memmove(buf, &e.msg, cplen);
+  if (cplen < len) {
+    memmove((char *)buf + sizeof(zipc_msg_t), &e.frame,
+            len - sizeof(zipc_msg_t));
+  }
+
+  return (int)len;
+}
+
+int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
+                             uint32_t timeout_ms) {
+  if (!cap_has_rights(src.rights, EXO_RIGHT_R))
+    return -EPERM;
+  ipc_init();
+  uint start;
+  acquire(&tickslock);
+  start = ticks;
+  release(&tickslock);
+  acquire(&ipcs.lock);
+  while (ipcs.r == ipcs.w) {
+    wakeup(&ipcs.w);
+    sleep(&ipcs.r, &ipcs.lock);
+    acquire(&tickslock);
+    uint now = ticks;
+    release(&tickslock);
+    if (now - start >= timeout_ms) {
+      release(&ipcs.lock);
+      return 0;
+    }
+  }
+  struct ipc_entry e = ipcs.buf[ipcs.r % IPC_BUFSZ];
+  ipcs.r++;
+  wakeup(&ipcs.w);
+  release(&ipcs.lock);
+
+  if (e.frame.pa &&
+      (!cap_verify(e.frame) || !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
     e.frame.pa = 0;
 
   size_t total = sizeof(zipc_msg_t);
@@ -105,6 +154,7 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
 }
 
 struct exo_ipc_ops exo_ipc_queue_ops = {
-  .send = exo_ipc_queue_send,
-  .recv = exo_ipc_queue_recv,
+    .send = exo_ipc_queue_send,
+    .recv = exo_ipc_queue_recv,
+    .recv_timed = exo_ipc_queue_recv_timed,
 };

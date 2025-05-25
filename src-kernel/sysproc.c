@@ -185,8 +185,7 @@ int sys_exo_flush_block(void) {
   char *data;
   struct buf b;
 
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
-      argptr(1, &data, BSIZE) < 0)
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argptr(1, &data, BSIZE) < 0)
     return -1;
 
   cap = *ucap;
@@ -214,10 +213,8 @@ int sys_exo_read_disk(void) {
   char *dst;
   uint off, n;
 
-  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&off) < 0 ||
-      argint(3, (int *)&n) < 0 ||
-      argptr(1, &dst, n) < 0)
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 || argint(2, (int *)&off) < 0 ||
+      argint(3, (int *)&n) < 0 || argptr(1, &dst, n) < 0)
 
     return -1;
   return exo_read_disk(cap, dst, off, n);
@@ -228,10 +225,8 @@ int sys_exo_write_disk(void) {
   char *src;
   uint off, n;
 
-  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&off) < 0 ||
-      argint(3, (int *)&n) < 0 ||
-      argptr(1, &src, n) < 0)
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 || argint(2, (int *)&off) < 0 ||
+      argint(3, (int *)&n) < 0 || argptr(1, &src, n) < 0)
 
     return -1;
   return exo_write_disk(cap, src, off, n);
@@ -270,8 +265,7 @@ int sys_exo_send(void) {
   exo_cap *ucap, cap;
   char *src;
   uint n;
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&n) < 0 ||
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argint(2, (int *)&n) < 0 ||
       argptr(1, &src, n) < 0)
     return -1;
   memmove(&cap, ucap, sizeof(cap));
@@ -284,14 +278,27 @@ int sys_exo_recv(void) {
   exo_cap *ucap, cap;
   char *dst;
   uint n;
-  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 ||
-      argint(2, (int *)&n) < 0 ||
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argint(2, (int *)&n) < 0 ||
       argptr(1, &dst, n) < 0)
     return -1;
   memmove(&cap, ucap, sizeof(cap));
   if (!cap_verify(cap))
     return -1;
   return exo_recv(cap, dst, n);
+}
+
+int sys_exo_recv_timed(void) {
+  exo_cap *ucap, cap;
+  char *dst;
+  uint n;
+  uint timeout;
+  if (argptr(0, (void *)&ucap, sizeof(cap)) < 0 || argint(2, (int *)&n) < 0 ||
+      argptr(1, &dst, n) < 0 || argint(3, (int *)&timeout) < 0)
+    return -1;
+  memmove(&cap, ucap, sizeof(cap));
+  if (!cap_verify(cap))
+    return -1;
+  return exo_recv_timed(cap, dst, n, timeout);
 }
 
 int sys_proc_alloc(void) {
@@ -359,9 +366,7 @@ int sys_set_gas(void) {
   return 0;
 }
 
-int sys_get_gas(void) {
-  return (int)myproc()->gas_remaining;
-}
+int sys_get_gas(void) { return (int)myproc()->gas_remaining; }
 
 int sys_sigsend(void) {
   int pid, sig;

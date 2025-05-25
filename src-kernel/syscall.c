@@ -10,7 +10,6 @@
 #include "x86.h"
 // clang-format on
 
-
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -82,9 +81,7 @@ int argint(int n, int *ip) {
 // Fetch the nth word-sized system call argument as a pointer
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
-int
-argptr(int n, char **pp, size_t size)
-{
+int argptr(int n, char **pp, size_t size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;
@@ -147,6 +144,7 @@ extern int sys_exo_read_disk(void);
 extern int sys_exo_write_disk(void);
 extern int sys_exo_send(void);
 extern int sys_exo_recv(void);
+extern int sys_exo_recv_timed(void);
 extern int sys_exo_alloc_ioport(void);
 extern int sys_exo_bind_irq(void);
 extern int sys_exo_alloc_dma(void);
@@ -195,6 +193,7 @@ static int (*syscalls[])(void) = {
     [SYS_exo_alloc_dma] sys_exo_alloc_dma,
     [SYS_exo_send] sys_exo_send,
     [SYS_exo_recv] sys_exo_recv,
+    [SYS_exo_recv_timed] sys_exo_recv_timed,
     [SYS_endpoint_send] sys_endpoint_send,
     [SYS_endpoint_recv] sys_endpoint_recv,
     [SYS_proc_alloc] sys_proc_alloc,
@@ -211,8 +210,8 @@ static int (*syscalls[])(void) = {
     [SYS_exo_irq_ack] sys_exo_irq_ack,
     [SYS_ipc] sys_ipc,
     [SYS_exo_alloc_ioport] sys_exo_alloc_ioport,
-    [SYS_exo_bind_irq]     sys_exo_bind_irq,
-    [SYS_exo_alloc_dma]    sys_exo_alloc_dma,
+    [SYS_exo_bind_irq] sys_exo_bind_irq,
+    [SYS_exo_alloc_dma] sys_exo_alloc_dma,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 
@@ -224,7 +223,7 @@ void syscall(void) {
 #else
   num = curproc->tf->rax;
 #endif
-  if(num == 0x30){
+  if (num == 0x30) {
 #ifdef __x86_64__
     curproc->tf->rax = sys_ipc_fast();
 #else

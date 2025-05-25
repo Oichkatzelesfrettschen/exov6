@@ -86,6 +86,7 @@ enum exo_syscall {
   EXO_SYSCALL_YIELD_TO = SYS_exo_yield_to,
   EXO_SYSCALL_SEND = SYS_exo_send,
   EXO_SYSCALL_RECV = SYS_exo_recv,
+  EXO_SYSCALL_RECV_TIMED = SYS_exo_recv_timed,
   EXO_SYSCALL_READ_DISK = SYS_exo_read_disk,
   EXO_SYSCALL_WRITE_DISK = SYS_exo_write_disk,
   EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,
