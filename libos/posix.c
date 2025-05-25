@@ -262,3 +262,11 @@ long libos_send(int fd,const void *buf,size_t len,int flags){
 long libos_recv(int fd,void *buf,size_t len,int flags){
     return recv(fd, buf, len, flags);
 }
+
+int libos_getsockopt(int fd,int level,int optname,void *optval,socklen_t *optlen){
+    return getsockopt(fd, level, optname, optval, optlen);
+}
+
+int libos_setsockopt(int fd,int level,int optname,const void *optval,socklen_t optlen){
+    return setsockopt(fd, level, optname, optval, optlen);
+}
