@@ -5,21 +5,29 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 SRC_FILES = [
-    ROOT / 'src-uland/posix_file_test.c',
-    ROOT / 'src-uland/posix_signal_test.c',
-    ROOT / 'src-uland/posix_pipe_test.c',
+    ROOT / "src-uland/posix_file_test.c",
+    ROOT / "src-uland/posix_signal_test.c",
+    ROOT / "src-uland/posix_pipe_test.c",
+    ROOT / "src-uland/timer_test.c",
 ]
 
 
 def compile_and_run(source: pathlib.Path) -> None:
     with tempfile.TemporaryDirectory() as td:
-        exe = pathlib.Path(td) / 'test'
-        subprocess.check_call([
-            'gcc', '-std=c2x', '-Wall', '-Werror',
-            '-idirafter', str(ROOT / 'src-headers'),
-            str(source),
-            '-o', str(exe),
-        ])
+        exe = pathlib.Path(td) / "test"
+        subprocess.check_call(
+            [
+                "gcc",
+                "-std=c2x",
+                "-Wall",
+                "-Werror",
+                "-idirafter",
+                str(ROOT / "src-headers"),
+                str(source),
+                "-o",
+                str(exe),
+            ]
+        )
         subprocess.check_call([str(exe)])
 
 
