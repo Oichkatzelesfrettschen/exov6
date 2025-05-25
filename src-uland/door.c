@@ -27,9 +27,9 @@ door_t door_create_remote(exo_cap dest) {
       d->handler(msg);
     return 0;
   }
-  if (cap_send(d->dest, msg, sizeof(*msg)) < 0)
+  if (cap_send(d->dest, msg, sizeof(*msg)) != EXO_IPC_OK)
     return -1;
-  return cap_recv(d->dest, msg, sizeof(*msg));
+  return cap_recv(d->dest, msg, sizeof(*msg)) == EXO_IPC_OK ? 0 : -1;
 }
 
 void door_server_loop(door_t *d) {
@@ -37,7 +37,7 @@ void door_server_loop(door_t *d) {
     return;
   while (1) {
     zipc_msg_t msg;
-    if (cap_recv(d->dest, &msg, sizeof(msg)) < 0)
+    if (cap_recv(d->dest, &msg, sizeof(msg)) != EXO_IPC_OK)
       continue;
     d->handler(&msg);
     cap_send(d->dest, &msg, sizeof(msg));

@@ -10,10 +10,11 @@ C_CODE = textwrap.dedent(
 #include <assert.h>
 #include <stdint.h>
 #include "src-headers/door.h"
+#include "src-headers/exo_ipc.h"
 
 // stub implementations for caplib helpers
-int cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return 0; }
-int cap_recv(exo_cap src, void *buf, uint64_t len) { (void)src; (void)buf; (void)len; return 0; }
+enum exo_ipc_status cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return EXO_IPC_OK; }
+enum exo_ipc_status cap_recv(exo_cap src, void *buf, uint64_t len) { (void)src; (void)buf; (void)len; return EXO_IPC_OK; }
 
 static int called = 0;
 static void handler(zipc_msg_t *m) { called++; m->w0++; }

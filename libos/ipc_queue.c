@@ -27,10 +27,10 @@ static void ipc_init(void) {
     }
 }
 
-int ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
+enum exo_ipc_status ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
     ipc_init();
     if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
-        return -EPERM;
+        return EXO_IPC_INVALID;
     if(len > sizeof(zipc_msg_t) + sizeof(exo_cap))
         len = sizeof(zipc_msg_t) + sizeof(exo_cap);
 
@@ -42,7 +42,7 @@ int ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
     if(len > sizeof(zipc_msg_t)) {
         memmove(&fr, (const char*)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
         if(!cap_has_rights(fr.rights, EXO_RIGHT_R))
-            return -EPERM;
+            return EXO_IPC_INVALID;
         if(dest.owner)
             fr.owner = dest.owner;
     }
@@ -60,16 +60,19 @@ int ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
     return exo_send(dest, buf, len);
 }
 
-int ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
+enum exo_ipc_status ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
     if(!cap_has_rights(src.rights, EXO_RIGHT_R))
-        return -EPERM;
+        return EXO_IPC_INVALID;
     ipc_init();
     uv_spinlock_lock(&ipcs.lock);
     while(ipcs.r == ipcs.w) {
         uv_spinlock_unlock(&ipcs.lock);
         char tmp[sizeof(zipc_msg_t) + sizeof(exo_cap)];
-        int r = exo_recv(src, tmp, sizeof(tmp));
-        if(r > 0) {
+        if (exo_recv(src, tmp, sizeof(tmp)) == EXO_IPC_OK) {
+            size_t r = sizeof(zipc_msg_t);
+            exo_cap *frtmp = (exo_cap *)(tmp + sizeof(zipc_msg_t));
+            if(frtmp->id)
+                r += sizeof(exo_cap);
             uv_spinlock_lock(&ipcs.lock);
             struct ipc_entry *e = &ipcs.buf[ipcs.w % IPC_BUFSZ];
             memset(e, 0, sizeof(*e));
@@ -99,5 +102,5 @@ int ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
     if(cplen < len)
         memmove((char*)buf + sizeof(zipc_msg_t), &e.frame, len - sizeof(zipc_msg_t));
 
-    return (int)len;
+    return EXO_IPC_OK;
 }

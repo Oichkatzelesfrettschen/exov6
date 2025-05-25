@@ -14,5 +14,5 @@ void ddekit_process_exit(int code) __attribute__((noreturn));
 void ddekit_yield(void);
 
 exo_cap ddekit_cap_alloc_page(void);
-int ddekit_cap_send(exo_cap dest, const void *buf, size_t len);
-int ddekit_cap_recv(exo_cap src, void *buf, size_t len);
+enum exo_ipc_status ddekit_cap_send(exo_cap dest, const void *buf, size_t len);
+enum exo_ipc_status ddekit_cap_recv(exo_cap src, void *buf, size_t len);

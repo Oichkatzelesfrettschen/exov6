@@ -5,12 +5,12 @@ exo_cap capwrap_alloc_page(void) {
     return c;
 }
 
-int capwrap_send(exo_cap dest, const void *buf, size_t len) {
+enum exo_ipc_status capwrap_send(exo_cap dest, const void *buf, size_t len) {
     (void)dest; (void)buf; (void)len;
-    return -1;
+    return EXO_IPC_INVALID;
 }
 
-int capwrap_recv(exo_cap src, void *buf, size_t len) {
+enum exo_ipc_status capwrap_recv(exo_cap src, void *buf, size_t len) {
     (void)src; (void)buf; (void)len;
-    return -1;
+    return EXO_IPC_INVALID;
 }

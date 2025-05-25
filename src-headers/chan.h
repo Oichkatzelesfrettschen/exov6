@@ -15,10 +15,11 @@ typedef struct chan {
 void chan_destroy(chan_t *c);
 
 // Send and receive through an exo capability endpoint
-[[nodiscard]] int chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg,
-                                     size_t len);
-[[nodiscard]] int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg,
-                                     size_t len);
+[[nodiscard]] enum exo_ipc_status chan_endpoint_send(chan_t *c, exo_cap dest,
+                                                     const void *msg,
+                                                     size_t len);
+[[nodiscard]] enum exo_ipc_status chan_endpoint_recv(chan_t *c, exo_cap src,
+                                                     void *msg, size_t len);
 
 // Helper macro to declare a typed channel wrapper
 // Usage: CHAN_DECLARE(mychan, struct mymsg);
@@ -32,15 +33,18 @@ void chan_destroy(chan_t *c);
     return (name##_t *)chan_create(&name##_typedesc);                          \
   }                                                                            \
   static inline void name##_destroy(name##_t *c) { chan_destroy(&c->base); }   \
-  static inline int name##_send(name##_t *c, exo_cap dest, const type *m) {    \
+  static inline enum exo_ipc_status name##_send(name##_t *c, exo_cap dest,       \
+                                               const type *m) {                 \
     unsigned char buf[type##_MESSAGE_SIZE];                                    \
     type##_encode(m, buf);                                                     \
     return chan_endpoint_send(&c->base, dest, buf, type##_MESSAGE_SIZE);       \
   }                                                                            \
-  static inline int name##_recv(name##_t *c, exo_cap src, type *m) {           \
+  static inline enum exo_ipc_status name##_recv(name##_t *c, exo_cap src,       \
+                                               type *m) {                      \
     unsigned char buf[type##_MESSAGE_SIZE];                                    \
-    int r = chan_endpoint_recv(&c->base, src, buf, type##_MESSAGE_SIZE);       \
-    if (r == 0)                                                                \
+    enum exo_ipc_status r =                                                   \
+        chan_endpoint_recv(&c->base, src, buf, type##_MESSAGE_SIZE);          \
+    if (r == EXO_IPC_OK)                                                      \
       type##_decode(m, buf);                                                   \
     return r;                                                                  \
   }
