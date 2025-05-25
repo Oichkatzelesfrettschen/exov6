@@ -37,6 +37,14 @@ The charter outlines the full scope and goals of the project.
 - `exo_yield_to()` – switch to a user controlled context.
 - `exo_send()` / `exo_recv()` – fast message passing between endpoints.
 
+The IPC helpers return an `exo_ipc_status` value declared in
+`src-headers/exo_ipc.h`:
+
+- `IPC_STATUS_SUCCESS` – message delivered or received.
+- `IPC_STATUS_TIMEOUT` – wait timed out.
+- `IPC_STATUS_AGAIN`   – destination mailbox was full.
+- `IPC_STATUS_BADDEST` – invalid endpoint capability.
+
 These calls are thin wrappers around the kernel interface.  Higher layers
 are implemented in the libOS.
 
