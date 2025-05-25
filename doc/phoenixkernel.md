@@ -55,8 +55,7 @@ Keeping kernel, user programs and the libOS separated helps manage dependencies 
 The project now uses CMake and Ninja. To build the kernel image run:
 
 ```
-cmake -S . -B build -G Ninja
-ninja -C build
+cmake -S . -B build -G Ninja && ninja -C build
 ```
 
 This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
@@ -174,8 +173,7 @@ the repository the filesystem image contains `exo_stream_demo`,
 1. Build everything:
 
    ```
-   cmake -S . -B build -G Ninja
-   ninja -C build
+   cmake -S . -B build -G Ninja && ninja -C build
    ```
 
 2. Start the system under QEMU:
