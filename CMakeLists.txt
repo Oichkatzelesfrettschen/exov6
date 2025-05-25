@@ -10,6 +10,7 @@ endif()
 project(xv6 LANGUAGES C CXX)
 
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
+option(IPC_DEBUG "Enable IPC debug logging" OFF)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -48,6 +49,9 @@ target_compile_options(kernel PRIVATE -Wall -Werror)
 
 if(USE_TICKET_LOCK)
   target_compile_definitions(kernel PRIVATE USE_TICKET_LOCK)
+endif()
+if(IPC_DEBUG)
+  target_compile_definitions(kernel PRIVATE IPC_DEBUG)
 endif()
 
 # QEMU executable used for run targets
