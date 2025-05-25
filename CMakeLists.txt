@@ -11,6 +11,7 @@ project(xv6 LANGUAGES C CXX)
 
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
 option(IPC_DEBUG "Enable IPC debug logging" OFF)
+option(USE_CAPNP "Build Cap'n Proto support" OFF)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -42,8 +43,29 @@ file(GLOB_RECURSE KERNEL_SOURCES
   src-uland/*.c
   src-uland/user/*.c
   libos/*.c
-  libos/capnp/*.c
 )
+
+if(USE_CAPNP)
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.h
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/proto/driver.capnp
+    DEPENDS ${CMAKE_SOURCE_DIR}/proto/driver.capnp
+  )
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.h
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/proto/hello.capnp
+    DEPENDS ${CMAKE_SOURCE_DIR}/proto/hello.capnp
+  )
+  add_library(capnp STATIC
+    libos/capnp/capnp_helpers.c
+    ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c
+    ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.c
+  )
+  target_include_directories(capnp PUBLIC
+    ${CMAKE_SOURCE_DIR}/proto
+    ${CMAKE_SOURCE_DIR}/libos/capnp
+  )
+endif()
 
 add_executable(kernel ${KERNEL_SOURCES})
 
@@ -75,6 +97,9 @@ if(CPUFLAGS)
 endif()
 
 target_link_libraries(kernel PRIVATE nstr_graph)
+if(USE_CAPNP)
+  target_link_libraries(kernel PRIVATE capnp)
+endif()
 
 add_subdirectory(libnstr_graph)
 
