@@ -5,7 +5,7 @@
 
 int main(void) {
     const char *msg = "hello";
-    int fd = libos_open("testfile", 0);
+    int fd = libos_open("testfile", 0, 0);
     if(fd < 0){
         printf(1, "posix_test: open failed\n");
         exit();
@@ -16,7 +16,7 @@ int main(void) {
     }
     libos_close(fd);
 
-    fd = libos_open("testfile", 0);
+    fd = libos_open("testfile", 0, 0);
     char buf[16];
     int n = libos_read(fd, buf, sizeof(buf)-1);
     if(n < 0){

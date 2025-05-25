@@ -4,7 +4,7 @@
 #include <string.h>
 #include "libos/posix.h"
 
-int libos_open(const char *path, int flags) { return open(path, flags | O_CREAT, 0600); }
+int libos_open(const char *path, int flags, int mode) { return open(path, flags, mode); }
 int libos_read(int fd, void *buf, size_t n) { return (int)read(fd, buf, n); }
 int libos_write(int fd, const void *buf, size_t n) { return (int)write(fd, buf, n); }
 int libos_close(int fd) { return close(fd); }
@@ -12,17 +12,28 @@ int libos_dup(int fd) { return dup(fd); }
 
 int main(void) {
     const char *msg = "hello";
-    int fd = libos_open("tmpfile.txt", O_RDWR);
+    unlink("tmpfile.txt");
+
+    int fd = libos_open("tmpfile.txt", O_RDWR | O_CREAT, 0600);
     assert(fd >= 0);
     assert(libos_write(fd, msg, strlen(msg)) == (int)strlen(msg));
     assert(libos_close(fd) == 0);
 
-    fd = libos_open("tmpfile.txt", O_RDONLY);
+    fd = libos_open("tmpfile.txt", O_RDONLY, 0);
     char buf[16];
     int n = libos_read(fd, buf, sizeof(buf) - 1);
     assert(n >= 0);
     buf[n] = '\0';
     assert(strcmp(buf, msg) == 0);
+
+    /* truncate existing file */
+    assert(libos_close(fd) == 0);
+    fd = libos_open("tmpfile.txt", O_WRONLY | O_TRUNC, 0600);
+    assert(fd >= 0);
+    assert(libos_close(fd) == 0);
+    fd = libos_open("tmpfile.txt", O_RDONLY, 0);
+    n = libos_read(fd, buf, sizeof(buf));
+    assert(n == 0);
 
     int dupfd = libos_dup(fd);
     assert(dupfd >= 0);
