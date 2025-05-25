@@ -1,7 +1,12 @@
 #include "door.h"
-#include <string.h>
+#include "exo_ipc.h"
+#include <stddef.h>
 
-static void clear_cap(exo_cap *c) { memset(c, 0, sizeof(*c)); }
+static void clear_cap(exo_cap *c) {
+  unsigned char *p = (unsigned char *)c;
+  for (size_t i = 0; i < sizeof(*c); i++)
+    p[i] = 0;
+}
 
 door_t door_create_local(void (*handler)(zipc_msg_t *msg)) {
   door_t d;
@@ -27,9 +32,11 @@ door_t door_create_remote(exo_cap dest) {
       d->handler(msg);
     return 0;
   }
-  if (cap_send(d->dest, msg, sizeof(*msg)) < 0)
+  if (cap_send(d->dest, msg, sizeof(*msg)) != IPC_STATUS_SUCCESS)
     return -1;
-  return cap_recv(d->dest, msg, sizeof(*msg));
+  if (cap_recv(d->dest, msg, sizeof(*msg)) != IPC_STATUS_SUCCESS)
+    return -1;
+  return 0;
 }
 
 void door_server_loop(door_t *d) {
@@ -40,6 +47,6 @@ void door_server_loop(door_t *d) {
     if (cap_recv(d->dest, &msg, sizeof(msg)) < 0)
       continue;
     d->handler(&msg);
-    cap_send(d->dest, &msg, sizeof(msg));
+    (void)cap_send(d->dest, &msg, sizeof(msg));
   }
 }

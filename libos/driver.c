@@ -1,5 +1,6 @@
 #include "driver.h"
 #include "user.h"
+#include "exo_ipc.h"
 
 [[nodiscard]] int driver_spawn(const char *path, char *const argv[]) {
   int pid = fork();
@@ -11,5 +12,6 @@
 }
 
 [[nodiscard]] int driver_connect(int pid, exo_cap ep) {
-  return cap_send(ep, &pid, sizeof(pid));
+  exo_ipc_status st = cap_send(ep, &pid, sizeof(pid));
+  return st == IPC_STATUS_SUCCESS ? 0 : -1;
 }
