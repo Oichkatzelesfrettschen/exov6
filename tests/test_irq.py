@@ -33,7 +33,7 @@ static int cap_verify(exo_cap c){ (void)c; return 1; }
 int main(void){
     cap_table_init();
     exo_cap cap = exo_alloc_irq(5, EXO_RIGHT_R | EXO_RIGHT_W);
-    irq_trigger(5);
+    assert(irq_trigger(5) == 0);
     unsigned num = 0;
     assert(exo_irq_wait(cap, &num) == 0);
     assert(num == 5);
@@ -43,25 +43,38 @@ int main(void){
 """
 )
 
+
 def compile_and_run():
     with tempfile.TemporaryDirectory() as td:
-        src = pathlib.Path(td)/"test.c"
-        exe = pathlib.Path(td)/"test"
+        src = pathlib.Path(td) / "test.c"
+        exe = pathlib.Path(td) / "test"
         src.write_text(C_CODE)
-        (pathlib.Path(td)/"proc.h").write_text("#pragma once\nstruct proc{int pid;};")
-        (pathlib.Path(td)/"include").mkdir()
-        (pathlib.Path(td)/"include/exokernel.h").write_text('#include "../src-headers/exokernel.h"')
-        (pathlib.Path(td)/"defs.h").write_text("")
-        (pathlib.Path(td)/"mmu.h").write_text("")
-        subprocess.check_call([
-            "gcc","-std=c2x","-Wall","-Werror",
-            "-I", str(td),
-            "-I", str(ROOT),
-            "-I", str(ROOT/"src-headers"),
-            str(src),
-            "-o", str(exe)
-        ])
+        (pathlib.Path(td) / "proc.h").write_text("#pragma once\nstruct proc{int pid;};")
+        (pathlib.Path(td) / "include").mkdir()
+        (pathlib.Path(td) / "include/exokernel.h").write_text(
+            '#include "../src-headers/exokernel.h"'
+        )
+        (pathlib.Path(td) / "defs.h").write_text("")
+        (pathlib.Path(td) / "mmu.h").write_text("")
+        subprocess.check_call(
+            [
+                "gcc",
+                "-std=c2x",
+                "-Wall",
+                "-Werror",
+                "-I",
+                str(td),
+                "-I",
+                str(ROOT),
+                "-I",
+                str(ROOT / "src-headers"),
+                str(src),
+                "-o",
+                str(exe),
+            ]
+        )
         return subprocess.run([str(exe)]).returncode
+
 
 def test_irq_event():
     assert compile_and_run() == 0
