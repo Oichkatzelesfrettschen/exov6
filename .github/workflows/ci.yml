@@ -31,18 +31,10 @@ jobs:
       run: |
         set -euxo pipefail
         swift/build_swift.sh
+    - name: Configure
+      run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }}
     - name: Build
-      run: |
-        set -euxo pipefail
-        make ARCH=${{ matrix.arch }} QEMU=echo qemu-nox
-    - name: Generate compile_commands
-      run: |
-        set -euxo pipefail
-        compiledb -n make ARCH=${{ matrix.arch }} QEMU=echo qemu-nox
-    - name: Run configuredb
-      run: |
-        set -euxo pipefail
-        configuredb --help
+      run: ninja -C build qemu-nox
     - name: Run unit tests
       run: |
         set -euxo pipefail

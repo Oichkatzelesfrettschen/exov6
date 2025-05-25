@@ -33,6 +33,11 @@ file(GLOB_RECURSE KERNEL_SOURCES
 
 add_executable(kernel ${KERNEL_SOURCES})
 
+# QEMU executable used for run targets
+find_program(QEMU_EXECUTABLE
+  NAMES qemu-system-x86_64 qemu-system-i386 qemu
+  DOC "QEMU system emulator")
+
 set(CPUFLAGS "" CACHE STRING "Additional CPU specific compile flags")
 
 target_include_directories(kernel PRIVATE
@@ -50,3 +55,11 @@ endif()
 target_link_libraries(kernel PRIVATE nstr_graph)
 
 add_subdirectory(libnstr_graph)
+
+if(QEMU_EXECUTABLE)
+  add_custom_target(qemu-nox
+    COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -kernel $<TARGET_FILE:kernel>
+    DEPENDS kernel
+    USES_TERMINAL
+  )
+endif()
