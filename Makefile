@@ -342,7 +342,8 @@ LIBOS_OBJS = \
        $(LIBOS_DIR)/driver.o \
         $(LIBOS_DIR)/affine_runtime.o \
        $(LIBOS_DIR)/posix.o \
-       $(LIBOS_DIR)/ipc_queue.o 
+       $(LIBOS_DIR)/ipc_queue.o \
+       $(LIBOS_DIR)/streams.o
 
 
 

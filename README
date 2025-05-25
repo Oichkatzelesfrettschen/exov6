@@ -480,6 +480,9 @@ constant. The ``flow_pid.py`` helpers ``set_kp()``, ``set_ki()`` and
 For testing the base directory can be overridden with the environment
 variable ``FLOW_PID_DIR``.
 
+Additional details on this interface can be found in
+``doc/streams_fc.md``.
+
 STREAMS LOGGING
 ---------------
 Python STREAMS modules log messages using ``strlog_json()`` from
