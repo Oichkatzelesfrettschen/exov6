@@ -23,6 +23,7 @@ typedef unsigned long libos_sigset_t;
 
 int libos_stat(const char *path, struct stat *st);
 long libos_lseek(int fd, long off, int whence);
+int libos_ftruncate(int fd, long length);
 void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd, long off);
 int libos_munmap(void *addr, size_t len);
 

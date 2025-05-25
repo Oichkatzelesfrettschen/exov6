@@ -11,6 +11,7 @@ C_CODE = textwrap.dedent("""
 
 int libos_stat(const char *path, struct stat *st){ (void)path; st->size=0; return 0; }
 long libos_lseek(int fd,long off,int whence){ (void)fd;(void)off;(void)whence; return 0; }
+int libos_ftruncate(int fd,long l){ (void)fd;(void)l; return 0; }
 void *libos_mmap(void *a,size_t l,int p,int f,int fd,long o){ (void)a;(void)l;(void)p;(void)f;(void)fd;(void)o; return (void*)1; }
 int libos_munmap(void *a,size_t l){ (void)a;(void)l; return 0; }
 int libos_sigemptyset(libos_sigset_t *s){ *s=0; return 0; }
