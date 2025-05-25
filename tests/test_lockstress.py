@@ -11,7 +11,15 @@ C_CODE = r"""
 #include <pthread.h>
 #include <stdlib.h>
 
-typedef unsigned int uint;
+
+struct spinlock;
+struct cpu;
+static struct cpu* mycpu(void);
+static void getcallerpcs(void*, unsigned int*);
+static void panic(char*);
+static void pushcli(void);
+static void popcli(void);
+static int holding(struct spinlock*);
 
 #include "src-headers/qspinlock.h"
 #include "src-headers/rspinlock.h"
@@ -26,27 +34,6 @@ static void panic(char *msg){ (void)msg; exit(1); }
 static void pushcli(void){ cpu0.ncli++; }
 static void popcli(void){ cpu0.ncli--; }
 static int holding(struct spinlock *lk){ return lk->cpu == &cpu0; }
-static void initlock(struct spinlock *lk, char *name){
-    lk->name = name;
-    lk->ticket.head = 0;
-    lk->ticket.tail = 0;
-    lk->cpu = 0;
-}
-static void acquire(struct spinlock *lk){
-    pushcli();
-    if(holding(lk)) panic("acq");
-    uint16_t t = atomic_fetch_add(&lk->ticket.tail, 1);
-    while(atomic_load(&lk->ticket.head) != t) ;
-    __sync_synchronize();
-    lk->cpu = &cpu0;
-}
-static void release(struct spinlock *lk){
-    if(!holding(lk)) panic("rel");
-    __sync_synchronize();
-    lk->cpu = 0;
-    atomic_fetch_add(&lk->ticket.head, 1);
-    popcli();
-}
 
 #include "src-kernel/qspinlock.c"
 #include "src-kernel/rspinlock.c"
@@ -98,8 +85,9 @@ def compile_and_run():
         src.write_text(C_CODE)
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc","-std=c11","-pthread","-DSPINLOCK_NO_STUBS",
+            "gcc","-std=c2x","-Wall","-Werror","-pthread","-DSPINLOCK_NO_STUBS",
             "-I", str(ROOT),
+            "-I", str(ROOT/"src-headers/libos"),
             "-I", str(ROOT/"src-headers"),
             "-I", str(ROOT/"src-kernel/include"),
             str(src),

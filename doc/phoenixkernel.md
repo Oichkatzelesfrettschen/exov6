@@ -25,18 +25,13 @@ that provides traditional services on top of the primitive capability interface.
             graph(DAG) of tasks. Nodes represent units of work and edges encode explicit dependencies. The kernel traverses this graph whenever a context switch is required, allowing cooperative libraries to chain execution without relying on heavyweight kernel threads. The DAG model enables fine-grained scheduling, efficient data-flow processing and transparent composition of user-level schedulers.
 
 
-            Each DAG node now tracks its parents in a reverse dependency
-            array.  When a node completes, the scheduler marks it as done
-            so children can verify that all prerequisites finished.  Ready
-            nodes are inserted based on a weight derived from their
-            priority so heavier tasks execute first when several nodes are
-            runnable.
+Each DAG node now tracks its parents in a reverse dependency
+array.  When a node completes, the scheduler marks it as done
+so children can verify that all prerequisites finished.  Ready
+nodes are inserted based on a weight derived from their
+priority so heavier tasks execute first when several nodes are
+runnable.
 
-A **Beatty scheduler** now complements the DAG engine. It alternates among an arbitrary
-number of contexts using Beatty sequences with irrational weights. Call
-`beatty_sched_set_tasks` with an array of task capabilities and their corresponding
-weights to activate it. The scheduler is registered as an exo stream so user-level
-runtimes can select it on demand.
 
 
 ## Capability System
@@ -57,18 +52,18 @@ Keeping kernel, user programs and the libOS separated helps manage dependencies 
 
 ## Building
 
-The repository uses GNU Make. To build the kernel image run:
+The project now uses CMake and Ninja. To build the kernel image run:
 
 ```
-make kernel
+cmake -S . -B build -G Ninja && ninja -C build
 ```
 
-This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The default `make` target also assembles a bootable `xv6.img` disk image containing this kernel.
+This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
 
 To build the user-space library operating system invoke:
 
 ```
-make libos
+ninja -C build libos
 ```
 
 which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `libos/` and `src-uland/`.
@@ -80,7 +75,8 @@ Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSI
 ## BSD and SVR4 Compatibility Goals
 
 While the current focus is POSIX emulation, the project also aims to
-support BSD and System&nbsp;V Release&nbsp;4 personalities entirely in user
+support BSD and System&nbsp;
+V Release &nbsp;4 personalities entirely in user
 space.  Additional modules under `libos/` will translate Phoenix
 capabilities to the expected interfaces.  Planned components include
 `bsd_signals.c` and `bsd_termios.c` for the classic BSD signal and
@@ -140,12 +136,14 @@ whenever the current task yields or no runnable work remains.
 
 ### IPC
 
-- `exo_send(dest, buf, len)` – enqueue a message to the destination
-  capability.
-- `exo_recv(src, buf, len)` – receive data from the source capability.
-- `zipc_call(msg)` – perform a fast IPC syscall using the `zipc_msg_t`
-  structure defined in `ipc.h`.
+- `exo_send(dest, buf, len)` – send a message to `dest`;
+queuing is handled in user
+        space.- `exo_recv(src, buf,
+                          len)` – receive data from `src` via the libOS queue
+                    .- `zipc_call(msg)` – perform a fast IPC syscall
+                       using the `zipc_msg_t` structure defined in `ipc.h`.
 
+                       IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
 Typed channels built with the `CHAN_DECLARE` macro wrap these primitives
 and automatically serialize Cap'n Proto messages.  Each channel is
 backed by a `msg_type_desc` describing the size of the Cap'n Proto
@@ -175,13 +173,13 @@ the repository the filesystem image contains `exo_stream_demo`,
 1. Build everything:
 
    ```
-   make
+   cmake -S . -B build -G Ninja && ninja -C build
    ```
 
 2. Start the system under QEMU:
 
    ```
-   make qemu-nox
+   ninja -C build qemu-nox
    ```
 
 3. At the xv6 shell run one of the demos:
@@ -206,6 +204,27 @@ corresponding I/O regions and interrupts. A crashed or misbehaving driver
 cannot compromise the kernel because it only receives the capabilities it
 needs. Drivers typically export a Cap'n Proto service describing the
 operations they support.
+
+## Interrupt Capabilities and Queues
+
+Phoenix exposes hardware interrupt lines through the capability type
+`CAP_TYPE_IRQ` declared in `src-headers/cap.h`.
+Drivers obtain an IRQ capability via `exo_alloc_irq()` and wait for events
+with `exo_irq_wait()` before acknowledging them through `exo_irq_ack()`.
+The kernel implementation lives in `src-kernel/irq.c` where a fixed size
+ring buffer records pending interrupts.  When an interrupt fires,
+`irq_trigger()` appends the number and any task blocked in
+`exo_irq_wait()` is woken once an entry becomes available.
+
+User space code uses the thin wrappers in `libos/irq_client.c` which simply
+forward the calls to the kernel.
+
+IPC messages follow the same queuing approach.  Functions
+`exo_ipc_queue_send()` and `exo_ipc_queue_recv()` manipulate a ring buffer in
+`src-kernel/exo_ipc_queue.c`.  The libOS mirrors this logic in
+`libos/ipc_queue.c` using a userspace lock to serialise access.  These
+functions are registered with `exo_ipc_register()` so `exo_send()` and
+`exo_recv()` share the same semantics.
 
 ## Supervisor
 
@@ -255,6 +274,15 @@ int fs_write_block(struct exo_blockcap cap, const void *src);
 These helpers make it straightforward to allocate memory pages, exchange
 messages and perform basic filesystem operations from user space.
 
+### User-Space Filesystem
+
+The legacy kernel file system has been moved entirely into the libOS.  Module
+`libos/fs_ufs.c` manages a tiny in-memory directory of files, each backed by a
+block capability obtained with `exo_alloc_block`.  Calls such as
+`libfs_open()` and `libfs_read()` operate on these capabilities with
+`exo_bind_block` so the kernel only sees raw disk accesses.  POSIX wrappers in
+`libos/posix.c` now use this API instead of invoking system calls.
+
 ## Writing a Simple Driver
 
 A minimal block driver illustrating these APIs is shown below:
@@ -276,7 +304,7 @@ int main(void) {
 }
 ```
 
-Compile the file with `make` and add the resulting binary to the disk image.
+Compile the file with ``ninja -C build`` and add the resulting binary to the disk image.
 The supervisor can then spawn the driver at boot time or restart it if it
 exits.
 
@@ -350,11 +378,11 @@ inside the xv6 environment.
 int
 main(void)
 {
-    exo_cap page = exo_alloc_page();
-    void *va = map_page(page.id); // provided by the libOS
-    memset(va, 0, PGSIZE);
-    exo_unbind_page(page);
-    return 0;
+  exo_cap page = exo_alloc_page();
+  void *va = map_page(page.id); // provided by the libOS
+  memset(va, 0, PGSIZE);
+  exo_unbind_page(page);
+  return 0;
 }
 ```
 
@@ -372,10 +400,10 @@ CHAN_DECLARE(ping_chan, ping_MESSAGE_SIZE);
 int
 main(void)
 {
-    struct ping msg = ping_init();
-    ping_chan_send(&ping_chan, &msg);
-    ping_chan_recv(&ping_chan, &msg);
-    return 0;
+  struct ping msg = ping_init();
+  ping_chan_send(&ping_chan, &msg);
+  ping_chan_recv(&ping_chan, &msg);
+  return 0;
 }
 ```
 
@@ -390,10 +418,10 @@ main(void)
 int
 main(void)
 {
-    int pid = driver_spawn("blk_driver", 0);
-    exo_cap ep = obtain_driver_ep(pid); // helper returning the endpoint
-    driver_connect(pid, ep);
-    return 0;
+  int pid = driver_spawn("blk_driver", 0);
+  exo_cap ep = obtain_driver_ep(pid); // helper returning the endpoint
+  driver_connect(pid, ep);
+  return 0;
 }
 ```
 
@@ -412,3 +440,47 @@ runtimes to build dependency graphs while still benefiting from the affine time
 slicing provided by Beatty. Selecting the combined stream merely requires
 calling the initializer before submitting DAG nodes.
 
+## Locking Patterns for User-Space Drivers and Services
+
+Phoenix exposes several locking primitives that mirror the kernel's spinlock
+implementations.  Most drivers are single threaded, so the default stub locks
+found in `src-headers/libos/spinlock.h` compile to no-ops.  Set `CONFIG_SMP` in
+`config.h` to `0` to remove all locking overhead when running on a single
+processor system.
+
+When building with `CONFIG_SMP=1` the libOS can use either the regular ticket
+lock API or the randomized qspinlock variant.  Ticket locks are invoked through
+`initlock`, `acquire` and `release`.  QSpinlocks provide `qspin_lock`,
+`qspin_unlock` and `qspin_trylock` for situations where many threads contend on
+the same structure.
+
+### Selecting an Implementation
+
+```c
+#include "spinlock.h"
+#ifdef USE_QSPIN
+#include "qspinlock.h"
+#endif
+
+struct spinlock lk;
+
+int main(void) {
+#if CONFIG_SMP
+  initlock(&lk, "demo");
+#ifdef USE_QSPIN
+  qspin_lock(&lk);
+  qspin_unlock(&lk);
+#else
+  acquire(&lk);
+  release(&lk);
+#endif
+#else
+// locking disabled when CONFIG_SMP=0
+#endif
+  return 0;
+}
+```
+
+Disable locking when a service never runs on more than one CPU or when
+`CONFIG_SMP` is not enabled.  For multi-core systems, prefer qspinlocks when
+heavy contention is expected; otherwise the ticket lock suffices.

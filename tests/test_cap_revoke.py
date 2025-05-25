@@ -25,7 +25,7 @@ static void cprintf(const char *f, ...){ (void)f; }
 
 int main(void){
     cap_table_init();
-    uint id = cap_table_alloc(CAP_TYPE_PAGE, 0x1000, 0, 1);
+    uint32_t id = cap_table_alloc(CAP_TYPE_PAGE, 0x1000, 0, 1);
     for(unsigned i=0; i < 0xffffu - 1; i++){
         assert(cap_revoke(id) == 0);
         id = cap_table_alloc(CAP_TYPE_PAGE, 0x1000, 0, 1);
@@ -46,17 +46,9 @@ def compile_and_run():
         (pathlib.Path(td)/"spinlock.h").write_text("struct spinlock{int d;};")
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text("")
-        (pathlib.Path(td)/"types.h").write_text(
-            "typedef unsigned int uint;\n"
-            "typedef unsigned short ushort;\n"
-            "typedef unsigned char uchar;\n"
-        )
-        (pathlib.Path(td)/"stdint.h").write_text(
-            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif"
-        )
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc","-std=c11",
+            "gcc","-std=c2x","-Wall","-Werror",
             "-I", str(td),
             "-I", str(ROOT),
             "-I", str(ROOT/"src-headers"),

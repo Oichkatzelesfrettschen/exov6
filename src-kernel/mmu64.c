@@ -51,13 +51,13 @@ walkpml4(pml4e_t *pml4, const void *va, int alloc)
 }
 
 static int
-mappages64(pml4e_t *pml4, void *va, uint size, uint64 pa, int perm)
+mappages64(pml4e_t *pml4, void *va, uint32_t size, uint64_t pa, int perm)
 {
   char *a, *last;
   pte_t *pte;
 
-  a = (char*)PGROUNDDOWN((uint64)va);
-  last = (char*)PGROUNDDOWN(((uint64)va) + size - 1);
+  a = (char*)PGROUNDDOWN((uint64_t)va);
+  last = (char*)PGROUNDDOWN(((uint64_t)va) + size - 1);
   for(;;){
     if((pte = walkpml4(pml4, a, 1)) == 0)
       return -1;
@@ -76,7 +76,7 @@ pml4e_t*
 setupkvm64(void)
 {
   pml4e_t *pml4;
-  struct kmap { void *virt; uint phys_start; uint phys_end; int perm; };
+  struct kmap { void *virt; uint32_t phys_start; uint32_t phys_end; int perm; };
   static struct kmap kmap[] = {
     { (void*)KERNBASE, 0,             EXTMEM,    PTE_W},
     { (void*)KERNLINK, V2P(KERNLINK), V2P(data), 0},
@@ -92,7 +92,7 @@ setupkvm64(void)
     panic("PHYSTOP too high");
   for(k = kmap; k < &kmap[NELEM(kmap)]; k++)
     if(mappages64(pml4, k->virt, k->phys_end - k->phys_start,
-                  (uint64)k->phys_start, k->perm) < 0) {
+                  (uint64_t)k->phys_start, k->perm) < 0) {
       kfree((char*)pml4);
       return 0;
     }

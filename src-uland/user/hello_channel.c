@@ -1,6 +1,7 @@
 #include "types.h"
 #include "user.h"
 #include "chan.h"
+#include "capnp_helpers.h"
 #include "caplib.h"
 #include "libsmk_cap.h"
 #include "proto/hello.capnp.h"

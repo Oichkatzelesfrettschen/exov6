@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "types.h"
 #include <errno.h>
+#include <string.h>
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
@@ -18,8 +19,8 @@ struct ipc_entry {
 static struct {
   struct spinlock lock;
   struct ipc_entry buf[IPC_BUFSZ];
-  uint r;
-  uint w;
+  uint32_t r;
+  uint32_t w;
   int inited;
 } ipcs;
 
@@ -33,21 +34,21 @@ static void ipc_init(void) {
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   ipc_init();
-  if(!cap_has_rights(dest.rights, EXO_RIGHT_W))
+  if (!cap_has_rights(dest.rights, EXO_RIGHT_W))
     return -EPERM;
   if (len > sizeof(zipc_msg_t) + sizeof(exo_cap))
     len = sizeof(zipc_msg_t) + sizeof(exo_cap);
 
   zipc_msg_t m = {0};
   size_t mlen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
-  memmove(&m, buf, mlen);
+  memcpy(&m, buf, mlen);
 
   exo_cap fr = {0};
   if (len > sizeof(zipc_msg_t)) {
-    memmove(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
+    memcpy(&fr, (const char *)buf + sizeof(zipc_msg_t), sizeof(exo_cap));
     if (!cap_verify(fr))
       return -EPERM;
-    if(!cap_has_rights(fr.rights, EXO_RIGHT_R))
+    if (!cap_has_rights(fr.rights, EXO_RIGHT_R))
       return -EPERM;
     if (dest.owner)
       fr.owner = dest.owner;
@@ -68,7 +69,7 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
 }
 
 int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
-  if(!cap_has_rights(src.rights, EXO_RIGHT_R))
+  if (!cap_has_rights(src.rights, EXO_RIGHT_R))
     return -EPERM;
   ipc_init();
   acquire(&ipcs.lock);
@@ -81,8 +82,8 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   wakeup(&ipcs.w);
   release(&ipcs.lock);
 
-  if (e.frame.pa && (!cap_verify(e.frame) ||
-                     !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
+  if (e.frame.pa &&
+      (!cap_verify(e.frame) || !cap_has_rights(e.frame.rights, EXO_RIGHT_R)))
     e.frame.pa = 0;
 
   size_t total = sizeof(zipc_msg_t);
@@ -95,16 +96,16 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
     len = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
 
   size_t cplen = len < sizeof(zipc_msg_t) ? len : sizeof(zipc_msg_t);
-  memmove(buf, &e.msg, cplen);
+  memcpy(buf, &e.msg, cplen);
   if (cplen < len) {
-    memmove((char *)buf + sizeof(zipc_msg_t), &e.frame,
-            len - sizeof(zipc_msg_t));
+    memcpy((char *)buf + sizeof(zipc_msg_t), &e.frame,
+           len - sizeof(zipc_msg_t));
   }
 
   return (int)len;
 }
 
 struct exo_ipc_ops exo_ipc_queue_ops = {
-  .send = exo_ipc_queue_send,
-  .recv = exo_ipc_queue_recv,
+    .send = exo_ipc_queue_send,
+    .recv = exo_ipc_queue_recv,
 };

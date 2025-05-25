@@ -11,9 +11,9 @@
 static struct {
   struct spinlock lock;
   char buf[INPUT_BUF];
-  uint r; // read index
-  uint w; // write index
-  uint e; // edit index
+  uint32_t r; // read index
+  uint32_t w; // write index
+  uint32_t e; // edit index
 } tty;
 
 void

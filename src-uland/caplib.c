@@ -2,17 +2,15 @@
 #include "types.h"
 #include "user.h"
 
-exo_cap cap_alloc_page(void) {
-  return exo_alloc_page();
-}
+exo_cap cap_alloc_page(void) { return exo_alloc_page(); }
 
-int cap_unbind_page(exo_cap cap) { return exo_unbind_page(cap); }
+[[nodiscard]] int cap_unbind_page(exo_cap cap) { return exo_unbind_page(cap); }
 
-int cap_alloc_block(uint dev, uint rights, exo_blockcap *cap) {
+[[nodiscard]] int cap_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap) {
   return exo_alloc_block(dev, rights, cap);
 }
 
-int cap_bind_block(exo_blockcap *cap, void *data, int write) {
+[[nodiscard]] int cap_bind_block(exo_blockcap *cap, void *data, int write) {
   return exo_bind_block(cap, data, write);
 }
 
@@ -20,37 +18,43 @@ void cap_flush_block(exo_blockcap *cap, void *data) {
   exo_flush_block(cap, data);
 }
 
-int cap_set_timer(void (*handler)(void)) { return set_timer_upcall(handler); }
-int cap_set_gas(uint64 amount) { return set_gas(amount); }
-int cap_get_gas(void) { return get_gas(); }
-int cap_out_of_gas(void) { return get_gas() <= 0; }
+[[nodiscard]] int cap_set_timer(void (*handler)(void)) {
+  return set_timer_upcall(handler);
+}
+[[nodiscard]] int cap_set_gas(uint64_t amount) { return set_gas(amount); }
+[[nodiscard]] int cap_get_gas(void) { return get_gas(); }
+[[nodiscard]] int cap_out_of_gas(void) { return get_gas() <= 0; }
 
 void cap_yield_to(context_t **old, context_t *target) {
   cap_yield(old, target);
 }
 
-int cap_yield_to_cap(exo_cap target) { return exo_yield_to(target); }
+[[nodiscard]] int cap_yield_to_cap(exo_cap target) {
+  return exo_yield_to(target);
+}
 
-int cap_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n) {
+[[nodiscard]] int cap_read_disk(exo_blockcap cap, void *dst, uint64_t off,
+                                uint64_t n) {
   return exo_read_disk(cap, dst, off, n);
 }
 
-int cap_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n) {
+[[nodiscard]] int cap_write_disk(exo_blockcap cap, const void *src, uint64_t off,
+                                 uint64_t n) {
   return exo_write_disk(cap, src, off, n);
 }
 
 extern int cap_revoke_syscall(void);
 int cap_revoke(void) { return cap_revoke_syscall(); }
 
-int cap_send(exo_cap dest, const void *buf, uint64 len) {
+[[nodiscard]] int cap_send(exo_cap dest, const void *buf, uint64_t len) {
   return exo_send(dest, buf, len);
 }
 
-int cap_recv(exo_cap src, void *buf, uint64 len) {
+[[nodiscard]] int cap_recv(exo_cap src, void *buf, uint64_t len) {
   return exo_recv(src, buf, len);
 }
 
-int cap_ipc_echo_demo(void) {
+[[nodiscard]] int cap_ipc_echo_demo(void) {
   const char *msg = "ping";
   char buf[5];
   exo_cap cap = {0, 0};

@@ -4,13 +4,13 @@
 double phi(void) { return 1.618033988749895; }
 
 // Compute the n-th Fibonacci number with F(0) = 0 and F(1) = 1.
-uint64 fib(uint n) {
+uint64_t fib(uint32_t n) {
   if (n == 0)
     return 0;
-  uint64 a = 0;
-  uint64 b = 1;
-  for (uint i = 1; i < n; i++) {
-    uint64 t = a + b;
+  uint64_t a = 0;
+  uint64_t b = 1;
+  for (uint32_t i = 1; i < n; i++) {
+    uint64_t t = a + b;
     a = b;
     b = t;
   }
@@ -18,7 +18,7 @@ uint64 fib(uint n) {
 }
 
 // Compute the greatest common divisor using Euclid's algorithm.
-uint64 gcd(uint64 a, uint64 b) {
+uint64_t gcd(uint64_t a, uint64_t b) {
   // Euclid's algorithm without division to avoid libgcc helpers
   while (a != b) {
     if (a > b)

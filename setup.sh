@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+set -x
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 # Detect basic network connectivity; many CI environments are offline
 NETWORK_AVAILABLE=true
@@ -69,6 +70,8 @@ else
 fi
 
 #— core build tools, formatters, analysis, science libs
+# The project now builds primarily with clang.  GCC packages remain only
+# for cross-compilers and legacy support.
 for pkg in \
   build-essential gcc g++ g++-13 clang clang-16 lld llvm \
   clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig shellcheck pre-commit \

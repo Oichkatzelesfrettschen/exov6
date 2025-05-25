@@ -5,16 +5,15 @@
 #include "buf.h"
 #include "exo_disk.h"
 #include <errno.h>
+#include <string.h>
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-int
-exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
-{
-  if(cap.owner != myproc()->pid ||
-     !cap_has_rights(cap.rights, EXO_RIGHT_R))
+[[nodiscard]] int exo_read_disk(struct exo_blockcap cap, void *dst,
+                                uint64_t off, uint64_t n) {
+  if (cap.owner != myproc()->pid || !cap_has_rights(cap.rights, EXO_RIGHT_R))
     return -EPERM;
   struct buf b;
   uint64_t tot = 0;
@@ -23,17 +22,17 @@ exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
 
   while (tot < n) {
     uint64_t cur = off + tot;
-    struct exo_blockcap blk = { cap.dev, cap.blockno + cur/BSIZE,
-                                cap.rights, cap.owner };
+    struct exo_blockcap blk = {cap.dev, cap.blockno + cur / BSIZE, cap.rights,
+                               cap.owner};
     size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);
     int r = exo_bind_block(&blk, &b, 0);
-    if(r < 0){
+    if (r < 0) {
       releasesleep(&b.lock);
       return r;
     }
-    memmove((char *)dst + tot, b.data + cur % BSIZE, m);
+    memcpy((char *)dst + tot, b.data + cur % BSIZE, m);
     releasesleep(&b.lock);
 
     tot += m;
@@ -42,11 +41,9 @@ exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
   return (int)tot;
 }
 
-int
-exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t n)
-{
-  if(cap.owner != myproc()->pid ||
-     !cap_has_rights(cap.rights, EXO_RIGHT_W))
+[[nodiscard]] int exo_write_disk(struct exo_blockcap cap, const void *src,
+                                 uint64_t off, uint64_t n) {
+  if (cap.owner != myproc()->pid || !cap_has_rights(cap.rights, EXO_RIGHT_W))
     return -EPERM;
   struct buf b;
   uint64_t tot = 0;
@@ -55,14 +52,14 @@ exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t 
 
   while (tot < n) {
     uint64_t cur = off + tot;
-    struct exo_blockcap blk = { cap.dev, cap.blockno + cur/BSIZE,
-                                cap.rights, cap.owner };
+    struct exo_blockcap blk = {cap.dev, cap.blockno + cur / BSIZE, cap.rights,
+                               cap.owner};
     size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);
-    memmove(b.data + cur % BSIZE, (char *)src + tot, m);
+    memcpy(b.data + cur % BSIZE, (char *)src + tot, m);
     int r = exo_bind_block(&blk, &b, 1);
-    if(r < 0){
+    if (r < 0) {
       releasesleep(&b.lock);
       return r;
     }

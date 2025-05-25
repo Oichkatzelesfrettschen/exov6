@@ -3,6 +3,8 @@ their efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)
 
 This project experiments with decomposition of the xv6 operating system into an exokernel model. 
+The project charter in [doc/charter.md](doc/charter.md) summarizes our goals and contributor guidelines. Philosophical technical debt notes are kept in [doc/ptd_log.md](doc/ptd_log.md).
+
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
@@ -58,37 +60,46 @@ We don't process error reports (see note on top of this file).
 
 BUILDING AND RUNNING XV6
 
-To build xv6 on an x86 ELF machine (like Linux or FreeBSD), run
-"make". On non-x86 or non-ELF machines (like OS X, even on x86), you
-will need to install a cross-compiler gcc suite capable of producing
-x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
-A cross-compiler may not be necessary on a 64-bit Linux host since the
-toolchain can produce 32-bit binaries, but on other systems install a
-cross-compiler suite and invoke ``make TOOLPREFIX=i386-jos-elf-``.
+To build xv6 on an x86 ELF machine (like Linux or FreeBSD) run
+``cmake -S . -B build -G Ninja`` followed by ``ninja -C build``.  This
+configures a ``build`` directory and compiles **both the kernel and all
+user programs**.  ``clang`` is used by default so the above command is
+equivalent to ``CC=clang cmake -S . -B build -G Ninja``.  On non-x86 or
+non-ELF machines you may need a cross-compiler toolchain capable of
+producing x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).  A
+cross-compiler may not be necessary on a 64-bit Linux host since the
+toolchain can produce 32-bit binaries.
+``bison`` is detected automatically and only required when building the
+optional example parser included in the build scripts.
 
 Step-by-step build and run commands::
 
-    make            # build the kernel and all user programs
-    make qemu       # boot the generated image under QEMU
-    make bochs      # alternatively boot using Bochs
+    CC=clang cmake -S . -B build -G Ninja && ninja -C build
+    ninja -C build qemu
+
+Specify a different compiler by changing ``CC`` or by passing
+``-DCMAKE_C_COMPILER=<triplet-gcc>`` to ``cmake``.  The ``meson`` build
+system can be used instead with ``meson setup build && ninja -C build``
+and the same ``CC`` variable to select the compiler.
 
 When adding new user-space utilities place the sources under
 ``src-uland/user`` and append the corresponding ``_prog`` name to
-``UPROGS`` in ``Makefile``.  Running plain ``make`` then rebuilds
-``fs.img`` with the new binaries.
+``src-uland/user`` and add the corresponding program target to
+``CMakeLists.txt``.  Rebuilding automatically updates ``fs.img`` with the
+new binaries.
 
 The QEMU PC simulator is installed automatically by ``setup.sh``.
-Bochs is optional but also supported via ``make bochs``.
+Bochs is optional but also supported via ``ninja -C build bochs``.
 
 A few headers used solely by the kernel have been moved under
 ``src-kernel/include``.  Files like ``spinlock.h`` and ``sleeplock.h``
-reside here instead of ``src-headers``.  The Makefile and Meson build
-add this directory to the compiler's include path automatically.
+reside here instead of ``src-headers``.  The CMake build adds this
+directory to the compiler's include path automatically.
 
 BOCHS
 -----
 The file ``dot-bochsrc`` contains the default configuration used when
-running ``make bochs``.  Severity directives such as ``panic:``,
+running ``ninja -C build bochs``.  Severity directives such as ``panic:``,
 ``error:``, ``info:`` and ``debug:`` accept per-facility overrides after the
 global ``action`` keyword.  These overrides let you customize how Bochs
 reacts to events from individual subsystems.  Example::
@@ -102,7 +113,7 @@ all other panic events.  Valid actions include ``fatal``, ``report``,
 Before building user-mode programs you must generate ``libos.a``,
 the user-space runtime library.  This typically happens as an
 implicit prerequisite, but if you see errors about a missing
-``libos.a`` run ``make libos`` explicitly and then rebuild your
+``libos.a`` run ``ninja -C build libos`` explicitly and then rebuild your
 programs.
 A helper script, `setup.sh`, installs cross-compilers, build dependencies,
 QEMU packages, and additional development tools.  Run it once before
@@ -143,9 +154,9 @@ The checks will run on every commit thereafter.
 TESTING
 -------
 Unit tests live under the ``tests/`` directory and can be executed with
-``make check``.  This target compiles ``src-uland/exo_unit_test`` and
-runs the Python tests via ``pytest``.  Ensure QEMU is installed if the
-tests require it (``setup.sh`` installs QEMU automatically).
+``pytest -q``.  The helper binary ``src-uland/exo_unit_test`` is built
+automatically when needed. Ensure QEMU is installed if the tests require
+it (``setup.sh`` installs QEMU automatically).
 
 For a quick reference of these steps see ``CONTRIBUTING.md``.
 
@@ -166,11 +177,14 @@ patches are emailed.  Enable it with::
 
 ``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
 generates ``compile_commands.json`` on demand using
-``scripts/gen_compile_commands.py`` if it doesn't already exist.
+``scripts/gen_compile_commands.py`` if it doesn't already exist.  The
+helper script configures a ``build`` directory with ``cmake`` and copies
+``build/compile_commands.json`` to the top-level directory.  Pass
+``--meson <path>`` to use ``meson setup`` instead of ``cmake``.
 
 Experimental support for building with the C23 standard and for
-cross-compiling a 64-bit version is available. Set
-``ARCH=x86_64`` when invoking make to enable 64-bit builds and adjust
+cross-compiling a 64-bit version is available. Pass ``-DARCH=x86_64``
+to ``cmake`` when configuring to enable 64-bit builds and adjust
 ``CSTD`` to use a different C standard if desired.
 
 
@@ -188,11 +202,12 @@ them from source using the standard GNU build process.
 
 Once a cross-compiler is installed, build the kernel with::
 
-    make ARCH=x86_64
+    cmake -S . -B build -G Ninja -DARCH=x86_64 \
+        -DCMAKE_C_COMPILER=x86_64-elf-gcc && ninja -C build
 
 The resulting ``kernel.img`` can be run under QEMU with::
 
-    make qemu ARCH=x86_64
+    ninja -C build qemu
 
 The 64-bit port currently differs from the 32-bit version in a few
 ways.  It is less thoroughly tested and some user-space tests may not
@@ -207,49 +222,36 @@ limit of usable physical memory.  When building for 64-bit these values
 are selected automatically via conditional compilation and replace the
 32-bit constants.
 
-
-16-BIT BUILD
-------------
-An experimental 16-bit configuration is also available.  ``setup.sh``
-installs the ``ia16-elf-gcc`` cross compiler.  Build the tiny 16-bit
-kernel and run it under Bochs with::
-
-    make ARCH=ia16
-    make bochs ARCH=ia16
-
-This creates ``kernel-ia16`` and ``xv6-ia16.img`` which Bochs can boot
-in real mode.
-
 CROSS-COMPILING
 ---------------
 The ``setup.sh`` script installs cross-compilers for several
 architectures such as ARMv7, AArch64, PowerPC and PowerPC64 (both
-big-endian and little-endian).  Use the ``ARCH`` variable when invoking
-``make`` to select the desired target.  The current Makefile implements
-``ARCH=aarch64`` in addition to ``x86`` and ``x86_64``.
+big-endian and little-endian).  Pass the ``ARCH`` value to ``cmake`` when
+configuring.  The current build system implements ``ARCH=aarch64`` in
+addition to ``x86`` and ``x86_64``.
 
 Build and run an AArch64 image with::
 
-    make ARCH=aarch64
+    cmake -S . -B build -G Ninja -DARCH=aarch64 && ninja -C build
     ./qemu-aarch64.sh
 
 Other cross-compilers are ready for experimentation.  Example commands
 for architectures that do not yet have dedicated run scripts are::
 
-    make ARCH=arm        # ARMv7
+    cmake -S . -B build-arm -G Ninja -DARCH=arm && ninja -C build-arm        # ARMv7
     qemu-system-arm -M virt -nographic -kernel kernel-arm
 
-    make ARCH=powerpc    # 32-bit PowerPC
+    cmake -S . -B build-ppc -G Ninja -DARCH=powerpc && ninja -C build-ppc    # 32-bit PowerPC
     qemu-system-ppc -M g3beige -nographic -kernel kernel-powerpc
 
-    make ARCH=ppc64      # PowerPC64 big-endian
+    cmake -S . -B build-ppc64 -G Ninja -DARCH=ppc64 && ninja -C build-ppc64      # PowerPC64 big-endian
     qemu-system-ppc64 -M pseries -nographic -kernel kernel-ppc64
 
-    make ARCH=ppc64le    # PowerPC64 little-endian
+    cmake -S . -B build-ppc64le -G Ninja -DARCH=ppc64le && ninja -C build-ppc64le    # PowerPC64 little-endian
     qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
 
-When additional ``ARCH`` values are implemented in the Makefile these
-commands will build and boot the corresponding images.
+When additional ``ARCH`` values are implemented these commands will
+build and boot the corresponding images.
 
 
 BOCHS
@@ -267,14 +269,52 @@ The above configuration reports panics from the CD-ROM while leaving
 other devices interactive, ignores non-critical CD-ROM errors and still
 prints its debug messages.
 
-MESON BUILD
+CMAKE BUILD
 -----------
-The repository also includes a simple Meson setup.  After running
-``setup.sh`` the ``meson`` and ``ninja`` tools are installed.  Configure a
-build directory and compile with::
+A minimal CMake configuration is provided.  After running ``setup.sh``
+``clang`` and ``cmake`` are available.  Configure a build directory and
+compile with::
 
-    meson setup build
+    cmake -S . -B build -G Ninja && ninja -C build
+
+Meson can configure the project as well::
+
+    meson setup build && ninja -C build
+
+Both build systems accept the same compiler selection.  Use
+``CC=<triplet-gcc>`` or ``-DCMAKE_C_COMPILER=<triplet-gcc>`` when
+cross-compiling.  For example::
+
+    CC=clang meson setup build
     ninja -C build
+
+Optional flags control the spinlock implementation and debugging
+facilities.  Set them with ``-D<FLAG>=ON`` when invoking CMake or in the
+environment for Meson:
+
+``CONFIG_SMP``
+    Enable multi-core support. When OFF spinlocks compile to no-ops.
+``USE_TICKET_LOCK``
+    Use ticket-based spinlocks instead of the default.
+``SPINLOCK_UNIPROCESSOR``
+    Optimize locks for single CPU systems. Implies CONFIG_SMP=OFF.
+``SPINLOCK_DEBUG``
+    Enable additional lock sanity checks.
+
+Example CMake usage::
+
+    cmake -S . -B build -DUSE_TICKET_LOCK=ON && ninja -C build
+
+Using Meson::
+
+    USE_TICKET_LOCK=1 meson setup build && ninja -C build
+
+To switch back to qspinlocks::
+
+    cmake -S . -B build -DUSE_TICKET_LOCK=OFF && ninja -C build
+
+Disable the option by setting ``OFF`` (or ``0`` for Meson).  The
+default build uses qspinlocks.
 
 CODE FORMATTING
 ---------------
@@ -301,9 +341,9 @@ USER DEMO: EXO_YIELD_TO AND STREAMS
 -----------------------------------
 The example program ``exo_stream_demo`` under ``src-uland/user/`` is a minimal
 illustration of switching contexts with ``exo_yield_to`` and using the
-placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system as
-usual with ``make``; the resulting ``fs.img`` will contain the new
-``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
+placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system with
+``cmake -S . -B build -G Ninja && ninja -C build``; the resulting
+``fs.img`` will contain the new ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
 
 USER DEMO: TYPED CHANNELS
@@ -311,7 +351,7 @@ USER DEMO: TYPED CHANNELS
 ``typed_chan_demo`` showcases the ``CHAN_DECLARE`` macro that creates a
 typed wrapper around the basic capability IPC functions.  Messages are
 defined using Cap'n Proto schemas under ``proto/`` and automatically
-serialized when sending.  Building with ``make`` will compile
+serialized when sending.  Building with ``cmake -S . -B build -G Ninja && ninja -C build`` will compile
 ``typed_chan_demo`` along with ``typed_chan_send`` and
 ``typed_chan_recv`` under ``src-uland/user``.  After ``fs.img`` is
 generated, run ``typed_chan_demo`` inside QEMU to see a Cap'n Proto
@@ -320,8 +360,8 @@ message sent and received through the typed channel API.
 USER DEMO: CHANNELS, DAG SCHEDULER AND SUPERVISOR
 -------------------------------------------------
 ``chan_dag_supervisor_demo`` combines typed channels, the DAG scheduler and
-the supervisor helper.  Building the repository with ``make`` compiles the
-demo and its helper ``typed_chan_recv``.  After booting with ``make qemu-nox``
+the supervisor helper.  Building the repository with the standard command
+compiles the demo and its helper ``typed_chan_recv``.  After booting with ``ninja -C build qemu-nox``
 run::
 
     $ chan_dag_supervisor_demo
@@ -339,7 +379,7 @@ according to their weights and dependencies.
 USER DEMO: BEATTY SCHEDULER
 --------------------------
 ``beatty_demo`` exercises the kernel's Beatty scheduler and prints the
-resulting task order. Build with ``make`` so the binary is placed in
+resulting task order. Build with ``cmake -S . -B build -G Ninja && ninja -C build`` so the binary is placed in
 ``fs.img`` and run it inside QEMU:
 
     $ beatty_demo
@@ -347,16 +387,23 @@ resulting task order. Build with ``make`` so the binary is placed in
 USER DEMO: HELLO CHANNEL
 ------------------------
 ``hello_channel`` shows typed channels together with capability
-borrowing. After ``make`` completes, boot with ``make qemu-nox`` and run:
+borrowing. After the build completes, boot with ``ninja -C build qemu-nox`` and run:
 
     $ hello_channel
 
 USER DEMO: AFFINE CHANNEL
 -------------------------
 ``affine_channel_demo`` demonstrates the ``AFFINE_CHAN_DECLARE`` macro
-which restricts a channel to a single send.  After building with ``make`` and booting with ``make qemu-nox`` run:
+which restricts a channel to a single send.  After building with ``cmake -S . -B build -G Ninja && ninja -C build`` and booting with ``ninja -C build qemu-nox`` run:
 
     $ affine_channel_demo
+
+USER DEMO: FBDEV DRIVER
+-----------------------
+``fbdev_demo`` uses the minimal DDEKit layer to send a simple pattern to
+the framebuffer.  Build the system and after booting run:
+
+    $ fbdev_demo
 
 
 The demonstration shows how Beatty's weights pick the family and how the
@@ -381,7 +428,7 @@ Example ``drivers.conf``::
 
 IPC DESIGN NOTE
 ---------------
-See ``IPC.md`` for an overview of the fast-path call, capability badges,
+See [doc/IPC.md](doc/IPC.md) for an overview of the fast-path call, capability badges,
 and the proposed endpoint and typed channel features.
 
 ENDPOINTS
@@ -407,6 +454,18 @@ See doc/phoenixkernel.md for a design overview of the Phoenix exokernel
 and step-by-step examples of capability allocation, typed channels and
 driver management.  The document also outlines the planned BSD and SVR4
 compatibility layers built on top of the libOS.
+Additional notes on the current research direction can be found in
+`doc/track_technical.md`, `doc/track_philosophy.md` and
+`doc/track_hybrid.md`. These summaries reference the project charter
+and provide a short overview of the exposed APIs and guiding
+philosophy.
+
+Additional documentation lives under the `doc/` directory.  The
+[technical track](doc/track_technical.md) summarizes the kernel API and
+libOS usage, while the [philosophy track](doc/track_philosophy.md)
+explains the broader goals without delving into implementation.  A
+brief [hybrid track](doc/track_hybrid.md) ties the two together.  All
+three reference the Phoenix kernel charter for further context.
 
 Example supervisor usage to manage drivers:
 

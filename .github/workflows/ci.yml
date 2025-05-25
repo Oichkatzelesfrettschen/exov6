@@ -12,21 +12,60 @@ jobs:
     strategy:
       matrix:
         arch: [i686, x86_64]
+        buildsys: [cmake, meson]
     steps:
     - uses: actions/checkout@v4
     - name: Install build dependencies
       run: |
+        set -euxo pipefail
         sudo apt-get update -y
-        sudo apt-get install -y build-essential clang clang-tidy clang-format python3-pip qemu-system-i386 qemu-system-x86_64
-        pip3 install pre-commit
+        sudo apt-get install -y build-essential clang lld llvm clang-tidy clang-format clang-tools python3-pip qemu-system-i386 qemu-system-x86_64
+        python3 -m pip install -v pre-commit compiledb configuredb
+    - name: Verify tool installation
+      run: |
+        set -euxo pipefail
+        pre-commit --version
+        compiledb --version || true
+        configuredb --help || true
     - uses: pre-commit/action@v3.0.0
     - name: Build Swift components
-      run: swift/build_swift.sh
+      run: |
+        set -euxo pipefail
+        swift/build_swift.sh
+    - name: Configure
+      run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }}
     - name: Build
-      run: make ARCH=${{ matrix.arch }} QEMU=echo qemu-nox
+      run: ninja -C build qemu-nox
     - name: Run unit tests
-      run: make check
+      run: |
+        set -euxo pipefail
+        make check
+    - name: Run fuzz smoke test
+      run: |
+        set -euxo pipefail
+        python3 scripts/swift_fuzz.py -runs=1
+    - name: Clean
+      run: |
+        set -euxo pipefail
+        make clean
+      run: swift/build_swift.sh
+    - name: Configure (CMake)
+      if: matrix.buildsys == 'cmake'
+      run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }}
+    - name: Build (CMake)
+      if: matrix.buildsys == 'cmake'
+      run: ninja -C build qemu-nox
+    - name: Configure (Meson)
+      if: matrix.buildsys == 'meson'
+      run: meson setup build --wipe
+    - name: Build (Meson)
+      if: matrix.buildsys == 'meson'
+      run: ninja -C build
+    - name: Run unit tests
+      run: pytest -q
     - name: Run fuzz smoke test
       run: python3 scripts/swift_fuzz.py -runs=1
+    - name: Run microbenchmarks
+      run: make -C tests/microbench run
     - name: Clean
-      run: make clean
+      run: rm -rf build

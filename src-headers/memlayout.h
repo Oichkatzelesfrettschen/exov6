@@ -29,10 +29,10 @@
 #endif
 
 #ifdef __x86_64__
-#define V2P(a) (((uint64)(a)) - KERNBASE)
-#define P2V(a) ((void *)((uint64)(a) + KERNBASE))
+#define V2P(a) (((uint64_t)(a)) - KERNBASE)
+#define P2V(a) ((void *)((uint64_t)(a) + KERNBASE))
 #else
-#define V2P(a) (((uint)(a)) - KERNBASE)
+#define V2P(a) (((uint32_t)(a)) - KERNBASE)
 #define P2V(a) ((void *)(((char *)(a)) + KERNBASE))
 #endif
 

@@ -15,7 +15,7 @@ memset(void *dst, int c, size_t n)
 int
 memcmp(const void *v1, const void *v2, size_t n)
 {
-  const uchar *s1, *s2;
+  const uint8_t *s1, *s2;
 
   s1 = v1;
   s2 = v2;
@@ -62,7 +62,7 @@ strncmp(const char *p, const char *q, size_t n)
     n--, p++, q++;
   if(n == 0)
     return 0;
-  return (uchar)*p - (uchar)*q;
+  return (uint8_t)*p - (uint8_t)*q;
 }
 
 char*

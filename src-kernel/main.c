@@ -7,6 +7,7 @@
 #include "dag.h"
 #include "cap.h"
 #include "x86.h"
+#include "spinlock.h"
 #include "exo_stream.h"
 #include "exo_ipc.h"
 
@@ -25,23 +26,23 @@ extern char end[]; // first address after kernel loaded from ELF file
 int main(void) {
   kinit1(end, P2V(4 * 1024 * 1024)); // phys page allocator
   kvmalloc();                        // kernel page table
-  mpinit();                          // detect other processors
-  lapicinit();                       // interrupt controller
-  seginit();                         // segment descriptors
-  picinit();                         // disable pic
-  ioapicinit();                      // another interrupt controller
-  consoleinit();                     // console hardware
-  uartinit();                        // serial port
-  cap_table_init();                  // initialize capability table
-  rcuinit();                         // rcu subsystem
-  pinit();                           // process table
-  tvinit();                          // trap vectors
-  binit();                           // buffer cache
-  fileinit();                        // file table
-  ideinit();                         // disk
-  dag_sched_init();                  // initialize DAG scheduler
-  beatty_sched_init();               // initialize Beatty scheduler
-  exo_ipc_register(&exo_ipc_queue_ops);
+  detect_cache_line_size();
+  mpinit();                                   // detect other processors
+  lapicinit();                                // interrupt controller
+  seginit();                                  // segment descriptors
+  picinit();                                  // disable pic
+  ioapicinit();                               // another interrupt controller
+  consoleinit();                              // console hardware
+  uartinit();                                 // serial port
+  cap_table_init();                           // initialize capability table
+  rcuinit();                                  // rcu subsystem
+  pinit();                                    // process table
+  tvinit();                                   // trap vectors
+  binit();                                    // buffer cache
+  fileinit();                                 // file table
+  ideinit();                                  // disk
+  dag_sched_init();                           // initialize DAG scheduler
+  beatty_sched_init();                        // initialize Beatty scheduler
   startothers();                              // start other processors
   kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()
   userinit();                                 // first user process
@@ -73,11 +74,11 @@ pde_t entrypgdir[]; // For entry.S
 // Start the non-boot (AP) processors.
 static void startothers(void) {
 #ifdef __x86_64__
-  extern uchar _binary_entryother64_start[], _binary_entryother64_size[];
+  extern uint8_t _binary_entryother64_start[], _binary_entryother64_size[];
 #else
-  extern uchar _binary_entryother_start[], _binary_entryother_size[];
+  extern uint8_t _binary_entryother_start[], _binary_entryother_size[];
 #endif
-  uchar *code;
+  uint8_t *code;
   struct cpu *c;
   char *stack;
 
@@ -90,7 +91,7 @@ static void startothers(void) {
   memmove(code, _binary_entryother64_start, (size_t)_binary_entryother64_size);
 
 #else
-  memmove(code, _binary_entryother_start, (uint)_binary_entryother_size);
+  memmove(code, _binary_entryother_start, (uint32_t)_binary_entryother_size);
 #endif
 
   for (c = cpus; c < cpus + ncpu; c++) {
@@ -104,7 +105,7 @@ static void startothers(void) {
     if (stack == 0)
       panic("startothers: out of memory");
 #ifdef __x86_64__
-    *(uint64 *)(code - 8) = (uint64)stack + KSTACKSIZE;
+    *(uint64_t *)(code - 8) = (uint64_t)stack + KSTACKSIZE;
     *(void (**)(void))(code - 16) = mpenter;
 #else
     *(void **)(code - 4) = stack + KSTACKSIZE;

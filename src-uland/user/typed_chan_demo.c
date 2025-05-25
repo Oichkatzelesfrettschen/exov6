@@ -1,6 +1,7 @@
 #include "types.h"
 #include "user.h"
 #include "chan.h"
+#include "capnp_helpers.h"
 #include "proto/driver.capnp.h"
 
 CHAN_DECLARE(ping_chan, DriverPing);

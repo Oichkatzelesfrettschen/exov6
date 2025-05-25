@@ -1,34 +1,72 @@
 #!/usr/bin/env python3
-import subprocess, json, shlex, os, re, sys
+"""Generate compile_commands.json via CMake or Meson."""
 
-def main():
-    make_args = ["make", "-n"] + sys.argv[1:]
-    try:
-        output = subprocess.check_output(make_args, text=True)
-    except subprocess.CalledProcessError as e:
-        output = e.output
-    commands = []
-    for line in output.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        if not re.match(r'^(?:gcc|cc|clang) ', line):
-            continue
-        tokens = shlex.split(line)
-        src = None
-        for tok in tokens:
-            if tok.endswith('.c'):
-                src = tok
-        if not src:
-            continue
-        cmd = line
-        commands.append({"directory": os.getcwd(), "command": cmd, "file": src})
-    if commands:
-        with open('compile_commands.json', 'w') as f:
-            json.dump(commands, f, indent=2)
+import argparse
+import os
+import shutil
+import subprocess
+import sys
+
+
+def run_cmake(cmake_args: list[str]) -> None:
+    build_dir = "build"
+    os.makedirs(build_dir, exist_ok=True)
+    cmd = [
+        "cmake",
+        "-S",
+        ".",
+        "-B",
+        build_dir,
+        "-G",
+        "Ninja",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    ] + cmake_args
+    subprocess.check_call(cmd)
+    src = os.path.join(build_dir, "compile_commands.json")
+    if os.path.exists(src):
+        shutil.copy(src, "compile_commands.json")
     else:
-        sys.stderr.write('No compile commands captured\n')
-        return 1
+        raise FileNotFoundError(src)
 
-if __name__ == '__main__':
-    sys.exit(main())
+
+def run_meson(path: str) -> None:
+    build_dir = "build"
+    cmd = [
+        "meson",
+        "setup",
+        "--wipe",
+        "--buildtype=release",
+        build_dir,
+        path,
+    ]
+    subprocess.check_call(cmd)
+    src = os.path.join(build_dir, "compile_commands.json")
+    if os.path.exists(src):
+        shutil.copy(src, "compile_commands.json")
+    else:
+        raise FileNotFoundError(src)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--meson", metavar="PATH", help="Meson project path")
+    parser.add_argument(
+        "cmake_args", nargs=argparse.REMAINDER, help="Extra CMake arguments"
+    )
+    args = parser.parse_args()
+
+    try:
+        if args.meson:
+            run_meson(args.meson)
+        else:
+            run_cmake(args.cmake_args)
+    except subprocess.CalledProcessError as exc:
+        return exc.returncode
+    except Exception as exc:  # pylint: disable=broad-except
+        sys.stderr.write(f"{exc}\n")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

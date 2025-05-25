@@ -28,3 +28,9 @@ QSpinlocks are useful when many cores contend for the same lock. They can
 reduce contention spikes in scheduler queues, I/O paths or other hot
 structures. Because they share the same `struct spinlock`, existing code
 can adopt qspinlocks without structural changes.
+
+### Optimal Alignment
+
+Use `spinlock_optimal_alignment()` to query the recommended byte
+alignment for `struct spinlock` instances. Aligning locks to this value
+helps avoid cache line sharing between CPUs.

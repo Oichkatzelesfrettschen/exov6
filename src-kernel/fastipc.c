@@ -9,7 +9,7 @@
 static struct {
     struct spinlock lock;
     zipc_msg_t buf[FASTIPC_BUFSZ];
-    uint r, w;
+    uint32_t r, w;
     int inited;
 } fastipc;
 
@@ -43,7 +43,7 @@ sys_ipc_fast(void)
     fastipc_init();
     acquire(&fastipc.lock);
     if(fastipc.r == fastipc.w){
-        p->tf->rsi = (uint64)-1;
+        p->tf->rsi = (uint64_t)-1;
         p->tf->rdx = p->tf->rcx = p->tf->r8 = 0;
     } else {
         zipc_msg_t m = fastipc.buf[fastipc.r % FASTIPC_BUFSZ];

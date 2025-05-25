@@ -4,11 +4,19 @@ import ctypes
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-LIB = ROOT / 'libnstr_graph.so'
+LIB = ROOT / 'build' / 'libnstr_graph' / 'libnstr_graph.so'
 
 def build_lib():
-    if not LIB.exists():
-        subprocess.check_call(['make', 'libnstr_graph.so'], cwd=ROOT)
+    if LIB.exists():
+        return
+    build_dir = ROOT / 'build'
+    subprocess.check_call([
+        'cmake', '-S', str(ROOT), '-B', str(build_dir), '-G', 'Ninja',
+        '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
+    ])
+    subprocess.check_call([
+        'cmake', '--build', str(build_dir), '--target', 'nstr_graph_shared'
+    ])
 
 
 def load_lib():
