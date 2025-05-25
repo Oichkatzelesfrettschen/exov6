@@ -1,6 +1,6 @@
 import json
 import sys
-from datetime import datetime, UTC
+import datetime
 
 
 def strlog(message: str) -> None:
@@ -20,7 +20,7 @@ def strlog_json(level: str, message: str, **fields) -> None:
     **fields:
         Additional keyword arguments are included in the output record.
     """
-    iso_ts = datetime.now(UTC).isoformat(timespec="seconds")
+    iso_ts = datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds")
     record = {
         "ts": iso_ts.replace("+00:00", "Z"),
         "level": level,
