@@ -8,6 +8,10 @@
 #include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "spinlock_config.h"
+#if SPINLOCK_TYPE == SPINLOCK_QSPIN
+#include "qspinlock.h"
+#endif
 
 void
 initlock(struct spinlock *lk, char *name)
@@ -25,6 +29,9 @@ initlock(struct spinlock *lk, char *name)
 void
 acquire(struct spinlock *lk)
 {
+#if SPINLOCK_TYPE == SPINLOCK_QSPIN
+  qspin_lock(lk);
+#else
   pushcli(); // disable interrupts to avoid deadlock.
   if(holding(lk))
     panic("acquire");
@@ -41,6 +48,7 @@ acquire(struct spinlock *lk)
   // Record info about lock acquisition for debugging.
   lk->cpu = mycpu();
   getcallerpcs(&lk, lk->pcs);
+#endif
 }
 
 // Release the lock.

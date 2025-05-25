@@ -34,3 +34,14 @@ can adopt qspinlocks without structural changes.
 Use `spinlock_optimal_alignment()` to query the recommended byte
 alignment for `struct spinlock` instances. Aligning locks to this value
 helps avoid cache line sharing between CPUs.
+
+### Selection Mechanism
+
+The active spinlock implementation is chosen at compile time through
+`spinlock_config.h`.  Define the macro `SPINLOCK_TYPE` to either
+`SPINLOCK_TICKET` (the default) or `SPINLOCK_QSPIN`.
+
+When `SPINLOCK_TYPE` is set to `SPINLOCK_QSPIN`, the kernel's
+`acquire()` routine dispatches to `qspin_lock` and the libos header does
+the same when `SPINLOCK_NO_STUBS` is defined.  Leaving `SPINLOCK_TYPE`
+undefined selects the traditional ticket lock implementation.
