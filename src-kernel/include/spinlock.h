@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <smp_lock.h>
 
 // Ticket-based mutual exclusion lock.
 struct ticketlock {
@@ -24,4 +25,11 @@ spinlock_optimal_alignment(void)
 {
   return __alignof__(struct spinlock);
 }
+
+#if !CONFIG_SMP
+static inline void initlock(struct spinlock *lk, char *name) { (void)lk; (void)name; }
+static inline void acquire(struct spinlock *lk) { (void)lk; }
+static inline void release(struct spinlock *lk) { (void)lk; }
+static inline int holding(struct spinlock *lk) { (void)lk; return 1; }
+#endif
 

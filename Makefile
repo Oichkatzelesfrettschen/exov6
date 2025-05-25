@@ -1,6 +1,7 @@
 KERNEL_DIR := src-kernel
 ULAND_DIR  := src-uland
 LIBOS_DIR  := libos
+CONFIG_SMP ?= 1
 
 OBJS = \
     $(KERNEL_DIR)/bio.o \
@@ -21,9 +22,6 @@ OBJS = \
     $(KERNEL_DIR)/pipe.o \
     $(KERNEL_DIR)/proc.o \
     $(KERNEL_DIR)/sleeplock.o \
-    $(KERNEL_DIR)/spinlock.o \
-    $(KERNEL_DIR)/qspinlock.o \
-    $(KERNEL_DIR)/rspinlock.o \
     $(KERNEL_DIR)/rcu.o \
     $(KERNEL_DIR)/string.o \
     $(KERNEL_DIR)/syscall.o \
@@ -48,6 +46,12 @@ OBJS = \
     $(KERNEL_DIR)/beatty_sched.o \
     $(KERNEL_DIR)/beatty_dag_stream.o \
     $(KERNEL_DIR)/zone.o
+
+ifeq ($(CONFIG_SMP),1)
+OBJS += $(KERNEL_DIR)/spinlock.o \
+       $(KERNEL_DIR)/qspinlock.o \
+       $(KERNEL_DIR)/rspinlock.o
+endif
 
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
@@ -245,7 +249,7 @@ SIGNBOOT := 0
 endif
 
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(KERNEL_DIR)/include -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(KERNEL_DIR)/include -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto -DCONFIG_SMP=$(CONFIG_SMP)
 CFLAGS += $(if $(filter ia16,$(ARCH)),-I$(KERNEL_DIR)/arch/ia16,)
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 # Optional CPU optimization flags

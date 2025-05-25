@@ -51,6 +51,7 @@ def compile_and_run(body):
         # headers expected by zone.c
         (pathlib.Path(td)/"spinlock.h").write_text(
             '#include "src-headers/libos/spinlock.h"\n')
+        (pathlib.Path(td)/"smp_lock.h").write_text('#define CONFIG_SMP 0\n')
         (pathlib.Path(td)/"defs.h").write_text("")
         (pathlib.Path(td)/"mmu.h").write_text('#include "src-headers/types.h"\n#include "src-headers/mmu.h"\n')
         (pathlib.Path(td)/"memlayout.h").write_text('#include "src-headers/memlayout.h"\n')

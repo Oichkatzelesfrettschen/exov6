@@ -21,6 +21,7 @@ def compile_and_run(use_stub):
         src.write_text(C_CODE)
         if use_stub:
             (pathlib.Path(td)/"spinlock.h").write_text('#include "src-headers/libos/spinlock.h"\n')
+            (pathlib.Path(td)/"smp_lock.h").write_text('#define CONFIG_SMP 0\n')
         cmd = [
             "gcc","-std=c11",
             "-I", str(td),

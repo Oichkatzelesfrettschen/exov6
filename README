@@ -173,6 +173,10 @@ cross-compiling a 64-bit version is available. Set
 ``ARCH=x86_64`` when invoking make to enable 64-bit builds and adjust
 ``CSTD`` to use a different C standard if desired.
 
+By default the kernel builds with symmetric multiprocessing (SMP) locks
+enabled. Set ``CONFIG_SMP=0`` when invoking ``make`` to omit the
+spinlock implementations and compile a uniprocessor configuration.
+
 
 When building with ``ARCH=x86_64`` the resulting artifacts will be named
 ``kernel64``, ``fs64.img``, ``xv6-64.img`` and ``xv6memfs-64.img``.

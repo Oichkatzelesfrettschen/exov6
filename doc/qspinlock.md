@@ -34,3 +34,11 @@ can adopt qspinlocks without structural changes.
 Use `spinlock_optimal_alignment()` to query the recommended byte
 alignment for `struct spinlock` instances. Aligning locks to this value
 helps avoid cache line sharing between CPUs.
+
+### SMP Option
+
+Spinlock operations are compiled only when `CONFIG_SMP` is non-zero.
+Defining this option to `0` removes the real locking code and replaces
+`acquire`/`release` with no-op inline functions. This is useful when
+building a uniprocessor configuration where interrupts alone suffice
+for mutual exclusion.
