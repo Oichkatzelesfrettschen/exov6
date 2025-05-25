@@ -66,6 +66,10 @@ int exo_recv(exo_cap src, void *buf, uint64 len);
 int exo_read_disk(exo_blockcap cap, void *dst, uint64 off, uint64 n);
 int exo_write_disk(exo_blockcap cap, const void *src, uint64 off, uint64 n);
 
+/* Allocate and wait/acknowledge interrupt events. */
+exo_cap exo_alloc_irq(uint irq, uint rights);
+int exo_irq_wait(exo_cap cap, uint *irq);
+int exo_irq_ack(exo_cap cap);
 /* Allocate capabilities for I/O ports, IRQs, and DMA channels. */
 exo_cap exo_alloc_ioport(uint port);
 exo_cap exo_bind_irq(uint irq);
@@ -89,6 +93,9 @@ enum exo_syscall {
     EXO_SYSCALL_ALLOC_DMA    = SYS_exo_alloc_dma,
     EXO_SYSCALL_CAP_INC     = SYS_cap_inc,
     EXO_SYSCALL_CAP_DEC     = SYS_cap_dec,
+    EXO_SYSCALL_IRQ_ALLOC   = SYS_exo_irq_alloc,
+    EXO_SYSCALL_IRQ_WAIT    = SYS_exo_irq_wait,
+    EXO_SYSCALL_IRQ_ACK     = SYS_exo_irq_ack,
     EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,
     EXO_SYSCALL_BIND_IRQ     = SYS_exo_bind_irq,
     EXO_SYSCALL_ALLOC_DMA    = SYS_exo_alloc_dma,
