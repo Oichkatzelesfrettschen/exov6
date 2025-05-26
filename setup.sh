@@ -342,4 +342,10 @@ fi
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 
+if [ -s "$FAIL_LOG" ]; then
+  echo "Setup completed with warnings. Review $FAIL_LOG for details." >&2
+else
+  echo "Setup completed successfully." >&2
+fi
+
 exit 0
