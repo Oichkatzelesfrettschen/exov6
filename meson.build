@@ -132,6 +132,7 @@ uprogs = {
   'tty_demo': 'engine/user/tty_demo.c',
   'termios_demo': 'engine/user/termios_demo.c',
   'msgqueue_demo': 'demos/examples/msgqueue_demo.c',
+  'fib_big_demo': 'demos/examples/fib_big_demo.c',
 }
 
 if use_capnp
