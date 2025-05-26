@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "exo_mem.h"
-#include "../exo.h"
+#include "exo.h"
 #include <stdint.h>
 
 [[nodiscard]] int exo_read_disk(struct exo_blockcap cap, void *dst,
