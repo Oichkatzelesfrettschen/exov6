@@ -5,7 +5,7 @@
 #include "x86.h"
 #include "spinlock.h"
 #include "ipc.h"
-#include "../exo.h"
+#include "exo.h"
 
 // Context used for kernel context switches.
 #if defined(__x86_64__) || defined(__aarch64__)
