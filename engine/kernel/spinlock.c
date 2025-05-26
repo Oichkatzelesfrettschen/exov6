@@ -1,4 +1,6 @@
 // Mutual exclusion spin locks.
+// See doc/qspinlock.md for guidelines on using qspinlocks in
+// STREAMS and RPC handlers.
 
 #include "types.h"
 #include "defs.h"
