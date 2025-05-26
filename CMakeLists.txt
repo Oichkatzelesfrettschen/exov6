@@ -143,7 +143,7 @@ if(QEMU_EXECUTABLE)
   )
 endif()
 
-add_executable(msgqueue_demo examples/msgqueue_demo.c)
+add_executable(msgqueue_demo demos/examples/msgqueue_demo.c)
 target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/engine/include
