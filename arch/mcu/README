@@ -1,0 +1,15 @@
+The mcu directory contains minimal startup code for 32-bit ARM Cortex-M targets.
+
+Cross compilation is typically performed with the GCC toolchain distributed as
+``arm-none-eabi-gcc``.  Configure the build with MCU support and select the
+cross compiler, for example::
+
+    cmake -S ../.. -B build -G Ninja -DMCU=ON \
+        -DCMAKE_C_COMPILER=arm-none-eabi-gcc
+
+Or with Meson::
+
+    meson setup build -Dmcu=true --cross-file your-cross-file
+
+The resulting ``kernel`` image can be flashed to a suitable microcontroller
+board.
