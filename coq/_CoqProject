@@ -1,1 +1,4 @@
 -Q . LambdaCap
+LambdaCap.v
+IRQProof.v
+StreamsProof.v
