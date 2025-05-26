@@ -24,7 +24,7 @@ void *va = map_page(page.id); /* provided by libOS */
 exo_unbind_page(page);
 ```
 
-More detailed examples live in the charter and the source tree under `libos/` and `src-uland/`.
+More detailed examples live in the charter and the source tree under `engine/libos/` and `engine/user/`.
 # Phoenix Technical Track
 
 This track provides a high level summary of the public APIs exported by Phoenix.
@@ -38,7 +38,7 @@ The charter outlines the full scope and goals of the project.
 - `exo_send()` / `exo_recv()` – fast message passing between endpoints.
 
 The IPC helpers return an `exo_ipc_status` value declared in
-`src-headers/exo_ipc.h`:
+`engine/include/exo_ipc.h`:
 
 - `IPC_STATUS_SUCCESS` – message delivered or received.
 - `IPC_STATUS_TIMEOUT` – wait timed out.

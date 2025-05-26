@@ -14,14 +14,14 @@ C_CODE = textwrap.dedent("""
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "src-headers/arbitrate.h"
+#include "engine/include/arbitrate.h"
 
 struct cpu; static struct cpu* mycpu(void){ return 0; }
 static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
 static void panic(char *msg){ (void)msg; _exit(1); }
 static void cprintf(const char *f, ...){ (void)f; }
 
-#include "src-kernel/arbitrate.c"
+#include "engine/kernel/arbitrate.c"
 
 static int prefer_low(uint32_t t, uint32_t r, uint32_t cur, uint32_t newo){
     (void)t; (void)r;
@@ -53,14 +53,14 @@ def compile_and_run():
     with tempfile.TemporaryDirectory() as td:
         src = pathlib.Path(td)/"test.c"
         src.write_text(C_CODE)
-        (pathlib.Path(td)/"spinlock.h").write_text('#include "src-headers/libos/spinlock.h"\n')
+        (pathlib.Path(td)/"spinlock.h").write_text('#include "engine/include/libos/spinlock.h"\n')
         (pathlib.Path(td)/"defs.h").write_text("")
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
             CC, "-std=c2x", "-Wall", "-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])

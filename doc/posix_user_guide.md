@@ -20,7 +20,7 @@ The resulting `libos.a` implements the POSIX wrappers used by applications.
 
 ## Compiling Applications
 
-Sources for user programs live under `src-uland/user`. Add the new `*_prog` target to `src-uland/user/CMakeLists.txt` and rebuild. A minimal file reader looks like:
+Sources for user programs live under `engine/user/user`. Add the new `*_prog` target to `engine/user/user/CMakeLists.txt` and rebuild. A minimal file reader looks like:
 
 ```c
 #include "posix.h"

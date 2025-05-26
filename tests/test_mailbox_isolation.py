@@ -9,8 +9,8 @@ C_CODE = textwrap.dedent("""
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
-#include "src-headers/exo_ipc.h"
-#include "src-headers/exokernel.h"
+#include "engine/include/exo_ipc.h"
+#include "engine/include/exokernel.h"
 
 struct spinlock { int locked; struct cpu *cpu; };
 struct mailbox;
@@ -31,8 +31,8 @@ struct mailbox { struct spinlock lock; struct ipc_entry buf[MAILBOX_BUFSZ];
 static struct mailbox mbs[2];
 static struct proc ps[2];
 
-#include "src-kernel/exo_ipc_queue.c"
-#include "src-kernel/exo_ipc.c"
+#include "engine/kernel/exo_ipc_queue.c"
+#include "engine/kernel/exo_ipc.c"
 
 int main(void){
     ps[0].mailbox = &mbs[0];
@@ -79,7 +79,7 @@ def compile_and_run():
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])

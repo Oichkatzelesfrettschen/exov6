@@ -1,6 +1,6 @@
 #ifndef EXO_H
 #define EXO_H
-#include "src-headers/types.h"
+#include "engine/include/types.h"
 
 typedef struct hash256 {
   uint64_t parts[4];
