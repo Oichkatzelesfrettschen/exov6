@@ -6,7 +6,8 @@ To run formatting and static analysis checks automatically on commit, this repos
 pip install pre-commit
 ```
 
-Once installed, set up the hooks with:
+Once installed, set up the hooks with the configuration in
+`.pre-commit-config.yaml` using:
 
 ```sh
 pre-commit install
