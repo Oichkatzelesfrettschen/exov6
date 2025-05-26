@@ -10,6 +10,7 @@
 #include "fs.h"
 #include "stat.h"
 #include "param.h"
+#include "generic_utils.h"
 
 #ifndef static_assert
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
@@ -250,7 +251,6 @@ balloc(int used)
   wsect(sb.bmapstart, buf);
 }
 
-#define min(a, b) ((a) < (b) ? (a) : (b))
 
 void
 iappend(uint32_t inum, void *xp, int n)
@@ -284,7 +284,7 @@ iappend(uint32_t inum, void *xp, int n)
       }
       x = xint(indirect[fbn-NDIRECT]);
     }
-    n1 = min(n, (fbn + 1) * BSIZE - off);
+    n1 = GU_MIN(n, (fbn + 1) * BSIZE - off);
     rsect(x, buf);
     bcopy(p, buf + off - (fbn * BSIZE), n1);
     wsect(x, buf);
