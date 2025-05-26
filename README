@@ -4,6 +4,7 @@ their efforts to the RISC-V version
 
 This project experiments with decomposition of the xv6 operating system into an exokernel model. 
 The project charter in [doc/charter.md](doc/charter.md) summarizes our goals and contributor guidelines. Philosophical technical debt notes are kept in [doc/ptd_log.md](doc/ptd_log.md).
+The evolving project roadmap can be found in [doc/roadmap.md](doc/roadmap.md).
 
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
