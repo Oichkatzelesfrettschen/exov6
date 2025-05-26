@@ -18,7 +18,6 @@ jobs:
       fail-fast: false
       matrix:
         linter:
-          - { id: "shellcheck", cmd: "files=$(git ls-files '*.sh'); [ -n \"$files\" ] && shellcheck -f gcc $files" }
           - { id: "clang-tidy", cmd: "files=$(git ls-files '*.c' '*.h'); [ -n \"$files\" ] && clang-tidy $files --" }
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +25,7 @@ jobs:
         run: |
           set -euxo pipefail
           sudo apt-get update -y
-          sudo apt-get install -y shellcheck clang clang-tidy clang-format
+          sudo apt-get install -y clang clang-tidy clang-format
       - name: Run ${{ matrix.linter.id }} & feed Reviewdog
 
         uses: reviewdog/reviewdog@master

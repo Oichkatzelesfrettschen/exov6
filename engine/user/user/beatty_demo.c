@@ -24,7 +24,11 @@ static void schedule_step(int slice) {
 int main(int argc, char **argv) {
   (void)argc;
   (void)argv;
+#ifdef HAVE_DECIMAL_FLOAT
+  alpha = dec64_to_double(phi());
+#else
   alpha = phi();
+#endif
   beta = alpha / (alpha - 1.0);
   for (int i = 1; i <= 10; i++)
     schedule_step(i);

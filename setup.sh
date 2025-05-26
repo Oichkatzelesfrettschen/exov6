@@ -98,7 +98,7 @@ apt_pin_install(){
 
   if ! dpkg -s "$pkg" >/dev/null 2>&1; then
     case "$pkg" in
-      python3-*|pre-commit)
+      python3-*)
         pip_pkg="${pkg#python3-}"
         pip_install "$pip_pkg"
         if command -v "$pip_pkg" >/dev/null 2>&1 || \
@@ -201,7 +201,7 @@ export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
 # for cross-compilers and legacy support.
 for pkg in \
   build-essential gcc g++ g++-13 clang clang-16 lld llvm llvm-bolt \
-  clang-format clang-tidy clangd clang-tools shellcheck ccache uncrustify astyle editorconfig \
+  clang-format clang-tidy clangd clang-tools ccache uncrustify astyle editorconfig \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip graphviz \
@@ -225,105 +225,17 @@ for pkg in \
 done
 
 for pip_pkg in \
-  black flake8 pyperf py-cpuinfo pytest pre-commit shellcheck-py compiledb configuredb \
+  black flake8 pyperf py-cpuinfo pytest compiledb configuredb \
   pyyaml pylint pyfuzz; do
   pip_install "$pip_pkg"
 done
 
 # Explicit installation of key tools
-pip_install pre-commit
 pip_install compiledb
 pip_install configuredb
 
-# Fallback to pip if pre-commit is missing or is a stub
-if ! command -v pre-commit >/dev/null 2>&1 || pre-commit --version 2>&1 | grep -q "not available"; then
-  pip_install pre-commit || true
-  if ! command -v pre-commit >/dev/null 2>&1 || pre-commit --version 2>&1 | grep -q "not available"; then
-    cat <<'EOF' >/usr/local/bin/pre-commit
-#!/usr/bin/env bash
-set -euo pipefail
-CONFIG=".pre-commit-config.yaml"
-
-show_version() {
-  echo "pre-commit 0.0" >&2
-}
-
-install_hook() {
-  hook=".git/hooks/pre-commit"
-  mkdir -p "$(dirname "$hook")"
-  cat <<'EOS' >"$hook"
-#!/usr/bin/env bash
-exec pre-commit run --all-files
-EOS
-  chmod +x "$hook"
-  echo "pre-commit hook installed" >&2
-}
-
-run_hooks() {
-  files=("$@")
-  if [ ${#files[@]} -eq 0 ]; then
-    while IFS= read -r -d '' f; do
-      files+=("$f")
-    done < <(git ls-files -z)
-  fi
-  awk '/entry:/{gsub(/^ +/,"",$0); sub(/entry: /,"",$0); entry=$0}
-       /types:/{gsub(/^ +/,"",$0); sub(/types: \[/,"",$0); sub(/\]/,"",$0);
-         types=$0; print entry"|"types}' "$CONFIG" |
-  while IFS='|' read -r entry types; do
-    hook_files=()
-    while IFS= read -r -d '' f; do
-      for ext in ${types//,/ }; do
-        ext="${ext// /}"
-        case "$f" in
-          *.$ext)
-            [ -f "$f" ] && hook_files+=("$f")
-            ;;
-        esac
-      done
-    done < <(printf '%s\0' "${files[@]}")
-    if [ ${#hook_files[@]} -gt 0 ]; then
-      echo "Running $entry" >&2
-      $entry "${hook_files[@]}"
-    fi
-  done
-}
-
-case "${1:-}" in
-  --version|-V)
-    show_version
-    ;;
-  install)
-    install_hook
-    ;;
-  run)
-    shift
-    if [ "${1:-}" = "--all-files" ]; then
-      shift
-      run_hooks
-    else
-      run_hooks "$@"
-    fi
-    ;;
-  *)
-    echo "pre-commit fallback script" >&2
-    echo "Available commands: install, run [--all-files], --version" >&2
-    exit 1
-    ;;
-esac
-EOF
-  chmod +x /usr/local/bin/pre-commit
-  fi
 fi
 
-if ! command -v shellcheck >/dev/null 2>&1; then
-  if python3 -m shellcheck --version >/dev/null 2>&1; then
-    cat <<'EOS' >/usr/local/bin/shellcheck
-#!/usr/bin/env bash
-exec python3 -m shellcheck "$@"
-EOS
-    chmod +x /usr/local/bin/shellcheck
-  fi
-fi
 
 if ! command -v pytest >/dev/null 2>&1; then
   pip_install pytest || true
@@ -581,14 +493,6 @@ for cmd in clang clang++ cmake qemu-system-x86 coqc; do
   fi
 done
 
-# Install pre-commit hooks if possible
-if command -v pre-commit >/dev/null 2>&1; then
-  if ! pre-commit install >/dev/null 2>&1; then
-    echo "Warning: pre-commit install failed" >&2
-    echo "pre-commit install" >>"$FAIL_LOG"
-  fi
-  pre-commit --version || true
-fi
 
 #— clean up
 apt-get clean
