@@ -30,7 +30,7 @@ _Static_assert(sizeof(struct cap_entry) == 20, "ABI mismatch");
 #endif
 // Verify alignment remains stable across compilers
 #ifdef __cplusplus
-static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
+static_assert(alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
 #else
 _Static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
 #endif

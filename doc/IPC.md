@@ -23,7 +23,27 @@ outcomes:
 
 ## Typed Channels and Capabilities
 
-Typed channels declared with `CHAN_DECLARE` automatically encode and decode Cap'n Proto messages. Each typed channel stores a `msg_type_desc` describing the serialized size and relies on `chan_endpoint_send`/`chan_endpoint_recv` to enforce it. These helpers ultimately call `exo_send` and `exo_recv` using capabilities that reference endpoint mailboxes. Capabilities carry badges identifying the sender so higher level services can implement their own security policies.
+Typed channels declared with `CHAN_DECLARE` automatically encode and decode Cap'n Proto messages. Each typed channel stores a `msg_type_desc` describing the maximum serialized size along with callbacks for encoding and decoding. The helpers `chan_endpoint_send()` and `chan_endpoint_recv()` validate that the buffer length does not exceed this limit before calling `exo_send` and `exo_recv`.  `CHAN_DECLARE_VAR` behaves the same way but lets the encode callback return a different length for each message so applications can send variable-sized payloads.
+
+```c
+typedef struct {
+    uint8_t len;
+    char    data[8];
+} VarMsg;
+
+size_t VarMsg_encode(const VarMsg *m, unsigned char *buf);
+size_t VarMsg_decode(VarMsg *m, const unsigned char *buf);
+#define VarMsg_MESSAGE_SIZE 9
+
+CHAN_DECLARE_VAR(var_chan, VarMsg);
+
+var_chan_t *c = var_chan_create();
+VarMsg msg = { .len = 5, .data = "hello" };
+exo_cap cap = {0};
+var_chan_send(c, cap, &msg);       // sends 6 bytes
+var_chan_recv(c, cap, &msg);       // receives up to 9 bytes
+var_chan_destroy(c);
+```
 
 ## Debug Logging
 

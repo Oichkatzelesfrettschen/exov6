@@ -4,9 +4,32 @@
 #include "capnp_helpers.h"
 #include "math_core.h"
 #include "libos/driver.h"
-#include "proto/driver.capnp.h"
 
-CHAN_DECLARE(ping_chan, DriverPing);
+typedef struct {
+    uint8_t len;
+    char data[8];
+} VarMsg;
+
+static size_t VarMsg_encode(const VarMsg *m, unsigned char *buf) {
+    if(buf){
+        buf[0] = m->len;
+        for(size_t i=0;i<m->len;i++)
+            buf[1+i] = m->data[i];
+    }
+    return 1 + m->len;
+}
+
+static size_t VarMsg_decode(VarMsg *m, const unsigned char *buf) {
+    m->len = buf[0];
+    for(size_t i=0;i<m->len;i++)
+        m->data[i] = buf[1+i];
+    m->data[m->len] = '\0';
+    return 1 + m->len;
+}
+
+#define VarMsg_MESSAGE_SIZE 9
+
+CHAN_DECLARE_VAR(ping_chan, VarMsg);
 
 static ping_chan_t *c;
 static double alpha;
@@ -16,17 +39,17 @@ static int nb = 1;
 static int child;
 
 static void send_task(int slice) {
-    DriverPing m = { .value = slice };
+    VarMsg m = { .len = 1, .data = { (char)('0' + slice) } };
     exo_cap cap = {0};
     ping_chan_send(c, cap, &m);
-    printf(1, "sent %d\n", slice);
+    printf(1, "sent %c\n", m.data[0]);
 }
 
 static void recv_task(void) {
-    DriverPing out = {0};
+    VarMsg out = {0};
     exo_cap cap = {0};
     ping_chan_recv(c, cap, &out);
-    printf(1, "received %d\n", out.value);
+    printf(1, "received %s\n", out.data);
 }
 
 static void schedule_step(int slice) {
