@@ -44,7 +44,11 @@ static void schedule_step(void) {
 
 int main(int argc, char *argv[]) {
     (void)argc; (void)argv;
+#ifdef HAVE_DECIMAL_FLOAT
+    alpha = dec64_to_double(phi());
+#else
     alpha = phi();
+#endif
     beta = alpha / (alpha - 1.0);
 
     // build simple DAGs

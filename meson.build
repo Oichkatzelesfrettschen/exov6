@@ -11,6 +11,10 @@ endif
 if ipc_debug
   common_cargs += ['-DIPC_DEBUG']
 endif
+cc = meson.get_compiler('c')
+if cc.has_argument('-mdecimal-float')
+  common_cargs += ['-mdecimal-float', '-DHAVE_DECIMAL_FLOAT']
+endif
 
 clang_tidy = find_program('clang-tidy', required: false)
 bison = find_program('bison', required: false)
