@@ -1,4 +1,7 @@
 #include "qspinlock.h"
+// Implementation of the randomized spinlock variant.
+// See doc/qspinlock.md for usage notes and the danger of holding
+// a lock across RPC calls.
 #include <stdint.h>
 #include <compiler_attrs.h>
 #if __has_include(<config.h>)

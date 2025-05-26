@@ -34,3 +34,18 @@ can adopt qspinlocks without structural changes.
 Use `spinlock_optimal_alignment()` to query the recommended byte
 alignment for `struct spinlock` instances. Aligning locks to this value
 helps avoid cache line sharing between CPUs.
+
+### STREAMS and RPC Usage
+
+STREAMS modules and RPC handlers often operate concurrently on multiple
+CPUs. When several threads push data through the same pipeline or serve
+RPC requests in parallel they can hammer on shared locks. In these
+scenarios prefer `qspin_lock()` over the regular ticket lock. The random
+back-off reduces contention spikes and keeps latency manageable even
+under heavy load.
+
+Avoid holding any spinlock while performing an RPC call. A handler that
+waits on a remote endpoint with the lock held can stall unrelated work
+and risks deadlock if the remote side calls back into the locked
+structure. Release the lock before issuing the RPC and reacquire it once
+the reply has been processed.
