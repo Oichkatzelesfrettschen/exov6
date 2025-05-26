@@ -51,6 +51,6 @@ This table lists every wrapper provided by the Phoenix libOS. "Status" records w
 | `libos_shm_free` | Implemented | N/A | [ipc.c](../engine/libos/ipc.c) | unbind page capability |
 | `libos_rename` | Missing | N/A | N/A | |
 | `libos_unlink` | Missing | [unlink](ben-books/susv4-2018/utilities/unlink.html) | N/A | |
-| `libos_chdir` | Missing | N/A | N/A | |
-| `libos_getcwd` | Missing | N/A | N/A | |
+| `libos_chdir` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | |
+| `libos_getcwd` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | |
 

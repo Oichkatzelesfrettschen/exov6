@@ -55,6 +55,8 @@ long libos_recv(int fd, void *buf, size_t len, int flags);
 
 int libos_setenv(const char *name, const char *value);
 const char *libos_getenv(const char *name);
+int libos_chdir(const char *path);
+char *libos_getcwd(char *buf, size_t size);
 
 /* IPC helpers */
 int libos_msgq_send(exo_cap dest, const void *buf, size_t len);
