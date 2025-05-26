@@ -12,6 +12,7 @@
 #include "param.h"
 #include "cap.h"
 #include "proc.h"
+#include "kernel/hypervisor/hypervisor.h"
 #include "spinlock.h"
 #include "runqueue.h"
 #include "x86.h"
@@ -162,6 +163,7 @@ int sys_exo_alloc_dma(void) {
   return 0;
 }
 
+
 int sys_exo_bind_block(void) {
   struct exo_blockcap *ucap, cap;
   char *data;
@@ -264,6 +266,23 @@ int sys_exo_alloc_dma(void) {
   exo_cap cap = exo_alloc_dma();
   memcpy(ucap, &cap, sizeof(cap));
   return 0;
+}
+
+int sys_exo_alloc_hypervisor(void) {
+  exo_cap *ucap;
+  if (argptr(0, (void *)&ucap, sizeof(*ucap)) < 0)
+    return -1;
+  exo_cap cap = exo_alloc_hypervisor();
+  memcpy(ucap, &cap, sizeof(cap));
+  return 0;
+}
+
+int sys_hv_launch(void) {
+  exo_cap cap;
+  char *path;
+  if (argptr(0, (void *)&cap, sizeof(cap)) < 0 || argstr(1, &path) < 0)
+    return -1;
+  return hv_launch_guest(cap, path);
 }
 
 int sys_exo_send(void) {

@@ -10,6 +10,7 @@ enum cap_type {
     CAP_TYPE_IOPORT  = 2,
     CAP_TYPE_IRQ     = 3,
     CAP_TYPE_DMA     = 4,
+    CAP_TYPE_HYPERVISOR = 5,
 };
 
 struct cap_entry {
@@ -30,7 +31,7 @@ _Static_assert(sizeof(struct cap_entry) == 20, "ABI mismatch");
 #endif
 // Verify alignment remains stable across compilers
 #ifdef __cplusplus
-static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
+static_assert(alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
 #else
 _Static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
 #endif

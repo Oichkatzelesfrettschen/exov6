@@ -254,6 +254,8 @@ int irq_trigger(uint32_t irq);
 exo_cap exo_alloc_ioport(uint32_t port);
 exo_cap exo_bind_irq(uint32_t irq);
 exo_cap exo_alloc_dma(uint32_t chan);
+exo_cap exo_alloc_hypervisor(void);
+int hv_launch_guest(exo_cap cap, const char *path);
 void cap_table_init(void);
 int cap_table_alloc(uint16_t, uint32_t, uint32_t, uint32_t);
 int cap_table_lookup(uint16_t, struct cap_entry *);

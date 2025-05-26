@@ -151,6 +151,8 @@ extern int sys_exo_recv_timed(void);
 extern int sys_exo_alloc_ioport(void);
 extern int sys_exo_bind_irq(void);
 extern int sys_exo_alloc_dma(void);
+extern int sys_exo_alloc_hypervisor(void);
+extern int sys_hv_launch(void);
 extern int sys_endpoint_send(void);
 extern int sys_endpoint_recv(void);
 extern int sys_proc_alloc(void);
@@ -170,6 +172,8 @@ extern int sys_exo_irq_ack(void);
 extern int sys_exo_alloc_ioport(void);
 extern int sys_exo_bind_irq(void);
 extern int sys_exo_alloc_dma(void);
+extern int sys_exo_alloc_hypervisor(void);
+extern int sys_hv_launch(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -194,6 +198,8 @@ static int (*syscalls[])(void) = {
     [SYS_exo_alloc_ioport] sys_exo_alloc_ioport,
     [SYS_exo_bind_irq] sys_exo_bind_irq,
     [SYS_exo_alloc_dma] sys_exo_alloc_dma,
+    [SYS_exo_alloc_hypervisor] sys_exo_alloc_hypervisor,
+    [SYS_hv_launch] sys_hv_launch,
     [SYS_exo_send] sys_exo_send,
     [SYS_exo_recv] sys_exo_recv,
     [SYS_exo_recv_timed] sys_exo_recv_timed,
@@ -215,6 +221,8 @@ static int (*syscalls[])(void) = {
     [SYS_exo_alloc_ioport] sys_exo_alloc_ioport,
     [SYS_exo_bind_irq]     sys_exo_bind_irq,
     [SYS_exo_alloc_dma]    sys_exo_alloc_dma,
+    [SYS_exo_alloc_hypervisor] sys_exo_alloc_hypervisor,
+    [SYS_hv_launch]        sys_hv_launch,
     [SYS_ipc_fast] sys_ipc_fast,
 };
 

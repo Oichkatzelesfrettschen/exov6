@@ -13,6 +13,10 @@ static inline int cap_has_rights(uint32_t rights, uint32_t need) {
   return (rights & need) == need;
 }
 
+typedef struct {
+  exo_cap cap;
+} HypervisorCap;
+
 /*
  * Minimal exokernel capability primitives.  Library operating systems
  * build higher level abstractions using only these calls.  The kernel
@@ -46,6 +50,8 @@ exo_cap exo_bind_irq(uint32_t irq);
 
 /* Allocate a DMA buffer page and return a capability for channel 'chan'. */
 exo_cap exo_alloc_dma(uint32_t chan);
+HypervisorCap exo_alloc_hypervisor(void);
+[[nodiscard]] int exo_hv_launch(HypervisorCap hv, const char *path);
 
 /* Switch to the context referenced by 'target'.  The caller's context must be
  * saved in a user-managed structure.  The kernel does not choose the next
@@ -90,6 +96,8 @@ enum exo_syscall {
   EXO_SYSCALL_ALLOC_IOPORT = SYS_exo_alloc_ioport,
   EXO_SYSCALL_BIND_IRQ = SYS_exo_bind_irq,
   EXO_SYSCALL_ALLOC_DMA = SYS_exo_alloc_dma,
+  EXO_SYSCALL_ALLOC_HYPERVISOR = SYS_exo_alloc_hypervisor,
+  EXO_SYSCALL_HV_LAUNCH = SYS_hv_launch,
   EXO_SYSCALL_CAP_INC = SYS_cap_inc,
   EXO_SYSCALL_CAP_DEC = SYS_cap_dec,
   EXO_SYSCALL_IRQ_ALLOC = SYS_exo_irq_alloc,

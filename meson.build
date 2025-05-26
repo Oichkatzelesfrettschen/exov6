@@ -95,7 +95,7 @@ libos = static_library('libos', libos_sources,
     include_directories: include_directories('.', 'engine/include', 'engine/proto', 'engine/libos/include', 'engine/libos/capnp'),
     c_args: common_cargs)
 
-src_dirs = ['engine/kernel', 'engine/user', 'engine/user/user', 'engine/libos']
+src_dirs = ['kernel/hypervisor', 'engine/kernel', 'engine/user', 'engine/user/user', 'engine/libos']
 
 sources = []
 foreach d : src_dirs
@@ -107,6 +107,7 @@ kernel = executable('kernel', sources,
            include_directories: include_directories('.',
                                             'engine/include',
                                             'engine/kernel/include',
+                                            'kernel/hypervisor',
                                             'engine/proto',
                                             'engine/libos/include',
                                             'engine/libos/capnp'),
@@ -161,6 +162,7 @@ uprogs = {
   'termios_demo': 'engine/user/termios_demo.c',
   'msgqueue_demo': 'demos/examples/msgqueue_demo.c',
   'fib_big_demo': 'demos/examples/fib_big_demo.c',
+  'start_guest': 'engine/user/start_guest.c',
 }
 
 if use_capnp
