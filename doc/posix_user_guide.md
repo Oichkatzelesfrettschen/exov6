@@ -4,23 +4,28 @@ This guide explains how to build the Phoenix kernel, compile programs that use t
 
 ## Building the Kernel and LibOS
 
-Configure a build directory and compile everything with:
+Set up a build directory with Meson and compile everything with:
+
+```sh
+meson setup build && ninja -C build
+```
+
+This command generates the kernel image, user programs and `libos.a`.
+If you prefer CMake for integration with other tools you can run:
 
 ```sh
 cmake -S . -B build -G Ninja && ninja -C build
 ```
 
-This produces the kernel image and the user programs. Build the user-space library separately with:
-
-```sh
-ninja -C build libos
-```
-
-The resulting `libos.a` implements the POSIX wrappers used by applications.
+but note that the CMake configuration only builds a subset of the user
+programs.
 
 ## Compiling Applications
 
-Sources for user programs live under `engine/user/user`. Add the new `*_prog` target to `engine/user/user/CMakeLists.txt` and rebuild. A minimal file reader looks like:
+Sources for user programs live under `engine/user/user`. Add the new
+`*_prog` entry to `meson.build` (and to `engine/user/user/CMakeLists.txt`
+if you are using the CMake configuration) then rebuild. A minimal file
+reader looks like:
 
 ```c
 #include "posix.h"
