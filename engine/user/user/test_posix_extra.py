@@ -38,7 +38,7 @@ def compile_and_run():
         src.write_text(C_CODE)
         subprocess.check_call([
             "gcc","-std=c11",
-            "-I", str(ROOT/"src-headers"),
+            "-I", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe),
         ])
