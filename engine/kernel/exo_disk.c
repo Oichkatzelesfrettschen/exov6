@@ -4,12 +4,12 @@
 #include "sleeplock.h"
 #include "buf.h"
 #include "exo_disk.h"
+#include "generic_utils.h"
 #include <errno.h>
 #include <string.h>
 #define EXO_KERNEL
 #include "include/exokernel.h"
 
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 [[nodiscard]] int exo_read_disk(struct exo_blockcap cap, void *dst,
                                 uint64_t off, uint64_t n) {
@@ -24,7 +24,7 @@
     uint64_t cur = off + tot;
     struct exo_blockcap blk = {cap.dev, cap.blockno + cur / BSIZE, cap.rights,
                                cap.owner};
-    size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
+    size_t m = GU_MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);
     int r = exo_bind_block(&blk, &b, 0);
@@ -54,7 +54,7 @@
     uint64_t cur = off + tot;
     struct exo_blockcap blk = {cap.dev, cap.blockno + cur / BSIZE, cap.rights,
                                cap.owner};
-    size_t m = MIN(n - tot, BSIZE - cur % BSIZE);
+    size_t m = GU_MIN(n - tot, BSIZE - cur % BSIZE);
 
     acquiresleep(&b.lock);
     memcpy(b.data + cur % BSIZE, (char *)src + tot, m);

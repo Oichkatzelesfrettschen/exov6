@@ -25,8 +25,8 @@
 #include "buf.h"
 #include "file.h"
 #include "exo.h"
+#include "generic_utils.h"
 
-#define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode *);
 // there should be one superblock per disk device, but we run with
 // only one device
@@ -496,7 +496,7 @@ int readi(struct inode *ip, char *dst, uint32_t off, size_t n) {
 
   for (tot = 0; tot < n; tot += m, off += m, dst += m) {
     bp = bread(ip->dev, bmap(ip, off / BSIZE));
-    m = min(n - tot, BSIZE - off % BSIZE);
+    m = GU_MIN(n - tot, BSIZE - off % BSIZE);
     memmove(dst, bp->data + off % BSIZE, m);
     brelse(bp);
   }
@@ -523,7 +523,7 @@ int writei(struct inode *ip, char *src, uint32_t off, size_t n) {
 
   for (tot = 0; tot < n; tot += m, off += m, src += m) {
     bp = bread(ip->dev, bmap(ip, off / BSIZE));
-    m = min(n - tot, BSIZE - off % BSIZE);
+    m = GU_MIN(n - tot, BSIZE - off % BSIZE);
     memmove(bp->data + off % BSIZE, src, m);
     log_write(bp);
     brelse(bp);
