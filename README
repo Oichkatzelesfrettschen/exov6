@@ -243,10 +243,13 @@ for architectures that do not yet have dedicated run scripts are::
     qemu-system-ppc -M g3beige -nographic -kernel kernel-powerpc
 
     cmake -S . -B build-ppc64 -G Ninja -DARCH=ppc64 && ninja -C build-ppc64      # PowerPC64 big-endian
-    qemu-system-ppc64 -M pseries -nographic -kernel kernel-ppc64
+      qemu-system-ppc64 -M pseries -nographic -kernel kernel-ppc64
 
-    cmake -S . -B build-ppc64le -G Ninja -DARCH=ppc64le && ninja -C build-ppc64le    # PowerPC64 little-endian
-    qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
+      cmake -S . -B build-ppc64le -G Ninja -DARCH=ppc64le && ninja -C build-ppc64le    # PowerPC64 little-endian
+      qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
+
+For more details on how CPU features are detected and how the build falls back
+when extensions are unavailable see ``doc/architecture_detection.md``.
 
 When additional ``ARCH`` values are implemented these commands will
 build and boot the corresponding images.
@@ -302,7 +305,9 @@ environment for Meson:
     Build Cap'n Proto helpers and example programs.
 ``USE_SIMD``
     Enable optional SIMD implementations of math routines when supported by the
-    target CPU. Requires SSE2 on x86 or NEON on ARM.
+    target CPU.  Implementations exist for x87 and MMX floating point, SSE
+    through AVX512 and FMA on x86, plus NEON and AltiVec on ARM and PowerPC.
+    When an extension is unavailable the generic C routines are used instead.
 
 Example CMake usage::
 
@@ -310,11 +315,20 @@ Example CMake usage::
     cmake -S . -B build -DUSE_CAPNP=ON && ninja -C build
     cmake -S . -B build -DUSE_SIMD=ON && ninja -C build
 
+To compile for specific instruction sets pass ``-DCPUFLAGS`` to ``cmake``.  The
+``scripts/build_isa_variants.sh`` helper builds a series of kernels using
+different flags (x87, MMX, SSE, AVX2, FMA, AVX512 and more).  Leaving
+``CPUFLAGS`` empty produces a baseline build that relies on runtime fallback
+when SIMD is not detected.
+
 Using Meson::
 
     USE_TICKET_LOCK=1 meson setup build && ninja -C build
     USE_CAPNP=1 meson setup build && ninja -C build
     USE_SIMD=1 meson setup build && ninja -C build
+
+When invoking Meson the ``CPUFLAGS`` variable can be provided in the
+environment to select a specific ISA, e.g. ``CPUFLAGS='-mavx2' meson setup build``.
 
 To switch back to qspinlocks::
 
