@@ -68,6 +68,10 @@ everything with::
 The helper scripts detect ``bison`` automatically and it is only required
 when building the example parser.
 
+This project relies on the preprocessor features ``__has_include`` and
+``__has_attribute``.  Use a compiler supporting these macros (GCC 5 or
+Clang 3.3 and newer).
+
 Step-by-step build and run commands::
 
     CC=clang meson setup build
