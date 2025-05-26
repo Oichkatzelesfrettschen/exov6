@@ -22,8 +22,15 @@ typedef struct {
   uint64_t w3;
 } zipc_msg_t;
 
+typedef size_t (*msg_size_fn)(const void *msg);
+typedef size_t (*msg_encode_fn)(const void *msg, unsigned char *buf);
+typedef size_t (*msg_decode_fn)(void *msg, const unsigned char *buf);
+
 typedef struct msg_type_desc {
-  size_t msg_size; // total message size in bytes
+  size_t msg_size;      // maximum message size in bytes
+  msg_size_fn size_cb;  // optional callback to compute encoded size
+  msg_encode_fn encode; // encode `msg` into `buf`, return bytes written
+  msg_decode_fn decode; // decode from `buf` into `msg`, return bytes read
 } msg_type_desc;
 
 static inline size_t msg_desc_size(const struct msg_type_desc *d) {

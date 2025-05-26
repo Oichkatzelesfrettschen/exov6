@@ -52,7 +52,9 @@ int lambda_cap_revoke(lambda_cap_t *lc);
 
 // Macro to declare an affine typed channel using Cap'n Proto helpers
 #define AFFINE_CHAN_DECLARE(name, type)                                        \
-  static const struct msg_type_desc name##_typedesc = {type##_MESSAGE_SIZE};   \
+  static const struct msg_type_desc name##_typedesc = {                        \
+      type##_MESSAGE_SIZE, 0, (msg_encode_fn)type##_encode,                    \
+      (msg_decode_fn)type##_decode};                                           \
   typedef struct {                                                             \
     affine_chan_t base;                                                        \
   } name##_t;                                                                  \
@@ -64,13 +66,13 @@ int lambda_cap_revoke(lambda_cap_t *lc);
   }                                                                            \
   static inline int name##_send(name##_t *c, exo_cap dest, const type *m) {    \
     unsigned char buf[type##_MESSAGE_SIZE];                                    \
-    type##_encode(m, buf);                                                     \
-    return affine_chan_send(&c->base, dest, buf, type##_MESSAGE_SIZE);         \
+    size_t len = type##_encode(m, buf);                                        \
+    return affine_chan_send(&c->base, dest, buf, len);                         \
   }                                                                            \
   static inline int name##_recv(name##_t *c, exo_cap src, type *m) {           \
     unsigned char buf[type##_MESSAGE_SIZE];                                    \
     int r = affine_chan_recv(&c->base, src, buf, type##_MESSAGE_SIZE);         \
-    if (r == 0)                                                                \
+    if (r >= 0)                                                                \
       type##_decode(m, buf);                                                   \
     return r;                                                                  \
   }

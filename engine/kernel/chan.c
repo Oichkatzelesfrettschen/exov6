@@ -9,8 +9,8 @@
     return -1;
   }
   size_t expected = msg_desc_size(c->desc);
-  if (len != expected) {
-    cprintf("chan_endpoint_send: size %d != %d\n", (int)len, (int)expected);
+  if (len > expected) {
+    cprintf("chan_endpoint_send: size %d > %d\n", (int)len, (int)expected);
     return -1;
   }
   return exo_send(dest, msg, len);
@@ -24,8 +24,8 @@
     return -1;
   }
   size_t expected = msg_desc_size(c->desc);
-  if (len != expected) {
-    cprintf("chan_endpoint_recv: size %d != %d\n", (int)len, (int)expected);
+  if (len > expected) {
+    cprintf("chan_endpoint_recv: size %d > %d\n", (int)len, (int)expected);
     return -1;
   }
   return exo_recv(src, msg, len);
