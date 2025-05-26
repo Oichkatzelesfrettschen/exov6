@@ -1,4 +1,14 @@
-project('xv6', 'c', default_options: ['c_std=c23'])
+project('xv6', 'c')
+cc = meson.get_compiler('c')
+std_flag = ''
+if cc.has_argument('-std=c23')
+  std_flag = '-std=c23'
+elif cc.has_argument('-std=c2x')
+  std_flag = '-std=c2x'
+endif
+if std_flag != ''
+  add_project_arguments(std_flag, language: 'c')
+endif
 add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 
 use_ticket_lock = get_option('use_ticket_lock')
@@ -12,9 +22,9 @@ endif
 if ipc_debug
   common_cargs += ['-DIPC_DEBUG']
 endif
-cc = meson.get_compiler('c')
 if cc.has_argument('-mdecimal-float')
   common_cargs += ['-mdecimal-float', '-DHAVE_DECIMAL_FLOAT']
+endif
 if use_simd
   common_cargs += ['-DUSE_SIMD']
 endif

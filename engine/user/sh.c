@@ -211,7 +211,7 @@ int fork1(void) {
   return pid;
 }
 
-static int __attribute__((unused)) isbuiltin(struct cmd *cmd) {
+static int [[maybe_unused]] isbuiltin(struct cmd *cmd) {
 
   struct execcmd *ecmd;
 
