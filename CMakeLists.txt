@@ -52,6 +52,34 @@ file(GLOB_RECURSE KERNEL_SOURCES
 )
 list(APPEND KERNEL_SOURCES engine/kernel/runqueue.c)
 
+set(SIMD_SOURCES
+  arch/simd_dispatch.c
+)
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "i.86")
+  list(APPEND SIMD_SOURCES
+    arch/x86/simd_x87.c
+    arch/x86/simd_mmx.c
+    arch/x86/simd_sse2.c
+    arch/x86/simd_avx.c)
+  set_source_files_properties(arch/x86/simd_mmx.c PROPERTIES COMPILE_OPTIONS "-mmmx")
+  set_source_files_properties(arch/x86/simd_sse2.c PROPERTIES COMPILE_OPTIONS "-msse2")
+  set_source_files_properties(arch/x86/simd_avx.c PROPERTIES COMPILE_OPTIONS "-mavx")
+endif()
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+  list(APPEND SIMD_SOURCES arch/arm/simd_neon.c)
+  set_source_files_properties(arch/arm/simd_neon.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
+endif()
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
+  list(APPEND SIMD_SOURCES arch/ppc/simd_altivec.c)
+  set_source_files_properties(arch/ppc/simd_altivec.c PROPERTIES COMPILE_OPTIONS "-maltivec")
+endif()
+
+add_library(simd_dispatch STATIC ${SIMD_SOURCES})
+target_include_directories(simd_dispatch PUBLIC ${CMAKE_SOURCE_DIR}/arch)
+
 set(LIBOS_SOURCES
   engine/user/ulib.c
   engine/user/printf.c
@@ -82,6 +110,7 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
 )
+target_link_libraries(libos PUBLIC simd_dispatch)
 if(USE_SIMD)
   target_compile_definitions(libos PUBLIC USE_SIMD)
 endif()

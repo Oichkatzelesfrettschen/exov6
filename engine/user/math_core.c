@@ -8,13 +8,7 @@ _Decimal64 double_to_dec64(double x) { return (_Decimal64)x; }
 #else
 // Return the golden ratio constant using binary floating point.
 #ifdef USE_SIMD
-#  if defined(__SSE2__) && __has_include(<emmintrin.h>)
-#    include <emmintrin.h>
-#    define SIMD_SSE2 1
-#  elif (defined(__ARM_NEON) || defined(__ARM_NEON__)) && __has_include(<arm_neon.h>)
-#    include <arm_neon.h>
-#    define SIMD_NEON 1
-#  endif
+#include "simd_dispatch.h"
 #endif
 
 // Return the golden ratio constant.
@@ -23,31 +17,8 @@ double phi(void) { return 1.618033988749895; }
 
 // Compute the n-th Fibonacci number with F(0) = 0 and F(1) = 1.
 uint64_t fib(uint32_t n) {
-#if defined(SIMD_SSE2)
-  if (n == 0)
-    return 0;
-  union {
-    __m128i v;
-    uint64_t u[2];
-  } state;
-  state.u[0] = 0;
-  state.u[1] = 1;
-  for (uint32_t i = 1; i < n; i++) {
-    __m128i shifted = _mm_slli_si128(state.v, 8);
-    __m128i sum = _mm_add_epi64(state.v, shifted);
-    state.v = _mm_unpackhi_epi64(sum, state.v);
-  }
-  return state.u[1];
-#elif defined(SIMD_NEON)
-  if (n == 0)
-    return 0;
-  uint64x2_t v = {0, 1};
-  for (uint32_t i = 1; i < n; i++) {
-    uint64x2_t shifted = vextq_u64(v, v, 1);
-    uint64x2_t sum = vaddq_u64(v, shifted);
-    v = vextq_u64(v, sum, 1);
-  }
-  return vgetq_lane_u64(v, 1);
+#ifdef USE_SIMD
+  return simd_fib(n);
 #else
   if (n == 0)
     return 0;
@@ -64,38 +35,9 @@ uint64_t fib(uint32_t n) {
 
 // Compute the greatest common divisor using Euclid's algorithm.
 uint64_t gcd(uint64_t a, uint64_t b) {
-#if defined(SIMD_SSE2)
-  while (a != b) {
-    if (a > b) {
-      __m128i va = _mm_set_epi64x(0, a);
-      __m128i vb = _mm_set_epi64x(0, b);
-      va = _mm_sub_epi64(va, vb);
-      a = (uint64_t)_mm_cvtsi128_si64(va);
-    } else {
-      __m128i va = _mm_set_epi64x(0, b);
-      __m128i vb = _mm_set_epi64x(0, a);
-      va = _mm_sub_epi64(va, vb);
-      b = (uint64_t)_mm_cvtsi128_si64(va);
-    }
-  }
-  return a;
-#elif defined(SIMD_NEON)
-  while (a != b) {
-    if (a > b) {
-      uint64x2_t va = {0, a};
-      uint64x2_t vb = {0, b};
-      uint64x2_t res = vsubq_u64(va, vb);
-      a = vgetq_lane_u64(res, 1);
-    } else {
-      uint64x2_t va = {0, b};
-      uint64x2_t vb = {0, a};
-      uint64x2_t res = vsubq_u64(va, vb);
-      b = vgetq_lane_u64(res, 1);
-    }
-  }
-  return a;
+#ifdef USE_SIMD
+  return simd_gcd(a, b);
 #else
-  // Euclid's algorithm without division to avoid libgcc helpers
   while (a != b) {
     if (a > b)
       a -= b;
