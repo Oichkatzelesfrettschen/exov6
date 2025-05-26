@@ -48,3 +48,12 @@ The behaviour of `read()` matches the Single UNIX Specification; see [`ben-books
 Phoenix exposes low level capabilities such as pages, blocks and endpoints. The libOS translates these primitives into standard file descriptors and process IDs. For example `libos_open()` obtains a block capability for the underlying storage and stores it in an internal table indexed by the returned descriptor. System calls like `libos_fork()` communicate with the scheduler using capability-protected endpoints. Memory mapping wrappers allocate pages with `exo_alloc_page()` before installing the mappings.
 
 By layering these wrappers on top of capabilities the system preserves POSIX semantics in user space while retaining the fine grained control of the exokernel.
+
+A small Rust example under `examples/rust` demonstrates the same
+capability primitives from a Rust program. Build it using cargo with the
+cross-compilation target matching the kernel, for instance:
+
+```sh
+rustup target add x86_64-unknown-elf
+RUSTFLAGS="-C linker=x86_64-elf-gcc" cargo build --release --target x86_64-unknown-elf
+```

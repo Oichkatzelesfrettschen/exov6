@@ -22,3 +22,7 @@ engine/user/exo_unit_test
 
 __pycache__/
 *.pyc
+
+# Rust artifacts
+target/
+Cargo.lock
