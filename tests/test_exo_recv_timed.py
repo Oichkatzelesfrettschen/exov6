@@ -9,8 +9,8 @@ C_CODE = textwrap.dedent("""
 #include <stdint.h>
 #include <string.h>
 #include <sys/mman.h>
-#include "src-headers/exo_ipc.h"
-#include "src-headers/exokernel.h"
+#include "engine/include/exo_ipc.h"
+#include "engine/include/exokernel.h"
 
 struct mailbox { int has; char buf[8]; size_t len; };
 static struct mailbox *mb;
@@ -63,9 +63,9 @@ def compile_and_run():
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
-            str(ROOT/"src-kernel/exo_ipc.c"),
+            str(ROOT/"engine/kernel/exo_ipc.c"),
             "-o", str(exe)
         ])
         return subprocess.run([str(exe)]).returncode

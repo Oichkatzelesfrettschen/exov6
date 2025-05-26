@@ -4,7 +4,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 CPP_CODE = textwrap.dedent("""
 #include <iostream>
-#include "src-headers/cap.h"
+#include "engine/include/cap.h"
 int main(){
     std::cout << sizeof(struct cap_entry) << ' ' << alignof(struct cap_entry);
     return 0;
@@ -19,7 +19,7 @@ def compile_and_run():
         subprocess.check_call([
             "g++","-std=c++17","-Wall","-Werror",
             "-iquote", str(ROOT),
-            "-iquote", str(ROOT/"src-headers"),
+            "-iquote", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])

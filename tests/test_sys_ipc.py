@@ -37,7 +37,7 @@ static int argint(int n, int *ip){
     return 0;
 }
 
-#include \"src-kernel/sys_ipc.c\"
+#include \"engine/kernel/sys_ipc.c\"
 
 int main(void){
     initlock(&test_tcb.lock, \"tcb\");
@@ -76,7 +76,7 @@ def compile_and_run():
             CC, "-std=c2x", "-Wall", "-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])
