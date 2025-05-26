@@ -56,11 +56,11 @@ struct cmd *parsecmd(char *);
 int runbuiltin(struct cmd *);
 
 // Annotate as noreturn so modern compilers know runcmd exits
-static void __attribute__((noreturn)) runcmd(struct cmd *cmd);
+static void [[noreturn]] runcmd(struct cmd *cmd);
 
 // Execute cmd.  Never returns.
 
-static void __attribute__((noreturn)) runcmd(struct cmd *cmd) {
+static void [[noreturn]] runcmd(struct cmd *cmd) {
   int p[2];
   struct backcmd *bcmd;
   struct execcmd *ecmd;

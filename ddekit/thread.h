@@ -117,7 +117,7 @@ void ddekit_thread_wakeup(ddekit_thread_t *thread);
  *
  * \ingroup DDEKit_threads
  */
-void ddekit_thread_exit(void) __attribute__((noreturn));
+void ddekit_thread_exit(void) [[noreturn]];
 
 /** Terminate a thread 
  *

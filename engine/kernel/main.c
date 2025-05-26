@@ -14,7 +14,7 @@
 #include <string.h>
 
 static void startothers(void);
-static void mpmain(void) __attribute__((noreturn));
+static void mpmain(void) [[noreturn]];
 #ifdef __x86_64__
 extern pml4e_t *kpgdir;
 #else
@@ -130,7 +130,7 @@ static void startothers(void) {
 // PTE_PS in a page directory entry enables 4Mbyte pages.
 
 #ifndef __x86_64__
-__attribute__((__aligned__(PGSIZE))) pde_t entrypgdir[NPDENTRIES] = {
+[[gnu::aligned(PGSIZE)]] pde_t entrypgdir[NPDENTRIES] = {
     // Map VA's [0, 4MB) to PA's [0, 4MB)
     [0] = (0) | PTE_P | PTE_W | PTE_PS,
     // Map VA's [KERNBASE, KERNBASE+4MB) to PA's [0, 4MB)
