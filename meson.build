@@ -131,7 +131,7 @@ uprogs = {
   'qspin_demo': 'engine/user/user/qspin_demo.c',
   'tty_demo': 'engine/user/tty_demo.c',
   'termios_demo': 'engine/user/termios_demo.c',
-  'msgqueue_demo': 'examples/msgqueue_demo.c',
+  'msgqueue_demo': 'demos/examples/msgqueue_demo.c',
 }
 
 if use_capnp
