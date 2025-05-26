@@ -137,23 +137,10 @@ This only needs to be done after cloning the repository or when
 dependencies change.
 
 The script now installs only the packages required for building and running
-the tests: cross-compilers, QEMU and basic Python tooling such as ``pytest`` and
-``pre-commit``.  Heavy machine learning frameworks are intentionally omitted to
-keep the environment small.
-
-The repository uses ``pre-commit`` hooks to automatically run
-``clang-format`` and ``clang-tidy``.  The ``setup.sh`` script attempts to
-install ``pre-commit`` via the distribution package manager and falls
-back to Python's ``pip`` if required.  If ``pre-commit`` is missing you
-can install it manually with::
-
-    pip install pre-commit
-
-Once installed, enable the hooks with::
-
-    pre-commit install
-
-    pre-commit run --all-files
+the tests: cross-compilers, QEMU and basic Python tooling such as ``pytest``.
+Heavy machine learning frameworks are intentionally omitted to keep the
+environment small.  Formatting and linting tools like ``clang-format`` and
+``clang-tidy`` can be run manually when needed.
 
 The checks will run on every commit thereafter.
 

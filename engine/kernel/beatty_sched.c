@@ -46,7 +46,11 @@ static void beatty_yield(void) {
 
 void beatty_sched_init(void) {
   initlock(&beatty_lock, "beatty");
+#ifdef HAVE_DECIMAL_FLOAT
+  alpha = dec64_to_double(phi());
+#else
   alpha = phi();
+#endif
   beta = alpha / (alpha - 1.0);
   beatty_ops.halt = beatty_halt;
   beatty_ops.yield = beatty_yield;

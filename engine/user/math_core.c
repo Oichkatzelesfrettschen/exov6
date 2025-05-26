@@ -1,5 +1,12 @@
 #include "math_core.h"
 
+#ifdef HAVE_DECIMAL_FLOAT
+_Decimal64 phi(void) { return (_Decimal64)1.618033988749895; }
+
+double dec64_to_double(_Decimal64 x) { return (double)x; }
+_Decimal64 double_to_dec64(double x) { return (_Decimal64)x; }
+#else
+// Return the golden ratio constant using binary floating point.
 #ifdef USE_SIMD
 #  if defined(__SSE2__) && __has_include(<emmintrin.h>)
 #    include <emmintrin.h>
@@ -12,6 +19,7 @@
 
 // Return the golden ratio constant.
 double phi(void) { return 1.618033988749895; }
+#endif
 
 // Compute the n-th Fibonacci number with F(0) = 0 and F(1) = 1.
 uint64_t fib(uint32_t n) {
@@ -53,29 +61,6 @@ uint64_t fib(uint32_t n) {
   return b;
 #endif
 }
-
-#ifdef __BITINT_MAXWIDTH__
-// 256-bit unsigned integer type for wide Fibonacci calculations.
-typedef unsigned _BitInt(256) uint256_t;
-
-uint256_t fib_big(uint32_t n) {
-  if (n == 0)
-    return 0;
-  uint256_t a = 0;
-  uint256_t b = 1;
-  for (uint32_t i = 1; i < n; i++) {
-    uint256_t t = a + b;
-    a = b;
-    b = t;
-  }
-  return b;
-}
-#else
-// Fallback implementation using 64-bit integers when _BitInt is unavailable.
-uint64_t fib_big(uint32_t n) {
-  return fib(n);
-}
-#endif
 
 // Compute the greatest common divisor using Euclid's algorithm.
 uint64_t gcd(uint64_t a, uint64_t b) {
@@ -136,7 +121,11 @@ size_t phi_align(size_t n) {
   size_t fib_val = f2;
 
   // Smallest integer >= n that is a multiple of phi.
+#ifdef HAVE_DECIMAL_FLOAT
+  double phi_val = dec64_to_double(phi());
+#else
   double phi_val = phi();
+#endif
   double k = (double)n / phi_val;
   size_t ki = (size_t)k;
   if (k > (double)ki)

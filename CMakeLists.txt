@@ -21,6 +21,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(-Wall -Werror)
 
+# Enable decimal floating point when supported
+include(CheckCCompilerFlag)
+check_c_compiler_flag("-mdecimal-float" HAVE_DECIMAL_FLOAT)
+if(HAVE_DECIMAL_FLOAT)
+  add_compile_options(-mdecimal-float)
+  add_compile_definitions(HAVE_DECIMAL_FLOAT=1)
+endif()
+
 if(NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
   message(WARNING "Clang is recommended for building this project")
 endif()

@@ -12,6 +12,9 @@ endif
 if ipc_debug
   common_cargs += ['-DIPC_DEBUG']
 endif
+cc = meson.get_compiler('c')
+if cc.has_argument('-mdecimal-float')
+  common_cargs += ['-mdecimal-float', '-DHAVE_DECIMAL_FLOAT']
 if use_simd
   common_cargs += ['-DUSE_SIMD']
 endif
