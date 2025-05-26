@@ -72,10 +72,6 @@ exo_cap exo_alloc_dma(uint32_t chan);
 exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
 [[nodiscard]] int exo_irq_wait(exo_cap cap, uint32_t *irq);
 [[nodiscard]] int exo_irq_ack(exo_cap cap);
-/* Allocate capabilities for I/O ports, IRQs, and DMA channels. */
-exo_cap exo_alloc_ioport(uint32_t port);
-exo_cap exo_bind_irq(uint32_t irq);
-exo_cap exo_alloc_dma(uint32_t chan);
 #endif /* EXO_KERNEL */
 
 /* Enumeration of syscall numbers for the primitives. */
