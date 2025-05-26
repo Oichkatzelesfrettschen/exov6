@@ -4,6 +4,7 @@ add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 use_ticket_lock = get_option('use_ticket_lock')
 ipc_debug = get_option('ipc_debug')
 use_capnp = get_option('use_capnp')
+use_simd = get_option('use_simd')
 common_cargs = []
 if use_ticket_lock
   common_cargs += ['-DUSE_TICKET_LOCK']
@@ -14,6 +15,8 @@ endif
 cc = meson.get_compiler('c')
 if cc.has_argument('-mdecimal-float')
   common_cargs += ['-mdecimal-float', '-DHAVE_DECIMAL_FLOAT']
+if use_simd
+  common_cargs += ['-DUSE_SIMD']
 endif
 
 clang_tidy = find_program('clang-tidy', required: false)
