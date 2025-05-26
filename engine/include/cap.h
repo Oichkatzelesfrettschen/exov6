@@ -28,6 +28,12 @@ static_assert(sizeof(struct cap_entry) == 20, "ABI mismatch");
 #else
 _Static_assert(sizeof(struct cap_entry) == 20, "ABI mismatch");
 #endif
+// Verify alignment remains stable across compilers
+#ifdef __cplusplus
+static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
+#else
+_Static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment incorrect");
+#endif
 
 extern uint32_t global_epoch;
 
