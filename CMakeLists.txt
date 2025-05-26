@@ -32,70 +32,70 @@ endif()
 find_package(BISON)
 if(BISON_FOUND)
   BISON_TARGET(example_parser
-    proto/example.y
+    engine/proto/example.y
     ${CMAKE_CURRENT_BINARY_DIR}/example_parser.c
     DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/example_parser.h)
   add_custom_target(example_bison DEPENDS ${BISON_example_parser_OUTPUTS})
 endif()
 
 file(GLOB_RECURSE KERNEL_SOURCES
-  src-kernel/*.c
-  src-uland/*.c
-  src-uland/user/*.c
-  libos/*.c
+  engine/kernel/*.c
+  engine/user/*.c
+  engine/user/user/*.c
+  engine/libos/*.c
 )
-list(APPEND KERNEL_SOURCES src-kernel/runqueue.c)
+list(APPEND KERNEL_SOURCES engine/kernel/runqueue.c)
 
 set(LIBOS_SOURCES
-  src-uland/ulib.c
-  src-uland/printf.c
-  src-uland/umalloc.c
-  src-uland/caplib.c
-  src-uland/chan.c
-  src-uland/door.c
-  src-uland/math_core.c
-  src-uland/libos/sched.c
-  libos/fs.c
-  libos/file.c
-  libos/driver.c
-  libos/affine_runtime.c
-  libos/env.c
-  libos/ipc.c
-  libos/posix.c
-  libos/termios.c
-  libos/microkernel/cap.c
-  libos/microkernel/msg_router.c
-  libos/microkernel/resource_account.c
-  libos/microkernel/registration.c
+  engine/user/ulib.c
+  engine/user/printf.c
+  engine/user/umalloc.c
+  engine/user/caplib.c
+  engine/user/chan.c
+  engine/user/door.c
+  engine/user/math_core.c
+  engine/user/libos/sched.c
+  engine/libos/fs.c
+  engine/libos/file.c
+  engine/libos/driver.c
+  engine/libos/affine_runtime.c
+  engine/libos/env.c
+  engine/libos/ipc.c
+  engine/libos/posix.c
+  engine/libos/termios.c
+  engine/libos/microkernel/cap.c
+  engine/libos/microkernel/msg_router.c
+  engine/libos/microkernel/resource_account.c
+  engine/libos/microkernel/registration.c
 )
 add_library(libos STATIC ${LIBOS_SOURCES})
 target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/src-headers
-  ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
-  ${CMAKE_SOURCE_DIR}/libos/capnp
+  ${CMAKE_SOURCE_DIR}/engine/include
+  ${CMAKE_SOURCE_DIR}/engine/proto
+  ${CMAKE_SOURCE_DIR}/engine/libos/include
+  ${CMAKE_SOURCE_DIR}/engine/libos/capnp
 )
 
 if(USE_CAPNP)
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.h
-    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/proto/driver.capnp
-    DEPENDS ${CMAKE_SOURCE_DIR}/proto/driver.capnp
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/engine/proto/driver.capnp
+    DEPENDS ${CMAKE_SOURCE_DIR}/engine/proto/driver.capnp
   )
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.h
-    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/proto/hello.capnp
-    DEPENDS ${CMAKE_SOURCE_DIR}/proto/hello.capnp
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/engine/proto/hello.capnp
+    DEPENDS ${CMAKE_SOURCE_DIR}/engine/proto/hello.capnp
   )
   add_library(capnp STATIC
-    libos/capnp/capnp_helpers.c
+    engine/libos/capnp/capnp_helpers.c
     ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c
     ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.c
   )
   target_include_directories(capnp PUBLIC
-    ${CMAKE_SOURCE_DIR}/proto
-    ${CMAKE_SOURCE_DIR}/libos/capnp
+    ${CMAKE_SOURCE_DIR}/engine/proto
+    ${CMAKE_SOURCE_DIR}/engine/libos/capnp
   )
 endif()
 
@@ -117,11 +117,11 @@ set(CPUFLAGS "" CACHE STRING "Additional CPU specific compile flags")
 
 target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/src-headers
-  ${CMAKE_SOURCE_DIR}/src-kernel/include
-  ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
-  ${CMAKE_SOURCE_DIR}/libos/capnp
+  ${CMAKE_SOURCE_DIR}/engine/include
+  ${CMAKE_SOURCE_DIR}/engine/kernel/include
+  ${CMAKE_SOURCE_DIR}/engine/proto
+  ${CMAKE_SOURCE_DIR}/engine/libos/include
+  ${CMAKE_SOURCE_DIR}/engine/libos/capnp
 )
 
 if(CPUFLAGS)
@@ -146,9 +146,9 @@ endif()
 add_executable(msgqueue_demo examples/msgqueue_demo.c)
 target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/src-headers
-  ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
+  ${CMAKE_SOURCE_DIR}/engine/include
+  ${CMAKE_SOURCE_DIR}/engine/proto
+  ${CMAKE_SOURCE_DIR}/engine/libos/include
 )
 target_link_libraries(msgqueue_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)

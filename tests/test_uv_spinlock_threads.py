@@ -11,7 +11,7 @@ C_CODE = r"""
 #include <assert.h>
 #include <pthread.h>
 #include <stdint.h>
-#include "src-headers/uv_spinlock.h"
+#include "engine/include/uv_spinlock.h"
 
 static uv_spinlock_t sl = UV_SPINLOCK_INITIALIZER;
 static int counter = 0;
@@ -45,7 +45,7 @@ def compile_and_run():
         subprocess.check_call([
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function","-pthread",
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])

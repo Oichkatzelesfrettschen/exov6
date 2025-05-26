@@ -10,13 +10,13 @@ C_CODE = textwrap.dedent("""
 #include <string.h>
 
 #define PGSIZE 4096
-#include "src-headers/iommu.h"
+#include "engine/include/iommu.h"
 
 struct cpu; static struct cpu* mycpu(void){ return 0; }
 static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
 static void panic(char *msg){ (void)msg; assert(0); }
 static void cprintf(const char *f, ...){ (void)f; }
-#include "src-kernel/iommu.c"
+#include "engine/kernel/iommu.c"
 
 int main(void){
     uint64_t tbl[8];
@@ -40,12 +40,12 @@ def compile_and_run():
         src.write_text(C_CODE)
         # headers expected by iommu.c
         (pathlib.Path(td)/"spinlock.h").write_text(
-            '#include "src-headers/types.h"\n'
-            '#include "src-kernel/include/spinlock.h"\n')
+            '#include "engine/include/types.h"\n'
+            '#include "engine/kernel/include/spinlock.h"\n')
         (pathlib.Path(td)/"defs.h").write_text("")
-        (pathlib.Path(td)/"mmu.h").write_text('#include "src-headers/types.h"\n#include "src-headers/mmu.h"\n')
-        (pathlib.Path(td)/"memlayout.h").write_text('#include "src-headers/memlayout.h"\n')
-        (pathlib.Path(td)/"types.h").write_text('#include "src-headers/types.h"\n')
+        (pathlib.Path(td)/"mmu.h").write_text('#include "engine/include/types.h"\n#include "engine/include/mmu.h"\n')
+        (pathlib.Path(td)/"memlayout.h").write_text('#include "engine/include/memlayout.h"\n')
+        (pathlib.Path(td)/"types.h").write_text('#include "engine/include/types.h"\n')
         (pathlib.Path(td)/"stdint.h").write_text(
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif\n"
         )
@@ -54,7 +54,7 @@ def compile_and_run():
             CC, "-std=c2x", "-Wall", "-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])

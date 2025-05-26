@@ -42,9 +42,9 @@ All privileged operations require an explicit capability token. Capabilities are
 
 A suggested layout for projects building on Phoenix is:
 
-- `src-kernel/`   – core kernel source files
-- `src-uland/`    – user-space programs and the basic C library
-- `libos/`        – the Phoenix libOS implementing POSIX-style services
+- `engine/kernel/`   – core kernel source files
+- `engine/user/`    – user-space programs and the basic C library
+- `engine/libos/`        – the Phoenix libOS implementing POSIX-style services
 - `include/`      – shared headers for both kernel and user space
 - `doc/`          – design notes and other documentation
 
@@ -58,7 +58,7 @@ The project now uses CMake and Ninja. To build the kernel image run:
 cmake -S . -B build -G Ninja && ninja -C build
 ```
 
-This compiles everything under `src-kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
+This compiles everything under `engine/kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
 
 To build the user-space library operating system invoke:
 
@@ -66,7 +66,7 @@ To build the user-space library operating system invoke:
 ninja -C build libos
 ```
 
-which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `libos/` and `src-uland/`.
+which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `engine/libos/` and `engine/user/`.
 
 ## POSIX Compatibility in User Space
 
@@ -147,7 +147,7 @@ queuing is handled in user
                        IPC messages are now queued entirely in user space; the kernel merely forwards each `exo_send` or `exo_recv` request.
 
 The helpers return an `exo_ipc_status` value defined in
-`src-headers/exo_ipc.h`:
+`engine/include/exo_ipc.h`:
 
 - `IPC_STATUS_SUCCESS` – operation completed normally.
 - `IPC_STATUS_TIMEOUT` – wait timed out.
@@ -218,10 +218,10 @@ operations they support.
 ## Interrupt Capabilities and Queues
 
 Phoenix exposes hardware interrupt lines through the capability type
-`CAP_TYPE_IRQ` declared in `src-headers/cap.h`.
+`CAP_TYPE_IRQ` declared in `engine/include/cap.h`.
 Drivers obtain an IRQ capability via `exo_alloc_irq()` and wait for events
 with `exo_irq_wait()` before acknowledging them through `exo_irq_ack()`.
-The kernel implementation lives in `src-kernel/irq.c` where a fixed size
+The kernel implementation lives in `engine/kernel/irq.c` where a fixed size
 ring buffer records pending interrupts.  When an interrupt fires,
 `irq_trigger()` appends the number and any task blocked in
 `exo_irq_wait()` is woken once an entry becomes available.
@@ -231,8 +231,8 @@ forward the calls to the kernel.
 
 IPC messages follow the same queuing approach.  Functions
 `exo_ipc_queue_send()` and `exo_ipc_queue_recv()` manipulate a ring buffer in
-`src-kernel/exo_ipc_queue.c`.  The libOS mirrors this logic in
-`libos/ipc_queue.c` using a userspace lock to serialise access.  These
+`engine/kernel/exo_ipc_queue.c`.  The libOS mirrors this logic in
+`engine/libos/ipc_queue.c` using a userspace lock to serialise access.  These
 functions are registered with `exo_ipc_register()` so `exo_send()` and
 `exo_recv()` share the same semantics.
 
@@ -462,7 +462,7 @@ calling the initializer before submitting DAG nodes.
 
 Phoenix exposes several locking primitives that mirror the kernel's spinlock
 implementations.  Most drivers are single threaded, so the default stub locks
-found in `src-headers/libos/spinlock.h` compile to no-ops.  Set `CONFIG_SMP` in
+found in `engine/include/libos/spinlock.h` compile to no-ops.  Set `CONFIG_SMP` in
 `config.h` to `0` to remove all locking overhead when running on a single
 processor system.
 

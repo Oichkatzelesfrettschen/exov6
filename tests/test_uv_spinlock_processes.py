@@ -14,7 +14,7 @@ C_CODE = r"""
 #include <sys/mman.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "src-headers/uv_spinlock.h"
+#include "engine/include/uv_spinlock.h"
 
 struct shared {
     uv_spinlock_t sl;
@@ -58,7 +58,7 @@ def compile_and_run():
         subprocess.check_call([
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"src-headers"),
+            "-idirafter", str(ROOT/"engine/include"),
             str(src),
             "-o", str(exe)
         ])
