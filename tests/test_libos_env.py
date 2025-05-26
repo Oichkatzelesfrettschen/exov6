@@ -25,6 +25,7 @@ def compile_and_run():
         src.write_text(C_CODE)
         subprocess.check_call([
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
+            "-I", str(ROOT),
             "-idirafter", str(ROOT/"engine/include"),
             str(src), str(ROOT/"engine/libos/env.c"),
             "-o", str(exe)
