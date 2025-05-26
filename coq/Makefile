@@ -1,4 +1,4 @@
-VOFILES=LambdaCap.vo
+VOFILES=LambdaCap.vo IRQProof.vo StreamsProof.vo
 
 all: $(VOFILES)
 
