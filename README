@@ -58,33 +58,31 @@ We don't process error reports (see note on top of this file).
 
 BUILDING AND RUNNING XV6
 
-To build xv6 on an x86 ELF machine (like Linux or FreeBSD) run
-``cmake -S . -B build -G Ninja`` followed by ``ninja -C build``.  This
-configures a ``build`` directory and compiles **both the kernel and all
-user programs**.  ``clang`` is used by default so the above command is
-equivalent to ``CC=clang cmake -S . -B build -G Ninja``.  On non-x86 or
-non-ELF machines you may need a cross-compiler toolchain capable of
-producing x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).  A
-cross-compiler may not be necessary on a 64-bit Linux host since the
-toolchain can produce 32-bit binaries.
-``bison`` is detected automatically and only required when building the
-optional example parser included in the build scripts.
+Meson is the recommended build system and produces the full disk image
+containing all user programs. Configure a build directory and compile
+everything with::
+
+    meson setup build && ninja -C build
+
+``clang`` is used by default; change ``CC`` to select another compiler.
+The helper scripts detect ``bison`` automatically and it is only required
+when building the example parser.
 
 Step-by-step build and run commands::
 
-    CC=clang cmake -S . -B build -G Ninja && ninja -C build
+    CC=clang meson setup build
     ninja -C build qemu
 
-Specify a different compiler by changing ``CC`` or by passing
-``-DCMAKE_C_COMPILER=<triplet-gcc>`` to ``cmake``.  The ``meson`` build
-system can be used instead with ``meson setup build && ninja -C build``
-and the same ``CC`` variable to select the compiler.
+The project also ships a minimal ``CMakeLists.txt`` for generating
+``compile_commands.json`` or integrating with external CMake tooling. It
+builds the kernel and a few demo programs but does not produce the full
+set of user binaries.
 
 When adding new user-space utilities place the sources under
-``engine/user/user`` and append the corresponding ``_prog`` name to
-``engine/user/user`` and add the corresponding program target to
-``CMakeLists.txt``.  Rebuilding automatically updates ``fs.img`` with the
-new binaries.
+``engine/user/user`` and update ``meson.build`` accordingly. If you rely
+on the CMake configuration add the program target there as well.  The
+filesystem image is regenerated automatically whenever user programs are
+built.
 
 The QEMU PC simulator is installed automatically by ``setup.sh``.
 Bochs is optional but also supported via ``ninja -C build bochs``.
