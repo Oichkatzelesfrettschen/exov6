@@ -39,4 +39,6 @@ enum {
   SYS_exo_alloc_ioport,
   SYS_exo_bind_irq,
   SYS_exo_alloc_dma,
+  SYS_exo_alloc_hypervisor,
+  SYS_hv_launch,
 };

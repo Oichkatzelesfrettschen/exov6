@@ -55,7 +55,7 @@ def compile_and_run():
         (pathlib.Path(td) / "proc.h").write_text("#pragma once\nstruct proc{int pid;};")
         (pathlib.Path(td) / "include").mkdir()
         (pathlib.Path(td) / "include/exokernel.h").write_text(
-            '#include "../engine/include/exokernel.h"'
+            '#include "engine/include/exokernel.h"'
         )
         (pathlib.Path(td) / "defs.h").write_text("")
         (pathlib.Path(td) / "mmu.h").write_text("")

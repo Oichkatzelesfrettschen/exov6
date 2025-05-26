@@ -1,6 +1,9 @@
 #pragma once
 #include <stddef.h>
 #include <signal.h>
+#ifndef SA_NOCLDSTOP
+struct sigaction { void (*sa_handler)(int); };
+#endif
 #include "types.h"
 #include "exo.h"
 
