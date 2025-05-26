@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -26,7 +26,7 @@ static uint64_t fnv64(const uint8_t *data, size_t len, uint64_t seed) {
 
 static void hash256(const uint8_t *data, size_t len, hash256_t *out) {
     const uint64_t basis = 14695981039346656037ULL;
-    for(int i=0;i<4;i++)
+    for(size_t i = 0; i < 4; ++i)
         out->parts[i] = fnv64(data, len, basis + i);
 }
 
