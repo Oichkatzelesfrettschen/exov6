@@ -5,6 +5,7 @@ use_ticket_lock = get_option('use_ticket_lock')
 ipc_debug = get_option('ipc_debug')
 use_capnp = get_option('use_capnp')
 use_simd = get_option('use_simd')
+mcu = get_option('mcu')
 common_cargs = []
 if use_ticket_lock
   common_cargs += ['-DUSE_TICKET_LOCK']
@@ -18,7 +19,17 @@ if cc.has_argument('-mdecimal-float')
 if use_simd
   common_cargs += ['-DUSE_SIMD']
 endif
+if mcu
+  common_cargs += ["-DMCU"]
+endif
 
+if mcu
+  kernel = executable('kernel', ['arch/mcu/startup.c', 'engine/kernel/picokernel.c', 'engine/user/blink.c'],
+      include_directories: include_directories('.', 'engine/include', 'arch/mcu'),
+      install: false,
+      c_args: common_cargs)
+  subdir_done()
+endif
 clang_tidy = find_program('clang-tidy', required: false)
 bison = find_program('bison', required: false)
 if bison.found()
