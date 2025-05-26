@@ -10,7 +10,7 @@ void ddekit_init(void);
 int ddekit_process_spawn(struct ddekit_process *p, const char *path,
                          char *const argv[]);
 int ddekit_process_wait(struct ddekit_process *p);
-void ddekit_process_exit(int code) __attribute__((noreturn));
+void ddekit_process_exit(int code) [[noreturn]];
 void ddekit_yield(void);
 
 exo_cap ddekit_cap_alloc_page(void);
