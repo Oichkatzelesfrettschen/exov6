@@ -10,18 +10,16 @@ xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern x86-based multiprocessor using ANSI C.
 
-The user-level shell supports built-in commands such as ``cd``.  These
+The user-level shell supports built-in commands such as ``cd`` and ``exit``.  These
 built-ins execute directly in the shell process even when used in command
 lists, pipelines, or background jobs. Programs invoked by the shell are
-searched for only in the root directory; if a command does not include a
-slash, the shell automatically prefixes ``/`` before executing it. xv6
-does not implement a ``PATH`` environment variable.
+searched using the ``PATH`` environment variable when present; if ``PATH``
+is unset, the shell falls back to searching only ``/``.
 
 Programs are expected to reside directly under `/`.  If a command
 name does not include a slash, the shell automatically prepends `/`
-when searching for the executable.  xv6 does not support environment
-variables like `PATH`, so the shell's search path is effectively hard
-coded to just `/`.
+when searching for the executable.  Other environment variables are
+not yet supported.
 
 ACKNOWLEDGMENTS
 
