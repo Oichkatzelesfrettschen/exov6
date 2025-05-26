@@ -52,21 +52,25 @@ Keeping kernel, user programs and the libOS separated helps manage dependencies 
 
 ## Building
 
-The project now uses CMake and Ninja. To build the kernel image run:
+Meson and Ninja are the primary tools for building Phoenix. Configure a
+build directory and compile the entire system with:
+
+```
+meson setup build && ninja -C build
+```
+
+This command builds the kernel, all user programs and the filesystem
+image. The static library `libos.a` is produced as part of the process.
+
+A minimal CMake configuration is also provided for workflows that rely on
+`compile_commands.json` or other CMake-based tooling. Invoke it with:
 
 ```
 cmake -S . -B build -G Ninja && ninja -C build
 ```
 
-This compiles everything under `engine/kernel/` and links the `exo-kernel` binary. The resulting disk image is written to the build directory.
-
-To build the user-space library operating system invoke:
-
-```
-ninja -C build libos
-```
-
-which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `engine/libos/` and `engine/user/`.
+The CMake build compiles the kernel and a handful of demo programs but
+does not generate the full set of utilities.
 
 ## POSIX Compatibility in User Space
 
