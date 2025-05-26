@@ -2,3 +2,4 @@ option('use_ticket_lock', type: 'boolean', value : false, description : 'Use tic
 option('ipc_debug', type: 'boolean', value : false, description : 'Enable IPC debug logging')
 option('use_capnp', type: 'boolean', value : false, description : 'Build Cap\'n Proto support')
 option('use_simd', type: 'boolean', value : false, description : 'Enable SIMD math routines')
+option('mcu', type: 'boolean', value : false, description : 'Build for Cortex-M microcontroller')

@@ -13,6 +13,7 @@ option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
 option(IPC_DEBUG "Enable IPC debug logging" OFF)
 option(USE_CAPNP "Build Cap'n Proto support" OFF)
 option(USE_SIMD "Enable SIMD math routines" OFF)
+option(MCU "Build for Cortex-M microcontroller" OFF)
 
 include(CheckCCompilerFlag)
 check_c_compiler_flag("-std=c23" HAVE_STD_C23)
@@ -56,6 +57,14 @@ if(BISON_FOUND)
   add_custom_target(example_bison DEPENDS ${BISON_example_parser_OUTPUTS})
 endif()
 
+if(MCU)
+  add_executable(kernel arch/mcu/startup.c engine/kernel/picokernel.c engine/user/blink.c)
+  target_include_directories(kernel PRIVATE
+    ${CMAKE_SOURCE_DIR}/arch/mcu
+    ${CMAKE_SOURCE_DIR}/engine/include)
+  add_compile_definitions(MCU=1)
+  return()
+endif()
 file(GLOB_RECURSE KERNEL_SOURCES
   engine/kernel/*.c
 )
