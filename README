@@ -143,7 +143,10 @@ Heavy machine learning frameworks are intentionally omitted to keep the
 environment small.  Formatting and linting tools like ``clang-format`` and
 ``clang-tidy`` can be run manually when needed.
 
-The checks will run on every commit thereafter.
+For automated formatting and linting the repository provides a
+``.pre-commit-config.yaml`` file. Install the hooks with ``pre-commit
+install`` to run these checks automatically. The checks will run on every
+commit thereafter.
 
 
 TESTING
