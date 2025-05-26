@@ -167,7 +167,7 @@ export MAKEFLAGS="${MAKEFLAGS:--j$(nproc)}"
 # for cross-compilers and legacy support.
 for pkg in \
   build-essential gcc g++ g++-13 clang clang-16 lld llvm llvm-bolt \
-  clang-format clang-tidy clangd clang-tools ccache uncrustify astyle editorconfig \
+  clang-format clang-tidy clangd clang-tools shellcheck ccache uncrustify astyle editorconfig \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
   pkg-config file ca-certificates curl git unzip graphviz \
