@@ -1,6 +1,9 @@
 #include "qspinlock.h"
 #include <stdint.h>
-#include <config.h>
+#include <compiler_attrs.h>
+#if __has_include(<config.h>)
+# include <config.h>
+#endif
 
 struct cpu;
 
