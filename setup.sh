@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
+
+# Optional debugging mode. Use --debug to enable verbose tracing.
+DEBUG_MODE=false
+
+# simple debug logger
+debug(){
+  if [ "$DEBUG_MODE" = true ]; then
+    echo "[DEBUG] $*" >&2
+  fi
+}
+
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 # This script installs all build dependencies. It logs actions to
 # /var/log/setup.log and records any failures in /var/log/setup_failures.log.
@@ -14,13 +24,20 @@ while [ $# -gt 0 ]; do
     --offline)
       OFFLINE_MODE=true
       ;;
+    --debug)
+      DEBUG_MODE=true
+      ;;
     *)
-      echo "Usage: $0 [--offline]" >&2
+      echo "Usage: $0 [--offline] [--debug]" >&2
       exit 1
       ;;
   esac
   shift
 done
+
+if [ "$DEBUG_MODE" = true ]; then
+  set -x
+fi
 
 # Detect basic network connectivity unless offline mode was requested
 NETWORK_AVAILABLE=true
@@ -42,6 +59,7 @@ export DEBIAN_FRONTEND=noninteractive
 #— helper to pin to the repo’s exact version if it exists
 pip_install(){
   pkg="$1"
+  debug "Attempting pip install $pkg"
   if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
     echo "Warning: pip install $pkg failed" >&2
     echo "pip $pkg" >>"$FAIL_LOG"
@@ -49,6 +67,7 @@ pip_install(){
 }
 apt_pin_install(){
   pkg="$1"
+  debug "Attempting apt install $pkg"
   if [ "$NETWORK_AVAILABLE" != true ]; then
     echo "Warning: network unavailable, skipping apt-get install of $pkg" >&2
     return 0
@@ -86,6 +105,7 @@ apt_pin_install(){
 
   if [ $status -ne 0 ] && ! command -v "$pkg" >/dev/null 2>&1; then
     if command -v npm >/dev/null 2>&1; then
+      debug "Attempting npm install $pkg"
       if ! npm install -g "$pkg" >/dev/null 2>&1; then
         echo "Warning: npm install $pkg failed" >&2
         echo "npm $pkg" >>"$FAIL_LOG"
@@ -556,7 +576,9 @@ fi
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 
-# Retry failed installations once using the recorded failure log
+# Retry failed installations once using the recorded failure log. This helps
+# resolve transient network issues or missing dependencies and documents each
+# attempt in $FAIL_LOG for future troubleshooting.
 if [ -s "$FAIL_LOG" ]; then
   echo "Retrying failed package installations" >&2
   mapfile -t _fails <"$FAIL_LOG"
