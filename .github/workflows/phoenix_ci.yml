@@ -1,0 +1,42 @@
+name: Phoenix CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install deps
+        run: sudo apt-get update && sudo apt-get install -y clang make cmake ninja-build
+      - name: Build ISA variants
+        run: |
+          chmod +x scripts/build_isa_variants.sh
+          ./scripts/build_isa_variants.sh
+      - name: Build metrics tool
+        run: clang -std=c2x -O2 tools/phoenix_metrics.c -o tools/phoenix_metrics
+      - name: Run benchmarks
+        run: |
+          mkdir bench_results
+          for v in $(ls build/isa); do
+            make -C tests/microbench run > bench_results/${v}_bench.txt
+            ./tools/phoenix_metrics engine/kernel 1 > bench_results/${v}_metrics.txt || true
+          done
+      - name: Check purity
+        run: |
+          fail=0
+          for f in bench_results/*_metrics.txt; do
+            purity=$(grep '^PURITY' "$f" | cut -d':' -f2)
+            if awk "BEGIN{exit !( $purity >= 1 )}"; then
+              echo "Purity for $f ok ($purity)"
+            else
+              echo "Purity below threshold: $purity"
+              fail=1
+            fi
+          done
+          exit $fail
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bench-results
+          path: bench_results
