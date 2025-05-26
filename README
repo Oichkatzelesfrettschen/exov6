@@ -308,16 +308,21 @@ environment for Meson:
     Enable additional lock sanity checks.
 ``USE_CAPNP``
     Build Cap'n Proto helpers and example programs.
+``USE_SIMD``
+    Enable optional SIMD implementations of math routines when supported by the
+    target CPU. Requires SSE2 on x86 or NEON on ARM.
 
 Example CMake usage::
 
     cmake -S . -B build -DUSE_TICKET_LOCK=ON && ninja -C build
     cmake -S . -B build -DUSE_CAPNP=ON && ninja -C build
+    cmake -S . -B build -DUSE_SIMD=ON && ninja -C build
 
 Using Meson::
 
     USE_TICKET_LOCK=1 meson setup build && ninja -C build
     USE_CAPNP=1 meson setup build && ninja -C build
+    USE_SIMD=1 meson setup build && ninja -C build
 
 To switch back to qspinlocks::
 
