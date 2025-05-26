@@ -1,7 +1,15 @@
 #pragma once
 #include "types.h"
 
+#ifdef HAVE_DECIMAL_FLOAT
+_Decimal64 phi(void);
+double dec64_to_double(_Decimal64 x);
+_Decimal64 double_to_dec64(double x);
+#else
 double phi(void);
+static inline double dec64_to_double(double x) { return x; }
+static inline double double_to_dec64(double x) { return x; }
+#endif
 uint64_t fib(uint32_t n);
 
 #ifdef __BITINT_MAXWIDTH__

@@ -1,7 +1,14 @@
 #include "math_core.h"
 
-// Return the golden ratio constant.
+#ifdef HAVE_DECIMAL_FLOAT
+_Decimal64 phi(void) { return (_Decimal64)1.618033988749895; }
+
+double dec64_to_double(_Decimal64 x) { return (double)x; }
+_Decimal64 double_to_dec64(double x) { return (_Decimal64)x; }
+#else
+// Return the golden ratio constant using binary floating point.
 double phi(void) { return 1.618033988749895; }
+#endif
 
 // Compute the n-th Fibonacci number with F(0) = 0 and F(1) = 1.
 uint64_t fib(uint32_t n) {
@@ -67,7 +74,11 @@ size_t phi_align(size_t n) {
   size_t fib_val = f2;
 
   // Smallest integer >= n that is a multiple of phi.
+#ifdef HAVE_DECIMAL_FLOAT
+  double phi_val = dec64_to_double(phi());
+#else
   double phi_val = phi();
+#endif
   double k = (double)n / phi_val;
   size_t ki = (size_t)k;
   if (k > (double)ki)

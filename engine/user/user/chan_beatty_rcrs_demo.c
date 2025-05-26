@@ -47,7 +47,11 @@ int main(int argc, char *argv[]) {
     child = driver_spawn("typed_chan_recv", rargv);
 
     c = ping_chan_create();
+#ifdef HAVE_DECIMAL_FLOAT
+    alpha = dec64_to_double(phi());
+#else
     alpha = phi();
+#endif
     beta = alpha / (alpha - 1.0);
 
     for (int i = 1; i <= 4; i++) {
