@@ -19,6 +19,13 @@ that provides traditional services on top of the primitive capability interface.
     devices and communication endpoints.User -
         space runtimes build whatever abstractions they require.
 
+    Phoenix draws heavily on the architecture described in the
+    [Engler–Kaashoek exokernel paper](https://pdos.csail.mit.edu/papers/exokernel:osdi95.pdf).
+    That work introduced **secure bindings**, **visible revocation** and an
+    **abort protocol** so library operating systems could safely multiplex
+    hardware resources. Phoenix retains these ideas so that its capability
+    interface matches the original model.
+
         ##DAG Execution Model
 
             Scheduling is expressed as a directed acyclic
