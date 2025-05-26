@@ -5,6 +5,15 @@ set -euo pipefail
 
 ARCH=${ARCH:-x86_64}
 
+# Optionally build only a specific ISA variant. Can be provided via the
+# ISA_VARIANT environment variable or as command line arguments.
+variants=()
+if [ "${ISA_VARIANT:-}" != "" ]; then
+  IFS=',' read -ra variants <<< "$ISA_VARIANT"
+elif [ "$#" -gt 0 ]; then
+  variants=("$@")
+fi
+
 # Map variant name -> CPUFLAGS
 declare -A ISA_FLAGS=(
   [baseline]=""
@@ -19,13 +28,25 @@ declare -A ISA_FLAGS=(
   [avx]="-mavx"
   [avx2]="-mavx2"
   [fma]="-mfma"
+  [fma3]="-mfma"
+  [fma4]="-mfma4"
+  [3dnow]="-m3dnow"
   [avx512]="-mavx512f -mavx512vl -mavx512bw"
+  [neon32]="-mfpu=neon"
+  [neon64]="-march=armv8-a+simd"
+  [altivec]="-maltivec"
+  [vsx]="-mvsx"
 )
 
 outdir=build/isa
 mkdir -p "$outdir"
 
-for variant in "${!ISA_FLAGS[@]}"; do
+# Determine which variants to build
+if [ ${#variants[@]} -eq 0 ]; then
+  variants=("${!ISA_FLAGS[@]}")
+fi
+
+for variant in "${variants[@]}"; do
   echo "== Building $variant =="
   flags="${ISA_FLAGS[$variant]}"
   builddir="$outdir/$variant"
