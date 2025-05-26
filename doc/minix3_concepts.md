@@ -25,3 +25,22 @@ model inspired by λ-calculus.
 3. Switch IPC calls to Cap'n Proto messages exchanged over typed channels.
 4. Limit public documentation to the MINIX-inspired features while keeping other
    Phoenix details internal.
+
+## rcrs Driver Supervisor
+
+Phoenix's supervisor, `rcrs`, mirrors the MINIX Reincarnation Server.  It reads
+`drivers.conf` at boot to know which drivers to launch.  Each non-empty line in
+the file is a command line for a user-space driver.  The supervisor pings all
+running drivers through an endpoint.  If a process exits or fails to respond
+before its timeout expires, `rcrs` kills and restarts it.  A restart counter and
+the current process ID are shown in periodic status reports so clients can
+reconnect when a driver is replaced.
+
+Example workflow:
+
+1. `drivers.conf` contains `kbdserv` and `pingdriver --timeout=60`.
+2. `rcrs` starts both drivers and begins pinging them.
+3. A crash or `kill -9` terminates `kbdserv`.
+4. `rcrs` logs `kbdserv exited, restarting (count=1)` and launches a new
+   instance with a new PID.
+5. Clients listening to the status output reconnect to the restarted service.
