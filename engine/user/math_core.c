@@ -56,3 +56,24 @@ size_t phi_align(size_t n) {
 
   return fib_val < phi_val_int ? fib_val : phi_val_int;
 }
+
+#ifdef __BITINT_MAXWIDTH__
+typedef unsigned _BitInt(256) fib_big_t;
+
+// Compute the n-th Fibonacci number using 256-bit precision.
+fib_big_t fib_big(uint32_t n) {
+  if (n == 0)
+    return 0;
+  fib_big_t a = 0;
+  fib_big_t b = 1;
+  for (uint32_t i = 1; i < n; i++) {
+    fib_big_t t = a + b;
+    a = b;
+    b = t;
+  }
+  return b;
+}
+#else
+// Fallback when _BitInt is unsupported.
+uint64_t fib_big(uint32_t n) { return fib(n); }
+#endif

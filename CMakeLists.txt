@@ -152,6 +152,18 @@ if(USE_CAPNP)
   target_link_libraries(msgqueue_demo PRIVATE capnp)
 endif()
 
+add_executable(fib_big_demo demos/examples/fib_big_demo.c)
+target_include_directories(fib_big_demo PRIVATE
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/engine/include
+  ${CMAKE_SOURCE_DIR}/engine/proto
+  ${CMAKE_SOURCE_DIR}/engine/libos/include
+)
+target_link_libraries(fib_big_demo PRIVATE libos nstr_graph)
+if(USE_CAPNP)
+  target_link_libraries(fib_big_demo PRIVATE capnp)
+endif()
+
 add_executable(wumpus engine/user/user/wumpus.c)
 target_include_directories(wumpus PRIVATE
   ${CMAKE_SOURCE_DIR}/engine/include
