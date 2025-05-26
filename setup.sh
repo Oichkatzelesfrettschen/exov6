@@ -543,6 +543,14 @@ if [ -n "$cc_cmd" ]; then
   rm -f /tmp/c2x_test
 fi
 
+# Check for essential commands and log if any are missing
+for cmd in clang clang++ cmake qemu-system-x86 coqc; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Warning: required command $cmd not found" >&2
+    echo "missing $cmd" >>"$FAIL_LOG"
+  fi
+done
+
 # Install pre-commit hooks if possible
 if command -v pre-commit >/dev/null 2>&1; then
   if ! pre-commit install >/dev/null 2>&1; then
