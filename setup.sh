@@ -39,6 +39,12 @@ if [ "$DEBUG_MODE" = true ]; then
   set -x
 fi
 
+# In offline mode or when network is unavailable the script attempts
+# to install packages from the offline_packages directory. Ensure this
+# directory is populated with the required .deb files or Python wheels
+# as described in offline_packages/README.md. Otherwise most installs
+# will be skipped and logged as warnings.
+
 # Detect basic network connectivity unless offline mode was requested
 NETWORK_AVAILABLE=true
 if [ "$OFFLINE_MODE" = true ]; then
@@ -144,7 +150,11 @@ install_offline_packages(){
   dir="$REPO_ROOT/offline_packages"
   if [ -d "$dir" ]; then
     shopt -s nullglob
-    for deb in "$dir"/*.deb; do
+    files=("$dir"/*.deb)
+    if [ ${#files[@]} -eq 0 ]; then
+      echo "Warning: no offline packages found in $dir" >&2
+    fi
+    for deb in "${files[@]}"; do
       if ! dpkg -i "$deb"; then
         echo "Warning: dpkg -i $deb failed" >&2
         echo "dpkg $deb" >>"$FAIL_LOG"
