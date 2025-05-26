@@ -40,9 +40,6 @@ endif()
 
 file(GLOB_RECURSE KERNEL_SOURCES
   engine/kernel/*.c
-  engine/user/*.c
-  engine/user/user/*.c
-  engine/libos/*.c
 )
 list(APPEND KERNEL_SOURCES engine/kernel/runqueue.c)
 
@@ -143,7 +140,7 @@ if(QEMU_EXECUTABLE)
   )
 endif()
 
-add_executable(msgqueue_demo demos/examples/msgqueue_demo.c)
+add_executable(msgqueue_demo engine/user/user/msgqueue_demo.c)
 target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/engine/include
@@ -154,3 +151,9 @@ target_link_libraries(msgqueue_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)
   target_link_libraries(msgqueue_demo PRIVATE capnp)
 endif()
+
+add_executable(wumpus engine/user/user/wumpus.c)
+target_include_directories(wumpus PRIVATE
+  ${CMAKE_SOURCE_DIR}/engine/include
+)
+target_link_libraries(wumpus PRIVATE libos)

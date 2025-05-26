@@ -2,6 +2,10 @@
 set -euo pipefail
 set -x
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+# This script installs all build dependencies. It logs actions to
+# /var/log/setup.log and records any failures in /var/log/setup_failures.log.
+# After the initial installation attempt it retries failed packages once using
+# apt, pip or npm depending on the recorded method.
 
 # Parse command line arguments
 OFFLINE_MODE=false
@@ -551,6 +555,36 @@ fi
 #— clean up
 apt-get clean
 rm -rf /var/lib/apt/lists/*
+
+# Retry failed installations once using the recorded failure log
+if [ -s "$FAIL_LOG" ]; then
+  echo "Retrying failed package installations" >&2
+  mapfile -t _fails <"$FAIL_LOG"
+  : >"$FAIL_LOG"
+  for entry in "${_fails[@]}"; do
+    set -- $entry
+    method=$1
+    pkg=${entry#"$method "}
+    case "$method" in
+      apt)
+        apt_pin_install "$pkg" || echo "$entry" >>"$FAIL_LOG"
+        ;;
+      pip)
+        pip_install "$pkg" || echo "$entry" >>"$FAIL_LOG"
+        ;;
+      npm)
+        if command -v npm >/dev/null 2>&1; then
+          npm install -g "$pkg" >/dev/null 2>&1 || echo "$entry" >>"$FAIL_LOG"
+        else
+          echo "$entry" >>"$FAIL_LOG"
+        fi
+        ;;
+      *)
+        echo "$entry" >>"$FAIL_LOG"
+        ;;
+    esac
+  done
+fi
 
 if [ -s "$FAIL_LOG" ]; then
   echo "Setup completed with warnings. Review $FAIL_LOG for details." >&2
