@@ -19,8 +19,9 @@ def compile_and_run(source: pathlib.Path) -> None:
         exe = pathlib.Path(td) / "test"
         inc_dir = pathlib.Path(td) / "include"
         inc_dir.mkdir()
+        host_header = ROOT / "engine/include/exokernel.h"
         (inc_dir / "exokernel.h").write_text(
-            '#include <stddef.h>\n#include "../engine/include/exokernel.h"\n'
+            f'#include <stddef.h>\n#include "{host_header}"\n'
         )
         cmd = [
             "gcc",
