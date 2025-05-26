@@ -18,3 +18,7 @@ You can also run all checks manually with:
 pre-commit run --all-files
 ```
 
+
+Formal models describing parts of the system live under the `formal/`
+directory. See `doc/formal_models.md` for instructions on building and
+extending these models.

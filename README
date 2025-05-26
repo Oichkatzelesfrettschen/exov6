@@ -569,3 +569,10 @@ An optional workflow installs the Codex CLI and executes `setup.sh` automaticall
 
 A minimal dev container configuration lives under `.devcontainer`. Opening the project in a Codespace installs Codex and runs `codex -q 'doctor setup.sh'` during initialization.
 
+
+FORMAL MODELS
+-------------
+Coq and TLA+ specifications live under the `formal/` directory. Run
+`make -C formal/coq` to type-check the Coq proofs and `tlc
+formal/tla/ExoCap.tla` to explore the TLA+ models. See
+`doc/formal_models.md` for details on extending the models.
