@@ -323,3 +323,7 @@ long libos_send(int fd, const void *buf, size_t len, int flags) {
 long libos_recv(int fd, void *buf, size_t len, int flags) {
   return recv(fd, buf, len, flags);
 }
+
+int libos_chdir(const char *path) { return chdir(path); }
+
+char *libos_getcwd(char *buf, size_t size) { return getcwd(buf, size); }
