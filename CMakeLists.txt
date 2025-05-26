@@ -12,6 +12,7 @@ project(xv6 LANGUAGES C CXX)
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
 option(IPC_DEBUG "Enable IPC debug logging" OFF)
 option(USE_CAPNP "Build Cap'n Proto support" OFF)
+option(USE_SIMD "Enable SIMD math routines" OFF)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -81,6 +82,9 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
 )
+if(USE_SIMD)
+  target_compile_definitions(libos PUBLIC USE_SIMD)
+endif()
 
 if(USE_CAPNP)
   add_custom_command(
@@ -111,6 +115,9 @@ if(USE_TICKET_LOCK)
 endif()
 if(IPC_DEBUG)
   target_compile_definitions(kernel PRIVATE IPC_DEBUG)
+endif()
+if(USE_SIMD)
+  target_compile_definitions(kernel PRIVATE USE_SIMD)
 endif()
 
 # QEMU executable used for run targets
