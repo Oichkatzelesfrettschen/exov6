@@ -50,13 +50,22 @@ static inline int vmlaunch(void) {
 
 // Allocate a capability referencing the hypervisor control interface.
 exo_cap exo_alloc_hypervisor(void) {
-    struct hv_vm *vm = kalloc();
+    exo_cap cap;
+    struct hv_vm *vm = cap_kalloc(&cap);
     if (!vm)
         return cap_new(0, 0, 0);
     memset(vm, 0, sizeof(*vm));
     int id = cap_table_alloc(CAP_TYPE_HYPERVISOR, (uint32_t)(uintptr_t)vm,
                              EXO_RIGHT_CTL, myproc()->pid);
-    return cap_new(id >= 0 ? id : 0, EXO_RIGHT_CTL, myproc()->pid);
+    vm->mem_cap = 0;
+    vm->vcpu.rip = 0;
+    vm->vcpu.rsp = 0;
+    vm->vcpu.rflags = 0;
+    if (id < 0) {
+        cap_kfree(cap);
+        return cap_new(0, 0, 0);
+    }
+    return cap_new(id, EXO_RIGHT_CTL, myproc()->pid);
 }
 
 // Minimal stub that pretends to launch a guest kernel image.
@@ -93,12 +102,13 @@ int hv_launch_guest(exo_cap cap, const char *path) {
     vm->vcpu.rsp = PGSIZE;
     vm->vcpu.rflags = 0x2;
 
-    void *vmxon_region = kalloc();
+    exo_cap xcap;
+    void *vmxon_region = cap_kalloc(&xcap);
     if (!vmxon_region)
         return -1;
     memset(vmxon_region, 0, PGSIZE);
     if (vmxon(V2P(vmxon_region)) < 0) {
-        kfree(vmxon_region);
+        cap_kfree(xcap);
         return -1;
     }
 
@@ -107,7 +117,7 @@ int hv_launch_guest(exo_cap cap, const char *path) {
     vmlaunch();
 
     vmxoff();
-    kfree(vmxon_region);
+    cap_kfree(xcap);
     cprintf("hypervisor: launched guest %s\n", path);
     return 0;
 }

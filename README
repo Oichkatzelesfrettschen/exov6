@@ -485,11 +485,11 @@ channel primitives in those microkernels.
 
 NUMA-AWARE ALLOCATOR
 --------------------
-The page allocator now keeps a separate free list per NUMA node.  A
-process can request a preferred node with the ``set_numa_node`` system
-call.  ``kalloc()`` first attempts to allocate from the preferred node
-and falls back to the other nodes only when the local free list is
-empty.
+The page allocator now exposes capability primitives. ``exo_alloc_page``
+returns a capability describing a physical page while ``exo_unbind_page``
+releases it. Each NUMA node maintains its own free list and a process
+may request a preferred node with ``set_numa_node``. Allocation first
+tries the preferred node before falling back to the others.
 
 
 

@@ -6,7 +6,6 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-#include "runqueue.h"
 #include <string.h>
 
 struct ptable ptable;
@@ -232,7 +231,6 @@ userinit(void)
   acquire(&ptable.lock);
 
   p->state = RUNNABLE;
-  setrunqueue(p);
 
   release(&ptable.lock);
 }
@@ -301,7 +299,6 @@ fork(void)
   acquire(&ptable.lock);
 
   np->state = RUNNABLE;
-  setrunqueue(np);
 
   release(&ptable.lock);
 
@@ -415,62 +412,8 @@ wait(void)
 void
 scheduler(void)
 {
-  struct proc *p;
-  struct cpu *c = mycpu();
-  c->proc = 0;
-  
-  for(;;){
-    // Enable interrupts on this processor.
-    sti();
-
-    acquire(&ptable.lock);
-    p = runqueue_head;
-    if(p == 0){
-      release(&ptable.lock);
-      exo_stream_halt();
-      continue;
-    }
-    struct proc *start = p;
-    int found = 0;
-    do {
-      if(p->state == RUNNABLE && !p->out_of_gas){
-        found = 1;
-        break;
-      }
-      remrq(p);
-      if(p->state == RUNNABLE)
-        setrunqueue(p);
-      p = runqueue_head;
-    } while(p && p != start);
-
-    if(!found){
-      release(&ptable.lock);
-      exo_stream_halt();
-      continue;
-    }
-
-    remrq(p);
-
-    acquire(&sched_lock);
-
-    // Switch to chosen process.  It is the process's job
-    // to release ptable.lock and then reacquire it
-    // before jumping back to us.
-    c->proc = p;
-    switchuvm(p);
-    p->state = RUNNING;
-
-    release(&sched_lock);
-
-    swtch(&(c->scheduler), p->context);
-    switchkvm();
-
-    // Process is done running for now.
-    // It should have changed its p->state before coming back.
-    c->proc = 0;
-    release(&ptable.lock);
-
-  }
+  for(;;)
+    exo_stream_yield();
 }
 
 // Enter scheduler.  Must hold only ptable.lock
@@ -503,14 +446,7 @@ sched(void)
 void
 yield(void)
 {
-  acquire(&ptable.lock);  //DOC: yieldlock
   exo_stream_yield();
-  acquire(&sched_lock);
-  myproc()->state = RUNNABLE;
-  setrunqueue(myproc());
-  release(&sched_lock);
-  sched();
-  release(&ptable.lock);
 }
 
 // A fork child's very first scheduling by scheduler()
@@ -587,7 +523,6 @@ wakeup1(void *chan)
     if(p->state == SLEEPING && p->chan == chan){
       acquire(&sched_lock);
       p->state = RUNNABLE;
-      setrunqueue(p);
       release(&sched_lock);
     }
 }
@@ -617,7 +552,6 @@ kill(int pid)
       if(p->state == SLEEPING){
         acquire(&sched_lock);
         p->state = RUNNABLE;
-        setrunqueue(p);
         release(&sched_lock);
       }
       release(&ptable.lock);
@@ -639,7 +573,6 @@ sigsend(int pid, int sig)
       if(p->state == SLEEPING){
         acquire(&sched_lock);
         p->state = RUNNABLE;
-        setrunqueue(p);
         release(&sched_lock);
       }
       release(&ptable.lock);

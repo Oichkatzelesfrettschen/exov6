@@ -6,6 +6,7 @@ struct dag_node;
 
 struct dag_node_list {
   struct dag_node *node;
+  exo_cap cap;
   struct dag_node_list *next;
 };
 

@@ -29,9 +29,11 @@ dag_node_set_priority(struct dag_node *n, int priority)
 void
 dag_node_add_dep(struct dag_node *parent, struct dag_node *child)
 {
-  struct dag_node_list *l = (struct dag_node_list *)kalloc();
+  exo_cap cap;
+  struct dag_node_list *l = (struct dag_node_list *)cap_kalloc(&cap);
   if(!l)
     return;
+  l->cap = cap;
   l->node = child;
   l->next = parent->children;
   parent->children = l;
@@ -76,7 +78,7 @@ dag_mark_done(struct dag_node *n)
     struct dag_node *child = l->node;
     if(--child->pending == 0)
       enqueue_ready(child);
-    kfree((char *)l); /* free allocation from dag_node_add_dep */
+    cap_kfree(l->cap); /* free allocation from dag_node_add_dep */
     l = next;
   }
 }
