@@ -14,7 +14,7 @@ the host socket APIs.
 | `libos_open` | Handles `O_CREAT`, `O_TRUNC` and `O_APPEND` and grows the descriptor table. |
 | `libos_stat` | Returns dummy metadata from the virtual FS. |
 | `libos_lseek` | Adjusts the in-memory file offset. |
-| `libos_ftruncate` | Ignored by the demo filesystem but provided for compatibility. |
+| `libos_ftruncate` | Updates the virtual file size and errors on invalid descriptors. |
 | `libos_mmap` / `libos_munmap` | Allocate and free memory using `malloc`. |
 | Signal set operations | `libos_sig*set()` manipulate a bitmask type. |
 | Process groups | Forward to the host's `getpgrp()` and `setpgid()` calls. |

@@ -7,6 +7,7 @@
 struct vfile {
     char path[32];
     int used;
+    size_t size;
     struct exo_blockcap cap;
 };
 
@@ -26,6 +27,7 @@ static struct vfile *create_vfile(const char *path) {
                 return 0;
             strncpy(vfiles[i].path, path, sizeof(vfiles[i].path)-1);
             vfiles[i].path[sizeof(vfiles[i].path)-1] = '\0';
+            vfiles[i].size = 0;
             vfiles[i].used = 1;
             return &vfiles[i];
         }
@@ -48,6 +50,7 @@ struct file *libfs_open(const char *path, int flags) {
     if(!f)
         return 0;
     f->cap = vf->cap;
+    f->sizep = &vf->size;
     f->readable = 1;
     f->writable = 1;
     f->off = 0;
@@ -59,7 +62,10 @@ int libfs_read(struct file *f, void *buf, size_t n) {
 }
 
 int libfs_write(struct file *f, const void *buf, size_t n) {
-    return filewrite(f, (char*)buf, n);
+    int r = filewrite(f, (char*)buf, n);
+    if(r > 0 && f->sizep && f->off > *f->sizep)
+        *f->sizep = f->off;
+    return r;
 }
 
 void libfs_close(struct file *f) {
@@ -71,6 +77,7 @@ int libfs_unlink(const char *path) {
     if(!vf)
         return -1;
     vf->used = 0;
+    vf->size = 0;
     return 0;
 }
 
@@ -83,6 +90,21 @@ int libfs_rename(const char *oldpath, const char *newpath) {
         dst->used = 0;
     strncpy(vf->path, newpath, sizeof(vf->path)-1);
     vf->path[sizeof(vf->path)-1] = '\0';
+    return 0;
+}
+
+int libfs_truncate(struct file *f, size_t length){
+    if(!f || !f->sizep)
+        return -1;
+    if(length > BSIZE)
+        length = BSIZE;
+    *f->sizep = length;
+    if(f->off > length)
+        f->off = length;
+    if(length == 0){
+        char zero[BSIZE] = {0};
+        fs_write_block(f->cap, zero);
+    }
     return 0;
 }
 

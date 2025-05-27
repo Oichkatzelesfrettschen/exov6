@@ -32,9 +32,7 @@ int libos_open(const char *path, int flags, int mode) {
   if (!f)
     return -1;
   if (flags & O_TRUNC) {
-    char zero[BSIZE] = {0};
-    fs_write_block(f->cap, zero);
-    f->off = 0;
+    libfs_truncate(f, 0);
   }
   if (flags & O_APPEND) {
     struct stat st;
@@ -252,9 +250,9 @@ int libos_ftruncate(int fd, long length) {
   ensure_fd_table();
   if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
     return -1;
-  (void)length;
-  /* The simple in-memory filesystem ignores size changes. */
-  return 0;
+  if (length < 0)
+    return -1;
+  return libfs_truncate(fd_table[fd], (size_t)length);
 }
 
 void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd,
