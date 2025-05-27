@@ -467,6 +467,7 @@ Example ``drivers.conf``::
 
     kbdserv
     pingdriver --timeout=60
+    fileserver
 
 
 IPC DESIGN NOTE
