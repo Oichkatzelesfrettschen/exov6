@@ -85,7 +85,7 @@ builds the kernel and a few demo programs but does not produce the full
 set of user binaries.
 
 When adding new user-space utilities place the sources under
-``engine/user/user`` and update ``meson.build`` accordingly. If you rely
+``engine/user/demos`` and update ``meson.build`` accordingly. If you rely
 on the CMake configuration add the program target there as well.  The
 filesystem image is regenerated automatically whenever user programs are
 built.
@@ -396,7 +396,7 @@ typed wrapper around the basic capability IPC functions.  Messages are
 defined using Cap'n Proto schemas under ``proto/`` and automatically
 serialized when sending.  Building with ``cmake -S . -B build -G Ninja && ninja -C build`` will compile
 ``typed_chan_demo`` along with ``typed_chan_send`` and
-``typed_chan_recv`` under ``engine/user/user``.  After ``fs.img`` is
+``typed_chan_recv`` under ``engine/user/demos``.  After ``fs.img`` is
 generated, run ``typed_chan_demo`` inside QEMU to see a Cap'n Proto
 message sent and received through the typed channel API.
 
