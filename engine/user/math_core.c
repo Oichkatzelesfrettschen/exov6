@@ -1,7 +1,10 @@
 #include "math_core.h"
 
 #ifdef HAVE_DECIMAL_FLOAT
-_Decimal64 phi(void) { return (_Decimal64)1.618033988749895; }
+// Return the golden ratio constant using a decimal floating literal when
+// the compiler supports decimal floats.  The literal uses the `dd` suffix
+// for `_Decimal64` precision.
+_Decimal64 phi(void) { return 1.618033988749895dd; }
 
 double dec64_to_double(_Decimal64 x) { return (double)x; }
 _Decimal64 double_to_dec64(double x) { return (_Decimal64)x; }

@@ -173,6 +173,7 @@ uprogs = {
   'beatty_dag_demo': 'engine/user/user/beatty_dag_demo.c',
   'ipc_test': 'engine/user/ipc_test.c',
   'nbtest': 'engine/user/nbtest.c',
+  'fileserver': 'engine/user/fileserver.c',
   'rcrs': 'engine/user/rcrs.c',
   'libos_posix_test': 'engine/user/libos_posix_test.c',
   'libos_posix_extra_test': 'engine/user/user/libos_posix_extra_test.c',
