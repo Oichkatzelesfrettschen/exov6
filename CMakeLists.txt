@@ -240,7 +240,7 @@ if(QEMU_EXECUTABLE)
   )
 endif()
 
-add_executable(msgqueue_demo engine/user/user/msgqueue_demo.c)
+add_executable(msgqueue_demo engine/user/demos/msgqueue_demo.c)
 target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/engine/include
@@ -252,7 +252,7 @@ if(USE_CAPNP)
   target_link_libraries(msgqueue_demo PRIVATE capnp)
 endif()
 
-add_executable(fib_big_demo demos/examples/fib_big_demo.c)
+add_executable(fib_big_demo engine/user/demos/fib_big_demo.c)
 target_include_directories(fib_big_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/engine/include
@@ -264,7 +264,7 @@ if(USE_CAPNP)
   target_link_libraries(fib_big_demo PRIVATE capnp)
 endif()
 
-add_executable(wumpus engine/user/user/wumpus.c)
+add_executable(wumpus engine/user/demos/wumpus.c)
 target_include_directories(wumpus PRIVATE
   ${CMAKE_SOURCE_DIR}/engine/include
 )
