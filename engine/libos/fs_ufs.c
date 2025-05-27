@@ -66,3 +66,23 @@ void libfs_close(struct file *f) {
     fileclose(f);
 }
 
+int libfs_unlink(const char *path) {
+    struct vfile *vf = lookup_vfile(path);
+    if(!vf)
+        return -1;
+    vf->used = 0;
+    return 0;
+}
+
+int libfs_rename(const char *oldpath, const char *newpath) {
+    struct vfile *vf = lookup_vfile(oldpath);
+    if(!vf)
+        return -1;
+    struct vfile *dst = lookup_vfile(newpath);
+    if(dst)
+        dst->used = 0;
+    strncpy(vf->path, newpath, sizeof(vf->path)-1);
+    vf->path[sizeof(vf->path)-1] = '\0';
+    return 0;
+}
+

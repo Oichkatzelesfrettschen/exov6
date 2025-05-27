@@ -49,8 +49,8 @@ This table lists every wrapper provided by the Phoenix libOS. "Status" records w
 | `libos_sem_wait` | Implemented | N/A | [ipc.c](../engine/libos/ipc.c) | wait on semaphore via recv |
 | `libos_shm_alloc` | Implemented | N/A | [ipc.c](../engine/libos/ipc.c) | allocate page capability |
 | `libos_shm_free` | Implemented | N/A | [ipc.c](../engine/libos/ipc.c) | unbind page capability |
-| `libos_rename` | Missing | N/A | N/A | |
-| `libos_unlink` | Missing | [unlink](ben-books/susv4-2018/utilities/unlink.html) | N/A | |
+| `libos_rename` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | |
+| `libos_unlink` | Implemented | [unlink](ben-books/susv4-2018/utilities/unlink.html) | [posix.c](../engine/libos/posix.c) | |
 | `libos_chdir` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | |
 | `libos_getcwd` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | |
 

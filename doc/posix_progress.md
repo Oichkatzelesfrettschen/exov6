@@ -38,8 +38,8 @@ This log tracks implementation status of the POSIX wrappers provided by the Phoe
 | `libos_connect` | Implemented | N/A | [posix.c](../libos/posix.c) |
 | `libos_send` | Implemented | N/A | [posix.c](../libos/posix.c) |
 | `libos_recv` | Implemented | N/A | [posix.c](../libos/posix.c) |
-| `libos_rename` | Missing | N/A | N/A |
-| `libos_unlink` | Missing | [unlink](ben-books/susv4-2018/utilities/unlink.html) | N/A |
+| `libos_rename` | Implemented | N/A | [posix.c](../libos/posix.c) |
+| `libos_unlink` | Implemented | [unlink](ben-books/susv4-2018/utilities/unlink.html) | [posix.c](../libos/posix.c) |
 | `libos_chdir` | Implemented | N/A | [posix.c](../libos/posix.c) |
 | `libos_getcwd` | Implemented | N/A | [posix.c](../libos/posix.c) |
 

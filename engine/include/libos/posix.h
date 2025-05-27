@@ -56,6 +56,9 @@ int libos_connect(int fd, const struct sockaddr *addr, socklen_t len);
 long libos_send(int fd, const void *buf, size_t len, int flags);
 long libos_recv(int fd, void *buf, size_t len, int flags);
 
+int libos_rename(const char *oldpath, const char *newpath);
+int libos_unlink(const char *path);
+
 int libos_setenv(const char *name, const char *value);
 const char *libos_getenv(const char *name);
 int libos_chdir(const char *path);
