@@ -1,6 +1,14 @@
 #include "../simd_dispatch.h"
 #include <immintrin.h>
 
+static int cap_validate_avx2(void) { return 1; }
+static void dag_process_avx2(void) {}
+
+__attribute__((constructor))
+static void register_avx2(void) {
+  simd_register(SIMD_FEATURE_AVX2_FMA, cap_validate_avx2, dag_process_avx2);
+}
+
 uint64_t fib_avx(uint32_t n) {
   /* Use SSE2 algorithm, compiled with AVX instructions available */
   if (n == 0)

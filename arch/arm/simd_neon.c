@@ -1,6 +1,14 @@
 #include "../simd_dispatch.h"
 #include <arm_neon.h>
 
+static int cap_validate_neon(void) { return 1; }
+static void dag_process_neon(void) {}
+
+__attribute__((constructor))
+static void register_neon(void) {
+  simd_register(SIMD_FEATURE_NEON, cap_validate_neon, dag_process_neon);
+}
+
 uint64_t fib_neon(uint32_t n) {
   if (n == 0)
     return 0;
