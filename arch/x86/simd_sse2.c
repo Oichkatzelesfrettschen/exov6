@@ -3,10 +3,17 @@
 
 static int cap_validate_sse3(void) { return 1; }
 static void dag_process_sse3(void) {}
+static int cap_validate_sse2(void) { return 1; }
+static void dag_process_sse2(void) {}
 
 __attribute__((constructor))
 static void register_sse3(void) {
   simd_register(SIMD_FEATURE_SSE3, cap_validate_sse3, dag_process_sse3);
+}
+
+__attribute__((constructor))
+static void register_sse2(void) {
+  simd_register(SIMD_FEATURE_SSE2, cap_validate_sse2, dag_process_sse2);
 }
 
 uint64_t fib_sse2(uint32_t n) {
