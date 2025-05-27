@@ -1,6 +1,15 @@
 #include "../simd_dispatch.h"
 #include <altivec.h>
 
+static int cap_validate_altivec(void) { return 1; }
+static void dag_process_altivec(void) {}
+
+__attribute__((constructor))
+static void register_altivec(void) {
+  simd_register(SIMD_FEATURE_ALTIVEC, cap_validate_altivec,
+                dag_process_altivec);
+}
+
 typedef __vector unsigned long long v2u64;
 
 uint64_t fib_altivec(uint32_t n) {
