@@ -20,7 +20,7 @@ jobs:
           # Build PowerPC AltiVec variant
           ARCH=ppc64 ISA_VARIANT="altivec" ./scripts/build_isa_variants.sh
       - name: Build metrics tool
-        run: clang -std=c2x -O2 tools/phoenix_metrics.c -o tools/phoenix_metrics
+        run: clang -std=c2x -O2 tools/profiling/phoenix_metrics.c -o tools/phoenix_metrics
       - name: Run tests and benchmarks
         run: |
           mkdir bench_results
@@ -28,7 +28,7 @@ jobs:
           for v in $variants; do
             make -C tests/microbench run > bench_results/${v}_bench.txt
             pytest -q > bench_results/${v}_tests.txt || true
-            ./tools/phoenix_metrics engine/kernel 1 > bench_results/${v}_metrics.txt || true
+            tools/phoenix_metrics engine/kernel 1 > bench_results/${v}_metrics.txt || true
           done
       - name: Check purity
         run: |
