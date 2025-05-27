@@ -5,7 +5,7 @@
 #include "param.h"
 #include <compiler_attrs.h>
 #if __has_include("config.h")
-# include "config.h"
+#include "config.h"
 #endif
 #include "spinlock.h"
 #include "proc.h"
@@ -272,6 +272,9 @@ struct exo_sched_ops *dag_sched_ops(void);
 struct exo_sched_ops *beatty_sched_ops(void);
 void beatty_dag_stream_init(void);
 void beatty_sched_set_tasks(const exo_cap *, const double *, int);
+void streams_sched_init(void);
+void streams_stop(void);
+void streams_yield(void);
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
 int sys_ipc(void);

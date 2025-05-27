@@ -9,6 +9,7 @@
 #include "x86.h"
 #include "spinlock.h"
 #include "exo_stream.h"
+#include "streams.h"
 #include "exo_ipc.h"
 #include "ipc_queue.h"
 #include <string.h>
@@ -46,6 +47,7 @@ int main(void) {
   ideinit();                                  // disk
   dag_sched_init();                           // initialize DAG scheduler
   beatty_sched_init();                        // initialize Beatty scheduler
+  streams_sched_init();                       // initialize STREAMS callbacks
   startothers();                              // start other processors
   kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()
   userinit();                                 // first user process

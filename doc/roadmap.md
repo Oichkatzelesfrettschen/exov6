@@ -1,4 +1,4 @@
-# Phoenix Roadmap
+#Phoenix Roadmap
 
 This document summarizes the current milestones and open tasks for the Phoenix exokernel project. It draws from the [project charter](charter.md) and the STREAMS TODO list.
 
@@ -17,7 +17,7 @@ These goals are paired with a lightweight governance model that welcomes contrib
 
 The prototype STREAMS stack still requires several features:
 
-- Integrate STREAMS callbacks with the kernel scheduler and implement `streams_stop()` / `streams_yield()`.
+- **Done:** integrate STREAMS callbacks with the kernel scheduler and implement `streams_stop()` / `streams_yield()`.
 - Expand the latency harness in `scripts/simulate.py` and add unit tests for `streams_log.py`.
 - Document the PID based flow control interface under `/proc/streams/fc/` and provide an example using `flow_pid.py`.
 
@@ -43,4 +43,3 @@ The prototype STREAMS stack still requires several features:
 - libOS: maintain POSIX compliance as features grow, keeping most logic outside the kernel.
 - Scheduler: experiment with alternative models and allow hot-swapping of schedulers.
 - Driver model: evolve toward a robust user space framework that isolates misbehaving drivers and supports dynamic restarts.
-
