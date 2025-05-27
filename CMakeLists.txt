@@ -116,6 +116,10 @@ target_include_directories(simd_dispatch PUBLIC
   ${CMAKE_SOURCE_DIR}/tools
 )
 
+file(GLOB LIBPOSIX_SOURCES userspace/libposix/*.c)
+file(GLOB LIBBAREMETAL_SOURCES userspace/libbaremetal/*.c)
+file(GLOB LIB9P_SOURCES userspace/lib9p/*.c)
+
 set(LIBOS_SOURCES
   engine/user/ulib.c
   engine/user/printf.c
@@ -137,9 +141,9 @@ set(LIBOS_SOURCES
   engine/libos/microkernel/msg_router.c
   engine/libos/microkernel/resource_account.c
   engine/libos/microkernel/registration.c
-  userspace/libposix/*.c
-  userspace/libbaremetal/*.c
-  userspace/lib9p/*.c
+  ${LIBPOSIX_SOURCES}
+  ${LIBBAREMETAL_SOURCES}
+  ${LIB9P_SOURCES}
 )
 add_library(libos STATIC ${LIBOS_SOURCES})
 target_include_directories(libos PUBLIC
