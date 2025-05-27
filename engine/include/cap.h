@@ -36,6 +36,7 @@ _Static_assert(_Alignof(struct cap_entry) == 4, "struct cap_entry alignment inco
 #endif
 
 extern uint32_t global_epoch;
+extern int cap_table_ready;
 
 void cap_table_init(void);
 int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner);

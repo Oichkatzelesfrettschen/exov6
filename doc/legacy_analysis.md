@@ -26,3 +26,5 @@ remaining legacy pieces.
 - Memory management uses capability operations exclusively.
 - Filesystem and drivers run entirely in user space.
 - Kernel scheduler logic removed in favour of DAG/Beatty streams.
+- Kernel page allocator now assigns a capability to every page.
+- File services launch in user space under the ``rcrs`` supervisor.
