@@ -118,18 +118,18 @@ static void simd_detect(void) {
   if (d & (1u << 26)) {
     fib_impl = fib_sse2;
     gcd_impl = gcd_sse2;
-    detected_feature = SIMD_FEATURE_NONE;
+    detected_feature = SIMD_FEATURE_SSE2;
     return;
   }
   if (d & (1u << 23)) {
     fib_impl = fib_mmx;
     gcd_impl = gcd_mmx;
-    detected_feature = SIMD_FEATURE_NONE;
+    detected_feature = SIMD_FEATURE_MMX;
     return;
   }
   fib_impl = fib_x87;
   gcd_impl = gcd_x87;
-  detected_feature = SIMD_FEATURE_NONE;
+  detected_feature = SIMD_FEATURE_X87;
 #elif defined(__arm__) || defined(__aarch64__)
 #if defined(__linux__)
 #ifndef AT_HWCAP
