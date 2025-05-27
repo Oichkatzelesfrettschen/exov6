@@ -19,5 +19,8 @@ def test_pipeline_transformation_roundtrip():
 
 def test_latency_reported(capsys):
     script.main()
-    captured = capsys.readouterr().out.strip()
-    assert re.match(r"^Average latency: [0-9.]+ us$", captured)
+    lines = capsys.readouterr().out.strip().splitlines()
+    assert len(lines) == 3
+    pattern = re.compile(r"^[a-z+]+: avg [0-9.]+ us \(min [0-9.]+, max [0-9.]+\)$")
+    for line in lines:
+        assert pattern.match(line)
