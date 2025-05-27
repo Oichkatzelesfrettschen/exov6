@@ -13,14 +13,21 @@ jobs:
       - name: Build ISA variants
         run: |
           chmod +x scripts/build_isa_variants.sh
-          ./scripts/build_isa_variants.sh
+          # Build x86 variants
+          ARCH=x86_64 ISA_VARIANT="baseline,sse2,avx2,avx512" ./scripts/build_isa_variants.sh
+          # Build ARM NEON variant
+          ARCH=aarch64 ISA_VARIANT="neon64" ./scripts/build_isa_variants.sh
+          # Build PowerPC AltiVec variant
+          ARCH=ppc64 ISA_VARIANT="altivec" ./scripts/build_isa_variants.sh
       - name: Build metrics tool
         run: clang -std=c2x -O2 tools/phoenix_metrics.c -o tools/phoenix_metrics
-      - name: Run benchmarks
+      - name: Run tests and benchmarks
         run: |
           mkdir bench_results
-          for v in $(ls build/isa); do
+          variants="x86-legacy x86-sse2 x86-avx2 x86-avx512 arm-neon power-altivec"
+          for v in $variants; do
             make -C tests/microbench run > bench_results/${v}_bench.txt
+            pytest -q > bench_results/${v}_tests.txt || true
             ./tools/phoenix_metrics engine/kernel 1 > bench_results/${v}_metrics.txt || true
           done
       - name: Check purity
