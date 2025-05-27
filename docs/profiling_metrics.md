@@ -5,6 +5,12 @@ development builds.  It exposes counters for SIMD instruction usage and
 scalar fallbacks along with timing hooks for IPC latency and context
 switch duration.
 
+For automated testing the same source is compiled as a standalone
+binary named `tools/phoenix_metrics`. The CI pipeline invokes this
+helper to gather SIMD counts, scalar fallbacks and latency numbers from
+the microbenchmark suite. The collected metrics are used to monitor
+performance trends across ISA variants.
+
 ## Building
 
 The tool is built as part of the standard build process:
