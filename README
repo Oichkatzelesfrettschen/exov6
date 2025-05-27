@@ -555,10 +555,15 @@ $ dot -Tpng streams_stack.dot -o stack.png
 
 The resulting `stack.png` illustrates the module chain.
 
-Run the latency harness with Python:
+Run the latency harness with Python.  The script will benchmark several
+module combinations and print the average, minimum and maximum latency
+for each:
 
 ```
 $ python3 scripts/simulate.py
+xor: avg 0.50 us (min 0.40, max 0.60)
+upper+xor: avg 0.70 us (min 0.60, max 0.80)
+reverse+upper+xor: avg 0.90 us (min 0.80, max 1.00)
 ```
 
 Further work items related to the STREAMS prototype are tracked in
