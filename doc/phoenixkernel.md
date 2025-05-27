@@ -67,6 +67,10 @@ ninja -C build libos
 
 which produces `libos.a`. Applications link against this archive to access the capability wrappers, filesystem code and user-level scheduler located in `libos/` and `src-uland/`.
 
+For an overview of supported CPU architectures, SIMD backends and the
+runtime detection logic see
+[multi_architecture.md](multi_architecture.md).
+
 ## POSIX Compatibility in User Space
 
 Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
