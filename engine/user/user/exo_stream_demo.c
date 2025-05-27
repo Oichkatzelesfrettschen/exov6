@@ -31,7 +31,7 @@ void streams_stop(void) {
   if (streams_lock.name)
     release(&streams_lock);
   exo_stream_halt();
-  yield();
+  exo_stream_yield();
 }
 
 /*
@@ -42,7 +42,6 @@ void streams_yield(void) {
   if (streams_lock.name)
     release(&streams_lock);
   exo_stream_yield();
-  yield();
 }
 
 int main(int argc, char **argv) {

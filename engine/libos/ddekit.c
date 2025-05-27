@@ -16,7 +16,7 @@ int ddekit_process_wait(struct ddekit_process *p) {
 
 void ddekit_process_exit(int code) { proc_exit(code); }
 
-void ddekit_yield(void) { yield(); }
+void ddekit_yield(void) { exo_stream_yield(); }
 
 exo_cap ddekit_cap_alloc_page(void) { return capwrap_alloc_page(); }
 

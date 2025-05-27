@@ -153,14 +153,11 @@ struct cpu *mycpu(void);
 struct proc *myproc();
 void pinit(void);
 void procdump(void);
-_Noreturn void scheduler(void);
-void sched(void);
-void setproc(struct proc *);
 void sleep(void *, struct spinlock *);
 void userinit(void);
 int wait(void);
 void wakeup(void *);
-void yield(void);
+void exo_stream_yield(void);
 struct proc *pctr_lookup(uint32_t);
 struct proc *allocproc(void);
 

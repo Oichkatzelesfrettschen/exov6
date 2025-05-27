@@ -8,11 +8,13 @@
 static struct spinlock cap_lock;
 static struct cap_entry cap_table[CAP_MAX];
 uint32_t global_epoch;
+int cap_table_ready;
 
 void cap_table_init(void) {
     initlock(&cap_lock, "captbl");
     memset(cap_table, 0, sizeof(cap_table));
     global_epoch = 0;
+    cap_table_ready = 1;
 }
 
 int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner) {

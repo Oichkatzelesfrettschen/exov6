@@ -9,6 +9,8 @@
 #include "mmu.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "cap.h"
+#include "include/exokernel.h"
 #include <string.h>
 
 void freerange(void *vstart, void *vend);
@@ -17,6 +19,7 @@ extern char end[]; // first address after kernel loaded from ELF file
 
 struct run {
   struct run *next;
+  uint32_t cap_id;
 };
 
 static inline int
@@ -80,6 +83,9 @@ kfree(char *v)
   if(kmem.use_lock)
     acquire(&kmem.lock[node]);
   r = (struct run*)v;
+  if(cap_table_ready && r->cap_id)
+    cap_revoke(r->cap_id);
+  r->cap_id = 0;
   r->next = kmem.freelist[node];
   kmem.freelist[node] = r;
   if(kmem.use_lock)
@@ -111,5 +117,9 @@ kalloc(void)
     if(kmem.use_lock)
       release(&kmem.lock[node]);
   }
+  if(r && cap_table_ready)
+    r->cap_id = cap_table_alloc(CAP_TYPE_KPAGE, V2P(r), EXO_RIGHT_R|EXO_RIGHT_W, 0);
+  else if(r)
+    r->cap_id = 0;
   return (char*)r;
 }

@@ -43,6 +43,6 @@ rcu_synchronize(void)
       break;
     }
     release(&rcu_state.lock);
-    yield();
+    exo_stream_yield();
   }
 }

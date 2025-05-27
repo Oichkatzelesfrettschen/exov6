@@ -42,9 +42,7 @@ int main(void) {
   pinit();                                    // process table
   ipc_timed_init();                           // initialize timed IPC mailbox
   tvinit();                                   // trap vectors
-  binit();                                    // buffer cache
-  fileinit();                                 // file table
-  ideinit();                                  // disk
+  // filesystem and drivers now run in user space under rcrs
   dag_sched_init();                           // initialize DAG scheduler
   beatty_sched_init();                        // initialize Beatty scheduler
   streams_sched_init();                       // initialize STREAMS callbacks

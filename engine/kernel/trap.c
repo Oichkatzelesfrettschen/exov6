@@ -58,7 +58,6 @@ void trap(struct trapframe *tf) {
         myproc()->out_of_gas = 1;
         lapiceoi();
         exo_stream_yield();
-        yield();
         break;
       }
     }

@@ -175,6 +175,7 @@ uprogs = {
   'ipc_test': 'engine/user/ipc_test.c',
   'nbtest': 'engine/user/nbtest.c',
   'rcrs': 'engine/user/rcrs.c',
+  'filesrv': 'engine/user/filesrv.c',
   'libos_posix_test': 'engine/user/libos_posix_test.c',
   'libos_posix_extra_test': 'engine/user/user/libos_posix_extra_test.c',
   'qspin_demo': 'engine/user/user/qspin_demo.c',

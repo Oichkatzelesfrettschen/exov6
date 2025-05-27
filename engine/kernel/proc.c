@@ -352,7 +352,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
-  sched();
+  exo_stream_yield();
   panic("zombie exit");
 }
 
@@ -412,43 +412,6 @@ wait(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
-void
-scheduler(void)
-{
-  struct proc *p;
-  struct cpu *c = mycpu();
-  c->proc = 0;
-  
-  for(;;){
-    // Enable interrupts on this processor.
-    sti();
-
-    acquire(&ptable.lock);
-    p = runqueue_head;
-    if(p == 0){
-      release(&ptable.lock);
-      exo_stream_halt();
-      continue;
-    }
-    struct proc *start = p;
-    int found = 0;
-    do {
-      if(p->state == RUNNABLE && !p->out_of_gas){
-        found = 1;
-        break;
-      }
-      remrq(p);
-      if(p->state == RUNNABLE)
-        setrunqueue(p);
-      p = runqueue_head;
-    } while(p && p != start);
-
-    if(!found){
-      release(&ptable.lock);
-      exo_stream_halt();
-      continue;
-    }
-
     remrq(p);
 
     acquire(&sched_lock);
@@ -480,38 +443,6 @@ scheduler(void)
 // be proc->intena and proc->ncli, but that would
 // break in the few places where a lock is held but
 // there's no process.
-void
-sched(void)
-{
-  int intena;
-  struct proc *p = myproc();
-
-  if(!holding(&ptable.lock))
-    panic("sched ptable.lock");
-  if(mycpu()->ncli != 1)
-    panic("sched locks");
-  if(p->state == RUNNING)
-    panic("sched running");
-  if(readeflags()&FL_IF)
-    panic("sched interruptible");
-  intena = mycpu()->intena;
-  swtch(&p->context, mycpu()->scheduler);
-  mycpu()->intena = intena;
-}
-
-// Give up the CPU for one scheduling round.
-void
-yield(void)
-{
-  acquire(&ptable.lock);  //DOC: yieldlock
-  exo_stream_yield();
-  acquire(&sched_lock);
-  myproc()->state = RUNNABLE;
-  setrunqueue(myproc());
-  release(&sched_lock);
-  sched();
-  release(&ptable.lock);
-}
 
 // A fork child's very first scheduling by scheduler()
 // will swtch here.  "Return" to user space.
@@ -563,7 +494,7 @@ sleep(void *chan, struct spinlock *lk)
   p->state = SLEEPING;
   release(&sched_lock);
 
-  sched();
+  exo_stream_yield();
 
   // Tidy up.
   p->chan = 0;
