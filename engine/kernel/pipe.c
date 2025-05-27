@@ -18,6 +18,7 @@ struct pipe {
   size_t nwrite; // number of bytes written
   int readopen;  // read fd is still open
   int writeopen; // write fd is still open
+  exo_cap cap;
 };
 
 [[nodiscard]] int pipealloc(struct file **f0, struct file **f1) {
@@ -27,8 +28,10 @@ struct pipe {
   *f0 = *f1 = 0;
   if ((*f0 = filealloc()) == 0 || (*f1 = filealloc()) == 0)
     goto bad;
-  if ((p = (struct pipe *)kalloc()) == 0)
+  exo_cap cap;
+  if ((p = (struct pipe *)cap_kalloc(&cap)) == 0)
     goto bad;
+  p->cap = cap;
   p->readopen = 1;
   p->writeopen = 1;
   p->nwrite = 0;
@@ -49,7 +52,7 @@ struct pipe {
   // PAGEBREAK: 20
 bad:
   if (p)
-    kfree((char *)p);
+    cap_kfree(p->cap);
   if (*f0)
     fileclose(*f0);
   if (*f1)
@@ -68,7 +71,7 @@ void pipeclose(struct pipe *p, int writable) {
   }
   if (p->readopen == 0 && p->writeopen == 0) {
     release(&p->lock);
-    kfree((char *)p);
+    cap_kfree(p->cap);
   } else
     release(&p->lock);
 }

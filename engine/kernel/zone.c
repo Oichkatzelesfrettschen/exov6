@@ -17,9 +17,11 @@ zone_init(zone_t *z, size_t obj_size, char *name)
 static struct slab*
 new_slab(zone_t *z)
 {
-  struct slab *s = (struct slab*)kalloc();
+  exo_cap cap;
+  struct slab *s = (struct slab*)cap_kalloc(&cap);
   if(!s)
     return 0;
+  s->cap = cap;
   s->zone = z;
   s->zone_id = z->zone_id;
   s->inuse = 0;

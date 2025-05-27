@@ -14,7 +14,6 @@
 #include "proc.h"
 #include "kernel/hypervisor/hypervisor.h"
 #include "spinlock.h"
-#include "runqueue.h"
 #include "x86.h"
 // clang-format on
 
@@ -361,7 +360,6 @@ int sys_proc_alloc(void) {
 
   acquire(&ptable.lock);
   np->state = RUNNABLE;
-  setrunqueue(np);
   release(&ptable.lock);
 
   exo_cap cap = cap_new(V2P(np->context), 0, np->pid);

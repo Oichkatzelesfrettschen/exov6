@@ -77,7 +77,6 @@ list(APPEND KERNEL_SOURCES
   ${ARCH_GENERIC_SOURCES}
   ${ARCH_X86_LEGACY_SOURCES}
   ${ARCH_X86_MODERN_SOURCES})
-list(APPEND KERNEL_SOURCES engine/kernel/runqueue.c)
 
 set(SIMD_SOURCES
   arch/simd_dispatch.c

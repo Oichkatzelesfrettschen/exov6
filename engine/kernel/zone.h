@@ -16,6 +16,7 @@ struct slab {
   struct slab *next;
   struct zone *zone;
   int zone_id;
+  exo_cap cap;
   struct zone_obj *free;
   int inuse;
 };
