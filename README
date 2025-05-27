@@ -20,7 +20,8 @@ is unset, the shell falls back to searching only ``/``.
 Programs are expected to reside directly under `/`.  If a command
 name does not include a slash, the shell automatically prepends `/`
 when searching for the executable.  Other environment variables are
-not yet supported.
+not yet supported.  Standard software can still be ported using the
+POSIX wrappers described in ``doc/posix_user_guide.md``.
 
 ACKNOWLEDGMENTS
 
@@ -229,7 +230,8 @@ The ``setup.sh`` script installs cross-compilers for several
 architectures such as ARMv7, AArch64, PowerPC and PowerPC64 (both
 big-endian and little-endian).  Pass the ``ARCH`` value to ``cmake`` when
 configuring.  The current build system implements ``ARCH=aarch64`` in
-addition to ``x86`` and ``x86_64``.
+addition to ``x86`` and ``x86_64``.  A broader overview of these targets
+is provided in ``doc/multi_architecture.md``.
 
 Build and run an AArch64 image with::
 
@@ -251,8 +253,8 @@ for architectures that do not yet have dedicated run scripts are::
       cmake -S . -B build-ppc64le -G Ninja -DARCH=ppc64le && ninja -C build-ppc64le    # PowerPC64 little-endian
       qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
 
-For more details on how CPU features are detected and how the build falls back
-when extensions are unavailable see ``doc/architecture_detection.md``.
+For more details on supported architectures, CPU feature detection and the
+fallback order see ``doc/multi_architecture.md``.
 
 When additional ``ARCH`` values are implemented these commands will
 build and boot the corresponding images.
@@ -311,6 +313,9 @@ environment for Meson:
     target CPU.  Implementations exist for x87 and MMX floating point, SSE
     through AVX512 and FMA on x86, plus NEON and AltiVec on ARM and PowerPC.
     When an extension is unavailable the generic C routines are used instead.
+    The dispatch layer prefers AVX, SSE2, MMX and x87 in that order on x86,
+    NEON on ARM and AltiVec/VSX on PowerPC.  See ``doc/multi_architecture.md``
+    for the full table.
 
 Example CMake usage::
 
@@ -318,11 +323,12 @@ Example CMake usage::
     cmake -S . -B build -DUSE_CAPNP=ON && ninja -C build
     cmake -S . -B build -DUSE_SIMD=ON && ninja -C build
 
-To compile for specific instruction sets pass ``-DCPUFLAGS`` to ``cmake``.  The
-``scripts/build_isa_variants.sh`` helper builds a series of kernels using
-different flags (x87, MMX, SSE, AVX2, FMA, AVX512 and more).  Leaving
-``CPUFLAGS`` empty produces a baseline build that relies on runtime fallback
-when SIMD is not detected.
+To compile for specific instruction sets pass ``-DCPUFLAGS`` to ``cmake``.
+This variable adds raw compiler flags like ``-mavx2`` or ``-mfpu=neon`` and is
+honoured by both build systems.  The ``scripts/build_isa_variants.sh`` helper
+builds a series of kernels using different flags (x87, MMX, SSE, AVX2, FMA,
+AVX512 and more).  Leaving ``CPUFLAGS`` empty produces a baseline build that
+relies on the runtime fallback described above.
 
 Using Meson::
 
