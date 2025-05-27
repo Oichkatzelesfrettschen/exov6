@@ -32,14 +32,15 @@ The dispatch table currently recognises the following instruction sets:
 
 * x87 scalar floating point
 * MMX
-* SSE2 / SSE3
+* SSE2
+* SSE3
 * AVX and AVX2+FMA
 * AVX‑512
 * NEON (ARM)
 * AltiVec/VSX (PowerPC)
 
 The order of preference on x86 ranges from AVX‑512 down through AVX2,
-AVX, SSE3/2, MMX and finally x87.  ARM prefers NEON while PowerPC tries
+AVX, SSE3, SSE2, MMX and finally x87.  ARM prefers NEON while PowerPC tries
 AltiVec.  If none of these are available the plain C implementations are
 used instead.
 
@@ -65,7 +66,7 @@ resulting binaries run on any compatible processor.
 
 At run time the SIMD dispatch library probes the host CPU and chooses the
 best available implementation.  On x86 the dispatcher prefers AVX‑512,
-then AVX2 with FMA, AVX, SSE3/SSE2, MMX and finally x87.  ARM builds
+then AVX2 with FMA, AVX, SSE3, SSE2, MMX and finally x87.  ARM builds
 attempt NEON while PowerPC tries AltiVec/VSX.  When none of these
 extensions are present the scalar routines are used.
 
