@@ -9,6 +9,7 @@ SRC_FILES = [
     ROOT / "engine/user/posix_signal_test.c",
     ROOT / "engine/user/posix_pipe_test.c",
     ROOT / "engine/user/posix_rename_unlink_test.c",
+    ROOT / "engine/user/posix_ftruncate_test.c",
     ROOT / "engine/user/user/posix_misc_test.c",
     ROOT / "engine/user/user/posix_socket_test.c",
     ROOT / "engine/user/user/posix_cwd_test.c",
@@ -72,5 +73,9 @@ def test_posix_misc_ops():
     compile_and_run(SRC_FILES[3])
 
 
-def test_posix_socket_ops():
+def test_posix_ftruncate_ops():
     compile_and_run(SRC_FILES[4])
+
+
+def test_posix_socket_ops():
+    compile_and_run(SRC_FILES[5])

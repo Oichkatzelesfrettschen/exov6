@@ -14,3 +14,4 @@ int libfs_write(struct file *f, const void *buf, size_t n);
 void libfs_close(struct file *f);
 int libfs_unlink(const char *path);
 int libfs_rename(const char *oldpath, const char *newpath);
+int libfs_truncate(struct file *f, size_t length);
