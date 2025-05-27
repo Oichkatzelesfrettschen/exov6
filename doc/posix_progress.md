@@ -22,8 +22,8 @@ This log tracks implementation status of the POSIX wrappers provided by the Phoe
 | `libos_stat` | Implemented | N/A | [posix.c](../libos/posix.c) |
 | `libos_lseek` | Implemented | [lseek](ben-books/susv4-2018/functions/lseek.html) | [posix.c](../libos/posix.c) |
 | `libos_ftruncate` | Stubbed | N/A | [posix.c](../libos/posix.c) |
-| `libos_mmap` | Stubbed | [mmap](ben-books/susv4-2018/functions/mmap.html) | [posix.c](../libos/posix.c) |
-| `libos_munmap` | Stubbed | N/A | [posix.c](../libos/posix.c) |
+| `libos_mmap` | Implemented | [mmap](ben-books/susv4-2018/functions/mmap.html) | [posix.c](../libos/posix.c) |
+| `libos_munmap` | Implemented | N/A | [posix.c](../libos/posix.c) |
 | `libos_sigemptyset` | Implemented | N/A | [posix.c](../libos/posix.c) |
 | `libos_sigfillset` | Implemented | [sigfillset](ben-books/susv4-2018/functions/sigfillset.html) | [posix.c](../libos/posix.c) |
 | `libos_sigaddset` | Implemented | N/A | [posix.c](../libos/posix.c) |

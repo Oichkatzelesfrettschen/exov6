@@ -18,9 +18,15 @@ int main(void) {
 
   void *p = libos_mmap(0, 4096, PROT_READ | PROT_WRITE,
                        MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-  assert(p != MAP_FAILED);
+  void *q = libos_mmap(0, 4096, PROT_READ | PROT_WRITE,
+                       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  assert(p != MAP_FAILED && q != MAP_FAILED && p != q);
   strcpy(p, "ok");
+  strcpy(q, "hi");
+  assert(strcmp(p, "ok") == 0);
+  assert(strcmp(q, "hi") == 0);
   assert(libos_munmap(p, 4096) == 0);
+  assert(libos_munmap(q, 4096) == 0);
 
   int pg = libos_getpgrp();
   assert(libos_setpgid(0, pg) == 0);

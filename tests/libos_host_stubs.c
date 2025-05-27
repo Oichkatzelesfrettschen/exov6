@@ -8,7 +8,7 @@
 static unsigned char disk[STUB_BLOCKS * BSIZE];
 static uint32_t next_block;
 
-int exo_alloc_page(exo_cap *cap) {
+static int exo_alloc_page_out(exo_cap *cap) {
     static uint32_t next_page = 1;
     if (!cap) return -1;
     cap->pa = next_page * 0x1000;
@@ -16,6 +16,12 @@ int exo_alloc_page(exo_cap *cap) {
     cap->rights = 0;
     cap->owner = 1;
     return 0;
+}
+
+exo_cap exo_alloc_page(void) {
+    exo_cap cap;
+    exo_alloc_page_out(&cap);
+    return cap;
 }
 
 int exo_unbind_page(exo_cap c) {
@@ -63,13 +69,16 @@ int exec(char *path, char **argv) {
     return -1;
 }
 
+static int last_sig;
 int sigsend(int pid, int sig) {
     (void)pid;
-    (void)sig;
+    last_sig = sig;
     return 0;
 }
 
 int sigcheck(void) {
-    return 0;
+    int s = last_sig;
+    last_sig = 0;
+    return s;
 }
 
