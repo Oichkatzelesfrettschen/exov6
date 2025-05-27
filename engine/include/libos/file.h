@@ -13,6 +13,7 @@ struct file {
   char writable;
   struct exo_blockcap cap; // backing storage capability
   size_t off;
+  size_t *sizep;           // pointer to shared file length
 };
 
 // in-memory copy of an inode
