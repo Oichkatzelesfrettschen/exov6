@@ -12,6 +12,7 @@ enum simd_feature {
   SIMD_FEATURE_AVX512,
   SIMD_FEATURE_NEON,
   SIMD_FEATURE_ALTIVEC,
+  SIMD_FEATURE_MMX,
 };
 
 typedef int (*cap_validate_fn_t)(void);
