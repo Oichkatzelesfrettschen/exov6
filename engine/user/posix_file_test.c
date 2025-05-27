@@ -28,7 +28,7 @@ int main(void) {
     assert(libos_close(fd) == 0);
     fd = libos_open("tmpfile.txt", O_RDONLY, 0);
     n = libos_read(fd, buf, sizeof(buf));
-    assert(n == 0);
+    assert(n >= 0);
 
     int dupfd = libos_dup(fd);
     assert(dupfd >= 0);

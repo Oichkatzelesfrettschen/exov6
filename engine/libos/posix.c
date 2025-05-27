@@ -4,6 +4,7 @@
 #include "fs.h"
 #include "string.h"
 #include "user.h"
+#include "exo_mem.h"
 #include <signal.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -24,6 +25,44 @@ static void ensure_fd_table(void) {
   }
 }
 static void (*sig_handlers[32])(int);
+
+typedef struct {
+  void *addr;
+  size_t len;
+  exo_cap cap;
+} mmap_entry_t;
+
+static mmap_entry_t *mmap_table;
+static int mmap_cap = 0;
+static int mmap_count = 0;
+
+static void mmap_table_add(void *addr, size_t len, exo_cap cap) {
+  if (mmap_count == mmap_cap) {
+    int new_cap = mmap_cap ? mmap_cap * 2 : 4;
+    mmap_entry_t *nt = realloc(mmap_table, new_cap * sizeof(mmap_entry_t));
+    if (!nt)
+      return;
+    mmap_table = nt;
+    mmap_cap = new_cap;
+  }
+  mmap_table[mmap_count].addr = addr;
+  mmap_table[mmap_count].len = len;
+  mmap_table[mmap_count].cap = cap;
+  mmap_count++;
+}
+
+static int mmap_table_remove(void *addr, exo_cap *out) {
+  for (int i = 0; i < mmap_count; i++) {
+    if (mmap_table[i].addr == addr) {
+      if (out)
+        *out = mmap_table[i].cap;
+      mmap_count--;
+      mmap_table[i] = mmap_table[mmap_count];
+      return 0;
+    }
+  }
+  return -1;
+}
 
 int libos_open(const char *path, int flags, int mode) {
   (void)mode; /* mode ignored by simple filesystem */
@@ -65,14 +104,14 @@ int libos_open(const char *path, int flags, int mode) {
 int libos_read(int fd, void *buf, size_t n) {
   ensure_fd_table();
   if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
-    return -1;
+    return read(fd, buf, n);
   return libfs_read(fd_table[fd], buf, n);
 }
 
 int libos_write(int fd, const void *buf, size_t n) {
   ensure_fd_table();
   if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
-    return -1;
+    return write(fd, buf, n);
   return libfs_write(fd_table[fd], buf, n);
 }
 
@@ -265,11 +304,18 @@ void *libos_mmap(void *addr, size_t len, int prot, int flags, int fd,
   (void)fd;
   (void)off;
   void *p = malloc(len);
-  return p ? p : (void *)-1;
+  if (!p)
+    return (void *)-1;
+  exo_cap cap = exo_alloc_page();
+  mmap_table_add(p, len, cap);
+  return p;
 }
 
 int libos_munmap(void *addr, size_t len) {
   (void)len;
+  exo_cap cap;
+  if (mmap_table_remove(addr, &cap) == 0)
+    (void)exo_unbind_page(cap);
   free(addr);
   return 0;
 }

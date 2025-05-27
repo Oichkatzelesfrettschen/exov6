@@ -23,18 +23,17 @@ static uint32_t next_page = 1;
 static uint32_t next_block = 1;
 static unsigned char diskbuf[512];
 
-int exo_alloc_page(exo_cap *cap) {
-    cap->pa = next_page * 0x1000;
-    cap->id = next_page++;
-    cap->rights = 0;
-    cap->owner = 1;
-    return 0;
+exo_cap exo_alloc_page(void) {
+    exo_cap cap;
+    cap.pa = next_page * 0x1000;
+    cap.id = next_page++;
+    cap.rights = 0;
+    cap.owner = 1;
+    return cap;
 }
 
-int exo_unbind_page(exo_cap *cap) {
-    if (!cap || cap->pa == 0)
-        return -1;
-    cap->pa = cap->id = cap->rights = cap->owner = 0;
+int exo_unbind_page(exo_cap cap) {
+    (void)cap;
     return 0;
 }
 
@@ -56,10 +55,9 @@ int exo_bind_block(exo_blockcap *cap, void *data, int write) {
 }
 
 static void test_exo_pages(void) {
-    exo_cap cap;
-    assert(exo_alloc_page(&cap) == 0);
+    exo_cap cap = exo_alloc_page();
     assert(cap.pa != 0);
-    assert(exo_unbind_page(&cap) == 0);
+    assert(exo_unbind_page(cap) == 0);
 }
 
 static void test_exo_block(void) {

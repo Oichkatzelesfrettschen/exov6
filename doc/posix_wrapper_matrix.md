@@ -25,8 +25,8 @@ This table lists every wrapper provided by the Phoenix libOS. "Status" records w
 | `libos_stat` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | returns dummy metadata |
 | `libos_lseek` | Implemented | [lseek](ben-books/susv4-2018/functions/lseek.html) | [posix.c](../engine/libos/posix.c) | updates in-memory offset |
 | `libos_ftruncate` | Stubbed | N/A | [posix.c](../engine/libos/posix.c) | size change ignored |
-| `libos_mmap` | Stubbed | [mmap](ben-books/susv4-2018/functions/mmap.html) | [posix.c](../engine/libos/posix.c) | uses `malloc` |
-| `libos_munmap` | Stubbed | N/A | [posix.c](../engine/libos/posix.c) | uses `free` |
+| `libos_mmap` | Implemented | [mmap](ben-books/susv4-2018/functions/mmap.html) | [posix.c](../engine/libos/posix.c) | allocates page capability |
+| `libos_munmap` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | unbinds page capability |
 | `libos_sigemptyset` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | bitmask operation |
 | `libos_sigfillset` | Implemented | [sigfillset](ben-books/susv4-2018/functions/sigfillset.html) | [posix.c](../engine/libos/posix.c) | bitmask operation |
 | `libos_sigaddset` | Implemented | N/A | [posix.c](../engine/libos/posix.c) | bitmask operation |
