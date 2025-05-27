@@ -365,18 +365,27 @@ EXO STREAMS
 with ``exo_stream_register`` and call ``exo_stream_yield`` or
 ``exo_stream_halt`` to invoke the registered callbacks.  See the
 ``EXO_STREAM`` design note for details.  ``yield()`` invokes
-``exo_stream_yield`` before scheduling another process.  When the
-scheduler has no runnable tasks it calls ``exo_stream_halt`` rather
-than spinning; the default implementation issues ``hlt`` if no stream
-is registered.
+``exo_stream_yield`` before scheduling another process.  When the scheduler
+has no runnable tasks it calls ``exo_stream_halt`` rather than spinning; the
+default implementation issues ``hlt`` if no stream is registered.
 
+``streams_stop()`` tears down the active STREAMS pipeline and wakes the
+scheduler once pending messages are flushed. ``streams_yield()`` saves the
+current module state, marks the pipeline runnable and returns control to the
+scheduler. Both helpers are invoked automatically when registered through
+``exo_stream_register`` and the scheduler calls ``exo_stream_halt`` or
+``exo_stream_yield``.
 
-USER DEMO: EXO_YIELD_TO AND STREAMS
------------------------------------
-The example program ``exo_stream_demo`` under ``engine/user/user/`` is a minimal
-illustration of switching contexts with ``exo_yield_to`` and using the
-placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system with
-``cmake -S . -B build -G Ninja && ninja -C build``; the resulting
+                USER DEMO
+    : EXO_YIELD_TO AND STREAMS
+      -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -The example
+      program ``exo_stream_demo`` under ``engine
+                / user / user
+                /`` is a minimal illustration of switching contexts
+                 with ``exo_yield_to`` and using the placeholder
+                 STREAMS ``stop`` and ``yield`` calls.Build the system with
+``cmake
+            - S.- B build - G Ninja &&ninja - C build``; the resulting
 ``fs.img`` will contain the new ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
 functions printing messages that indicate the expected invocation order.
 
