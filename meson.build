@@ -201,5 +201,10 @@ fsimg = custom_target('fs.img',
   depends: uprogs_targets,
   build_by_default: true)
 
+executable('phoenix_prof', 'tools/profiling/phoenix_metrics.c',
+           include_directories: include_directories('.'),
+           install: false,
+           c_args: common_cargs + ['-DPHOENIX_METRICS_MAIN'])
+
 subdir('tests/microbench')
 subdir('tests/posix')
