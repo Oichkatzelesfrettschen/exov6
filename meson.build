@@ -159,6 +159,7 @@ uprogs = {
   'msgqueue_demo': 'demos/examples/msgqueue_demo.c',
   'fib_big_demo': 'demos/examples/fib_big_demo.c',
   'start_guest': 'engine/user/start_guest.c',
+  'hv_demo': 'engine/user/user/hv_demo.c',
 }
 
 if use_capnp
