@@ -68,6 +68,15 @@ endif()
 file(GLOB_RECURSE KERNEL_SOURCES
   engine/kernel/*.c
 )
+file(GLOB_RECURSE PICO_SOURCES kernel/pico/*.c)
+file(GLOB_RECURSE ARCH_GENERIC_SOURCES arch/generic/*.c)
+file(GLOB_RECURSE ARCH_X86_LEGACY_SOURCES arch/x86/legacy/*.c)
+file(GLOB_RECURSE ARCH_X86_MODERN_SOURCES arch/x86/modern/*.c)
+list(APPEND KERNEL_SOURCES
+  ${PICO_SOURCES}
+  ${ARCH_GENERIC_SOURCES}
+  ${ARCH_X86_LEGACY_SOURCES}
+  ${ARCH_X86_MODERN_SOURCES})
 list(APPEND KERNEL_SOURCES engine/kernel/runqueue.c)
 
 set(SIMD_SOURCES
@@ -128,6 +137,9 @@ set(LIBOS_SOURCES
   engine/libos/microkernel/msg_router.c
   engine/libos/microkernel/resource_account.c
   engine/libos/microkernel/registration.c
+  userspace/libposix/*.c
+  userspace/libbaremetal/*.c
+  userspace/lib9p/*.c
 )
 add_library(libos STATIC ${LIBOS_SOURCES})
 target_include_directories(libos PUBLIC
@@ -136,6 +148,13 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}/engine/proto
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
+  ${CMAKE_SOURCE_DIR}/kernel/pico
+  ${CMAKE_SOURCE_DIR}/arch/generic
+  ${CMAKE_SOURCE_DIR}/arch/x86/legacy
+  ${CMAKE_SOURCE_DIR}/arch/x86/modern
+  ${CMAKE_SOURCE_DIR}/userspace/libposix
+  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
+  ${CMAKE_SOURCE_DIR}/userspace/lib9p
 )
 target_link_libraries(libos PUBLIC simd_dispatch)
 if(USE_SIMD)
@@ -190,6 +209,13 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/engine/proto
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
+  ${CMAKE_SOURCE_DIR}/kernel/pico
+  ${CMAKE_SOURCE_DIR}/arch/generic
+  ${CMAKE_SOURCE_DIR}/arch/x86/legacy
+  ${CMAKE_SOURCE_DIR}/arch/x86/modern
+  ${CMAKE_SOURCE_DIR}/userspace/libposix
+  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
+  ${CMAKE_SOURCE_DIR}/userspace/lib9p
 )
 
 if(CPUFLAGS)

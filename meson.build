@@ -71,7 +71,20 @@ libos = static_library('libos', libos_sources,
     include_directories: include_directories('.', 'engine/include', 'engine/proto', 'engine/libos/include', 'engine/libos/capnp'),
     c_args: common_cargs)
 
-src_dirs = ['kernel/hypervisor', 'engine/kernel', 'engine/user', 'engine/user/user', 'engine/libos']
+src_dirs = [
+  'kernel/hypervisor',
+  'kernel/pico',
+  'engine/kernel',
+  'engine/user',
+  'engine/user/user',
+  'engine/libos',
+  'userspace/libposix',
+  'userspace/libbaremetal',
+  'userspace/lib9p',
+  'arch/generic',
+  'arch/x86/legacy',
+  'arch/x86/modern',
+]
 
 sources = []
 foreach d : src_dirs
@@ -84,9 +97,16 @@ kernel = executable('kernel', sources,
                                             'engine/include',
                                             'engine/kernel/include',
                                             'kernel/hypervisor',
+                                            'kernel/pico',
                                             'engine/proto',
                                             'engine/libos/include',
-                                            'engine/libos/capnp'),
+                                            'engine/libos/capnp',
+                                            'userspace/libposix',
+                                            'userspace/libbaremetal',
+                                            'userspace/lib9p',
+                                            'arch/generic',
+                                            'arch/x86/legacy',
+                                            'arch/x86/modern'),
            install: false,
            c_args: common_cargs)
 
