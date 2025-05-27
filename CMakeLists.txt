@@ -32,7 +32,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(-Wall -Werror)
 
-# Enable decimal floating point when supported
+#Enable decimal floating point when supported
 check_c_compiler_flag("-mdecimal-float" HAVE_DECIMAL_FLOAT)
 if(HAVE_DECIMAL_FLOAT)
   add_compile_options(-mdecimal-float)
@@ -79,20 +79,26 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "i.
     arch/x86/simd_x87.c
     arch/x86/simd_mmx.c
     arch/x86/simd_sse2.c
-    arch/x86/simd_avx.c)
+    arch/x86/simd_avx.c
+    arch/x86/legacy/simd_mmx_cap.c
+    arch/x86/modern/simd_avx2_cap.c)
   set_source_files_properties(arch/x86/simd_mmx.c PROPERTIES COMPILE_OPTIONS "-mmmx")
   set_source_files_properties(arch/x86/simd_sse2.c PROPERTIES COMPILE_OPTIONS "-msse2")
   set_source_files_properties(arch/x86/simd_avx.c PROPERTIES COMPILE_OPTIONS "-mavx")
+  set_source_files_properties(arch/x86/legacy/simd_mmx_cap.c PROPERTIES COMPILE_OPTIONS "-mmmx")
+  set_source_files_properties(arch/x86/modern/simd_avx2_cap.c PROPERTIES COMPILE_OPTIONS "-mavx2")
 endif()
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-  list(APPEND SIMD_SOURCES arch/arm/simd_neon.c)
+  list(APPEND SIMD_SOURCES arch/arm/simd_neon.c arch/arm/simd_neon_cap.c)
   set_source_files_properties(arch/arm/simd_neon.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
+  set_source_files_properties(arch/arm/simd_neon_cap.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
 endif()
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
-  list(APPEND SIMD_SOURCES arch/ppc/simd_altivec.c)
+  list(APPEND SIMD_SOURCES arch/ppc/simd_altivec.c arch/ppc/simd_altivec_cap.c)
   set_source_files_properties(arch/ppc/simd_altivec.c PROPERTIES COMPILE_OPTIONS "-maltivec")
+  set_source_files_properties(arch/ppc/simd_altivec_cap.c PROPERTIES COMPILE_OPTIONS "-maltivec")
 endif()
 
 add_library(simd_dispatch STATIC ${SIMD_SOURCES})
