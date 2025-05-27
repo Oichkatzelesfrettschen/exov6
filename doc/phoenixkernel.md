@@ -79,6 +79,10 @@ cmake -S . -B build -G Ninja && ninja -C build
 The CMake build compiles the kernel and a handful of demo programs but
 does not generate the full set of utilities.
 
+For an overview of supported CPU architectures, SIMD backends and the
+runtime detection logic see
+[multi_architecture.md](multi_architecture.md).
+
 ## POSIX Compatibility in User Space
 
 Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
