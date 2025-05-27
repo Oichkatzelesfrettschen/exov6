@@ -8,6 +8,7 @@ SRC_FILES = [
     ROOT / "engine/user/posix_file_test.c",
     ROOT / "engine/user/posix_signal_test.c",
     ROOT / "engine/user/posix_pipe_test.c",
+    ROOT / "engine/user/posix_rename_unlink_test.c",
     ROOT / "engine/user/user/posix_misc_test.c",
     ROOT / "engine/user/user/posix_socket_test.c",
     ROOT / "engine/user/user/posix_cwd_test.c",

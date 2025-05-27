@@ -104,6 +104,12 @@ int libos_mkdir(const char *path) { return mkdir(path, 0777); }
 
 int libos_rmdir(const char *path) { return unlink((char *)path); }
 
+int libos_unlink(const char *path) { return libfs_unlink(path); }
+
+int libos_rename(const char *oldpath, const char *newpath) {
+  return libfs_rename(oldpath, newpath);
+}
+
 int libos_dup(int fd) {
   ensure_fd_table();
   if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
