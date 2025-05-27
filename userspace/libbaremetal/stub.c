@@ -1,2 +1,2 @@
 /* Minimal stub source to ensure library builds */
-void libbaremetal_stub(void) {}
+[[maybe_unused]] void libbaremetal_stub(void) {}
