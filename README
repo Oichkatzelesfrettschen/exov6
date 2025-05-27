@@ -98,6 +98,10 @@ A few headers used solely by the kernel have been moved under
 reside here instead of ``engine/include``.  The CMake build adds this
 directory to the compiler's include path automatically.
 
+PHOENIX_PROF
+-----------
+`phoenix_prof` is a small profiling helper built along with the rest of the system. It counts SIMD versus scalar operations and measures IPC and context switch latency. Build it via `ninja -C build phoenix_prof` or the matching CMake target. See [docs/profiling_metrics.md](docs/profiling_metrics.md) for further details.
+
 BOCHS
 -----
 The file ``dot-bochsrc`` contains the default configuration used when
