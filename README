@@ -585,7 +585,9 @@ constant. The ``flow_pid.py`` helpers ``set_kp()``, ``set_ki()`` and
 ``set_kd()`` provide a convenient API for adjusting the parameters.
 
 For testing the base directory can be overridden with the environment
-variable ``FLOW_PID_DIR``.
+variable ``FLOW_PID_DIR``.  A short walkthrough of the interface along
+with a Python example is provided in
+``doc/streams_flow_control.md``.
 
 STREAMS LOGGING
 ---------------
