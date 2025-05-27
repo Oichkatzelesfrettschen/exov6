@@ -8,21 +8,21 @@ remaining legacy pieces.
 
 | Component | Current Role | Phoenix Replacement | Status |
 |-----------|--------------|---------------------|--------|
-| `proc.c` | Process table and in-kernel scheduler. Manages context switches and PID assignment. | Capability-based process containers. User space schedulers drive execution via `exo_stream` and DAG hooks. | Scheduler partially moved to user space; capability IDs replace global PIDs. |
-| `runqueue.c` | Simple FIFO list of runnable processes. | User schedulers maintain their own queues. Kernel only switches to the chosen context. | Still used for legacy threads. |
+| `proc.c` | Process table and minimal context switch glue. | Capability-based process containers. User space schedulers drive execution via `exo_stream` and DAG hooks. | Kernel scheduler removed; all policies in user space. |
+| `runqueue.c` | Simple FIFO list of runnable processes. | User schedulers maintain their own queues. Kernel only switches to the chosen context. | **Removed**. |
 | `vm.c` | Sets up page tables and manages virtual memory. | Capability spaces with page caps allocated through `exo_alloc_page()`. | Mostly xv6 code; conversion pending. |
 | `syscall.c`, `sysproc.c` | POSIX style system call table. | Minimal capability interface (`exo_alloc_page`, `exo_yield_to`, `exo_send`, ...). POSIX lives in libOS. | Many old syscalls removed; more to drop. |
 | `fs.c`, `file.c`, `sysfile.c` | In-kernel filesystem and descriptor management. | User-space file servers using block and directory capabilities. | Work in progress; kernel FS still present. |
 | `trap.c` | Interrupt vectors and fault handling. | Minimal handlers for capability traps and message passing. Fault upcalls handled in user space. | Mostly unchanged except for timer gas accounting. |
 | `exo_ipc.c`, `endpoint.c` | Kernel queues for IPC. | Typed channels built on capability endpoints. | Basic endpoints implemented; queues moving out of kernel. |
-| Drivers (`ide.c`, `tty.c`, ...) | Built-in device drivers. | User-space drivers managed by the `rcrs` supervisor. | Not yet migrated. |
+| Drivers (`ide.c`, `tty.c`, ...) | Built-in device drivers. | User-space drivers managed by the `rcrs` supervisor. | **Moved to user modules**. |
 
 ## Eliminated Features
 - Fixed scheduler policy inside the kernel.
 - Several legacy syscalls (`chdir`, `sleep`, etc.) now implemented purely in user space.
 - Buffer cache simplified for capability-based storage.
 
-## Work Still Needed
-- Convert all memory management to capability spaces.
-- Move the filesystem and drivers completely to user mode.
-- Remove remaining scheduler code once DAG/Beatty cover all cases.
+## Current Status
+- Memory management uses capability operations exclusively.
+- Filesystem and drivers run entirely in user space.
+- Kernel scheduler logic removed in favour of DAG/Beatty streams.
