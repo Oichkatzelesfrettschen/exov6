@@ -102,7 +102,10 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
 endif()
 
 add_library(simd_dispatch STATIC ${SIMD_SOURCES})
-target_include_directories(simd_dispatch PUBLIC ${CMAKE_SOURCE_DIR}/arch)
+target_include_directories(simd_dispatch PUBLIC
+  ${CMAKE_SOURCE_DIR}/arch
+  ${CMAKE_SOURCE_DIR}/tools
+)
 
 set(LIBOS_SOURCES
   engine/user/ulib.c
@@ -237,3 +240,9 @@ target_include_directories(wumpus PRIVATE
   ${CMAKE_SOURCE_DIR}/engine/include
 )
 target_link_libraries(wumpus PRIVATE libos)
+
+add_executable(phoenix_prof tools/profiling/phoenix_metrics.c)
+target_include_directories(phoenix_prof PRIVATE
+  ${CMAKE_SOURCE_DIR}
+)
+target_compile_definitions(phoenix_prof PRIVATE PHOENIX_METRICS_MAIN)
