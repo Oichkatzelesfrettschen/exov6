@@ -1,0 +1,1 @@
+The request to restructure the entire repository into a modernized layout lacks specific guidelines about the desired structure and file locations. This project is large and moving files without a detailed plan would break builds and tests. Please provide a concrete proposal or roadmap for the new hierarchy before attempting such a sweeping change.
