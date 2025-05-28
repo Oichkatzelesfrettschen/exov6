@@ -5,7 +5,7 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts import simulate as script
+from scripts import streams_latency as script
 
 
 def test_pipeline_transformation_roundtrip():

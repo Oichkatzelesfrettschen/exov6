@@ -1,80 +1,68 @@
 #!/usr/bin/env python3
-"""Latency test harness for STREAMS module stack.
+"""Simulation harness for xv6 testing.
 
-This script chains together various STREAMS modules and measures the
-latency of processing a simple ``mblk_t`` message through the pipeline.
-Multiple module combinations are tested so that changes to individual
-modules can be evaluated in isolation.
+Boot xv6 under QEMU and return the emulator's exit status. The QEMU
+binary and disk image paths can be overridden via environment
+variables. The harness is primarily used by the automated test suite.
 """
 
-import sys
-import time
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
 from pathlib import Path
+from typing import Optional
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT))
-
-import statistics
-
-from encrypt_mod import XorEncryptModule
-from stream_module import mblk_t, attach_module
+DEFAULT_QEMU = "qemu-system-x86_64"
+DEFAULT_DISK = "xv6-64.img"
+DEFAULT_FS = "fs64.img"
+SCRIPT = "echo booted;\n\x01x"
 
 
-class UpperCaseModule:
-    """Transform message bytes to upper case."""
-
-    def __call__(self, mblk: mblk_t) -> mblk_t:
-        mblk.data = bytearray(mblk.data.upper())
-        return mblk
-
-
-class ReverseModule:
-    """Reverse the byte order of the message."""
-
-    def __call__(self, mblk: mblk_t) -> mblk_t:
-        mblk.data.reverse()
-        return mblk
+def _find_qemu() -> Optional[str]:
+    """Return the first available QEMU binary or ``None``."""
+    for binary in ("qemu-system-x86_64", "qemu-system-i386", "qemu"):
+        path = shutil.which(binary)
+        if path:
+            return path
+    return None
 
 
-def _measure_latency(pipeline, iterations: int) -> dict[str, float]:
-    """Return average, minimum and maximum latency in microseconds."""
+def main() -> int:
+    """Boot xv6 under QEMU and return the emulator's exit status."""
 
-    samples = []
-    for _ in range(iterations):
-        msg = mblk_t(b"hello")
-        start = time.perf_counter_ns()
-        pipeline(msg)
-        samples.append(time.perf_counter_ns() - start)
+    qemu = os.environ.get("QEMU") or _find_qemu()
+    if not qemu:
+        print("QEMU not found; cannot run simulation")
+        return 1
 
-    return {
-        "avg": statistics.mean(samples) / 1000.0,
-        "min": min(samples) / 1000.0,
-        "max": max(samples) / 1000.0,
-    }
+    disk = Path(os.environ.get("XV6_IMG", DEFAULT_DISK))
+    fsimg = Path(os.environ.get("FS_IMG", DEFAULT_FS))
 
-
-def main() -> None:
-    """Run latency measurements for several module configurations."""
-
-    key = 0x55
-    configs = [
-        ("xor", [XorEncryptModule(key)]),
-        ("upper+xor", [UpperCaseModule(), XorEncryptModule(key)]),
-        (
-            "reverse+upper+xor",
-            [ReverseModule(), UpperCaseModule(), XorEncryptModule(key)],
-        ),
+    cmd = [
+        qemu,
+        "-nographic",
+        "-serial",
+        "stdio",
+        "-drive",
+        f"file={fsimg},index=1,media=disk,format=raw",
+        "-drive",
+        f"file={disk},index=0,media=disk,format=raw",
     ]
 
-    iterations = 10000
-    for name, modules in configs:
-        pipeline = attach_module(modules)
-        metrics = _measure_latency(pipeline, iterations)
-        print(
-            f"{name}: avg {metrics['avg']:.2f} us "
-            f"(min {metrics['min']:.2f}, max {metrics['max']:.2f})"
+    try:
+        proc = subprocess.Popen(
+            cmd, text=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE
         )
+    except FileNotFoundError:
+        raise RuntimeError(f"QEMU not found: {qemu}") from None
+
+    out, _ = proc.communicate(SCRIPT)
+    if out:
+        print(out, end="")
+    return proc.returncode
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

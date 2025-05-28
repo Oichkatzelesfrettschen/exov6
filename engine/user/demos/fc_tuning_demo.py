@@ -1,12 +1,12 @@
 """Example showing dynamic tuning of STREAMS flow control constants."""
 
-import os
 from pathlib import Path
-
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import flow_pid
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from scripts import flow_pid
 
 
 def main() -> None:
