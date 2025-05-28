@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scan engine/ for #include directives and emit a DOT graph."""
+"""Scan the source tree for #include directives and emit a DOT graph."""
 
 import argparse
 import os
@@ -12,7 +12,7 @@ FILE_EXTS = {'.h', '.c', '.cpp', '.S'}
 
 def parse_args():
     p = argparse.ArgumentParser(description="Generate header dependency graph")
-    p.add_argument('-r', '--root', default='engine', help='Root directory to scan')
+    p.add_argument('-r', '--root', default='.', help='Root directory to scan')
     p.add_argument('-o', '--output', help='Output DOT file')
     return p.parse_args()
 

@@ -12,7 +12,7 @@
 #include "param.h"
 #include "cap.h"
 #include "proc.h"
-#include "engine/kernel/hypervisor/hypervisor.h"
+#include "kernel/hypervisor/hypervisor.h"
 #include "spinlock.h"
 #include "x86.h"
 // clang-format on
