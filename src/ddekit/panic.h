@@ -1,6 +1,6 @@
 #ifndef _DDEKIT_PANIC_H
 #define _DDEKIT_PANIC_H
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 #include <stdarg.h>
 
 /** \defgroup DDEKit_util */

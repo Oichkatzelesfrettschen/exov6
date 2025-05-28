@@ -1,8 +1,8 @@
 #ifndef DDEKIT_SRC_MSG_QUEUE_H
 #define DDEKIT_SRC_MSG_QUEUE_H
 
-#include <ddekit/ddekit.h>
-#include <ddekit/thread.h> 
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/thread.h> 
 #include <minix/ipc.h>
 
 struct ddekit_minix_msg_q; 

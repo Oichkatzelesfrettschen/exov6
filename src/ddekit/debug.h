@@ -1,7 +1,7 @@
 #ifndef DDEKIT_DEBUG_H
 #define DDEKIT_DEBUG_H
-#include <ddekit/ddekit.h>
-#include <ddekit/printf.h>
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/printf.h>
 
 #define DDEBUG_QUIET 0
 #define DDEBUG_ERR 1

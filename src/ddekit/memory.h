@@ -31,7 +31,7 @@
 #ifndef _DDEKIT_MEMORY_H
 #define _DDEKIT_MEMORY_H
 
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
 /*******************
  ** Slab facility **

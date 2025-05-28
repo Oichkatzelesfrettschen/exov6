@@ -1,7 +1,7 @@
 #ifndef _DDEKIT_SEMAPHORE_H
 #define _DDEKIT_SEMAPHORE_H
 
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
 
 /** \defgroup DDEKit_synchronization */

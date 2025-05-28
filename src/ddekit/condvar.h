@@ -2,9 +2,9 @@
 #define _ddekit_condvar_h
 
 /** \file ddekit/condvar.h */
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
-#include <ddekit/lock.h>
+#include <src/ddekit/lock.h>
 
 struct ddekit_condvar;
 typedef struct ddekit_condvar ddekit_condvar_t;
