@@ -28,7 +28,7 @@ jobs:
           for v in $variants; do
             make -C tests/microbench run > bench_results/${v}_bench.txt
             pytest -q > bench_results/${v}_tests.txt || true
-            tools/phoenix_metrics engine/kernel 1 > bench_results/${v}_metrics.txt || true
+            tools/phoenix_metrics kernel 1 > bench_results/${v}_metrics.txt || true
           done
       - name: Check purity
         run: |

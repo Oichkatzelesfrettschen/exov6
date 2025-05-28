@@ -5,11 +5,11 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 SRC_FILES = [
-    ROOT / "engine/user/posix_file_test.c",
-    ROOT / "engine/user/posix_signal_test.c",
-    ROOT / "engine/user/posix_pipe_test.c",
-    ROOT / "engine/user/posix_rename_unlink_test.c",
-    ROOT / "engine/user/posix_ftruncate_test.c",
+    ROOT / "user/posix_file_test.c",
+    ROOT / "user/posix_signal_test.c",
+    ROOT / "user/posix_pipe_test.c",
+    ROOT / "user/posix_rename_unlink_test.c",
+    ROOT / "user/posix_ftruncate_test.c",
     ROOT / "examples/demos/posix_misc_test.c",
     ROOT / "examples/demos/posix_socket_test.c",
     ROOT / "examples/demos/posix_cwd_test.c",
@@ -21,7 +21,7 @@ def compile_and_run(source: pathlib.Path) -> None:
         exe = pathlib.Path(td) / "test"
         inc_dir = pathlib.Path(td) / "include"
         inc_dir.mkdir()
-        host_header = ROOT / "engine/include/exokernel.h"
+        host_header = ROOT / "include/exokernel.h"
         (inc_dir / "exokernel.h").write_text(
             f'#include <stddef.h>\n#include "{host_header}"\n'
         )
@@ -37,18 +37,18 @@ def compile_and_run(source: pathlib.Path) -> None:
             "-I",
             str(ROOT / "engine"),
             "-I",
-            str(ROOT / "engine/libos/include"),
+            str(ROOT / "libos/include"),
             "-I",
-            str(ROOT / "engine/libos"),
+            str(ROOT / "libos"),
             "-I",
-            str(ROOT / "engine/include/libos"),
+            str(ROOT / "include/libos"),
             "-idirafter",
-            str(ROOT / "engine/include"),
+            str(ROOT / "include"),
             str(source),
-            str(ROOT / "engine/libos/posix.c"),
-            str(ROOT / "engine/libos/fs.c"),
-            str(ROOT / "engine/libos/file.c"),
-            str(ROOT / "engine/libos/fs_ufs.c"),
+            str(ROOT / "libos/posix.c"),
+            str(ROOT / "libos/fs.c"),
+            str(ROOT / "libos/file.c"),
+            str(ROOT / "libos/fs_ufs.c"),
             str(ROOT / "tests/libos_host_stubs.c"),
             "-o",
             str(exe),

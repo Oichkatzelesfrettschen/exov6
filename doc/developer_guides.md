@@ -4,7 +4,7 @@ This repository contains assorted tools to help hacking on the code base. One of
 
 ## Regenerating the header dependency graph
 
-The script `tools/header_graph.py` scans the `engine/` directory for `#include` directives and emits a [DOT](https://graphviz.org/) representation of the dependencies between files. To update the graph run:
+The script `tools/header_graph.py` scans the `kernel/`, `include/` and related directories for `#include` directives and emits a [DOT](https://graphviz.org/) representation of the dependencies between files. To update the graph run:
 
 ```sh
 python tools/header_graph.py -o doc/header_graph.dot

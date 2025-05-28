@@ -23,8 +23,8 @@ static void pushcli(void);
 static void popcli(void);
 static int holding(struct spinlock*);
 
-#include "engine/include/qspinlock.h"
-#include "engine/include/rspinlock.h"
+#include "include/qspinlock.h"
+#include "include/rspinlock.h"
 
 struct cpu { int ncli; int intena; };
 static struct cpu cpu0;
@@ -37,8 +37,8 @@ static void pushcli(void){ cpu0.ncli++; }
 static void popcli(void){ cpu0.ncli--; }
 static int holding(struct spinlock *lk){ return lk->cpu == &cpu0; }
 
-#include "engine/kernel/qspinlock.c"
-#include "engine/kernel/rspinlock.c"
+#include "kernel/qspinlock.c"
+#include "kernel/rspinlock.c"
 
 int main(){
     struct spinlock sl; initlock(&sl, "a");
@@ -64,9 +64,9 @@ def compile_and_run():
         subprocess.check_call([
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function","-DSPINLOCK_NO_STUBS",
             "-I", str(ROOT),
-            "-I", str(ROOT/"engine/include/libos"),
-            "-idirafter", str(ROOT/"engine/include"),
-            "-I", str(ROOT/"engine/kernel/include"),
+            "-I", str(ROOT/"include/libos"),
+            "-idirafter", str(ROOT/"include"),
+            "-I", str(ROOT/"kernel/include"),
             str(src),
             "-o", str(exe)
         ])

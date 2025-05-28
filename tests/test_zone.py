@@ -22,7 +22,7 @@ static void cprintf(const char *fmt, ...){ (void)fmt; }
 static void *kalloc(void){ void *p; if(posix_memalign(&p, PGSIZE, PGSIZE)!=0) return NULL; return p; }
 static void kfree(char *p){ free(p); }
 
-#include "engine/kernel/zone.c"
+#include "kernel/zone.c"
 
 int main(void) {
 %s
@@ -53,10 +53,10 @@ def compile_and_run(body):
         src.write_text(C_CODE_TEMPLATE % body)
         # headers expected by zone.c
         (pathlib.Path(td)/"spinlock.h").write_text(
-            '#include "engine/include/libos/spinlock.h"\n')
+            '#include "include/libos/spinlock.h"\n')
         (pathlib.Path(td)/"defs.h").write_text("")
-        (pathlib.Path(td)/"mmu.h").write_text('#include "engine/include/types.h"\n#include "engine/include/mmu.h"\n')
-        (pathlib.Path(td)/"memlayout.h").write_text('#include "engine/include/memlayout.h"\n')
+        (pathlib.Path(td)/"mmu.h").write_text('#include "include/types.h"\n#include "include/mmu.h"\n')
+        (pathlib.Path(td)/"memlayout.h").write_text('#include "include/memlayout.h"\n')
         subprocess.check_call([
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),

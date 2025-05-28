@@ -17,7 +17,7 @@ kernelmemfs
 mkfs
 .gdbinit
 fuzz
-engine/user/exo_unit_test
+user/exo_unit_test
 *.so
 
 __pycache__/
