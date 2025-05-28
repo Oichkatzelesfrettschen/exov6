@@ -116,9 +116,9 @@ target_include_directories(simd_dispatch PUBLIC
   ${CMAKE_SOURCE_DIR}/tools
 )
 
-file(GLOB LIBPOSIX_SOURCES userspace/libposix/*.c)
-file(GLOB LIBBAREMETAL_SOURCES userspace/libbaremetal/*.c)
-file(GLOB LIB9P_SOURCES userspace/lib9p/*.c)
+file(GLOB LIBPOSIX_SOURCES libos/stubs/libposix/*.c)
+file(GLOB LIBBAREMETAL_SOURCES libos/stubs/libbaremetal/*.c)
+file(GLOB LIB9P_SOURCES libos/stubs/lib9p/*.c)
 
 set(LIBOS_SOURCES
   engine/user/ulib.c
@@ -157,9 +157,9 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}/src/arch/generic
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
   ${CMAKE_SOURCE_DIR}/src/arch/x86/modern
-  ${CMAKE_SOURCE_DIR}/userspace/libposix
-  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
-  ${CMAKE_SOURCE_DIR}/userspace/lib9p
+  ${CMAKE_SOURCE_DIR}/libos/stubs/libposix
+  ${CMAKE_SOURCE_DIR}/libos/stubs/libbaremetal
+  ${CMAKE_SOURCE_DIR}/libos/stubs/lib9p
 )
 target_link_libraries(libos PUBLIC simd_dispatch)
 if(USE_SIMD)
@@ -219,9 +219,9 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/src/arch/generic
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
   ${CMAKE_SOURCE_DIR}/src/arch/x86/modern
-  ${CMAKE_SOURCE_DIR}/userspace/libposix
-  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
-  ${CMAKE_SOURCE_DIR}/userspace/lib9p
+  ${CMAKE_SOURCE_DIR}/libos/stubs/libposix
+  ${CMAKE_SOURCE_DIR}/libos/stubs/libbaremetal
+  ${CMAKE_SOURCE_DIR}/libos/stubs/lib9p
 )
 
 if(CPUFLAGS)
