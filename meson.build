@@ -107,7 +107,8 @@ kernel = executable('kernel', sources,
                                             'arch/x86/legacy',
                                             'arch/x86/modern'),
            install: false,
-           c_args: common_cargs)
+           c_args: common_cargs,
+           link_with: [libddekit])
 
 if clang_tidy.found()
   run_target('clang-tidy', command: [clang_tidy, sources],
@@ -123,6 +124,7 @@ if qemu.found()
              console: true)
 endif
 
+subdir('src/ddekit')
 subdir('libnstr_graph')
 
 # User-space programs
