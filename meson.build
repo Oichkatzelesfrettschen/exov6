@@ -72,7 +72,7 @@ libos = static_library('libos', libos_sources,
     c_args: common_cargs)
 
 src_dirs = [
-  'kernel/hypervisor',
+  'engine/kernel/hypervisor',
   'kernel/pico',
   'engine/kernel',
   'engine/user',
@@ -95,7 +95,7 @@ kernel = executable('kernel', sources,
            include_directories: include_directories('.',
                                             'engine/include',
                                             'engine/kernel/include',
-                                            'kernel/hypervisor',
+                                           'engine/kernel/hypervisor',
                                             'kernel/pico',
                                             'engine/proto',
                                             'engine/libos/include',
