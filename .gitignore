@@ -17,6 +17,7 @@ kernelmemfs
 mkfs
 .gdbinit
 fuzz
+!scripts/fuzz/
 engine/user/exo_unit_test
 *.so
 

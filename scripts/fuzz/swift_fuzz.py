@@ -31,7 +31,7 @@ def main() -> None:
         "fuzzer_args", nargs=argparse.REMAINDER, help="Arguments for the fuzzer"
     )
     opts = parser.parse_args()
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parent
     exe = build_fuzzer(root)
     run_fuzzer(exe, opts.fuzzer_args)
 

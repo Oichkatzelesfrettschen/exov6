@@ -8,7 +8,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import os
-import simulate
+from scripts import qemu_harness as simulate
 
 
 def test_simulate_harness_completes(tmp_path, monkeypatch, capsys):
