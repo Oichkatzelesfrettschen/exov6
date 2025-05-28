@@ -132,26 +132,6 @@ along with the rest of the toolchain.
 This only needs to be done after cloning the repository or when
 dependencies change.
 
-The script now installs only the packages required for building and running
-the tests: cross-compilers, QEMU and basic Python tooling such as ``pytest`` and
-``pre-commit``.  Heavy machine learning frameworks are intentionally omitted to
-keep the environment small.
-
-The repository uses ``pre-commit`` hooks to automatically run
-``clang-format`` and ``clang-tidy``.  The ``setup.sh`` script attempts to
-install ``pre-commit`` via the distribution package manager and falls
-back to Python's ``pip`` if required.  If ``pre-commit`` is missing you
-can install it manually with::
-
-    pip install pre-commit
-
-Once installed, enable the hooks with::
-
-    pre-commit install
-
-    pre-commit run --all-files
-
-The checks will run on every commit thereafter.
 
 
 TESTING
@@ -308,16 +288,21 @@ environment for Meson:
     Enable additional lock sanity checks.
 ``USE_CAPNP``
     Build Cap'n Proto helpers and example programs.
+``USE_SIMD``
+    Enable optional SIMD implementations of math routines when supported by the
+    target CPU. Requires SSE2 on x86 or NEON on ARM.
 
 Example CMake usage::
 
     cmake -S . -B build -DUSE_TICKET_LOCK=ON && ninja -C build
     cmake -S . -B build -DUSE_CAPNP=ON && ninja -C build
+    cmake -S . -B build -DUSE_SIMD=ON && ninja -C build
 
 Using Meson::
 
     USE_TICKET_LOCK=1 meson setup build && ninja -C build
     USE_CAPNP=1 meson setup build && ninja -C build
+    USE_SIMD=1 meson setup build && ninja -C build
 
 To switch back to qspinlocks::
 

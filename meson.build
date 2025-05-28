@@ -4,12 +4,16 @@ add_project_arguments('-Wall', '-Werror', language: ['c', 'cpp'])
 use_ticket_lock = get_option('use_ticket_lock')
 ipc_debug = get_option('ipc_debug')
 use_capnp = get_option('use_capnp')
+use_simd = get_option('use_simd')
 common_cargs = []
 if use_ticket_lock
   common_cargs += ['-DUSE_TICKET_LOCK']
 endif
 if ipc_debug
   common_cargs += ['-DIPC_DEBUG']
+endif
+if use_simd
+  common_cargs += ['-DUSE_SIMD']
 endif
 
 clang_tidy = find_program('clang-tidy', required: false)

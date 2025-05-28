@@ -20,14 +20,12 @@ jobs:
         set -euxo pipefail
         sudo apt-get update -y
         sudo apt-get install -y build-essential clang lld llvm clang-tidy clang-format clang-tools python3-pip qemu-system-i386 qemu-system-x86_64
-        python3 -m pip install -v pre-commit compiledb configuredb
+        python3 -m pip install -v compiledb configuredb
     - name: Verify tool installation
       run: |
         set -euxo pipefail
-        pre-commit --version
         compiledb --version || true
         configuredb --help || true
-    - uses: pre-commit/action@v3.0.0
     - name: Build Swift components
       run: |
         set -euxo pipefail

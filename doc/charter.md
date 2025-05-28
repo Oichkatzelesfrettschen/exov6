@@ -20,12 +20,11 @@ participate, and the basic governance model used to steer development.
 Contributions are welcome from anyone. To keep patches manageable,
 please follow these simple rules:
 
-1. Run the provided `pre-commit` hooks before sending patches.
-2. Keep commits focused on a single change and include clear commit
+1. Keep commits focused on a single change and include clear commit
    messages.
-3. Discuss larger features on the mailing list or issue tracker before
+2. Discuss larger features on the mailing list or issue tracker before
    implementation.
-4. Documentation updates are just as valuable as code and are strongly
+3. Documentation updates are just as valuable as code and are strongly
    encouraged.
 
 ## Governance Model
