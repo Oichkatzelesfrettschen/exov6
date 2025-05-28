@@ -1,7 +1,7 @@
 .PHONY: proof formal
 
 proof:
-	$(MAKE) -C coq all
+       $(MAKE) -C formal/coq all
 
 formal:
 	@if command -v coqc >/dev/null 2>&1; then \
