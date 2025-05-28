@@ -8,9 +8,9 @@
 #ifndef _DDEKIT_PGTAB_H
 #define _DDEKIT_PGTAB_H
 
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
-#include <ddekit/types.h>
+#include <src/ddekit/types.h>
 
 /* FIXME Region types may be defined by pgtab users. Do we really need them
  * here? */

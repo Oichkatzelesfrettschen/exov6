@@ -1,7 +1,7 @@
 #ifndef _DDEKIT_LOCK_H
 #define _DDEKIT_LOCK_H
 
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
 struct ddekit_lock;
 typedef struct ddekit_lock *ddekit_lock_t;

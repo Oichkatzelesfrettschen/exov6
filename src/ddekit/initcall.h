@@ -1,7 +1,7 @@
 #ifndef _DDEKIT_INITCALL_H
 #define _DDEKIT_INITCALL_H
-#include <ddekit/ddekit.h>
-#include <ddekit/attribs.h>
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/attribs.h>
 
 typedef void (*ddekit_initcall_t)(void);
 

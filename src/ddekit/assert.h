@@ -1,9 +1,9 @@
 #ifndef _ddekit_assert_h
 #define _ddekit_assert_h
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
-#include <ddekit/printf.h>
-#include <ddekit/panic.h>
+#include <src/ddekit/printf.h>
+#include <src/ddekit/panic.h>
 
 /** \file ddekit/assert.h */
 
