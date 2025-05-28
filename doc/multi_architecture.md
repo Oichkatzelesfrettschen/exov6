@@ -48,7 +48,7 @@ used instead.
 
 User programs link against `libos.a` which exposes POSIX-style wrappers.
 Those wrappers in turn call helper functions from
-`engine/user/math_core.c`.  At run time these helpers forward to the
+`src/engine/user/math_core.c`.  At run time these helpers forward to the
 dispatch library so applications automatically benefit from the best
 available SIMD backend.  When compiled without `USE_SIMD` or when the
 required extension is missing the same wrappers transparently fall back

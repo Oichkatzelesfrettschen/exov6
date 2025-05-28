@@ -11,7 +11,7 @@ C_CODE = textwrap.dedent(
     """
 #include <assert.h>
 #include <stdint.h>
-#include "engine/include/door.h"
+#include "src/engine/include/door.h"
 
 // stub implementations for caplib helpers
 int cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return 0; }
@@ -46,9 +46,9 @@ def compile_and_run() -> None:
                 "-I",
                 str(ROOT),
                 "-I",
-                str(ROOT / "engine/include"),
+                str(ROOT / "src/engine/include"),
                 str(src),
-                str(ROOT / "engine/user/door.c"),
+                str(ROOT / "src/engine/user/door.c"),
                 "-o",
                 str(exe),
             ]
@@ -64,8 +64,8 @@ C_CODE_FAIL = textwrap.dedent(
     """
 #include <assert.h>
 #include <stdint.h>
-#include "engine/include/exo_ipc.h"
-#include "engine/include/door.h"
+#include "src/engine/include/exo_ipc.h"
+#include "src/engine/include/door.h"
 
 int cap_send(exo_cap dest, const void *buf, uint64_t len) { (void)dest; (void)buf; (void)len; return IPC_STATUS_SUCCESS; }
 int cap_recv(exo_cap src, void *buf, uint64_t len) { (void)src; (void)buf; (void)len; return IPC_STATUS_TIMEOUT; }
@@ -94,9 +94,9 @@ def compile_and_run_fail() -> None:
                 "-I",
                 str(ROOT),
                 "-I",
-                str(ROOT / "engine/include"),
+                str(ROOT / "src/engine/include"),
                 str(src),
-                str(ROOT / "engine/user/door.c"),
+                str(ROOT / "src/engine/user/door.c"),
                 "-o",
                 str(exe),
             ]

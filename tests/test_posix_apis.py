@@ -5,14 +5,14 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 SRC_FILES = [
-    ROOT / "engine/user/posix_file_test.c",
-    ROOT / "engine/user/posix_signal_test.c",
-    ROOT / "engine/user/posix_pipe_test.c",
-    ROOT / "engine/user/posix_rename_unlink_test.c",
-    ROOT / "engine/user/posix_ftruncate_test.c",
-    ROOT / "engine/user/demos/posix_misc_test.c",
-    ROOT / "engine/user/demos/posix_socket_test.c",
-    ROOT / "engine/user/demos/posix_cwd_test.c",
+    ROOT / "src/engine/user/posix_file_test.c",
+    ROOT / "src/engine/user/posix_signal_test.c",
+    ROOT / "src/engine/user/posix_pipe_test.c",
+    ROOT / "src/engine/user/posix_rename_unlink_test.c",
+    ROOT / "src/engine/user/posix_ftruncate_test.c",
+    ROOT / "src/engine/user/demos/posix_misc_test.c",
+    ROOT / "src/engine/user/demos/posix_socket_test.c",
+    ROOT / "src/engine/user/demos/posix_cwd_test.c",
 ]
 
 
@@ -21,7 +21,7 @@ def compile_and_run(source: pathlib.Path) -> None:
         exe = pathlib.Path(td) / "test"
         inc_dir = pathlib.Path(td) / "include"
         inc_dir.mkdir()
-        host_header = ROOT / "engine/include/exokernel.h"
+        host_header = ROOT / "src/engine/include/exokernel.h"
         (inc_dir / "exokernel.h").write_text(
             f'#include <stddef.h>\n#include "{host_header}"\n'
         )
@@ -35,20 +35,20 @@ def compile_and_run(source: pathlib.Path) -> None:
             "-I",
             str(ROOT),
             "-I",
-            str(ROOT / "engine"),
+            str(ROOT / "src"),
             "-I",
-            str(ROOT / "engine/libos/include"),
+            str(ROOT / "src/engine/libos/include"),
             "-I",
-            str(ROOT / "engine/libos"),
+            str(ROOT / "src/engine/libos"),
             "-I",
-            str(ROOT / "engine/include/libos"),
+            str(ROOT / "src/engine/include/libos"),
             "-idirafter",
-            str(ROOT / "engine/include"),
+            str(ROOT / "src/engine/include"),
             str(source),
-            str(ROOT / "engine/libos/posix.c"),
-            str(ROOT / "engine/libos/fs.c"),
-            str(ROOT / "engine/libos/file.c"),
-            str(ROOT / "engine/libos/fs_ufs.c"),
+            str(ROOT / "src/engine/libos/posix.c"),
+            str(ROOT / "src/engine/libos/fs.c"),
+            str(ROOT / "src/engine/libos/file.c"),
+            str(ROOT / "src/engine/libos/fs_ufs.c"),
             str(ROOT / "tests/libos_host_stubs.c"),
             "-o",
             str(exe),

@@ -34,8 +34,8 @@ if mcu
 endif
 
 if mcu
-  kernel = executable('kernel', ['arch/mcu/startup.c', 'engine/kernel/picokernel.c', 'engine/user/blink.c'],
-      include_directories: include_directories('.', 'engine/include', 'arch/mcu'),
+  kernel = executable('kernel', ['arch/mcu/startup.c', 'src/engine/kernel/picokernel.c', 'src/engine/user/blink.c'],
+      include_directories: include_directories('.', 'src/engine/include', 'arch/mcu'),
       install: false,
       c_args: common_cargs)
   subdir_done()
@@ -44,7 +44,7 @@ clang_tidy = find_program('clang-tidy', required: false)
 bison = find_program('bison', required: false)
 if bison.found()
   example_parser = custom_target('example_parser',
-    input: 'engine/proto/example.y',
+    input: 'src/engine/proto/example.y',
     output: ['example_parser.c', 'example_parser.h'],
     command: [bison, '--defines=@OUTPUT1@', '-o', '@OUTPUT0@', '@INPUT@'])
 endif
@@ -54,57 +54,57 @@ mock_capnpc = find_program('scripts/mock_capnpc.sh')
 capnp_targets = []
 if use_capnp
   driver_capnp = custom_target('driver_capnp',
-      input: 'engine/proto/driver.capnp',
+      input: 'src/engine/proto/driver.capnp',
       output: ['driver.capnp.c', 'driver.capnp.h'],
       command: [mock_capnpc, '@INPUT@'])
   hello_capnp = custom_target('hello_capnp',
-      input: 'engine/proto/hello.capnp',
+      input: 'src/engine/proto/hello.capnp',
       output: ['hello.capnp.c', 'hello.capnp.h'],
       command: [mock_capnpc, '@INPUT@'])
   capnp_targets += [driver_capnp, hello_capnp]
   libcapnp = static_library('libcapnp',
-      ['engine/libos/capnp/capnp_helpers.c'] + capnp_targets,
-      include_directories: include_directories('.', 'engine/include', 'engine/proto', 'engine/libos/capnp'),
+      ['src/engine/libos/capnp/capnp_helpers.c'] + capnp_targets,
+      include_directories: include_directories('.', 'src/engine/include', 'src/engine/proto', 'src/engine/libos/capnp'),
       c_args: common_cargs)
 endif
 
 libos_sources = [
-  'engine/user/ulib.c',
-  'engine/user/printf.c',
-  'engine/user/umalloc.c',
-  'engine/user/caplib.c',
-  'engine/user/chan.c',
-  'engine/user/door.c',
-  'engine/user/math_core.c',
-  'engine/user/libos/sched.c',
-  'engine/libos/fs.c',
-  'engine/libos/file.c',
-  'engine/libos/driver.c',
-  'engine/libos/affine_runtime.c',
-  'engine/libos/env.c',
-  'engine/libos/ipc.c',
-  'engine/libos/posix.c',
-  'engine/libos/termios.c',
-  'engine/libos/microkernel/cap.c',
-  'engine/libos/microkernel/msg_router.c',
-  'engine/libos/microkernel/resource_account.c',
-  'engine/libos/microkernel/registration.c',
+  'src/engine/user/ulib.c',
+  'src/engine/user/printf.c',
+  'src/engine/user/umalloc.c',
+  'src/engine/user/caplib.c',
+  'src/engine/user/chan.c',
+  'src/engine/user/door.c',
+  'src/engine/user/math_core.c',
+  'src/engine/user/libos/sched.c',
+  'src/engine/libos/fs.c',
+  'src/engine/libos/file.c',
+  'src/engine/libos/driver.c',
+  'src/engine/libos/affine_runtime.c',
+  'src/engine/libos/env.c',
+  'src/engine/libos/ipc.c',
+  'src/engine/libos/posix.c',
+  'src/engine/libos/termios.c',
+  'src/engine/libos/microkernel/cap.c',
+  'src/engine/libos/microkernel/msg_router.c',
+  'src/engine/libos/microkernel/resource_account.c',
+  'src/engine/libos/microkernel/registration.c',
 ]
 
 libos = static_library('libos', libos_sources,
-    include_directories: include_directories('.', 'engine/include', 'engine/proto', 'engine/libos/include', 'engine/libos/capnp'),
+    include_directories: include_directories('.', 'src/engine/include', 'src/engine/proto', 'src/engine/libos/include', 'src/engine/libos/capnp'),
     c_args: common_cargs)
 
 src_dirs = [
   'kernel/hypervisor',
   'kernel/pico',
-  'engine/kernel',
-  'engine/user',
-  'engine/user/demos',
-  'engine/libos',
-  'userspace/libposix',
-  'userspace/libbaremetal',
-  'userspace/lib9p',
+  'src/engine/kernel',
+  'src/engine/user',
+  'src/engine/user/demos',
+  'src/engine/libos',
+  'src/userspace/libposix',
+  'src/userspace/libbaremetal',
+  'src/userspace/lib9p',
   'arch/generic',
   'arch/x86/legacy',
   'arch/x86/modern',
@@ -117,16 +117,16 @@ endforeach
 
 kernel = executable('kernel', sources,
            include_directories: include_directories('.',
-                                            'engine/include',
-                                            'engine/kernel/include',
+                                            'src/engine/include',
+                                            'src/engine/kernel/include',
                                             'kernel/hypervisor',
                                             'kernel/pico',
-                                            'engine/proto',
-                                            'engine/libos/include',
-                                            'engine/libos/capnp',
-                                            'userspace/libposix',
-                                            'userspace/libbaremetal',
-                                            'userspace/lib9p',
+                                            'src/engine/proto',
+                                            'src/engine/libos/include',
+                                            'src/engine/libos/capnp',
+                                            'src/userspace/libposix',
+                                            'src/userspace/libbaremetal',
+                                            'src/userspace/lib9p',
                                             'arch/generic',
                                             'arch/x86/legacy',
                                             'arch/x86/modern'),
@@ -147,63 +147,63 @@ if qemu.found()
              console: true)
 endif
 
-subdir('libnstr_graph')
+subdir('src/libnstr_graph')
 
 # User-space programs
 uprogs = {
-  'cat': 'engine/user/cat.c',
-  'echo': 'engine/user/echo.c',
-  'forktest': 'engine/user/forktest.c',
-  'grep': 'engine/user/grep.c',
-  'init': 'engine/user/init.c',
-  'kill': 'engine/user/kill.c',
-  'ln': 'engine/user/ln.c',
-  'ls': 'engine/user/ls.c',
-  'mkdir': 'engine/user/mkdir.c',
-  'rm': 'engine/user/rm.c',
-  'sh': 'engine/user/sh.c',
-  'stressfs': 'engine/user/stressfs.c',
-  'usertests': 'engine/user/usertests.c',
-  'wc': 'engine/user/wc.c',
-  'zombie': 'engine/user/zombie.c',
-  'phi': 'engine/user/phi.c',
-  'exo_stream_demo': 'engine/user/demos/exo_stream_demo.c',
-  'dag_demo': 'engine/user/demos/dag_demo.c',
-  'beatty_demo': 'engine/user/demos/beatty_demo.c',
-  'beatty_dag_demo': 'engine/user/demos/beatty_dag_demo.c',
-  'ipc_test': 'engine/user/ipc_test.c',
-  'nbtest': 'engine/user/nbtest.c',
-  'fileserver': 'engine/user/fileserver.c',
-  'rcrs': 'engine/user/rcrs.c',
-  'libos_posix_test': 'engine/user/libos_posix_test.c',
-  'libos_posix_extra_test': 'engine/user/demos/libos_posix_extra_test.c',
-  'qspin_demo': 'engine/user/demos/qspin_demo.c',
-  'tty_demo': 'engine/user/tty_demo.c',
-  'termios_demo': 'engine/user/termios_demo.c',
-  'msgqueue_demo': 'engine/user/demos/msgqueue_demo.c',
-  'fib_big_demo': 'engine/user/demos/fib_big_demo.c',
-  'start_guest': 'engine/user/start_guest.c',
-  'hv_demo': 'engine/user/demos/hv_demo.c',
+  'cat': 'src/engine/user/cat.c',
+  'echo': 'src/engine/user/echo.c',
+  'forktest': 'src/engine/user/forktest.c',
+  'grep': 'src/engine/user/grep.c',
+  'init': 'src/engine/user/init.c',
+  'kill': 'src/engine/user/kill.c',
+  'ln': 'src/engine/user/ln.c',
+  'ls': 'src/engine/user/ls.c',
+  'mkdir': 'src/engine/user/mkdir.c',
+  'rm': 'src/engine/user/rm.c',
+  'sh': 'src/engine/user/sh.c',
+  'stressfs': 'src/engine/user/stressfs.c',
+  'usertests': 'src/engine/user/usertests.c',
+  'wc': 'src/engine/user/wc.c',
+  'zombie': 'src/engine/user/zombie.c',
+  'phi': 'src/engine/user/phi.c',
+  'exo_stream_demo': 'src/engine/user/demos/exo_stream_demo.c',
+  'dag_demo': 'src/engine/user/demos/dag_demo.c',
+  'beatty_demo': 'src/engine/user/demos/beatty_demo.c',
+  'beatty_dag_demo': 'src/engine/user/demos/beatty_dag_demo.c',
+  'ipc_test': 'src/engine/user/ipc_test.c',
+  'nbtest': 'src/engine/user/nbtest.c',
+  'fileserver': 'src/engine/user/fileserver.c',
+  'rcrs': 'src/engine/user/rcrs.c',
+  'libos_posix_test': 'src/engine/user/libos_posix_test.c',
+  'libos_posix_extra_test': 'src/engine/user/demos/libos_posix_extra_test.c',
+  'qspin_demo': 'src/engine/user/demos/qspin_demo.c',
+  'tty_demo': 'src/engine/user/tty_demo.c',
+  'termios_demo': 'src/engine/user/termios_demo.c',
+  'msgqueue_demo': 'src/engine/user/demos/msgqueue_demo.c',
+  'fib_big_demo': 'src/engine/user/demos/fib_big_demo.c',
+  'start_guest': 'src/engine/user/start_guest.c',
+  'hv_demo': 'src/engine/user/demos/hv_demo.c',
 }
 
 if use_capnp
   uprogs += {
-    'pingdriver': 'engine/user/pingdriver.c',
-    'typed_chan_demo': 'engine/user/demos/typed_chan_demo.c',
-    'typed_chan_send': 'engine/user/demos/typed_chan_send.c',
-    'typed_chan_recv': 'engine/user/demos/typed_chan_recv.c',
-    'affine_channel_demo': 'engine/user/demos/affine_channel_demo.c',
-    'chan_dag_supervisor_demo': 'engine/user/demos/chan_dag_supervisor_demo.c',
-    'chan_beatty_rcrs_demo': 'engine/user/demos/chan_beatty_rcrs_demo.c',
+    'pingdriver': 'src/engine/user/pingdriver.c',
+    'typed_chan_demo': 'src/engine/user/demos/typed_chan_demo.c',
+    'typed_chan_send': 'src/engine/user/demos/typed_chan_send.c',
+    'typed_chan_recv': 'src/engine/user/demos/typed_chan_recv.c',
+    'affine_channel_demo': 'src/engine/user/demos/affine_channel_demo.c',
+    'chan_dag_supervisor_demo': 'src/engine/user/demos/chan_dag_supervisor_demo.c',
+    'chan_beatty_rcrs_demo': 'src/engine/user/demos/chan_beatty_rcrs_demo.c',
   }
 endif
 
 uprogs_targets = []
 foreach name, path : uprogs
-  incs = [include_directories('.', 'engine/include', 'engine/proto', 'engine/libos/include')]
+  incs = [include_directories('.', 'src/engine/include', 'src/engine/proto', 'src/engine/libos/include')]
   deps = [libos]
   if use_capnp
-    incs += include_directories('engine/libos/capnp')
+    incs += include_directories('src/engine/libos/capnp')
     deps += libcapnp
   endif
   exe = executable('_' + name, path,

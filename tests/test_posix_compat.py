@@ -49,7 +49,7 @@ def compile_and_run():
         subprocess.check_call([
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"engine/include"),
+            "-idirafter", str(ROOT/"src/engine/include"),
             str(src),
             "-o", str(exe)
         ])

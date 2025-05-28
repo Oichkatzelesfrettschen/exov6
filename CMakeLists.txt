@@ -51,22 +51,22 @@ endif()
 find_package(BISON)
 if(BISON_FOUND)
   BISON_TARGET(example_parser
-    engine/proto/example.y
+    src/engine/proto/example.y
     ${CMAKE_CURRENT_BINARY_DIR}/example_parser.c
     DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/example_parser.h)
   add_custom_target(example_bison DEPENDS ${BISON_example_parser_OUTPUTS})
 endif()
 
 if(MCU)
-  add_executable(kernel arch/mcu/startup.c engine/kernel/picokernel.c engine/user/blink.c)
+  add_executable(kernel arch/mcu/startup.c src/engine/kernel/picokernel.c src/engine/user/blink.c)
   target_include_directories(kernel PRIVATE
     ${CMAKE_SOURCE_DIR}/arch/mcu
-    ${CMAKE_SOURCE_DIR}/engine/include)
+    ${CMAKE_SOURCE_DIR}/src/engine/include)
   add_compile_definitions(MCU=1)
   return()
 endif()
 file(GLOB_RECURSE KERNEL_SOURCES
-  engine/kernel/*.c
+  src/engine/kernel/*.c
 )
 file(GLOB_RECURSE PICO_SOURCES kernel/pico/*.c)
 file(GLOB_RECURSE ARCH_GENERIC_SOURCES arch/generic/*.c)
@@ -115,31 +115,31 @@ target_include_directories(simd_dispatch PUBLIC
   ${CMAKE_SOURCE_DIR}/tools
 )
 
-file(GLOB LIBPOSIX_SOURCES userspace/libposix/*.c)
-file(GLOB LIBBAREMETAL_SOURCES userspace/libbaremetal/*.c)
-file(GLOB LIB9P_SOURCES userspace/lib9p/*.c)
+file(GLOB LIBPOSIX_SOURCES src/userspace/libposix/*.c)
+file(GLOB LIBBAREMETAL_SOURCES src/userspace/libbaremetal/*.c)
+file(GLOB LIB9P_SOURCES src/userspace/lib9p/*.c)
 
 set(LIBOS_SOURCES
-  engine/user/ulib.c
-  engine/user/printf.c
-  engine/user/umalloc.c
-  engine/user/caplib.c
-  engine/user/chan.c
-  engine/user/door.c
-  engine/user/math_core.c
-  engine/user/libos/sched.c
-  engine/libos/fs.c
-  engine/libos/file.c
-  engine/libos/driver.c
-  engine/libos/affine_runtime.c
-  engine/libos/env.c
-  engine/libos/ipc.c
-  engine/libos/posix.c
-  engine/libos/termios.c
-  engine/libos/microkernel/cap.c
-  engine/libos/microkernel/msg_router.c
-  engine/libos/microkernel/resource_account.c
-  engine/libos/microkernel/registration.c
+  src/engine/user/ulib.c
+  src/engine/user/printf.c
+  src/engine/user/umalloc.c
+  src/engine/user/caplib.c
+  src/engine/user/chan.c
+  src/engine/user/door.c
+  src/engine/user/math_core.c
+  src/engine/user/libos/sched.c
+  src/engine/libos/fs.c
+  src/engine/libos/file.c
+  src/engine/libos/driver.c
+  src/engine/libos/affine_runtime.c
+  src/engine/libos/env.c
+  src/engine/libos/ipc.c
+  src/engine/libos/posix.c
+  src/engine/libos/termios.c
+  src/engine/libos/microkernel/cap.c
+  src/engine/libos/microkernel/msg_router.c
+  src/engine/libos/microkernel/resource_account.c
+  src/engine/libos/microkernel/registration.c
   ${LIBPOSIX_SOURCES}
   ${LIBBAREMETAL_SOURCES}
   ${LIB9P_SOURCES}
@@ -147,17 +147,17 @@ set(LIBOS_SOURCES
 add_library(libos STATIC ${LIBOS_SOURCES})
 target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/engine/include
-  ${CMAKE_SOURCE_DIR}/engine/proto
-  ${CMAKE_SOURCE_DIR}/engine/libos/include
-  ${CMAKE_SOURCE_DIR}/engine/libos/capnp
+  ${CMAKE_SOURCE_DIR}/src/engine/include
+  ${CMAKE_SOURCE_DIR}/src/engine/proto
+  ${CMAKE_SOURCE_DIR}/src/engine/libos/include
+  ${CMAKE_SOURCE_DIR}/src/engine/libos/capnp
   ${CMAKE_SOURCE_DIR}/kernel/pico
   ${CMAKE_SOURCE_DIR}/arch/generic
   ${CMAKE_SOURCE_DIR}/arch/x86/legacy
   ${CMAKE_SOURCE_DIR}/arch/x86/modern
-  ${CMAKE_SOURCE_DIR}/userspace/libposix
-  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
-  ${CMAKE_SOURCE_DIR}/userspace/lib9p
+  ${CMAKE_SOURCE_DIR}/src/userspace/libposix
+  ${CMAKE_SOURCE_DIR}/src/userspace/libbaremetal
+  ${CMAKE_SOURCE_DIR}/src/userspace/lib9p
 )
 target_link_libraries(libos PUBLIC simd_dispatch)
 if(USE_SIMD)
@@ -167,22 +167,22 @@ endif()
 if(USE_CAPNP)
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.h
-    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/engine/proto/driver.capnp
-    DEPENDS ${CMAKE_SOURCE_DIR}/engine/proto/driver.capnp
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/src/engine/proto/driver.capnp
+    DEPENDS ${CMAKE_SOURCE_DIR}/src/engine/proto/driver.capnp
   )
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.c ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.h
-    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/engine/proto/hello.capnp
-    DEPENDS ${CMAKE_SOURCE_DIR}/engine/proto/hello.capnp
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/mock_capnpc.sh ${CMAKE_SOURCE_DIR}/src/engine/proto/hello.capnp
+    DEPENDS ${CMAKE_SOURCE_DIR}/src/engine/proto/hello.capnp
   )
   add_library(capnp STATIC
-    engine/libos/capnp/capnp_helpers.c
+    src/engine/libos/capnp/capnp_helpers.c
     ${CMAKE_CURRENT_BINARY_DIR}/driver.capnp.c
     ${CMAKE_CURRENT_BINARY_DIR}/hello.capnp.c
   )
   target_include_directories(capnp PUBLIC
-    ${CMAKE_SOURCE_DIR}/engine/proto
-    ${CMAKE_SOURCE_DIR}/engine/libos/capnp
+    ${CMAKE_SOURCE_DIR}/src/engine/proto
+    ${CMAKE_SOURCE_DIR}/src/engine/libos/capnp
   )
 endif()
 
@@ -207,18 +207,18 @@ set(CPUFLAGS "" CACHE STRING "Additional CPU specific compile flags")
 
 target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/engine/include
-  ${CMAKE_SOURCE_DIR}/engine/kernel/include
-  ${CMAKE_SOURCE_DIR}/engine/proto
-  ${CMAKE_SOURCE_DIR}/engine/libos/include
-  ${CMAKE_SOURCE_DIR}/engine/libos/capnp
+  ${CMAKE_SOURCE_DIR}/src/engine/include
+  ${CMAKE_SOURCE_DIR}/src/engine/kernel/include
+  ${CMAKE_SOURCE_DIR}/src/engine/proto
+  ${CMAKE_SOURCE_DIR}/src/engine/libos/include
+  ${CMAKE_SOURCE_DIR}/src/engine/libos/capnp
   ${CMAKE_SOURCE_DIR}/kernel/pico
   ${CMAKE_SOURCE_DIR}/arch/generic
   ${CMAKE_SOURCE_DIR}/arch/x86/legacy
   ${CMAKE_SOURCE_DIR}/arch/x86/modern
-  ${CMAKE_SOURCE_DIR}/userspace/libposix
-  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
-  ${CMAKE_SOURCE_DIR}/userspace/lib9p
+  ${CMAKE_SOURCE_DIR}/src/userspace/libposix
+  ${CMAKE_SOURCE_DIR}/src/userspace/libbaremetal
+  ${CMAKE_SOURCE_DIR}/src/userspace/lib9p
 )
 
 if(CPUFLAGS)
@@ -230,7 +230,7 @@ if(USE_CAPNP)
   target_link_libraries(kernel PRIVATE capnp)
 endif()
 
-add_subdirectory(libnstr_graph)
+add_subdirectory(src/libnstr_graph)
 
 if(QEMU_EXECUTABLE)
   add_custom_target(qemu-nox
@@ -240,33 +240,33 @@ if(QEMU_EXECUTABLE)
   )
 endif()
 
-add_executable(msgqueue_demo engine/user/demos/msgqueue_demo.c)
+add_executable(msgqueue_demo src/engine/user/demos/msgqueue_demo.c)
 target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/engine/include
-  ${CMAKE_SOURCE_DIR}/engine/proto
-  ${CMAKE_SOURCE_DIR}/engine/libos/include
+  ${CMAKE_SOURCE_DIR}/src/engine/include
+  ${CMAKE_SOURCE_DIR}/src/engine/proto
+  ${CMAKE_SOURCE_DIR}/src/engine/libos/include
 )
 target_link_libraries(msgqueue_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)
   target_link_libraries(msgqueue_demo PRIVATE capnp)
 endif()
 
-add_executable(fib_big_demo engine/user/demos/fib_big_demo.c)
+add_executable(fib_big_demo src/engine/user/demos/fib_big_demo.c)
 target_include_directories(fib_big_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/engine/include
-  ${CMAKE_SOURCE_DIR}/engine/proto
-  ${CMAKE_SOURCE_DIR}/engine/libos/include
+  ${CMAKE_SOURCE_DIR}/src/engine/include
+  ${CMAKE_SOURCE_DIR}/src/engine/proto
+  ${CMAKE_SOURCE_DIR}/src/engine/libos/include
 )
 target_link_libraries(fib_big_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)
   target_link_libraries(fib_big_demo PRIVATE capnp)
 endif()
 
-add_executable(wumpus engine/user/demos/wumpus.c)
+add_executable(wumpus src/engine/user/demos/wumpus.c)
 target_include_directories(wumpus PRIVATE
-  ${CMAKE_SOURCE_DIR}/engine/include
+  ${CMAKE_SOURCE_DIR}/src/engine/include
 )
 target_link_libraries(wumpus PRIVATE libos)
 

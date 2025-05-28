@@ -22,8 +22,8 @@ programs.
 
 ## Compiling Applications
 
-Sources for user programs live under `engine/user/demos`. Add the new
-`*_prog` entry to `meson.build` (and to `engine/user/CMakeLists.txt`
+Sources for user programs live under `src/engine/user/demos`. Add the new
+`*_prog` entry to `meson.build` (and to `src/engine/user/CMakeLists.txt`
 if you are using the CMake configuration) then rebuild. A minimal file
 reader looks like:
 

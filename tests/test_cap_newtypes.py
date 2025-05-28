@@ -8,7 +8,7 @@ C_CODE = textwrap.dedent("""
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
-#include "engine/include/cap.h"
+#include "src/engine/include/cap.h"
 
 struct spinlock; 
 struct cpu; static struct cpu* mycpu(void){ return 0; }
@@ -19,7 +19,7 @@ static int holding(struct spinlock *l){ (void)l; return 0; }
 static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
 static void panic(char *msg){ (void)msg; assert(0); }
 static void cprintf(const char *f, ...){ (void)f; }
-#include "engine/kernel/cap_table.c"
+#include "src/engine/kernel/cap_table.c"
 
 int main(void){
     cap_table_init();
@@ -52,7 +52,7 @@ def compile_and_run():
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"engine/include"),
+            "-idirafter", str(ROOT/"src/engine/include"),
             str(src),
             "-o", str(exe)
         ])

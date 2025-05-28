@@ -12,7 +12,7 @@ C_CODE = textwrap.dedent(
     """
 #include <assert.h>
 #include <stdint.h>
-#include "engine/include/exo_irq.h"
+#include "src/engine/include/exo_irq.h"
 #include "proc.h"
 #include <string.h>
 
@@ -30,8 +30,8 @@ static exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner){
 }
 static int cap_verify(exo_cap c){ (void)c; return 1; }
 
-#include "engine/kernel/cap_table.c"
-#include "engine/kernel/irq.c"
+#include "src/engine/kernel/cap_table.c"
+#include "src/engine/kernel/irq.c"
 
 int main(void){
     cap_table_init();
@@ -55,7 +55,7 @@ def compile_and_run():
         (pathlib.Path(td) / "proc.h").write_text("#pragma once\nstruct proc{int pid;};")
         (pathlib.Path(td) / "include").mkdir()
         (pathlib.Path(td) / "include/exokernel.h").write_text(
-            '#include "engine/include/exokernel.h"'
+            '#include "src/engine/include/exokernel.h"'
         )
         (pathlib.Path(td) / "defs.h").write_text("")
         (pathlib.Path(td) / "mmu.h").write_text("")
@@ -70,7 +70,7 @@ def compile_and_run():
                 "-I",
                 str(ROOT),
                 "-idirafter",
-                str(ROOT/"engine/include"),
+                str(ROOT/"src/engine/include"),
                 str(src),
                 "-o",
                 str(exe),

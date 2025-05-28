@@ -4,7 +4,7 @@ bench_src = files('cap_verify_bench.c',
 foreach src : bench_src
   exe_name = src.stem()
   executable(exe_name, src,
-             include_directories: include_directories('../../engine/libos/include',
-                                                     '../../engine/include'),
+             include_directories: include_directories('../../src/engine/libos/include',
+                                                     '../../src/engine/include'),
              install: false)
 endforeach

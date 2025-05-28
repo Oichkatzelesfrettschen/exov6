@@ -18,7 +18,7 @@ static struct cpu* mycpu(void); static void getcallerpcs(void*, unsigned int*);
 static void panic(char*); static void pushcli(void); static void popcli(void);
 static int holding(struct spinlock*);
 
-#include "engine/include/libos/spinlock.h"
+#include "src/engine/include/libos/spinlock.h"
 
 struct cpu { int ncli; int intena; };
 static __thread struct cpu cpu0;
@@ -70,9 +70,9 @@ def compile_and_run():
         subprocess.check_call([
             CC,"-std=c2x","-DSPINLOCK_NO_STUBS",
             "-I", str(ROOT),
-            "-I", str(ROOT/"engine/include/libos"),
-            "-idirafter", str(ROOT/"engine/include"),
-            "-I", str(ROOT/"engine/kernel/include"),
+            "-I", str(ROOT/"src/engine/include/libos"),
+            "-idirafter", str(ROOT/"src/engine/include"),
+            "-I", str(ROOT/"src/engine/kernel/include"),
             str(src),
             "-o", str(exe)
         ])
