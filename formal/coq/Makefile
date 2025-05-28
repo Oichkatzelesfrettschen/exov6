@@ -1,9 +1,9 @@
-VOFILES=ExoCap.vo
+VOFILES=ExoCap.vo LambdaCap.vo IRQProof.vo StreamsProof.vo
 
 all: $(VOFILES)
 
 %.vo: %.v
-coqc $<
+	coqc $<
 
 clean:
-rm -f $(VOFILES) *.glob *.vo *.vio
+	rm -f $(VOFILES) *.glob *.vo *.vio

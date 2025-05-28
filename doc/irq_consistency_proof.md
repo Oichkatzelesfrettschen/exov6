@@ -78,7 +78,7 @@ Under the stated assumptions about counter wrap‑around, `irq_wait` and `irq_tr
 
 ## Formal Coq Model
 
-The file [`coq/IRQProof.v`](../coq/IRQProof.v) contains a mechanised
+The file [`formal/coq/IRQProof.v`](../formal/coq/IRQProof.v) contains a mechanised
 version of the queue.  It defines the invariant `queue_inv` and two
 lemmas:
 
