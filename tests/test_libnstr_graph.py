@@ -4,7 +4,7 @@ import ctypes
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-LIB = ROOT / 'build' / 'libnstr_graph' / 'libnstr_graph.so'
+LIB = ROOT / 'build' / 'src' / 'libnstr_graph' / 'libnstr_graph.so'
 
 def build_lib():
     if LIB.exists():
