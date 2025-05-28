@@ -34,8 +34,8 @@ if mcu
 endif
 
 if mcu
-  kernel = executable('kernel', ['arch/mcu/startup.c', 'engine/kernel/picokernel.c', 'engine/user/blink.c'],
-      include_directories: include_directories('.', 'engine/include', 'arch/mcu'),
+  kernel = executable('kernel', ['src/arch/mcu/startup.c', 'engine/kernel/picokernel.c', 'engine/user/blink.c'],
+      include_directories: include_directories('.', 'engine/include', 'src', 'src/arch/mcu'),
       install: false,
       c_args: common_cargs)
   subdir_done()
@@ -105,9 +105,9 @@ src_dirs = [
   'userspace/libposix',
   'userspace/libbaremetal',
   'userspace/lib9p',
-  'arch/generic',
-  'arch/x86/legacy',
-  'arch/x86/modern',
+  'src/arch/generic',
+  'src/arch/x86/legacy',
+  'src/arch/x86/modern',
 ]
 
 sources = []
@@ -127,9 +127,10 @@ kernel = executable('kernel', sources,
                                             'userspace/libposix',
                                             'userspace/libbaremetal',
                                             'userspace/lib9p',
-                                            'arch/generic',
-                                            'arch/x86/legacy',
-                                            'arch/x86/modern'),
+                                            'src',
+                                            'src/arch/generic',
+                                            'src/arch/x86/legacy',
+                                            'src/arch/x86/modern'),
            install: false,
            c_args: common_cargs,
            link_with: [libddekit])
