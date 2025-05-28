@@ -13,7 +13,7 @@ Timeouts are encoded as a `timeout_t` value passed to `sys_ipc`. When the wait p
 ## Status Codes
 
 All IPC helpers return an `exo_ipc_status` value defined in
-`engine/include/exo_ipc.h`.  The enumeration documents the possible
+`include/exo_ipc.h`.  The enumeration documents the possible
 outcomes:
 
 - `IPC_STATUS_SUCCESS` – operation completed normally.

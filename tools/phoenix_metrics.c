@@ -98,7 +98,7 @@ static void scan_dir(const char *dir, int *sloc, int *structs, int *simd) {
 }
 
 int main(int argc, char *argv[]) {
-  const char *root = argc > 1 ? argv[1] : "engine/kernel";
+  const char *root = argc > 1 ? argv[1] : "kernel";
   double threshold = -1.0;
   if (argc > 2)
     threshold = atof(argv[2]);

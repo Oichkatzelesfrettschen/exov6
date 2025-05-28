@@ -1,6 +1,6 @@
 # IRQ Queue Consistency Proof
 
-This note sketches why the pair of functions `irq_wait`/`irq_trigger` maintain a consistent queue of pending interrupts.  The implementation lives in [`engine/kernel/irq.c`](../engine/kernel/irq.c).
+This note sketches why the pair of functions `irq_wait`/`irq_trigger` maintain a consistent queue of pending interrupts.  The implementation lives in [`kernel/irq.c`](../kernel/irq.c).
 
 ## Data Structure
 

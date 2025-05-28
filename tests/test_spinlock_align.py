@@ -23,13 +23,13 @@ def compile_and_run(use_stub):
         exe = pathlib.Path(td)/"test"
         src.write_text(C_CODE)
         if use_stub:
-            (pathlib.Path(td)/"spinlock.h").write_text('#include "engine/include/libos/spinlock.h"\n')
+            (pathlib.Path(td)/"spinlock.h").write_text('#include "include/libos/spinlock.h"\n')
         cmd = [
             CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
-            "-idirafter", str(ROOT/"engine/include"),
-            "-I", str(ROOT/"engine/kernel/include"),
+            "-idirafter", str(ROOT/"include"),
+            "-I", str(ROOT/"kernel/include"),
             str(src),
             "-o", str(exe)
         ]

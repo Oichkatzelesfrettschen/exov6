@@ -94,8 +94,8 @@ The QEMU PC simulator is installed automatically by ``setup.sh``.
 Bochs is optional but also supported via ``ninja -C build bochs``.
 
 A few headers used solely by the kernel have been moved under
-``engine/kernel/include``.  Files like ``spinlock.h`` and ``sleeplock.h``
-reside here instead of ``engine/include``.  The CMake build adds this
+``kernel/include``.  Files like ``spinlock.h`` and ``sleeplock.h``
+reside here instead of ``include``.  The CMake build adds this
 directory to the compiler's include path automatically.
 
 PHOENIX_PROF
@@ -157,7 +157,7 @@ commit thereafter.
 TESTING
 -------
 Unit tests live under the ``tests/`` directory and can be executed with
-``pytest -q``.  The helper binary ``engine/user/exo_unit_test`` is built
+``pytest -q``.  The helper binary ``user/exo_unit_test`` is built
 automatically when needed. Ensure QEMU is installed if the tests require
 it (``setup.sh`` installs QEMU automatically).
 Several tests compile small standalone C programs with the host compiler.
