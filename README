@@ -628,6 +628,6 @@ A minimal dev container configuration lives under `.devcontainer`. Opening the p
 FORMAL MODELS
 -------------
 Coq proofs live under the `formal/` directory. TLA+ models can be found
-under `specs/tla/`. Run `make -C formal/coq` to type-check the Coq
-proofs and `tlc specs/tla/ExoCap.tla` to explore the TLA+ models. See
+under `formal/specs/tla/`. Run `make -C formal/coq` to type-check the Coq
+proofs and `tlc formal/specs/tla/ExoCap.tla` to explore the TLA+ models. See
 `doc/formal_models.md` for details on extending the models.

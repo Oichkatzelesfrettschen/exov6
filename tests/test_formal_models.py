@@ -46,4 +46,4 @@ def test_coq_build():
 def test_tla_model():
     if not shutil.which("tlc"):
         pytest.skip("tlc not installed")
-    subprocess.check_call(["tlc", os.path.join(ROOT, "formal", "tla", "ExoCap.tla")])
+    subprocess.check_call(["tlc", os.path.join(ROOT, "formal", "specs", "tla", "ExoCap.tla")])
