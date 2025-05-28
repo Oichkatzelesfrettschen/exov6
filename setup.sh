@@ -40,9 +40,9 @@ if [ "$DEBUG_MODE" = true ]; then
 fi
 
 # In offline mode or when network is unavailable the script attempts
-# to install packages from the offline_packages directory. Ensure this
+# to install packages from the scripts/offline_packages directory. Ensure this
 # directory is populated with the required .deb files or Python wheels
-# as described in offline_packages/README.md. Otherwise most installs
+# as described in scripts/offline_packages/README.md. Otherwise most installs
 # will be skipped and logged as warnings.
 
 # Detect basic network connectivity unless offline mode was requested
@@ -145,9 +145,9 @@ apt_pin_install(){
   return 0
 }
 
-# Install packages from offline_packages/ when network is unavailable
+# Install packages from scripts/offline_packages/ when network is unavailable
 install_offline_packages(){
-  dir="$REPO_ROOT/offline_packages"
+  dir="$REPO_ROOT/scripts/offline_packages"
   if [ -d "$dir" ]; then
     shopt -s nullglob
     files=("$dir"/*.deb)
@@ -162,7 +162,7 @@ install_offline_packages(){
     done
     shopt -u nullglob
   else
-    echo "Warning: offline_packages directory not found" >&2
+    echo "Warning: scripts/offline_packages directory not found" >&2
   fi
 }
 
