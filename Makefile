@@ -9,8 +9,8 @@ formal:
 	else \
 		  echo "coqc not found; skipping Coq build"; \
 	fi
-	@if command -v tlc >/dev/null 2>&1; then \
-		  tlc formal/tla/ExoCap.tla >/dev/null; \
+        @if command -v tlc >/dev/null 2>&1; then \
+                  tlc specs/tla/ExoCap.tla >/dev/null; \
 	else \
 		  echo "tlc not found; skipping TLA+ check"; \
 	fi
