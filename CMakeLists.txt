@@ -58,9 +58,10 @@ if(BISON_FOUND)
 endif()
 
 if(MCU)
-  add_executable(kernel arch/mcu/startup.c engine/kernel/picokernel.c engine/user/blink.c)
+  add_executable(kernel src/arch/mcu/startup.c engine/kernel/picokernel.c engine/user/blink.c)
   target_include_directories(kernel PRIVATE
-    ${CMAKE_SOURCE_DIR}/arch/mcu
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/arch/mcu
     ${CMAKE_SOURCE_DIR}/engine/include)
   add_compile_definitions(MCU=1)
   return()
@@ -69,9 +70,9 @@ file(GLOB_RECURSE KERNEL_SOURCES
   engine/kernel/*.c
 )
 file(GLOB_RECURSE PICO_SOURCES kernel/pico/*.c)
-file(GLOB_RECURSE ARCH_GENERIC_SOURCES arch/generic/*.c)
-file(GLOB_RECURSE ARCH_X86_LEGACY_SOURCES arch/x86/legacy/*.c)
-file(GLOB_RECURSE ARCH_X86_MODERN_SOURCES arch/x86/modern/*.c)
+file(GLOB_RECURSE ARCH_GENERIC_SOURCES src/arch/generic/*.c)
+file(GLOB_RECURSE ARCH_X86_LEGACY_SOURCES src/arch/x86/legacy/*.c)
+file(GLOB_RECURSE ARCH_X86_MODERN_SOURCES src/arch/x86/modern/*.c)
 list(APPEND KERNEL_SOURCES
   ${PICO_SOURCES}
   ${ARCH_GENERIC_SOURCES}
@@ -79,39 +80,39 @@ list(APPEND KERNEL_SOURCES
   ${ARCH_X86_MODERN_SOURCES})
 
 set(SIMD_SOURCES
-  arch/simd_dispatch.c
+  src/arch/simd_dispatch.c
 )
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "i.86")
   list(APPEND SIMD_SOURCES
-    arch/x86/simd_x87.c
-    arch/x86/simd_mmx.c
-    arch/x86/simd_sse2.c
-    arch/x86/simd_avx.c
-    arch/x86/legacy/simd_mmx_cap.c
-    arch/x86/modern/simd_avx2_cap.c)
-  set_source_files_properties(arch/x86/simd_mmx.c PROPERTIES COMPILE_OPTIONS "-mmmx")
-  set_source_files_properties(arch/x86/simd_sse2.c PROPERTIES COMPILE_OPTIONS "-msse2")
-  set_source_files_properties(arch/x86/simd_avx.c PROPERTIES COMPILE_OPTIONS "-mavx")
-  set_source_files_properties(arch/x86/legacy/simd_mmx_cap.c PROPERTIES COMPILE_OPTIONS "-mmmx")
-  set_source_files_properties(arch/x86/modern/simd_avx2_cap.c PROPERTIES COMPILE_OPTIONS "-mavx2")
+    src/arch/x86/simd_x87.c
+    src/arch/x86/simd_mmx.c
+    src/arch/x86/simd_sse2.c
+    src/arch/x86/simd_avx.c
+    src/arch/x86/legacy/simd_mmx_cap.c
+    src/arch/x86/modern/simd_avx2_cap.c)
+  set_source_files_properties(src/arch/x86/simd_mmx.c PROPERTIES COMPILE_OPTIONS "-mmmx")
+  set_source_files_properties(src/arch/x86/simd_sse2.c PROPERTIES COMPILE_OPTIONS "-msse2")
+  set_source_files_properties(src/arch/x86/simd_avx.c PROPERTIES COMPILE_OPTIONS "-mavx")
+  set_source_files_properties(src/arch/x86/legacy/simd_mmx_cap.c PROPERTIES COMPILE_OPTIONS "-mmmx")
+  set_source_files_properties(src/arch/x86/modern/simd_avx2_cap.c PROPERTIES COMPILE_OPTIONS "-mavx2")
 endif()
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-  list(APPEND SIMD_SOURCES arch/arm/simd_neon.c arch/arm/simd_neon_cap.c)
-  set_source_files_properties(arch/arm/simd_neon.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
-  set_source_files_properties(arch/arm/simd_neon_cap.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
+  list(APPEND SIMD_SOURCES src/arch/arm/simd_neon.c src/arch/arm/simd_neon_cap.c)
+  set_source_files_properties(src/arch/arm/simd_neon.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
+  set_source_files_properties(src/arch/arm/simd_neon_cap.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
 endif()
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
-  list(APPEND SIMD_SOURCES arch/ppc/simd_altivec.c arch/ppc/simd_altivec_cap.c)
-  set_source_files_properties(arch/ppc/simd_altivec.c PROPERTIES COMPILE_OPTIONS "-maltivec")
-  set_source_files_properties(arch/ppc/simd_altivec_cap.c PROPERTIES COMPILE_OPTIONS "-maltivec")
+  list(APPEND SIMD_SOURCES src/arch/ppc/simd_altivec.c src/arch/ppc/simd_altivec_cap.c)
+  set_source_files_properties(src/arch/ppc/simd_altivec.c PROPERTIES COMPILE_OPTIONS "-maltivec")
+  set_source_files_properties(src/arch/ppc/simd_altivec_cap.c PROPERTIES COMPILE_OPTIONS "-maltivec")
 endif()
 
 add_library(simd_dispatch STATIC ${SIMD_SOURCES})
 target_include_directories(simd_dispatch PUBLIC
-  ${CMAKE_SOURCE_DIR}/arch
+  ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/tools
 )
 
@@ -152,9 +153,10 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
   ${CMAKE_SOURCE_DIR}/kernel/pico
-  ${CMAKE_SOURCE_DIR}/arch/generic
-  ${CMAKE_SOURCE_DIR}/arch/x86/legacy
-  ${CMAKE_SOURCE_DIR}/arch/x86/modern
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src/arch/generic
+  ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
+  ${CMAKE_SOURCE_DIR}/src/arch/x86/modern
   ${CMAKE_SOURCE_DIR}/userspace/libposix
   ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
   ${CMAKE_SOURCE_DIR}/userspace/lib9p
@@ -213,9 +215,10 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
   ${CMAKE_SOURCE_DIR}/kernel/pico
-  ${CMAKE_SOURCE_DIR}/arch/generic
-  ${CMAKE_SOURCE_DIR}/arch/x86/legacy
-  ${CMAKE_SOURCE_DIR}/arch/x86/modern
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/src/arch/generic
+  ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
+  ${CMAKE_SOURCE_DIR}/src/arch/x86/modern
   ${CMAKE_SOURCE_DIR}/userspace/libposix
   ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
   ${CMAKE_SOURCE_DIR}/userspace/lib9p
