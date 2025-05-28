@@ -3,7 +3,7 @@
 This example demonstrates how Phoenix policies can be expressed as lambda
 terms that handle interrupts.  Two small policies wait for an IRQ and then
 acknowledge it.  They are composed using a third lambda that runs the steps
-in sequence.  See `examples/demos/irq_lambda_policy.c` for the full program.
+in sequence.  See `demos/irq_lambda_policy.c` for the full program.
 
 ```c
 /* Demo showing how to compose lambda policies with IRQ events */

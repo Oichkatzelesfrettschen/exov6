@@ -23,10 +23,10 @@ flow_pid.set_kd(0.01)
 ```
 
 ### Example Program
-`examples/demos/fc_tuning_demo.py` demonstrates dynamic tuning. When run it prints the initial constants and then updates them:
+`demos/fc_tuning_demo.py` demonstrates dynamic tuning. When run it prints the initial constants and then updates them:
 
 ```sh
-$ python3 examples/demos/fc_tuning_demo.py
+$ python3 demos/fc_tuning_demo.py
 Initial constants: {'Kp': 1.0, 'Ki': 0.0, 'Kd': 0.0}
 Updated constants: {'Kp': 1.5, 'Ki': 0.1, 'Kd': 0.05}
 ```
