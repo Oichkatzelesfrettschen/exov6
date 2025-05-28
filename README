@@ -70,7 +70,7 @@ directory simply execute::
     sudo ./setup.sh
 
 When running without internet access place all required `.deb` files under
-`offline_packages/` and use::
+`scripts/offline_packages/` and use::
 
     sudo ./setup.sh --offline
 
