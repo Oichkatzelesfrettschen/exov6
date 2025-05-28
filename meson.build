@@ -125,7 +125,7 @@ if qemu.found()
 endif
 
 subdir('src/ddekit')
-subdir('libnstr_graph')
+subdir('src/libnstr_graph')
 
 # User-space programs
 uprogs = {

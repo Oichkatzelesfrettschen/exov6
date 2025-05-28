@@ -235,7 +235,7 @@ endif()
 
 add_subdirectory(src/ddekit)
 
-add_subdirectory(libnstr_graph)
+add_subdirectory(src/libnstr_graph)
 
 if(QEMU_EXECUTABLE)
   add_custom_target(qemu-nox
