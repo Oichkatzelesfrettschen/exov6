@@ -69,12 +69,10 @@ endif()
 file(GLOB_RECURSE KERNEL_SOURCES
   engine/kernel/*.c
 )
-file(GLOB_RECURSE PICO_SOURCES kernel/pico/*.c)
 file(GLOB_RECURSE ARCH_GENERIC_SOURCES src/arch/generic/*.c)
 file(GLOB_RECURSE ARCH_X86_LEGACY_SOURCES src/arch/x86/legacy/*.c)
 file(GLOB_RECURSE ARCH_X86_MODERN_SOURCES src/arch/x86/modern/*.c)
 list(APPEND KERNEL_SOURCES
-  ${PICO_SOURCES}
   ${ARCH_GENERIC_SOURCES}
   ${ARCH_X86_LEGACY_SOURCES}
   ${ARCH_X86_MODERN_SOURCES})
@@ -152,7 +150,6 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}/engine/proto
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
-  ${CMAKE_SOURCE_DIR}/kernel/pico
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/arch/generic
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
@@ -214,7 +211,6 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/engine/proto
   ${CMAKE_SOURCE_DIR}/engine/libos/include
   ${CMAKE_SOURCE_DIR}/engine/libos/capnp
-  ${CMAKE_SOURCE_DIR}/kernel/pico
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/arch/generic
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
