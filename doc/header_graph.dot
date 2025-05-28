@@ -9,8 +9,8 @@ digraph headers {
     "include/chan.h" -> "include/caplib.h";
     "include/chan.h" -> "include/types.h";
     "include/dag.h" -> "include/types.h";
-    "include/ddekit.h" -> "include/caplib.h";
-    "include/ddekit.h" -> "include/types.h";
+    "src/ddekit/ddekit.h" -> "include/caplib.h";
+    "src/ddekit/ddekit.h" -> "include/types.h";
     "include/defs.h" -> "include/cap.h";
     "include/defs.h" -> "include/config.h";
     "include/defs.h" -> "include/exo_cpu.h";

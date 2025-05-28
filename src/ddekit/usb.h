@@ -1,8 +1,8 @@
 #ifndef _DDEKIT_USB_H
 #define _DDEKIT_USB_H
 
-#include <ddekit/ddekit.h>
-#include <ddekit/types.h>
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/types.h>
 
 /** isochronous transfer */
 #define  DDEKIT_USB_TRANSFER_ISO 0

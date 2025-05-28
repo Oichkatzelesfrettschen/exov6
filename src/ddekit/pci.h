@@ -1,8 +1,8 @@
 #ifndef _DDEKIT_PCI_H
 #define _DDEKIT_PCI_H
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 
-#include <ddekit/types.h>
+#include <src/ddekit/types.h>
 
 /** \defgroup DDEKit_pci */
 

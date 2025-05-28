@@ -1,8 +1,8 @@
 #ifndef _DDEKIT_TIMER_H
 #define _DDEKIT_TIMER_H
 
-#include <ddekit/ddekit.h>
-#include <ddekit/thread.h>
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/thread.h>
 
 /** \defgroup DDEKit_timer 
  *

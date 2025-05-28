@@ -1,7 +1,7 @@
 #ifndef _DDEKIT_PRINTF_H
 #define _DDEKIT_PRINTF_H
 
-#include <ddekit/ddekit.h>
+#include <src/ddekit/ddekit.h>
 #include <stdarg.h>
 
 /** Print message.

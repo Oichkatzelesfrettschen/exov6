@@ -225,10 +225,12 @@ if(CPUFLAGS)
   target_compile_options(kernel PRIVATE ${CPUFLAGS})
 endif()
 
-target_link_libraries(kernel PRIVATE nstr_graph)
+target_link_libraries(kernel PRIVATE nstr_graph ddekit)
 if(USE_CAPNP)
   target_link_libraries(kernel PRIVATE capnp)
 endif()
+
+add_subdirectory(src/ddekit)
 
 add_subdirectory(libnstr_graph)
 

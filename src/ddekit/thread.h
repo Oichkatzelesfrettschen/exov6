@@ -2,8 +2,8 @@
 #define _DDEKIT_THREAD_H
 
 /** \defgroup DDEKit_threads */
-#include <ddekit/ddekit.h>
-#include <ddekit/lock.h>
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/lock.h>
 
 struct ddekit_thread;
 typedef struct ddekit_thread ddekit_thread_t;

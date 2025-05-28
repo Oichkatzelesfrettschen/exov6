@@ -28,8 +28,8 @@
 
 #ifndef _DDEKIT_INTERUPT_H
 #define _DDEKIT_INTERUPT_H
-#include <ddekit/ddekit.h>
-#include <ddekit/thread.h>
+#include <src/ddekit/ddekit.h>
+#include <src/ddekit/thread.h>
 
 /** Attach to an interrupt */
 ddekit_thread_t *ddekit_interrupt_attach( int irq, int shared,
