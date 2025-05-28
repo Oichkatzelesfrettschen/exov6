@@ -19,7 +19,7 @@ files=`grep -v '^#' runoff.list | awk '{print $1}'`
 n=99
 for i in $files
 do
-	./runoff1 -n $n $i >fmt/$i
+       ./scripts/runoff1 -n $n $i >fmt/$i
 	nn=`tail -1 fmt/$i | sed 's/ .*//; s/^0*//'`
 	if [ "x$nn" != x ]; then
 		n=$nn
@@ -255,17 +255,17 @@ awk '
 
 # format the whole thing
 (
-	../pr.pl README
-	../pr.pl -h "table of contents" toc
-	# pr -t -2 t.defs | ../pr.pl -h "definitions" | pad
-	pr -t -l50 -2 refs | ../pr.pl -h "cross-references" | pad
+       ../scripts/pr.pl README
+       ../scripts/pr.pl -h "table of contents" toc
+       # pr -t -2 t.defs | ../scripts/pr.pl -h "definitions" | pad
+       pr -t -l50 -2 refs | ../scripts/pr.pl -h "cross-references" | pad
 	# pr.pl -h "definitions" -2 t.defs | pad
 	# pr.pl -h "cross-references" -2 refs | pad
-	../pr.pl blank  # make sheet 1 start on left page
-	../pr.pl blank
+       ../scripts/pr.pl blank  # make sheet 1 start on left page
+       ../scripts/pr.pl blank
 	for i in $files
 	do
-		../pr.pl -h "xv6/$i" $i
+               ../scripts/pr.pl -h "xv6/$i" $i
 	done
 ) | mpage -m50t50b -o -bLetter -T -t -2 -FCourier -L60 >all.ps
 grep Pages: all.ps
