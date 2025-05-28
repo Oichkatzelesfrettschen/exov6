@@ -347,8 +347,19 @@ To switch back to qspinlocks::
 
     cmake -S . -B build -DUSE_TICKET_LOCK=OFF && ninja -C build
 
+
 Disable the option by setting ``OFF`` (or ``0`` for Meson).  The
 default build uses qspinlocks.
+
+GDB UTILITIES
+-------------
+Helper macros for inspecting x86 descriptor tables live under
+``tools/gdbutil``.  Load them in GDB with::
+
+    source tools/gdbutil
+
+Use ``printdesc`` or ``printdescs`` to display a single descriptor or a
+range of entries.
 
 CODE FORMATTING
 ---------------
