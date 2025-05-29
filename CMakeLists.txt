@@ -258,7 +258,7 @@ target_include_directories(wumpus PRIVATE
 )
 target_link_libraries(wumpus PRIVATE libos)
 
-add_executable(phoenix_prof tools/profiling/phoenix_metrics.c)
+add_executable(phoenix_prof tools/phoenix_metrics.c)
 target_include_directories(phoenix_prof PRIVATE
   ${CMAKE_SOURCE_DIR}
 )

@@ -30,7 +30,7 @@ $ cmake --build build --target phoenix_prof
 ## Example Usage
 
 ```c
-#include "profiling/phoenix_metrics.h"
+#include "phoenix_metrics.h"
 
 phoenix_metrics_reset();
 phoenix_metrics_record_ipc_start();
