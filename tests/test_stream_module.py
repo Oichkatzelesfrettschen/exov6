@@ -4,7 +4,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from stream_module import mblk_t, attach_module
+from examples.python.stream_module import mblk_t, attach_module
 
 
 def test_attach_module_pipeline_order():

@@ -17,11 +17,11 @@ This file collects outstanding tasks for the prototype STREAMS implementation. T
 ## Testing and tooling
 
 - Expand the latency harness in `scripts/simulate.py` to cover more module combinations.
-- Add unit tests for the logging helpers in `streams_log.py`.
+- Add unit tests for the logging helpers in `examples/python/streams_log.py`.
 
 ## Flow control and configuration
 
 - Document the PID based flow control interface under `/proc/streams/fc/`.
-- Provide an example illustrating dynamic tuning via `flow_pid.py`.
+- Provide an example illustrating dynamic tuning via `examples/python/flow_pid.py`.
 
 Additional issues may be recorded here as the prototype evolves.

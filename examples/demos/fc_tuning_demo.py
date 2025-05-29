@@ -4,9 +4,9 @@ import os
 from pathlib import Path
 
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-import flow_pid
+from examples.python import flow_pid
 
 
 def main() -> None:
