@@ -1,115 +1,102 @@
+#define _POSIX_C_SOURCE 200809L
+#include "phoenix_metrics.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include <stdbool.h>
+#include <time.h>
 
-static bool has_suffix(const char *name, const char *suf) {
-  size_t n = strlen(name), m = strlen(suf);
-  return n >= m && strcmp(name + n - m, suf) == 0;
+static uint64_t simd_instr_count = 0;
+static uint64_t scalar_fallback_count = 0;
+static uint64_t ipc_latency_total = 0;
+static uint64_t ipc_samples = 0;
+static uint64_t ctx_switch_total = 0;
+static uint64_t ctx_switch_samples = 0;
+static uint64_t tmp_start = 0;
+
+static uint64_t now_ns(void) {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000000000ull + ts.tv_nsec;
 }
 
-static int count_sloc_in_file(const char *path) {
-  FILE *f = fopen(path, "r");
-  if (!f)
-    return 0;
-  int sloc = 0;
-  bool in_block = false;
-  char line[512];
-  while (fgets(line, sizeof(line), f)) {
-    char *p = line;
-    while (isspace((unsigned char)*p))
-      p++;
-    if (*p == '\0')
-      continue;
-    if (in_block) {
-      char *end = strstr(p, "*/");
-      if (end)
-        in_block = false;
-      continue;
+void phoenix_metrics_record_simd(uint64_t c) { simd_instr_count += c; }
+void phoenix_metrics_record_scalar(uint64_t c) { scalar_fallback_count += c; }
+
+void phoenix_metrics_record_ipc_start(void) { tmp_start = now_ns(); }
+void phoenix_metrics_record_ipc_end(void) {
+    uint64_t end = now_ns();
+    if (end > tmp_start) {
+        ipc_latency_total += end - tmp_start;
+        ipc_samples++;
     }
-    if (strncmp(p, "//", 2) == 0)
-      continue;
-    if (strncmp(p, "/*", 2) == 0) {
-      if (!strstr(p + 2, "*/"))
-        in_block = true;
-      continue;
+}
+
+void phoenix_metrics_record_ctx_switch_start(void) { tmp_start = now_ns(); }
+void phoenix_metrics_record_ctx_switch_end(void) {
+    uint64_t end = now_ns();
+    if (end > tmp_start) {
+        ctx_switch_total += end - tmp_start;
+        ctx_switch_samples++;
     }
-    sloc++;
-  }
-  fclose(f);
-  return sloc;
 }
 
-static int count_structs_in_file(const char *path) {
-  FILE *f = fopen(path, "r");
-  if (!f)
-    return 0;
-  int count = 0;
-  char line[512];
-  while (fgets(line, sizeof(line), f)) {
-    char *p = strstr(line, "struct ");
-    if (p && strstr(p, "{"))
-      count++;
-  }
-  fclose(f);
-  return count;
+uint64_t phoenix_metrics_get_simd_count(void) { return simd_instr_count; }
+uint64_t phoenix_metrics_get_scalar_count(void) { return scalar_fallback_count; }
+uint64_t phoenix_metrics_get_ipc_latency(void) {
+    return ipc_samples ? ipc_latency_total / ipc_samples : 0;
+}
+uint64_t phoenix_metrics_get_ctx_switch(void) {
+    return ctx_switch_samples ? ctx_switch_total / ctx_switch_samples : 0;
 }
 
-static int count_simd_in_file(const char *path) {
-  FILE *f = fopen(path, "r");
-  if (!f)
-    return 0;
-  int count = 0;
-  char line[512];
-  while (fgets(line, sizeof(line), f)) {
-    if (strstr(line, "_mm") || strstr(line, "SIMD") || strstr(line, "sse") ||
-        strstr(line, "avx") || strstr(line, "neon"))
-      count++;
-  }
-  fclose(f);
-  return count;
+void phoenix_metrics_reset(void) {
+    simd_instr_count = 0;
+    scalar_fallback_count = 0;
+    ipc_latency_total = 0;
+    ipc_samples = 0;
+    ctx_switch_total = 0;
+    ctx_switch_samples = 0;
+    tmp_start = 0;
 }
 
-static void scan_dir(const char *dir, int *sloc, int *structs, int *simd) {
-  DIR *d = opendir(dir);
-  if (!d)
-    return;
-  struct dirent *ent;
-  while ((ent = readdir(d))) {
-    if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
-      continue;
-    char path[512];
-    snprintf(path, sizeof(path), "%s/%s", dir, ent->d_name);
-    struct stat st;
-    if (stat(path, &st) < 0)
-      continue;
-    if (S_ISDIR(st.st_mode)) {
-      scan_dir(path, sloc, structs, simd);
-    } else if (has_suffix(ent->d_name, ".c") || has_suffix(ent->d_name, ".h")) {
-      *sloc += count_sloc_in_file(path);
-      *structs += count_structs_in_file(path);
-      *simd += count_simd_in_file(path);
+static void benchmark_variant(const char *name) {
+    printf("-- %s --\n", name);
+    char cmd[256];
+    snprintf(cmd, sizeof(cmd), "make -C tests/microbench run > /dev/null");
+    uint64_t start = now_ns();
+    int r = system(cmd);
+    uint64_t end = now_ns();
+    if (r != 0)
+        printf("benchmark failed\n");
+    else
+        printf("elapsed_ns:%llu\n", (unsigned long long)(end - start));
+}
+
+void benchmark_all_architectures(void) {
+    DIR *d = opendir("build/isa");
+    if (!d) {
+        perror("opendir build/isa");
+        return;
     }
-  }
-  closedir(d);
+    struct dirent *ent;
+    while ((ent = readdir(d))) {
+        if (ent->d_name[0] == '.')
+            continue;
+        char path[256];
+        snprintf(path, sizeof(path), "build/isa/%s", ent->d_name);
+        struct stat st;
+        if (stat(path, &st) < 0 || !S_ISDIR(st.st_mode))
+            continue;
+        benchmark_variant(ent->d_name);
+    }
+    closedir(d);
 }
 
-int main(int argc, char *argv[]) {
-  const char *root = argc > 1 ? argv[1] : "kernel";
-  double threshold = -1.0;
-  if (argc > 2)
-    threshold = atof(argv[2]);
-  int sloc = 0, structs = 0, simd = 0;
-  scan_dir(root, &sloc, &structs, &simd);
-  double purity = sloc ? ((double)structs / (double)sloc) * 100.0 : 0.0;
-  printf("SLOC:%d\nABSTRACTIONS:%d\nSIMD:%d\nPURITY:%.2f\n", sloc, structs,
-         simd, purity);
-  if (threshold >= 0.0 && purity < threshold) {
-    fprintf(stderr, "Purity %.2f below threshold %.2f\n", purity, threshold);
-    return 1;
-  }
-  return 0;
+#ifdef PHOENIX_METRICS_MAIN
+int main(void) {
+    benchmark_all_architectures();
+    return 0;
 }
+#endif
