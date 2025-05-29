@@ -145,7 +145,6 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
   ${CMAKE_SOURCE_DIR}/libos/capnp
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
@@ -203,7 +202,6 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/kernel/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
   ${CMAKE_SOURCE_DIR}/libos/capnp
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
@@ -237,7 +235,6 @@ target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
 )
 target_link_libraries(msgqueue_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)
@@ -249,7 +246,6 @@ target_include_directories(fib_big_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
 )
 target_link_libraries(fib_big_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)

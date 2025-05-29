@@ -1,4 +1,4 @@
-#include "procwrap.h"
+#include <procwrap.h>
 #include "user.h"
 
 int proc_spawn(proc_handle_t *p, const char *path, char *const argv[]) {
