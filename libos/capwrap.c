@@ -1,4 +1,4 @@
-#include "capwrap.h"
+#include <capwrap.h>
 
 exo_cap capwrap_alloc_page(void) {
     exo_cap c = {0};

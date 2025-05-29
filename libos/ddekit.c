@@ -1,6 +1,6 @@
 #include "ddekit.h"
-#include "procwrap.h"
-#include "capwrap.h"
+#include <procwrap.h>
+#include <capwrap.h>
 #include "user.h"
 
 void ddekit_init(void) {}

@@ -92,7 +92,7 @@ libos_sources = [
 ]
 
 libos = static_library('libos', libos_sources,
-    include_directories: include_directories('.', 'include', 'proto', 'libos/include', 'libos/capnp'),
+    include_directories: include_directories('.', 'include', 'proto', 'libos/capnp'),
     c_args: common_cargs)
 
 src_dirs = [
@@ -120,7 +120,6 @@ kernel = executable('kernel', sources,
                                            'kernel/hypervisor',
                                             'kernel/pico',
                                             'proto',
-                                            'libos/include',
                                             'libos/capnp',
                                             'userspace/stubs',
                                             'src',
@@ -199,7 +198,7 @@ endif
 
 uprogs_targets = []
 foreach name, path : uprogs
-  incs = [include_directories('.', 'include', 'proto', 'libos/include')]
+  incs = [include_directories('.', 'include', 'proto')]
   deps = [libos]
   if use_capnp
     incs += include_directories('libos/capnp')
