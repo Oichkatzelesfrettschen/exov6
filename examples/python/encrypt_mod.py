@@ -1,5 +1,5 @@
-from stream_module import mblk_t
-from streams_log import strlog_json
+from examples.python.stream_module import mblk_t
+from examples.python.streams_log import strlog_json
 
 
 class XorEncryptModule:

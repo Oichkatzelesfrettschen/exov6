@@ -18,8 +18,8 @@ These goals are paired with a lightweight governance model that welcomes contrib
 The prototype STREAMS stack still requires several features:
 
 - **Done:** integrate STREAMS callbacks with the kernel scheduler and implement `streams_stop()` / `streams_yield()`.
-- Expand the latency harness in `scripts/simulate.py` and add unit tests for `streams_log.py`.
-- Document the PID based flow control interface under `/proc/streams/fc/` and provide an example using `flow_pid.py`.
+- Expand the latency harness in `scripts/simulate.py` and add unit tests for `examples/python/streams_log.py`.
+- Document the PID based flow control interface under `/proc/streams/fc/` and provide an example using `examples/python/flow_pid.py`.
 
 ## Development Goals
 

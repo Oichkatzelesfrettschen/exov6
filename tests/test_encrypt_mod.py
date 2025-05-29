@@ -4,8 +4,8 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from encrypt_mod import XorEncryptModule
-from stream_module import mblk_t
+from examples.python.encrypt_mod import XorEncryptModule
+from examples.python.stream_module import mblk_t
 
 
 def test_xor_encrypt_decrypt_roundtrip():
