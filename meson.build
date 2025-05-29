@@ -226,4 +226,4 @@ executable('phoenix_prof', 'tools/phoenix_metrics.c',
            c_args: common_cargs + ['-DPHOENIX_METRICS_MAIN'])
 
 subdir('tests/microbench')
-subdir('tests/posix')
+subdir('tests')
