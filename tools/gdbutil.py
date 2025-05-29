@@ -1,7 +1,7 @@
 # -*- gdb-script -*-
 
 # Utility functions to pretty-print x86 segment/interrupt descriptors.
-# To load this file, run "source tools/gdbutil" in gdb.
+# To load this file, run "source tools/gdbutil.py" in gdb.
 # printdesc and printdescs are the main entry points.
 
 # IA32 2007, Volume 3A, Table 3-2
