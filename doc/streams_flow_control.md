@@ -11,10 +11,10 @@ The integral constant accumulates past errors to eliminate steady state drift. A
 ## /proc/streams/fc/Kd
 The derivative constant dampens oscillations by responding to the rate of change. Increasing **Kd** smooths out sudden spikes at the cost of slower response.
 
-Missing or malformed procfs files fall back to built-in defaults. Writing a new value immediately updates the live constant. The helpers in `flow_pid.py` wrap these files:
+Missing or malformed procfs files fall back to built-in defaults. Writing a new value immediately updates the live constant. The helpers in `examples/python/flow_pid.py` wrap these files:
 
 ```python
-import flow_pid
+from examples.python import flow_pid
 
 flow_pid.flow_pid_init()
 flow_pid.set_kp(1.2)

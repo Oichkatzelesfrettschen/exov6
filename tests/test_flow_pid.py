@@ -6,7 +6,7 @@ sys.path.insert(0, str(ROOT))
 
 import importlib
 
-import flow_pid
+from examples.python import flow_pid
 
 
 def test_flow_pid_init_and_update(tmp_path, monkeypatch):

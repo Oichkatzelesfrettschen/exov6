@@ -593,7 +593,7 @@ the numeric values::
 
 Missing or malformed files fall back to built-in defaults. Writing a
 new value to one of these files immediately updates the active
-constant. The ``flow_pid.py`` helpers ``set_kp()``, ``set_ki()`` and
+constant. The ``examples/python/flow_pid.py`` helpers ``set_kp()``, ``set_ki()`` and
 ``set_kd()`` provide a convenient API for adjusting the parameters.
 
 For testing the base directory can be overridden with the environment
@@ -604,14 +604,14 @@ with a Python example is provided in
 STREAMS LOGGING
 ---------------
 Python STREAMS modules log messages using ``strlog_json()`` from
-``streams_log.py``.  The helper outputs a JSON object containing the
+``examples/python/streams_log.py``.  The helper outputs a JSON object containing the
 timestamp, log level and message.  Extra keyword arguments become
 fields in the record.  ``strlog()`` continues to print plain text for
 older modules.
 
 Example::
 
-    from streams_log import strlog_json
+    from examples.python.streams_log import strlog_json
     strlog_json("info", "module loaded", name="xor_encrypt")
 
 AUTOMATED SETUP WITH CODEX

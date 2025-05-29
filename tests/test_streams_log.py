@@ -6,7 +6,7 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from streams_log import strlog_json
+from examples.python.streams_log import strlog_json
 
 
 def test_strlog_json_timestamp_format(capsys):

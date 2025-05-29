@@ -16,8 +16,8 @@ sys.path.insert(0, str(ROOT))
 
 import statistics
 
-from encrypt_mod import XorEncryptModule
-from stream_module import mblk_t, attach_module
+from examples.python.encrypt_mod import XorEncryptModule
+from examples.python.stream_module import mblk_t, attach_module
 
 
 class UpperCaseModule:
