@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "procwrap.h"
-#include "capwrap.h"
+#include <procwrap.h>
+#include <capwrap.h>
 
 int main(void) {
     proc_handle_t p;

@@ -15,7 +15,6 @@ foreach src : posix_tests
   executable(exe_name, [src] + libos_srcs,
              include_directories: include_directories('../../',
                                                     '../../include',
-                                                    '../../libos/include',
                                                     '../../tests/include'),
              install: false)
 endforeach

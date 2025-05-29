@@ -92,7 +92,7 @@ libos_sources = [
 ]
 
 libos = static_library('libos', libos_sources,
-    include_directories: include_directories('.', 'include', 'proto', 'libos/include', 'libos/capnp'),
+    include_directories: include_directories('.', 'include', 'proto', 'libos/capnp'),
     c_args: common_cargs)
 
 src_dirs = [
@@ -104,6 +104,8 @@ src_dirs = [
   'userspace/libposix',
   'userspace/libbaremetal',
   'userspace/lib9p',
+  'userspace/stubs',
+  'src/arch/generic',
   'src/arch/x86/legacy',
   'src/arch/x86/modern',
 ]
@@ -119,11 +121,8 @@ kernel = executable('kernel', sources,
                                             'kernel/include',
                                            'kernel/hypervisor',
                                             'proto',
-                                            'libos/include',
                                             'libos/capnp',
-                                            'userspace/libposix',
-                                            'userspace/libbaremetal',
-                                            'userspace/lib9p',
+                                            'userspace/stubs',
                                             'src',
                                             'src/arch/x86/legacy',
                                             'src/arch/x86/modern'),
@@ -199,7 +198,7 @@ endif
 
 uprogs_targets = []
 foreach name, path : uprogs
-  incs = [include_directories('.', 'include', 'proto', 'libos/include')]
+  incs = [include_directories('.', 'include', 'proto')]
   deps = [libos]
   if use_capnp
     incs += include_directories('libos/capnp')
@@ -221,7 +220,7 @@ fsimg = custom_target('fs.img',
   depends: uprogs_targets,
   build_by_default: true)
 
-executable('phoenix_prof', 'tools/profiling/phoenix_metrics.c',
+executable('phoenix_prof', 'tools/phoenix_metrics.c',
            include_directories: include_directories('.'),
            install: false,
            c_args: common_cargs + ['-DPHOENIX_METRICS_MAIN'])

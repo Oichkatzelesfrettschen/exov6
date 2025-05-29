@@ -111,9 +111,9 @@ target_include_directories(simd_dispatch PUBLIC
   ${CMAKE_SOURCE_DIR}/tools
 )
 
-file(GLOB LIBPOSIX_SOURCES userspace/libposix/*.c)
-file(GLOB LIBBAREMETAL_SOURCES userspace/libbaremetal/*.c)
-file(GLOB LIB9P_SOURCES userspace/lib9p/*.c)
+set(LIBPOSIX_SOURCES userspace/stubs/libposix.c)
+set(LIBBAREMETAL_SOURCES userspace/stubs/libbaremetal.c)
+set(LIB9P_SOURCES userspace/stubs/lib9p.c)
 
 set(LIBOS_SOURCES
   user/ulib.c
@@ -145,14 +145,11 @@ target_include_directories(libos PUBLIC
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
   ${CMAKE_SOURCE_DIR}/libos/capnp
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
   ${CMAKE_SOURCE_DIR}/src/arch/x86/modern
-  ${CMAKE_SOURCE_DIR}/userspace/libposix
-  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
-  ${CMAKE_SOURCE_DIR}/userspace/lib9p
+  ${CMAKE_SOURCE_DIR}/userspace/stubs
 )
 target_link_libraries(libos PUBLIC simd_dispatch)
 if(USE_SIMD)
@@ -205,14 +202,11 @@ target_include_directories(kernel PRIVATE
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/kernel/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
   ${CMAKE_SOURCE_DIR}/libos/capnp
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/arch/x86/legacy
   ${CMAKE_SOURCE_DIR}/src/arch/x86/modern
-  ${CMAKE_SOURCE_DIR}/userspace/libposix
-  ${CMAKE_SOURCE_DIR}/userspace/libbaremetal
-  ${CMAKE_SOURCE_DIR}/userspace/lib9p
+  ${CMAKE_SOURCE_DIR}/userspace/stubs
 )
 
 if(CPUFLAGS)
@@ -241,7 +235,6 @@ target_include_directories(msgqueue_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
 )
 target_link_libraries(msgqueue_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)
@@ -253,7 +246,6 @@ target_include_directories(fib_big_demo PRIVATE
   ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/proto
-  ${CMAKE_SOURCE_DIR}/libos/include
 )
 target_link_libraries(fib_big_demo PRIVATE libos nstr_graph)
 if(USE_CAPNP)
@@ -266,7 +258,7 @@ target_include_directories(wumpus PRIVATE
 )
 target_link_libraries(wumpus PRIVATE libos)
 
-add_executable(phoenix_prof tools/profiling/phoenix_metrics.c)
+add_executable(phoenix_prof tools/phoenix_metrics.c)
 target_include_directories(phoenix_prof PRIVATE
   ${CMAKE_SOURCE_DIR}
 )

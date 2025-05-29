@@ -1,5 +1,5 @@
 #include "simd_dispatch.h"
-#include "../tools/profiling/phoenix_metrics.h"
+#include "../tools/phoenix_metrics.h"
 #include <stddef.h>
 #if defined(__linux__)
 #include <sys/auxv.h>
