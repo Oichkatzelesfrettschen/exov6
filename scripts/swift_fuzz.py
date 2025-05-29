@@ -7,8 +7,8 @@ from pathlib import Path
 
 
 def build_fuzzer(root: Path) -> Path:
-    src = root / "fuzz.swift"
-    out = root / "fuzz"
+    src = root / "examples" / "swift" / "fuzz.swift"
+    out = root / "examples" / "swift" / "fuzz"
     cmd = [
         "swiftc",
         "-sanitize=fuzzer,address",
