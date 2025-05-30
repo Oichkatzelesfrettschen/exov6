@@ -145,6 +145,24 @@ apt_pin_install(){
   return 0
 }
 
+# ensure_command tries to install specified packages until the command exists.
+# Missing commands are logged but do not halt the script.
+ensure_command(){
+  local cmd="$1"
+  shift
+  if command -v "$cmd" >/dev/null 2>&1; then
+    return 0
+  fi
+  local pkg
+  for pkg in "$@"; do
+    apt_pin_install "$pkg"
+  done
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Warning: required command $cmd not found after install attempts" >&2
+    echo "missing $cmd" >>"$FAIL_LOG"
+  fi
+}
+
 # Install packages from scripts/offline_packages/ when network is unavailable
 install_offline_packages(){
   dir="$REPO_ROOT/scripts/offline_packages"
@@ -234,7 +252,6 @@ done
 pip_install compiledb
 pip_install configuredb
 
-fi
 
 
 if ! command -v pytest >/dev/null 2>&1; then
@@ -484,6 +501,14 @@ if [ -n "$cc_cmd" ]; then
   fi
   rm -f /tmp/c2x_test
 fi
+
+# Ensure critical tools are installed
+ensure_command clang clang clang-16
+ensure_command clang-tidy clang-tidy
+ensure_command clang-format clang-format
+ensure_command meson meson
+ensure_command coqc coq coqide coq-theories
+ensure_command tlc tlaplus
 
 # Check for essential commands and log if any are missing
 for cmd in clang clang++ cmake qemu-system-x86 coqc; do
