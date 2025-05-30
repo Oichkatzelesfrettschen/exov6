@@ -390,9 +390,8 @@ scheduler. Both helpers are invoked automatically when registered through
                 USER DEMO
     : EXO_YIELD_TO AND STREAMS
       -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -The example
-      program ``exo_stream_demo`` under ``engine
-                / user / user
-                /`` is a minimal illustration of switching contexts
+      program ``exo_stream_demo`` under ``examples/demos`` is a minimal
+      illustration of switching contexts
                  with ``exo_yield_to`` and using the placeholder
                  STREAMS ``stop`` and ``yield`` calls.Build the system with
 ``cmake

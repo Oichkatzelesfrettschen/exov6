@@ -35,8 +35,6 @@ def compile_and_run(source: pathlib.Path) -> None:
             "-I",
             str(ROOT),
             "-I",
-            str(ROOT / "engine"),
-            "-I",
             str(ROOT / "libos"),
             "-I",
             str(ROOT / "include/libos"),
