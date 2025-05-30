@@ -2,9 +2,9 @@ posix_tests = files('../user/posix_file_test.c',
                     '../user/posix_signal_test.c',
                     '../user/posix_pipe_test.c',
                     '../user/posix_rename_unlink_test.c',
-                    '../examples/demos/posix_misc_test.c',
-                    '../examples/demos/posix_socket_test.c',
-                    '../examples/demos/posix_cwd_test.c')
+                    '../demos/posix_misc_test.c',
+                    '../demos/posix_socket_test.c',
+                    '../demos/posix_cwd_test.c')
 libos_srcs = files('../libos/posix.c',
                    '../libos/fs.c',
                    '../libos/file.c',
