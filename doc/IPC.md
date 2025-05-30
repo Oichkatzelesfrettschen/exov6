@@ -1,6 +1,6 @@
 # Inter-Process Communication
 
-Phoenix implements asynchronous message passing using per-process mailboxes. Each process owns a mailbox that queues incoming `zipc_msg_t` structures. Senders append to the destination mailbox while receivers dequeue from their own queue.
+FeuerBird implements asynchronous message passing using per-process mailboxes. Each process owns a mailbox that queues incoming `zipc_msg_t` structures. Senders append to the destination mailbox while receivers dequeue from their own queue.
 
 ## Send and Receive
 

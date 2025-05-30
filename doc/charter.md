@@ -1,6 +1,6 @@
-# Phoenix Exokernel Charter
+# FeuerBird Exokernel Charter
 
-This document describes the guiding principles of the Phoenix exokernel
+This document describes the guiding principles of the FeuerBird exokernel
 project. It outlines the long term goals, how contributors can
 participate, and the basic governance model used to steer development.
 
@@ -30,7 +30,7 @@ please follow these simple rules:
 
 ## Governance Model
 
-Phoenix is maintained by a small group of volunteers. Design decisions
+FeuerBird is maintained by a small group of volunteers. Design decisions
 are reached by consensus on the public mailing list. In case of
 conflict, the maintainers listed in `MAINTAINERS` have final say.
 Releases are cut periodically once the test suite passes and planned

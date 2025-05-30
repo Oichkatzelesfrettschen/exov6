@@ -1,6 +1,6 @@
 #POSIX Compatibility Layer
 
-Phoenix exposes capabilities for blocks, pages and IPC endpoints.
+FeuerBird exposes capabilities for blocks, pages and IPC endpoints.
 The libOS translates these primitives into familiar POSIX file and
 process abstractions.  Each open file stores the underlying block
 capability and read/write requests issue disk operations on that block.
@@ -29,7 +29,7 @@ only the PID is returned.|
 
         These wrappers mirror the POSIX names where possible but
                 are not fully featured
-                    .They exist so portability layers can build against Phoenix
+                    .They exist so portability layers can build against FeuerBird
                         without pulling in a real C library.
 
             ##Environment Variables

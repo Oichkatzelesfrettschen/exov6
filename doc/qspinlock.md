@@ -1,6 +1,6 @@
 # Quantum-inspired Spinlock (QSpinlock)
 
-The qspinlock API extends xv6's ticket-based spinlocks with a randomized
+The qspinlock API extends FeuerBird's ticket-based spinlocks with a randomized
 back-off strategy. When a CPU fails to immediately acquire the lock, it
 waits for a pseudo-random delay before retrying. On x86 systems with the
 `RDRAND` instruction the delay is derived from hardware randomness;

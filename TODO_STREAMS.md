@@ -16,7 +16,6 @@ This file collects outstanding tasks for the prototype STREAMS implementation. T
 
 ## Testing and tooling
 
-- Expand the latency harness in `scripts/simulate.py` to cover more module combinations.
 - Add unit tests for the logging helpers in `examples/python/streams_log.py`.
 
 ## Flow control and configuration

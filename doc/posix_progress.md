@@ -1,6 +1,6 @@
 # POSIX Interface Progress
 
-This log tracks implementation status of the POSIX wrappers provided by the Phoenix libOS.  Mark each interface as **Implemented**, **Stubbed**, or **Missing**.  Update the table whenever a new wrapper is merged.
+This log tracks implementation status of the POSIX wrappers provided by the FeuerBird libOS.  Mark each interface as **Implemented**, **Stubbed**, or **Missing**.  Update the table whenever a new wrapper is merged.
 
 | Interface | Status | Spec | Source |
 |-----------|--------|------|--------|
