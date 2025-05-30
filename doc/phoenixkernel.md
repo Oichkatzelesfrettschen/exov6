@@ -235,7 +235,7 @@ User space may host several small microkernels built on top of the Phoenix capab
 
 Registered microkernels share capabilities through the libOS helpers in `libos/microkernel/`.  The capability manager hands out pages and revokes them when a runtime exits.  Messages are routed by the `msg_router` library which simply forwards buffers to the destination capability.  Resource usage may be metered with the lightweight accounting functions in `resource_account.c` so cooperating kernels can enforce quotas on one another.  Because all communication relies on explicit capabilities the kernels remain isolated yet can still collaborate within the same address space.
 
-The microkernel helpers include modules for runtime registration, message routing and lambda capabilities. `cap.c` now exposes `mk_obtain_cap()` and `mk_revoke_cap()` so runtimes can duplicate or revoke tokens securely. `lambda_cap.c` wraps the affine runtime to create capabilities that execute small policies when consumed. See `examples/demos/microkernel_rcrs_demo.c` for a minimal runtime that registers with `rcrs`, allocates a page and sends a message through the router.
+The microkernel helpers include modules for runtime registration, message routing and lambda capabilities. `cap.c` now exposes `mk_obtain_cap()` and `mk_revoke_cap()` so runtimes can duplicate or revoke tokens securely. `lambda_cap.c` wraps the affine runtime to create capabilities that execute small policies when consumed. See `demos/microkernel_rcrs_demo.c` for a minimal runtime that registers with `rcrs`, allocates a page and sends a message through the router.
 
 ## Cap'n Proto IPC
 

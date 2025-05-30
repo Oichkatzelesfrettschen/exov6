@@ -10,9 +10,9 @@ SRC_FILES = [
     ROOT / "user/posix_pipe_test.c",
     ROOT / "user/posix_rename_unlink_test.c",
     ROOT / "user/posix_ftruncate_test.c",
-    ROOT / "examples/demos/posix_misc_test.c",
-    ROOT / "examples/demos/posix_socket_test.c",
-    ROOT / "examples/demos/posix_cwd_test.c",
+    ROOT / "demos/posix_misc_test.c",
+    ROOT / "demos/posix_socket_test.c",
+    ROOT / "demos/posix_cwd_test.c",
 ]
 
 
