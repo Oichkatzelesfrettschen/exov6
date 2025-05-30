@@ -1,6 +1,6 @@
-# Phoenix POSIX User Guide
+# FeuerBird POSIX User Guide
 
-This guide explains how to build the Phoenix kernel, compile programs that use the libOS, and how the capability system maps to familiar POSIX interfaces. It supplements the more detailed [phoenixkernel.md](phoenixkernel.md) design notes.
+This guide explains how to build the FeuerBird kernel, compile programs that use the libOS, and how the capability system maps to familiar POSIX interfaces. It supplements the more detailed [phoenixkernel.md](phoenixkernel.md) design notes.
 
 ## Building the Kernel and LibOS
 
@@ -45,7 +45,7 @@ The behaviour of `read()` matches the Single UNIX Specification; see [`ben-books
 
 ## Capabilities and POSIX Semantics
 
-Phoenix exposes low level capabilities such as pages, blocks and endpoints. The libOS translates these primitives into standard file descriptors and process IDs. For example `libos_open()` obtains a block capability for the underlying storage and stores it in an internal table indexed by the returned descriptor. System calls like `libos_fork()` communicate with the scheduler using capability-protected endpoints. Memory mapping wrappers allocate pages with `exo_alloc_page()` before installing the mappings.
+FeuerBird exposes low level capabilities such as pages, blocks and endpoints. The libOS translates these primitives into standard file descriptors and process IDs. For example `libos_open()` obtains a block capability for the underlying storage and stores it in an internal table indexed by the returned descriptor. System calls like `libos_fork()` communicate with the scheduler using capability-protected endpoints. Memory mapping wrappers allocate pages with `exo_alloc_page()` before installing the mappings.
 
 By layering these wrappers on top of capabilities the system preserves POSIX semantics in user space while retaining the fine grained control of the exokernel.
 

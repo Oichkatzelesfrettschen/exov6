@@ -1,7 +1,7 @@
-#Phoenix Kernel Overview
+#FeuerBird Kernel Overview
 
-The Phoenix kernel implements an exokernel research platform built on top of the
-        xv6 code base.Its goal is to expose low -
+The FeuerBird kernel implements an exokernel research platform built on top of the
+        FeuerBird code base.Its goal is to expose low -
     level hardware resources directly to user space while keeping the in -
     kernel portion as small as possible.Applications
         link against a library operating
@@ -10,20 +10,20 @@ that provides traditional services on top of the primitive capability interface.
 
     ##Exokernel Philosophy
 
-        Phoenix follows the exokernel approach
+        FeuerBird follows the exokernel approach
     : the kernel multiplexes hardware resources and
           enforces protection but leaves higher -
     level abstractions to user -
     level code.Instead of implementing full POSIX semantics in the kernel,
-    Phoenix exposes capabilities that grant controlled access to memory regions,
+    FeuerBird exposes capabilities that grant controlled access to memory regions,
     devices and communication endpoints.User -
         space runtimes build whatever abstractions they require.
 
-    Phoenix draws heavily on the architecture described in the
+    FeuerBird draws heavily on the architecture described in the
     [Engler–Kaashoek exokernel paper](https://pdos.csail.mit.edu/papers/exokernel:osdi95.pdf).
     That work introduced **secure bindings**, **visible revocation** and an
     **abort protocol** so library operating systems could safely multiplex
-    hardware resources. Phoenix retains these ideas so that its capability
+    hardware resources. FeuerBird retains these ideas so that its capability
     interface matches the original model.
 
         ##DAG Execution Model
@@ -47,11 +47,11 @@ All privileged operations require an explicit capability token. Capabilities are
 
 ## Directory Layout
 
-A suggested layout for projects building on Phoenix is:
+A suggested layout for projects building on FeuerBird is:
 
 - `kernel/`   – core kernel source files
 - `user/`    – user-space programs and the basic C library
-- `libos/`        – the Phoenix libOS implementing POSIX-style services
+- `libos/`        – the FeuerBird libOS implementing POSIX-style services
 - `include/`      – shared headers for both kernel and user space
 - `doc/`          – design notes and other documentation
 
@@ -59,7 +59,7 @@ Keeping kernel, user programs and the libOS separated helps manage dependencies 
 
 ## Building
 
-Meson and Ninja are the primary tools for building Phoenix. Configure a
+Meson and Ninja are the primary tools for building FeuerBird. Configure a
 build directory and compile the entire system with:
 
 ```
@@ -85,7 +85,7 @@ runtime detection logic see
 
 ## POSIX Compatibility in User Space
 
-Phoenix itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
+FeuerBird itself does not provide a POSIX interface. Instead the libOS layers POSIX system calls on top of the capability primitives. Files, processes and IPC endpoints are implemented in user space, allowing multiple runtimes to coexist. Programs written against POSIX headers simply link against `libos.a` and run unmodified on the exokernel.
 See [posix_user_guide.md](posix_user_guide.md) for build steps and examples of the POSIX wrappers.
 
 ## BSD and SVR4 Compatibility Goals
@@ -93,7 +93,7 @@ See [posix_user_guide.md](posix_user_guide.md) for build steps and examples of t
 While the current focus is POSIX emulation, the project also aims to
 support BSD and System&nbsp;
 V Release &nbsp;4 personalities entirely in user
-space.  Additional modules under `libos/` will translate Phoenix
+space.  Additional modules under `libos/` will translate FeuerBird
 capabilities to the expected interfaces.  Planned components include
 `bsd_signals.c` and `bsd_termios.c` for the classic BSD signal and
 terminal APIs, and `svr4_signal.c` along with `svr4_termios.c` to mimic
@@ -207,7 +207,7 @@ the repository the filesystem image contains `exo_stream_demo`,
    ninja -C build qemu-nox
    ```
 
-3. At the xv6 shell run one of the demos:
+3. At the FeuerBird shell run one of the demos:
 
    ```
    $ exo_stream_demo
@@ -224,7 +224,7 @@ Both programs print messages from their stub implementations showing how
 ## Driver Processes
 
 Hardware devices are managed entirely from user space. A driver runs as a
-regular Phoenix process holding capabilities that provide access to the
+regular FeuerBird process holding capabilities that provide access to the
 corresponding I/O regions and interrupts. A crashed or misbehaving driver
 cannot compromise the kernel because it only receives the capabilities it
 needs. Drivers typically export a Cap'n Proto service describing the
@@ -232,7 +232,7 @@ operations they support.
 
 ## Interrupt Capabilities and Queues
 
-Phoenix exposes hardware interrupt lines through the capability type
+FeuerBird exposes hardware interrupt lines through the capability type
 `CAP_TYPE_IRQ` declared in `include/cap.h`.
 Drivers obtain an IRQ capability via `exo_alloc_irq()` and wait for events
 with `exo_irq_wait()` before acknowledging them through `exo_irq_ack()`.
@@ -257,7 +257,7 @@ The `rcrs` supervisor runs at boot and keeps drivers alive. It launches each pro
 
 ## Cooperating Microkernels
 
-User space may host several small microkernels built on top of the Phoenix capability substrate.  Each microkernel registers itself with `rcrs` by sending a `REGISTER` message to the global endpoint.  The supervisor tracks the PIDs of the registered runtimes and includes them in its periodic status reports.
+User space may host several small microkernels built on top of the FeuerBird capability substrate.  Each microkernel registers itself with `rcrs` by sending a `REGISTER` message to the global endpoint.  The supervisor tracks the PIDs of the registered runtimes and includes them in its periodic status reports.
 
 Registered microkernels share capabilities through the libOS helpers in `libos/microkernel/`.  The capability manager hands out pages and revokes them when a runtime exits.  Messages are routed by the `msg_router` library which simply forwards buffers to the destination capability.  Resource usage may be metered with the lightweight accounting functions in `resource_account.c` so cooperating kernels can enforce quotas on one another.  Because all communication relies on explicit capabilities the kernels remain isolated yet can still collaborate within the same address space.
 
@@ -265,7 +265,7 @@ The microkernel helpers include modules for runtime registration, message routin
 
 ## Cap'n Proto IPC
 
-Phoenix uses [Cap'n Proto](https://capnproto.org/) schemas to describe the
+FeuerBird uses [Cap'n Proto](https://capnproto.org/) schemas to describe the
 messages exchanged between processes. The fast endpoint-based IPC mechanism
 transports serialized Cap'n Proto messages. Applications define their RPC
 interfaces in `.capnp` files and rely on the Cap'n Proto C bindings to
@@ -328,7 +328,7 @@ A minimal block driver illustrating these APIs is shown below:
 int main(void) {
   struct exo_blockcap blk;
   fs_alloc_block(1, EXO_RIGHT_R | EXO_RIGHT_W, &blk);
-  char buf[BSIZE] = "Phoenix";
+  char buf[BSIZE] = "FeuerBird";
   fs_write_block(blk, buf);
   memset(buf, 0, sizeof(buf));
   fs_read_block(blk, buf);
@@ -389,15 +389,15 @@ int lambda_run(lambda_term_t *t, int fuel);
 ```
 
 This lightweight accounting mechanism allows research into affine
-λ-calculus interpreters while integrating with Phoenix's typed channel
+λ-calculus interpreters while integrating with FeuerBird's typed channel
 infrastructure.  See `affine_channel_demo.c` for a simple example
 that sends a message over an affine channel.
 
 ## Step-by-Step Examples
 
-The following walkthroughs illustrate how common Phoenix primitives fit
+The following walkthroughs illustrate how common FeuerBird primitives fit
 together.  Each snippet can be compiled as a standalone program and run
-inside the xv6 environment.
+inside the FeuerBird environment.
 
 ### Capability Allocation
 
@@ -475,7 +475,7 @@ calling the initializer before submitting DAG nodes.
 
 ## Locking Patterns for User-Space Drivers and Services
 
-Phoenix exposes several locking primitives that mirror the kernel's spinlock
+FeuerBird exposes several locking primitives that mirror the kernel's spinlock
 implementations.  Most drivers are single threaded, so the default stub locks
 found in `include/libos/spinlock.h` compile to no-ops.  Set `CONFIG_SMP` in
 `config.h` to `0` to remove all locking overhead when running on a single

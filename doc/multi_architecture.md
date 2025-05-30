@@ -1,6 +1,6 @@
 # Multi-Architecture Builds
 
-Phoenix supports several CPU architectures through a combination of cross
+FeuerBird supports several CPU architectures through a combination of cross
 compilers and runtime feature detection.  The `setup.sh` helper installs
 cross toolchains for the targets below and the build system selects one via
 `-DARCH=<arch>`.

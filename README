@@ -1,14 +1,14 @@
-NOTE: MIT have stopped maintaining the x86 version of xv6, and switched
+NOTE: MIT have stopped maintaining the x86 version of FeuerBird, and switched
 their efforts to the RISC-V version
-(https://github.com/mit-pdos/xv6-riscv.git)
+(https://github.com/mit-pdos/FeuerBird-riscv.git)
 
-This project experiments with decomposition of the xv6 operating system into an exokernel model. 
+This project experiments with decomposition of the FeuerBird operating system into an exokernel model. 
 The project charter in [doc/charter.md](doc/charter.md) summarizes our goals and contributor guidelines. Philosophical technical debt notes are kept in [doc/ptd_log.md](doc/ptd_log.md).
 The evolving project roadmap can be found in [doc/roadmap.md](doc/roadmap.md).
 
 
-xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
-Version 6 (v6).  xv6 loosely follows the structure and style of v6,
+FeuerBird is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
+Version 6 (v6).  FeuerBird loosely follows the structure and style of v6,
 but is implemented for a modern x86-based multiprocessor using ANSI C.
 
 The user-level shell supports built-in commands such as ``cd`` and ``exit``.  These
@@ -25,12 +25,12 @@ POSIX wrappers described in ``doc/posix_user_guide.md``.
 
 ACKNOWLEDGMENTS
 
-xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
+FeuerBird is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
 to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
 2000)). See also https://pdos.csail.mit.edu/6.828/, which
 provides pointers to on-line resources for v6.
 
-xv6 borrows code from the following sources:
+FeuerBird borrows code from the following sources:
     JOS (asm.h, elf.h, mmu.h, bootasm.S, ide.c, console.c, and others)
     Plan 9 (entryother.S, mp.h, mp.c, lapic.c)
     FreeBSD (ioapic.c)
@@ -51,7 +51,7 @@ Eldar Sehayek, Yongming Shen, Cam Tenny, tyfkda, Rafael Ubal, Warren
 Toomey, Stephen Tu, Pablo Ventura, Xi Wang, Keiichi Watanabe, Nicolas
 Wolovick, wxdao, Grant Wu, Jindong Zhang, Icenowy Zheng, and Zou Chang Wei.
 
-The code in the files that constitute xv6 is
+The code in the files that constitute FeuerBird is
 Copyright 2006-2018 Frans Kaashoek, Robert Morris, and Russ Cox.
 
 ERROR REPORTS
@@ -195,7 +195,7 @@ to ``cmake`` when configuring to enable 64-bit builds and adjust
 
 
 When building with ``ARCH=x86_64`` the resulting artifacts will be named
-``kernel64``, ``fs64.img``, ``xv6-64.img`` and ``xv6memfs-64.img``.
+``kernel64``, ``fs64.img``, ``FeuerBird-64.img`` and ``FeuerBirdmemfs-64.img``.
 Use these files when running QEMU or other emulators.
 
 64-BIT BUILD REQUIREMENTS
@@ -504,7 +504,7 @@ tries the preferred node before falling back to the others.
 
 
 
-See doc/phoenixkernel.md for a design overview of the Phoenix exokernel
+See doc/phoenixkernel.md for a design overview of the FeuerBird exokernel
 and step-by-step examples of capability allocation, typed channels and
 driver management.  The document also outlines the planned BSD and SVR4
 compatibility layers built on top of the libOS.
@@ -520,7 +520,7 @@ Additional documentation lives under the `doc/` directory.  The
 libOS usage, while the [philosophy track](doc/track_philosophy.md)
 explains the broader goals without delving into implementation.  A
 brief [hybrid track](doc/track_hybrid.md) ties the two together.  All
-three reference the Phoenix kernel charter for further context.
+three reference the FeuerBird kernel charter for further context.
 
 Example supervisor usage to manage drivers:
 
@@ -566,16 +566,6 @@ $ dot -Tpng streams_stack.dot -o stack.png
 
 The resulting `stack.png` illustrates the module chain.
 
-Run the latency harness with Python.  The script will benchmark several
-module combinations and print the average, minimum and maximum latency
-for each:
-
-```
-$ python3 scripts/simulate.py
-xor: avg 0.50 us (min 0.40, max 0.60)
-upper+xor: avg 0.70 us (min 0.60, max 0.80)
-reverse+upper+xor: avg 0.90 us (min 0.80, max 1.00)
-```
 
 Further work items related to the STREAMS prototype are tracked in
 `TODO_STREAMS.md`.

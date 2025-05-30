@@ -1,6 +1,6 @@
 # Architecture Detection and Fallback
 
-Phoenix builds can target multiple CPU architectures. The build system passes
+FeuerBird builds can target multiple CPU architectures. The build system passes
 `ARCH` to the compiler and optionally additional instruction set extensions via
 `CPUFLAGS`. When `USE_SIMD` is enabled the math routines choose specialized
 implementations at compile time.

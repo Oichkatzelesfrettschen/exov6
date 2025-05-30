@@ -1,7 +1,7 @@
 # Philosophical Technical Debt Log
 
 This file tracks outstanding philosophical or conceptual debt in the
-Phoenix project. Unlike ordinary bugs, these entries capture open
+FeuerBird project. Unlike ordinary bugs, these entries capture open
 questions or theoretical shortcuts that may influence future design
 choices.
 
