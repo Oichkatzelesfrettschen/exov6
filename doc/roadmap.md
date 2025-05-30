@@ -1,10 +1,10 @@
-#Phoenix Roadmap
+#FeuerBird Roadmap
 
-This document summarizes the current milestones and open tasks for the Phoenix exokernel project. It draws from the [project charter](charter.md) and the STREAMS TODO list.
+This document summarizes the current milestones and open tasks for the FeuerBird exokernel project. It draws from the [project charter](charter.md) and the STREAMS TODO list.
 
 ## Milestones from the Charter
 
-Phoenix aims to:
+FeuerBird aims to:
 
 - Build a small capability based exokernel that exposes hardware resources directly to user space.
 - Provide a flexible libOS implementing POSIX, BSD and SVR4 personalities without bloating the kernel.
@@ -18,7 +18,6 @@ These goals are paired with a lightweight governance model that welcomes contrib
 The prototype STREAMS stack still requires several features:
 
 - **Done:** integrate STREAMS callbacks with the kernel scheduler and implement `streams_stop()` / `streams_yield()`.
-- Expand the latency harness in `scripts/simulate.py` and add unit tests for `examples/python/streams_log.py`.
 - Document the PID based flow control interface under `/proc/streams/fc/` and provide an example using `examples/python/flow_pid.py`.
 
 ## Development Goals

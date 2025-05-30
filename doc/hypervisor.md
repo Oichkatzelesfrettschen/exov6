@@ -2,7 +2,7 @@
 
 This directory introduces a minimal hypervisor interface. The kernel now
 exports a `HypervisorCap` capability which allows a user program to request
-the launch of another Phoenix kernel as a guest. The hypervisor uses the
+the launch of another FeuerBird kernel as a guest. The hypervisor uses the
 processor's virtualisation extensions to enter guest mode. Guest memory is
 mapped from a page capability supplied by the kernel and a tiny virtual CPU
 state is initialised before attempting a `vmlaunch`.

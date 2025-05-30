@@ -1,6 +1,6 @@
 # POSIX Implementation Roadmap
 
-This document outlines the phased approach for implementing a POSIX compatibility layer on top of the Phoenix exokernel. Each phase builds upon the previous one and introduces new functionality while maintaining a strict capability-based security model.
+This document outlines the phased approach for implementing a POSIX compatibility layer on top of the FeuerBird exokernel. Each phase builds upon the previous one and introduces new functionality while maintaining a strict capability-based security model.
 
 ## Phase I: Foundation Layer - Core Infrastructure & Build System
 

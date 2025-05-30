@@ -1,6 +1,6 @@
 # Profiling Metrics
 
-The `phoenix_prof` utility provides basic profiling support for Phoenix
+The `phoenix_prof` utility provides basic profiling support for FeuerBird
 development builds.  It exposes counters for SIMD instruction usage and
 scalar fallbacks along with timing hooks for IPC latency and context
 switch duration.

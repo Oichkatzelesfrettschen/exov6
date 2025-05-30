@@ -1,6 +1,6 @@
 # POSIX Wrapper Matrix
 
-This table lists every wrapper provided by the Phoenix libOS. "Status" records whether the call is fully implemented, just a stub, or not yet present. The "Spec" column links to the Single UNIX Specification HTML when available. "Source" links point to the implementation files. The "Notes" column briefly describes any deviations or missing features.
+This table lists every wrapper provided by the FeuerBird libOS. "Status" records whether the call is fully implemented, just a stub, or not yet present. The "Spec" column links to the Single UNIX Specification HTML when available. "Source" links point to the implementation files. The "Notes" column briefly describes any deviations or missing features.
 
 | Interface | Status | Spec | Source | Notes |
 |-----------|--------|------|--------|-------|

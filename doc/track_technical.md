@@ -1,10 +1,10 @@
 # Technical Track
 
-This guide outlines the low level Phoenix interfaces and how programs interact with the libOS. It should be read together with the [Phoenix kernel charter](phoenixkernel.md).
+This guide outlines the low level FeuerBird interfaces and how programs interact with the libOS. It should be read together with the [FeuerBird kernel charter](phoenixkernel.md).
 
 ## Kernel API Summary
 
-Phoenix provides a minimal capability interface. Important calls include:
+FeuerBird provides a minimal capability interface. Important calls include:
 
 - `exo_alloc_page()` and `exo_unbind_page()` for physical pages.
 - `exo_alloc_block()` and `exo_bind_block()` for disk blocks.
@@ -25,9 +25,9 @@ exo_unbind_page(page);
 ```
 
 More detailed examples live in the charter and the source tree under `libos/` and `user/`.
-# Phoenix Technical Track
+# FeuerBird Technical Track
 
-This track provides a high level summary of the public APIs exported by Phoenix.
+This track provides a high level summary of the public APIs exported by FeuerBird.
 The charter outlines the full scope and goals of the project.
 
 ## Capability Primitives

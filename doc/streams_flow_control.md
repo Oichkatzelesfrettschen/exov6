@@ -1,6 +1,6 @@
 # STREAMS Flow Control
 
-Phoenix uses a simple PID controller to regulate message flow through the STREAMS pipeline. The three constants **Kp**, **Ki** and **Kd** tune the controller and can be adjusted at runtime via procfs entries.
+FeuerBird uses a simple PID controller to regulate message flow through the STREAMS pipeline. The three constants **Kp**, **Ki** and **Kd** tune the controller and can be adjusted at runtime via procfs entries.
 
 ## /proc/streams/fc/Kp
 The proportional constant. Larger values cause the controller to react more strongly to differences between the desired and observed throughput.
