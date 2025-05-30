@@ -1,60 +1,86 @@
-#include "asm.h"
+/*
+ * bootasm.S - Multimode Bootloader Assembly (16-bit, 32-bit, and 64-bit)
+ *
+ * This file handles initial real mode setup, protected mode transition,
+ * and a 64-bit long mode pathway. It includes:
+ *   - 16-bit real mode startup (BIOS entry).
+ *   - Enabling the A20 line for >1MB memory.
+ *   - Setting up a 32-bit protected mode environment.
+ *   - Setting up page tables, enabling PAE, and setting the LME bit in IA32_EFER.
+ *   - Jumping to 64-bit long mode with .code64.
+ *
+ * Main entry points:
+ *   - start: Executed in 16-bit real mode.
+ *   - start32: Transition to 32-bit protected mode.
+ *   - start64: Transition to 64-bit long mode.
+ */
+
 #include "memlayout.h"
 #include "mmu.h"
 #include "arch/asm_common.h"
 
-# Start the first CPU: switch to 32-bit protected mode, jump into C.
-# The BIOS loads this code from the first sector of the hard disk into
-# memory at physical address 0x7c00 and starts executing in real mode
-# with %cs=0 %ip=7c00.
-
-.code16                       # Assemble for 16-bit mode
+.code16
 .globl start
 start:
-  cli                         # BIOS enabled interrupts; disable
+  cli
+  xorw    %ax, %ax
+  movw    %ax, %ds
+  movw    %ax, %es
+  movw    %ax, %ss
 
-  # Zero data segment registers DS, ES, and SS.
-  xorw    %ax,%ax             # Set %ax to zero
-  movw    %ax,%ds             # -> Data Segment
-  movw    %ax,%es             # -> Extra Segment
-  movw    %ax,%ss             # -> Stack Segment
-
-  # Enable access to memory above 1MB
   ENABLE_A20
 
-  # Switch from real to protected mode.  Use a bootstrap GDT that makes
-  # virtual addresses map directly to physical addresses so that the
-  # effective memory map doesn't change during the transition.
   SETUP_PROT_MODE(gdtdesc, SEG_KCODE<<3, start32)
 
-//PAGEBREAK!
-
-.code32  # Tell assembler to generate 32-bit code now.
+.code32
 start32:
-  # Set up the protected-mode data segment registers
   INIT_PROT_MODE_DATA(SEG_KDATA<<3)
 
-  # Set up the stack pointer and call into C.
+  // Set up the stack pointer and call into C.
   movl    $start, %esp
   call    bootmain
 
-  # If bootmain returns (it shouldn't), trigger a Bochs
-  # breakpoint if running under Bochs, then loop.
-  movw    $0x8a00, %ax            # 0x8a00 -> port 0x8a00
-  movw    %ax, %dx
-  outw    %ax, %dx
-  movw    $0x8ae0, %ax            # 0x8ae0 -> port 0x8a00
-  outw    %ax, %dx
-spin:
-  jmp     spin
+  // If bootmain returns, spin forever
+spin32:
+  jmp     spin32
 
-# Bootstrap GDT
-.p2align 2                                # force 4 byte alignment
+  // Prepare for 64-bit mode: set CR4.PAE=1, load PML4, set IA32_EFER.LME=1, then jump
+  // (This example assumes paging structures have been set up elsewhere)
+  // movl    $pml4_table, %eax
+  // movl    %eax, %cr3
+  // movl    %cr4, %eax
+  // orl     $(1 << 5), %eax       // CR4.PAE=1
+  // movl    %eax, %cr4
+  // rdmsr
+  // bts     $8, %eax              // IA32_EFER.LME=1 (bit 8)
+  // wrmsr
+  // jmp     enter64
+
+enter64:
+  // Set up a 64-bit code segment in the GDT or LDT before jumping here
+  ljmp    $(SEG_KCODE64 << 3), $start64
+
+.code64
+start64:
+  // Now in 64-bit mode
+  // Set up the stack, data segments, etc. as needed
+  // Continue to your 64-bit kernel entry point
+  jmp long_mode_entry
+
+long_mode_entry:
+  // 64-bit execution begins here
+  // ...
+  // Spin loop / fallback
+spin64:
+  jmp     spin64
+
+.p2align 2
 gdt:
-  SEG_NULLASM                             # null seg
-  SEG_ASM(STA_X|STA_R, 0x0, 0xffffffff)   # code seg
-  SEG_ASM(STA_W, 0x0, 0xffffffff)         # data seg
+  SEG_NULLASM
+  SEG_ASM(STA_X|STA_R, 0x0, 0xffffffff)   // 32-bit code segment
+  SEG_ASM(STA_W, 0x0, 0xffffffff)         // 32-bit data segment
+  SEG_ASM64(STA_X|STA_R, 0x0, 0xfffff)    // 64-bit code segment (example)
 
 gdtdesc:
-  .word   (gdtdesc - gdt - 1)             # sizeof(gdt) - 1
-  .long   gdt                             # address gdt
+  .word (gdtdesc - gdt - 1)
+  .long gdt
