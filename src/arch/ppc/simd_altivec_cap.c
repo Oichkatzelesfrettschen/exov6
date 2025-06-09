@@ -1,5 +1,10 @@
 #include <altivec.h>
 
+/**
+ * @file simd_altivec_cap.c
+ * @brief AltiVec capability detection and basic DAG.
+ */
+
 typedef __vector unsigned int v4u32;
 
 /** Validate availability of AltiVec instructions. */

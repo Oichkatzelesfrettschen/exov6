@@ -1,5 +1,10 @@
 #include <immintrin.h>
 
+/**
+ * @file simd_avx2_cap.c
+ * @brief AVX2 capability checks and simple DAG example.
+ */
+
 /** Validate availability of AVX2 instructions. */
 int cap_validate_avx2(void) {
   __m256i z = _mm256_setzero_si256();
