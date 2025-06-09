@@ -1,25 +1,26 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/ usr / bin / env bash
+set - euo pipefail
 
-# Optional debugging mode. Use --debug to enable verbose tracing.
-DEBUG_MODE=false
+#Optional debugging mode.Use-- debug to enable verbose tracing.
+          DEBUG_MODE = false
 
-# simple debug logger
-debug(){
-  if [ "$DEBUG_MODE" = true ]; then
-    echo "[DEBUG] $*" >&2
-  fi
+#simple debug logger
+    debug() {
+  if
+    ["$DEBUG_MODE" = true];
+  then echo "[DEBUG] $*" > &2 fi
 }
 
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-# This script installs all build dependencies. It logs actions to
-# /var/log/setup.log and records any failures in /var/log/setup_failures.log.
-# After the initial installation attempt it retries failed packages once using
-# apt, pip or npm depending on the recorded method.
+REPO_ROOT = "$(cd " $(dirname "$0") " && pwd)"
+#This script installs all build dependencies.It logs actions to
+#/ var / log /                                                                 \
+    setup.log and records any failures in / var / log / setup_failures.log.
+#After the initial installation attempt it retries failed packages once using
+#apt, pip or npm depending on the recorded method.
 
-# Parse command line arguments
-OFFLINE_MODE=false
-while [ $# -gt 0 ]; do
+#Parse command line arguments
+    OFFLINE_MODE = false while[$ # - gt 0];
+do
   case "$1" in
     --offline)
       OFFLINE_MODE=true
@@ -39,64 +40,56 @@ if [ "$DEBUG_MODE" = true ]; then
   set -x
 fi
 
-# In offline mode or when network is unavailable the script attempts
-# to install packages from the scripts/offline_packages directory. Ensure this
-# directory is populated with the required .deb files or Python wheels
-# as described in scripts/offline_packages/README.md. Otherwise most installs
-# will be skipped and logged as warnings.
+#In offline mode or when network is unavailable the script attempts
+#to install packages from the scripts / offline_packages directory.Ensure this
+#directory is populated with the required.deb files or Python wheels
+#as described in scripts / offline_packages /                                \
+      README.md.Otherwise most installs
+#will be skipped and logged as warnings.
 
-# Detect basic network connectivity unless offline mode was requested
+#Detect basic network connectivity unless offline mode was requested
 NETWORK_AVAILABLE=true
 if [ "$OFFLINE_MODE" = true ]; then
   NETWORK_AVAILABLE=false
   echo "Offline mode enabled" >&2
 elif ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
-  NETWORK_AVAILABLE=false
-  echo "Network unavailable, proceeding in offline mode" >&2
-fi
-LOG_FILE=/var/log/setup.log
-FAIL_LOG=/var/log/setup_failures.log
-mkdir -p /var/log
-: >"$LOG_FILE"
-: >"$FAIL_LOG"
-exec > >(tee -a "$LOG_FILE") 2>&1
-export DEBIAN_FRONTEND=noninteractive
+    NETWORK_AVAILABLE =
+        false echo
+        "Network unavailable, proceeding in offline mode" > & 2 fi LOG_FILE =
+            / var / log /
+            setup.log FAIL_LOG = / var / log / setup_failures.log mkdir -
+                                     p / var / log : >
+                                                     "$LOG_FILE"
+        : > "$FAIL_LOG" exec >>
+          (tee - a "$LOG_FILE")2 > & 1 export DEBIAN_FRONTEND = noninteractive
 
 #— helper to pin to the repo’s exact version if it exists
-pip_install(){
-  pkg="$1"
-  debug "Attempting pip install $pkg"
-  if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
-    echo "Warning: pip install $pkg failed" >&2
-    echo "pip $pkg" >>"$FAIL_LOG"
-  fi
-}
-apt_pin_install(){
-  pkg="$1"
-  debug "Attempting apt install $pkg"
-  if [ "$NETWORK_AVAILABLE" != true ]; then
-    echo "Warning: network unavailable, skipping apt-get install of $pkg" >&2
-    return 0
-  fi
+        pip_install() {
+      pkg = "$1" debug "Attempting pip install $pkg" if !pip3 install-- no -
+                cache - dir "$pkg" >
+            / dev / null 2 > &1;
+      then echo "Warning: pip install $pkg failed" > &2 echo "pip $pkg" >>
+          "$FAIL_LOG" fi
+    }
+  apt_pin_install() {
+    pkg = "$1" debug
+          "Attempting apt install $pkg" if["$NETWORK_AVAILABLE" != true];
+    then echo "Warning: network unavailable, skipping apt-get install of $pkg" >
+            & 2 return 0 fi
 
-  status=0
-  ver=$(apt-cache show "$pkg" 2>/dev/null \
-        | awk '/^Version:/{print $2; exit}' || true)
-  if [ -n "$ver" ]; then
-    if ! apt-get install -y "${pkg}=${ver}"; then
-      echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
-      echo "apt ${pkg}=${ver}" >>"$FAIL_LOG"
-      status=1
-    fi
-  else
-    if ! apt-get install -y "$pkg"; then
-      echo "Warning: apt-get install $pkg failed" >&2
-      echo "apt $pkg" >>"$FAIL_LOG"
-      status=1
-    fi
-  fi
+                status = 0 ver = $(apt - cache show "$pkg" 2 > / dev / null |
+                                       awk '/^Version:/{print $2; exit}' ||
+                                   true) if[-n "$ver"];
+    then if !apt - get install - y "${pkg}=${ver}";
+    then echo "Warning: apt-get install ${pkg}=${ver} failed" >
+        &2 echo "apt ${pkg}=${ver}" >>
+        "$FAIL_LOG" status = 1 fi else if !apt - get install - y "$pkg";
+    then echo "Warning: apt-get install $pkg failed" > &2 echo "apt $pkg" >>
+        "$FAIL_LOG" status = 1 fi fi
 
-  if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                                 if !dpkg -
+                                 s "$pkg" >
+                             / dev / null 2 > &1; then
     case "$pkg" in
       python3-*)
         pip_pkg="${pkg#python3-}"
@@ -127,46 +120,39 @@ apt_pin_install(){
         if ! command -v capnp >/dev/null 2>&1; then
           if ! curl -fsSL https://capnproto.org/capnproto-c++-1.0.1.tar.gz \
               -o /tmp/capnp.tar.gz; then
-            echo "Warning: failed to download capnproto" >&2
-            echo "download capnproto" >>"$FAIL_LOG"
-          else
-            tar -xzf /tmp/capnp.tar.gz -C /tmp
-            (cd /tmp/capnproto-* && ./configure && make -j"$(nproc)" && make install) || {
-              echo "Warning: building capnproto failed" >&2
-              echo "build capnproto" >>"$FAIL_LOG"
-            }
-            rm -rf /tmp/capnproto-* /tmp/capnp.tar.gz
-          fi
-        fi
-        ;;
-    esac
-  fi
+    echo "Warning: failed to download capnproto" >
+            &2 echo "download capnproto" >>
+            "$FAIL_LOG" else tar - xzf / tmp / capnp.tar.gz -
+                C / tmp(cd / tmp / capnproto - *&&./ configure &&
+                        make - j "$(nproc)" && make install) ||
+        {echo "Warning: building capnproto failed" >
+         &2 echo "build capnproto" >> "$FAIL_LOG"} rm -
+            rf / tmp / capnproto - */ tmp / capnp.tar.gz fi fi;
+    ;
+    esac fi
 
-  return 0
-}
+        return 0
+  }
 
-# ensure_command tries to install specified packages until the command exists.
-# Missing commands are logged but do not halt the script.
-ensure_command(){
-  local cmd="$1"
-  shift
-  if command -v "$cmd" >/dev/null 2>&1; then
+#ensure_command tries to install specified packages until the command exists.
+#Missing commands are logged but do not halt the script.
+  ensure_command() {
+    local cmd = "$1" shift if command - v "$cmd" > / dev / null 2 > &1; then
     return 0
   fi
   local pkg
-  for pkg in "$@"; do
-    apt_pin_install "$pkg"
-  done
-  if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "Warning: required command $cmd not found after install attempts" >&2
-    echo "missing $cmd" >>"$FAIL_LOG"
-  fi
-}
+  for pkg in "$@";
+    do
+      apt_pin_install "$pkg" done if !command - v "$cmd" > / dev / null 2 > &1;
+    then echo
+        "Warning: required command $cmd not found after install attempts" >
+        &2 echo "missing $cmd" >> "$FAIL_LOG" fi
+  }
 
-# Install packages from scripts/offline_packages/ when network is unavailable
-install_offline_packages(){
-  dir="$REPO_ROOT/scripts/offline_packages"
-  if [ -d "$dir" ]; then
+#Install packages from scripts / offline_packages /                          \
+      when network is unavailable
+  install_offline_packages() {
+    dir = "$REPO_ROOT/scripts/offline_packages" if[-d "$dir"]; then
     shopt -s nullglob
     files=("$dir"/*.deb)
     if [ ${#files[@]} -eq 0 ]; then
@@ -226,7 +212,7 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  libasan6 libubsan1 likwid hwloc; do
+  libasan6 libubsan1 likwid hwloc cloc; do
   apt_pin_install "$pkg"
 done
 
@@ -323,7 +309,7 @@ configuredb --help >/dev/null 2>&1 || true
 for pkg in \
   qemu-user-static \
   qemu-system-x86 qemu-system-arm qemu-system-aarch64 \
-  qemu-system-riscv64 qemu-system-ppc qemu-system-ppc64 qemu-utils; do
+  qemu-system-riscv64 qemu-system-ppc qemu-system-ppc64 qemu-utils qemu-nox; do
   apt_pin_install "$pkg"
 done
 
@@ -396,7 +382,7 @@ done
 #— containers, virtualization, HPC, debug
 for pkg in \
   docker.io podman buildah virt-manager libvirt-daemon-system qemu-kvm \
-  bochs bochs-sdl \
+  bochs bochs-sdl tmux \
   gdb lldb perf gcovr lcov bcc-tools bpftrace \
   openmpi-bin libopenmpi-dev mpich; do
   apt_pin_install "$pkg"
@@ -512,7 +498,7 @@ ensure_command coqc coq coqide coq-theories
 ensure_command tlc tlaplus
 
 # Check for essential commands and log if any are missing
-for cmd in clang clang++ cmake qemu-system-x86 coqc; do
+for cmd in clang clang++ cmake qemu-system-x86 qemu-nox tmux cloc coqc; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     echo "Warning: required command $cmd not found" >&2
     echo "missing $cmd" >>"$FAIL_LOG"

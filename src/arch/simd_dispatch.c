@@ -14,6 +14,12 @@ static void dag_process_scalar(void) {}
 typedef int (*cap_validate_ptr)(void);
 typedef void (*dag_process_ptr)(void);
 
+/**
+ * @brief Scalar fallback implementation of Fibonacci.
+ *
+ * @param n Index within the Fibonacci sequence.
+ * @return nth Fibonacci number.
+ */
 static uint64_t fib_scalar(uint32_t n) {
   if (n == 0)
     return 0;
@@ -26,6 +32,13 @@ static uint64_t fib_scalar(uint32_t n) {
   return b;
 }
 
+/**
+ * @brief Compute the greatest common divisor using scalar arithmetic.
+ *
+ * @param a First operand.
+ * @param b Second operand.
+ * @return Greatest common divisor of @a a and @a b.
+ */
 static uint64_t gcd_scalar(uint64_t a, uint64_t b) {
   while (a != b) {
     if (a > b)
@@ -67,6 +80,13 @@ static unsigned simd_table_len;
 static cap_validate_ptr cap_validate_impl = cap_validate_scalar;
 static dag_process_ptr dag_process_impl = dag_process_scalar;
 
+/**
+ * @brief Register handlers for a specific SIMD feature.
+ *
+ * @param feature Feature identifier.
+ * @param cap_fn  Capability check callback.
+ * @param dag_fn  DAG processing callback.
+ */
 void simd_register(enum simd_feature feature, cap_validate_ptr cap_fn,
                    dag_process_ptr dag_fn) {
   if (simd_table_len < MAX_SIMD_ENTRIES) {
@@ -78,6 +98,15 @@ void simd_register(enum simd_feature feature, cap_validate_ptr cap_fn,
 }
 
 #if defined(__x86_64__) || defined(__i386__)
+/**
+ * @brief Execute the CPUID instruction.
+ *
+ * @param leaf Requested CPUID leaf.
+ * @param a    Output EAX value.
+ * @param b    Output EBX value.
+ * @param c    Output ECX value.
+ * @param d    Output EDX value.
+ */
 static inline void cpuid_inst(uint32_t leaf, uint32_t *a, uint32_t *b,
                               uint32_t *c, uint32_t *d) {
   __asm__ volatile("cpuid"
@@ -86,7 +115,13 @@ static inline void cpuid_inst(uint32_t leaf, uint32_t *a, uint32_t *b,
 }
 #endif
 
-/** Detect available SIMD features and select implementations. */
+/**
+ * @brief Detect CPU SIMD capabilities and configure handlers.
+ *
+ * This function queries platform-specific registers to determine the
+ * best available SIMD instruction set. It then updates function
+ * pointers so that subsequent calls use the most efficient code path.
+ */
 static void simd_detect(void) {
   simd_initialized = 1;
 #if defined(__x86_64__) || defined(__i386__)
@@ -169,6 +204,7 @@ static void simd_detect(void) {
   detected_feature = SIMD_FEATURE_NONE;
 }
 
+/** Initialise SIMD subsystem and select registered handlers. */
 void simd_init(void) {
   if (!simd_initialized)
     simd_detect();
@@ -181,6 +217,7 @@ void simd_init(void) {
   }
 }
 
+/** Compute Fibonacci number using the selected SIMD backend. */
 uint64_t simd_fib(uint32_t n) {
   if (!simd_initialized)
     simd_detect();
@@ -191,6 +228,7 @@ uint64_t simd_fib(uint32_t n) {
   return fib_impl(n);
 }
 
+/** Compute GCD using the selected SIMD backend. */
 uint64_t simd_gcd(uint64_t a, uint64_t b) {
   if (!simd_initialized)
     simd_detect();
@@ -201,12 +239,14 @@ uint64_t simd_gcd(uint64_t a, uint64_t b) {
   return gcd_impl(a, b);
 }
 
+/** Validate capabilities of the current SIMD backend. */
 int simd_cap_validate(void) {
   if (!simd_initialized)
     simd_init();
   return cap_validate_impl();
 }
 
+/** Invoke DAG processing routine for the current SIMD backend. */
 void simd_dag_process(void) {
   if (!simd_initialized)
     simd_init();

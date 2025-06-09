@@ -1,11 +1,12 @@
 #include "../simd_dispatch.h"
 #include <arm_neon.h>
 
-/* Validate NEON support using a trivial instruction. */
+/** Validate NEON support using a trivial instruction. */
 static int cap_validate_neon(void) { return 1; }
-/* Simple DAG processing placeholder for NEON. */
+/** Simple DAG processing placeholder for NEON. */
 static void dag_process_neon(void) {}
 
+/** Register NEON handlers at startup. */
 __attribute__((constructor)) static void register_neon(void) {
   simd_register(SIMD_FEATURE_NEON, cap_validate_neon, dag_process_neon);
 }

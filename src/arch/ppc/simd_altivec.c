@@ -1,11 +1,17 @@
 #include "../simd_dispatch.h"
 #include <altivec.h>
 
-/* Validate AltiVec support. */
+/**
+ * @file simd_altivec.c
+ * @brief AltiVec capability checks and sample algorithms.
+ */
+
+/** Validate AltiVec support. */
 static int cap_validate_altivec(void) { return 1; }
-/* Simple DAG processing placeholder for AltiVec. */
+/** Simple DAG processing placeholder for AltiVec. */
 static void dag_process_altivec(void) {}
 
+/** Register AltiVec handlers at startup. */
 __attribute__((constructor)) static void register_altivec(void) {
   simd_register(SIMD_FEATURE_ALTIVEC, cap_validate_altivec,
                 dag_process_altivec);
