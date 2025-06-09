@@ -67,8 +67,7 @@ static unsigned simd_table_len;
 static cap_validate_ptr cap_validate_impl = cap_validate_scalar;
 static dag_process_ptr dag_process_impl = dag_process_scalar;
 
-void simd_register(enum simd_feature feature,
-                   cap_validate_ptr cap_fn,
+void simd_register(enum simd_feature feature, cap_validate_ptr cap_fn,
                    dag_process_ptr dag_fn) {
   if (simd_table_len < MAX_SIMD_ENTRIES) {
     simd_table[simd_table_len].feature = feature;
@@ -79,13 +78,15 @@ void simd_register(enum simd_feature feature,
 }
 
 #if defined(__x86_64__) || defined(__i386__)
-static inline void cpuid_inst(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c,
-                              uint32_t *d) {
-  __asm__ volatile("cpuid" : "=a"(*a), "=b"(*b), "=c"(*c), "=d"(*d)
+static inline void cpuid_inst(uint32_t leaf, uint32_t *a, uint32_t *b,
+                              uint32_t *c, uint32_t *d) {
+  __asm__ volatile("cpuid"
+                   : "=a"(*a), "=b"(*b), "=c"(*c), "=d"(*d)
                    : "0"(leaf));
 }
 #endif
 
+/** Detect available SIMD features and select implementations. */
 static void simd_detect(void) {
   simd_initialized = 1;
 #if defined(__x86_64__) || defined(__i386__)

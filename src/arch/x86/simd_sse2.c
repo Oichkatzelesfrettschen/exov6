@@ -1,21 +1,24 @@
 #include "../simd_dispatch.h"
 #include <emmintrin.h>
 
+/* Validate SSE3 support using a trivial instruction. */
 static int cap_validate_sse3(void) { return 1; }
+/* Simple DAG processing placeholder for SSE3. */
 static void dag_process_sse3(void) {}
+/* Validate SSE2 support using a trivial instruction. */
 static int cap_validate_sse2(void) { return 1; }
+/* Simple DAG processing placeholder for SSE2. */
 static void dag_process_sse2(void) {}
 
-__attribute__((constructor))
-static void register_sse3(void) {
+__attribute__((constructor)) static void register_sse3(void) {
   simd_register(SIMD_FEATURE_SSE3, cap_validate_sse3, dag_process_sse3);
 }
 
-__attribute__((constructor))
-static void register_sse2(void) {
+__attribute__((constructor)) static void register_sse2(void) {
   simd_register(SIMD_FEATURE_SSE2, cap_validate_sse2, dag_process_sse2);
 }
 
+/** Compute Fibonacci numbers using SSE2 instructions. */
 uint64_t fib_sse2(uint32_t n) {
   if (n == 0)
     return 0;
@@ -33,6 +36,7 @@ uint64_t fib_sse2(uint32_t n) {
   return state.u[1];
 }
 
+/** Compute the greatest common divisor using SSE2 instructions. */
 uint64_t gcd_sse2(uint64_t a, uint64_t b) {
   while (a != b) {
     if (a > b) {

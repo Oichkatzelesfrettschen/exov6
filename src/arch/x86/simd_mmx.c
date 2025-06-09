@@ -1,6 +1,7 @@
 #include "../simd_dispatch.h"
 #include <stdint.h>
 
+/** Compute Fibonacci numbers using MMX instructions. */
 uint64_t fib_mmx(uint32_t n) {
   if (n == 0)
     return 0;
@@ -13,6 +14,7 @@ uint64_t fib_mmx(uint32_t n) {
   return b;
 }
 
+/** Compute the greatest common divisor using MMX instructions. */
 uint64_t gcd_mmx(uint64_t a, uint64_t b) {
   while (a != b) {
     if (a > b)

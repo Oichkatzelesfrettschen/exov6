@@ -1,10 +1,10 @@
 #ifndef _DDEKIT_TIMER_H
 #define _DDEKIT_TIMER_H
 
-#include <src/ddekit/ddekit.h>
-#include <src/ddekit/thread.h>
+#include "ddekit.h"
+#include "thread.h"
 
-/** \defgroup DDEKit_timer 
+/** \defgroup DDEKit_timer
  *
  * Timer subsystem
  *
@@ -19,11 +19,10 @@
  *
  *  \ingroup DDEKit_timer
  *
- *	\return		>=0	valid timer ID 
+ *	\return		>=0	valid timer ID
  *  \return		< 0	error
  */
-int ddekit_add_timer(void (*fn)(void *), void *args, unsigned long
-	timeout);
+int ddekit_add_timer(void (*fn)(void *), void *args, unsigned long timeout);
 
 /** Delete timer with the corresponding timer id.
  *
@@ -31,7 +30,7 @@ int ddekit_add_timer(void (*fn)(void *), void *args, unsigned long
  */
 int ddekit_del_timer(int timer);
 
-/** Check whether a timer is pending 
+/** Check whether a timer is pending
  *
  *  \ingroup DDEKit_timer
  *

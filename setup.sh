@@ -222,7 +222,7 @@ for pkg in \
   clang-format clang-tidy clangd clang-tools ccache uncrustify astyle editorconfig \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
-  pkg-config file ca-certificates curl git unzip graphviz \
+  pkg-config file ca-certificates curl git unzip graphviz doxygen doxygen-latex \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
@@ -238,7 +238,8 @@ fi
 
 #— Python tooling
 for pkg in \
-  python3 python3-pip python3-dev python3-venv python3-wheel; do
+  python3 python3-pip python3-dev python3-venv python3-wheel \
+  python3-sphinx python3-sphinx-rtd-theme; do
   apt_pin_install "$pkg"
 done
 
