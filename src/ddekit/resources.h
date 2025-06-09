@@ -1,9 +1,8 @@
 #ifndef _DDEKIT_RESOURCES_H
 #define _DDEKIT_RESOURCES_H
 
-#include <src/ddekit/ddekit.h>
-#include <src/ddekit/types.h>
-
+#include "ddekit.h"
+#include "types.h"
 
 /*
  * request/release an isa DMA-channel
@@ -22,7 +21,7 @@ int ddekit_release_io(ddekit_addr_t start, ddekit_addr_t count);
  * request an IO-Memory mapping from address start to vaddr of the length count
  */
 int ddekit_request_mem(ddekit_addr_t start, ddekit_addr_t count,
-	ddekit_addr_t *vaddr);
+                       ddekit_addr_t *vaddr);
 int ddekit_release_mem(ddekit_addr_t start, ddekit_addr_t count);
 
 /**
@@ -75,6 +74,5 @@ void ddekit_outw(ddekit_addr_t port, unsigned short val);
  * \param val   value to write
  */
 void ddekit_outl(ddekit_addr_t port, unsigned long val);
-
 
 #endif

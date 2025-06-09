@@ -8,17 +8,18 @@
 #ifndef _DDEKIT_PGTAB_H
 #define _DDEKIT_PGTAB_H
 
-#include <src/ddekit/ddekit.h>
+#include "ddekit.h"
 
-#include <src/ddekit/types.h>
+#include "types.h"
 
 /* FIXME Region types may be defined by pgtab users. Do we really need them
  * here? */
-enum ddekit_pgtab_type
-{
-	PTE_TYPE_OTHER, PTE_TYPE_LARGE, PTE_TYPE_UMA, PTE_TYPE_CONTIG
+enum ddekit_pgtab_type {
+  PTE_TYPE_OTHER,
+  PTE_TYPE_LARGE,
+  PTE_TYPE_UMA,
+  PTE_TYPE_CONTIG
 };
-
 
 /**
  * Set virtual->physical mapping for VM region
@@ -29,19 +30,17 @@ enum ddekit_pgtab_type
  * \param type      pgtab type for region
  */
 void ddekit_pgtab_set_region(void *virt, ddekit_addr_t phys, int pages,
-	int type);
-
+                             int type);
 
 /**
  * Set virtual->physical mapping for VM region given a specific size in bytes.
  *
- * Internally, DDEKit manages regions with pages. However, DDEs do not need to tangle
- * with the underlying mechanism and therefore can use this function that takes care
- * of translating a size to an amount of pages.
+ * Internally, DDEKit manages regions with pages. However, DDEs do not need to
+ * tangle with the underlying mechanism and therefore can use this function that
+ * takes care of translating a size to an amount of pages.
  */
-void ddekit_pgtab_set_region_with_size(void *virt, ddekit_addr_t phys,
-	int size, int type);
-
+void ddekit_pgtab_set_region_with_size(void *virt, ddekit_addr_t phys, int size,
+                                       int type);
 
 /**
  * Clear virtual->physical mapping for VM region

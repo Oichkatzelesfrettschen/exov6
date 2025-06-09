@@ -1,27 +1,27 @@
 #ifndef _DDEKIT_PCI_H
 #define _DDEKIT_PCI_H
-#include <src/ddekit/ddekit.h>
+#include "ddekit.h"
 
-#include <src/ddekit/types.h>
+#include "types.h"
 
 /** \defgroup DDEKit_pci */
 
 /** Our version of PCI_ANY_ID */
-#define DDEKIT_PCI_ANY_ID    (~0)
+#define DDEKIT_PCI_ANY_ID (~0)
 
 /** Copy of L4IO_PCIDEV_RES */
-#define DDEKIT_PCIDEV_RES	 12
+#define DDEKIT_PCIDEV_RES 12
 
 struct ddekit_pci_dev;
 
-/** PCI resource descriptor. Copied from generic_io. 
+/** PCI resource descriptor. Copied from generic_io.
  *
  * XXX!
  */
 typedef struct ddekit_pci_resource {
-	unsigned long start;
-	unsigned long end;
-	unsigned long flags;
+  unsigned long start;
+  unsigned long end;
+  unsigned long flags;
 } ddekit_pci_res_t;
 
 void ddekit_pci_init(void);
@@ -29,9 +29,9 @@ void ddekit_pci_init(void);
 int ddekit_pci_get_device(int nr, int *bus, int *slot, int *func);
 
 int ddekit_pci_read(int bus, int slot, int func, int pos, int len,
-	ddekit_uint32_t *val);
+                    ddekit_uint32_t *val);
 int ddekit_pci_write(int bus, int slot, int func, int pos, int len,
-	ddekit_uint32_t val);
+                     ddekit_uint32_t val);
 
 /** Read byte from PCI config space.
  *
@@ -45,8 +45,7 @@ int ddekit_pci_write(int bus, int slot, int func, int pos, int len,
  *
  * \return 0       success
  */
-int ddekit_pci_readb(int bus, int slot, int func, int pos,
-	ddekit_uint8_t *val);
+int ddekit_pci_readb(int bus, int slot, int func, int pos, ddekit_uint8_t *val);
 
 /** Read word from PCI config space.
  *
@@ -61,7 +60,7 @@ int ddekit_pci_readb(int bus, int slot, int func, int pos,
  * \return 0       success
  */
 int ddekit_pci_readw(int bus, int slot, int func, int pos,
-	ddekit_uint16_t *val);
+                     ddekit_uint16_t *val);
 
 /** Read dword from PCI config space.
  *
@@ -76,7 +75,7 @@ int ddekit_pci_readw(int bus, int slot, int func, int pos,
  * \return 0       success
  */
 int ddekit_pci_readl(int bus, int slot, int func, int pos,
-	ddekit_uint32_t *val);
+                     ddekit_uint32_t *val);
 
 /** Write byte to PCI config space.
  *
@@ -90,8 +89,7 @@ int ddekit_pci_readl(int bus, int slot, int func, int pos,
  *
  * \return 0       success
  */
-int ddekit_pci_writeb(int bus, int slot, int func, int pos,
-	ddekit_uint8_t val);
+int ddekit_pci_writeb(int bus, int slot, int func, int pos, ddekit_uint8_t val);
 
 /** Write word to PCI config space.
  *
@@ -106,7 +104,7 @@ int ddekit_pci_writeb(int bus, int slot, int func, int pos,
  * \return 0       success
  */
 int ddekit_pci_writew(int bus, int slot, int func, int pos,
-	ddekit_uint16_t val);
+                      ddekit_uint16_t val);
 
 /** Write word to PCI config space.
  *
@@ -121,15 +119,17 @@ int ddekit_pci_writew(int bus, int slot, int func, int pos,
  * \return 0       success
  */
 int ddekit_pci_writel(int bus, int slot, int func, int pos,
-	ddekit_uint32_t val);
+                      ddekit_uint32_t val);
 
 /** Find a PCI device.
  *
  * \ingroup DDEKit_pci
  *
  * \param bus	pointer to bus number or \ref DDEKIT_PCI_ANY_ID
- * \param slot  pointer to slot number (devfn >> DEVFN_SLOTSHIFT) or \ref DDEKIT_PCI_ANY_ID
- * \param func  pointer to func number (devfc & DEVFN_FUNCMASK) or \ref DDEKIT_PCI_ANY_ID
+ * \param slot  pointer to slot number (devfn >> DEVFN_SLOTSHIFT) or \ref
+ * DDEKIT_PCI_ANY_ID
+ * \param func  pointer to func number (devfc & DEVFN_FUNCMASK) or \ref
+ * DDEKIT_PCI_ANY_ID
  * \param start search device list only behind this device (excluding it!), NULL
  *              searches whole device list
  *
@@ -140,8 +140,8 @@ int ddekit_pci_writel(int bus, int slot, int func, int pos,
  * \return device   a valid PCI device
  * \return NULL     if no device found
  */
-struct ddekit_pci_dev * ddekit_pci_find_device(int *bus, int *slot, int
-	*func, struct ddekit_pci_dev *start);
+struct ddekit_pci_dev *ddekit_pci_find_device(int *bus, int *slot, int *func,
+                                              struct ddekit_pci_dev *start);
 
 /** Enable PCI device
  * \ingroup DDEKit_pci
@@ -202,9 +202,8 @@ char *ddekit_pci_get_slot_name(struct ddekit_pci_dev *dev);
  * \ingroup DDEKit_pci
  */
 ddekit_pci_res_t *ddekit_pci_get_resource(struct ddekit_pci_dev *dev,
-	unsigned int idx);
+                                          unsigned int idx);
 
-int ddekit_pci_irq_enable(int bus, int slot, int func, int pin, int
-	*irq);
+int ddekit_pci_irq_enable(int bus, int slot, int func, int pin, int *irq);
 
-#endif 
+#endif

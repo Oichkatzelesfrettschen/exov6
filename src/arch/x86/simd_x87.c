@@ -1,13 +1,15 @@
 #include "../simd_dispatch.h"
 
+/* Validate x87 FPU support. */
 static int cap_validate_x87(void) { return 1; }
+/* Placeholder for x87 DAG processing. */
 static void dag_process_x87(void) {}
 
-__attribute__((constructor))
-static void register_x87(void) {
+__attribute__((constructor)) static void register_x87(void) {
   simd_register(SIMD_FEATURE_X87, cap_validate_x87, dag_process_x87);
 }
 
+/** Compute Fibonacci numbers using x87 instructions. */
 uint64_t fib_x87(uint32_t n) {
   if (n == 0)
     return 0;
@@ -20,6 +22,7 @@ uint64_t fib_x87(uint32_t n) {
   return b;
 }
 
+/** Compute the greatest common divisor using x87 instructions. */
 uint64_t gcd_x87(uint64_t a, uint64_t b) {
   while (a != b) {
     if (a > b)

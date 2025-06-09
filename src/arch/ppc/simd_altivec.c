@@ -1,17 +1,19 @@
 #include "../simd_dispatch.h"
 #include <altivec.h>
 
+/* Validate AltiVec support. */
 static int cap_validate_altivec(void) { return 1; }
+/* Simple DAG processing placeholder for AltiVec. */
 static void dag_process_altivec(void) {}
 
-__attribute__((constructor))
-static void register_altivec(void) {
+__attribute__((constructor)) static void register_altivec(void) {
   simd_register(SIMD_FEATURE_ALTIVEC, cap_validate_altivec,
                 dag_process_altivec);
 }
 
 typedef __vector unsigned long long v2u64;
 
+/** Compute Fibonacci numbers using AltiVec instructions. */
 uint64_t fib_altivec(uint32_t n) {
   if (n == 0)
     return 0;
@@ -29,6 +31,7 @@ uint64_t fib_altivec(uint32_t n) {
   return state.u[1];
 }
 
+/** Compute the greatest common divisor using AltiVec instructions. */
 uint64_t gcd_altivec(uint64_t a, uint64_t b) {
   while (a != b) {
     if (a > b) {
