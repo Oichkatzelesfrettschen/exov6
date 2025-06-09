@@ -16,7 +16,7 @@ struct exo_ipc_ops {
 };
 
 void exo_ipc_register(struct exo_ipc_ops *ops);
-[[nodiscard]] int exo_send(exo_cap dest, const void *buf, uint64_t len);
-[[nodiscard]] int exo_recv(exo_cap src, void *buf, uint64_t len);
-[[nodiscard]] int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
+EXO_NODISCARD int exo_send(exo_cap dest, const void *buf, uint64_t len);
+EXO_NODISCARD int exo_recv(exo_cap src, void *buf, uint64_t len);
+EXO_NODISCARD int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
                                  unsigned timeout);

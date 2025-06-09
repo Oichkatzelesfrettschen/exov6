@@ -136,7 +136,7 @@ void picinit(void);
 
 // pipe.c
 
-[[nodiscard]] int pipealloc(struct file **, struct file **);
+EXO_NODISCARD int pipealloc(struct file **, struct file **);
 void pipeclose(struct pipe *, int);
 int piperead(struct pipe *, struct file *, char *, size_t);
 int pipewrite(struct pipe *, struct file *, char *, size_t);

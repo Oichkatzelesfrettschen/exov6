@@ -1,5 +1,5 @@
 Usage
 =====
 
-.. automodule:: exov6
-   :members:
+This project consists primarily of C sources. Refer to the API
+documentation generated from the code for usage details.

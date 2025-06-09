@@ -3,7 +3,11 @@
 
 #include "ddekit.h"
 
-/** \defgroup DDEKit_synchronization */
+/**
+ * \defgroup DDEKit_synchronization DDEKit Synchronization Primitives
+ *
+ * Lightweight semaphores used throughout the library.
+ */
 
 struct ddekit_sem;
 typedef struct ddekit_sem ddekit_sem_t;

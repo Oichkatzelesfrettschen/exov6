@@ -80,13 +80,7 @@ static unsigned simd_table_len;
 static cap_validate_ptr cap_validate_impl = cap_validate_scalar;
 static dag_process_ptr dag_process_impl = dag_process_scalar;
 
-/**
- * @brief Register handlers for a specific SIMD feature.
- *
- * @param feature Feature identifier.
- * @param cap_fn  Capability check callback.
- * @param dag_fn  DAG processing callback.
- */
+/** Register handlers for a specific SIMD feature. */
 void simd_register(enum simd_feature feature, cap_validate_ptr cap_fn,
                    dag_process_ptr dag_fn) {
   if (simd_table_len < MAX_SIMD_ENTRIES) {

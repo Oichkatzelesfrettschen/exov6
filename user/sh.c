@@ -56,11 +56,11 @@ struct cmd *parsecmd(char *);
 int runbuiltin(struct cmd *);
 
 // Annotate as noreturn so modern compilers know runcmd exits
-static void [[noreturn]] runcmd(struct cmd *cmd);
+static void EXO_NORETURN runcmd(struct cmd *cmd);
 
 // Execute cmd.  Never returns.
 
-static void [[noreturn]] runcmd(struct cmd *cmd) {
+static void EXO_NORETURN runcmd(struct cmd *cmd) {
   int p[2];
   struct backcmd *bcmd;
   struct execcmd *ecmd;
@@ -211,7 +211,7 @@ int fork1(void) {
   return pid;
 }
 
-static int [[maybe_unused]] isbuiltin(struct cmd *cmd) {
+static int EXO_MAYBE_UNUSED isbuiltin(struct cmd *cmd) {
 
   struct execcmd *ecmd;
 

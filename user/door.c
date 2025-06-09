@@ -24,7 +24,7 @@ door_t door_create_remote(exo_cap dest) {
   return d;
 }
 
-[[nodiscard]] int door_call(door_t *d, zipc_msg_t *msg) {
+EXO_NODISCARD int door_call(door_t *d, zipc_msg_t *msg) {
   if (!d)
     return -1;
   if (d->is_local) {

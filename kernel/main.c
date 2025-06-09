@@ -15,7 +15,7 @@
 #include <string.h>
 
 static void startothers(void);
-static void mpmain(void) [[noreturn]];
+static void mpmain(void) EXO_NORETURN;
 #ifdef __x86_64__
 extern pml4e_t *kpgdir;
 #else

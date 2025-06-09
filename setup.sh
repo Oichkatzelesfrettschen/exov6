@@ -225,7 +225,7 @@ fi
 #— Python tooling
 for pkg in \
   python3 python3-pip python3-dev python3-venv python3-wheel \
-  python3-sphinx python3-sphinx-rtd-theme; do
+  python3-sphinx python3-breathe python3-sphinx-rtd-theme python3-myst-parser; do
   apt_pin_install "$pkg"
 done
 

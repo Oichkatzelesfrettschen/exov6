@@ -9,12 +9,12 @@ typedef struct affine_chan {
   int used_recv;
 } affine_chan_t;
 
-[[nodiscard]] affine_chan_t *
+EXO_NODISCARD affine_chan_t *
 affine_chan_create(const struct msg_type_desc *desc);
 void affine_chan_destroy(affine_chan_t *c);
-[[nodiscard]] int affine_chan_send(affine_chan_t *c, exo_cap dest,
+EXO_NODISCARD int affine_chan_send(affine_chan_t *c, exo_cap dest,
                                    const void *msg, size_t len);
-[[nodiscard]] int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg,
+EXO_NODISCARD int affine_chan_recv(affine_chan_t *c, exo_cap src, void *msg,
                                    size_t len);
 
 // Simple lambda term representation
@@ -38,8 +38,8 @@ typedef struct lambda_cap {
   int consumed;       // non-zero once used
 } lambda_cap_t;
 
-[[nodiscard]] lambda_cap_t *lambda_cap_create(lambda_fn fn, void *env,
-                                             exo_cap cap);
+EXO_NODISCARD lambda_cap_t *lambda_cap_create(lambda_fn fn, void *env,
+                                              exo_cap cap);
 void lambda_cap_destroy(lambda_cap_t *lc);
 // Execute the lambda once and mark the capability consumed
 int lambda_cap_use(lambda_cap_t *lc, int fuel);
