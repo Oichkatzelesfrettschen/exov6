@@ -1,10 +1,16 @@
 #include "../simd_dispatch.h"
 
-/* Validate x87 FPU support. */
+/**
+ * @file simd_x87.c
+ * @brief x87 floating point implementations and capability checks.
+ */
+
+/** Validate x87 FPU support. */
 static int cap_validate_x87(void) { return 1; }
-/* Placeholder for x87 DAG processing. */
+/** Placeholder for x87 DAG processing. */
 static void dag_process_x87(void) {}
 
+/** Register x87 handlers at startup. */
 __attribute__((constructor)) static void register_x87(void) {
   simd_register(SIMD_FEATURE_X87, cap_validate_x87, dag_process_x87);
 }
