@@ -4,7 +4,11 @@
 
 #include "types.h"
 
-/** \defgroup DDEKit_pci */
+/**
+ * \defgroup DDEKit_pci DDEKit PCI Helpers
+ *
+ * Functions for interacting with PCI configuration space.
+ */
 
 /** Our version of PCI_ANY_ID */
 #define DDEKIT_PCI_ANY_ID (~0)
@@ -41,7 +45,7 @@ int ddekit_pci_write(int bus, int slot, int func, int pos, int len,
  * \param slot     slot #
  * \param func     function #
  * \param pos      offset in config space
- * \retval val     read value
+ * \param[out] val read value
  *
  * \return 0       success
  */
@@ -55,7 +59,7 @@ int ddekit_pci_readb(int bus, int slot, int func, int pos, ddekit_uint8_t *val);
  * \param slot     slot #
  * \param func     function #
  * \param pos      offset in config space
- * \retval val     read value
+ * \param[out] val read value
  *
  * \return 0       success
  */
@@ -70,7 +74,7 @@ int ddekit_pci_readw(int bus, int slot, int func, int pos,
  * \param slot     slot #
  * \param func     function #
  * \param pos      offset in config space
- * \retval val     read value
+ * \param[out] val read value
  *
  * \return 0       success
  */
@@ -85,7 +89,7 @@ int ddekit_pci_readl(int bus, int slot, int func, int pos,
  * \param slot     slot #
  * \param func     function #
  * \param pos      offset in config space
- * \retval val     value to write
+ * \param val      value to write
  *
  * \return 0       success
  */
@@ -99,7 +103,7 @@ int ddekit_pci_writeb(int bus, int slot, int func, int pos, ddekit_uint8_t val);
  * \param slot     slot #
  * \param func     function #
  * \param pos      offset in config space
- * \retval val     value to write
+ * \param val      value to write
  *
  * \return 0       success
  */
@@ -114,7 +118,7 @@ int ddekit_pci_writew(int bus, int slot, int func, int pos,
  * \param slot     slot #
  * \param func     function #
  * \param pos      offset in config space
- * \retval val     value to write
+ * \param val      value to write
  *
  * \return 0       success
  */

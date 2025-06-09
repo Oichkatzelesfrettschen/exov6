@@ -31,16 +31,17 @@ exo_cap exo_alloc_page(void);
 
 /* Free the page referenced by cap and remove any mappings to it.  Returns 0
  * on success and -1 on failure. */
-[[nodiscard]] int exo_unbind_page(exo_cap cap);
+EXO_NODISCARD int exo_unbind_page(exo_cap cap);
 
 /* Allocate a disk block capability for device 'dev'.  On success the
  * capability is stored in *cap and zero is returned. */
-[[nodiscard]] int exo_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap);
+EXO_NODISCARD int exo_alloc_block(uint32_t dev, uint32_t rights,
+                                  exo_blockcap *cap);
 
 /* Bind the block capability to the buffer 'data'.  If 'write' is non-zero the
  * contents of the buffer are written to disk; otherwise the block is read into
  * the buffer.  Returns 0 on success. */
-[[nodiscard]] int exo_bind_block(exo_blockcap *cap, void *data, int write);
+EXO_NODISCARD int exo_bind_block(exo_blockcap *cap, void *data, int write);
 
 /* Allocate a capability referencing an I/O port. */
 exo_cap exo_alloc_ioport(uint32_t port);
@@ -51,33 +52,33 @@ exo_cap exo_bind_irq(uint32_t irq);
 /* Allocate a DMA buffer page and return a capability for channel 'chan'. */
 exo_cap exo_alloc_dma(uint32_t chan);
 HypervisorCap exo_alloc_hypervisor(void);
-[[nodiscard]] int exo_hv_launch(HypervisorCap hv, const char *path);
+EXO_NODISCARD int exo_hv_launch(HypervisorCap hv, const char *path);
 
 /* Switch to the context referenced by 'target'.  The caller's context must be
  * saved in a user-managed structure.  The kernel does not choose the next
  * runnable task. */
-[[nodiscard]] int exo_yield_to(exo_cap target);
+EXO_NODISCARD int exo_yield_to(exo_cap target);
 
 /* Send 'len' bytes from 'buf' to destination capability 'dest'.  Any queuing
  * or flow control is managed in user space. */
-[[nodiscard]] int exo_send(exo_cap dest, const void *buf, uint64_t len);
+EXO_NODISCARD int exo_send(exo_cap dest, const void *buf, uint64_t len);
 
 /* Receive up to 'len' bytes from source capability 'src' into 'buf'.  The call
  * blocks according to policy implemented by the library OS. */
-[[nodiscard]] int exo_recv(exo_cap src, void *buf, uint64_t len);
-[[nodiscard]] int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
+EXO_NODISCARD int exo_recv(exo_cap src, void *buf, uint64_t len);
+EXO_NODISCARD int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
                                  unsigned timeout);
 
 /* Read or write arbitrary byte ranges using a block capability. */
-[[nodiscard]] int exo_read_disk(exo_blockcap cap, void *dst, uint64_t off,
+EXO_NODISCARD int exo_read_disk(exo_blockcap cap, void *dst, uint64_t off,
                                 uint64_t n);
-[[nodiscard]] int exo_write_disk(exo_blockcap cap, const void *src, uint64_t off,
-                                 uint64_t n);
+EXO_NODISCARD int exo_write_disk(exo_blockcap cap, const void *src,
+                                 uint64_t off, uint64_t n);
 
 /* Allocate and wait/acknowledge interrupt events. */
 exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
-[[nodiscard]] int exo_irq_wait(exo_cap cap, uint32_t *irq);
-[[nodiscard]] int exo_irq_ack(exo_cap cap);
+EXO_NODISCARD int exo_irq_wait(exo_cap cap, uint32_t *irq);
+EXO_NODISCARD int exo_irq_ack(exo_cap cap);
 #endif /* EXO_KERNEL */
 
 /* Enumeration of syscall numbers for the primitives. */

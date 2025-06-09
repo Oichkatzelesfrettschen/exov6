@@ -23,7 +23,7 @@ typedef struct exo_blockcap {
 
 #ifdef EXO_KERNEL
 exo_cap exo_alloc_page(void);
-[[nodiscard]] int exo_unbind_page(exo_cap c);
+EXO_NODISCARD int exo_unbind_page(exo_cap c);
 exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner);
 int cap_verify(exo_cap c);
 #endif

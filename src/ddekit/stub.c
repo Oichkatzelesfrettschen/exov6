@@ -4,4 +4,4 @@
  */
 
 /** Empty stub to satisfy the linker when ddekit is unused. */
-[[maybe_unused]] void ddekit_stub(void) {}
+EXO_MAYBE_UNUSED void ddekit_stub(void) {}

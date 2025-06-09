@@ -58,4 +58,4 @@ static inline void cap_yield(context_t **old, context_t *target) {
   swtch(old, target);
 }
 
-[[nodiscard]] int exo_yield_to(exo_cap target);
+EXO_NODISCARD int exo_yield_to(exo_cap target);
