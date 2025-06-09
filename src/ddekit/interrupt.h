@@ -28,20 +28,31 @@
 
 #ifndef _DDEKIT_INTERUPT_H
 #define _DDEKIT_INTERUPT_H
-#include <src/ddekit/ddekit.h>
-#include <src/ddekit/thread.h>
+#include "ddekit.h"
+#include "thread.h"
 
-/** Attach to an interrupt */
-ddekit_thread_t *ddekit_interrupt_attach( int irq, int shared,
-	void(*thread_init)(void *), void(*handler)(void *), void *priv);
+/**
+ * Attach to an interrupt.
+ *
+ * @param irq         Interrupt vector number.
+ * @param shared      Whether the interrupt is shared.
+ * @param thread_init Optional initialization callback.
+ * @param handler     Interrupt handler callback.
+ * @param priv        User provided data pointer.
+ *
+ * @return Handle to the created interrupt thread.
+ */
+ddekit_thread_t *ddekit_interrupt_attach(int irq, int shared,
+                                         void (*thread_init)(void *),
+                                         void (*handler)(void *), void *priv);
 
-/* Detach from a previously attached interrupt. */
+/** Detach from a previously attached interrupt. */
 void ddekit_interrupt_detach(int irq);
 
-/* Block interrupt. */
+/** Block interrupt. */
 void ddekit_interrupt_disable(int irq);
 
-/* Enable interrupt */
+/** Enable interrupt */
 void ddekit_interrupt_enable(int irq);
 
 #endif

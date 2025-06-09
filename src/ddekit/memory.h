@@ -31,7 +31,7 @@
 #ifndef _DDEKIT_MEMORY_H
 #define _DDEKIT_MEMORY_H
 
-#include <src/ddekit/ddekit.h>
+#include "ddekit.h"
 
 /*******************
  ** Slab facility **
@@ -40,16 +40,16 @@
 struct ddekit_slab;
 
 /* Store user pointer in slab cache */
-void ddekit_slab_set_data(struct ddekit_slab * slab, void *data);
+void ddekit_slab_set_data(struct ddekit_slab *slab, void *data);
 
 /* Read user pointer from slab cache */
-void *ddekit_slab_get_data(struct ddekit_slab * slab);
+void *ddekit_slab_get_data(struct ddekit_slab *slab);
 
 /* Allocate slab in slab cache */
-void *ddekit_slab_alloc(struct ddekit_slab * slab);
+void *ddekit_slab_alloc(struct ddekit_slab *slab);
 
 /* Allocate slab in slab cache */
-void ddekit_slab_free(struct ddekit_slab * slab, void *objp);
+void ddekit_slab_free(struct ddekit_slab *slab, void *objp);
 
 /*
  * Setup page cache for all slabs
@@ -71,7 +71,7 @@ void ddekit_slab_setup_page_cache(unsigned pages);
  *
  * slab:  pointer to slab cache structure
  */
-void ddekit_slab_destroy(struct ddekit_slab * slab);
+void ddekit_slab_destroy(struct ddekit_slab *slab);
 
 /**
  * Initialize slab cache
@@ -81,8 +81,7 @@ void ddekit_slab_destroy(struct ddekit_slab * slab);
  *
  * \return pointer to new slab cache or 0 on error
  */
-struct ddekit_slab * ddekit_slab_init(unsigned size, int contiguous);
-
+struct ddekit_slab *ddekit_slab_init(unsigned size, int contiguous);
 
 /**********************
  ** Memory allocator **
@@ -115,8 +114,8 @@ void ddekit_large_free(void *p);
  * contig_malloc() is the lowest-level allocator interface one could implement.
  * we should consider to provide vmalloc() too. */
 void *ddekit_contig_malloc(unsigned long size, unsigned long low,
-	unsigned long high, unsigned long alignment, unsigned long boundary);
-
+                           unsigned long high, unsigned long alignment,
+                           unsigned long boundary);
 
 /*****************************
  ** Simple memory allocator **

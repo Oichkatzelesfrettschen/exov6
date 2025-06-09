@@ -1,14 +1,16 @@
 #include "../simd_dispatch.h"
 #include <immintrin.h>
 
+/* Validate AVX2/FMA support using a trivial instruction. */
 static int cap_validate_avx2(void) { return 1; }
+/* Simple DAG processing placeholder for AVX2. */
 static void dag_process_avx2(void) {}
 
-__attribute__((constructor))
-static void register_avx2(void) {
+__attribute__((constructor)) static void register_avx2(void) {
   simd_register(SIMD_FEATURE_AVX2_FMA, cap_validate_avx2, dag_process_avx2);
 }
 
+/** Compute Fibonacci numbers using AVX2 instructions. */
 uint64_t fib_avx(uint32_t n) {
   /* Use SSE2 algorithm, compiled with AVX instructions available */
   if (n == 0)
@@ -27,6 +29,7 @@ uint64_t fib_avx(uint32_t n) {
   return state.u[1];
 }
 
+/** Compute the greatest common divisor using AVX2 instructions. */
 uint64_t gcd_avx(uint64_t a, uint64_t b) {
   while (a != b) {
     if (a > b) {

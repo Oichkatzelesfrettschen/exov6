@@ -1,8 +1,7 @@
 #ifndef _DDEKIT_SEMAPHORE_H
 #define _DDEKIT_SEMAPHORE_H
 
-#include <src/ddekit/ddekit.h>
-
+#include "ddekit.h"
 
 /** \defgroup DDEKit_synchronization */
 
@@ -44,7 +43,7 @@ int ddekit_sem_down_try(ddekit_sem_t *sem);
  */
 int ddekit_sem_down_timed(ddekit_sem_t *sem, int timo);
 
-/** Semaphore up method. 
+/** Semaphore up method.
  *
  * \ingroup DDEKit_synchronization
  */

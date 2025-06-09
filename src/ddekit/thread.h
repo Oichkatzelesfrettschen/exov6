@@ -2,8 +2,8 @@
 #define _DDEKIT_THREAD_H
 
 /** \defgroup DDEKit_threads */
-#include <src/ddekit/ddekit.h>
-#include <src/ddekit/lock.h>
+#include "ddekit.h"
+#include "lock.h"
 
 struct ddekit_thread;
 typedef struct ddekit_thread ddekit_thread_t;
@@ -12,26 +12,27 @@ typedef struct ddekit_thread ddekit_thread_t;
  *
  * \ingroup DDEKit_threads
  *
- * Create a new thread running the specified thread function with the specified 
- * arguments. The thread is assigned the given internal name. 
+ * Create a new thread running the specified thread function with the specified
+ * arguments. The thread is assigned the given internal name.
  *
  * Additionally, DDEKit threads possess a thread-local storage area where they
  * may store arbitrary data.
  *
  * \param fun     thread function
- * \param arg     optional argument to thread function, set to NULL if not needed
+ * \param arg     optional argument to thread function, set to NULL if not
+ * needed
  * \param name    internal thread name
  */
 ddekit_thread_t *ddekit_thread_create(void (*fun)(void *), void *arg,
-	const char *name);
+                                      const char *name);
 
-/** Reference to own DDEKit thread id. 
+/** Reference to own DDEKit thread id.
  *
  * \ingroup DDEKit_threads
  */
 ddekit_thread_t *ddekit_thread_myself(void);
 
-/** Initialize thread with given name. 
+/** Initialize thread with given name.
  *
  * \ingroup DDEKit_threads
  *
@@ -107,25 +108,25 @@ void ddekit_thread_nsleep(unsigned long nsecs);
  */
 void ddekit_thread_sleep(ddekit_lock_t *lock);
 
-/** Wakeup a waiting thread. 
+/** Wakeup a waiting thread.
  *
  * \ingroup DDEKit_threads
  */
 void ddekit_thread_wakeup(ddekit_thread_t *thread);
 
-/** Terminate a thread 
+/** Terminate a thread
  *
  * \ingroup DDEKit_threads
  */
 void ddekit_thread_exit(void) [[noreturn]];
 
-/** Terminate a thread 
+/** Terminate a thread
  *
  * \ingroup DDEKit_threads
  */
 void ddekit_thread_terminate(ddekit_thread_t *thread);
 
-/** Get the name, a thread registered with DDEKit. 
+/** Get the name, a thread registered with DDEKit.
  *
  * \ingroup DDEKit_threads
  */
@@ -142,19 +143,19 @@ const char *ddekit_thread_get_name(ddekit_thread_t *thread);
  */
 int ddekit_thread_get_id(ddekit_thread_t *thread);
 
-/** Hint that this thread is done and may be scheduled somehow. 
+/** Hint that this thread is done and may be scheduled somehow.
  *
  * \ingroup DDEKit_threads
  */
 void ddekit_thread_schedule(void);
 
-/** Hint that this thread is done and may be scheduled somehow. 
+/** Hint that this thread is done and may be scheduled somehow.
  *
  * \ingroup DDEKit_threads
  */
 void ddekit_yield(void);
 
-/** Initialize DDEKit thread subsystem. 
+/** Initialize DDEKit thread subsystem.
  *
  * \ingroup DDEKit_threads
  */
