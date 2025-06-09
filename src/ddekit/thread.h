@@ -1,7 +1,11 @@
 #ifndef _DDEKIT_THREAD_H
 #define _DDEKIT_THREAD_H
 
-/** \defgroup DDEKit_threads */
+/**
+ * \defgroup DDEKit_threads DDEKit Thread Management
+ *
+ * Facilities for creating and controlling lightweight threads.
+ */
 #include "ddekit.h"
 #include "lock.h"
 
@@ -98,7 +102,7 @@ void ddekit_thread_usleep(unsigned long usecs);
  *
  * \ingroup DDEKit_threads
  *
- * \param usecs      time to sleep in ns.
+ * \param nsecs      time to sleep in ns.
  */
 void ddekit_thread_nsleep(unsigned long nsecs);
 
@@ -118,7 +122,7 @@ void ddekit_thread_wakeup(ddekit_thread_t *thread);
  *
  * \ingroup DDEKit_threads
  */
-void ddekit_thread_exit(void) [[noreturn]];
+void ddekit_thread_exit(void) EXO_NORETURN;
 
 /** Terminate a thread
  *

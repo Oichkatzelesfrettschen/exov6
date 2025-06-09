@@ -15,4 +15,4 @@ void endpoint_init(struct endpoint *ep);
 void endpoint_config(struct endpoint *ep, zipc_msg_t *buf, uint32_t size,
                      const struct msg_type_desc *desc);
 void endpoint_send(struct endpoint *ep, zipc_msg_t *m);
-[[nodiscard]] int endpoint_recv(struct endpoint *ep, zipc_msg_t *m);
+EXO_NODISCARD int endpoint_recv(struct endpoint *ep, zipc_msg_t *m);

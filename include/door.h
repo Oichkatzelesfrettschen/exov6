@@ -14,7 +14,7 @@ typedef struct door {
 
 door_t door_create_local(void (*handler)(zipc_msg_t *msg));
 door_t door_create_remote(exo_cap dest);
-[[nodiscard]] int door_call(door_t *d, zipc_msg_t *msg);
+EXO_NODISCARD int door_call(door_t *d, zipc_msg_t *msg);
 void door_server_loop(door_t *d);
 
 #ifdef __cplusplus

@@ -56,6 +56,11 @@ static void add_node(struct nstr_graph *g, int id) {
   g->nodes = n;
 }
 
+/**
+ * Create a new empty graph instance.
+ *
+ * @return Newly allocated graph or NULL on allocation failure.
+ */
 nstr_graph *nstr_graph_open(void) {
   struct nstr_graph *g = malloc(sizeof(*g));
   if (!g)
