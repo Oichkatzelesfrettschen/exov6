@@ -357,6 +357,7 @@ void exo_stream_halt(void);
 void exo_stream_yield(void);
 void dag_sched_init(void);
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct exo_sched_ops *dag_sched_get_ops(void);
 void beatty_sched_init(void);
 <<<<<<< HEAD:defs.h
@@ -364,11 +365,15 @@ void beatty_sched_init(void);
 =======
 void beatty_sched_init(void);
 >>>>>>> 17ceee6e (caplib.h)
+=======
+void beatty_sched_init(void);
+>>>>>>> b60d8c8a (restructuring cont.)
 
 struct exo_sched_ops *dag_sched_ops(void);
 struct exo_sched_ops *beatty_sched_ops(void);
 void beatty_dag_stream_init(void);
 void beatty_sched_set_tasks(const exo_cap *, const double *, int);
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 void beatty_sched_set_tasks(exo_cap, exo_cap);
@@ -378,6 +383,8 @@ int beatty_sched_pick(void);
 >>>>>>> 7ff6ee1c (Add weighted DAG scheduling and Beatty integration):defs.h
 =======
 >>>>>>> 17ceee6e (caplib.h)
+=======
+>>>>>>> b60d8c8a (restructuring cont.)
 void fastipc_send(zipc_msg_t *);
 int sys_ipc_fast(void);
 void endpoint_send(struct endpoint *, zipc_msg_t *);
