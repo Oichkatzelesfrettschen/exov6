@@ -1,9 +1,0 @@
-The exo_stream interface links a chain of scheduler modules that the kernel
-can consult when yielding or idling.  Each module provides optional ``yield``
-and ``halt`` callbacks.  A stream is installed with ``exo_stream_register``
-and later exercised via ``exo_stream_yield`` or ``exo_stream_halt``.  When
-invoked these functions walk the list and call each callback in order.
-
-Modules omit an operation by setting the callback to zero.  If no stream is
-registered ``exo_stream_halt`` issues the ``hlt`` instruction and
-``exo_stream_yield`` does nothing.

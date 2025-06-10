@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-set -x
-LOG_DIR="/var/log"
-LOG_FILE="$LOG_DIR/codex_setup.log"
-mkdir -p "$LOG_DIR"
-exec > >(tee -a "$LOG_FILE") 2>&1
-
-"$(dirname "$0")/../setup.sh"
