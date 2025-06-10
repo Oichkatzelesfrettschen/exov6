@@ -136,7 +136,11 @@ void picinit(void);
 
 // pipe.c
 
+<<<<<<< Updated upstream:kernel/defs.h
 [[nodiscard]] int pipealloc(struct file **, struct file **);
+=======
+EXO_NODISCARD int pipealloc(struct file **, struct file **);
+>>>>>>> Stashed changes:engine/kernel/defs.h
 void pipeclose(struct pipe *, int);
 int piperead(struct pipe *, struct file *, char *, size_t);
 int pipewrite(struct pipe *, struct file *, char *, size_t);
