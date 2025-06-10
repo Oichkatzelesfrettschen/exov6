@@ -1,5 +1,14 @@
 #pragma once
 
+#include <stdint.h>
+#include <stddef.h>
+
+// Type definitions for compatibility
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef uint64_t uint64;
+
 // Routines to let C code use special x86 instructions.
 
 static inline uchar inb(ushort port) {
@@ -49,14 +58,13 @@ struct segdesc;
 
 static inline void lgdt(struct segdesc *p, int size) {
   volatile ushort pd[3];
-
   pd[0] = size - 1;
 #ifdef __x86_64__
-  pd[1] = (uint64)p;
-  pd[2] = (uint64)p >> 16;
+  pd[1] = (uint64)(uintptr_t)p;
+  pd[2] = (uint64)(uintptr_t)p >> 16;
 #else
-  pd[1] = (uint)p;
-  pd[2] = (uint)p >> 16;
+  pd[1] = (uintptr_t)p;
+  pd[2] = (uintptr_t)p >> 16;
 #endif
 
   asm volatile("lgdt (%0)" : : "r"(pd));
@@ -69,11 +77,11 @@ static inline void lidt(struct gatedesc *p, int size) {
 
   pd[0] = size - 1;
 #ifdef __x86_64__
-  pd[1] = (uint64)p;
-  pd[2] = (uint64)p >> 16;
+  pd[1] = (uint64)(uintptr_t)p;
+  pd[2] = (uint64)(uintptr_t)p >> 16;
 #else
-  pd[1] = (uint)p;
-  pd[2] = (uint)p >> 16;
+  pd[1] = (uintptr_t)p;
+  pd[2] = (uintptr_t)p >> 16;
 #endif
 
   asm volatile("lidt (%0)" : : "r"(pd));
