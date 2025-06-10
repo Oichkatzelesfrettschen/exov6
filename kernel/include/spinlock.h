@@ -5,6 +5,7 @@
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
+<<<<<<< Updated upstream:kernel/include/spinlock.h
 #pragma once
 
 #include <stddef.h>
@@ -55,6 +56,8 @@ static inline int holding(struct spinlock *lk) {
 static inline size_t spinlock_optimal_alignment(void) {
   return cache_line_size;
 }
+=======
+>>>>>>> Stashed changes:engine/kernel/include/spinlock.h
 =======
 >>>>>>> Stashed changes:engine/kernel/include/spinlock.h
 =======
