@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "types.h"
 #include "spinlock.h"
 #include "proc.h"
