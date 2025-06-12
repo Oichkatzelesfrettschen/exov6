@@ -6,7 +6,11 @@ C_CODE = textwrap.dedent("""
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
+<<<<<<< HEAD
 #include "src-headers/cap.h"
+=======
+#include "include/cap.h"
+>>>>>>> origin/feature/epoch-cache-design-progress
 
 struct spinlock;
 struct cpu; static struct cpu* mycpu(void){ return 0; }
@@ -17,7 +21,11 @@ static int holding(struct spinlock *l){ (void)l; return 0; }
 static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
 static void panic(char *msg){ (void)msg; assert(0); }
 static void cprintf(const char *f, ...){ (void)f; }
+<<<<<<< HEAD
 #include "src-kernel/cap_table.c"
+=======
+#include "kernel/cap_table.c"
+>>>>>>> origin/feature/epoch-cache-design-progress
 
 int main(void){
     cap_table_init();
@@ -51,7 +59,11 @@ def compile_and_run():
             "gcc","-std=c2x","-Wall","-Werror",
             "-I", str(td),
             "-I", str(ROOT),
+<<<<<<< HEAD
             "-I", str(ROOT/"src-headers"),
+=======
+            "-idirafter", str(ROOT/"include"),
+>>>>>>> origin/feature/epoch-cache-design-progress
             str(src),
             "-o", str(exe)
         ])

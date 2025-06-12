@@ -1,54 +1,172 @@
-#!/usr/bin/env bash
-set -euo pipefail
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-# Detect basic network connectivity; many CI environments are offline
-NETWORK_AVAILABLE=true
-if ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
-  NETWORK_AVAILABLE=false
-  echo "Network unavailable, proceeding in offline mode" >&2
+#!/ usr / bin / env bash
+set - euo pipefail
+
+#Optional debugging mode.Use-- debug to enable verbose tracing.
+          DEBUG_MODE = false
+
+#simple debug logger
+    debug() {
+  if
+    ["$DEBUG_MODE" = true];
+  then echo "[DEBUG] $*" > &2 fi
+}
+
+REPO_ROOT = "$(cd " $(dirname "$0") " && pwd)"
+#This script installs all build dependencies.It logs actions to
+#/ var / log /                                                                 \
+    setup.log and records any failures in / var / log / setup_failures.log.
+#After the initial installation attempt it retries failed packages once using
+#apt, pip or npm depending on the recorded method.
+
+#Parse command line arguments
+    OFFLINE_MODE = false while[$ # - gt 0];
+do
+  case "$1" in
+    --offline)
+      OFFLINE_MODE=true
+      ;;
+    --debug)
+      DEBUG_MODE=true
+      ;;
+    *)
+      echo "Usage: $0 [--offline] [--debug]" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+if [ "$DEBUG_MODE" = true ]; then
+  set -x
 fi
-FAIL_LOG=/var/log/setup_failures.log
-: >"$FAIL_LOG"
-export DEBIAN_FRONTEND=noninteractive
+
+#In offline mode or when network is unavailable the script attempts
+#to install packages from the scripts / offline_packages directory.Ensure this
+#directory is populated with the required.deb files or Python wheels
+#as described in scripts / offline_packages /                                \
+      README.md.Otherwise most installs
+#will be skipped and logged as warnings.
+
+#Detect basic network connectivity unless offline mode was requested
+NETWORK_AVAILABLE=true
+if [ "$OFFLINE_MODE" = true ]; then
+  NETWORK_AVAILABLE=false
+  echo "Offline mode enabled" >&2
+elif ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
+    NETWORK_AVAILABLE =
+        false echo
+        "Network unavailable, proceeding in offline mode" > & 2 fi LOG_FILE =
+            / var / log /
+            setup.log FAIL_LOG = / var / log / setup_failures.log mkdir -
+                                     p / var / log : >
+                                                     "$LOG_FILE"
+        : > "$FAIL_LOG" exec >>
+          (tee - a "$LOG_FILE")2 > & 1 export DEBIAN_FRONTEND = noninteractive
 
 #— helper to pin to the repo’s exact version if it exists
-pip_install(){
-  pkg="$1"
-  if [ "$NETWORK_AVAILABLE" = false ]; then
-    return 0
-  fi
-  if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
-    echo "Warning: pip install $pkg failed" >&2
-    echo "pip $pkg" >>"$FAIL_LOG"
-  fi
-}
-apt_pin_install(){
-  pkg="$1"
-  if [ "$NETWORK_AVAILABLE" = false ]; then
-    return 0
-  fi
-  ver=$(apt-cache show "$pkg" 2>/dev/null \
-        | awk '/^Version:/{print $2; exit}')
-  if [ -n "$ver" ]; then
-    if ! apt-get install -y "${pkg}=${ver}"; then
-      echo "Warning: apt-get install ${pkg}=${ver} failed" >&2
-      echo "apt ${pkg}=${ver}" >>"$FAIL_LOG"
-    fi
-  else
-    if ! apt-get install -y "$pkg"; then
-      echo "Warning: apt-get install $pkg failed" >&2
-      echo "apt $pkg" >>"$FAIL_LOG"
-    fi
-  fi
+        pip_install() {
+      pkg = "$1" debug "Attempting pip install $pkg" if !pip3 install-- no -
+                cache - dir "$pkg" >
+            / dev / null 2 > &1;
+      then echo "Warning: pip install $pkg failed" > &2 echo "pip $pkg" >>
+          "$FAIL_LOG" fi
+    }
+  apt_pin_install() {
+    pkg = "$1" debug
+          "Attempting apt install $pkg" if["$NETWORK_AVAILABLE" != true];
+    then echo "Warning: network unavailable, skipping apt-get install of $pkg" >
+            & 2 return 0 fi
 
-  # Fallback to pip for Python packages
-  if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                status = 0 ver = $(apt - cache show "$pkg" 2 > / dev / null |
+                                       awk '/^Version:/{print $2; exit}' ||
+                                   true) if[-n "$ver"];
+    then if !apt - get install - y "${pkg}=${ver}";
+    then echo "Warning: apt-get install ${pkg}=${ver} failed" >
+        &2 echo "apt ${pkg}=${ver}" >>
+        "$FAIL_LOG" status = 1 fi else if !apt - get install - y "$pkg";
+    then echo "Warning: apt-get install $pkg failed" > &2 echo "apt $pkg" >>
+        "$FAIL_LOG" status = 1 fi fi
+
+                                 if !dpkg -
+                                 s "$pkg" >
+                             / dev / null 2 > &1; then
     case "$pkg" in
       python3-*|pre-commit)
         pip_pkg="${pkg#python3-}"
         pip_install "$pip_pkg"
+        if command -v "$pip_pkg" >/dev/null 2>&1 || \
+           python3 -c "import $pip_pkg" >/dev/null 2>&1; then
+          status=0
+        fi
         ;;
     esac
+  fi
+
+  if [ $status -ne 0 ] && ! command -v "$pkg" >/dev/null 2>&1; then
+    if command -v npm >/dev/null 2>&1; then
+      debug "Attempting npm install $pkg"
+      if ! npm install -g "$pkg" >/dev/null 2>&1; then
+        echo "Warning: npm install $pkg failed" >&2
+        echo "npm $pkg" >>"$FAIL_LOG"
+      else
+        status=0
+      fi
+    fi
+  fi
+
+  if [ $status -ne 0 ]; then
+    case "$pkg" in
+      capnproto|capnp*)
+        if ! command -v capnp >/dev/null 2>&1; then
+          if ! curl -fsSL https://capnproto.org/capnproto-c++-1.0.1.tar.gz \
+              -o /tmp/capnp.tar.gz; then
+    echo "Warning: failed to download capnproto" >
+            &2 echo "download capnproto" >>
+            "$FAIL_LOG" else tar - xzf / tmp / capnp.tar.gz -
+                C / tmp(cd / tmp / capnproto - *&&./ configure &&
+                        make - j "$(nproc)" && make install) ||
+        {echo "Warning: building capnproto failed" >
+         &2 echo "build capnproto" >> "$FAIL_LOG"} rm -
+            rf / tmp / capnproto - */ tmp / capnp.tar.gz fi fi;
+    ;
+    esac fi
+
+        return 0
+  }
+
+#ensure_command tries to install specified packages until the command exists.
+#Missing commands are logged but do not halt the script.
+  ensure_command() {
+    local cmd = "$1" shift if command - v "$cmd" > / dev / null 2 > &1; then
+    return 0
+  fi
+  local pkg
+  for pkg in "$@";
+    do
+      apt_pin_install "$pkg" done if !command - v "$cmd" > / dev / null 2 > &1;
+    then echo
+        "Warning: required command $cmd not found after install attempts" >
+        &2 echo "missing $cmd" >> "$FAIL_LOG" fi
+  }
+
+#Install packages from scripts / offline_packages /                          \
+      when network is unavailable
+  install_offline_packages() {
+    dir = "$REPO_ROOT/scripts/offline_packages" if[-d "$dir"]; then
+    shopt -s nullglob
+    files=("$dir"/*.deb)
+    if [ ${#files[@]} -eq 0 ]; then
+      echo "Warning: no offline packages found in $dir" >&2
+    fi
+    for deb in "${files[@]}"; do
+      if ! dpkg -i "$deb"; then
+        echo "Warning: dpkg -i $deb failed" >&2
+        echo "dpkg $deb" >>"$FAIL_LOG"
+      fi
+    done
+    shopt -u nullglob
+  else
+    echo "Warning: scripts/offline_packages directory not found" >&2
   fi
 }
 
@@ -72,11 +190,11 @@ for pkg in \
   clang-format clang-tidy clangd clang-tools uncrustify astyle editorconfig shellcheck pre-commit \
   make bmake ninja-build cmake meson \
   autoconf automake libtool m4 gawk flex bison byacc \
-  pkg-config file ca-certificates curl git unzip graphviz \
+  pkg-config file ca-certificates curl git unzip graphviz doxygen doxygen-latex \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  libasan6 libubsan1 likwid hwloc; do
+  libasan6 libubsan1 likwid hwloc cloc; do
   apt_pin_install "$pkg"
 done
 
@@ -89,10 +207,7 @@ fi
 #— Python & deep-learning / MLOps
 for pkg in \
   python3 python3-pip python3-dev python3-venv python3-wheel \
-  python3-numpy python3-scipy python3-pandas \
-  python3-matplotlib python3-scikit-learn \
-  python3-torch python3-torchvision python3-torchaudio \
-  python3-onnx python3-onnxruntime python3-configuredb; do
+  python3-sphinx python3-breathe python3-sphinx-rtd-theme python3-myst-parser; do
   apt_pin_install "$pkg"
 done
 
@@ -104,21 +219,19 @@ for pip_pkg in \
 done
 
 # Explicit installation of key tools
-pip_install pre-commit
-pip_install compile-db
+pip_install compiledb
+pip_install configuredb
 
-# Fallback to pip if pre-commit is still missing
-if ! command -v pre-commit >/dev/null 2>&1; then
-  pip_install pre-commit || true
-  if ! command -v pre-commit >/dev/null 2>&1; then
-    cat <<'EOF' >/usr/local/bin/pre-commit
-#!/usr/bin/env bash
-echo "pre-commit not available in this environment" >&2
-exit 1
-EOF
-    chmod +x /usr/local/bin/pre-commit
-  fi
-fi
+# --- TLA+ Python Tooling ---
+# tlacli: Command-line interface for TLA+ and TLC model checker
+# tlaplus-jupyter: Jupyter kernel for interactive TLA+ (installs tla2tools.jar)
+# tla: Python parser and syntax tree library for TLA+
+echo "Installing TLA+ Python tooling..."
+pip_install "tlacli"
+pip_install "tlaplus-jupyter"
+pip_install "tla"
+
+
 
 if ! command -v pytest >/dev/null 2>&1; then
   pip_install pytest || true
@@ -139,7 +252,7 @@ fi
 for pkg in \
   qemu-user-static \
   qemu-system-x86 qemu-system-arm qemu-system-aarch64 \
-  qemu-system-riscv64 qemu-system-ppc qemu-system-ppc64 qemu-utils; do
+  qemu-system-riscv64 qemu-system-ppc qemu-system-ppc64 qemu-utils qemu-nox; do
   apt_pin_install "$pkg"
 done
 
@@ -210,7 +323,7 @@ done
 #— containers, virtualization, HPC, debug
 for pkg in \
   docker.io podman buildah virt-manager libvirt-daemon-system qemu-kvm \
-  bochs bochs-sdl \
+  bochs bochs-sdl tmux \
   gdb lldb perf gcovr lcov bcc-tools bpftrace \
   openmpi-bin libopenmpi-dev mpich; do
   apt_pin_install "$pkg"
@@ -330,11 +443,35 @@ elif [ -x scripts/gen_compile_commands.py ]; then
   fi
 fi
 
-# Install pre-commit hooks if possible
-if command -v pre-commit >/dev/null 2>&1; then
-  if ! pre-commit install >/dev/null 2>&1; then
-    echo "Warning: pre-commit install failed" >&2
-    echo "pre-commit install" >>"$FAIL_LOG"
+# Verify the host compiler supports the C2X standard used by standalone tests
+cc_cmd=""
+if command -v clang >/dev/null 2>&1; then
+  cc_cmd=clang
+elif command -v gcc >/dev/null 2>&1; then
+  cc_cmd=gcc
+fi
+if [ -n "$cc_cmd" ]; then
+  if ! echo 'int main(void){return 0;}' | $cc_cmd -std=c2x -x c - \
+      -o /tmp/c2x_test >/dev/null 2>&1; then
+    echo "Error: $cc_cmd lacks -std=c2x support which is required for some tests" >&2
+    echo "$cc_cmd no c2x" >>"$FAIL_LOG"
+  fi
+  rm -f /tmp/c2x_test
+fi
+
+# Ensure critical tools are installed
+ensure_command clang clang clang-16
+ensure_command clang-tidy clang-tidy
+ensure_command clang-format clang-format
+ensure_command meson meson
+ensure_command coqc coq coqide coq-theories
+ensure_command tlc tlaplus
+
+# Check for essential commands and log if any are missing
+for cmd in clang clang++ cmake qemu-system-x86 qemu-nox tmux cloc coqc; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Warning: required command $cmd not found" >&2
+    echo "missing $cmd" >>"$FAIL_LOG"
   fi
 fi
 

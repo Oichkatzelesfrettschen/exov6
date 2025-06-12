@@ -7,3 +7,5 @@ struct stat {
   short nlink;
   unsigned int size;
 };
+
+// Testing etc.

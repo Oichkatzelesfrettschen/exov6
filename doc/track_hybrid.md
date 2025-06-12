@@ -1,5 +1,11 @@
-# Hybrid Track
 
-The hybrid track collects notes where technical details and high level ideas intersect. It builds on both the [technical](track_technical.md) and [philosophy](track_philosophy.md) documents, with the charter serving as the common reference point.
+# FeuerBird Hybrid Track
 
-Examples include discussions about how a specific capability mechanism advances the broader goal of user level innovation, or how scheduler experiments influence the libOS design. When updates span philosophy and implementation, record them here.
+The hybrid track links the philosophy and the concrete APIs.  By
+following the charter's principles of minimalism and openness, FeuerBird
+exposes low level capabilities together with helper libraries.  User
+space composes these pieces into higher abstractions as needed.
+
+This approach allows researchers to replace parts of the system without
+altering the kernel.  Examples include typed channels built on the basic
+IPC calls and the supervisor managing drivers via capabilities.

@@ -1,4 +1,5 @@
 #pragma once
+<<<<<<< HEAD
 
 #include <stddef.h>
 #include <stdint.h>
@@ -345,6 +346,14 @@ capnp_error_t capnp_stream_read_message(capnp_stream_t *stream,
                                         size_t buffer_size,
                                         size_t *message_size_out);
 
+=======
+#include <stddef.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+size_t capnp_encode(const void *msg, size_t len, unsigned char *buf);
+size_t capnp_decode(void *msg, size_t len, const unsigned char *buf);
+>>>>>>> origin/feature/epoch-cache-design-progress
 #ifdef __cplusplus
 }
 #endif

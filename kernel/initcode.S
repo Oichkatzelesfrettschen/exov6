@@ -5,6 +5,7 @@
 #include "traps.h"
 
 
+<<<<<<< HEAD
 # Prepare arguments and invoke the SYS_exec system call to execute the /init program.
 # The arguments pushed onto the stack are:
 # 1. argv: A pointer to the argument array containing the program name and a null terminator.
@@ -15,6 +16,14 @@ start:
   pushl $argv
   pushl $init
   pushl $0  # where caller pc would be
+=======
+# exec(init, argv)
+.globl start
+start:
+  pushl $argv
+  pushl $init
+  pushl $0  // where caller pc would be
+>>>>>>> origin/feature/epoch-cache-design-progress
   movl $SYS_exec, %eax
   int $T_SYSCALL
 
@@ -22,6 +31,7 @@ start:
 exit:
   movl $SYS_exit, %eax
   int $T_SYSCALL
+<<<<<<< HEAD
   hlt  # halt the CPU execution
 
 # char init[] = "/init\0";
@@ -38,4 +48,16 @@ argv:
   .quad init
   .quad 0
   .long init
+=======
+  jmp exit
+
+# char init[] = "/init\0";
+init:
+  .string "/init\0"
+
+# char *argv[] = { init, 0 };
+.p2align 2
+argv:
+  .long init
+>>>>>>> origin/feature/epoch-cache-design-progress
   .long 0

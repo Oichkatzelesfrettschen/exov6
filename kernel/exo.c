@@ -1,10 +1,18 @@
 #include "defs.h"
+<<<<<<< HEAD
 #include "kernel/exo_cpu.h"
 #include "kernel/exo_disk.h"
 #include "kernel/exo_ipc.h"
 #include "mmu.h"
 #include "param.h"
 #include "mmu.h"
+=======
+#include "exo_cpu.h"
+#include "exo_disk.h"
+#include "exo_ipc.h"
+#include "mmu.h"
+#include "param.h"
+>>>>>>> origin/feature/epoch-cache-design-progress
 #include "proc.h"
 #include "spinlock.h"
 #include "types.h"
@@ -12,8 +20,11 @@
 
 extern struct ptable ptable;
 
+<<<<<<< HEAD
 extern struct ptable ptable;
 
+=======
+>>>>>>> origin/feature/epoch-cache-design-progress
 void exo_pctr_transfer(struct trapframe *tf) {
   uint32_t cap = tf->eax;
   struct proc *p;
@@ -24,6 +35,7 @@ void exo_pctr_transfer(struct trapframe *tf) {
     p->pctr_signal++;
   release(&ptable.lock);
 }
+<<<<<<< HEAD
 
 // Stubs for capability syscalls. Real implementations may reside in
 // platform-specific code, but we provide simple versions so that the
@@ -54,3 +66,5 @@ exo_write_disk(exo_cap cap, const void *src, uint64_t off, uint64_t n)
   (void)n;
   return -1;
 }
+=======
+>>>>>>> origin/feature/epoch-cache-design-progress

@@ -44,6 +44,7 @@ gdtdesc:
 .globl syscallentry
 syscallentry:
     swapgs
+    lfence
     # push general registers
     pushq %r15
     pushq %r14
@@ -73,6 +74,7 @@ syscallentry:
     # trapno, err, rip, cs, eflags, rsp, ss
 
     movq %rsp, %rdi   # argument: pointer to trap frame
+    lfence
     call trap
     jmp trapret
 
@@ -94,5 +96,7 @@ trapret:
     popq %r13
     popq %r14
     popq %r15
+    lfence
     swapgs
+    lfence
     iretq

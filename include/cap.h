@@ -5,11 +5,13 @@
 #define CAP_MAX 1024
 
 enum cap_type {
-    CAP_TYPE_NONE = 0,
-    CAP_TYPE_PAGE = 1,
-    CAP_TYPE_IOPORT = 2,
-    CAP_TYPE_IRQ = 3,
-    CAP_TYPE_DMA = 4,
+    CAP_TYPE_NONE    = 0,
+    CAP_TYPE_PAGE    = 1,
+    CAP_TYPE_IOPORT  = 2,
+    CAP_TYPE_IRQ     = 3,
+    CAP_TYPE_DMA     = 4,
+    CAP_TYPE_HYPERVISOR = 5,
+    CAP_TYPE_CRYPTOKEY = 6, // Added for cryptographic key capabilities
 };
 
 struct cap_entry {

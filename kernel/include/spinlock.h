@@ -1,11 +1,14 @@
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
+<<<<<<< HEAD
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
 <<<<<<< Updated upstream:kernel/include/spinlock.h
+=======
+>>>>>>> origin/feature/epoch-cache-design-progress
 #pragma once
 
 #include <stddef.h>
@@ -60,6 +63,7 @@ static inline size_t spinlock_optimal_alignment(void) {
 >>>>>>> Stashed changes:engine/kernel/include/spinlock.h
 =======
 >>>>>>> Stashed changes:engine/kernel/include/spinlock.h
+<<<<<<< HEAD
 =======
 >>>>>>> Stashed changes:engine/kernel/include/spinlock.h
 =======
@@ -72,3 +76,5 @@ static inline size_t spinlock_optimal_alignment(void) {
 >>>>>>> Stashed changes:engine/kernel/include/spinlock.h
 =======
 >>>>>>> Stashed changes:engine/kernel/include/spinlock.h
+=======
+>>>>>>> origin/feature/epoch-cache-design-progress

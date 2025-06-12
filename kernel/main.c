@@ -11,7 +11,11 @@
 #include "kernel/exo_ipc.h"
 
 static void startothers(void);
+<<<<<<< HEAD
 static void mpmain(void) __attribute__((noreturn));
+=======
+static void mpmain(void) EXO_NORETURN;
+>>>>>>> origin/feature/epoch-cache-design-progress
 #ifdef __x86_64__
 extern pml4e_t *kpgdir;
 #else
