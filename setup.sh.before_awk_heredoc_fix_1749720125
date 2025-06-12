@@ -51,32 +51,26 @@ fi
 NETWORK_AVAILABLE=true
 if [ "$OFFLINE_MODE" = true ]; then
   NETWORK_AVAILABLE=false
-  echo "Offline mode enabled" 1>&2
+  echo "Offline mode enabled" >&2
 elif ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
-  NETWORK_AVAILABLE=false
-  echo "Network unavailable, proceeding in offline mode" 1>&2
-fi
-
-LOG_FILE=/var/log/setup.log
-FAIL_LOG=/var/log/setup_failures.log
-sudo mkdir -p /var/log
-sudo chown "$(whoami):$(id -g -n "$(whoami)")" /var/log "$LOG_FILE" "$FAIL_LOG" 2>/dev/null || true
-sudo : > "$LOG_FILE"
-sudo : > "$FAIL_LOG"
-
-exec >> >(tee -a "$LOG_FILE") 2>&1
-
-export DEBIAN_FRONTEND=noninteractive
+    NETWORK_AVAILABLE =
+        false echo
+        "Network unavailable, proceeding in offline mode" > & 2 fi LOG_FILE =
+            / var / log /
+            setup.log FAIL_LOG = / var / log / setup_failures.log mkdir -
+                                     p / var / log : >
+                                                     "$LOG_FILE"
+        : > "$FAIL_LOG" exec >>
+          (tee - a "$LOG_FILE")2 > & 1 export DEBIAN_FRONTEND = noninteractive
 
 #— helper to pin to the repo’s exact version if it exists
-pip_install() {
-  pkg="$1"
-  debug "Attempting pip install \$pkg"
-  if ! pip3 install --no-cache-dir "\$pkg" >/dev/null 2>&1; then
-    echo "Warning: pip install \$pkg failed" 1>&2
-    echo "pip \$pkg" >> "\$FAIL_LOG"
-  fi
-}
+        pip_install() {
+      pkg = "$1" debug "Attempting pip install $pkg" if !pip3 install-- no -
+                cache - dir "$pkg" >
+            / dev / null 2 > &1;
+      then echo "Warning: pip install $pkg failed" > &2 echo "pip $pkg" >>
+          "$FAIL_LOG" fi
+    }
   apt_pin_install() {
     pkg = "$1" debug
           "Attempting apt install $pkg" if["$NETWORK_AVAILABLE" != true];
