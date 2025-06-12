@@ -19,7 +19,12 @@ void cap_table_init(void) {
 
 int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights,
                     uint32_t owner) {
-  if (type == CAP_TYPE_NONE || type > CAP_TYPE_HYPERVISOR)
+  // Validate capability type.
+  // CAP_TYPE_NONE is invalid for allocation.
+  // The type must be one of the defined capability types.
+  // CAP_TYPE_CRYPTOKEY is currently the highest valid enum value.
+  // This check needs to be updated if new capability types with higher enum values are added.
+  if (type == CAP_TYPE_NONE || type > CAP_TYPE_CRYPTOKEY)
     return -1;
   acquire(&cap_lock);
   for (int i = 1; i < CAP_MAX; i++) {

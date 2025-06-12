@@ -16,12 +16,14 @@
 void readseg(uint8_t*, uint32_t, uint32_t);
 
 void
-bootmain(void)
+bootmain(uint32_t kaslr_physical_offset) // Renamed parameter
 {
   struct elfhdr *elf;
-  struct proghdr *ph, *eph;
+  // struct proghdr *ph, *eph; // Original
   void (*entry)(void);
-  uint8_t* pa;
+  // uint8_t* pa; // Original, replaced by segment_actual_physical_load_addr
+
+  uintptr_t actual_kernel_physical_base = (uintptr_t)EXTMEM + kaslr_physical_offset; // New calculation
 
   elf = (struct elfhdr*)0x10000;  // scratch space
 
@@ -33,19 +35,39 @@ bootmain(void)
     return;  // let bootasm.S handle error
 
   // Load each program segment (ignores ph flags).
-  ph = (struct proghdr*)((uint8_t*)elf + elf->phoff);
-  eph = ph + elf->phnum;
-  for(; ph < eph; ph++){
-    pa = (uint8_t*)(uintptr_t)ph->paddr;
-    readseg(pa, ph->filesz, ph->off);
-    if(ph->memsz > ph->filesz)
-      stosb(pa + ph->filesz, 0, ph->memsz - ph->filesz);
+  // ph = (struct proghdr*)((uint8_t*)elf + elf->phoff); // Original
+  // eph = ph + elf->phnum; // Original
+  // for(; ph < eph; ph++){ // Original
+  //   pa = (uint8_t*)(uintptr_t)ph->paddr; // Original
+  //   readseg(pa, ph->filesz, ph->off); // Original
+  //   if(ph->memsz > ph->filesz) // Original
+  //     stosb(pa + ph->filesz, 0, ph->memsz - ph->filesz); // Original
+  // } // Original
+
+  struct proghdr *ph_elf_offset, *eph_elf_offset;
+  ph_elf_offset = (struct proghdr*)((uint8_t*)elf + elf->phoff); // ph_elf_offset is based on physical elf pointer
+  eph_elf_offset = ph_elf_offset + elf->phnum;
+
+  for(; ph_elf_offset < eph_elf_offset; ph_elf_offset++){
+    // ph_elf_offset->paddr is the LINK address of the segment.
+    // KERNLINK is the LINK address of the kernel base.
+    // actual_kernel_physical_base is the new randomized PHYSICAL address where kernel base is loaded.
+    uintptr_t segment_link_virtual_address = (uintptr_t)ph_elf_offset->paddr;
+    uintptr_t segment_offset_from_kernlink = segment_link_virtual_address - (uintptr_t)KERNLINK; // KERNLINK comes from memlayout.h
+    uintptr_t segment_actual_physical_load_addr = actual_kernel_physical_base + segment_offset_from_kernlink;
+
+    readseg((uint8_t*)segment_actual_physical_load_addr, ph_elf_offset->filesz, ph_elf_offset->off);
+    if(ph_elf_offset->memsz > ph_elf_offset->filesz)
+      stosb((uint8_t*)segment_actual_physical_load_addr + ph_elf_offset->filesz, 0, ph_elf_offset->memsz - ph_elf_offset->filesz);
   }
 
   // Call the entry point from the ELF header.
-  // Does not return!
-  entry = (void(*)(void))(uintptr_t)(elf->entry);
-  entry();
+  // This is the fixed VIRTUAL address (e.g., KERNLINK + offset).
+  // The page tables set up in bootasm64.S are responsible for mapping this
+  // virtual address to the randomized physical memory.
+  void (*kernel_virtual_entry)(void);
+  kernel_virtual_entry = (void(*)(void))(uintptr_t)elf->entry; // elf->entry is KERNLINK-based
+  kernel_virtual_entry();
 }
 
 void

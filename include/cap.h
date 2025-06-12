@@ -11,6 +11,7 @@ enum cap_type {
     CAP_TYPE_IRQ     = 3,
     CAP_TYPE_DMA     = 4,
     CAP_TYPE_HYPERVISOR = 5,
+    CAP_TYPE_CRYPTOKEY = 6, // Added for cryptographic key capabilities
 };
 
 struct cap_entry {

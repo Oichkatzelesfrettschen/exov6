@@ -12,6 +12,10 @@
 #define CR0_PG 0x80000000 // Paging
 
 #define CR4_PSE 0x00000010 // Page size extension
+// Control Register CR4 bits
+#define CR4_SMEP (1 << 20) /* Supervisor Mode Execution Protection Enable */
+#define CR4_SMAP (1 << 21) /* Supervisor Mode Access Prevention Enable */
+#define CR4_UMIP (1 << 2)  /* User-Mode Instruction Prevention */
 
 // various segment selectors.
 #define SEG_KCODE 1 // kernel code

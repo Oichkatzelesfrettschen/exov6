@@ -239,6 +239,15 @@ done
 pip_install compiledb
 pip_install configuredb
 
+# --- TLA+ Python Tooling ---
+# tlacli: Command-line interface for TLA+ and TLC model checker
+# tlaplus-jupyter: Jupyter kernel for interactive TLA+ (installs tla2tools.jar)
+# tla: Python parser and syntax tree library for TLA+
+echo "Installing TLA+ Python tooling..."
+pip_install "tlacli"
+pip_install "tlaplus-jupyter"
+pip_install "tla"
+
 
 
 if ! command -v pytest >/dev/null 2>&1; then
