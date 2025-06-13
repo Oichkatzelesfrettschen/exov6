@@ -1,3 +1,3 @@
 struct DriverPing {
-  value @0 :Int32;
+  value @0 : Int32;
 }
