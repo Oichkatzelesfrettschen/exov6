@@ -17,7 +17,7 @@ def compile_and_run():
         exe = pathlib.Path(td)/"test"
         src.write_text(CPP_CODE)
         subprocess.check_call([
-            "g++","-std=c++17","-Wall","-Werror",
+            "g++","-std=c++23","-Wall","-Werror",
             "-iquote", str(ROOT),
             "-iquote", str(ROOT/"include"),
             str(src),

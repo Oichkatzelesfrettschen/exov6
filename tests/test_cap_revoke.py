@@ -56,7 +56,7 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif")
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            "gcc","-std=c2x","-Wall","-Werror",
+            "gcc","-std=c23","-Wall","-Werror",
             "-I", str(td),
             "-I", str(ROOT),
 <<<<<<< HEAD
