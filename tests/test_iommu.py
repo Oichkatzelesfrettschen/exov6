@@ -51,7 +51,7 @@ def compile_and_run():
         )
         exe = pathlib.Path(td)/"test"
         subprocess.check_call([
-            CC, "-std=c2x", "-Wall", "-Werror","-Wno-unused-function",
+            CC, "-std=c23", "-Wall", "-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
             "-idirafter", str(ROOT/"include"),

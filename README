@@ -151,7 +151,7 @@ Unit tests live under the ``tests/`` directory and can be executed with
 automatically when needed. Ensure QEMU is installed if the tests require
 it (``setup.sh`` installs QEMU automatically).
 Several tests compile small standalone C programs with the host compiler.
-Make sure your ``gcc`` or ``clang`` version supports the ``-std=c2x``
+Make sure your ``gcc`` or ``clang`` version supports the ``-std=c23``
 option or these builds will fail.
 
 For a quick reference of these steps see ``CONTRIBUTING.md``.
