@@ -25,6 +25,7 @@ OBJS = \
     $(KERNEL_DIR)/qspinlock.o \
     $(KERNEL_DIR)/rspinlock.o \
     $(KERNEL_DIR)/rcu.o \
+    $(KERNEL_DIR)/rcu_fastpath.o \
     $(KERNEL_DIR)/string.o \
     $(KERNEL_DIR)/syscall.o \
     $(KERNEL_DIR)/sysfile.o \
