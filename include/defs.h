@@ -290,6 +290,10 @@ void rcuinit(void);
 void rcu_read_lock(void);
 void rcu_read_unlock(void);
 void rcu_synchronize(void);
+void rcu_read_lock_c23(void);
+void rcu_read_unlock_c23(void);
+bool call_rcu_c23(void (*)(void *), void *);
+void synchronize_rcu_expedited_c23(void);
 
 // memutil.c
 pte_t *pte_lookup(pde_t *, const void *);
