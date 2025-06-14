@@ -6,6 +6,7 @@ Welcome to exov6's documentation!
    :caption: Contents:
 
    usage
+   lattice_ipc
 
 .. doxygenindex::
    :project: exov6
