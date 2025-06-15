@@ -37,6 +37,9 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
     child->deps[child->ndeps++] = parent;
 }
 
+/**
+ * @brief Insert a ready node ordered by priority.
+ */
 static void enqueue_ready(struct dag_node *n) {
   int w = node_weight(n);
   struct dag_node **pp = &ready_head;
@@ -47,13 +50,40 @@ static void enqueue_ready(struct dag_node *n) {
   *pp = n;
 }
 
-void dag_sched_submit(struct dag_node *n) {
+/** DFS helper for cycle detection. */
+static bool path_exists(struct dag_node *src, struct dag_node *dst,
+                        struct dag_node **stack, size_t depth) {
+  for (size_t i = 0; i < depth; ++i)
+    if (stack[i] == src)
+      return false;
+  if (src == dst)
+    return true;
+  stack[depth] = src;
+  for (struct dag_node_list *l = src->children; l; l = l->next)
+    if (path_exists(l->node, dst, stack, depth + 1))
+      return true;
+  return false;
+}
+
+/** Check whether scheduling @p n would introduce a cycle. */
+static bool creates_cycle(struct dag_node *n) {
+  struct dag_node *stack[64];
+  for (int i = 0; i < n->ndeps; ++i)
+    if (path_exists(n->deps[i], n, stack, 0))
+      return true;
+  return false;
+}
+
+int dag_sched_submit(struct dag_node *n) {
   acquire(&dag_lock);
-
+  if (creates_cycle(n)) {
+    release(&dag_lock);
+    return -1;
+  }
   if (n->pending == 0 && !n->done)
-
     enqueue_ready(n);
   release(&dag_lock);
+  return 0;
 }
 
 static struct dag_node *dequeue_ready(void) {
