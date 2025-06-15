@@ -8,5 +8,4 @@ Welcome to exov6's documentation!
    usage
    lattice_ipc
 
-.. doxygenindex::
-   :project: exov6
+
