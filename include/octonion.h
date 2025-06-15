@@ -10,6 +10,8 @@
 
 /* Quaternion and octonion type definitions. */
 
+#include "lattice_types.h"
+
 typedef struct {
   double w;
   double x;
@@ -17,23 +19,21 @@ typedef struct {
   double z;
 } quaternion_t;
 
-typedef struct {
-  double e0;
-  double e1;
-  double e2;
-  double e3;
-  double e4;
-  double e5;
-  double e6;
-  double e7;
-} octonion_t;
-
 #include <math.h>      /* sqrt and fabs */
 #include <stdatomic.h> /* atomic operations for spinlocks */
 #include <string.h>    /* memcmp */
 #ifdef USE_SIMD
 #include <immintrin.h> /* SIMD intrinsics */
 #endif
+
+/** Add two octonions component-wise. */
+octonion_t octonion_add(octonion_t a, octonion_t b);
+
+/** Multiply two octonions using the Cayley–Dickson construction. */
+octonion_t octonion_mul(octonion_t a, octonion_t b);
+
+/** Compute the multiplicative inverse of an octonion. */
+octonion_t octonion_inv(octonion_t o);
 
 // Forward declare for use in qspin_lock_t if it were here, but it'll be in its
 // own header.
