@@ -17,6 +17,32 @@ Applications continue to use the same simple API but gain strong, quantum-resist
 
 Basic usage example::
 
+   .. code-block:: c
+
+      lattice_channel_t ch;
+      if (lattice_connect(&ch, server_cap) == 0) {
+          /* Channel.key now holds the shared Kyber-derived secret */
+          lattice_send(&ch, "hello", 5);          /* encrypt + update sequence counter */
+          char buf[16];
+          lattice_recv(&ch, buf, sizeof(buf));    /* decrypt + update sequence counter */
+          lattice_close(&ch);
+      }
+
+Below is the underlying process:
+
+lattice_connect(&ch, cap)
+- generates two Kyber key-pairs, exchanges public keys, derives ch.key via establish_secret(…)
+- initializes ch.seq = 0, ch.auth_token = HMAC(ch.key, seq)
+
+lattice_send(&ch, data, len)
+- locks ch.lock (quaternion spinlock), increments ch.seq, recomputes ch.auth_token
+- XOR-encrypts data with a keystream derived from ch.key || ch.seq, appends ch.auth_token, and queues or transmits
+- unlocks ch.lock
+
+lattice_recv(&ch, buf, buflen)
+- locks ch.lock, checks and decrypts incoming payload, verifies auth_token, increments ch.seq
+- copies plaintext into buf, unlocks ch.lock
+
 ```c
 lattice_channel_t ch;
 if (lattice_connect(&ch, server_cap) == 0) {
