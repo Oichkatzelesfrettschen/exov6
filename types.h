@@ -21,7 +21,8 @@ typedef signed char int8_t;
 
 // Pointer-sized and size types
 typedef unsigned long uintptr_t;
-typedef unsigned int size_t;
+// Use compiler-provided definition to avoid mismatched size_t with system headers
+typedef __SIZE_TYPE__ size_t;
 
 #ifdef __x86_64__
 typedef unsigned long long pde_t;
