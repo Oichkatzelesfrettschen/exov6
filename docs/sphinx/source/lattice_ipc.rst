@@ -48,7 +48,7 @@ Concurrency
 All operations on ``lattice_channel_t`` mutate shared state.  A quaternion
 spinlock serialized through the :c:macro:`WITH_QLOCK` helper guards these
 critical sections.  Each successful send or receive increments ``seq`` using a
-relaxed :c:type:`_Atomic` update while holding the lock.  This ordering keeps
+relaxed ``_Atomic`` update while holding the lock.  This ordering keeps
 the counter consistent with the encrypted payloads yet avoids unnecessary
 barriers because mutual exclusion already provides the required happens-before
 relationship.
