@@ -43,15 +43,6 @@ lattice_recv(&ch, buf, buflen)
 - locks ch.lock, checks and decrypts incoming payload, verifies auth_token, increments ch.seq
 - copies plaintext into buf, unlocks ch.lock
 
-```c
-lattice_channel_t ch;
-if (lattice_connect(&ch, server_cap) == 0) {
-    // Channel.key now holds the shared Kyber-derived secret
-    lattice_send(&ch, "hello", 5);          // encrypts + updates sequence counter
-    char buf[16];
-    lattice_recv(&ch, buf, sizeof(buf));    // decrypts + updates sequence counter
-    lattice_close(&ch);
-}
 The helpers work as follows:
 
 ``lattice_connect``
@@ -63,3 +54,31 @@ The helpers work as follows:
   Lock the channel, XOR-encrypt or decrypt the payload with a stream derived
   from ``ch.key`` and the current sequence value, update the sequence counter and
   release the lock.
+
+Using the DAG scheduler
+-----------------------
+
+Tasks represented by :c:type:`dag_node` structures may yield directly to IPC
+peers.  After associating a :c:type:`lattice_channel_t` with a node via
+``dag_node_set_channel`` the scheduler invokes ``lattice_yield_to`` whenever the
+node runs.
+
+Example::
+
+   .. code-block:: c
+
+      lattice_channel_t ch;
+      struct dag_node send, recv;
+
+      lattice_connect(&ch, peer_cap);
+      dag_node_init(&send, (exo_cap){0});
+      dag_node_init(&recv, (exo_cap){0});
+      dag_node_set_channel(&send, &ch);    /* octonion channel */
+      dag_node_set_channel(&recv, &ch);
+      dag_node_add_dep(&send, &recv);
+
+      dag_sched_submit(&send);
+      dag_sched_submit(&recv);
+
+Nodes execute according to dependency order and yield across the octonion based
+channel when scheduled.

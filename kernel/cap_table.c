@@ -99,53 +99,35 @@ static int verify_lattice_signature_stub(const struct cap_entry* entry, const la
 // Forward declaration for the recursive helper if needed, or make it static within the main function.
 // static int dfs_cycle_check(struct dag_node* current_node, /* potrzebne struktury danych do śledzenia ścieżki/odwiedzonych */);
 
-static int verify_dag_acyclic_stub(struct dag_node* start_node) {
-    if (start_node == NULL) {
-        return 1; // No path or node to check is considered acyclic.
-    }
-
-    // TODO: Implement actual DFS-based cycle detection.
-    // This placeholder outlines the conceptual steps. A real implementation
-    // would require:
-    // 1. A way to mark nodes during traversal (e.g., visiting, visited states).
-    //    This might involve adding fields to struct dag_node or using external tracking
-    //    if node modification is not possible/desirable here.
-    // 2. A starting point for traversal if checking a global graph property,
-    //    or if 'start_node' is the entry point for a specific path to validate.
-
-    // Conceptual DFS:
-    // Pseudo-code for a recursive DFS helper:
-    // int dfs_helper(node, path_set, visited_set):
-    //   add node to path_set
-    //   add node to visited_set
-    //
-    //   for each child in node->children:
-    //     if child in path_set:
-    //       return DETECTED_CYCLE // Cycle detected
-    //     if child not in visited_set:
-    //       if dfs_helper(child, path_set, visited_set) == DETECTED_CYCLE:
-    //         return DETECTED_CYCLE
-    //
-    //   remove node from path_set
-    //   return NO_CYCLE
-
-    // To make it slightly more than a simple 'return 1':
-    // Let's simulate a very shallow check: a self-loop on the start_node via its direct children.
-    // This requires knowing the structure of dag_node, specifically how children are accessed.
-    // Assuming struct dag_node has a field like 'struct dag_node_list* children;'
-    // where dag_node_list is 'struct dag_node_list { struct dag_node* node; struct dag_node_list* next; };'
-    if (start_node->children) { // Assuming 'children' is a pointer to the head of a list of child nodes
-        struct dag_node_list* child_item = start_node->children;
-        while (child_item) {
-            if (child_item->node == start_node) {
-                // Direct self-loop detected
-                return 0;
-            }
-            child_item = child_item->next;
+/**
+ * Depth-first search helper for cycle detection.
+ */
+static bool dfs_cycle(struct dag_node *node, struct dag_node **stack,
+                      size_t depth) {
+    for (size_t i = 0; i < depth; ++i) {
+        if (stack[i] == node) {
+            return true;
         }
     }
+    stack[depth] = node;
+    for (struct dag_node_list *l = node->children; l; l = l->next) {
+        if (dfs_cycle(l->node, stack, depth + 1)) {
+            return true;
+        }
+    }
+    return false;
+}
 
-    return 1; // Placeholder: Assume acyclic for now for other cases.
+/**
+ * Verify that the DAG reachable from @p start_node is acyclic.
+ */
+static int verify_dag_acyclic_stub(struct dag_node *start_node) {
+    if (!start_node) {
+        return 1;
+    }
+
+    struct dag_node *stack[64];
+    return dfs_cycle(start_node, stack, 0) ? 0 : 1;
 }
 
 
