@@ -128,9 +128,9 @@ When running without internet access place the required `.deb` files under
 
     sudo ./setup.sh --offline
 
-The setup script now searches `scripts/offline_packages/` for each package
-before invoking `apt-get`. Any package installed from this cache is logged
-to `/var/log/setup.log`.
+The setup script now installs any packages found in `scripts/offline_packages/`
+before running `apt-get`.  Packages installed from the cache are recorded in
+`/var/log/offline_installed.log` for easy auditing.
 
 This script installs bare-metal cross compiler packages such as
 ``gcc-i386-elf``/``g++-i386-elf`` and ``gcc-x86-64-elf``/``g++-x86-64-elf``

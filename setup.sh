@@ -54,10 +54,12 @@ fi
 
 LOG_FILE=/var/log/setup.log
 FAIL_LOG=/var/log/setup_failures.log
+OFFLINE_LOG=/var/log/offline_installed.log
 sudo mkdir -p /var/log
 sudo chown "$(whoami):$(id -g -n "$(whoami)")" /var/log "$LOG_FILE" "$FAIL_LOG" 2>/dev/null || true
 : >"$LOG_FILE"
 : >"$FAIL_LOG"
+: >"$OFFLINE_LOG"
 
 exec >> >(tee -a "$LOG_FILE") 2>&1
 
@@ -86,6 +88,7 @@ apt_pin_install() {
     if [ -n "$deb" ]; then
       if sudo dpkg -i "$deb" >/dev/null 2>&1; then
         echo "Installed $pkg from offline cache ($deb)" >&2
+        echo "$pkg" >>"$OFFLINE_LOG"
         status=0
       else
         echo "Warning: dpkg -i $deb failed" >&2
@@ -141,6 +144,10 @@ ensure_command() {
 
 # Install all packages in the offline directory
 install_offline_packages() {
+  ## Install all `.deb` files located in the offline cache directory.
+  ## The function intentionally keeps nullglob enabled only locally.  shellcheck
+  ## complains about SC2317 when functions are defined but never called; the
+  ## disable is required because the function may be conditionally invoked.
   # shellcheck disable=SC2317
   if [ -d "$OFFLINE_DIR" ]; then
     shopt -s nullglob
@@ -148,6 +155,7 @@ install_offline_packages() {
     for deb in "$OFFLINE_DIR"/*.deb; do
       if sudo dpkg -i "$deb" >/dev/null 2>&1; then
         echo "Installed offline package $deb" >&2
+        echo "$deb" >>"$OFFLINE_LOG"
       else
         echo "Warning: dpkg -i $deb failed" >&2
         echo "dpkg $deb" >>"$FAIL_LOG"
@@ -162,6 +170,9 @@ install_offline_packages() {
 for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
+
+# Install local packages before accessing network repositories.
+install_offline_packages
 
 if [ "$NETWORK_AVAILABLE" = true ]; then
   apt-get update -y || {
