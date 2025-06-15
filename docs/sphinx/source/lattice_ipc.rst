@@ -19,6 +19,10 @@ Under the hood, each channel performs:
   atomically (relaxed) on each send/receive.
 - **Quaternion spinlock** protection of all mutable channel state, allowing
   safe recursive locking across threads.
+- **Octonion session tokens** derived from the negotiated secret, stored in
+  ``lattice_channel_t.token``.
+- **DAG-based channel management** through ``lattice_channel_add_dep`` and
+  ``lattice_channel_submit`` which prevent cyclic wait-for graphs.
 
 Applications continue to use the same simple API but gain strong,
 quantum-resistant confidentiality and integrity guarantees.
@@ -71,6 +75,8 @@ API Details
   - Derives ``ch.key`` via ``establish_secret(ch.key, peer_pub)``.
   - Initializes ``ch.seq = 0`` and computes initial
     ``ch.auth_token = HMAC(ch.key, ch.seq)``.
+  - Derives ``ch.token`` from ``ch.key`` as an octonion session marker.
+  - Initializes ``ch.dag`` for DAG scheduling with ``dag_node_init``.
 
 ``lattice_send(&ch, data, len)``
   - Locks ``ch.lock`` (quaternion spinlock).
@@ -92,6 +98,13 @@ API Details
   - Increments ``ch.seq`` and updates ``ch.auth_token``.
   - Unlocks ``ch.lock``.
 
+``lattice_channel_add_dep(parent, child)``
+  - Adds a dependency edge in the wait-for DAG.
+  - Fails with ``-1`` if the edge would create a cycle.
+
+``lattice_channel_submit(chan)``
+  - Marks ``chan`` as ready by submitting its DAG node.
+
 Concurrency
 -----------
 
@@ -100,3 +113,5 @@ quaternion spinlock, used via the macro ``WITH_QLOCK(ch.lock)``, guards
 every critical section.  Sequence counters use ``memory_order_relaxed``
 since the spinlock provides the necessary happens-before ordering
 without extra barriers.
+Channel dependencies are expressed using a DAG; submissions that would
+introduce cycles are rejected to guarantee progress.

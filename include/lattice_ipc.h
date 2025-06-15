@@ -2,6 +2,8 @@
 #include "exo_ipc.h"
 #include "lattice_types.h"
 #include "../kernel/quaternion_spinlock.h"
+#include "octonion.h"
+#include "dag.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -17,6 +19,8 @@ typedef struct lattice_channel {
   exo_cap cap;                /**< Capability handle for peer communication. */
   _Atomic uint64_t seq;       /**< Sequence number for messages. */
   lattice_sig_t key;          /**< Authentication token. */
+  octonion_t token;           /**< Octonion-based session token. */
+  struct dag_node dag;        /**< DAG node for wait-for tracking. */
 } lattice_channel_t;
 
 /**
@@ -72,3 +76,21 @@ void lattice_close(lattice_channel_t *chan);
  * @return 0 on success, negative value on failure.
  */
 [[nodiscard]] int lattice_yield_to(const lattice_channel_t *chan);
+
+/**
+ * @brief Add a dependency edge between two channels.
+ *
+ * @param parent Channel that must complete before @p child.
+ * @param child Channel that depends on @p parent.
+ * @return 0 on success, negative on cycle detection or failure.
+ */
+[[nodiscard]] int lattice_channel_add_dep(lattice_channel_t *parent,
+                                          lattice_channel_t *child);
+
+/**
+ * @brief Submit a channel's DAG node to the scheduler.
+ *
+ * @param chan Channel whose node becomes ready.
+ * @return 0 on success, negative on cycle detection.
+ */
+[[nodiscard]] int lattice_channel_submit(lattice_channel_t *chan);
