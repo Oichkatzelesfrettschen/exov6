@@ -9,8 +9,9 @@ extern "C" {
 /**
  * @brief Lightweight abstraction representing a synchronous door.
  *
- * A door is either local, in which case @c handler is invoked directly,
- * or remote and messages are forwarded through @c dest.
+ * A door is either local, in which case ::handler is invoked directly,
+ * or remote and messages are forwarded through ::dest.  The ::is_local
+ * flag differentiates between the two cases.
  */
 typedef struct door {
   exo_cap dest;                     /**< Capability for remote invocation. */
