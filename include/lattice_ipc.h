@@ -9,8 +9,8 @@
  * @brief Lattice-based IPC channel descriptor.
  *
  * Access to mutable fields is serialized using a quaternion spinlock.
- * The sequence counter is incremented atomically on successful
- * send and receive operations.
+ * The sequence counter is incremented atomically with relaxed
+ * memory ordering on successful send and receive operations.
  */
 typedef struct lattice_channel {
   quaternion_spinlock_t lock; /**< Protects channel state. */
@@ -36,8 +36,8 @@ typedef struct lattice_channel {
  * @param len  Number of bytes to send.
  * @return 0 on success, negative value on failure.
  *
- * The sequence counter is updated atomically while the quaternion
- * lock guards the channel state.
+ * The sequence counter is updated atomically with relaxed ordering
+ * while the quaternion lock guards the channel state.
  */
 [[nodiscard]] int lattice_send(lattice_channel_t *chan, const void *buf,
                                size_t len);
@@ -51,7 +51,7 @@ typedef struct lattice_channel {
  * @return Number of bytes received on success, negative value on failure.
  *
  * The call acquires the quaternion lock and increments the sequence
- * counter atomically on success.
+ * counter atomically with relaxed ordering on success.
  */
 [[nodiscard]] int lattice_recv(lattice_channel_t *chan, void *buf, size_t len);
 
@@ -61,7 +61,7 @@ typedef struct lattice_channel {
  * @param chan Channel to close.
  *
  * The operation resets the sequence counter and authentication token
- * under the channel lock.
+ * under the channel lock using relaxed atomic stores.
  */
 void lattice_close(lattice_channel_t *chan);
 
