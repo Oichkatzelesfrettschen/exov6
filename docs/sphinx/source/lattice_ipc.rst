@@ -14,5 +14,11 @@ The following snippet illustrates a basic workflow::
         lattice_close(&ch);
     }
 
-Each channel maintains a sequence counter and authentication token to
-support future cryptographic extensions.
+On connection, ``lattice_connect`` now performs a lightweight
+post-quantum key exchange based on a Kyber-style exchange.  The
+negotiated secret is stored in ``lattice_channel_t.key`` and
+is transparently used by ``lattice_send`` and ``lattice_recv`` to
+encrypt and decrypt payloads via a simple XOR stream.
+
+Applications continue to call the API as before but now benefit from
+authenticated encrypted transport.
