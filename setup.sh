@@ -141,6 +141,7 @@ ensure_command() {
 
 # Install all packages in the offline directory
 install_offline_packages() {
+  # shellcheck disable=SC2317
   if [ -d "$OFFLINE_DIR" ]; then
     shopt -s nullglob
     local deb
@@ -319,7 +320,8 @@ done
 if ! command -v swiftc >/dev/null 2>&1; then
   echo "swiftc not found, fetching official Swift toolchain" >&2
   ARCH=$(uname -m)
-  OS_VERSION=$(. /etc/os-release; echo ${VERSION_ID})
+  # shellcheck disable=SC1091
+  OS_VERSION=$(. /etc/os-release; echo "${VERSION_ID}")
   SWIFT_VERSION=5.9.2
   PLATFORM="ubuntu${OS_VERSION}"
   case "$ARCH" in
@@ -339,7 +341,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
   curl -fsSL "${BASE_URL}/${SWIFT_FILE}" -o /tmp/swift.tar.gz
   tar -xzf /tmp/swift.tar.gz -C /opt/swift --strip-components=1
   rm /tmp/swift.tar.gz
-  echo 'export PATH=/opt/swift/usr/bin:$PATH' > /etc/profile.d/swift.sh
+  echo "export PATH=/opt/swift/usr/bin:\$PATH" > /etc/profile.d/swift.sh
   export PATH=/opt/swift/usr/bin:$PATH
 fi
 
@@ -354,7 +356,8 @@ done
 if ! command -v swiftc >/dev/null 2>&1; then
   echo "swiftc not found, fetching official Swift toolchain" >&2
   ARCH=$(uname -m)
-  OS_VERSION=$(. /etc/os-release; echo ${VERSION_ID})
+  # shellcheck disable=SC1091
+  OS_VERSION=$(. /etc/os-release; echo "${VERSION_ID}")
   SWIFT_VERSION=5.9.2
   PLATFORM="ubuntu${OS_VERSION}"
   case "$ARCH" in
@@ -381,7 +384,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
     }
     rm /tmp/swift.tar.gz
   fi
-  echo 'export PATH=/opt/swift/usr/bin:$PATH' > /etc/profile.d/swift.sh
+  echo "export PATH=/opt/swift/usr/bin:\$PATH" > /etc/profile.d/swift.sh
   export PATH=/opt/swift/usr/bin:$PATH
 fi
 
@@ -395,7 +398,7 @@ if ! curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER
   echo "Warning: failed to install IA16 cross compiler" >&2
   echo "download ia16" >>"$FAIL_LOG"
 fi
-echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
+echo "export PATH=/opt/ia16-elf-gcc/bin:\$PATH" > /etc/profile.d/ia16.sh
 export PATH=/opt/ia16-elf-gcc/bin:$PATH
 
 #— protoc installer (pinned)
