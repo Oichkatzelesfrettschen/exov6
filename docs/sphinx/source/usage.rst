@@ -6,4 +6,5 @@ documentation generated from the code for usage details.
 
 The :c:func:`dag_sched_submit` function rejects submissions forming
 cyclic dependencies. When a cycle is detected it returns ``-1`` and the
-node is not scheduled.
+node is not scheduled.  This check applies equally when submitting nodes
+through the Beatty scheduler.
