@@ -16,7 +16,7 @@ typedef struct lattice_channel {
   quaternion_spinlock_t lock; /**< Protects channel state. */
   exo_cap cap;                /**< Capability handle for peer communication. */
   _Atomic uint64_t seq;       /**< Sequence number for messages. */
-  lattice_sig_t key;          /**< Authentication token. */
+  octonion_t key;             /**< Authentication token. */
 } lattice_channel_t;
 
 /**
