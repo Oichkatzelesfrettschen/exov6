@@ -35,4 +35,6 @@ pytest -v
 
 Tests compile small helper programs using `clang` so a working C toolchain must
 be available. The `pytest.ini` configuration ensures each file following
-`test_*.py` naming is automatically discovered.
+`test_*.py` naming is automatically discovered.  When creating new test
+directories remember to add an `__init__.py` file so the package is
+importable by pytest.
