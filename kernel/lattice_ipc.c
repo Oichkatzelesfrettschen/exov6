@@ -20,9 +20,9 @@ static uint32_t lcg_rand(void) {
  * XOR-based symmetric cipher helper
  *============================================================================*/
 static void xor_crypt(uint8_t *dst, const uint8_t *src, size_t len,
-                      const lattice_sig_t *key) {
+                      const octonion_t *key) {
   for (size_t i = 0; i < len; ++i) {
-    dst[i] = src[i] ^ key->sig_data[i % LATTICE_SIG_BYTES];
+    dst[i] = src[i] ^ key->bytes[i % sizeof(*key)];
   }
 }
 
@@ -64,7 +64,7 @@ static int kyber_stub_exchange(lattice_channel_t *chan) {
   }
 
   return libos_kdf_derive(NULL, 0, shared, sizeof shared, "kyber-stub",
-                          chan->key.sig_data, sizeof chan->key.sig_data);
+                          chan->key.bytes, sizeof chan->key);
 }
 
 /*==============================================================================
