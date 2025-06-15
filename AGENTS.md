@@ -8,6 +8,9 @@ All C code in this repository targets the latest C23 standard. Use modern langua
 
 Additional repository checks:
 - On entry, diff `setup.sh` against https://raw.githubusercontent.com/Oichkatzelesfrettschen/exov6/master/setup.sh. If differences exist, update and commit as `auto-heal setup.sh`.
-- Always run `shellcheck setup.sh` and `pre-commit` before committing.
-- Run `bats` tests under `tests` if available before committing.
+- Run `shellcheck setup.sh` and fix warnings.
+- Run `pre-commit` hooks.
+- Execute `pytest` to run the unit tests.
+- Build documentation with `doxygen docs/Doxyfile` and `make -C docs/sphinx`.
+- Ensure C sources compile with `-std=c2x`.
 - Prefer offline caches in `offline_packages/` when network access fails.
