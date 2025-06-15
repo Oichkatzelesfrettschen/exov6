@@ -4,6 +4,7 @@
 #include "quaternion_spinlock.h" /* for WITH_QLOCK */
 #include <stdint.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdatomic.h>
 
@@ -68,6 +69,8 @@ int lattice_connect(lattice_channel_t *chan, exo_cap dest) {
 
   WITH_QLOCK(&chan->lock) {
     chan->cap = dest;
+    /* relaxed ordering is sufficient: qlock serialization provides
+       the necessary happens-before relation for readers */
     atomic_store_explicit(&chan->seq, 0, memory_order_relaxed);
     memset(&chan->key, 0, sizeof chan->key);
   }
@@ -83,16 +86,21 @@ int lattice_send(lattice_channel_t *chan, const void *buf, size_t len) {
     return -1;
   }
 
-  uint8_t enc[len];
+  uint8_t *enc = malloc(len);
+  if (!enc) {
+    return -1;
+  }
   xor_crypt(enc, buf, len, &chan->key);
 
   int ret;
   WITH_QLOCK(&chan->lock) {
     ret = exo_send(chan->cap, enc, (uint64_t)len);
-    if (ret > 0) {
+    if (ret == (int)len) {
+      /* relaxed increment safe under qlock */
       atomic_fetch_add_explicit(&chan->seq, 1, memory_order_relaxed);
     }
   }
+  free(enc);
   return ret;
 }
 
@@ -104,15 +112,20 @@ int lattice_recv(lattice_channel_t *chan, void *buf, size_t len) {
     return -1;
   }
 
-  uint8_t enc[len];
+  uint8_t *enc = malloc(len);
+  if (!enc) {
+    return -1;
+  }
   int ret;
   WITH_QLOCK(&chan->lock) {
     ret = exo_recv(chan->cap, enc, (uint64_t)len);
-    if (ret >= 0) {
+    if (ret == (int)len) {
       xor_crypt((uint8_t *)buf, enc, (size_t)ret, &chan->key);
+      /* relaxed increment safe under qlock */
       atomic_fetch_add_explicit(&chan->seq, 1, memory_order_relaxed);
     }
   }
+  free(enc);
   return ret;
 }
 
@@ -125,7 +138,8 @@ void lattice_close(lattice_channel_t *chan) {
   }
 
   WITH_QLOCK(&chan->lock) {
-    chan->cap = 0;
+    chan->cap = (exo_cap){0};
+    /* relaxed store is safe: qlock ensures visibility */
     atomic_store_explicit(&chan->seq, 0, memory_order_relaxed);
     memset(&chan->key, 0, sizeof chan->key);
   }
@@ -141,7 +155,7 @@ int lattice_yield_to(const lattice_channel_t *chan) {
   }
 
   exo_cap dest;
-  /* cast away const for locking */
+  /* cast away const for locking; WITH_QLOCK ensures exclusive access */
   WITH_QLOCK((quaternion_spinlock_t *)&chan->lock) { dest = chan->cap; }
   return cap_yield_to_cap(dest);
 }
