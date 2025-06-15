@@ -36,12 +36,9 @@ enum {
   SYS_cap_inc,
   SYS_cap_dec,
   SYS_ipc,
-<<<<<<< HEAD:engine/kernel/syscall.h
-=======
   SYS_exo_irq_alloc,
   SYS_exo_irq_wait,
   SYS_exo_irq_ack,
->>>>>>> origin/feature/epoch-cache-design-progress:kernel/syscall.h
   SYS_exo_alloc_ioport,
   SYS_exo_bind_irq,
   SYS_exo_alloc_dma,
