@@ -14,5 +14,7 @@ The following snippet illustrates a basic workflow::
         lattice_close(&ch);
     }
 
-Each channel maintains a sequence counter and authentication token to
-support future cryptographic extensions.
+Each channel maintains a sequence counter and authentication token.
+Mutable channel state is protected by a *quaternion spinlock* allowing
+recursive locking. The sequence counter increments atomically with
+each successful send or receive.
