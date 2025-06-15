@@ -1,455 +1,401 @@
-#include "include/cap.h"   // For new struct cap_entry, cap_id_t, etc.
-#include "include/types.h" // For basic types if not covered by stdint.h
-#include "include/defs.h"  // For kalloc, kfree, panic (if used)
-#include "engine/kernel/spinlock.h" // For struct spinlock, initlock, acquire, release
-#include "include/octonion.h"       // For octonion_t and operations
-#include "include/lattice_types.h" // For lattice_pt, lattice_sig_t
-#include "include/dag.h"           // For struct dag_node (definition for stubs)
-#include <string.h>                // For memset, memcpy, memcmp
-#include <stdint.h>                // For UINT64_MAX, standard integer types
-#include <stdatomic.h> // For atomic operations like atomic_store, atomic_fetch_add
+/*
+ * @file cap_table.c
+ * @brief Unified capability table and authentication stubs (C23).
+ */
 
-// --- Globals ---
-static struct spinlock cap_lock;
-static struct cap_entry
-    cap_table[CAP_MAX]; // Array of the new unified cap_entry
-uint64_t global_current_epoch =
-    1;                   // Start global epoch at 1 (0 might mean uninitialized)
-int cap_table_ready = 0; // Indicates if the capability table is initialized
+#include "cap.h"
+#include "types.h"
+#include "defs.h"
+#include "engine/kernel/spinlock.h"
+#include "octonion.h"
+#include "lattice_types.h"
+#include "dag.h"
 
-// --- System Key Stub for Octonion Auth ---
-// This would be a securely managed key in a real system.
-static const octonion_t SYSTEM_OCTONION_KEY_STUB = {0.123, 0.456, 0.789, 0.101,
-                                                    0.112, 0.131, 0.415, 0.161};
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+#include <stdatomic.h>
+#include <stdbool.h>
 
-// --- Forward declarations for static helper functions ---
-static uint16_t get_index_from_id(cap_id_t id);
-static uint64_t get_epoch_from_id(cap_id_t id);
-static cap_id_t generate_cap_id(uint16_t index, uint64_t epoch);
+/*------------------------------------------------------------------------------
+ * Global state
+ *----------------------------------------------------------------------------*/
+static struct spinlock      cap_lock;
+static struct cap_entry     cap_table[CAP_MAX];
+static atomic_uint_fast64_t global_current_epoch = ATOMIC_VAR_INIT(1);
+static bool                 cap_table_ready      = false;
 
-// Stub function implementations
-static void generate_stub_auth_token(const struct cap_entry *entry,
-                                     octonion_t *out_token) {
-  // Simplified generation logic for the stub.
-  // A real implementation would use cryptographic hashing or HMAC with the
-  // system key. For this stub, combine some fields and "mix" with the system
-  // key.
-  if (!entry || !out_token)
-    return;
-  octonion_t temp_data = {(double)entry->id + 0.1,
-                          (double)entry->epoch + 0.2,
-                          (double)entry->type + 0.3,
-                          (double)entry->rights_mask + 0.4,
-                          (double)(uintptr_t)entry->resource_ptr + 0.5,
-                          (double)(uintptr_t)entry->access_path_ptr + 0.6,
-                          (double)entry->owner + 0.7,
-                          (double)entry->generation + 0.8};
-  // Keep using quaternion_multiply as the stub mixing function for now
-  *out_token = quaternion_multiply(temp_data, SYSTEM_OCTONION_KEY_STUB);
-  // Add another mix step for pseudo-complexity
-  octonion_t key_squared =
-      quaternion_multiply(SYSTEM_OCTONION_KEY_STUB, SYSTEM_OCTONION_KEY_STUB);
-  *out_token = quaternion_multiply(*out_token, key_squared);
+/*------------------------------------------------------------------------------
+ * System octonion key stub
+ *----------------------------------------------------------------------------*/
+static const octonion_t SYSTEM_OCTONION_KEY = {
+    .r = 0.123, .i = 0.456, .j = 0.789, .k = 0.101,
+    .l = 0.112, .m = 0.131, .n = 0.415, .o = 0.161
+};
+
+/*------------------------------------------------------------------------------
+ * Pseudo‐random generator (non‐crypto; stub only)
+ *----------------------------------------------------------------------------*/
+static uint32_t
+lcg_rand(void)
+{
+    static uint32_t seed = 123456789u;
+    seed = seed * 1103515245u + 12345u;
+    return seed;
 }
 
-static int verify_stub_auth_token(const struct cap_entry *entry,
-                                  const octonion_t *token_to_check) {
-  if (!entry || !token_to_check)
-    return 0;
-  octonion_t expected_token;
-  generate_stub_auth_token(entry, &expected_token); // Regenerate the token
-  return octonion_equals(token_to_check, &expected_token); // New way
+/*------------------------------------------------------------------------------
+ * Helpers for cap_id encoding/decoding
+ *----------------------------------------------------------------------------*/
+static uint16_t
+get_index_from_id(cap_id_t id)
+{
+    return (uint16_t)(id & 0xFFFFu);
 }
 
-static void generate_lattice_signature_stub(const struct cap_entry *entry,
-                                            lattice_sig_t *out_sig) {
-  if (!entry || !out_sig)
-    return;
-  // Simple "hash" of some capability fields
-  uint8_t digest[8]; // Use 8 bytes of the signature for this digest
-  memset(digest, 0, sizeof(digest));
-  digest[0] = (uint8_t)(entry->id & 0xFF);
-  digest[1] = (uint8_t)((entry->id >> 8) & 0xFF);
-  digest[2] = (uint8_t)(entry->epoch & 0xFF);
-  digest[3] = (uint8_t)(entry->type & 0xFF);
-  digest[4] = (uint8_t)(entry->rights_mask & 0xFF);
-  digest[5] = (uint8_t)(entry->owner & 0xFF);
-  digest[6] = (uint8_t)((uintptr_t)entry->resource_ptr & 0xFF);
-  digest[7] = (uint8_t)((uintptr_t)entry->access_path_ptr & 0xFF);
-
-  // Fill sig_data: first part is digest, rest is a pattern
-  memset(out_sig->sig_data, 0xCC, sizeof(out_sig->sig_data)); // Default pattern
-  memcpy(out_sig->sig_data, digest, sizeof(digest));          // Embed digest
-  out_sig->sig_size = sizeof(out_sig->sig_data); // LATTICE_SIG_BYTES
+static uint64_t
+get_epoch_from_id(cap_id_t id)
+{
+    return (uint64_t)(id >> 16);
 }
 
-static int verify_lattice_signature_stub(const struct cap_entry *entry,
-                                         const lattice_sig_t *sig_to_check) {
-  if (!entry || !sig_to_check ||
-      sig_to_check->sig_size != sizeof(sig_to_check->sig_data))
-    return 0;
-
-  uint8_t expected_digest[8];
-  memset(expected_digest, 0, sizeof(expected_digest));
-  expected_digest[0] = (uint8_t)(entry->id & 0xFF);
-  expected_digest[1] = (uint8_t)((entry->id >> 8) & 0xFF);
-  expected_digest[2] = (uint8_t)(entry->epoch & 0xFF);
-  expected_digest[3] = (uint8_t)(entry->type & 0xFF);
-  expected_digest[4] = (uint8_t)(entry->rights_mask & 0xFF);
-  expected_digest[5] = (uint8_t)(entry->owner & 0xFF);
-  expected_digest[6] = (uint8_t)((uintptr_t)entry->resource_ptr & 0xFF);
-  expected_digest[7] = (uint8_t)((uintptr_t)entry->access_path_ptr & 0xFF);
-
-  if (memcmp(sig_to_check->sig_data, expected_digest,
-             sizeof(expected_digest)) != 0) {
-    return 0; // Digest mismatch
-  }
-
-  // Check the rest of the pattern
-  for (size_t i = sizeof(expected_digest); i < sig_to_check->sig_size; ++i) {
-    if (sig_to_check->sig_data[i] != 0xCC)
-      return 0; // Pattern mismatch
-  }
-  return 1;
+static cap_id_t
+generate_cap_id(uint16_t index, uint64_t epoch)
+{
+    return (cap_id_t)((epoch << 16) | index);
 }
 
-// Forward declaration for the recursive helper if needed, or make it static
-// within the main function. static int dfs_cycle_check(struct dag_node*
-// current_node, /* potrzebne struktury danych do śledzenia ścieżki/odwiedzonych
-// */);
+/*------------------------------------------------------------------------------
+ * Authentication stubs
+ *----------------------------------------------------------------------------*/
+static void
+generate_stub_auth_token(const struct cap_entry *entry,
+                         octonion_t *out)
+{
+    if (!entry || !out) {
+        return;
+    }
+    octonion_t tmp = {
+        .r = entry->id + 0.1,
+        .i = entry->epoch + 0.2,
+        .j = entry->type + 0.3,
+        .k = entry->rights_mask + 0.4,
+        .l = (uintptr_t)entry->resource_ptr + 0.5,
+        .m = (uintptr_t)entry->access_path_ptr + 0.6,
+        .n = entry->owner + 0.7,
+        .o = entry->generation + 0.8
+    };
+    *out = quaternion_multiply(tmp, SYSTEM_OCTONION_KEY);
+    octonion_t key_sq = quaternion_multiply(SYSTEM_OCTONION_KEY,
+                                            SYSTEM_OCTONION_KEY);
+    *out = quaternion_multiply(*out, key_sq);
+}
 
-static bool dag_cycle_dfs(struct dag_node *node, struct node_vec *stack,
-                          struct node_vec *visited) {
-  if (contains(stack, node))
+static bool
+verify_stub_auth_token(const struct cap_entry *entry,
+                       const octonion_t *token)
+{
+    if (!entry || !token) {
+        return false;
+    }
+    octonion_t expected;
+    generate_stub_auth_token(entry, &expected);
+    return octonion_equals(token, &expected);
+}
+
+static void
+generate_lattice_signature_stub(const struct cap_entry *entry,
+                                lattice_sig_t *out)
+{
+    if (!entry || !out) {
+        return;
+    }
+    uint8_t digest[8] = {
+        (uint8_t)(entry->id & 0xFFu),
+        (uint8_t)((entry->id >> 8) & 0xFFu),
+        (uint8_t)(entry->epoch & 0xFFu),
+        (uint8_t)(entry->type & 0xFFu),
+        (uint8_t)(entry->rights_mask & 0xFFu),
+        (uint8_t)(entry->owner & 0xFFu),
+        (uint8_t)((uintptr_t)entry->resource_ptr & 0xFFu),
+        (uint8_t)((uintptr_t)entry->access_path_ptr & 0xFFu)
+    };
+    memset(out->sig_data, 0xCC, LATTICE_SIG_BYTES);
+    memcpy(out->sig_data, digest, sizeof digest);
+    out->sig_size = LATTICE_SIG_BYTES;
+}
+
+static bool
+verify_lattice_signature_stub(const struct cap_entry *entry,
+                              const lattice_sig_t *sig)
+{
+    if (!entry || !sig || sig->sig_size != LATTICE_SIG_BYTES) {
+        return false;
+    }
+    uint8_t expected[8] = {
+        (uint8_t)(entry->id & 0xFFu),
+        (uint8_t)((entry->id >> 8) & 0xFFu),
+        (uint8_t)(entry->epoch & 0xFFu),
+        (uint8_t)(entry->type & 0xFFu),
+        (uint8_t)(entry->rights_mask & 0xFFu),
+        (uint8_t)(entry->owner & 0xFFu),
+        (uint8_t)((uintptr_t)entry->resource_ptr & 0xFFu),
+        (uint8_t)((uintptr_t)entry->access_path_ptr & 0xFFu)
+    };
+    if (memcmp(sig->sig_data, expected, sizeof expected) != 0) {
+        return false;
+    }
+    for (size_t i = sizeof expected; i < sig->sig_size; ++i) {
+        if (sig->sig_data[i] != 0xCC) {
+            return false;
+        }
+    }
     return true;
-  if (contains(visited, node))
+}
+
+/*------------------------------------------------------------------------------
+ * DAG cycle detection stub
+ *----------------------------------------------------------------------------*/
+static bool
+dfs_cycle(struct dag_node *node,
+          struct dag_node **stack,
+          size_t depth)
+{
+    for (size_t i = 0; i < depth; ++i) {
+        if (stack[i] == node) {
+            return true;
+        }
+    }
+    stack[depth] = node;
+    for (struct dag_node_list *l = node->children; l; l = l->next) {
+        if (dfs_cycle(l->node, stack, depth + 1)) {
+            return true;
+        }
+    }
     return false;
-  if (!push(stack, node))
-    return true;
-  push(visited, node);
-  for (struct dag_node_list *l = node->children; l; l = l->next)
-    if (dag_cycle_dfs(l->node, stack, visited))
-      return true;
-  stack->len--;
-  return false;
 }
 
-static int verify_dag_acyclic(struct dag_node *start_node) {
-  if (start_node == NULL)
-    return 1;
-  struct dag_node *stack_buf[DAG_MAX_DEPTH];
-  struct dag_node *visit_buf[DAG_MAX_DEPTH];
-  struct node_vec stack = {stack_buf, 0};
-  struct node_vec visited = {visit_buf, 0};
-  return dag_cycle_dfs(start_node, &stack, &visited) ? 0 : 1;
+static bool
+verify_dag_acyclic(const struct dag_node *start)
+{
+    if (!start) {
+        return true;
+    }
+    struct dag_node *stack[DAG_MAX_DEPTH] = { NULL };
+    return !dfs_cycle((struct dag_node *)start, stack, 0);
 }
 
-// --- Capability Table Management Functions ---
-
-void cap_table_init(void) {
-  initlock(&cap_lock, "captbl");
-  memset(cap_table, 0, sizeof(cap_table)); // Zero out all entries
-  global_current_epoch = 1;                // Reset epoch
-  cap_table_ready = 1;
+/*------------------------------------------------------------------------------
+ * Capability table management
+ *----------------------------------------------------------------------------*/
+void
+cap_table_init(void)
+{
+    initlock(&cap_lock, "cap_table");
+    memset(cap_table, 0, sizeof cap_table);
+    atomic_store(&global_current_epoch, 1);
+    cap_table_ready = true;
 }
 
-cap_id_t cap_table_alloc(cap_type_t type, void *resource_ptr, uint64_t rights,
-                         uint32_t owner, struct dag_node *access_path_ptr,
-                         const lattice_pt *resource_lattice_id_param,
-                         int is_quantum_safe) {
-  if (!cap_table_ready) {
-    // Or panic, depending on system design
-    return 0; // Table not initialized
-  }
-  if (type == CAP_TYPE_NONE) { // Cannot allocate a "NONE" type
+cap_id_t
+cap_table_alloc(cap_type_t        type,
+                void             *resource_ptr,
+                uint64_t          rights,
+                uint32_t          owner,
+                struct dag_node  *access_path,
+                const lattice_pt *lattice_id,
+                bool              quantum_safe)
+{
+    if (!cap_table_ready || type == CAP_TYPE_NONE) {
+        return 0;
+    }
+    acquire(&cap_lock);
+    for (uint16_t i = 1; i < CAP_MAX; ++i) {
+        struct cap_entry *e = &cap_table[i];
+        if (e->type == CAP_TYPE_NONE) {
+            e->epoch = atomic_load(&global_current_epoch);
+            e->generation = 0;
+            e->id = generate_cap_id(i, e->epoch);
+            e->type = type;
+            e->resource_ptr = resource_ptr;
+            e->rights_mask = rights;
+            e->owner = owner;
+            e->access_path_ptr = access_path;
+            if (lattice_id) {
+                e->resource_identifier_lattice = *lattice_id;
+            } else {
+                memset(&e->resource_identifier_lattice, 0,
+                       sizeof e->resource_identifier_lattice);
+            }
+            if (quantum_safe) {
+                generate_lattice_signature_stub(e,
+                    &e->auth.lattice_auth_signature);
+                e->flags.quantum_safe = 1;
+            } else {
+                generate_stub_auth_token(e, &e->auth.auth_token);
+                e->flags.quantum_safe = 0;
+            }
+            e->flags.epoch_valid      = 1;
+            e->flags.dag_verified     = 0;
+            e->flags.crypto_verified  = 0;
+            atomic_store(&e->refcnt, 1);
+            initlock(&e->lock, "cap_entry");
+            release(&cap_lock);
+            return e->id;
+        }
+    }
+    release(&cap_lock);
     return 0;
-  }
+}
 
-  acquire(&cap_lock);
-  for (uint16_t i = 1; i < CAP_MAX; i++) {    // Index 0 is typically reserved
-    if (cap_table[i].type == CAP_TYPE_NONE) { // Found a free slot
-      struct cap_entry *entry = &cap_table[i];
-
-      // Initialize Epoch-based fields
-      entry->epoch = global_current_epoch;
-      entry->generation = 0; // Initial generation
-      entry->id = generate_cap_id(i, entry->epoch);
-
-      // Initialize Core capability fields
-      entry->type = type;
-      entry->resource_ptr = resource_ptr;
-      entry->rights_mask = rights;
-      entry->owner = owner;
-
-      // Initialize DAG/Lattice fields
-      entry->access_path_ptr = access_path_ptr;
-      if (resource_lattice_id_param) {
-        // Shallow copy for the lattice_pt struct.
-        // If lattice_pt.data points to heap memory that cap_entry should own,
-        // then a deep copy (allocate and copy content) would be needed here.
-        // For now, assume resource_lattice_id_param->data is managed elsewhere
-        // or simple.
-        entry->resource_identifier_lattice = *resource_lattice_id_param;
-      } else {
-        memset(&entry->resource_identifier_lattice, 0, sizeof(lattice_pt));
-      }
-
-      // Initialize Quantum-safe auth
-      if (is_quantum_safe) {
-        generate_lattice_signature_stub(entry,
-                                        &entry->auth.lattice_auth_signature);
-      } else {
-        generate_stub_auth_token(entry, &entry->auth.auth_token);
-      }
-
-      // Initialize Metadata/flags
-      entry->flags.dag_verified = 0;    // Verification happens on demand
-      entry->flags.crypto_verified = 0; // Verification happens on demand
-      entry->flags.epoch_valid = 1;     // Valid upon allocation
-      entry->flags.quantum_safe = is_quantum_safe ? 1 : 0;
-      entry->flags.reserved = 0;
-
-      // Initialize Kernel internal management fields
-      atomic_store(&entry->refcnt, 1);
-
-      release(&cap_lock);
-      return entry->id;
+int
+cap_table_lookup(cap_id_t id,
+                 struct cap_entry *out)
+{
+    if (!cap_table_ready || id == 0) {
+        return -1;
     }
-  }
-  release(&cap_lock);
-  return 0; // No free slot found
-}
-
-int cap_table_lookup(cap_id_t id, struct cap_entry *out) {
-  if (!cap_table_ready || id == 0)
-    return -1;
-
-  uint16_t index = get_index_from_id(id);
-  uint64_t epoch_from_id = get_epoch_from_id(id);
-
-  if (index == 0 || index >= CAP_MAX)
-    return -1; // Invalid index
-
-  // No lock needed for initial check if type is NONE, but epoch check needs
-  // lock acquire(&cap_lock); // Moved lock acquisition to after index check if
-  // (cap_table[index].type == CAP_TYPE_NONE) { // Quick check before lock
-  //     release(&cap_lock);
-  //     return -1;
-  // }
-  acquire(&cap_lock);
-
-  struct cap_entry *entry = &cap_table[index];
-
-  if (entry->type == CAP_TYPE_NONE || entry->epoch != epoch_from_id) {
-    release(&cap_lock);
-    return -1; // Slot is free or epoch mismatch (revoked or reused)
-  }
-
-  if (out) {
-    *out = *entry; // Copy out the capability entry
-  }
-  release(&cap_lock);
-  return 0; // Success
-}
-
-void cap_table_inc_ref(cap_id_t id) {
-  if (!cap_table_ready || id == 0)
-    return;
-
-  uint16_t index = get_index_from_id(id);
-  uint64_t epoch_from_id = get_epoch_from_id(id);
-
-  if (index == 0 || index >= CAP_MAX)
-    return;
-
-  acquire(&cap_lock);
-  struct cap_entry *entry = &cap_table[index];
-  if (entry->type != CAP_TYPE_NONE && entry->epoch == epoch_from_id) {
-    atomic_fetch_add(&entry->refcnt, 1);
-  }
-  release(&cap_lock);
-}
-
-void cap_table_dec_ref(cap_id_t id) {
-  if (!cap_table_ready || id == 0)
-    return;
-
-  uint16_t index = get_index_from_id(id);
-  uint64_t epoch_from_id = get_epoch_from_id(id);
-
-  if (index == 0 || index >= CAP_MAX)
-    return;
-
-  acquire(&cap_lock);
-  struct cap_entry *entry = &cap_table[index];
-  if (entry->type != CAP_TYPE_NONE && entry->epoch == epoch_from_id) {
-    if (atomic_fetch_sub(&entry->refcnt, 1) - 1 == 0) {
-      // Ref count dropped to zero, effectively "freeing" the slot for reuse.
-      // Actual memory for pointed-to data (resource_ptr, access_path_ptr,
-      // resource_identifier_lattice.data if deep-copied) should be managed
-      // by the subsystem that owns those resources, often before calling
-      // dec_ref. This function just marks the cap_entry slot as available.
-
-      // Stub: "Clear" fields to prevent accidental use of stale data
-      entry->type = CAP_TYPE_NONE; // Mark as free
-      entry->resource_ptr = NULL;
-      entry->access_path_ptr = NULL;
-      memset(&entry->resource_identifier_lattice, 0, sizeof(lattice_pt));
-      memset(&entry->auth, 0, sizeof(entry->auth)); // Zero out auth union
-      memset(&entry->flags, 0, sizeof(entry->flags));
-      entry->owner = 0;
-      entry->rights_mask = 0;
-      // Epoch and ID remain for debugging/tracing until slot is overwritten by
-      // alloc
+    uint16_t idx = get_index_from_id(id);
+    uint64_t ep  = get_epoch_from_id(id);
+    if (idx == 0 || idx >= CAP_MAX) {
+        return -1;
     }
-  }
-  release(&cap_lock);
+    acquire(&cap_lock);
+    struct cap_entry entry = cap_table[idx];
+    if (entry.type == CAP_TYPE_NONE || entry.epoch != ep) {
+        release(&cap_lock);
+        return -1;
+    }
+    if (out) {
+        *out = entry;
+    }
+    release(&cap_lock);
+    return 0;
 }
 
-int cap_revoke(cap_id_t id) {
-  if (!cap_table_ready || id == 0)
-    return -1;
-
-  uint16_t index = get_index_from_id(id);
-  uint64_t epoch_from_id = get_epoch_from_id(id);
-
-  if (index == 0 || index >= CAP_MAX)
-    return -1;
-
-  acquire(&cap_lock);
-  struct cap_entry *entry = &cap_table[index];
-
-  if (entry->type == CAP_TYPE_NONE || entry->epoch != epoch_from_id) {
+void
+cap_table_inc_ref(cap_id_t id)
+{
+    if (!cap_table_ready || id == 0) {
+        return;
+    }
+    uint16_t idx = get_index_from_id(id);
+    uint64_t ep  = get_epoch_from_id(id);
+    if (idx == 0 || idx >= CAP_MAX) {
+        return;
+    }
+    acquire(&cap_lock);
+    struct cap_entry *e = &cap_table[idx];
+    if (e->type != CAP_TYPE_NONE && e->epoch == ep) {
+        atomic_fetch_add(&e->refcnt, 1);
+    }
     release(&cap_lock);
-    return -1; // Not found or already revoked
-  }
+}
 
-  if (entry->epoch == UINT64_MAX) {
-    // Epoch is maxed out, cannot increment further.
-    // This is a critical condition if the system relies on epoch increment for
-    // security. Depending on policy, could panic or mark as permanently
-    // unusable. For now, just fail the revocation.
+void
+cap_table_dec_ref(cap_id_t id)
+{
+    if (!cap_table_ready || id == 0) {
+        return;
+    }
+    uint16_t idx = get_index_from_id(id);
+    uint64_t ep  = get_epoch_from_id(id);
+    if (idx == 0 || idx >= CAP_MAX) {
+        return;
+    }
+    acquire(&cap_lock);
+    struct cap_entry *e = &cap_table[idx];
+    if (e->type != CAP_TYPE_NONE && e->epoch == ep &&
+        atomic_fetch_sub(&e->refcnt, 1) == 1)
+    {
+        e->type               = CAP_TYPE_NONE;
+        e->resource_ptr       = NULL;
+        e->access_path_ptr    = NULL;
+        memset(&e->resource_identifier_lattice, 0,
+               sizeof e->resource_identifier_lattice);
+        memset(&e->auth, 0, sizeof e->auth);
+        memset(&e->flags, 0, sizeof e->flags);
+        e->owner              = 0;
+        e->rights_mask        = 0;
+    }
     release(&cap_lock);
-    // Consider logging this event: panic("cap_revoke: epoch overflow");
-    return -2; // Indicate epoch overflow
-  }
+}
 
-  entry->epoch++; // Increment epoch, invalidating old IDs
-  // Update global_current_epoch if this new epoch is higher
-  if (global_current_epoch <= entry->epoch) {
-    global_current_epoch = entry->epoch + 1;
-    // Handle wrap-around for global_current_epoch too, though less critical
-    // than entry's epoch
-    if (global_current_epoch == 0)
-      global_current_epoch = 1;
-  }
-
-  // "Free" the slot by marking it as type NONE and clearing sensitive fields.
-  // Similar to dec_ref when refcnt hits zero.
-  entry->type = CAP_TYPE_NONE;
-  atomic_store(&entry->refcnt, 0); // No more valid references
-  entry->resource_ptr = NULL;
-  entry->access_path_ptr = NULL;
-  memset(&entry->resource_identifier_lattice, 0, sizeof(lattice_pt));
-  memset(&entry->auth, 0, sizeof(entry->auth));
-  memset(&entry->flags, 0, sizeof(entry->flags));
-  entry->owner = 0;
-  entry->rights_mask = 0;
-  // ID field is not cleared, epoch field now holds the new (incremented) epoch.
-
-  release(&cap_lock);
-  return 0; // Success
+int
+cap_revoke(cap_id_t id)
+{
+    if (!cap_table_ready || id == 0) {
+        return -1;
+    }
+    uint16_t idx = get_index_from_id(id);
+    uint64_t ep  = get_epoch_from_id(id);
+    if (idx == 0 || idx >= CAP_MAX) {
+        return -1;
+    }
+    acquire(&cap_lock);
+    struct cap_entry *e = &cap_table[idx];
+    if (e->type == CAP_TYPE_NONE || e->epoch != ep) {
+        release(&cap_lock);
+        return -1;
+    }
+    if (e->epoch == UINT64_MAX) {
+        release(&cap_lock);
+        return -2;
+    }
+    e->epoch++;
+    atomic_store(&e->refcnt, 0);
+    e->type               = CAP_TYPE_NONE;
+    e->resource_ptr       = NULL;
+    e->access_path_ptr    = NULL;
+    memset(&e->resource_identifier_lattice, 0,
+           sizeof e->resource_identifier_lattice);
+    memset(&e->auth, 0, sizeof e->auth);
+    memset(&e->flags, 0, sizeof e->flags);
+    e->owner              = 0;
+    e->rights_mask        = 0;
+    uint64_t gc = atomic_load(&global_current_epoch);
+    if (gc <= e->epoch) {
+        atomic_store(&global_current_epoch, e->epoch + 1);
+    }
+    release(&cap_lock);
+    return 0;
 }
 
 cap_validation_result_t
-cap_validate_unified(cap_id_t id, struct cap_entry *out_entry_if_valid) {
-  if (!cap_table_ready)
-    return VALIDATION_FAILED_NULL;
-
-  struct cap_entry
-      current_cap_data; // Local copy to work with after releasing lock
-
-  uint16_t index = get_index_from_id(id);
-  uint64_t epoch_from_id = get_epoch_from_id(id);
-
-  if (index == 0 || index >= CAP_MAX)
-    return VALIDATION_FAILED_NULL;
-
-  acquire(&cap_lock);
-  struct cap_entry *entry_in_table = &cap_table[index];
-
-  if (entry_in_table->type == CAP_TYPE_NONE) {
-    release(&cap_lock);
-    return VALIDATION_FAILED_NULL;
-  }
-
-  // Epoch Check (Critical: do this while holding the lock)
-  if (entry_in_table->epoch != epoch_from_id) {
-    release(&cap_lock);
-    return VALIDATION_FAILED_EPOCH;
-  }
-  entry_in_table->flags.epoch_valid = 1; // Mark as checked for this instance
-
-  // Copy to local struct to minimize time holding lock for further checks
-  current_cap_data = *entry_in_table;
-  release(&cap_lock);
-
-  // DAG Check (can be done on local copy if DAG structure is stable or also
-  // copied) Assuming verify_dag_acyclic can work on potentially stale data or
-  // is very fast. If DAG structure can change and needs locked access, this
-  // must be re-evaluated.
-  if (current_cap_data.access_path_ptr &&
-      !current_cap_data.flags.dag_verified) {
-    if (!verify_dag_acyclic(current_cap_data.access_path_ptr)) {
-      // Note: We are not updating flags in the actual table entry here
-      // as we've released the lock. Caching flags should be done under lock.
-      // This validation function is more of a check than a state update for
-      // flags.
-      return VALIDATION_FAILED_DAG;
+cap_validate_unified(cap_id_t id,
+                     struct cap_entry *out)
+{
+    if (!cap_table_ready) {
+        return VALIDATION_FAILED_NULL;
     }
-    // current_cap_data.flags.dag_verified = 1; // Reflects check on local copy
-  }
-
-  // Crypto Check (on local copy)
-  if (!current_cap_data.flags.crypto_verified) {
-    if (current_cap_data.flags.quantum_safe) {
-      if (!verify_lattice_signature_stub(
-              &current_cap_data,
-              &current_cap_data.auth.lattice_auth_signature)) {
-        return VALIDATION_FAILED_CRYPTO_AUTH;
-      }
+    uint16_t idx = get_index_from_id(id);
+    uint64_t ep  = get_epoch_from_id(id);
+    if (idx == 0 || idx >= CAP_MAX) {
+        return VALIDATION_FAILED_NULL;
+    }
+    acquire(&cap_lock);
+    struct cap_entry entry = cap_table[idx];
+    if (entry.type == CAP_TYPE_NONE || entry.epoch != ep) {
+        release(&cap_lock);
+        return VALIDATION_FAILED_NULL;
+    }
+    release(&cap_lock);
+    if (entry.access_path_ptr && !verify_dag_acyclic(entry.access_path_ptr)) {
+        return VALIDATION_FAILED_DAG;
+    }
+    if (entry.flags.quantum_safe) {
+        if (!verify_lattice_signature_stub(&entry,
+                                           &entry.auth.lattice_auth_signature))
+        {
+            return VALIDATION_FAILED_CRYPTO_AUTH;
+        }
     } else {
-      if (!verify_stub_auth_token(&current_cap_data,
-                                  &current_cap_data.auth.auth_token)) {
-        return VALIDATION_FAILED_CRYPTO_AUTH;
-      }
+        if (!verify_stub_auth_token(&entry, &entry.auth.auth_token)) {
+            return VALIDATION_FAILED_CRYPTO_AUTH;
+        }
     }
-    // current_cap_data.flags.crypto_verified = 1; // Reflects check on local
-    // copy
-  }
-
-  // If all checks passed:
-  if (out_entry_if_valid) {
-    *out_entry_if_valid =
-        current_cap_data; // Provide the validated (copied) entry
-  }
-  return VALIDATION_SUCCESS;
-}
-
-// --- Static Helper Function Implementations ---
-
-static uint16_t get_index_from_id(cap_id_t id) {
-  return (uint16_t)(id & 0xFFFF); // Lower 16 bits for index
-}
-
-static uint64_t get_epoch_from_id(cap_id_t id) {
-  // Upper bits for epoch. Shift by 16.
-  return (id >> 16);
-}
-
-static cap_id_t generate_cap_id(uint16_t index, uint64_t epoch) {
-  // Combine epoch and index to form a unique ID.
-  // Ensure index is within valid range (e.g., < CAP_MAX and not 0).
-  // Ensure epoch doesn't overflow into index bits if shifting is different.
-  return (epoch << 16) | index;
+    if (out) {
+        *out = entry;
+    }
+    return VALIDATION_SUCCESS;
 }
