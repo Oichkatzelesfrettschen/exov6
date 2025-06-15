@@ -2,6 +2,7 @@
 #include "defs.h"
 #include "spinlock.h"
 #include "dag.h"
+#include "lattice_ipc.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
 #include <string.h>
@@ -12,17 +13,29 @@ static struct dag_node *ready_head;
 static struct exo_sched_ops dag_ops;
 static struct exo_stream dag_stream;
 
+/** Determine scheduling weight based on node priority. */
 static inline int node_weight(struct dag_node *n) { return n->priority; }
 
+/** Initialize a DAG node. */
 void dag_node_init(struct dag_node *n, exo_cap ctx) {
   memset(n, 0, sizeof(*n));
   n->ctx = ctx;
+  n->chan = NULL;
 }
 
+/** Set the scheduling priority of a node. */
 void dag_node_set_priority(struct dag_node *n, int priority) {
   n->priority = priority;
 }
 
+/** Attach a lattice IPC channel used for yielding. */
+void dag_node_set_channel(struct dag_node *n, lattice_channel_t *chan) {
+  n->chan = chan;
+}
+
+/**
+ * Register @p child as dependent on @p parent.
+ */
 void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
   struct dag_node_list *l = (struct dag_node_list *)kalloc();
   if (!l)
@@ -104,6 +117,7 @@ static void dag_mark_done(struct dag_node *n) {
   }
 }
 
+/** Run the next ready node and yield to its context. */
 static void dag_yield(void) {
   struct dag_node *n;
 
@@ -114,7 +128,10 @@ static void dag_yield(void) {
   if (!n)
     return;
 
-  exo_yield_to(n->ctx);
+  if (n->chan)
+    lattice_yield_to(n->chan);
+  else
+    exo_yield_to(n->ctx);
 
   acquire(&dag_lock);
   dag_mark_done(n);
