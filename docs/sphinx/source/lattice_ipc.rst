@@ -43,3 +43,13 @@ Below the hood:
       ``auth_token`` and increments ``ch.seq`` with relaxed atomics.
     - copies plaintext into ``buf`` and then unlocks ``ch.lock``.
 
+Concurrency
+-----------
+All operations on ``lattice_channel_t`` mutate shared state.  A quaternion
+spinlock serialized through the :c:macro:`WITH_QLOCK` helper guards these
+critical sections.  Each successful send or receive increments ``seq`` using a
+relaxed :c:type:`_Atomic` update while holding the lock.  This ordering keeps
+the counter consistent with the encrypted payloads yet avoids unnecessary
+barriers because mutual exclusion already provides the required happens-before
+relationship.
+
