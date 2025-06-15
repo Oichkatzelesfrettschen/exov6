@@ -283,7 +283,7 @@ int endpoint_recv(struct endpoint *, zipc_msg_t *);
 void dag_node_init(struct dag_node *, exo_cap);
 void dag_node_set_priority(struct dag_node *, int);
 void dag_node_add_dep(struct dag_node *, struct dag_node *);
-void dag_sched_submit(struct dag_node *);
+int dag_sched_submit(struct dag_node *);
 
 // rcu.c
 void rcuinit(void);
