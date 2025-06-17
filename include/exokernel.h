@@ -104,4 +104,6 @@ enum exo_syscall {
   EXO_SYSCALL_IRQ_ALLOC = SYS_exo_irq_alloc,
   EXO_SYSCALL_IRQ_WAIT = SYS_exo_irq_wait,
   EXO_SYSCALL_IRQ_ACK = SYS_exo_irq_ack,
+  EXO_SYSCALL_SERVICE_REGISTER = SYS_service_register,
+  EXO_SYSCALL_SERVICE_ADD_DEP = SYS_service_add_dependency,
 };

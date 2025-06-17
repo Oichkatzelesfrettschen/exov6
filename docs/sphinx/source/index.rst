@@ -9,5 +9,6 @@ Welcome to exov6's documentation!
    lattice_ipc
    door_ipc
    scheduler
+   service_management
 
 

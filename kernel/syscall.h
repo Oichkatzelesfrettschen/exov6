@@ -44,4 +44,6 @@ enum {
   SYS_exo_alloc_dma,
   SYS_exo_alloc_hypervisor,
   SYS_hv_launch,
+  SYS_service_register,
+  SYS_service_add_dependency,
 };

@@ -10,7 +10,6 @@
 #include "x86.h"
 // clang-format on
 
-
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -82,15 +81,14 @@ int argint(int n, int *ip) {
 // Fetch the nth word-sized system call argument as a pointer
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
-int
-argptr(int n, char **pp, size_t size)
-{
+int argptr(int n, char **pp, size_t size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
   int i;
   if (argint(n, &i) < 0)
     return -1;
-  if (size < 0 || (uint32_t)i >= curproc->sz || (uint32_t)i + size > curproc->sz)
+  if (size < 0 || (uint32_t)i >= curproc->sz ||
+      (uint32_t)i + size > curproc->sz)
     return -1;
   *pp = (char *)i;
   return 0;
@@ -163,6 +161,8 @@ extern int sys_sigsend(void);
 extern int sys_sigcheck(void);
 extern int sys_cap_inc(void);
 extern int sys_cap_dec(void);
+extern int sys_service_register(void);
+extern int sys_service_add_dependency(void);
 
 static int (*syscalls[])(void) = {
     [SYS_fork] sys_fork,
@@ -202,6 +202,8 @@ static int (*syscalls[])(void) = {
     [SYS_cap_inc] sys_cap_inc,
     [SYS_cap_dec] sys_cap_dec,
     [SYS_ipc_fast] sys_ipc_fast,
+    [SYS_service_register] sys_service_register,
+    [SYS_service_add_dependency] sys_service_add_dependency,
 };
 
 void syscall(void) {
@@ -212,7 +214,7 @@ void syscall(void) {
 #else
   num = curproc->tf->rax;
 #endif
-  if(num == 0x30){
+  if (num == 0x30) {
 #ifdef __x86_64__
     curproc->tf->rax = sys_ipc_fast();
 #else
