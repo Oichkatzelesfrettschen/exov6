@@ -121,3 +121,53 @@ int pqcrypto_kem_dec(uint8_t *key, const uint8_t *cipher, const uint8_t *sk) {
   return 0;
 #endif
 }
+
+/**
+ * Generate a signing key pair.
+ */
+int pqcrypto_sign_keypair(uint8_t *pk, uint8_t *sk) {
+#ifdef HAVE_PQCRYPTO
+  return pqcrystals_dilithium2_ref_keypair(pk, sk);
+#else
+  for (size_t i = 0; i < 32; ++i) {
+    pk[i] = (uint8_t)(i + 3u);
+    sk[i] = (uint8_t)(i + 4u);
+  }
+  return 0;
+#endif
+}
+
+/**
+ * Sign a message using the private key.
+ */
+int pqcrypto_sign(uint8_t *sig, size_t *sig_len, const uint8_t *msg,
+                  size_t msg_len, const uint8_t *sk) {
+#ifdef HAVE_PQCRYPTO
+  return pqcrystals_dilithium2_ref_sign(sig, sig_len, msg, msg_len, sk);
+#else
+  size_t n = msg_len < 32 ? msg_len : 32;
+  for (size_t i = 0; i < n; ++i) {
+    sig[i] = msg[i] ^ sk[i % 32];
+  }
+  *sig_len = n;
+  return 0;
+#endif
+}
+
+/**
+ * Verify a message signature using the public key.
+ */
+int pqcrypto_verify(const uint8_t *sig, size_t sig_len, const uint8_t *msg,
+                    size_t msg_len, const uint8_t *pk) {
+#ifdef HAVE_PQCRYPTO
+  return pqcrystals_dilithium2_ref_verify(sig, sig_len, msg, msg_len, pk);
+#else
+  size_t n = sig_len < msg_len ? sig_len : msg_len;
+  for (size_t i = 0; i < n; ++i) {
+    if ((sig[i] ^ pk[i % 32]) != msg[i]) {
+      return -1;
+    }
+  }
+  return 0;
+#endif
+}
