@@ -11,6 +11,7 @@ The **Lattice IPC** layer provides an authenticated, encrypted,
 capability-based interface for secure message passing.  Clients and
 servers simply:
 
+#.  Allocate a channel and call ``:c:func:`lattice_channel_init````
 #.  Open a channel with ``:c:func:`lattice_connect````
 #.  Exchange messages with ``:c:func:`lattice_send``` and
     ``:c:func:`lattice_recv```
@@ -80,6 +81,12 @@ Basic Usage
 API Reference
 -------------
 
+.. c:function:: int lattice_channel_init(lattice_channel_t *chan)
+
+   - Generates a new Kyber key pair with ``pqcrypto_kem_keypair``.
+   - Resets sequence counters and clears authentication state.
+   - Initializes the quaternion lock and DAG node.
+
 .. c:function:: int lattice_connect(lattice_channel_t *chan, exo_cap cap)
 
    - Generates two ephemeral Kyber key-pairs, exchanges public keys
@@ -141,15 +148,19 @@ API Reference
 Under the Hood
 --------------
 
-1. **lattice_connect()**  
-   - Ephemeral keypairs for client/server.  
+1. **lattice_channel_init()**
+   - Generate a per-channel key pair.
+   - Reset counters and lock state.
+
+2. **lattice_connect()**
+   - Ephemeral keypairs for client/server.
    - Capability-based public-key exchange.  
    - KDF to derive shared secret into ``chan->key``.  
    - Reset sequence counter and compute initial HMAC.  
    - Generate octonion session token from secret.  
    - Initialize DAG node for this channel.
 
-2. **lattice_send() / lattice_recv()**  
+3. **lattice_send() / lattice_recv()**
    - Acquire quaternion spinlock via ``WITH_QLOCK(chan->lock)``.  
    - Bump ``chan->seq`` with ``memory_order_relaxed``.  
    - Derive per-message keystream from ``chan->key`` and the new sequence.  

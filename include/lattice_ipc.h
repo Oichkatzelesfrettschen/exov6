@@ -19,13 +19,26 @@
  * relaxed _Atomic updates.
  */
 typedef struct lattice_channel {
-    quaternion_spinlock_t lock; /**< Guards all mutable channel state. */
-    exo_cap               cap;  /**< Capability handle for peer comm. */
-    _Atomic uint64_t      seq;  /**< Sequence counter for messages. */
-    lattice_sig_t         key;  /**< HMAC authentication token. */
-    octonion_t            token;/**< Octonion session token. */
-    struct dag_node       dag;  /**< Embedded DAG node for deps. */
+  quaternion_spinlock_t lock; /**< Guards all mutable channel state. */
+  exo_cap cap;                /**< Capability handle for peer comm. */
+  lattice_public_key_t pub;   /**< Per-channel post-quantum public key. */
+  lattice_secret_key_t priv;  /**< Per-channel post-quantum private key. */
+  _Atomic uint64_t seq;       /**< Sequence counter for messages. */
+  lattice_sig_t key;          /**< HMAC authentication token. */
+  octonion_t token;           /**< Octonion session token. */
+  struct dag_node dag;        /**< Embedded DAG node for deps. */
 } lattice_channel_t;
+
+/**
+ * @brief Initialize a channel with fresh PQ-crypto keys.
+ *
+ * Generates a Kyber-style key pair and resets all runtime state.
+ * The channel is left disconnected.
+ *
+ * @param chan Channel to initialize (non-NULL).
+ * @return 0 on success, negative on failure.
+ */
+[[nodiscard]] int lattice_channel_init(lattice_channel_t *chan);
 
 /**
  * @brief Establish a secure channel over a capability.
@@ -38,9 +51,7 @@ typedef struct lattice_channel {
  * @param dest  Remote endpoint capability.
  * @return      0 on success, negative on failure.
  */
-[[nodiscard]] int
-lattice_connect(lattice_channel_t *chan,
-                exo_cap dest);
+[[nodiscard]] int lattice_connect(lattice_channel_t *chan, exo_cap dest);
 
 /**
  * @brief Send an encrypted, authenticated message.
@@ -53,10 +64,8 @@ lattice_connect(lattice_channel_t *chan,
  * @param len   Data length in bytes.
  * @return      Bytes sent on success, negative on error.
  */
-[[nodiscard]] int
-lattice_send(lattice_channel_t *chan,
-             const void *buf,
-             size_t len);
+[[nodiscard]] int lattice_send(lattice_channel_t *chan, const void *buf,
+                               size_t len);
 
 /**
  * @brief Receive and decrypt an authenticated message.
@@ -70,10 +79,7 @@ lattice_send(lattice_channel_t *chan,
  * @return         Bytes received on success,
  *                 negative or E_NO_MESSAGE otherwise.
  */
-[[nodiscard]] int
-lattice_recv(lattice_channel_t *chan,
-             void *buf,
-             size_t len);
+[[nodiscard]] int lattice_recv(lattice_channel_t *chan, void *buf, size_t len);
 
 /**
  * @brief Close and reset a channel.
@@ -83,8 +89,7 @@ lattice_recv(lattice_channel_t *chan,
  *
  * @param chan  Channel to close (non-NULL).
  */
-void
-lattice_close(lattice_channel_t *chan);
+void lattice_close(lattice_channel_t *chan);
 
 /**
  * @brief Yield execution to the channel’s peer.
@@ -94,8 +99,7 @@ lattice_close(lattice_channel_t *chan);
  * @param chan  Channel describing destination.
  * @return      0 on success, negative on error.
  */
-[[nodiscard]] int
-lattice_yield_to(const lattice_channel_t *chan);
+[[nodiscard]] int lattice_yield_to(const lattice_channel_t *chan);
 
 /**
  * @brief Add a DAG dependency between two channels.
@@ -107,9 +111,8 @@ lattice_yield_to(const lattice_channel_t *chan);
  * @param child   Channel that depends on parent.
  * @return        0 on success, negative on cycle or error.
  */
-[[nodiscard]] int
-lattice_channel_add_dep(lattice_channel_t *parent,
-                        lattice_channel_t *child);
+[[nodiscard]] int lattice_channel_add_dep(lattice_channel_t *parent,
+                                          lattice_channel_t *child);
 
 /**
  * @brief Submit a channel’s DAG node to the scheduler.
@@ -120,5 +123,4 @@ lattice_channel_add_dep(lattice_channel_t *parent,
  * @param chan  Channel to submit (non-NULL).
  * @return      0 on success, negative on error.
  */
-[[nodiscard]] int
-lattice_channel_submit(lattice_channel_t *chan);
+[[nodiscard]] int lattice_channel_submit(lattice_channel_t *chan);
