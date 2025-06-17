@@ -12,10 +12,9 @@ debug() {
   fi
 }
 
-## Resolve the repository root, following symlinks to this script.
+## Resolve the directory of this script even when invoked via symlink.
 ## shellcheck disable=SC2155
-REPO_ROOT="$(cd -- "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")" \
-  && pwd -P)"
+REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 OFFLINE_DIR="$REPO_ROOT/scripts/offline_packages"
 
 # This script installs all build dependencies. It logs actions to

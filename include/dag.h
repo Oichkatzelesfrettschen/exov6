@@ -33,4 +33,4 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child);
 int dag_add_edge(struct dag_node *parent, struct dag_node *child);
 int dag_sched_submit(struct dag_node *node);
 void dag_sched_init(void);
-void dag_yield_to(struct dag_node *n);
+void dag_sched_yield_to(struct dag_node *n);
