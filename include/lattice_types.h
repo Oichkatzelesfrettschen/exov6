@@ -28,6 +28,13 @@ typedef struct {
   // size_t key_size; // Could be implicit from LATTICE_KEY_BYTES
 } lattice_public_key_t; // More specific
 
+/**
+ * @brief Container for a lattice-based private key.
+ */
+typedef struct {
+  uint8_t key_data[LATTICE_KEY_BYTES];
+} lattice_secret_key_t;
+
 typedef struct {
   uint8_t sig_data[LATTICE_SIG_BYTES];
   // size_t sig_size; // Could be implicit from LATTICE_SIG_BYTES
