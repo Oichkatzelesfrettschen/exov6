@@ -19,8 +19,8 @@ servers simply:
 
 Under the hood, each channel implements:
 
-- **Post-quantum Kyber key exchange** on connect, deriving a shared secret
-  stored in ``lattice_channel_t.key``.
+- **Post-quantum Kyber key exchange** on connect via ``pqcrypto``,
+  deriving a shared secret stored in ``lattice_channel_t.key``.
 - **Transparent XOR-stream encryption/decryption** of every payload.
 - **Per-channel sequence counters** with HMAC-based authentication tokens,
   bumped atomically (``memory_order_relaxed``) on each send/receive.
@@ -89,9 +89,10 @@ API Reference
 
 .. c:function:: int lattice_connect(lattice_channel_t *chan, exo_cap cap)
 
-   - Generates two ephemeral Kyber key-pairs, exchanges public keys
-     via the capability channel.
-   - Derives ``chan->key`` via KDF over the shared contributions.
+   - Generates ephemeral Kyber key pairs and exchanges them via the
+     capability channel using the ``pqcrypto`` helpers.
+   - Encapsulates and decapsulates to derive ``chan->key`` with a KDF
+     over both shared contributions.
    - Initializes ``chan->seq = 0``, ``chan->auth_token = HMAC(chan->key, 0)``.
    - Derives ``chan->token`` (octonion session marker) from ``chan->key``.
    - Initializes associated DAG node via ``dag_node_init(&chan->node)``.
