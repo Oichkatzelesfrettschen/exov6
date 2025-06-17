@@ -200,3 +200,14 @@ quaternion spinlock (``WITH_QLOCK(ch.lock)``) guards each critical
 section.  Sequence counters use ``memory_order_relaxed``, relying on
 the spinlock for necessary happens-before ordering.  DAG dependencies
 are enforced at submission time, rejecting cycles to guarantee progress.
+
+Post-Quantum Helpers
+--------------------
+
+Additional helper functions are available in ``libos/crypto.h`` for
+post-quantum operations.  ``pqcrypto_kem_keypair``, ``pqcrypto_kem_enc``
+and ``pqcrypto_kem_dec`` implement a Kyber-like key exchange, while
+``pqcrypto_sign_keypair``, ``pqcrypto_sign`` and ``pqcrypto_verify``
+provide Dilithium-style signatures.  These routines call out to the
+``pqcrypto`` library when present and fall back to deterministic stubs
+otherwise.
