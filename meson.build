@@ -69,6 +69,7 @@ libos_sources = [
   'libos/ipc.c',
   'libos/posix.c',
   'libos/termios.c',
+  'libos/service.c',
   'libos/cap.c', # Corrected path
   'libos/msg_router.c', # Corrected path
   'libos/resource_account.c', # Corrected path

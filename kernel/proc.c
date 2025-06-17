@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "service.h"
 #include <string.h>
 
 struct ptable ptable;
@@ -333,6 +334,8 @@ void exit(void) {
         wakeup1(initproc);
     }
   }
+
+  service_notify_exit(curproc);
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;

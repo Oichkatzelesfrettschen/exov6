@@ -132,6 +132,7 @@ set(LIBOS_SOURCES
   libos/ipc.c
   libos/posix.c
   libos/termios.c
+  libos/service.c
   libos/microkernel/cap.c
   libos/microkernel/msg_router.c
   libos/microkernel/resource_account.c

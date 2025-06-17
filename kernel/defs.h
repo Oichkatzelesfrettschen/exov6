@@ -11,6 +11,7 @@
 #include "proc.h"
 #include "ipc.h"
 #include "cap.h"
+#include "service.h"
 #include <stdnoreturn.h>
 
 struct buf;
@@ -262,6 +263,12 @@ int cap_table_lookup(uint16_t, struct cap_entry *);
 void cap_table_inc(uint16_t);
 void cap_table_dec(uint16_t);
 int cap_table_remove(uint16_t);
+
+// service.c
+int service_register(const char *name, const char *path,
+                     service_options_t opts);
+int service_add_dependency(const char *name, const char *dependency);
+void service_notify_exit(struct proc *p);
 void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);
