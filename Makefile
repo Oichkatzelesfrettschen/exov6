@@ -2,7 +2,6 @@
 ULAND_DIR  := src-uland
 LIBOS_DIR  := libos
 
-<<<<<<< HEAD
 OBJS = \
     $(KERNEL_DIR)/bio.o \
     $(KERNEL_DIR)/console.o \
@@ -473,7 +472,6 @@ qemu-memfs: $(XV6_MEMFS_IMG)
 	        echo "QEMU not found. Kernel built but not executed."; \
 	else \
 	        $(QEMU) -drive file=$(XV6_MEMFS_IMG),index=0,media=disk,format=raw -smp $(CPUS) -m 256; \
-=======
 proof:
 	$(MAKE) -C formal/coq all
 
@@ -487,7 +485,6 @@ formal:
 	tlc formal/specs/tla/ExoCap.tla >/dev/null; \
 	else \
 	echo "tlc not found; skipping TLA+ check"; \
->>>>>>> origin/feature/epoch-cache-design-progress
 	fi
 
 qemu-nox: $(FS_IMG) $(XV6_IMG)
