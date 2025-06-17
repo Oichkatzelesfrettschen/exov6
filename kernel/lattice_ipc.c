@@ -194,7 +194,7 @@ int lattice_yield_to(const lattice_channel_t *chan) {
   }
 
   exo_cap dest;
-  WITH_QLOCK((quaternion_spinlock_t *)&chan->lock) { dest = chan->cap; }
+  WITH_QLOCK(&chan->lock) { dest = chan->cap; }
   return cap_yield_to_cap(dest);
 }
 
