@@ -77,6 +77,16 @@ pip_install() {
   fi
 }
 
+# Install an npm package globally with quiet output
+npm_install() {
+  local pkg="$1"
+  debug "Attempting npm install $pkg"
+  if ! npm install --global "$pkg" >/dev/null 2>&1; then
+    echo "Warning: npm install $pkg failed" >&2
+    echo "npm $pkg" >>"$FAIL_LOG"
+  fi
+}
+
 # Install a package, preferring offline .deb files when available
 # shellcheck disable=SC2155
 apt_pin_install() {
@@ -195,7 +205,7 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  libasan6 libubsan1 likwid hwloc cloc; do
+  libasan6 libubsan1 likwid hwloc cloc cscope ctags cppcheck bear; do
   apt_pin_install "$pkg"
 done
 
@@ -215,13 +225,20 @@ done
 for pip_pkg in \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db configuredb; do
+  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db configuredb \
+  lizard radon networkx pygraphviz mypy pylint; do
   pip_install "$pip_pkg"
 done
 
 # Explicit installation of key tools
 pip_install compiledb
 pip_install configuredb
+
+# Node.js tooling for dependency graphs and linting
+for npm_pkg in \
+  madge dependency-cruiser eslint; do
+  npm_install "$npm_pkg"
+done
 
 # --- TLA+ Python Tooling ---
 # tlacli: Command-line interface for TLA+ and TLC model checker
@@ -302,7 +319,7 @@ for pkg in \
   swift swift-lldb swiftpm swift-tools-support-core libswiftFuzzer \
   kotlin gradle-plugin-kotlin \
   ruby ruby-dev gem bundler php-cli php-dev composer phpunit \
-  r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol \
+  r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol nodejs npm \
   fpc lazarus zig nim nimble crystal shards gforth; do
   apt_pin_install "$pkg"
 done
