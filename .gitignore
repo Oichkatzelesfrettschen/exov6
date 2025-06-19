@@ -1,2 +1,21 @@
 src-headers/fs 3.h
 engine/kernel/user.h
+# Build artifacts
+build/
+*.o
+*.a
+*.so
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Node packages
+node_modules/
+
+# Documentation builds
+/docs/sphinx/build/
+/docs/build/
+
+# Local caches
+.cache/
