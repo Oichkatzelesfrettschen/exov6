@@ -86,12 +86,14 @@ static inline quaternion_t quaternion_from_cpu_id(int cpu_id) {
 static inline octonion_t octonion_create(double e0, double e1, double e2,
                                          double e3, double e4, double e5,
                                          double e6, double e7) {
-  return (octonion_t){e0, e1, e2, e3, e4, e5, e6, e7};
+  return (octonion_t){.e0 = e0, .e1 = e1, .e2 = e2, .e3 = e3,
+                      .e4 = e4, .e5 = e5, .e6 = e6, .e7 = e7};
 }
 
 /** Conjugate an octonion by negating the imaginary parts. */
 static inline octonion_t octonion_conjugate(octonion_t o) {
-  return (octonion_t){o.e0, -o.e1, -o.e2, -o.e3, -o.e4, -o.e5, -o.e6, -o.e7};
+  return (octonion_t){.e0 = o.e0, .e1 = -o.e1, .e2 = -o.e2, .e3 = -o.e3,
+                      .e4 = -o.e4, .e5 = -o.e5, .e6 = -o.e6, .e7 = -o.e7};
 }
 
 /**
@@ -117,8 +119,9 @@ static inline octonion_t octonion_multiply(octonion_t a, octonion_t b) {
   right.y += temp2.y;
   right.z += temp2.z;
 
-  return (octonion_t){left.w,  left.x,  left.y,  left.z,
-                      right.w, right.x, right.y, right.z};
+  return (octonion_t){.e0 = left.w,  .e1 = left.x,  .e2 = left.y,  .e3 = left.z,
+                      .e4 = right.w, .e5 = right.x, .e6 = right.y,
+                      .e7 = right.z};
 }
 
 /** Squared norm of an octonion. */

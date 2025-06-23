@@ -6,7 +6,7 @@
 typedef unsigned int uint;
 typedef unsigned short ushort;
 typedef unsigned char uchar;
-typedef unsigned long long uint64;
+typedef uint64_t uint64;
 typedef signed long long int64;
 
 /**

@@ -18,9 +18,9 @@ static int nearly_equal(double a, double b) {
 }
 
 int main(void) {
-  octonion_t a = {1, 2, 3, 4, 5, 6, 7, 8};
-  octonion_t b = {2, -1, 0.5, -3, 1, -1, 0.1, 2.5};
-  octonion_t c = {0.3, 0.2, 0.1, -0.4, 1, 0, -0.2, 0.5};
+  octonion_t a = {{1, 2, 3, 4, 5, 6, 7, 8}};
+  octonion_t b = {{2, -1, 0.5, -3, 1, -1, 0.1, 2.5}};
+  octonion_t c = {{0.3, 0.2, 0.1, -0.4, 1, 0, -0.2, 0.5}};
 
   octonion_t ab = octonion_multiply(a, b);
   octonion_t bc = octonion_multiply(b, c);
@@ -58,6 +58,13 @@ def compile_and_run():
             [
                 CC,
                 "-std=c23",
+                "-O3",
+                "-march=native",
+                "-ffast-math",
+                "-fstrict-aliasing",
+                "-fomit-frame-pointer",
+                "-funroll-loops",
+                "-pipe",
                 "-Wall",
                 "-Werror",
                 "-I",

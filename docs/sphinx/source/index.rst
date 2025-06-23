@@ -10,5 +10,6 @@ Welcome to exov6's documentation!
    door_ipc
    scheduler
    service_management
+   build_flags
 
 
