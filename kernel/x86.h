@@ -44,3 +44,17 @@ static inline void cpuid(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c,
                    : "=a"(*a), "=b"(*b), "=c"(*c), "=d"(*d)
                    : "0"(leaf));
 }
+
+static inline uint64_t read_flags(void) {
+  uint64_t flags;
+#ifdef __x86_64__
+  __asm__ volatile("pushfq; popq %0" : "=r"(flags) :: "memory");
+#else
+  __asm__ volatile("pushfl; popl %0" : "=r"(flags) :: "memory");
+#endif
+  return flags;
+}
+
+static inline void cli(void) { __asm__ volatile("cli" ::: "memory"); }
+
+static inline void sti(void) { __asm__ volatile("sti" ::: "memory"); }

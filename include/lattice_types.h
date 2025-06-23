@@ -43,7 +43,14 @@ typedef struct {
 /**
  * @brief Octonion capability token consisting of eight components.
  */
+/**
+ * @brief Octonion capability token consisting of eight components.
+ *
+ * The anonymous structure allows direct member access (e.g., `o.e0`) while
+ * still providing array-based and raw byte views.
+ */
 typedef union {
+  double v[8];                       /**< Array-style coefficient access. */
   struct {
     double e0;
     double e1;
@@ -53,8 +60,7 @@ typedef union {
     double e5;
     double e6;
     double e7;
-  } coeffs;                          /**< Named coefficient access. */
-  double v[8];                       /**< Array-style coefficient access. */
+  };                                /**< Named coefficient access. */
   uint8_t bytes[8 * sizeof(double)]; /**< Raw byte representation. */
 } octonion_t;
 

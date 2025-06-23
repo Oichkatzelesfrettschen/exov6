@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include <stdint.h>
 #include <compiler_attrs.h>
 #if __has_include("config.h")
 #include "config.h"
@@ -144,8 +145,15 @@ int pipewrite(struct pipe *, struct file *, char *, size_t);
 
 // PAGEBREAK: 16
 //  proc.c
-int cpuid(void);
-void exit(void);
+/**
+ * Query CPU feature information using the CPUID instruction.
+ */
+void cpuid(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
+
+/**
+ * Terminate the current process and schedule a replacement.
+ */
+_Noreturn void exit(int status);
 int fork(void);
 int growproc(int);
 int kill(int);
