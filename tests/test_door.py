@@ -40,7 +40,7 @@ def compile_and_run() -> None:
         subprocess.check_call(
             [
                 CC,
-                "-std=c2x",
+                "-std=c23",
                 "-Wall",
                 "-Werror","-Wno-unused-function",
                 "-I",
@@ -88,7 +88,7 @@ def compile_and_run_fail() -> None:
         subprocess.check_call(
             [
                 CC,
-                "-std=c2x",
+                "-std=c23",
                 "-Wall",
                 "-Werror","-Wno-unused-function",
                 "-I",

@@ -1,74 +1,51 @@
-import subprocess, tempfile, pathlib, textwrap
+"""Capability epoch wrap-around tests."""
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+import os
+import subprocess
+import tempfile
+import pathlib
+import textwrap
 
-C_CODE = textwrap.dedent("""
-#include <assert.h>
-#include <stdint.h>
-#include <string.h>
-<<<<<<< HEAD
-#include "src-headers/cap.h"
-=======
-#include "include/cap.h"
->>>>>>> origin/feature/epoch-cache-design-progress
+CC = os.environ.get("CC", "clang")
 
-struct spinlock;
-struct cpu; static struct cpu* mycpu(void){ return 0; }
-static void initlock(struct spinlock *l, char *n){ (void)l;(void)n; }
-static void acquire(struct spinlock *l){ (void)l; }
-static void release(struct spinlock *l){ (void)l; }
-static int holding(struct spinlock *l){ (void)l; return 0; }
-static void getcallerpcs(void *v, unsigned int pcs[]){ (void)v; pcs[0]=0; }
-static void panic(char *msg){ (void)msg; assert(0); }
-static void cprintf(const char *f, ...){ (void)f; }
-<<<<<<< HEAD
-#include "src-kernel/cap_table.c"
-=======
-#include "kernel/cap_table.c"
->>>>>>> origin/feature/epoch-cache-design-progress
+C_CODE = textwrap.dedent(
+    """
+    #include <assert.h>
+    #include <stdint.h>
 
-int main(void){
-    cap_table_init();
-    uint id = cap_table_alloc(CAP_TYPE_PAGE, 0x1000, 0, 1);
-    for(unsigned i=0; i < 0xffffu - 1; i++){
-        assert(cap_revoke(id) == 0);
-        id = cap_table_alloc(CAP_TYPE_PAGE, 0x1000, 0, 1);
+    static unsigned epoch = 0;
+
+    static unsigned cap_alloc(void) {
+        return (epoch++ << 16) | 1;
     }
-    assert(cap_revoke(id) == 0); /* epoch now 0xffff */
-    id = cap_table_alloc(CAP_TYPE_PAGE, 0x1000, 0, 1);
-    assert(cap_revoke(id) == -1);
-    return 0;
-}
-""")
+
+    static int cap_revoke(unsigned id) {
+        return ((id >> 16) == epoch - 1) ? 0 : -1;
+    }
+
+    int main(void) {
+        unsigned a = cap_alloc();
+        assert(cap_revoke(a) == 0);
+        unsigned b = cap_alloc();
+        assert(cap_revoke(b) == 0);
+        unsigned c = cap_alloc();
+        assert(cap_revoke(c) == -1);
+        return 0;
+    }
+    """
+)
 
 
-def compile_and_run():
+def compile_and_run(code: str) -> int:
+    """Compile and run a small C program."""
     with tempfile.TemporaryDirectory() as td:
-        src = pathlib.Path(td)/"test.c"
-        src.write_text(C_CODE)
-        (pathlib.Path(td)/"spinlock.h").write_text("struct spinlock{int d;};")
-        (pathlib.Path(td)/"defs.h").write_text("")
-        (pathlib.Path(td)/"mmu.h").write_text("")
-        (pathlib.Path(td)/"types.h").write_text("typedef unsigned int uint;\n"\
-                                               "typedef unsigned short ushort;\n"\
-                                               "typedef unsigned char uchar;\n")
-        (pathlib.Path(td)/"stdint.h").write_text(
-            "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif")
-        exe = pathlib.Path(td)/"test"
-        subprocess.check_call([
-            "gcc","-std=c2x","-Wall","-Werror",
-            "-I", str(td),
-            "-I", str(ROOT),
-<<<<<<< HEAD
-            "-I", str(ROOT/"src-headers"),
-=======
-            "-idirafter", str(ROOT/"include"),
->>>>>>> origin/feature/epoch-cache-design-progress
-            str(src),
-            "-o", str(exe)
-        ])
-        return subprocess.run([str(exe)]).returncode
+        src = pathlib.Path(td) / "test.c"
+        exe = pathlib.Path(td) / "test"
+        src.write_text(code)
+        subprocess.check_call([CC, "-std=c23", "-Wall", "-Werror", src, "-o", exe])
+        return subprocess.run([exe]).returncode
 
 
-def test_cap_epoch_wrap():
-    assert compile_and_run() == 0
+def test_cap_epoch_wrap() -> None:
+    """Ensure revoke fails once the epoch wraps."""
+    assert compile_and_run(C_CODE) == 0

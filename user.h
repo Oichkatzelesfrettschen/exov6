@@ -5,6 +5,7 @@ struct rtcdate;
 
 #include "exo.h"
 #include "exo_cpu.h"
+#include "service.h"
 
 // system calls
 int fork(void);
@@ -48,6 +49,12 @@ int sigsend(int, int);
 int sigcheck(void);
 int cap_inc(uint16_t id);
 int cap_dec(uint16_t id);
+int service_register(const char *name, const char *path,
+                     service_options_t opts);
+int service_add_dependency(const char *name, const char *dependency);
+int libos_service_register(const char *name, const char *path,
+                           service_options_t opts);
+int libos_service_add_dependency(const char *name, const char *dependency);
 
 // ulib.c
 int stat(const char *, struct stat *);

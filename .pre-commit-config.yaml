@@ -11,3 +11,32 @@ repos:
     rev: 6.1.0
     hooks:
       - id: flake8
+  - repo: local
+    hooks:
+      - id: clang-tidy-c23
+        name: clang-tidy (C23)
+        entry: scripts/run-clang-tidy.sh --config-file=.clang-tidy
+        language: system
+        pass_filenames: true
+        files: \.(c|h)$
+      - id: clang-tidy-cpp23
+        name: clang-tidy (C++23)
+        entry: scripts/run-clang-tidy.sh --config-file=.clang-tidy-cpp23
+        language: system
+        pass_filenames: true
+        files: \.(cpp|cxx|cc|c\+\+|hpp|hxx|hh)$
+      - id: shellcheck
+        name: shellcheck
+        entry: shellcheck
+        language: system
+        types: [shell]
+      - id: black
+        name: black
+        entry: black --check --diff
+        language: python
+        additional_dependencies: [black==25.1.0]
+        types: [python]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer

@@ -1,13 +1,12 @@
-	KERNEL_DIR := src-kernel
-ULAND_DIR  := src-uland
+KERNEL_DIR := kernel
+ULAND_DIR  := user
 LIBOS_DIR  := libos
+ARCH_DIR   := src/arch
 
-<<<<<<< HEAD
 OBJS = \
     $(KERNEL_DIR)/bio.o \
     $(KERNEL_DIR)/console.o \
     $(KERNEL_DIR)/exec.o \
-    $(KERNEL_DIR)/file.o \
     $(KERNEL_DIR)/fs.o \
     $(KERNEL_DIR)/ide.o \
     $(KERNEL_DIR)/ioapic.o \
@@ -25,6 +24,7 @@ OBJS = \
     $(KERNEL_DIR)/qspinlock.o \
     $(KERNEL_DIR)/rspinlock.o \
     $(KERNEL_DIR)/rcu.o \
+    $(KERNEL_DIR)/rcu_fastpath.o \
     $(KERNEL_DIR)/string.o \
     $(KERNEL_DIR)/syscall.o \
     $(KERNEL_DIR)/sysfile.o \
@@ -34,10 +34,10 @@ OBJS = \
     $(KERNEL_DIR)/uart.o \
     $(KERNEL_DIR)/vm.o \
     $(KERNEL_DIR)/exo.o \
-    $(KERNEL_DIR)/kernel/exo_cpu.o \
-    $(KERNEL_DIR)/kernel/exo_disk.o \
-    $(KERNEL_DIR)/kernel/exo_ipc.o \
-    $(KERNEL_DIR)/kernel/exo_ipc_queue.o \
+    $(KERNEL_DIR)/exo_cpu.o \
+    $(KERNEL_DIR)/exo_disk.o \
+    $(KERNEL_DIR)/exo_ipc.o \
+    $(KERNEL_DIR)/exo_ipc_queue.o \
     $(KERNEL_DIR)/exo_stream.o \
     $(KERNEL_DIR)/cap.o \
     $(KERNEL_DIR)/cap_table.o \
@@ -95,38 +95,38 @@ TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o \
        $(KERNEL_DIR)/vectors.o \
-       $(KERNEL_DIR)/arch/x64/trapasm64.o
+       $(ARCH_DIR)/x64/trapasm64.o
 OBJS := $(filter-out $(KERNEL_DIR)/trapasm.o,$(OBJS))
-BOOTASM := $(KERNEL_DIR)/arch/x64/bootasm64.S
-ENTRYASM := $(KERNEL_DIR)/arch/x64/entry64.S
+BOOTASM := $(ARCH_DIR)/x64/bootasm64.S
+ENTRYASM := $(ARCH_DIR)/x64/entry64.S
 else ifeq ($(ARCH),aarch64)
 OBJS += $(KERNEL_DIR)/main64.o \
-       $(KERNEL_DIR)/arch/aarch64/swtch.o \
-       $(KERNEL_DIR)/arch/aarch64/vectors.o
-BOOTASM := $(KERNEL_DIR)/arch/aarch64/boot.S
-ENTRYASM := $(KERNEL_DIR)/arch/aarch64/entry.S
+       $(ARCH_DIR)/aarch64/swtch.o \
+       $(ARCH_DIR)/aarch64/vectors.o
+BOOTASM := $(ARCH_DIR)/aarch64/boot.S
+ENTRYASM := $(ARCH_DIR)/aarch64/entry.S
 else ifeq ($(ARCH),armv7)
-OBJS += $(KERNEL_DIR)/arch/armv7/swtch.o \
-       $(KERNEL_DIR)/arch/armv7/vectors.o
-BOOTASM := $(KERNEL_DIR)/arch/armv7/boot.S
-ENTRYASM := $(KERNEL_DIR)/arch/armv7/entry.S
+OBJS += $(ARCH_DIR)/armv7/swtch.o \
+       $(ARCH_DIR)/armv7/vectors.o
+BOOTASM := $(ARCH_DIR)/armv7/boot.S
+ENTRYASM := $(ARCH_DIR)/armv7/entry.S
 else ifeq ($(ARCH),powerpc)
-OBJS += $(KERNEL_DIR)/arch/ppc/swtch.o \
-       $(KERNEL_DIR)/arch/ppc/vectors.o
-BOOTASM := $(KERNEL_DIR)/arch/ppc/boot.S
-ENTRYASM := $(KERNEL_DIR)/arch/ppc/entry.S
+OBJS += $(ARCH_DIR)/ppc/swtch.o \
+       $(ARCH_DIR)/ppc/vectors.o
+BOOTASM := $(ARCH_DIR)/ppc/boot.S
+ENTRYASM := $(ARCH_DIR)/ppc/entry.S
 else ifeq ($(ARCH),powerpc64)
 OBJS += $(KERNEL_DIR)/main64.o \
-       $(KERNEL_DIR)/arch/ppc64/swtch.o \
-       $(KERNEL_DIR)/arch/ppc64/vectors.o
-BOOTASM := $(KERNEL_DIR)/arch/ppc64/boot.S
-ENTRYASM := $(KERNEL_DIR)/arch/ppc64/entry.S
+       $(ARCH_DIR)/ppc64/swtch.o \
+       $(ARCH_DIR)/ppc64/vectors.o
+BOOTASM := $(ARCH_DIR)/ppc64/boot.S
+ENTRYASM := $(ARCH_DIR)/ppc64/entry.S
 else ifeq ($(ARCH),powerpc64le)
 OBJS += $(KERNEL_DIR)/main64.o \
-       $(KERNEL_DIR)/arch/ppc64le/swtch.o \
-       $(KERNEL_DIR)/arch/ppc64le/vectors.o
-BOOTASM := $(KERNEL_DIR)/arch/ppc64le/boot.S
-ENTRYASM := $(KERNEL_DIR)/arch/ppc64le/entry.S
+       $(ARCH_DIR)/ppc64le/swtch.o \
+       $(ARCH_DIR)/ppc64le/vectors.o
+BOOTASM := $(ARCH_DIR)/ppc64le/boot.S
+ENTRYASM := $(ARCH_DIR)/ppc64le/entry.S
 else
 OBJS += $(KERNEL_DIR)/swtch.o \
        $(KERNEL_DIR)/vectors.o
@@ -224,11 +224,11 @@ SIGNBOOT := 0
 endif
 
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Iinclude -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 # Optional CPU optimization flags
 CFLAGS += $(CPUFLAGS)
-ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
+ASFLAGS = $(ARCHFLAG) -gdwarf-2 -Wa,-divide -I. -Iinclude -I$(KERNEL_DIR) -I$(ULAND_DIR) -Iproto $(CPUFLAGS)
 
 	#Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
@@ -338,30 +338,30 @@ _forktest: $(ULAND_DIR)/forktest.o $(ULAND_DIR)/ulib.o usys.o
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
-exo_stream_demo.o: user/exo_stream_demo.c
+exo_stream_demo.o: $(ULAND_DIR)/exo_stream_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
-$(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/user/exo_stream_demo.c
+$(ULAND_DIR)/exo_stream_demo.o: $(ULAND_DIR)/exo_stream_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/user/dag_demo.c
+$(ULAND_DIR)/dag_demo.o: $(ULAND_DIR)/dag_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/user/typed_chan_demo.c
+$(ULAND_DIR)/typed_chan_demo.o: $(ULAND_DIR)/typed_chan_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/user/typed_chan_send.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-$(ULAND_DIR)/beatty_demo.o: $(ULAND_DIR)/user/beatty_demo.c
+$(ULAND_DIR)/typed_chan_send.o: $(ULAND_DIR)/typed_chan_send.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(ULAND_DIR)/beatty_dag_demo.o: $(ULAND_DIR)/user/beatty_dag_demo.c
+$(ULAND_DIR)/beatty_demo.o: $(ULAND_DIR)/beatty_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/user/typed_chan_recv.c
+$(ULAND_DIR)/beatty_dag_demo.o: $(ULAND_DIR)/beatty_dag_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/user/chan_dag_supervisor_demo.c
+
+$(ULAND_DIR)/typed_chan_recv.o: $(ULAND_DIR)/typed_chan_recv.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(ULAND_DIR)/chan_beatty_rcrs_demo.o: $(ULAND_DIR)/user/chan_beatty_rcrs_demo.c
+$(ULAND_DIR)/chan_dag_supervisor_demo.o: $(ULAND_DIR)/chan_dag_supervisor_demo.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+$(ULAND_DIR)/chan_beatty_rcrs_demo.o: $(ULAND_DIR)/chan_beatty_rcrs_demo.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 	# Generate simple C bindings from Cap'n Proto schemas
@@ -472,7 +472,6 @@ qemu-memfs: $(XV6_MEMFS_IMG)
 	        echo "QEMU not found. Kernel built but not executed."; \
 	else \
 	        $(QEMU) -drive file=$(XV6_MEMFS_IMG),index=0,media=disk,format=raw -smp $(CPUS) -m 256; \
-=======
 proof:
 	$(MAKE) -C formal/coq all
 
@@ -486,7 +485,6 @@ formal:
 	tlc formal/specs/tla/ExoCap.tla >/dev/null; \
 	else \
 	echo "tlc not found; skipping TLA+ check"; \
->>>>>>> origin/feature/epoch-cache-design-progress
 	fi
 
 qemu-nox: $(FS_IMG) $(XV6_IMG)
@@ -529,9 +527,9 @@ EXTRA=\
         $(ULAND_DIR)/rm.c $(ULAND_DIR)/stressfs.c $(ULAND_DIR)/usertests.c \
         $(ULAND_DIR)/wc.c $(ULAND_DIR)/zombie.c \
         $(ULAND_DIR)/phi.c \
-        $(ULAND_DIR)/user/exo_stream_demo.c \
-        $(ULAND_DIR)/user/dag_demo.c \
-        $(ULAND_DIR)/user/beatty_dag_demo.c \
+        $(ULAND_DIR)/exo_stream_demo.c \
+        $(ULAND_DIR)/dag_demo.c \
+        $(ULAND_DIR)/beatty_dag_demo.c \
         $(ULAND_DIR)/printf.c $(ULAND_DIR)/umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\

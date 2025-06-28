@@ -2,14 +2,10 @@ NOTE: MIT have stopped maintaining the x86 version of FeuerBird, and switched
 their efforts to the RISC-V version
 (https://github.com/mit-pdos/FeuerBird-riscv.git)
 
-<<<<<<< HEAD
-This project experiments with decomposition of the xv6 operating system into an exokernel model. 
-=======
 This project experiments with decomposition of the FeuerBird operating system into an exokernel model. 
 The project charter in [doc/charter.md](doc/charter.md) summarizes our goals and contributor guidelines. Philosophical technical debt notes are kept in [doc/ptd_log.md](doc/ptd_log.md).
 The evolving project roadmap can be found in [doc/roadmap.md](doc/roadmap.md).
 
->>>>>>> origin/feature/epoch-cache-design-progress
 
 FeuerBird is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  FeuerBird loosely follows the structure and style of v6,
@@ -57,20 +53,8 @@ ERROR REPORTS
 
 We don't process error reports (see note on top of this file).
 
-BUILDING AND RUNNING XV6
+BUILDING AND RUNNING FEUERBIRD
 
-<<<<<<< HEAD
-To build xv6 on an x86 ELF machine (like Linux or FreeBSD), run
-"make". On non-x86 or non-ELF machines (like OS X, even on x86), you
-will need to install a cross-compiler gcc suite capable of producing
-x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
-A cross-compiler may not be necessary on a 64-bit Linux host since the
-toolchain can produce 32-bit binaries, but on other systems install a
-cross-compiler suite and invoke ``make TOOLPREFIX=i386-jos-elf-``.  Now
-install the QEMU PC simulator and run ``make qemu``.  The Bochs
-emulator is also supported via ``make bochs`` and is installed by
-``setup.sh``.
-=======
 Meson is the recommended build system and produces the full disk image
 containing all user programs. Configure a build directory and compile
 everything with::
@@ -132,7 +116,6 @@ the user-space runtime library.  This typically happens as an
 implicit prerequisite, but if you see errors about a missing
 ``libos.a`` run ``ninja -C build libos`` explicitly and then rebuild your
 programs.
->>>>>>> origin/feature/epoch-cache-design-progress
 A helper script, `setup.sh`, installs cross-compilers, build dependencies,
 QEMU packages, and additional development tools.  Run it once before
 building to ensure all prerequisites are available.  From the top-level
@@ -140,12 +123,14 @@ directory simply execute::
 
     sudo ./setup.sh
 
-When running without internet access place all required `.deb` files under
+When running without internet access place the required `.deb` files under
 `scripts/offline_packages/` and use::
 
     sudo ./setup.sh --offline
 
-The script installs each package from that directory with `dpkg -i`.
+The setup script now installs any packages found in `scripts/offline_packages/`
+before running `apt-get`.  Packages installed from the cache are recorded in
+`/var/log/offline_installed.log` for easy auditing.
 
 This script installs bare-metal cross compiler packages such as
 ``gcc-i386-elf``/``g++-i386-elf`` and ``gcc-x86-64-elf``/``g++-x86-64-elf``
@@ -158,10 +143,8 @@ The repository uses ``pre-commit`` hooks to automatically run
 ``clang-format`` and ``clang-tidy``.  Install the hooks with::
 
     pre-commit install
+The checks run automatically on every commit.
 
-<<<<<<< HEAD
-The checks will run on every commit.
-=======
 
 TESTING
 -------
@@ -170,7 +153,7 @@ Unit tests live under the ``tests/`` directory and can be executed with
 automatically when needed. Ensure QEMU is installed if the tests require
 it (``setup.sh`` installs QEMU automatically).
 Several tests compile small standalone C programs with the host compiler.
-Make sure your ``gcc`` or ``clang`` version supports the ``-std=c2x``
+Make sure your ``gcc`` or ``clang`` version supports the ``-std=c23``
 option or these builds will fail.
 
 For a quick reference of these steps see ``CONTRIBUTING.md``.
@@ -189,7 +172,6 @@ patches are emailed.  Enable it with::
 
     cp scripts/sendemail-validate.sample .git/hooks/sendemail-validate
     chmod +x .git/hooks/sendemail-validate
->>>>>>> origin/feature/epoch-cache-design-progress
 
 ``clang-tidy`` is wrapped by ``scripts/run-clang-tidy.sh`` which
 generates ``compile_commands.json`` on demand using
@@ -306,8 +288,6 @@ build directory and compile with::
     meson setup build
     ninja -C build
 
-<<<<<<< HEAD
-=======
 Optional flags control the spinlock implementation and debugging
 facilities.  Set them with ``-D<FLAG>=ON`` when invoking CMake or in the
 environment for Meson:
@@ -371,7 +351,6 @@ Helper macros for inspecting x86 descriptor tables live under
 Use ``printdesc`` or ``printdescs`` to display a single descriptor or a
 range of entries.
 
->>>>>>> origin/feature/epoch-cache-design-progress
 CODE FORMATTING
 ---------------
 The project includes a ``.clang-format`` file configured for the LLVM
@@ -393,15 +372,6 @@ than spinning; the default implementation issues ``hlt`` if no stream
 is registered.
 
 
-<<<<<<< HEAD
-USER DEMO: EXO_YIELD_TO AND STREAMS
------------------------------------
-The example program ``exo_stream_demo`` under ``src-uland/user/`` is a minimal
-illustration of switching contexts with ``exo_yield_to`` and using the
-placeholder STREAMS ``stop`` and ``yield`` calls.  Build the system as
-usual with ``make``; the resulting ``fs.img`` will contain the new
-``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
-=======
                 USER DEMO
     : EXO_YIELD_TO AND STREAMS
       -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -The example
@@ -412,7 +382,6 @@ usual with ``make``; the resulting ``fs.img`` will contain the new
 ``cmake
             - S.- B build - G Ninja &&ninja - C build``; the resulting
 ``fs.img`` will contain the new ``exo_stream_demo`` binary.  Run it inside QEMU to observe the stub
->>>>>>> origin/feature/epoch-cache-design-progress
 functions printing messages that indicate the expected invocation order.
 
 USER DEMO: TYPED CHANNELS
@@ -422,11 +391,7 @@ typed wrapper around the basic capability IPC functions.  Messages are
 defined using Cap'n Proto schemas under ``proto/`` and automatically
 serialized when sending.  Building with ``make`` will compile
 ``typed_chan_demo`` along with ``typed_chan_send`` and
-<<<<<<< HEAD
-``typed_chan_recv`` under ``src-uland/user``.  After ``fs.img`` is
-=======
 ``typed_chan_recv`` under ``demos``.  After ``fs.img`` is
->>>>>>> origin/feature/epoch-cache-design-progress
 generated, run ``typed_chan_demo`` inside QEMU to see a Cap'n Proto
 message sent and received through the typed channel API.
 
@@ -562,8 +527,6 @@ $ python3 scripts/swift_fuzz.py -runs=1
 ```
 
 Additional libFuzzer flags may be provided after the script name.
-<<<<<<< HEAD
-=======
 
 STREAMS STACK
 -------------
@@ -630,4 +593,3 @@ Coq proofs live under the `formal/` directory. TLA+ models can be found
 under `formal/specs/tla/`. Run `make -C formal/coq` to type-check the Coq
 proofs and `tlc formal/specs/tla/ExoCap.tla` to explore the TLA+ models. See
 `doc/formal_models.md` for details on extending the models.
->>>>>>> origin/feature/epoch-cache-design-progress

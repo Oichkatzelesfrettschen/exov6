@@ -149,7 +149,7 @@ int holding(struct spinlock *lock) {
 void pushcli(void) {
   int eflags;
 
-  eflags = readeflags();
+  eflags = read_flags();
   cli();
   if (mycpu()->ncli == 0)
     mycpu()->intena = eflags & FL_IF;
@@ -157,7 +157,7 @@ void pushcli(void) {
 }
 
 void popcli(void) {
-  if (readeflags() & FL_IF)
+  if (read_flags() & FL_IF)
     panic("popcli - interruptible");
   if (--mycpu()->ncli < 0)
     panic("popcli");
