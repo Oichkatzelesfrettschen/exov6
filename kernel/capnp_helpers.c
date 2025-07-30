@@ -1,6 +1,5 @@
 #include "capnp_helpers.h"
 #include <string.h>
-<<<<<<< HEAD
 #include <stdlib.h>
 
 // =============================================================================
@@ -500,15 +499,3 @@ size_t capnp_decode(void *msg, size_t len, const unsigned char *buf) {
   memcpy(msg, buf + offset, data_size);
   return data_size;
 }
-=======
-
-size_t capnp_encode(const void *msg, size_t len, unsigned char *buf) {
-    memcpy(buf, msg, len);
-    return len;
-}
-
-size_t capnp_decode(void *msg, size_t len, const unsigned char *buf) {
-    memcpy(msg, buf, len);
-    return len;
-}
->>>>>>> origin/feature/epoch-cache-design-progress

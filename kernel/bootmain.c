@@ -9,7 +9,7 @@
 #include "elf.h"
 #include "x86.h"
 #include "memlayout.h"
-#include <stdint.h>
+#include "stdint.h"
 
 #define SECTSIZE  512
 
@@ -21,7 +21,7 @@ bootmain(void)
   struct elfhdr *elf;
   struct proghdr *ph, *eph;
   void (*entry)(void);
-  uint8_t* pa;
+  uint8_t *pa;
 
   elf = (struct elfhdr*)0x10000;  // scratch space
 
