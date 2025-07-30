@@ -53,7 +53,7 @@ def compile_and_run(code: str) -> int:
         src = pathlib.Path(td) / "test.c"
         exe = pathlib.Path(td) / "test"
         src.write_text(code)
-        subprocess.check_call([CC, "-std=c23", "-Wall", "-Werror", src, "-o", exe])
+        subprocess.check_call([CC, "-std=c2x", "-Wall", "-Werror", src, "-o", exe])
         return subprocess.run([exe]).returncode
 
 

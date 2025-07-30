@@ -76,7 +76,7 @@ def compile_and_run():
             "struct proc{ struct mailbox *mailbox; };\n")
         (pathlib.Path(td)/"defs.h").write_text("void wakeup(void*); void sleep(void*, struct spinlock*); void panic(char*);\n")
         subprocess.check_call([
-            CC,"-std=c23","-Wall","-Werror","-Wno-unused-function",
+            CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
             "-idirafter", str(ROOT/"include"),
