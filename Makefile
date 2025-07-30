@@ -87,7 +87,7 @@ QEMU := $(shell which qemu-system-aarch64 2>/dev/null || \
 endif
 
 ARCH ?= x86_64
-CSTD ?= gnu2x
+CSTD ?= c2x
 CLANG_TIDY ?= clang-tidy
 TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
