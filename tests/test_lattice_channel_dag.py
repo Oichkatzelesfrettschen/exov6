@@ -48,7 +48,7 @@ def test_lattice_channel_dag():
         subprocess.check_call(
             [
                 CC,
-                "-std=c23",
+                "-std=c2x",
                 "-Wall",
                 "-Werror",
                 "-I",
