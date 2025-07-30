@@ -79,6 +79,12 @@ The project also ships a minimal ``CMakeLists.txt`` for generating
 builds the kernel and a few demo programs but does not produce the full
 set of user binaries.
 
+For convenience the ``scripts/build.py`` wrapper provides a unified
+interface over both build systems.  Invoke ``python scripts/build.py``
+to configure and build with CMake by default.  Use ``--system meson`` to
+select Meson instead and ``--type`` to choose between ``debug``,
+``release`` or ``performance`` build presets.
+
 When adding new user-space utilities place the sources under
 ``demos`` and update ``meson.build`` accordingly. If you rely
 on the CMake configuration add the program target there as well.  The
