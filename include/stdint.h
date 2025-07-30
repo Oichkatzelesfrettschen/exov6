@@ -1,8 +1,10 @@
 #pragma once
 
-#if __has_include_next(<stdint.h>)
-# include_next <stdint.h>
-#else
+/**
+ * Minimal stdint definitions for freestanding builds.
+ * When compiling with \c -nostdinc the system <stdint.h> may not be
+ * available, so we provide the required typedefs here unconditionally.
+ */
 typedef signed char int8_t;
 typedef short int16_t;
 typedef int int32_t;
@@ -15,4 +17,3 @@ typedef unsigned long long uint64_t;
 
 typedef long intptr_t;
 typedef unsigned long uintptr_t;
-#endif
