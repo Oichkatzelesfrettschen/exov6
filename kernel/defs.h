@@ -143,7 +143,8 @@ int pipewrite(struct pipe *, struct file *, char *, size_t);
 
 // PAGEBREAK: 16
 //  proc.c
-int cpuid(void);
+// int cpuid(void); // Old declaration
+void cpuid(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d); // New, matches x86.h
 void exit(void);
 int fork(void);
 int growproc(int);
@@ -257,11 +258,11 @@ exo_cap exo_alloc_dma(uint32_t chan);
 exo_cap exo_alloc_hypervisor(void);
 int hv_launch_guest(exo_cap cap, const char *path);
 void cap_table_init(void);
-int cap_table_alloc(uint16_t, uint32_t, uint32_t, uint32_t);
-int cap_table_lookup(uint16_t, struct cap_entry *);
-void cap_table_inc(uint16_t);
-void cap_table_dec(uint16_t);
-int cap_table_remove(uint16_t);
+int cap_table_alloc(uint16_t, uint32_t, uint32_t, uint32_t); // Reverted first param to uint16_t
+int cap_table_lookup(uint32_t, struct cap_entry *);
+void cap_table_inc(uint32_t);
+void cap_table_dec(uint32_t);
+int cap_table_remove(uint32_t);
 void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);

@@ -1,54 +1,53 @@
-	KERNEL_DIR := src-kernel
+KERNEL_DIR := src
 ULAND_DIR  := src-uland
 LIBOS_DIR  := libos
 
-<<<<<<< HEAD
 OBJS = \
-    $(KERNEL_DIR)/bio.o \
-    $(KERNEL_DIR)/console.o \
-    $(KERNEL_DIR)/exec.o \
-    $(KERNEL_DIR)/file.o \
-    $(KERNEL_DIR)/fs.o \
-    $(KERNEL_DIR)/ide.o \
-    $(KERNEL_DIR)/ioapic.o \
-    $(KERNEL_DIR)/kalloc.o \
-    $(KERNEL_DIR)/kbd.o \
-    $(KERNEL_DIR)/lapic.o \
-    $(KERNEL_DIR)/log.o \
-    $(KERNEL_DIR)/main.o \
-    $(KERNEL_DIR)/mp.o \
-    $(KERNEL_DIR)/picirq.o \
-    $(KERNEL_DIR)/pipe.o \
-    $(KERNEL_DIR)/proc.o \
-    $(KERNEL_DIR)/sleeplock.o \
-    $(KERNEL_DIR)/spinlock.o \
-    $(KERNEL_DIR)/qspinlock.o \
-    $(KERNEL_DIR)/rspinlock.o \
-    $(KERNEL_DIR)/rcu.o \
-    $(KERNEL_DIR)/string.o \
-    $(KERNEL_DIR)/syscall.o \
-    $(KERNEL_DIR)/sysfile.o \
-    $(KERNEL_DIR)/sysproc.o \
+    kernel/bio.o \
+    kernel/console.o \
+    kernel/exec.o \
+    kernel/file.o \
+    kernel/fs.o \
+    kernel/ide.o \
+    kernel/ioapic.o \
+    kernel/kalloc.o \
+    kernel/kbd.o \
+    kernel/lapic.o \
+    kernel/log.o \
+    kernel/main.o \
+    kernel/mp.o \
+    kernel/picirq.o \
+    kernel/pipe.o \
+    kernel/proc.o \
+    kernel/sleeplock.o \
+    kernel/spinlock.o \
+    kernel/qspinlock.o \
+    kernel/rspinlock.o \
+    kernel/rcu.o \
+    kernel/string.o \
+    kernel/syscall.o \
+    kernel/sysfile.o \
+    kernel/sysproc.o \
     $(KERNEL_DIR)/trapasm.o \
-    $(KERNEL_DIR)/trap.o \
-    $(KERNEL_DIR)/uart.o \
-    $(KERNEL_DIR)/vm.o \
-    $(KERNEL_DIR)/exo.o \
-    $(KERNEL_DIR)/kernel/exo_cpu.o \
-    $(KERNEL_DIR)/kernel/exo_disk.o \
-    $(KERNEL_DIR)/kernel/exo_ipc.o \
-    $(KERNEL_DIR)/kernel/exo_ipc_queue.o \
-    $(KERNEL_DIR)/exo_stream.o \
-    $(KERNEL_DIR)/cap.o \
-    $(KERNEL_DIR)/cap_table.o \
-    $(KERNEL_DIR)/fastipc.o \
-    $(KERNEL_DIR)/endpoint.o \
-    $(KERNEL_DIR)/dag_sched.o \
-    $(KERNEL_DIR)/beatty_sched.o \
-    $(KERNEL_DIR)/beatty_dag_stream.o
+    kernel/trap.o \
+    kernel/uart.o \
+    kernel/vm.o \
+    kernel/exo.o \
+    kernel/exo_cpu.o \
+    kernel/exo_disk.o \
+    kernel/exo_ipc.o \
+    kernel/exo_ipc_queue.o \
+    kernel/exo_stream.o \
+    kernel/cap.o \
+    kernel/cap_table.o \
+    kernel/fastipc.o \
+    kernel/endpoint.o \
+    kernel/dag_sched.o \
+    kernel/beatty_sched.o \
+    kernel/beatty_dag_stream.o
 
 ifeq ($(ARCH),x86_64)
-OBJS += $(KERNEL_DIR)/mmu64.o
+OBJS += kernel/mmu64.o
 endif
 
 #Cross - compiling(e.g., on Mac OS X)
@@ -93,12 +92,12 @@ TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
 
 ifeq ($(ARCH),x86_64)
-OBJS += $(KERNEL_DIR)/main64.o $(KERNEL_DIR)/swtch64.o \
-       $(KERNEL_DIR)/vectors.o \
-       $(KERNEL_DIR)/arch/x64/trapasm64.o
-OBJS := $(filter-out $(KERNEL_DIR)/trapasm.o,$(OBJS))
-BOOTASM := $(KERNEL_DIR)/arch/x64/bootasm64.S
-ENTRYASM := $(KERNEL_DIR)/arch/x64/entry64.S
+OBJS += kernel/main64.o kernel/swtch64.o \
+       kernel/vectors.o \
+       $(KERNEL_DIR)/arch/x64/trapasm64.o # This path uses KERNEL_DIR=src, which is correct
+OBJS := $(filter-out $(KERNEL_DIR)/trapasm.o,$(OBJS)) # This removes src/trapasm.o, which is correct
+BOOTASM := $(KERNEL_DIR)/arch/x64/bootasm64.S # Correct: src/arch/x64/bootasm64.S
+ENTRYASM := $(KERNEL_DIR)/arch/x64/entry64.S # Correct: src/arch/x64/entry64.S
 else ifeq ($(ARCH),aarch64)
 OBJS += $(KERNEL_DIR)/main64.o \
        $(KERNEL_DIR)/arch/aarch64/swtch.o \
@@ -224,7 +223,7 @@ SIGNBOOT := 0
 endif
 
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -nostdinc -I. -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror -fno-omit-frame-pointer -std=$(CSTD) -I. -Iinclude -Isrc-headers -I$(KERNEL_DIR) -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 # Optional CPU optimization flags
 CFLAGS += $(CPUFLAGS)
@@ -248,9 +247,9 @@ $(XV6_MEMFS_IMG): bootblock kernelmemfs
 	dd if=bootblock of=$(XV6_MEMFS_IMG) conv=notrunc
 	dd if=$(KERNELMEMFS_FILE) of=$(XV6_MEMFS_IMG) seek=1 conv=notrunc
 
-bootblock: $(BOOTASM) $(KERNEL_DIR)/bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c $(KERNEL_DIR)/bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c $(BOOTASM) -o bootasm.o
+bootblock: $(BOOTASM) kernel/bootmain.c
+	$(CC) $(CFLAGS) -fno-pic -O -I. -c kernel/bootmain.c
+	$(CC) $(CFLAGS) -fno-pic -I. -c $(BOOTASM) -o bootasm.o
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
 	$(OBJDUMP) -S bootblock.o > bootblock.asm
 	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
@@ -472,7 +471,8 @@ qemu-memfs: $(XV6_MEMFS_IMG)
 	        echo "QEMU not found. Kernel built but not executed."; \
 	else \
 	        $(QEMU) -drive file=$(XV6_MEMFS_IMG),index=0,media=disk,format=raw -smp $(CPUS) -m 256; \
-=======
+	fi
+
 proof:
 	$(MAKE) -C formal/coq all
 
@@ -486,7 +486,6 @@ formal:
 	tlc formal/specs/tla/ExoCap.tla >/dev/null; \
 	else \
 	echo "tlc not found; skipping TLA+ check"; \
->>>>>>> origin/feature/epoch-cache-design-progress
 	fi
 
 qemu-nox: $(FS_IMG) $(XV6_IMG)

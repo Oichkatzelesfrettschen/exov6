@@ -4,8 +4,9 @@
 #include <stdint.h>
 #include "config.h"
 
-// Forward declaration of struct cpu, representing a CPU structure used in spinlock debugging.
+// Forward declaration
 struct cpu;
+void detect_cache_line_size(void); // Moved prototype up
 
 // Ticket-based mutual exclusion lock.
 struct ticketlock {
@@ -26,7 +27,7 @@ struct spinlock {
                     // and may involve walking the stack or using compiler-provided intrinsics.
   struct cpu *cpu;  // The cpu holding the lock.
 };
-extern size_t cache_line_size;
+
 // Represents the size of a cache line in bytes, used for optimizing spinlock alignment.
 // It is initialized by the detect_cache_line_size() function at runtime.
 extern size_t cache_line_size;
@@ -34,11 +35,14 @@ extern size_t cache_line_size;
 // Ensure cache_line_size is initialized during program startup.
 __attribute__((constructor)) static void initialize_cache_line_size(void) {
   if (cache_line_size == 0) {
+    // Conditional compilation for this call might be needed based on CONFIG_SMP etc.
+    // For now, ensure it's called if cache_line_size is 0.
     detect_cache_line_size();
-#endif // CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
+  }
 }
-void detect_cache_line_size(void);
+
 void initlock(struct spinlock *lk, char *lock_name_ptr);
+
 // Enable spinlock functionality for symmetric multiprocessing (SMP) systems,
 // unless explicitly configured for a uniprocessor setup.
 #if CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
@@ -46,14 +50,7 @@ void initlock(struct spinlock *lk, char *lock_name_ptr);
 void acquire(struct spinlock *lk);
 void release(struct spinlock *lk);
 #endif
-// Returns the recommended alignment for instances of struct spinlock.
-// Aligning spinlocks to the cache line size helps avoid false sharing,
-// which can significantly improve performance in multi-core systems.
-  // Assume cache_line_size is initialized during program startup.
-  // No need to call detect_cache_line_size here.
-  }
-  return cache_line_size;
-}
 
-#endif // CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
-
+// Note: The erroneous block with stray '}' and 'return cache_line_size;' and a misplaced #endif
+// that was previously at the end of the file has been removed.
+// If a function like `get_cache_line_size()` is needed, it should be properly defined.
