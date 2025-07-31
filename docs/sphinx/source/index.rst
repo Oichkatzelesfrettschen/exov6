@@ -6,6 +6,10 @@ Welcome to exov6's documentation!
    :caption: Contents:
 
    usage
+   lattice_ipc
+   door_ipc
+   scheduler
+   service_management
+   build_flags
 
-.. doxygenindex::
-   :project: exov6
+

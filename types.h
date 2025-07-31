@@ -3,29 +3,43 @@
 #include <stdint.h>
 
 // Basic integral types used throughout xv6
-typedef unsigned int uint;
-typedef unsigned short ushort;
-typedef unsigned char uchar;
-// typedef unsigned long long uint64; // Commented out to resolve conflict with kernel/types.h's uint64 via uint64_t
-typedef signed long long int64; // This might also need adjustment later if conflicts arise
+typedef unsigned int        uint;
+typedef unsigned short      ushort;
+typedef unsigned char       uchar;
+typedef uint64_t            uint64;
+typedef signed long long    int64;
 
-// Sized integer aliases (fallbacks for our small libc)
-// These are commented out to prefer system's stdint.h
-// typedef unsigned int uint32_t;
-// typedef int int32_t;
-// typedef unsigned long long uint64_t;
-// typedef long long int64_t;
-// typedef unsigned short uint16_t;
-// typedef short int16_t;
-// typedef unsigned char uint8_t;
-// typedef signed char int8_t;
+/**
+ * @brief Sized integer aliases for environments lacking <stdint.h>.
+ *
+ * When the standard types are already provided, these definitions are
+ * omitted to avoid conflicts during userland compilation.
+ */
+#ifndef UINT32_MAX
+typedef unsigned int        uint32_t;
+typedef int                 int32_t;
+typedef unsigned long long  uint64_t;
+typedef long long           int64_t;
+typedef unsigned short      uint16_t;
+typedef short               int16_t;
+typedef unsigned char       uint8_t;
+typedef signed char         int8_t;
+#endif
 
 // Pointer-sized and size types
-typedef unsigned long uintptr_t; // This might also conflict if system provides it
-// typedef unsigned int size_t; // Commented out to prefer system's stddef.h
+#ifndef UINTPTR_MAX
+typedef unsigned long       uintptr_t;
+#endif
 
-#ifdef __x86_64__
-typedef unsigned long long pde_t;
+#ifndef __SIZE_TYPE__
+typedef unsigned long       size_t;
 #else
-typedef unsigned int pde_t;
+typedef __SIZE_TYPE__       size_t;
+#endif
+
+// Page-directory entry type
+#ifdef __x86_64__
+typedef unsigned long long  pde_t;
+#else
+typedef unsigned int        pde_t;
 #endif

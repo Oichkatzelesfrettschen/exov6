@@ -1,17 +1,18 @@
+"""Simulation harness unit tests."""
+
 import pathlib
 import shutil
 import sys
 import pytest
 
-# Ensure repository root is in sys.path
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import os
-import simulate
+from scripts import qemu_sim
 
 
-def test_simulate_harness_completes():
+def test_simulate_harness_completes(monkeypatch) -> None:
+    """Ensure the QEMU harness runs even when QEMU is stubbed."""
     if not (
         shutil.which("qemu-system-x86_64")
         or shutil.which("qemu-system-i386")
@@ -19,7 +20,5 @@ def test_simulate_harness_completes():
     ):
         pytest.skip("QEMU not installed")
 
-def test_simulate_harness_completes(monkeypatch):
     monkeypatch.setenv("QEMU", "/bin/true")
-
-    assert simulate.main() == 0
+    assert qemu_sim.main() == 0

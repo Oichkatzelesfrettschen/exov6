@@ -2,55 +2,71 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdatomic.h>
 #include "config.h"
 
-// Forward declaration
+/** Forward declaration for CPU reference in spinlock. */
 struct cpu;
-void detect_cache_line_size(void); // Moved prototype up
 
-// Ticket-based mutual exclusion lock.
-struct ticketlock {
-  _Atomic uint16_t head;
-  _Atomic uint16_t tail;
-};
-
-struct spinlock {
-  struct ticketlock ticket; // Ticket lock implementation
-  char *lock_name_ptr;  // Pointer to the name of the lock (null-terminated string).
-  // For debugging:
-  uint32_t pcs[10]; // Stores the call stack for debugging purposes.
-                    // The call stack (an array of program counters) that locked the lock.
-                    // This array is intended to store up to 10 program counters (return addresses)
-                    // from the call stack at the time the lock was acquired. It is primarily used
-                    // for debugging purposes to trace the code path that led to the lock being held.
-                    // The exact mechanism for capturing these program counters is implementation-specific
-                    // and may involve walking the stack or using compiler-provided intrinsics.
-  struct cpu *cpu;  // The cpu holding the lock.
-};
-
-// Represents the size of a cache line in bytes, used for optimizing spinlock alignment.
-// It is initialized by the detect_cache_line_size() function at runtime.
+/** Size of a cache line in bytes. Determined at runtime. */
 extern size_t cache_line_size;
 
-// Ensure cache_line_size is initialized during program startup.
-__attribute__((constructor)) static void initialize_cache_line_size(void) {
-  if (cache_line_size == 0) {
-    // Conditional compilation for this call might be needed based on CONFIG_SMP etc.
-    // For now, ensure it's called if cache_line_size is 0.
-    detect_cache_line_size();
-  }
+/** Detect and set the hardware cache line size. */
+void detect_cache_line_size(void);
+
+/**
+ * @brief Ticket-based mutual exclusion lock for spinlocks.
+ *
+ * Provides fair FIFO ordering of lock acquisition.
+ */
+struct ticketlock {
+    _Atomic uint16_t head; /**< Next ticket number to service. */
+    _Atomic uint16_t tail; /**< Current ticket being served. */
+};
+
+/**
+ * @brief Simple spinlock built on a ticket lock.
+ *
+ * Collects debug info and owner tracking.
+ */
+struct spinlock {
+    struct ticketlock ticket; /**< Underlying ticket lock. */
+    char *name;               /**< Human-readable lock name. */
+    uint32_t pcs[10];         /**< Call stack at acquisition for debugging. */
+    struct cpu *cpu;          /**< CPU that currently holds the lock. */
+};
+
+/**
+ * @brief Initialise a spinlock with the provided name.
+ */
+void initlock(struct spinlock *lk, char *name);
+
+/** Ensure cache_line_size is initialized at program startup. */
+__attribute__((constructor))
+static void initialize_cache_line_size(void) {
+    if (cache_line_size == 0) {
+        detect_cache_line_size();
+    }
 }
 
-void initlock(struct spinlock *lk, char *lock_name_ptr);
-
-// Enable spinlock functionality for symmetric multiprocessing (SMP) systems,
-// unless explicitly configured for a uniprocessor setup.
 #if CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
-// void initlock(struct spinlock *lk, char *name); // Removed duplicate declaration
+/**
+ * @brief Acquire a spinlock, blocking until it is available.
+ */
 void acquire(struct spinlock *lk);
+
+/**
+ * @brief Release a previously acquired spinlock.
+ */
 void release(struct spinlock *lk);
 #endif
 
-// Note: The erroneous block with stray '}' and 'return cache_line_size;' and a misplaced #endif
-// that was previously at the end of the file has been removed.
-// If a function like `get_cache_line_size()` is needed, it should be properly defined.
+/**
+ * @brief Recommended alignment for spinlock instances.
+ *
+ * Aligning to the cache line size helps avoid false sharing
+ * in multi-core environments.
+ */
+static inline size_t spinlock_alignment(void) {
+    return cache_line_size ? cache_line_size : 64u;
+}

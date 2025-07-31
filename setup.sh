@@ -1,26 +1,30 @@
-#!/ usr / bin / env bash
-set - euo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
-#Optional debugging mode.Use-- debug to enable verbose tracing.
-          DEBUG_MODE = false
+# Optional debugging mode. Use --debug to enable verbose tracing.
+DEBUG_MODE=false
 
-#simple debug logger
-    debug() {
-  if
-    ["$DEBUG_MODE" = true];
-  then echo "[DEBUG] $*" > &2 fi
+# Simple debug logger
+# shellcheck disable=SC2148
+debug() {
+  if [ "$DEBUG_MODE" = true ]; then
+    echo "[DEBUG] $*" >&2
+  fi
 }
 
-REPO_ROOT = "$(cd " $(dirname "$0") " && pwd)"
-#This script installs all build dependencies.It logs actions to
-#/ var / log /                                                                 \
-    setup.log and records any failures in / var / log / setup_failures.log.
-#After the initial installation attempt it retries failed packages once using
-#apt, pip or npm depending on the recorded method.
+## Resolve the directory of this script even when invoked via symlink.
+## shellcheck disable=SC2155
+REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+OFFLINE_DIR="$REPO_ROOT/scripts/offline_packages"
 
-#Parse command line arguments
-    OFFLINE_MODE = false while[$ # - gt 0];
-do
+# This script installs all build dependencies. It logs actions to
+# /var/log/setup.log and records any failures in /var/log/setup_failures.log.
+# After the initial installation attempt it retries failed packages once using
+# apt, pip or npm depending on the recorded method.
+
+# Parse command line arguments
+OFFLINE_MODE=false
+while [ $# -gt 0 ]; do
   case "$1" in
     --offline)
       OFFLINE_MODE=true
@@ -40,140 +44,147 @@ if [ "$DEBUG_MODE" = true ]; then
   set -x
 fi
 
-#In offline mode or when network is unavailable the script attempts
-#to install packages from the scripts / offline_packages directory.Ensure this
-#directory is populated with the required.deb files or Python wheels
-#as described in scripts / offline_packages /                                \
-      README.md.Otherwise most installs
-#will be skipped and logged as warnings.
-
-#Detect basic network connectivity unless offline mode was requested
+# Detect basic network connectivity unless offline mode was requested
 NETWORK_AVAILABLE=true
 if [ "$OFFLINE_MODE" = true ]; then
   NETWORK_AVAILABLE=false
   echo "Offline mode enabled" >&2
 elif ! timeout 5 curl -fsSL https://pypi.org/simple >/dev/null 2>&1; then
-    NETWORK_AVAILABLE =
-        false echo
-        "Network unavailable, proceeding in offline mode" > & 2 fi LOG_FILE =
-            / var / log /
-            setup.log FAIL_LOG = / var / log / setup_failures.log mkdir -
-                                     p / var / log : >
-                                                     "$LOG_FILE"
-        : > "$FAIL_LOG" exec >>
-          (tee - a "$LOG_FILE")2 > & 1 export DEBIAN_FRONTEND = noninteractive
+  NETWORK_AVAILABLE=false
+  echo "Network unavailable, proceeding in offline mode" >&2
+fi
 
-#— helper to pin to the repo’s exact version if it exists
-        pip_install() {
-      pkg = "$1" debug "Attempting pip install $pkg" if !pip3 install-- no -
-                cache - dir "$pkg" >
-            / dev / null 2 > &1;
-      then echo "Warning: pip install $pkg failed" > &2 echo "pip $pkg" >>
-          "$FAIL_LOG" fi
-    }
-  apt_pin_install() {
-    pkg = "$1" debug
-          "Attempting apt install $pkg" if["$NETWORK_AVAILABLE" != true];
-    then echo "Warning: network unavailable, skipping apt-get install of $pkg" >
-            & 2 return 0 fi
+LOG_FILE=/var/log/setup.log
+FAIL_LOG=/var/log/setup_failures.log
+OFFLINE_LOG=/var/log/offline_installed.log
+sudo mkdir -p /var/log
+sudo chown "$(whoami):$(id -g -n "$(whoami)")" /var/log "$LOG_FILE" "$FAIL_LOG" 2>/dev/null || true
+: >"$LOG_FILE"
+: >"$FAIL_LOG"
+: >"$OFFLINE_LOG"
 
-                status = 0 ver = $(apt - cache show "$pkg" 2 > / dev / null |
-                                       awk '/^Version:/{print $2; exit}' ||
-                                   true) if[-n "$ver"];
-    then if !apt - get install - y "${pkg}=${ver}";
-    then echo "Warning: apt-get install ${pkg}=${ver} failed" >
-        &2 echo "apt ${pkg}=${ver}" >>
-        "$FAIL_LOG" status = 1 fi else if !apt - get install - y "$pkg";
-    then echo "Warning: apt-get install $pkg failed" > &2 echo "apt $pkg" >>
-        "$FAIL_LOG" status = 1 fi fi
+exec >> >(tee -a "$LOG_FILE") 2>&1
 
-                                 if !dpkg -
-                                 s "$pkg" >
-                             / dev / null 2 > &1; then
+export DEBIAN_FRONTEND=noninteractive
+
+# Helper to pin to the repo's exact version if it exists
+pip_install() {
+  local pkg="$1"
+  debug "Attempting pip install $pkg"
+  if ! pip3 install --no-cache-dir "$pkg" >/dev/null 2>&1; then
+    echo "Warning: pip install $pkg failed" >&2
+    echo "pip $pkg" >>"$FAIL_LOG"
+  fi
+}
+
+# Install an npm package globally with quiet output
+npm_install() {
+  local pkg="$1"
+  debug "Attempting npm install $pkg"
+  if ! npm install --global "$pkg" >/dev/null 2>&1; then
+    echo "Warning: npm install $pkg failed" >&2
+    echo "npm $pkg" >>"$FAIL_LOG"
+  fi
+}
+
+# Install a package, preferring offline .deb files when available
+# shellcheck disable=SC2155
+apt_pin_install() {
+  local pkg="$1"
+  debug "Installing $pkg"
+  local status=1
+
+  if [ -d "$OFFLINE_DIR" ]; then
+    local deb
+    deb=$(find "$OFFLINE_DIR" -maxdepth 1 -name "${pkg}_*.deb" -o -name "${pkg}*.deb" 2>/dev/null | head -n 1 || true)
+    if [ -n "$deb" ]; then
+      if sudo dpkg -i "$deb" >/dev/null 2>&1; then
+        echo "Installed $pkg from offline cache ($deb)" >&2
+        echo "$pkg" >>"$OFFLINE_LOG"
+        status=0
+      else
+        echo "Warning: dpkg -i $deb failed" >&2
+        echo "dpkg $deb" >>"$FAIL_LOG"
+      fi
+    fi
+  fi
+
+  if [ $status -ne 0 ] && [ "$NETWORK_AVAILABLE" = true ]; then
+    if ! sudo apt-get install -y "$pkg" >/dev/null 2>&1; then
+      echo "Warning: apt-get install $pkg failed" >&2
+      echo "apt $pkg" >>"$FAIL_LOG"
+    else
+      status=0
+    fi
+  elif [ $status -ne 0 ]; then
+    echo "Warning: $pkg not available offline" >&2
+    echo "offline $pkg" >>"$FAIL_LOG"
+  fi
+
+  if [ $status -ne 0 ]; then
     case "$pkg" in
       python3-*|pre-commit)
-        pip_pkg="${pkg#python3-}"
+        local pip_pkg="${pkg#python3-}"
         pip_install "$pip_pkg"
-        if command -v "$pip_pkg" >/dev/null 2>&1 || \
-           python3 -c "import $pip_pkg" >/dev/null 2>&1; then
+        if command -v "$pip_pkg" >/dev/null 2>&1 || python3 -c "import $pip_pkg" >/dev/null 2>&1; then
           status=0
         fi
         ;;
     esac
   fi
 
-  if [ $status -ne 0 ] && ! command -v "$pkg" >/dev/null 2>&1; then
-    if command -v npm >/dev/null 2>&1; then
-      debug "Attempting npm install $pkg"
-      if ! npm install -g "$pkg" >/dev/null 2>&1; then
-        echo "Warning: npm install $pkg failed" >&2
-        echo "npm $pkg" >>"$FAIL_LOG"
-      else
-        status=0
-      fi
-    fi
-  fi
+  return $status
+}
 
-  if [ $status -ne 0 ]; then
-    case "$pkg" in
-      capnproto|capnp*)
-        if ! command -v capnp >/dev/null 2>&1; then
-          if ! curl -fsSL https://capnproto.org/capnproto-c++-1.0.1.tar.gz \
-              -o /tmp/capnp.tar.gz; then
-    echo "Warning: failed to download capnproto" >
-            &2 echo "download capnproto" >>
-            "$FAIL_LOG" else tar - xzf / tmp / capnp.tar.gz -
-                C / tmp(cd / tmp / capnproto - *&&./ configure &&
-                        make - j "$(nproc)" && make install) ||
-        {echo "Warning: building capnproto failed" >
-         &2 echo "build capnproto" >> "$FAIL_LOG"} rm -
-            rf / tmp / capnproto - */ tmp / capnp.tar.gz fi fi;
-    ;
-    esac fi
-
-        return 0
-  }
-
-#ensure_command tries to install specified packages until the command exists.
-#Missing commands are logged but do not halt the script.
-  ensure_command() {
-    local cmd = "$1" shift if command - v "$cmd" > / dev / null 2 > &1; then
+# ensure_command tries to install specified packages until the command exists.
+# Missing commands are logged but do not halt the script.
+ensure_command() {
+  local cmd="$1"
+  shift
+  if command -v "$cmd" >/dev/null 2>&1; then
     return 0
   fi
   local pkg
-  for pkg in "$@";
-    do
-      apt_pin_install "$pkg" done if !command - v "$cmd" > / dev / null 2 > &1;
-    then echo
-        "Warning: required command $cmd not found after install attempts" >
-        &2 echo "missing $cmd" >> "$FAIL_LOG" fi
-  }
+  for pkg in "$@"; do
+    apt_pin_install "$pkg"
+  done
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Warning: required command $cmd not found after install attempts" >&2
+    echo "missing $cmd" >>"$FAIL_LOG"
+  fi
+}
 
-#Install packages from scripts / offline_packages /                          \
-      when network is unavailable
-  install_offline_packages() {
-    dir = "$REPO_ROOT/scripts/offline_packages" if[-d "$dir"]; then
+# Install all packages in the offline directory
+install_offline_packages() {
+  ## Install all `.deb` files located in the offline cache directory.
+  ## The function intentionally keeps nullglob enabled only locally.  shellcheck
+  ## complains about SC2317 when functions are defined but never called; the
+  ## disable is required because the function may be conditionally invoked.
+  # shellcheck disable=SC2317
+  if [ -d "$OFFLINE_DIR" ]; then
     shopt -s nullglob
-    files=("$dir"/*.deb)
-    if [ ${#files[@]} -eq 0 ]; then
-      echo "Warning: no offline packages found in $dir" >&2
-    fi
-    for deb in "${files[@]}"; do
-      if ! dpkg -i "$deb"; then
+    local deb
+    for deb in "$OFFLINE_DIR"/*.deb; do
+      if sudo dpkg -i "$deb" >/dev/null 2>&1; then
+        echo "Installed offline package $deb" >&2
+        echo "$deb" >>"$OFFLINE_LOG"
+      else
         echo "Warning: dpkg -i $deb failed" >&2
         echo "dpkg $deb" >>"$FAIL_LOG"
       fi
     done
     shopt -u nullglob
-  else
-    echo "Warning: scripts/offline_packages directory not found" >&2
   fi
 }
+
 
 #— enable foreign architectures for cross-compilation
 for arch in i386 armel armhf arm64 riscv64 powerpc ppc64el ia64; do
   dpkg --add-architecture "$arch"
 done
+
+# Install local packages before accessing network repositories.
+install_offline_packages
 
 if [ "$NETWORK_AVAILABLE" = true ]; then
   apt-get update -y || {
@@ -194,7 +205,7 @@ for pkg in \
   libopenblas-dev liblapack-dev libeigen3-dev \
   strace ltrace linux-perf systemtap systemtap-sdt-dev crash \
   valgrind kcachegrind trace-cmd kernelshark \
-  libasan6 libubsan1 likwid hwloc cloc; do
+  libasan6 libubsan1 likwid hwloc cloc cscope ctags cppcheck bear; do
   apt_pin_install "$pkg"
 done
 
@@ -214,13 +225,20 @@ done
 for pip_pkg in \
   tensorflow-cpu jax jaxlib \
   tensorflow-model-optimization mlflow onnxruntime-tools \
-  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db configuredb; do
+  black flake8 pyperf py-cpuinfo pytest pre-commit compile-db configuredb \
+  lizard radon networkx pygraphviz mypy pylint; do
   pip_install "$pip_pkg"
 done
 
 # Explicit installation of key tools
 pip_install compiledb
 pip_install configuredb
+
+# Node.js tooling for dependency graphs and linting
+for npm_pkg in \
+  madge dependency-cruiser eslint; do
+  npm_install "$npm_pkg"
+done
 
 # --- TLA+ Python Tooling ---
 # tlacli: Command-line interface for TLA+ and TLC model checker
@@ -301,7 +319,7 @@ for pkg in \
   swift swift-lldb swiftpm swift-tools-support-core libswiftFuzzer \
   kotlin gradle-plugin-kotlin \
   ruby ruby-dev gem bundler php-cli php-dev composer phpunit \
-  r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol \
+  r-base r-base-dev dart flutter gnat gprbuild gfortran gnucobol nodejs npm \
   fpc lazarus zig nim nimble crystal shards gforth; do
   apt_pin_install "$pkg"
 done
@@ -332,7 +350,8 @@ done
 if ! command -v swiftc >/dev/null 2>&1; then
   echo "swiftc not found, fetching official Swift toolchain" >&2
   ARCH=$(uname -m)
-  OS_VERSION=$(. /etc/os-release; echo ${VERSION_ID})
+  # shellcheck disable=SC1091
+  OS_VERSION=$(. /etc/os-release; echo "${VERSION_ID}")
   SWIFT_VERSION=5.9.2
   PLATFORM="ubuntu${OS_VERSION}"
   case "$ARCH" in
@@ -352,7 +371,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
   curl -fsSL "${BASE_URL}/${SWIFT_FILE}" -o /tmp/swift.tar.gz
   tar -xzf /tmp/swift.tar.gz -C /opt/swift --strip-components=1
   rm /tmp/swift.tar.gz
-  echo 'export PATH=/opt/swift/usr/bin:$PATH' > /etc/profile.d/swift.sh
+  echo "export PATH=/opt/swift/usr/bin:\$PATH" > /etc/profile.d/swift.sh
   export PATH=/opt/swift/usr/bin:$PATH
 fi
 
@@ -367,7 +386,8 @@ done
 if ! command -v swiftc >/dev/null 2>&1; then
   echo "swiftc not found, fetching official Swift toolchain" >&2
   ARCH=$(uname -m)
-  OS_VERSION=$(. /etc/os-release; echo ${VERSION_ID})
+  # shellcheck disable=SC1091
+  OS_VERSION=$(. /etc/os-release; echo "${VERSION_ID}")
   SWIFT_VERSION=5.9.2
   PLATFORM="ubuntu${OS_VERSION}"
   case "$ARCH" in
@@ -394,7 +414,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
     }
     rm /tmp/swift.tar.gz
   fi
-  echo 'export PATH=/opt/swift/usr/bin:$PATH' > /etc/profile.d/swift.sh
+  echo "export PATH=/opt/swift/usr/bin:\$PATH" > /etc/profile.d/swift.sh
   export PATH=/opt/swift/usr/bin:$PATH
 fi
 
@@ -408,7 +428,7 @@ if ! curl -fsSL "https://github.com/tkchia/gcc-ia16/releases/download/${IA16_VER
   echo "Warning: failed to install IA16 cross compiler" >&2
   echo "download ia16" >>"$FAIL_LOG"
 fi
-echo 'export PATH=/opt/ia16-elf-gcc/bin:$PATH' > /etc/profile.d/ia16.sh
+echo "export PATH=/opt/ia16-elf-gcc/bin:\$PATH" > /etc/profile.d/ia16.sh
 export PATH=/opt/ia16-elf-gcc/bin:$PATH
 
 #— protoc installer (pinned)
@@ -473,7 +493,7 @@ for cmd in clang clang++ cmake qemu-system-x86 qemu-nox tmux cloc coqc; do
     echo "Warning: required command $cmd not found" >&2
     echo "missing $cmd" >>"$FAIL_LOG"
   fi
-fi
+done
 
 #— clean up
 apt-get clean

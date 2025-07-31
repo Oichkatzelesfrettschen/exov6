@@ -145,3 +145,6 @@ SYSCALL(cap_dec)
 SYSCALL(cap_inc)
 SYSCALL(cap_dec)
 
+SYSCALL(service_register)
+SYSCALL(service_add_dependency)
+
