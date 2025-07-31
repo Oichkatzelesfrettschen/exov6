@@ -54,15 +54,11 @@ OBJS += $(KERNEL_DIR)/mmu64.o
 endif
 
 # Cross-compiling tool prefix inference
-ifndef TOOLPREFIX
-TOOLPREFIX := $(shell \
-  if i386-jos-elf-objdump -i 2>&1 | grep -q '^elf32-i386$$'; then \
-    echo 'i386-jos-elf-'; \
-  elif objdump -i 2>&1 | grep -q 'elf32-i386'; then \
-    echo ''; \
-  else \
-    echo "*** Error: Couldn't find an i386-*-elf toolchain." 1>&2; exit 1; \
-  fi)
+$(info ARCH is $(ARCH))
+ifeq ($(ARCH),x86_64)
+TOOLPREFIX := x86_64-elf-
+else
+TOOLPREFIX := i386-elf-
 endif
 
 # QEMU detection
@@ -78,7 +74,7 @@ QEMU := $(shell \
 endif
 
 ARCH ?= x86_64
-CSTD ?= c17
+CSTD ?= c11
 CLANG_TIDY ?= clang-tidy
 TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
@@ -155,7 +151,8 @@ CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing \
          -O2 -Wall -MD -ggdb $(ARCHFLAG) -Werror \
          -fno-omit-frame-pointer -std=$(CSTD) \
          -nostdinc -I. -Iinclude -I$(KERNEL_DIR) \
-         -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto
+         -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto \
+         -I/opt/cross/x86_64-elf-7.5.0-Linux-x86_64/lib/gcc/x86_64-elf/7.5.0/include
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 \
             && echo -fno-stack-protector)
 CFLAGS += $(CPUFLAGS)
