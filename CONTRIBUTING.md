@@ -23,3 +23,18 @@ pre-commit run --all-files
 Formal models describing parts of the system live under the `formal/`
 directory. See `doc/formal_models.md` for instructions on building and
 extending these models.
+
+## Running the Test Suite
+
+All Python and C integration tests reside under the `tests/` directory and are
+executed with `pytest`. After installing the development dependencies run:
+
+```sh
+pytest -v
+```
+
+Tests compile small helper programs using `clang` so a working C toolchain must
+be available. The `pytest.ini` configuration ensures each file following
+`test_*.py` naming is automatically discovered.  When creating new test
+directories remember to add an `__init__.py` file so the package is
+importable by pytest.

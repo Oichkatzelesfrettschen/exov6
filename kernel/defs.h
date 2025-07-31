@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "param.h"
+#include <stdint.h>
 #include <compiler_attrs.h>
 #if __has_include("config.h")
 #include "config.h"
@@ -11,6 +12,7 @@
 #include "proc.h"
 #include "ipc.h"
 #include "cap.h"
+#include "service.h"
 #include <stdnoreturn.h>
 
 struct buf;
@@ -143,8 +145,15 @@ int pipewrite(struct pipe *, struct file *, char *, size_t);
 
 // PAGEBREAK: 16
 //  proc.c
-int cpuid(void);
-void exit(void);
+/**
+ * Query CPU feature information using the CPUID instruction.
+ */
+void cpuid(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
+
+/**
+ * Terminate the current process and schedule a replacement.
+ */
+_Noreturn void exit(int status);
 int fork(void);
 int growproc(int);
 int kill(int);
@@ -257,11 +266,18 @@ exo_cap exo_alloc_dma(uint32_t chan);
 exo_cap exo_alloc_hypervisor(void);
 int hv_launch_guest(exo_cap cap, const char *path);
 void cap_table_init(void);
-int cap_table_alloc(uint16_t, uint32_t, uint32_t, uint32_t);
-int cap_table_lookup(uint16_t, struct cap_entry *);
-void cap_table_inc(uint16_t);
-void cap_table_dec(uint16_t);
-int cap_table_remove(uint16_t);
+int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights,
+                    uint32_t owner);
+int cap_table_lookup(cap_id_t id, struct cap_entry *out);
+void cap_table_inc(cap_id_t id);
+void cap_table_dec(cap_id_t id);
+int cap_table_remove(cap_id_t id);
+
+// service.c
+int service_register(const char *name, const char *path,
+                     service_options_t opts);
+int service_add_dependency(const char *name, const char *dependency);
+void service_notify_exit(struct proc *p);
 void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);
@@ -283,7 +299,7 @@ int endpoint_recv(struct endpoint *, zipc_msg_t *);
 void dag_node_init(struct dag_node *, exo_cap);
 void dag_node_set_priority(struct dag_node *, int);
 void dag_node_add_dep(struct dag_node *, struct dag_node *);
-void dag_sched_submit(struct dag_node *);
+int dag_sched_submit(struct dag_node *);
 
 // rcu.c
 void rcuinit(void);

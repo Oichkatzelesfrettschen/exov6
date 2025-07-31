@@ -1,5 +1,6 @@
 -Q . ExoCap
 -Q . LambdaCap
+ExoCap.v
 LambdaCap.v
 IRQProof.v
 StreamsProof.v

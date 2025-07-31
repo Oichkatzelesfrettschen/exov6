@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "exo_mem.h"
+#include <compiler_attrs.h>
 #include "exo.h"
 
 typedef enum {

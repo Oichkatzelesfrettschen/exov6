@@ -15,18 +15,9 @@ option(USE_CAPNP "Build Cap'n Proto support" OFF)
 option(USE_SIMD "Enable SIMD math routines" OFF)
 option(MCU "Build for Cortex-M microcontroller" OFF)
 
-include(CheckCCompilerFlag)
-check_c_compiler_flag("-std=c23" HAVE_STD_C23)
-if(HAVE_STD_C23)
-  add_compile_options(-std=c23)
-  set(CMAKE_C_STANDARD 23)
-  set(CMAKE_C_STANDARD_REQUIRED ON)
-else()
-  check_c_compiler_flag("-std=c2x" HAVE_STD_C2X)
-  if(HAVE_STD_C2X)
-    add_compile_options(-std=c2x)
-  endif()
-endif()
+add_compile_options(-std=c2x)
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -132,6 +123,7 @@ set(LIBOS_SOURCES
   libos/ipc.c
   libos/posix.c
   libos/termios.c
+  libos/service.c
   libos/microkernel/cap.c
   libos/microkernel/msg_router.c
   libos/microkernel/resource_account.c
