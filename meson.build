@@ -1,30 +1,10 @@
 project('xv6', 'c',
-  default_options : ['c_std=c17']
+  default_options : ['c_std=c2x']
 )
 
 add_project_arguments('-Wall', '-Werror', language : ['c', 'cpp'])
 
-# User-configurable options
-option('use_ticket_lock',
-  type : 'boolean',
-  value : false,
-  description : 'Enable ticket-based spinlock implementation'
-)
-option('ipc_debug',
-  type : 'boolean',
-  value : false,
-  description : 'Enable extra IPC debug instrumentation'
-)
-option('use_capnp',
-  type : 'boolean',
-  value : false,
-  description : 'Enable Cap’n Proto support for IPC definitions'
-)
-option('mcu',
-  type : 'boolean',
-  value : false,
-  description : 'Build the MCU-specific kernel variant'
-)
+# User-configurable options are declared in meson_options.txt
 
 # Collect common C compiler arguments based on options
 common_cargs = []
@@ -118,8 +98,9 @@ src_dirs = [
 ]
 
 all_sources = []
+fs = import('fs')
 foreach d : src_dirs
-  all_sources += files(d + '/*.c')
+  all_sources += fs.glob(d + '/*.c')
 endforeach
 
 # Kernel executable
