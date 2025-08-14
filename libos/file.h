@@ -1,89 +1,106 @@
 #pragma once
 
-<<<<<<< HEAD
-struct file {
-  enum { FD_NONE, FD_PIPE, FD_INODE } type;
-  size_t ref; // reference count
-  char readable;
-  char writable;
-  struct pipe *pipe;
-  struct inode *ip;
-  size_t off;
-};
-
-
-// in-memory copy of an inode
-struct inode {
-  uint dev;           // Device number
-  uint inum;          // Inode number
-  size_t ref;            // Reference count
-  struct sleeplock lock; // protects everything below here
-  int valid;          // inode has been read from disk?
-
-  short type;         // copy of disk inode
-=======
 #include <stddef.h>
 #include <stdint.h>
+#include <sys/stat.h>
+
 #include "include/exokernel.h"
 #include "fs.h"
 #include "sleeplock.h"
 
+/**
+ * @brief Per-file state for the capability-based file system.
+ */
 struct file {
-  enum { FD_NONE, FD_CAP } type;
-  size_t ref; // reference count
-  char readable;
-  char writable;
-  struct exo_blockcap cap; // backing storage capability
-  size_t off;
-  size_t *sizep;           // pointer to shared file length
+  enum { FD_NONE, FD_CAP } type; /**< File descriptor type. */
+  size_t ref;                    /**< Reference count. */
+  char readable;                 /**< Read permission flag. */
+  char writable;                 /**< Write permission flag. */
+  struct exo_blockcap cap;       /**< Backing storage capability. */
+  size_t off;                    /**< Current file offset. */
+  size_t *sizep;                 /**< Pointer to shared file length. */
 };
 
-// in-memory copy of an inode
+/**
+ * @brief In-memory representation of an inode.
+ */
 struct inode {
-  uint32_t dev;              // Device number
-  uint32_t inum;             // Inode number
-  size_t ref;            // Reference count
-  struct sleeplock lock; // protects everything below here
-  int valid;             // inode has been read from disk?
+  uint32_t dev;          /**< Device number. */
+  uint32_t inum;         /**< Inode number. */
+  size_t ref;            /**< Reference count. */
+  struct sleeplock lock; /**< Protects fields below. */
+  int valid;             /**< Has inode been read from disk? */
 
-  short type; // copy of disk inode
->>>>>>> origin/feature/epoch-cache-design-progress
-  short major;
-  short minor;
-  short nlink;
-  size_t size;
-<<<<<<< HEAD
-  uint addrs[NDIRECT+1];
-=======
-  uint32_t addrs[NDIRECT + 1];
->>>>>>> origin/feature/epoch-cache-design-progress
+  short type;                  /**< Copy of disk inode type. */
+  short major;                 /**< Major device number. */
+  short minor;                 /**< Minor device number. */
+  short nlink;                 /**< Number of directory links. */
+  size_t size;                 /**< File size in bytes. */
+  uint32_t addrs[NDIRECT + 1]; /**< Data block addresses. */
 };
 
-// table mapping major device number to
-// device functions
+/** Device switch table entry. */
 struct devsw {
-<<<<<<< HEAD
-  int (*read)(struct inode*, char*, size_t);
-  int (*write)(struct inode*, char*, size_t);
-=======
   int (*read)(struct inode *, char *, size_t);
   int (*write)(struct inode *, char *, size_t);
->>>>>>> origin/feature/epoch-cache-design-progress
 };
 
 extern struct devsw devsw[];
 
 #define CONSOLE 1
-<<<<<<< HEAD
-=======
 
-#include <sys/stat.h>
-
+/**
+ * @brief Initialize the file table.
+ */
 void fileinit(void);
+
+/**
+ * @brief Allocate a new file structure.
+ *
+ * @return Pointer to the allocated file or NULL on failure.
+ */
 struct file *filealloc(void);
+
+/**
+ * @brief Increment the reference count of a file.
+ *
+ * @param f File to duplicate.
+ * @return The same file pointer.
+ */
 struct file *filedup(struct file *f);
+
+/**
+ * @brief Close a file and release its resources.
+ *
+ * @param f File to close.
+ */
 void fileclose(struct file *f);
+
+/**
+ * @brief Retrieve file metadata.
+ *
+ * @param f  File handle.
+ * @param st Destination stat structure.
+ * @return 0 on success, negative error code otherwise.
+ */
 int filestat(struct file *f, struct stat *st);
+
+/**
+ * @brief Read data from a file.
+ *
+ * @param f     File handle.
+ * @param addr  Destination buffer.
+ * @param n     Number of bytes to read.
+ * @return Number of bytes read or negative error code.
+ */
 int fileread(struct file *f, char *addr, size_t n);
+
+/**
+ * @brief Write data to a file.
+ *
+ * @param f     File handle.
+ * @param addr  Source buffer.
+ * @param n     Number of bytes to write.
+ * @return Number of bytes written or negative error code.
+ */
 int filewrite(struct file *f, char *addr, size_t n);
->>>>>>> origin/feature/epoch-cache-design-progress
