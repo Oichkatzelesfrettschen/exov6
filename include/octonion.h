@@ -11,9 +11,14 @@
 #ifndef OCTONION_H
 #define OCTONION_H
 
+#include "kernel_compat.h"
+
+/* Kernel-compatible includes */
+#ifndef __KERNEL__
 #include <math.h>        /* sqrt, fabs */
 #include <string.h>      /* memcmp */
-#include <stdatomic.h>   /* atomic operations (for spinlocks, if needed) */
+#include <stdatomic.h>   /* atomic operations */
+#endif
 
 #include "lattice_types.h"  /* defines octonion_t */
 

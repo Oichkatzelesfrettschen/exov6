@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <stdatomic.h>
+#include "kernel_compat.h"
 #include "config.h"
 
 /** Forward declaration for CPU reference in spinlock. */

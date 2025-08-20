@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <stdnoreturn.h>
+#include "kernel_compat.h"
 
 #include "types.h"
 #include "param.h"
