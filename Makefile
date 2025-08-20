@@ -53,12 +53,26 @@ ifeq ($(ARCH),x86_64)
 OBJS += $(KERNEL_DIR)/mmu64.o
 endif
 
-# Cross-compiling tool prefix inference
+# Cross-compiling tool prefix inference with fallback
 $(info ARCH is $(ARCH))
 ifeq ($(ARCH),x86_64)
-TOOLPREFIX := x86_64-elf-
+CROSS_PREFIX := x86_64-elf-
+NATIVE_CHECK := $(shell which $(CROSS_PREFIX)gcc 2>/dev/null)
+ifeq ($(NATIVE_CHECK),)
+  $(warning Cross-compiler $(CROSS_PREFIX)gcc not found, using native compiler)
+  TOOLPREFIX :=
 else
-TOOLPREFIX := i386-elf-
+  TOOLPREFIX := $(CROSS_PREFIX)
+endif
+else
+CROSS_PREFIX := i386-elf-
+NATIVE_CHECK := $(shell which $(CROSS_PREFIX)gcc 2>/dev/null)
+ifeq ($(NATIVE_CHECK),)
+  $(warning Cross-compiler $(CROSS_PREFIX)gcc not found, using native compiler)
+  TOOLPREFIX :=
+else
+  TOOLPREFIX := $(CROSS_PREFIX)
+endif
 endif
 
 # QEMU detection
@@ -74,7 +88,7 @@ QEMU := $(shell \
 endif
 
 ARCH ?= x86_64
-CSTD ?= c11
+CSTD ?= c2x
 CLANG_TIDY ?= clang-tidy
 TIDY_SRCS := $(wildcard $(KERNEL_DIR)/*.c $(ULAND_DIR)/*.c $(LIBOS_DIR)/*.c)
 
@@ -120,12 +134,22 @@ BOOTASM  := $(KERNEL_DIR)/bootasm.S
 ENTRYASM := $(KERNEL_DIR)/entry.S
 endif
 
+# Compiler tools with fallback to native compilers
+ifeq ($(TOOLPREFIX),)
+CC      = clang
+AS      = as
+LD      = ld
+OBJCOPY = objcopy
+OBJDUMP = objdump
+AR      = ar
+else
 CC      = $(TOOLPREFIX)gcc
 AS      = $(TOOLPREFIX)as
 LD      = $(TOOLPREFIX)ld
 OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 AR      = $(TOOLPREFIX)ar
+endif
 
 ifeq ($(ARCH),x86_64)
 ARCHFLAG          := -m64

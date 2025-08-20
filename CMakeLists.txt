@@ -9,6 +9,9 @@ endif()
 
 project(xv6 LANGUAGES C CXX)
 
+# Include required modules
+include(CheckCCompilerFlag)
+
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
 option(IPC_DEBUG "Enable IPC debug logging" OFF)
 option(USE_CAPNP "Build Cap'n Proto support" OFF)
