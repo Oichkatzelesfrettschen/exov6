@@ -32,7 +32,7 @@ jobs:
         set -euxo pipefail
         swift/build_swift.sh
     - name: Configure
-      run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }}
+      run: cmake -S . -B build -G Ninja -DARCH=${{ matrix.arch }} -DUSE_LLD=ON -DUSE_LTO=ON
     - name: Build
       run: ninja -C build qemu-nox
     - name: Run unit tests

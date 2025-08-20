@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install deps
-        run: sudo apt-get update && sudo apt-get install -y clang make cmake ninja-build
+        run: sudo apt-get update && sudo apt-get install -y clang-18 lld-18 llvm-18 make cmake ninja-build
       - name: Build ISA variants
         run: |
           chmod +x scripts/build_isa_variants.sh

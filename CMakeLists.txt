@@ -17,6 +17,12 @@ option(IPC_DEBUG "Enable IPC debug logging" OFF)
 option(USE_CAPNP "Build Cap'n Proto support" OFF)
 option(USE_SIMD "Enable SIMD math routines" OFF)
 option(MCU "Build for Cortex-M microcontroller" OFF)
+option(USE_LTO "Enable Link Time Optimization" OFF)
+option(USE_LLD "Use LLVM LLD linker" OFF)
+option(USE_POLLY "Enable LLVM Polly optimizations" OFF)
+option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+option(ENABLE_TSAN "Enable ThreadSanitizer" OFF)
+option(ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer" OFF)
 
 add_compile_options(-std=c2x)
 set(CMAKE_C_STANDARD 23)
@@ -25,6 +31,85 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(-Wall -Werror)
+
+# Configure modern LLVM toolchain
+if(USE_LLD)
+  if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fuse-ld=lld")
+    message(STATUS "Using LLVM LLD linker")
+  else()
+    message(WARNING "LLD linker requires Clang compiler")
+  endif()
+endif()
+
+# Configure LLVM archiver and tools
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  find_program(LLVM_AR NAMES llvm-ar-18 llvm-ar)
+  find_program(LLVM_OBJCOPY NAMES llvm-objcopy-18 llvm-objcopy)
+  find_program(LLVM_STRIP NAMES llvm-strip-18 llvm-strip)
+  find_program(LLVM_NM NAMES llvm-nm-18 llvm-nm)
+  find_program(LLVM_OBJDUMP NAMES llvm-objdump-18 llvm-objdump)
+  
+  if(LLVM_AR)
+    set(CMAKE_AR "${LLVM_AR}")
+    message(STATUS "Using LLVM archiver: ${LLVM_AR}")
+  endif()
+  if(LLVM_OBJCOPY)
+    set(CMAKE_OBJCOPY "${LLVM_OBJCOPY}")
+  endif()
+  if(LLVM_STRIP)
+    set(CMAKE_STRIP "${LLVM_STRIP}")
+  endif()
+endif()
+
+# Configure Link Time Optimization
+if(USE_LTO)
+  if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+    add_compile_options(-flto=thin)
+    add_link_options(-flto=thin)
+    message(STATUS "Enabled LLVM ThinLTO")
+  else()
+    message(WARNING "LTO requires Clang compiler for LLVM ThinLTO")
+  endif()
+endif()
+
+# Configure Polly optimizations
+if(USE_POLLY)
+  if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    find_program(OPT_POLLY NAMES opt-18 opt)
+    if(OPT_POLLY)
+      add_compile_options(-mllvm -polly)
+      add_compile_options(-mllvm -polly-vectorizer=stripmine)
+      add_compile_options(-mllvm -polly-parallel)
+      message(STATUS "Enabled LLVM Polly optimizations")
+    else()
+      message(WARNING "Polly optimizations require LLVM opt tool")
+    endif()
+  else()
+    message(WARNING "Polly optimizations require Clang compiler")
+  endif()
+endif()
+
+# Configure sanitizers
+if(ENABLE_ASAN)
+  add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+  add_link_options(-fsanitize=address)
+  message(STATUS "Enabled AddressSanitizer")
+endif()
+
+if(ENABLE_TSAN)
+  add_compile_options(-fsanitize=thread)
+  add_link_options(-fsanitize=thread)
+  message(STATUS "Enabled ThreadSanitizer")
+endif()
+
+if(ENABLE_UBSAN)
+  add_compile_options(-fsanitize=undefined)
+  add_link_options(-fsanitize=undefined)
+  message(STATUS "Enabled UndefinedBehaviorSanitizer")
+endif()
 
 #Enable decimal floating point when supported
 check_c_compiler_flag("-mdecimal-float" HAVE_DECIMAL_FLOAT)
@@ -120,17 +205,15 @@ set(LIBOS_SOURCES
   user/libos/sched.c
   libos/fs.c
   libos/file.c
-  libos/driver.c
   libos/affine_runtime.c
-  libos/env.c
   libos/ipc.c
   libos/posix.c
   libos/termios.c
   libos/service.c
-  libos/microkernel/cap.c
-  libos/microkernel/msg_router.c
-  libos/microkernel/resource_account.c
-  libos/microkernel/registration.c
+  libos/cap.c
+  libos/msg_router.c
+  libos/resource_account.c
+  libos/registration.c
   ${LIBPOSIX_SOURCES}
   ${LIBBAREMETAL_SOURCES}
   ${LIB9P_SOURCES}

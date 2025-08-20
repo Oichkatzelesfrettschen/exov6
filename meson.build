@@ -8,11 +8,90 @@ add_project_arguments('-Wall', '-Werror', language : ['c', 'cpp'])
 
 # Collect common C compiler arguments based on options
 common_cargs = []
+common_link_args = []
+
 if get_option('use_ticket_lock')
   common_cargs += ['-DUSE_TICKET_LOCK']
 endif
 if get_option('ipc_debug')
   common_cargs += ['-DIPC_DEBUG']
+endif
+
+# Modern LLVM toolchain configuration
+cc = meson.get_compiler('c')
+
+# Configure LLD linker
+if get_option('use_lld')
+  if cc.get_id() == 'clang'
+    common_link_args += ['-fuse-ld=lld']
+    message('Using LLVM LLD linker')
+  else
+    warning('LLD linker requires Clang compiler')
+  endif
+endif
+
+# Configure Link Time Optimization (ThinLTO)
+if get_option('use_lto')
+  if cc.get_id() == 'clang'
+    common_cargs += ['-flto=thin']
+    common_link_args += ['-flto=thin']
+    message('Enabled LLVM ThinLTO')
+  else
+    warning('LTO requires Clang compiler for LLVM ThinLTO')
+  endif
+endif
+
+# Configure Polly optimizations
+if get_option('use_polly')
+  if cc.get_id() == 'clang'
+    polly_args = [
+      '-mllvm', '-polly',
+      '-mllvm', '-polly-vectorizer=stripmine',
+      '-mllvm', '-polly-parallel'
+    ]
+    if cc.has_multi_arguments(polly_args)
+      common_cargs += polly_args
+      message('Enabled LLVM Polly optimizations')
+    else
+      warning('Polly optimizations not supported by this Clang version')
+    endif
+  else
+    warning('Polly optimizations require Clang compiler')
+  endif
+endif
+
+# Configure sanitizers
+if get_option('enable_asan')
+  asan_args = ['-fsanitize=address', '-fno-omit-frame-pointer']
+  if cc.has_multi_arguments(asan_args)
+    common_cargs += asan_args
+    common_link_args += ['-fsanitize=address']
+    message('Enabled AddressSanitizer')
+  else
+    warning('AddressSanitizer not supported by this compiler')
+  endif
+endif
+
+if get_option('enable_tsan')
+  tsan_args = ['-fsanitize=thread']
+  if cc.has_multi_arguments(tsan_args)
+    common_cargs += tsan_args
+    common_link_args += ['-fsanitize=thread']
+    message('Enabled ThreadSanitizer')
+  else
+    warning('ThreadSanitizer not supported by this compiler')
+  endif
+endif
+
+if get_option('enable_ubsan')
+  ubsan_args = ['-fsanitize=undefined']
+  if cc.has_multi_arguments(ubsan_args)
+    common_cargs += ubsan_args
+    common_link_args += ['-fsanitize=undefined']
+    message('Enabled UndefinedBehaviorSanitizer')
+  else
+    warning('UndefinedBehaviorSanitizer not supported by this compiler')
+  endif
 endif
 
 # Detect decimal float support
@@ -122,6 +201,7 @@ kernel = executable(
   ),
   install: false,
   c_args: common_cargs,
+  link_args: common_link_args,
   link_with: [ libos ] + (get_option('use_capnp') ? [ libcapnp ] : [])
 )
 
