@@ -5,7 +5,7 @@
 
 #include "exo_ipc.h"
 #include "lattice_types.h"
-#include "../kernel/quaternion_spinlock.h"
+#include "quaternion_spinlock.h"
 #include "octonion.h"
 #include "dag.h"
 

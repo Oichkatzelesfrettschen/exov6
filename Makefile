@@ -44,6 +44,8 @@ OBJS = \
     $(KERNEL_DIR)/cap.o \
     $(KERNEL_DIR)/cap_security.o \
     $(KERNEL_DIR)/cap_table.o \
+    $(KERNEL_DIR)/crypto.o \
+    $(KERNEL_DIR)/lattice_ipc.o \
     $(KERNEL_DIR)/fastipc.o \
     $(KERNEL_DIR)/endpoint.o \
     $(KERNEL_DIR)/dag_sched.o \
@@ -177,7 +179,8 @@ CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing \
          -fno-omit-frame-pointer -std=$(CSTD) \
          -nostdinc -I. -Iinclude -I$(KERNEL_DIR) \
          -I$(ULAND_DIR) -I$(LIBOS_DIR) -Iproto \
-         -I/opt/cross/x86_64-elf-7.5.0-Linux-x86_64/lib/gcc/x86_64-elf/7.5.0/include
+         -I/opt/cross/x86_64-elf-7.5.0-Linux-x86_64/lib/gcc/x86_64-elf/7.5.0/include \
+         -D__KERNEL__
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 \
             && echo -fno-stack-protector)
 CFLAGS += $(CPUFLAGS)

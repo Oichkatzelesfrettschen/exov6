@@ -7,15 +7,21 @@
 #include "caplib.h"
 #include "libos/crypto.h"
 #include "cap_security.h"
-#include "octonion.h"
-#include "quaternion_spinlock.h"
-#include "dag.h"
 
-#include <stdatomic.h>
+/* Kernel-compatible headers */
 #include <stdint.h>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
+
+/* Kernel-compatible malloc/free */
+#ifdef __KERNEL__
+extern void *kalloc(void);
+extern void kfree(char *);
+#define malloc(size) kalloc()
+#define free(ptr) kfree((char*)ptr)
+#else
+#include <stdlib.h>
+#endif
 
 /* Forward declarations for crypto functions */
 extern void simple_sha256(const uint8_t *data, size_t len, uint8_t hash[32]);

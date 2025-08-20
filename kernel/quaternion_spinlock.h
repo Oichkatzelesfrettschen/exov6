@@ -1,6 +1,29 @@
 #pragma once
 #include "rspinlock.h"
-#include <stdbool.h>
+
+/* C23 compatible bool definition for kernel */
+#ifndef __cplusplus
+#ifndef bool
+#ifdef __STDC_VERSION__
+#if __STDC_VERSION__ >= 202311L
+/* C23 has built-in _Bool */
+#define bool _Bool
+#define true 1
+#define false 0
+#else
+/* Pre-C23 fallback */
+typedef int bool;
+#define true 1
+#define false 0
+#endif
+#else
+/* Fallback for older compilers */
+typedef int bool;
+#define true 1
+#define false 0
+#endif
+#endif
+#endif
 
 /**
  * @brief Quaternion spinlock providing recursive locking semantics.
