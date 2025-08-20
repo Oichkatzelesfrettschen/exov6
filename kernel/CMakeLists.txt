@@ -1,0 +1,285 @@
+# kernel/CMakeLists.txt - ExoV6 Kernel
+
+# ═════════════════════════════════════════════════════════════════════
+# MCU TARGET (Early exit for microcontroller builds)
+# ═════════════════════════════════════════════════════════════════════
+
+if(MCU)
+    # MCU-specific kernel build
+    exov6_add_executable(kernel-mcu
+        SOURCES 
+            picokernel.c
+            ${CMAKE_SOURCE_DIR}/user/blink.c
+            ${CMAKE_SOURCE_DIR}/src/arch/mcu/startup.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/src/arch/mcu
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+        DEFINITIONS MCU=1
+    )
+    
+    set_target_properties(exov6-kernel-mcu PROPERTIES 
+        OUTPUT_NAME "kernel-mcu"
+        PREFIX ""
+    )
+    
+    # Create alias for main kernel target
+    add_executable(exov6-kernel ALIAS exov6-kernel-mcu)
+    
+    message(STATUS "Kernel zone configured for MCU target")
+    return()
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# KERNEL SOURCE COLLECTION
+# ═════════════════════════════════════════════════════════════════════
+
+# Core kernel sources
+file(GLOB KERNEL_CORE_SOURCES *.c)
+
+# Assembly sources
+file(GLOB KERNEL_ASM_SOURCES *.S)
+
+# Architecture-specific sources from src/arch (already compiled into architecture libs)
+# These are included via library dependencies
+
+# Hypervisor sources
+set(HYPERVISOR_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/hypervisor")
+    file(GLOB HYPERVISOR_SOURCES hypervisor/*.c)
+endif()
+
+# Combine all kernel sources
+set(ALL_KERNEL_SOURCES 
+    ${KERNEL_CORE_SOURCES}
+    ${KERNEL_ASM_SOURCES}
+    ${HYPERVISOR_SOURCES}
+)
+
+# Remove any sources that shouldn't be in the main kernel
+list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*test.*")
+list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*picokernel.*")
+
+# ═════════════════════════════════════════════════════════════════════
+# KERNEL EXECUTABLE
+# ═════════════════════════════════════════════════════════════════════
+
+exov6_add_executable(kernel
+    SOURCES ${ALL_KERNEL_SOURCES}
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/hypervisor
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/proto
+        ${CMAKE_SOURCE_DIR}/libos/stubs
+    DEPENDENCIES 
+        exov6-architecture
+        exov6-ddekit
+        exov6-nstr-graph
+        exov6-protocols
+)
+
+# Add Cap'n Proto dependency if enabled
+if(USE_CAPNP AND TARGET exov6-capnp)
+    target_link_libraries(exov6-kernel PRIVATE exov6-capnp)
+endif()
+
+# Set kernel-specific properties
+set_target_properties(exov6-kernel PROPERTIES 
+    OUTPUT_NAME "kernel"
+    PREFIX ""
+)
+
+# ═════════════════════════════════════════════════════════════════════
+# KERNEL FEATURE CONFIGURATION
+# ═════════════════════════════════════════════════════════════════════
+
+# Feature-based compilation definitions
+if(USE_TICKET_LOCK)
+    target_compile_definitions(exov6-kernel PRIVATE USE_TICKET_LOCK)
+endif()
+
+if(IPC_DEBUG)
+    target_compile_definitions(exov6-kernel PRIVATE IPC_DEBUG)
+endif()
+
+if(USE_SIMD)
+    target_compile_definitions(exov6-kernel PRIVATE USE_SIMD)
+endif()
+
+# Apply additional CPU flags if specified
+set(CPUFLAGS "" CACHE STRING "Additional CPU specific compile flags")
+if(CPUFLAGS)
+    target_compile_options(exov6-kernel PRIVATE ${CPUFLAGS})
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# KERNEL MODULES (OPTIONAL)
+# ═════════════════════════════════════════════════════════════════════
+
+# Security audit module
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cap_security.c")
+    exov6_add_library(exov6-kernel-security
+        STATIC
+        SOURCES cap_security.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-security)
+endif()
+
+# Memory management module
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cap_mem.c")
+    exov6_add_library(exov6-kernel-memory
+        STATIC
+        SOURCES cap_mem.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-memory)
+endif()
+
+# IPC queue module
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/exo_ipc_queue.c")
+    exov6_add_library(exov6-kernel-ipc-queue
+        STATIC
+        SOURCES exo_ipc_queue.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-ipc-queue)
+endif()
+
+# Streaming module
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/streams.c")
+    exov6_add_library(exov6-kernel-streams
+        STATIC
+        SOURCES streams.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-streams)
+endif()
+
+# Lattice IPC module
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lattice_ipc.c")
+    exov6_add_library(exov6-kernel-lattice-ipc
+        STATIC
+        SOURCES lattice_ipc.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-lattice-ipc)
+endif()
+
+# Crypto module
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/crypto.c")
+    exov6_add_library(exov6-kernel-crypto
+        STATIC
+        SOURCES crypto.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-crypto)
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# KERNEL DEBUGGING AND TESTING
+# ═════════════════════════════════════════════════════════════════════
+
+# Test spinlock executable (if test sources exist)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_quaternion_spinlock.c")
+    exov6_add_executable(test-quaternion-spinlock
+        SOURCES test_quaternion_spinlock.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES exov6-architecture
+    )
+    
+    set_target_properties(exov6-test-quaternion-spinlock PROPERTIES 
+        OUTPUT_NAME "test-quaternion-spinlock"
+        PREFIX ""
+    )
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# LINKER SCRIPT AND SPECIAL LINKING
+# ═════════════════════════════════════════════════════════════════════
+
+# Use kernel linker script if it exists
+if(EXISTS "${CMAKE_SOURCE_DIR}/kernel.ld")
+    target_link_options(exov6-kernel PRIVATE 
+        "LINKER:-T,${CMAKE_SOURCE_DIR}/kernel.ld"
+    )
+endif()
+
+# Set kernel-specific link options
+target_link_options(exov6-kernel PRIVATE
+    -nostdlib
+    -static
+)
+
+# ═════════════════════════════════════════════════════════════════════
+# EXPORTS
+# ═════════════════════════════════════════════════════════════════════
+
+set(EXOV6_KERNEL_TARGETS
+    exov6-kernel
+    PARENT_SCOPE
+)
+
+# Export optional kernel modules
+set(KERNEL_MODULE_TARGETS)
+foreach(module security memory ipc-queue streams lattice-ipc crypto)
+    if(TARGET exov6-kernel-${module})
+        list(APPEND KERNEL_MODULE_TARGETS exov6-kernel-${module})
+    endif()
+endforeach()
+
+if(KERNEL_MODULE_TARGETS)
+    set(EXOV6_KERNEL_MODULE_TARGETS ${KERNEL_MODULE_TARGETS} PARENT_SCOPE)
+endif()
+
+message(STATUS "Kernel zone configured:")
+message(STATUS "  - Main kernel: ✓")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/hypervisor")
+    message(STATUS "  - Hypervisor support: ✓")
+endif()
+if(KERNEL_MODULE_TARGETS)
+    message(STATUS "  - Kernel modules: ${KERNEL_MODULE_TARGETS}")
+endif()
+if(USE_CAPNP)
+    message(STATUS "  - Cap'n Proto support: ✓")
+endif()
+if(TARGET exov6-test-quaternion-spinlock)
+    message(STATUS "  - Test utilities: ✓")
+endif()

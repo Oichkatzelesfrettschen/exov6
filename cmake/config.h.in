@@ -1,0 +1,77 @@
+#ifndef EXOV6_CONFIG_H
+#define EXOV6_CONFIG_H
+
+/* System capabilities */
+#cmakedefine HAVE_STDATOMIC_H 1
+#cmakedefine HAVE_STDNORETURN_H 1
+#cmakedefine HAVE_THREADS_H 1
+#cmakedefine HAVE_STDALIGN_H 1
+#cmakedefine HAVE_SYS_MMAN_H 1
+#cmakedefine HAVE_SYS_PRCTL_H 1
+#cmakedefine HAVE_LINUX_SECCOMP_H 1
+
+/* C23 features */
+#cmakedefine HAVE_STATIC_ASSERT 1
+#cmakedefine HAVE_GENERIC 1
+
+/* System functions */
+#cmakedefine HAVE_MMAP 1
+#cmakedefine HAVE_MPROTECT 1
+#cmakedefine HAVE_PRCTL 1
+#cmakedefine HAVE_SECCOMP 1
+#cmakedefine HAVE_CLONE 1
+#cmakedefine HAVE_EPOLL 1
+#cmakedefine HAVE_EVENTFD 1
+#cmakedefine HAVE_SIGNALFD 1
+#cmakedefine HAVE_TIMERFD 1
+
+/* Libraries */
+#cmakedefine HAVE_LIBRT 1
+#cmakedefine HAVE_LIBPTHREAD 1
+#cmakedefine HAVE_LIBNUMA 1
+
+/* Type sizes */
+#define SIZEOF_VOID_P @SIZEOF_VOID_P@
+#define SIZEOF_LONG @SIZEOF_LONG@
+#define SIZEOF_SIZE_T @SIZEOF_SIZE_T@
+
+/* SIMD capabilities */
+#cmakedefine HAVE_SSE2 1
+#cmakedefine HAVE_AVX2 1
+#cmakedefine HAVE_AVX512F 1
+#cmakedefine HAVE_NEON 1
+#cmakedefine HAVE_ALTIVEC 1
+
+/* Hardware features */
+#cmakedefine HAVE_KVM 1
+#cmakedefine HAVE_HYPERVISOR 1
+#cmakedefine IN_CONTAINER 1
+
+/* System parameters */
+#define CPU_COUNT @CPU_COUNT@
+#define PAGE_SIZE @PAGE_SIZE@
+#cmakedefine MEMORY_SIZE_MB @MEMORY_SIZE_MB@
+
+/* ExoV6 version */
+#define EXOV6_VERSION_MAJOR @EXOV6_VERSION_MAJOR@
+#define EXOV6_VERSION_MINOR @EXOV6_VERSION_MINOR@
+#define EXOV6_VERSION_PATCH @EXOV6_VERSION_PATCH@
+#define EXOV6_VERSION "@EXOV6_VERSION@"
+
+/* Build configuration */
+#cmakedefine USE_LTO 1
+#cmakedefine USE_LLD 1
+#cmakedefine USE_POLLY 1
+#cmakedefine USE_SIMD 1
+#cmakedefine USE_TICKET_LOCK 1
+#cmakedefine USE_CAPNP 1
+#cmakedefine IPC_DEBUG 1
+#cmakedefine MCU 1
+
+/* Sanitizers */
+#cmakedefine ENABLE_ASAN 1
+#cmakedefine ENABLE_TSAN 1
+#cmakedefine ENABLE_UBSAN 1
+#cmakedefine ENABLE_MSAN 1
+
+#endif /* EXOV6_CONFIG_H */
