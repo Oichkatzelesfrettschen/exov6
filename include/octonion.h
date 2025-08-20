@@ -11,51 +11,13 @@
 #ifndef OCTONION_H
 #define OCTONION_H
 
-/* Kernel-compatible math functions */
-#ifdef __KERNEL__
-/* Simple kernel implementations */
-static inline double sqrt(double x) {
-    /* Simple Newton-Raphson approximation for kernel use */
-    if (x <= 0.0) return 0.0;
-    double guess = x / 2.0;
-    for (int i = 0; i < 10; i++) {
-        guess = (guess + x / guess) / 2.0;
-    }
-    return guess;
-}
+#include "kernel_compat.h"
 
-static inline double fabs(double x) {
-    return x < 0.0 ? -x : x;
-}
-#else
+/* Kernel-compatible includes */
+#ifndef __KERNEL__
 #include <math.h>        /* sqrt, fabs */
-#endif
-
-/* Kernel-compatible string functions */
-#ifdef __KERNEL__
-/* memcmp is available in kernel/string.c */
-extern int memcmp(const void *s1, const void *s2, size_t n);
-#else
 #include <string.h>      /* memcmp */
-#endif
-
-/* Kernel-compatible atomic operations */
-#ifdef __KERNEL__
-/* Use compiler builtins for atomics in kernel */
-#define _Atomic volatile
-#define atomic_load(ptr) __atomic_load_n(ptr, __ATOMIC_SEQ_CST)
-#define atomic_store(ptr, val) __atomic_store_n(ptr, val, __ATOMIC_SEQ_CST)
-#define atomic_exchange(ptr, val) __atomic_exchange_n(ptr, val, __ATOMIC_SEQ_CST)
-#define atomic_compare_exchange_strong(ptr, expected, desired) \
-    __atomic_compare_exchange_n(ptr, expected, desired, 0, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)
-#define atomic_fetch_add(ptr, val) __atomic_fetch_add(ptr, val, __ATOMIC_SEQ_CST)
-#define atomic_fetch_sub(ptr, val) __atomic_fetch_sub(ptr, val, __ATOMIC_SEQ_CST)
-#define memory_order_relaxed __ATOMIC_RELAXED
-#define memory_order_acquire __ATOMIC_ACQUIRE
-#define memory_order_release __ATOMIC_RELEASE
-#define memory_order_seq_cst __ATOMIC_SEQ_CST
-#else
-#include <stdatomic.h>   /* atomic operations (for spinlocks, if needed) */
+#include <stdatomic.h>   /* atomic operations */
 #endif
 
 #include "lattice_types.h"  /* defines octonion_t */

@@ -4,6 +4,7 @@
 #define QUATERNION_SPINLOCK_H
 
 #include "octonion.h" // For quaternion_t (which handles atomics)
+#include "kernel_compat.h"
 #include <stdint.h> // For uintptr_t
 
 struct cpu; // Forward declaration
