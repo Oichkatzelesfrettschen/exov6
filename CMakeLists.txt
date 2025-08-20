@@ -123,8 +123,10 @@ if(NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_program(CLANG_TIDY_EXE NAMES clang-tidy)
-if(CLANG_TIDY_EXE)
-  set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_EXE}")
+if(CLANG_TIDY_EXE AND NOT DEFINED CMAKE_C_CLANG_TIDY)
+  # Only enable clang-tidy if explicitly requested and not conflicting
+  # set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_EXE}")
+  message(STATUS "clang-tidy found but disabled due to header conflicts")
 endif()
 
 find_package(BISON)
