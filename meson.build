@@ -98,9 +98,17 @@ src_dirs = [
 ]
 
 all_sources = []
-fs = import('fs')
 foreach d : src_dirs
-  all_sources += fs.glob(d + '/*.c')
+  # Use run_command with find to get source files
+  find_result = run_command('find', d, '-name', '*.c', '-type', 'f', check: false)
+  if find_result.returncode() == 0
+    source_files = find_result.stdout().strip().split('\n')
+    foreach f : source_files
+      if f != ''
+        all_sources += files(f)
+      endif
+    endforeach
+  endif
 endforeach
 
 # Kernel executable

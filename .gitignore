@@ -18,5 +18,10 @@ node_modules/
 /docs/sphinx/build/
 /docs/build/
 
+# Build directories
+build*/
+builddir/
+_build/
+
 # Local caches
 .cache/
