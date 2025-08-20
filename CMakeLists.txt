@@ -131,16 +131,16 @@ find_program(QEMU_EXECUTABLE
 if(QEMU_EXECUTABLE)
     # Basic QEMU target
     add_custom_target(qemu-nox
-        COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -kernel $<TARGET_FILE:exov6-kernel>
-        DEPENDS exov6-kernel
+        COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -kernel $<TARGET_FILE:kernel>
+        DEPENDS kernel
         USES_TERMINAL
         COMMENT "Running ExoV6 kernel in QEMU (no graphics)"
     )
     
     # Debug QEMU target
     add_custom_target(qemu-debug
-        COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -s -S -kernel $<TARGET_FILE:exov6-kernel>
-        DEPENDS exov6-kernel
+        COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -s -S -kernel $<TARGET_FILE:kernel>
+        DEPENDS kernel
         USES_TERMINAL
         COMMENT "Running ExoV6 kernel in QEMU with GDB server"
     )
@@ -148,8 +148,8 @@ if(QEMU_EXECUTABLE)
     # KVM accelerated target (if available)
     if(HAVE_KVM)
         add_custom_target(qemu-kvm
-            COMMAND ${QEMU_EXECUTABLE} -enable-kvm -nographic -serial stdio -kernel $<TARGET_FILE:exov6-kernel>
-            DEPENDS exov6-kernel
+            COMMAND ${QEMU_EXECUTABLE} -enable-kvm -nographic -serial stdio -kernel $<TARGET_FILE:kernel>
+            DEPENDS kernel
             USES_TERMINAL
             COMMENT "Running ExoV6 kernel in QEMU with KVM acceleration"
         )
@@ -161,7 +161,7 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Install kernel
-install(TARGETS exov6-kernel
+install(TARGETS kernel
     RUNTIME DESTINATION bin
     COMPONENT kernel
 )

@@ -148,11 +148,13 @@ foreach(app ${USER_APPS})
                 exov6-caplib
         )
         
-        # Set output name without prefix
-        set_target_properties(exov6-user-${app} PROPERTIES 
+        # Set output name without prefix (the framework adds exov6- prefix)
+        set_target_properties(user-${app} PROPERTIES 
             OUTPUT_NAME ${app}
             PREFIX ""
         )
+    else()
+        message(STATUS "Skipping ${app} - source file not found")
     endif()
 endforeach()
 
@@ -171,10 +173,12 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fileserver.c")
             exov6-chan
             exov6-door
     )
-    set_target_properties(exov6-user-fileserver PROPERTIES 
+    set_target_properties(user-fileserver PROPERTIES 
         OUTPUT_NAME fileserver
         PREFIX ""
     )
+else()
+    message(STATUS "Skipping fileserver - source file not found")
 endif()
 
 # Test applications
@@ -198,10 +202,12 @@ foreach(test_app ${TEST_APPS})
                 exov6-caplib
         )
         
-        set_target_properties(exov6-user-${test_app} PROPERTIES 
+        set_target_properties(user-${test_app} PROPERTIES 
             OUTPUT_NAME ${test_app}
             PREFIX ""
         )
+    else()
+        message(STATUS "Skipping ${test_app} - source file not found")
     endif()
 endforeach()
 

@@ -183,7 +183,11 @@ function(exov6_add_library target_name)
     
     # Set dependencies
     if(EXOV6_LIB_DEPENDENCIES)
-        target_link_libraries(${target_name} PUBLIC ${EXOV6_LIB_DEPENDENCIES})
+        if(lib_type STREQUAL "INTERFACE")
+            target_link_libraries(${target_name} INTERFACE ${EXOV6_LIB_DEPENDENCIES})
+        else()
+            target_link_libraries(${target_name} PUBLIC ${EXOV6_LIB_DEPENDENCIES})
+        endif()
     endif()
     
     # Set definitions
@@ -199,7 +203,6 @@ function(exov6_add_library target_name)
     if(NOT lib_type STREQUAL "INTERFACE")
         set_target_properties(${target_name} PROPERTIES
             POSITION_INDEPENDENT_CODE OFF
-            PREFIX "libexov6-"
         )
     endif()
 endfunction()
@@ -232,7 +235,7 @@ function(exov6_add_executable target_name)
     
     # Set properties
     set_target_properties(${target_name} PROPERTIES
-        PREFIX "exov6-"
+        OUTPUT_NAME ${target_name}
     )
 endfunction()
 

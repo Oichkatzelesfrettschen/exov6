@@ -84,11 +84,11 @@ exov6_add_executable(kernel
 
 # Add Cap'n Proto dependency if enabled
 if(USE_CAPNP AND TARGET exov6-capnp)
-    target_link_libraries(exov6-kernel PRIVATE exov6-capnp)
+    target_link_libraries(kernel PRIVATE exov6-capnp)
 endif()
 
 # Set kernel-specific properties
-set_target_properties(exov6-kernel PROPERTIES 
+set_target_properties(kernel PROPERTIES 
     OUTPUT_NAME "kernel"
     PREFIX ""
 )
@@ -99,21 +99,21 @@ set_target_properties(exov6-kernel PROPERTIES
 
 # Feature-based compilation definitions
 if(USE_TICKET_LOCK)
-    target_compile_definitions(exov6-kernel PRIVATE USE_TICKET_LOCK)
+    target_compile_definitions(kernel PRIVATE USE_TICKET_LOCK)
 endif()
 
 if(IPC_DEBUG)
-    target_compile_definitions(exov6-kernel PRIVATE IPC_DEBUG)
+    target_compile_definitions(kernel PRIVATE IPC_DEBUG)
 endif()
 
 if(USE_SIMD)
-    target_compile_definitions(exov6-kernel PRIVATE USE_SIMD)
+    target_compile_definitions(kernel PRIVATE USE_SIMD)
 endif()
 
 # Apply additional CPU flags if specified
 set(CPUFLAGS "" CACHE STRING "Additional CPU specific compile flags")
 if(CPUFLAGS)
-    target_compile_options(exov6-kernel PRIVATE ${CPUFLAGS})
+    target_compile_options(kernel PRIVATE ${CPUFLAGS})
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -132,7 +132,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cap_security.c")
         DEPENDENCIES exov6-architecture
     )
     
-    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-security)
+    target_link_libraries(kernel PRIVATE exov6-kernel-security)
 endif()
 
 # Memory management module
@@ -147,7 +147,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cap_mem.c")
         DEPENDENCIES exov6-architecture
     )
     
-    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-memory)
+    target_link_libraries(kernel PRIVATE exov6-kernel-memory)
 endif()
 
 # IPC queue module
@@ -162,7 +162,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/exo_ipc_queue.c")
         DEPENDENCIES exov6-architecture
     )
     
-    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-ipc-queue)
+    target_link_libraries(kernel PRIVATE exov6-kernel-ipc-queue)
 endif()
 
 # Streaming module
@@ -177,7 +177,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/streams.c")
         DEPENDENCIES exov6-architecture
     )
     
-    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-streams)
+    target_link_libraries(kernel PRIVATE exov6-kernel-streams)
 endif()
 
 # Lattice IPC module
@@ -192,7 +192,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lattice_ipc.c")
         DEPENDENCIES exov6-architecture
     )
     
-    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-lattice-ipc)
+    target_link_libraries(kernel PRIVATE exov6-kernel-lattice-ipc)
 endif()
 
 # Crypto module
@@ -207,7 +207,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/crypto.c")
         DEPENDENCIES exov6-architecture
     )
     
-    target_link_libraries(exov6-kernel PRIVATE exov6-kernel-crypto)
+    target_link_libraries(kernel PRIVATE exov6-kernel-crypto)
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -225,7 +225,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_quaternion_spinlock.c")
         DEPENDENCIES exov6-architecture
     )
     
-    set_target_properties(exov6-test-quaternion-spinlock PROPERTIES 
+    set_target_properties(test-quaternion-spinlock PROPERTIES 
         OUTPUT_NAME "test-quaternion-spinlock"
         PREFIX ""
     )
@@ -237,13 +237,13 @@ endif()
 
 # Use kernel linker script if it exists
 if(EXISTS "${CMAKE_SOURCE_DIR}/kernel.ld")
-    target_link_options(exov6-kernel PRIVATE 
+    target_link_options(kernel PRIVATE 
         "LINKER:-T,${CMAKE_SOURCE_DIR}/kernel.ld"
     )
 endif()
 
 # Set kernel-specific link options
-target_link_options(exov6-kernel PRIVATE
+target_link_options(kernel PRIVATE
     -nostdlib
     -static
 )
@@ -253,7 +253,7 @@ target_link_options(exov6-kernel PRIVATE
 # ═════════════════════════════════════════════════════════════════════
 
 set(EXOV6_KERNEL_TARGETS
-    exov6-kernel
+    kernel
     PARENT_SCOPE
 )
 

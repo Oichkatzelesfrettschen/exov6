@@ -1,0 +1,4 @@
+# ninja log v7
+5	161	1755712583754105016	src/arch/CMakeFiles/exov6-simd.dir/simd_dispatch.c.o	d58a259464f43ca2
+4	35	1755712616820552767	src/arch/CMakeFiles/exov6-simd.dir/simd_dispatch.c.o	d58a259464f43ca2
+35	61	1755712616850553140	src/arch/CMakeFiles/exov6-simd.dir/x86/simd_x87.c.o	a5ba1c589282977a
