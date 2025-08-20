@@ -42,6 +42,7 @@ OBJS = \
     $(KERNEL_DIR)/exo_ipc_queue.o \
     $(KERNEL_DIR)/exo_stream.o \
     $(KERNEL_DIR)/cap.o \
+    $(KERNEL_DIR)/cap_security.o \
     $(KERNEL_DIR)/cap_table.o \
     $(KERNEL_DIR)/fastipc.o \
     $(KERNEL_DIR)/endpoint.o \
