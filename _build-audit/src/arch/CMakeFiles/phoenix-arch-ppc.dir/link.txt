@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-arch-ppc.a "CMakeFiles/phoenix-arch-ppc.dir/ppc/simd_altivec.c.o" "CMakeFiles/phoenix-arch-ppc.dir/ppc/simd_altivec_cap.c.o"
-/usr/bin/ranlib libphoenix-arch-ppc.a

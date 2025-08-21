@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-sched-helpers.a "CMakeFiles/phoenix-libos-sched-helpers.dir/sched_helpers.c.o"
-/usr/bin/ranlib libphoenix-libos-sched-helpers.a

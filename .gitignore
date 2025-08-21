@@ -24,6 +24,7 @@ builddir/
 _build/
 _build-cmake/
 _build-test/
+_build-audit/
 test-build/
 
 # Local caches

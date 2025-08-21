@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-arch-arm.a "CMakeFiles/phoenix-arch-arm.dir/arm/simd_neon.c.o" "CMakeFiles/phoenix-arch-arm.dir/arm/simd_neon_cap.c.o"
-/usr/bin/ranlib libphoenix-arch-arm.a

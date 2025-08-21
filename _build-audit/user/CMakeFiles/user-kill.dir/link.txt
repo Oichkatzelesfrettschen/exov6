@@ -1,1 +1,0 @@
-/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/user-kill.dir/link.d "CMakeFiles/user-kill.dir/kill.c.o" -o kill  libphoenix-ulib.a libphoenix-umalloc.a libphoenix-printf.a libphoenix-caplib.a libphoenix-ulib.a

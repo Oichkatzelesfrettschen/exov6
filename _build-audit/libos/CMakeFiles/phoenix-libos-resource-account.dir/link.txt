@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-resource-account.a "CMakeFiles/phoenix-libos-resource-account.dir/resource_account.c.o"
-/usr/bin/ranlib libphoenix-libos-resource-account.a

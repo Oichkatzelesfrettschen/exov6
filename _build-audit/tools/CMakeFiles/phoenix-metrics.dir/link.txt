@@ -1,1 +1,0 @@
-/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/phoenix-metrics.dir/link.d "CMakeFiles/phoenix-metrics.dir/phoenix_metrics.c.o" -o phoenix-metrics

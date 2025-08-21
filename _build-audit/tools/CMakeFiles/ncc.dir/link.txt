@@ -1,1 +1,0 @@
-/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/ncc.dir/link.d CMakeFiles/ncc.dir/ncc.c.o -o ncc  libphoenix-compiler-utils.a

@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-posix-stubs.a "CMakeFiles/phoenix-libos-posix-stubs.dir/stubs/libposix.c.o"
-/usr/bin/ranlib libphoenix-libos-posix-stubs.a

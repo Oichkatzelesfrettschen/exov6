@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-9p-stubs.a "CMakeFiles/phoenix-libos-9p-stubs.dir/stubs/lib9p.c.o"
-/usr/bin/ranlib libphoenix-libos-9p-stubs.a
