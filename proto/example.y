@@ -1,8 +1,13 @@
-%
-    {/* Example Bison grammar */
-     % }
+%{
+/* Example Bison grammar */
+%}
 
-    % start input % % input :
+%start input
+
+%%
+
+input :
     /* empty */
     ;
-% %
+
+%%

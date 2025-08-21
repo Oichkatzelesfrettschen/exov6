@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 
 typedef uint8_t  uchar;
 typedef uint16_t ushort;
