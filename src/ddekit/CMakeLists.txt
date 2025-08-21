@@ -1,3 +1,21 @@
-add_library(ddekit STATIC stub.c)
-set_target_properties(ddekit PROPERTIES POSITION_INDEPENDENT_CODE OFF)
-target_include_directories(ddekit PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# src/ddekit/CMakeLists.txt - Device Driver Environment Kit
+
+# Collect DDEKit sources
+file(GLOB DDEKIT_SOURCES *.c)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/badgerferret")
+    file(GLOB BADGERFERRET_SOURCES badgerferret/*.c)
+    list(APPEND DDEKIT_SOURCES ${BADGERFERRET_SOURCES})
+endif()
+
+# Create DDEKit library using ExoV6 framework
+phoenix_add_library(phoenix-ddekit
+    STATIC
+    SOURCES ${DDEKIT_SOURCES}
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-architecture
+)
+
+# Legacy alias for backward compatibility
+add_library(ddekit ALIAS phoenix-ddekit)

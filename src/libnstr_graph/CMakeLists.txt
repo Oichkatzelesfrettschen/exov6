@@ -1,7 +1,29 @@
-add_library(nstr_graph STATIC nstr_graph.c)
-set_target_properties(nstr_graph PROPERTIES POSITION_INDEPENDENT_CODE OFF)
-target_include_directories(nstr_graph PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# src/libnstr_graph/CMakeLists.txt - NStr Graph Library
 
-add_library(nstr_graph_shared SHARED nstr_graph.c)
-set_target_properties(nstr_graph_shared PROPERTIES OUTPUT_NAME nstr_graph)
-target_include_directories(nstr_graph_shared PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# Create NStr Graph library using ExoV6 framework
+phoenix_add_library(phoenix-nstr-graph
+    STATIC
+    SOURCES nstr_graph.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+)
+
+# Create shared library variant
+phoenix_add_library(phoenix-nstr-graph-shared
+    SHARED
+    SOURCES nstr_graph.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+)
+
+# Set output name for shared library
+set_target_properties(phoenix-nstr-graph-shared PROPERTIES 
+    OUTPUT_NAME "phoenix-nstr-graph"
+    PREFIX "lib"
+)
+
+# Legacy aliases for backward compatibility
+add_library(nstr_graph ALIAS phoenix-nstr-graph)
+add_library(nstr_graph_shared ALIAS phoenix-nstr-graph-shared)

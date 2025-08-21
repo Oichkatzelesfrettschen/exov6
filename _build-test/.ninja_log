@@ -1,0 +1,17 @@
+# ninja log v7
+6	74	1755752763759336182	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_mmx.c.o	6fc9a726a3b53fdc
+5	85	1755752763758336170	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o	b37b171bf1412180
+5	128	1755752763758336170	src/arch/CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o	c1bcd073daf3e128
+6	202	1755752763759336182	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_sse2.c.o	f6af91d13d1c3805
+7	202	1755752763760336193	src/arch/CMakeFiles/phoenix-simd.dir/x86/legacy/simd_mmx_cap.c.o	506f3127ad70809f
+85	205	1755752763838337110	src/arch/CMakeFiles/phoenix-arch-x86-legacy.dir/x86/legacy/simd_mmx_cap.c.o	b07e0a0e63983ea0
+202	264	1755752763955338486	src/ddekit/CMakeFiles/phoenix-ddekit.dir/stub.c.o	f542f3f4e79f4607
+264	325	1755752764017339214	kernel/CMakeFiles/phoenix-kernel-security.dir/cap_security.c.o	c2c2e4b2bd0d44f2
+202	373	1755752764125340484	proto/example_parser.c	f9c914795ec1e0ee
+202	373	1755752764125340484	proto/example_parser.h	f9c914795ec1e0ee
+202	373	1755752764125340484	/home/runner/work/exov6/exov6/_build-test/proto/example_parser.c	f9c914795ec1e0ee
+202	373	1755752764125340484	/home/runner/work/exov6/exov6/_build-test/proto/example_parser.h	f9c914795ec1e0ee
+74	520	1755752763827336981	src/arch/CMakeFiles/phoenix-simd.dir/x86/modern/simd_avx2_cap.c.o	ec197382249baeb2
+7	562	1755752763760336193	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o	cdef840c00d8e25d
+128	640	1755752763881337616	src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/x86/modern/simd_avx2_cap.c.o	c7a69f61db16ac75
+5	5377	1755752772071434863	src/arch/libphoenix-simd.a	5984266befa3fd2c

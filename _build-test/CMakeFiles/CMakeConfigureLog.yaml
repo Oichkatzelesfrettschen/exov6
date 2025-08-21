@@ -1,0 +1,1765 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      The system is: Linux - 6.11.0-1018-azure - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/bin/clang 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is Clang, found in:
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/3.31.6/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/clang++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is Clang, found in:
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/3.31.6/CompilerIdCXX/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:1250 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineASMCompiler.cmake:135 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Checking whether the ASM compiler is GNU using "--version" did not match "(GNU assembler)|(GCC)|(Free Software Foundation)":
+      Ubuntu clang version 18.1.3 (1ubuntu1)
+      Target: x86_64-pc-linux-gnu
+      Thread model: posix
+      InstalledDir: /usr/bin
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:1250 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineASMCompiler.cmake:135 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Checking whether the ASM compiler is AppleClang using "--version" did not match "(Apple (clang|LLVM) version)":
+      Ubuntu clang version 18.1.3 (1ubuntu1)
+      Target: x86_64-pc-linux-gnu
+      Thread model: posix
+      InstalledDir: /usr/bin
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:1237 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineASMCompiler.cmake:135 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Checking whether the ASM compiler is Clang using "--version" matched "(clang version)":
+      Ubuntu clang version 18.1.3 (1ubuntu1)
+      Target: x86_64-pc-linux-gnu
+      Thread model: posix
+      InstalledDir: /usr/bin
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_d57d1
+        [1/2] /usr/bin/clang   -v -MD -MT CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake-3.31/Modules/CMakeCCompilerABI.c
+        Ubuntu clang version 18.1.3 (1ubuntu1)
+        Target: x86_64-pc-linux-gnu
+        Thread model: posix
+        InstalledDir: /usr/bin
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Candidate multilib: .;@m64
+        Selected multilib: .;@m64
+         (in-process)
+         "/usr/lib/llvm-18/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy -v -fcoverage-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy -resource-dir /usr/lib/llvm-18/lib/clang/18 -dependency-file CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -sys-header-deps -internal-isystem /usr/lib/llvm-18/lib/clang/18/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -x c /usr/local/share/cmake-3.31/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 18.1.3 based upon LLVM 18.1.3 default target x86_64-pc-linux-gnu
+        ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include"
+        ignoring nonexistent directory "/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/llvm-18/lib/clang/18/include
+         /usr/local/include
+         /usr/include/x86_64-linux-gnu
+         /usr/include
+        End of search list.
+        [2/2] : && /usr/bin/clang  -v -Wl,-v CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -o cmTC_d57d1   && :
+        Ubuntu clang version 18.1.3 (1ubuntu1)
+        Target: x86_64-pc-linux-gnu
+        Thread model: posix
+        InstalledDir: /usr/bin
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Candidate multilib: .;@m64
+        Selected multilib: .;@m64
+         "/usr/bin/ld" -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_d57d1 /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o /lib/x86_64-linux-gnu/crtn.o
+        GNU ld (GNU Binutils for Ubuntu) 2.42
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/llvm-18/lib/clang/18/include]
+          add: [/usr/local/include]
+          add: [/usr/include/x86_64-linux-gnu]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/llvm-18/lib/clang/18/include] ==> [/usr/lib/llvm-18/lib/clang/18/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include/x86_64-linux-gnu] ==> [/usr/include/x86_64-linux-gnu]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/lib/llvm-18/lib/clang/18/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/local/bin/ninja -v cmTC_d57d1]
+        ignore line: [[1/2] /usr/bin/clang   -v -MD -MT CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake-3.31/Modules/CMakeCCompilerABI.c]
+        ignore line: [Ubuntu clang version 18.1.3 (1ubuntu1)]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/bin]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Candidate multilib: .]
+        ignore line: [@m64]
+        ignore line: [Selected multilib: .]
+        ignore line: [@m64]
+        ignore line: [ (in-process)]
+        ignore line: [ "/usr/lib/llvm-18/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy -v -fcoverage-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-helpdy -resource-dir /usr/lib/llvm-18/lib/clang/18 -dependency-file CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -sys-header-deps -internal-isystem /usr/lib/llvm-18/lib/clang/18/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -x c /usr/local/share/cmake-3.31/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 18.1.3 based upon LLVM 18.1.3 default target x86_64-pc-linux-gnu]
+        ignore line: [ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include"]
+        ignore line: [ignoring nonexistent directory "/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/llvm-18/lib/clang/18/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include/x86_64-linux-gnu]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /usr/bin/clang  -v -Wl -v CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -o cmTC_d57d1   && :]
+        ignore line: [Ubuntu clang version 18.1.3 (1ubuntu1)]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/bin]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Candidate multilib: .]
+        ignore line: [@m64]
+        ignore line: [Selected multilib: .]
+        ignore line: [@m64]
+        link line: [ "/usr/bin/ld" -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_d57d1 /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o /lib/x86_64-linux-gnu/crtn.o]
+          arg [/usr/bin/ld] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_d57d1] ==> ignore
+          arg [/lib/x86_64-linux-gnu/Scrt1.o] ==> obj [/lib/x86_64-linux-gnu/Scrt1.o]
+          arg [/lib/x86_64-linux-gnu/crti.o] ==> obj [/lib/x86_64-linux-gnu/crti.o]
+          arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o] ==> obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o]
+          arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/14] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+          arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64]
+          arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/lib] ==> dir [/lib]
+          arg [-L/usr/lib] ==> dir [/usr/lib]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_d57d1.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--no-as-needed] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--no-as-needed] ==> ignore
+          arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o] ==> obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o]
+          arg [/lib/x86_64-linux-gnu/crtn.o] ==> obj [/lib/x86_64-linux-gnu/crtn.o]
+        linker tool for 'C': /usr/bin/ld
+        collapse obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o] ==> [/usr/lib/gcc/x86_64-linux-gnu/14/crtbeginS.o]
+        collapse obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o] ==> [/usr/lib/gcc/x86_64-linux-gnu/14/crtendS.o]
+        collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14] ==> [/usr/lib/gcc/x86_64-linux-gnu/14]
+        collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib] ==> [/lib]
+        collapse library dir [/usr/lib] ==> [/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/lib/x86_64-linux-gnu/Scrt1.o;/lib/x86_64-linux-gnu/crti.o;/usr/lib/gcc/x86_64-linux-gnu/14/crtbeginS.o;/usr/lib/gcc/x86_64-linux-gnu/14/crtendS.o;/lib/x86_64-linux-gnu/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/14;/usr/lib64;/lib/x86_64-linux-gnu;/lib64;/usr/lib/x86_64-linux-gnu;/lib;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Running the C compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld (GNU Binutils for Ubuntu) 2.42
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_6d29c
+        [1/2] /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp
+        Ubuntu clang version 18.1.3 (1ubuntu1)
+        Target: x86_64-pc-linux-gnu
+        Thread model: posix
+        InstalledDir: /usr/bin
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Candidate multilib: .;@m64
+        Selected multilib: .;@m64
+         (in-process)
+         "/usr/lib/llvm-18/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd -v -fcoverage-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd -resource-dir /usr/lib/llvm-18/lib/clang/18 -dependency-file CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/x86_64-linux-gnu/c++/14 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/backward -internal-isystem /usr/lib/llvm-18/lib/clang/18/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 18.1.3 based upon LLVM 18.1.3 default target x86_64-pc-linux-gnu
+        ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include"
+        ignoring nonexistent directory "/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14
+         /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/x86_64-linux-gnu/c++/14
+         /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/backward
+         /usr/lib/llvm-18/lib/clang/18/include
+         /usr/local/include
+         /usr/include/x86_64-linux-gnu
+         /usr/include
+        End of search list.
+        [2/2] : && /usr/bin/clang++  -v -Wl,-v CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_6d29c   && :
+        Ubuntu clang version 18.1.3 (1ubuntu1)
+        Target: x86_64-pc-linux-gnu
+        Thread model: posix
+        InstalledDir: /usr/bin
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+        Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14
+        Candidate multilib: .;@m64
+        Selected multilib: .;@m64
+         "/usr/bin/ld" -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_6d29c /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o /lib/x86_64-linux-gnu/crtn.o
+        GNU ld (GNU Binutils for Ubuntu) 2.42
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14]
+          add: [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/x86_64-linux-gnu/c++/14]
+          add: [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/backward]
+          add: [/usr/lib/llvm-18/lib/clang/18/include]
+          add: [/usr/local/include]
+          add: [/usr/include/x86_64-linux-gnu]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14] ==> [/usr/include/c++/14]
+        collapse include dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/x86_64-linux-gnu/c++/14] ==> [/usr/include/x86_64-linux-gnu/c++/14]
+        collapse include dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/backward] ==> [/usr/include/c++/14/backward]
+        collapse include dir [/usr/lib/llvm-18/lib/clang/18/include] ==> [/usr/lib/llvm-18/lib/clang/18/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include/x86_64-linux-gnu] ==> [/usr/include/x86_64-linux-gnu]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/include/c++/14;/usr/include/x86_64-linux-gnu/c++/14;/usr/include/c++/14/backward;/usr/lib/llvm-18/lib/clang/18/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/local/bin/ninja -v cmTC_6d29c]
+        ignore line: [[1/2] /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Ubuntu clang version 18.1.3 (1ubuntu1)]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/bin]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Candidate multilib: .]
+        ignore line: [@m64]
+        ignore line: [Selected multilib: .]
+        ignore line: [@m64]
+        ignore line: [ (in-process)]
+        ignore line: [ "/usr/lib/llvm-18/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd -v -fcoverage-compilation-dir=/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-z75Dmd -resource-dir /usr/lib/llvm-18/lib/clang/18 -dependency-file CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/x86_64-linux-gnu/c++/14 -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/backward -internal-isystem /usr/lib/llvm-18/lib/clang/18/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include -internal-externc-isystem /usr/include/x86_64-linux-gnu -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/share/cmake-3.31/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 18.1.3 based upon LLVM 18.1.3 default target x86_64-pc-linux-gnu]
+        ignore line: [ignoring nonexistent directory "/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../x86_64-linux-gnu/include"]
+        ignore line: [ignoring nonexistent directory "/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14]
+        ignore line: [ /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/x86_64-linux-gnu/c++/14]
+        ignore line: [ /usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/backward]
+        ignore line: [ /usr/lib/llvm-18/lib/clang/18/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include/x86_64-linux-gnu]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [[2/2] : && /usr/bin/clang++  -v -Wl -v CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_6d29c   && :]
+        ignore line: [Ubuntu clang version 18.1.3 (1ubuntu1)]
+        ignore line: [Target: x86_64-pc-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /usr/bin]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13]
+        ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+        ignore line: [Candidate multilib: .]
+        ignore line: [@m64]
+        ignore line: [Selected multilib: .]
+        ignore line: [@m64]
+        link line: [ "/usr/bin/ld" -z relro --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_6d29c /lib/x86_64-linux-gnu/Scrt1.o /lib/x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o /lib/x86_64-linux-gnu/crtn.o]
+          arg [/usr/bin/ld] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_6d29c] ==> ignore
+          arg [/lib/x86_64-linux-gnu/Scrt1.o] ==> obj [/lib/x86_64-linux-gnu/Scrt1.o]
+          arg [/lib/x86_64-linux-gnu/crti.o] ==> obj [/lib/x86_64-linux-gnu/crti.o]
+          arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o] ==> obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o]
+          arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/14] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14]
+          arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64]
+          arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/lib] ==> dir [/lib]
+          arg [-L/usr/lib] ==> dir [/usr/lib]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_6d29c.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o] ==> obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o]
+          arg [/lib/x86_64-linux-gnu/crtn.o] ==> obj [/lib/x86_64-linux-gnu/crtn.o]
+        linker tool for 'CXX': /usr/bin/ld
+        collapse obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtbeginS.o] ==> [/usr/lib/gcc/x86_64-linux-gnu/14/crtbeginS.o]
+        collapse obj [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/crtendS.o] ==> [/usr/lib/gcc/x86_64-linux-gnu/14/crtendS.o]
+        collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14] ==> [/usr/lib/gcc/x86_64-linux-gnu/14]
+        collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/14/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib] ==> [/lib]
+        collapse library dir [/usr/lib] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/lib/x86_64-linux-gnu/Scrt1.o;/lib/x86_64-linux-gnu/crti.o;/usr/lib/gcc/x86_64-linux-gnu/14/crtbeginS.o;/usr/lib/gcc/x86_64-linux-gnu/14/crtendS.o;/lib/x86_64-linux-gnu/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/14;/usr/lib64;/lib/x86_64-linux-gnu;/lib64;/usr/lib/x86_64-linux-gnu;/lib;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/local/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:13 (project)"
+    message: |
+      Running the CXX compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld (GNU Binutils for Ubuntu) 2.42
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:14 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_THIN_LTO"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rap2qX"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rap2qX"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_THIN_LTO"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rap2qX'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_247a2
+        [1/2] /usr/bin/clang -DSUPPORTS_THIN_LTO  -flto=thin -MD -MT CMakeFiles/cmTC_247a2.dir/src.c.o -MF CMakeFiles/cmTC_247a2.dir/src.c.o.d -o CMakeFiles/cmTC_247a2.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rap2qX/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_247a2.dir/src.c.o -o cmTC_247a2   && :
+        FAILED: [code=1] cmTC_247a2 
+        : && /usr/bin/clang   CMakeFiles/cmTC_247a2.dir/src.c.o -o cmTC_247a2   && :
+        CMakeFiles/cmTC_247a2.dir/src.c.o: file not recognized: file format not recognized
+        clang: error: linker command failed with exit code 1 (use -v to see invocation)
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:15 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_LLD"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-u9XETZ"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-u9XETZ"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_LLD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-u9XETZ'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_e4b6d
+        [1/2] /usr/bin/clang -DSUPPORTS_LLD  -fuse-ld=lld -MD -MT CMakeFiles/cmTC_e4b6d.dir/src.c.o -MF CMakeFiles/cmTC_e4b6d.dir/src.c.o.d -o CMakeFiles/cmTC_e4b6d.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-u9XETZ/src.c
+        clang: warning: argument unused during compilation: '-fuse-ld=lld' [-Wunused-command-line-argument]
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_e4b6d.dir/src.c.o -o cmTC_e4b6d   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:16 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_POLLY"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qilSgF"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qilSgF"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_POLLY"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qilSgF'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_ea17f
+        [1/2] /usr/bin/clang -DSUPPORTS_POLLY  -mllvm -polly -MD -MT CMakeFiles/cmTC_ea17f.dir/src.c.o -MF CMakeFiles/cmTC_ea17f.dir/src.c.o.d -o CMakeFiles/cmTC_ea17f.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qilSgF/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_ea17f.dir/src.c.o -o cmTC_ea17f   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:36 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_C23"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-L7GF2A"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-L7GF2A"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_C23"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-L7GF2A'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_50cc8
+        [1/2] /usr/bin/clang -DSUPPORTS_C23  -std=c2x -MD -MT CMakeFiles/cmTC_50cc8.dir/src.c.o -MF CMakeFiles/cmTC_50cc8.dir/src.c.o.d -o CMakeFiles/cmTC_50cc8.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-L7GF2A/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_50cc8.dir/src.c.o -o cmTC_50cc8   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:42 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_MARCH_NATIVE"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-6uBNij"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-6uBNij"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_MARCH_NATIVE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-6uBNij'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_1a12c
+        [1/2] /usr/bin/clang -DSUPPORTS_MARCH_NATIVE  -march=native -MD -MT CMakeFiles/cmTC_1a12c.dir/src.c.o -MF CMakeFiles/cmTC_1a12c.dir/src.c.o.d -o CMakeFiles/cmTC_1a12c.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-6uBNij/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_1a12c.dir/src.c.o -o cmTC_1a12c   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:43 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_MTUNE_NATIVE"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-4LCbyG"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-4LCbyG"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_MTUNE_NATIVE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-4LCbyG'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_e35fd
+        [1/2] /usr/bin/clang -DSUPPORTS_MTUNE_NATIVE  -mtune=native -MD -MT CMakeFiles/cmTC_e35fd.dir/src.c.o -MF CMakeFiles/cmTC_e35fd.dir/src.c.o.d -o CMakeFiles/cmTC_e35fd.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-4LCbyG/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_e35fd.dir/src.c.o -o cmTC_e35fd   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:44 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_FAST_MATH"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-pljR87"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-pljR87"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_FAST_MATH"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-pljR87'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_9f3be
+        [1/2] /usr/bin/clang -DSUPPORTS_FAST_MATH  -ffast-math -MD -MT CMakeFiles/cmTC_9f3be.dir/src.c.o -MF CMakeFiles/cmTC_9f3be.dir/src.c.o.d -o CMakeFiles/cmTC_9f3be.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-pljR87/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_9f3be.dir/src.c.o -o cmTC_9f3be   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:45 (check_c_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:163 (detect_and_configure_compiler)"
+      - "CMakeLists.txt:26 (include)"
+    checks:
+      - "Performing Test SUPPORTS_UNROLL_LOOPS"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-YLsdJp"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-YLsdJp"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_UNROLL_LOOPS"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-YLsdJp'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_49fbc
+        [1/2] /usr/bin/clang -DSUPPORTS_UNROLL_LOOPS  -funroll-loops -MD -MT CMakeFiles/cmTC_49fbc.dir/src.c.o -MF CMakeFiles/cmTC_49fbc.dir/src.c.o.d -o CMakeFiles/cmTC_49fbc.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-YLsdJp/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_49fbc.dir/src.c.o -o cmTC_49fbc   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:12 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for stdatomic.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iS77l0"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iS77l0"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_STDATOMIC_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iS77l0'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_b3d83
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_b3d83.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_b3d83.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_b3d83.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iS77l0/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_b3d83.dir/CheckIncludeFile.c.o -o cmTC_b3d83   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:13 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for stdnoreturn.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-yYzL6S"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-yYzL6S"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_STDNORETURN_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-yYzL6S'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_74b71
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_74b71.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_74b71.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_74b71.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-yYzL6S/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_74b71.dir/CheckIncludeFile.c.o -o cmTC_74b71   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:14 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for threads.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-8lKiJn"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-8lKiJn"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_THREADS_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-8lKiJn'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_cda60
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_cda60.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_cda60.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_cda60.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-8lKiJn/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_cda60.dir/CheckIncludeFile.c.o -o cmTC_cda60   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:15 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for stdalign.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-R67kYz"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-R67kYz"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_STDALIGN_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-R67kYz'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_841ef
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_841ef.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_841ef.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_841ef.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-R67kYz/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_841ef.dir/CheckIncludeFile.c.o -o cmTC_841ef   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:16 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for sys/mman.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EPVjJK"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EPVjJK"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SYS_MMAN_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EPVjJK'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_be083
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_be083.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_be083.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_be083.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EPVjJK/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_be083.dir/CheckIncludeFile.c.o -o cmTC_be083   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:17 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for sys/prctl.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-WsbXiU"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-WsbXiU"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SYS_PRCTL_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-WsbXiU'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_fa73e
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_fa73e.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_fa73e.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_fa73e.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-WsbXiU/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_fa73e.dir/CheckIncludeFile.c.o -o cmTC_fa73e   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "cmake/FeatureDetection.cmake:18 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for linux/seccomp.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iqjReI"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iqjReI"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_LINUX_SECCOMP_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iqjReI'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_948cf
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_948cf.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_948cf.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_948cf.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-iqjReI/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_948cf.dir/CheckIncludeFile.c.o -o cmTC_948cf   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckSymbolExists.cmake:163 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckSymbolExists.cmake:68 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "cmake/FeatureDetection.cmake:21 (check_symbol_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for _Static_assert"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-21JBIn"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-21JBIn"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_STATIC_ASSERT"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-21JBIn'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_e9d06
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-21JBIn/CheckSymbolExists.c
+        FAILED: [code=1] CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o 
+        /usr/bin/clang    -MD -MT CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_e9d06.dir/CheckSymbolExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-21JBIn/CheckSymbolExists.c
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-21JBIn/CheckSymbolExists.c:8:19: error: expected expression
+            8 |   return ((int*)(&_Static_assert))[argc];
+              |                   ^
+        1 error generated.
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckSymbolExists.cmake:163 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckSymbolExists.cmake:68 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "cmake/FeatureDetection.cmake:22 (check_symbol_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for _Generic"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qU58wx"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qU58wx"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_GENERIC"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qU58wx'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_e8883
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qU58wx/CheckSymbolExists.c
+        FAILED: [code=1] CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o 
+        /usr/bin/clang    -MD -MT CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_e8883.dir/CheckSymbolExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qU58wx/CheckSymbolExists.c
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-qU58wx/CheckSymbolExists.c:8:27: error: expected '('
+            8 |   return ((int*)(&_Generic))[argc];
+              |                           ^
+              |                           (
+        1 error generated.
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:25 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for mmap"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-I8qXtj"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-I8qXtj"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_MMAP"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-I8qXtj'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_d5552
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=mmap -MD -MT CMakeFiles/cmTC_d5552.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_d5552.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_d5552.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-I8qXtj/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=mmap  CMakeFiles/cmTC_d5552.dir/CheckFunctionExists.c.o -o cmTC_d5552   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:26 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for mprotect"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vDLiqa"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vDLiqa"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_MPROTECT"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vDLiqa'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_e14fa
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=mprotect -MD -MT CMakeFiles/cmTC_e14fa.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_e14fa.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_e14fa.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vDLiqa/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=mprotect  CMakeFiles/cmTC_e14fa.dir/CheckFunctionExists.c.o -o cmTC_e14fa   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:27 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for prctl"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Kxkpen"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Kxkpen"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_PRCTL"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Kxkpen'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_eb68f
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=prctl -MD -MT CMakeFiles/cmTC_eb68f.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_eb68f.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_eb68f.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Kxkpen/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=prctl  CMakeFiles/cmTC_eb68f.dir/CheckFunctionExists.c.o -o cmTC_eb68f   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:28 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for seccomp"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-MqzVic"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-MqzVic"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SECCOMP"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-MqzVic'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_83313
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=seccomp -MD -MT CMakeFiles/cmTC_83313.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_83313.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_83313.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-MqzVic/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=seccomp  CMakeFiles/cmTC_83313.dir/CheckFunctionExists.c.o -o cmTC_83313   && :
+        FAILED: [code=1] cmTC_83313 
+        : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=seccomp  CMakeFiles/cmTC_83313.dir/CheckFunctionExists.c.o -o cmTC_83313   && :
+        /usr/bin/ld: CMakeFiles/cmTC_83313.dir/CheckFunctionExists.c.o: in function `main':
+        CheckFunctionExists.c:(.text+0x17): undefined reference to `seccomp'
+        clang: error: linker command failed with exit code 1 (use -v to see invocation)
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:29 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for clone"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zLKQSD"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zLKQSD"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_CLONE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zLKQSD'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_16613
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=clone -MD -MT CMakeFiles/cmTC_16613.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_16613.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_16613.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zLKQSD/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=clone  CMakeFiles/cmTC_16613.dir/CheckFunctionExists.c.o -o cmTC_16613   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:30 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for epoll_create1"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-VR9K2t"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-VR9K2t"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_EPOLL"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-VR9K2t'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_45aa1
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=epoll_create1 -MD -MT CMakeFiles/cmTC_45aa1.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_45aa1.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_45aa1.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-VR9K2t/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=epoll_create1  CMakeFiles/cmTC_45aa1.dir/CheckFunctionExists.c.o -o cmTC_45aa1   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:31 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for eventfd"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-efcVyd"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-efcVyd"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_EVENTFD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-efcVyd'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_41017
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=eventfd -MD -MT CMakeFiles/cmTC_41017.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_41017.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_41017.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-efcVyd/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=eventfd  CMakeFiles/cmTC_41017.dir/CheckFunctionExists.c.o -o cmTC_41017   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:32 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for signalfd"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-2rgP9s"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-2rgP9s"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SIGNALFD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-2rgP9s'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_6778a
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=signalfd -MD -MT CMakeFiles/cmTC_6778a.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_6778a.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_6778a.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-2rgP9s/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=signalfd  CMakeFiles/cmTC_6778a.dir/CheckFunctionExists.c.o -o cmTC_6778a   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckFunctionExists.cmake:93 (try_compile)"
+      - "cmake/FeatureDetection.cmake:33 (check_function_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for timerfd_create"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-3mPXyZ"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-3mPXyZ"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_TIMERFD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-3mPXyZ'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_86653
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=timerfd_create -MD -MT CMakeFiles/cmTC_86653.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_86653.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_86653.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-3mPXyZ/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=timerfd_create  CMakeFiles/cmTC_86653.dir/CheckFunctionExists.c.o -o cmTC_86653   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckLibraryExists.cmake:78 (try_compile)"
+      - "cmake/FeatureDetection.cmake:36 (check_library_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for clock_gettime in rt"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Pmc0fV"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Pmc0fV"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_LIBRT"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Pmc0fV'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_1cc41
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=clock_gettime -MD -MT CMakeFiles/cmTC_1cc41.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_1cc41.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_1cc41.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-Pmc0fV/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=clock_gettime  CMakeFiles/cmTC_1cc41.dir/CheckFunctionExists.c.o -o cmTC_1cc41  -lrt && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckLibraryExists.cmake:78 (try_compile)"
+      - "cmake/FeatureDetection.cmake:37 (check_library_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-lYyFyu"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-lYyFyu"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_LIBPTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-lYyFyu'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_4b3fa
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=pthread_create -MD -MT CMakeFiles/cmTC_4b3fa.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_4b3fa.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_4b3fa.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-lYyFyu/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=pthread_create  CMakeFiles/cmTC_4b3fa.dir/CheckFunctionExists.c.o -o cmTC_4b3fa  -lpthread && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckLibraryExists.cmake:78 (try_compile)"
+      - "cmake/FeatureDetection.cmake:38 (check_library_exists)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for numa_available in numa"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EzGHwx"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EzGHwx"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_LIBNUMA"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EzGHwx'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_6f933
+        [1/2] /usr/bin/clang   -DCHECK_FUNCTION_EXISTS=numa_available -MD -MT CMakeFiles/cmTC_6f933.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_6f933.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_6f933.dir/CheckFunctionExists.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EzGHwx/CheckFunctionExists.c
+        [2/2] : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=numa_available  CMakeFiles/cmTC_6f933.dir/CheckFunctionExists.c.o -o cmTC_6f933  -lnuma && :
+        FAILED: [code=1] cmTC_6f933 
+        : && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=numa_available  CMakeFiles/cmTC_6f933.dir/CheckFunctionExists.c.o -o cmTC_6f933  -lnuma && :
+        /usr/bin/ld: cannot find -lnuma: No such file or directory
+        clang: error: linker command failed with exit code 1 (use -v to see invocation)
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:262 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:41 (check_type_size)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for sys/types.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zvkZWP"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zvkZWP"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zvkZWP'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_7c106
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_7c106.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_7c106.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_7c106.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-zvkZWP/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_7c106.dir/CheckIncludeFile.c.o -o cmTC_7c106   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:263 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:41 (check_type_size)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for stdint.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-LXZHJ2"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-LXZHJ2"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-LXZHJ2'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_70e94
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_70e94.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_70e94.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_70e94.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-LXZHJ2/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_70e94.dir/CheckIncludeFile.c.o -o cmTC_70e94   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckIncludeFile.cmake:99 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:264 (check_include_file)"
+      - "cmake/FeatureDetection.cmake:41 (check_type_size)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Looking for stddef.h"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rT9xzV"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rT9xzV"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_STDDEF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rT9xzV'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_3249a
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_3249a.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_3249a.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_3249a.dir/CheckIncludeFile.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-rT9xzV/CheckIncludeFile.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_3249a.dir/CheckIncludeFile.c.o -o cmTC_3249a   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:156 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:283 (__check_type_size_impl)"
+      - "cmake/FeatureDetection.cmake:41 (check_type_size)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Check size of void*"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-v4x9p0"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-v4x9p0"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SIZEOF_VOID_P"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-v4x9p0'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_1d070
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_1d070.dir/SIZEOF_VOID_P.c.o -MF CMakeFiles/cmTC_1d070.dir/SIZEOF_VOID_P.c.o.d -o CMakeFiles/cmTC_1d070.dir/SIZEOF_VOID_P.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-v4x9p0/SIZEOF_VOID_P.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_1d070.dir/SIZEOF_VOID_P.c.o -o cmTC_1d070   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:156 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:283 (__check_type_size_impl)"
+      - "cmake/FeatureDetection.cmake:42 (check_type_size)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Check size of long"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-CZLuOQ"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-CZLuOQ"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SIZEOF_LONG"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-CZLuOQ'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_fe9cc
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_fe9cc.dir/SIZEOF_LONG.c.o -MF CMakeFiles/cmTC_fe9cc.dir/SIZEOF_LONG.c.o.d -o CMakeFiles/cmTC_fe9cc.dir/SIZEOF_LONG.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-CZLuOQ/SIZEOF_LONG.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_fe9cc.dir/SIZEOF_LONG.c.o -o cmTC_fe9cc   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:156 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckTypeSize.cmake:283 (__check_type_size_impl)"
+      - "cmake/FeatureDetection.cmake:43 (check_type_size)"
+      - "cmake/FeatureDetection.cmake:257 (detect_system_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Check size of size_t"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-hnAbCo"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-hnAbCo"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SIZEOF_SIZE_T"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-hnAbCo'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_da17b
+        [1/2] /usr/bin/clang    -MD -MT CMakeFiles/cmTC_da17b.dir/SIZEOF_SIZE_T.c.o -MF CMakeFiles/cmTC_da17b.dir/SIZEOF_SIZE_T.c.o.d -o CMakeFiles/cmTC_da17b.dir/SIZEOF_SIZE_T.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-hnAbCo/SIZEOF_SIZE_T.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_da17b.dir/SIZEOF_SIZE_T.c.o -o cmTC_da17b   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/FeatureDetection.cmake:78 (check_c_source_compiles)"
+      - "cmake/FeatureDetection.cmake:258 (detect_simd_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Performing Test HAVE_SSE2"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-bB1LhX"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-bB1LhX"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_SSE2"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-bB1LhX'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_9902e
+        [1/2] /usr/bin/clang -DHAVE_SSE2   -MD -MT CMakeFiles/cmTC_9902e.dir/src.c.o -MF CMakeFiles/cmTC_9902e.dir/src.c.o.d -o CMakeFiles/cmTC_9902e.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-bB1LhX/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_9902e.dir/src.c.o -o cmTC_9902e   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/FeatureDetection.cmake:86 (check_c_source_compiles)"
+      - "cmake/FeatureDetection.cmake:258 (detect_simd_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Performing Test HAVE_AVX2"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_AVX2"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_12919
+        [1/2] /usr/bin/clang -DHAVE_AVX2   -MD -MT CMakeFiles/cmTC_12919.dir/src.c.o -MF CMakeFiles/cmTC_12919.dir/src.c.o.d -o CMakeFiles/cmTC_12919.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV/src.c
+        FAILED: [code=1] CMakeFiles/cmTC_12919.dir/src.c.o 
+        /usr/bin/clang -DHAVE_AVX2   -MD -MT CMakeFiles/cmTC_12919.dir/src.c.o -MF CMakeFiles/cmTC_12919.dir/src.c.o.d -o CMakeFiles/cmTC_12919.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV/src.c
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV/src.c:4:29: error: always_inline function '_mm256_setzero_si256' requires target feature 'avx', but would be inlined into function 'main' that is compiled without support for 'avx'
+            4 |                 __m256i a = _mm256_setzero_si256();
+              |                             ^
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-EcVgEV/src.c:4:29: error: AVX vector return of type '__m256i' (vector of 4 'long long' values) without 'avx' enabled changes the ABI
+        2 errors generated.
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCSourceCompiles.cmake:58 (cmake_check_source_compiles)"
+      - "cmake/FeatureDetection.cmake:94 (check_c_source_compiles)"
+      - "cmake/FeatureDetection.cmake:258 (detect_simd_features)"
+      - "CMakeLists.txt:27 (include)"
+    checks:
+      - "Performing Test HAVE_AVX512F"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_AVX512F"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_a5dbc
+        [1/2] /usr/bin/clang -DHAVE_AVX512F   -MD -MT CMakeFiles/cmTC_a5dbc.dir/src.c.o -MF CMakeFiles/cmTC_a5dbc.dir/src.c.o.d -o CMakeFiles/cmTC_a5dbc.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M/src.c
+        FAILED: [code=1] CMakeFiles/cmTC_a5dbc.dir/src.c.o 
+        /usr/bin/clang -DHAVE_AVX512F   -MD -MT CMakeFiles/cmTC_a5dbc.dir/src.c.o -MF CMakeFiles/cmTC_a5dbc.dir/src.c.o.d -o CMakeFiles/cmTC_a5dbc.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M/src.c
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M/src.c:4:29: error: always_inline function '_mm512_setzero_si512' requires target feature 'avx512f', but would be inlined into function 'main' that is compiled without support for 'avx512f'
+            4 |                 __m512i a = _mm512_setzero_si512();
+              |                             ^
+        /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-et2T2M/src.c:4:29: error: AVX vector return of type '__m512i' (vector of 8 'long long' values) without 'avx512f' enabled changes the ABI
+        2 errors generated.
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/PhoenixConfig.cmake:143 (check_c_compiler_flag)"
+      - "cmake/PhoenixConfig.cmake:172 (phoenix_configure_features)"
+      - "src/arch/CMakeLists.txt:60 (phoenix_add_library)"
+    checks:
+      - "Performing Test HAVE_DECIMAL_FLOAT"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-ZSQiNJ"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-ZSQiNJ"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "HAVE_DECIMAL_FLOAT"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-ZSQiNJ'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_8b283
+        [1/2] /usr/bin/clang -DHAVE_DECIMAL_FLOAT  -mdecimal-float -MD -MT CMakeFiles/cmTC_8b283.dir/src.c.o -MF CMakeFiles/cmTC_8b283.dir/src.c.o.d -o CMakeFiles/cmTC_8b283.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-ZSQiNJ/src.c
+        FAILED: [code=1] CMakeFiles/cmTC_8b283.dir/src.c.o 
+        /usr/bin/clang -DHAVE_DECIMAL_FLOAT  -mdecimal-float -MD -MT CMakeFiles/cmTC_8b283.dir/src.c.o -MF CMakeFiles/cmTC_8b283.dir/src.c.o.d -o CMakeFiles/cmTC_8b283.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-ZSQiNJ/src.c
+        clang: error: unknown argument: '-mdecimal-float'
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:132 (check_c_compiler_flag)"
+      - "src/arch/CMakeLists.txt:70 (configure_arch_optimizations)"
+    checks:
+      - "Performing Test SUPPORTS_AVX2"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-GyTpxS"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-GyTpxS"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_AVX2"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-GyTpxS'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_ff3ed
+        [1/2] /usr/bin/clang -DSUPPORTS_AVX2  -mavx2 -MD -MT CMakeFiles/cmTC_ff3ed.dir/src.c.o -MF CMakeFiles/cmTC_ff3ed.dir/src.c.o.d -o CMakeFiles/cmTC_ff3ed.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-GyTpxS/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_ff3ed.dir/src.c.o -o cmTC_ff3ed   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckSourceCompiles.cmake:108 (try_compile)"
+      - "/usr/local/share/cmake-3.31/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake:56 (cmake_check_compiler_flag)"
+      - "cmake/CompilerDetection.cmake:133 (check_c_compiler_flag)"
+      - "src/arch/CMakeLists.txt:70 (configure_arch_optimizations)"
+    checks:
+      - "Performing Test SUPPORTS_AVX512"
+    directories:
+      source: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vR0S8S"
+      binary: "/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vR0S8S"
+    cmakeVariables:
+      CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps-18"
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/runner/work/exov6/exov6/cmake"
+    buildResult:
+      variable: "SUPPORTS_AVX512"
+      cached: true
+      stdout: |
+        Change Dir: '/home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vR0S8S'
+        
+        Run Build Command(s): /usr/local/bin/ninja -v cmTC_f6740
+        [1/2] /usr/bin/clang -DSUPPORTS_AVX512  -mavx512f -MD -MT CMakeFiles/cmTC_f6740.dir/src.c.o -MF CMakeFiles/cmTC_f6740.dir/src.c.o.d -o CMakeFiles/cmTC_f6740.dir/src.c.o -c /home/runner/work/exov6/exov6/_build-test/CMakeFiles/CMakeScratch/TryCompile-vR0S8S/src.c
+        [2/2] : && /usr/bin/clang   CMakeFiles/cmTC_f6740.dir/src.c.o -o cmTC_f6740   && :
+        
+      exitCode: 0
+...

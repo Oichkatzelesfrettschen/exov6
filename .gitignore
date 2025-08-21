@@ -22,6 +22,9 @@ node_modules/
 build*/
 builddir/
 _build/
+_build-cmake/
+_build-test/
+test-build/
 
 # Local caches
 .cache/
