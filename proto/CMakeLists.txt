@@ -1,29 +1,9 @@
 # proto/CMakeLists.txt - Protocols and Interface Definitions
 
 # ═════════════════════════════════════════════════════════════════════
-# BISON PARSER GENERATION
+# PURE C PROTOCOL SUPPORT - NO LEGACY PARSERS
 # ═════════════════════════════════════════════════════════════════════
-
-find_package(BISON)
-if(BISON_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/example.y")
-    BISON_TARGET(example_parser
-        example.y
-        ${CMAKE_CURRENT_BINARY_DIR}/example_parser.c
-        DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/example_parser.h
-    )
-    
-    # Create parser library
-    phoenix_add_library(phoenix-example-parser
-        STATIC
-        SOURCES ${BISON_example_parser_OUTPUTS}
-        INCLUDES 
-            ${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-    
-    add_custom_target(example_bison DEPENDS ${BISON_example_parser_OUTPUTS})
-    add_dependencies(phoenix-example-parser example_bison)
-endif()
+# This section intentionally left empty - using pure C implementations only
 
 # ═════════════════════════════════════════════════════════════════════
 # CAP'N PROTO SUPPORT
@@ -111,9 +91,6 @@ phoenix_add_library(phoenix-protocols
 
 # Add dependencies to protocol implementations
 set(PROTOCOL_DEPS)
-if(TARGET phoenix-example-parser)
-    list(APPEND PROTOCOL_DEPS phoenix-example-parser)
-endif()
 if(TARGET phoenix-capnp)
     list(APPEND PROTOCOL_DEPS phoenix-capnp)
 endif()
@@ -136,11 +113,9 @@ if(TARGET phoenix-capnp)
 endif()
 
 message(STATUS "Protocols zone configured:")
-if(BISON_FOUND AND TARGET phoenix-example-parser)
-    message(STATUS "  - Bison parser: ✓")
-endif()
 if(USE_CAPNP AND TARGET phoenix-capnp)
     message(STATUS "  - Cap'n Proto: ✓")
 else()
     message(STATUS "  - Cap'n Proto: Disabled")
 endif()
+message(STATUS "  - Pure C only: ✓ (legacy parsers removed)")
