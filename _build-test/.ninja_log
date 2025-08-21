@@ -15,3 +15,13 @@
 7	562	1755752763760336193	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o	cdef840c00d8e25d
 128	640	1755752763881337616	src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/x86/modern/simd_avx2_cap.c.o	c7a69f61db16ac75
 5	5377	1755752772071434863	src/arch/libphoenix-simd.a	5984266befa3fd2c
+4	1095	1755754457446609369	build.ninja	ae716d072b4afe79
+12	179	1755754457633612188	proto/example_parser.c	f9c914795ec1e0ee
+12	179	1755754457633612188	proto/example_parser.h	f9c914795ec1e0ee
+12	179	1755754457633612188	/home/runner/work/exov6/exov6/_build-test/proto/example_parser.c	f9c914795ec1e0ee
+12	179	1755754457633612188	/home/runner/work/exov6/exov6/_build-test/proto/example_parser.h	f9c914795ec1e0ee
+13	1227	1755754457468609701	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o	b37b171bf1412180
+13	1227	1755754457468609701	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_mmx.c.o	6fc9a726a3b53fdc
+12	1261	1755754457467609685	src/arch/CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o	c1bcd073daf3e128
+14	1350	1755754457469609716	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_sse2.c.o	f6af91d13d1c3805
+14	1412	1755754457469609716	src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o	cdef840c00d8e25d
