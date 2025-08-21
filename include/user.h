@@ -2,6 +2,10 @@
 #include "types.h"
 #include "exo.h"
 
+/* Prevent conflicts with system headers */
+#ifndef PHOENIX_USER_H_DECLS
+#define PHOENIX_USER_H_DECLS
+
 int exec(char *path, char **argv);
 int sigsend(int pid, int sig);
 int sigcheck(void);
@@ -24,3 +28,5 @@ void exo_flush_block(exo_blockcap *cap, void *data);
 /* Basic syscalls */
 void *sbrk(int nbytes);
 int write(int fd, const void *buf, int count);
+
+#endif /* PHOENIX_USER_H_DECLS */

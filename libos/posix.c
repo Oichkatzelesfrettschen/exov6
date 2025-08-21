@@ -1,17 +1,94 @@
-#include "posix.h"
-#include "file.h"
-#include "libfs.h"
-#include "fs.h"
-#include "string.h"
-#include "user.h"
-#include "exo_mem.h"
-#include <signal.h>
-#include <stdlib.h>
-#include <fcntl.h>
+/* Phoenix Exokernel POSIX compatibility layer */
+#include <fcntl.h>        /* O_TRUNC, O_APPEND constants - must come first */
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <unistd.h>
 #include <sys/socket.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>       /* memset, strlen */
+
+/* Ensure O_TRUNC and O_APPEND are defined */
+#ifndef O_TRUNC
+#define O_TRUNC    0x0200
+#endif
+#ifndef O_APPEND 
+#define O_APPEND   0x0008
+#endif
+
+/* Minimal type definitions to avoid header conflicts */
+#ifndef __STDINT_TYPES_DEFINED
+#define __STDINT_TYPES_DEFINED
+#include <stdint.h>  /* Use system stdint.h */
+#endif
+
+#ifndef __SIZE_T_DEFINED
+#define __SIZE_T_DEFINED
+#include <stddef.h>  /* Use system stddef.h */
+#endif
+
+/* File structure definition to avoid header conflicts */
+struct file {
+  enum { FD_NONE, FD_PIPE, FD_INODE } type;
+  size_t ref; // reference count
+  char readable;
+  char writable;
+  struct pipe *pipe;
+  struct inode *ip;
+  size_t off;
+  int flags;
+};
+
+/* Forward declarations to avoid including problem headers */
+struct pipe;
+struct inode;
+struct sleeplock;
+
+typedef struct exo_cap {
+    uint32_t pa;
+    uint32_t id; 
+    uint32_t rights;
+    uint32_t owner;
+    uint64_t auth_tag[4];
+} exo_cap;
+
+/* Function declarations we need */
+int exec(char *path, char **argv);
+int sigsend(int pid, int sig);
+int sigcheck(void);
+void *malloc(size_t size);
+void free(void *ptr);
+void *realloc(void *ptr, size_t size);
+void *calloc(size_t nmemb, size_t size);
+
+/* POSIX function signatures for libOS layer */
+typedef unsigned long libos_sigset_t;
+
+/* Define struct sigaction to avoid conflicts */
+#ifndef SA_NOCLDSTOP
+typedef unsigned long sigset_t;  /* Use same as libos_sigset_t */
+struct sigaction { 
+    void (*sa_handler)(int); 
+    sigset_t sa_mask;
+    int sa_flags;
+};
+#endif
+
+/* Phoenix libOS functions - declare directly to avoid header conflicts */
+struct file *libfs_open(const char *path, int flags);
+int libfs_read(struct file *f, void *buf, size_t n);
+int libfs_write(struct file *f, const void *buf, size_t n);
+void libfs_close(struct file *f);
+int libfs_truncate(struct file *f, size_t length);
+int libfs_unlink(const char *path);
+int libfs_rename(const char *oldpath, const char *newpath);
+int filestat(struct file *f, struct stat *st);
+struct file *filedup(struct file *f);
+void fileclose(struct file *f);
+
+/* Exokernel capability functions */
+exo_cap exo_alloc_page(void);
+int exo_unbind_page(exo_cap cap);
 
 #define LIBOS_INITFD 16
 
