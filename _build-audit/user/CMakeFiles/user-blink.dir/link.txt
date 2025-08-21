@@ -1,0 +1,1 @@
+/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/user-blink.dir/link.d "CMakeFiles/user-blink.dir/blink.c.o" -o blink  libphoenix-ulib.a libphoenix-umalloc.a libphoenix-printf.a libphoenix-caplib.a libphoenix-ulib.a

@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-chan.a "CMakeFiles/phoenix-chan.dir/chan.c.o"
+/usr/bin/ranlib libphoenix-chan.a

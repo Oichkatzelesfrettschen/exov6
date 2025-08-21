@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-math-core.a "CMakeFiles/phoenix-math-core.dir/math_core.c.o"
+/usr/bin/ranlib libphoenix-math-core.a

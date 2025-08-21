@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-umalloc.a "CMakeFiles/phoenix-umalloc.dir/umalloc.c.o"
+/usr/bin/ranlib libphoenix-umalloc.a

@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-registration.a "CMakeFiles/phoenix-libos-registration.dir/registration.c.o"
+/usr/bin/ranlib libphoenix-libos-registration.a

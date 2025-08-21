@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-kernel-ipc-queue.a "CMakeFiles/phoenix-kernel-ipc-queue.dir/exo_ipc_queue.c.o"
+/usr/bin/ranlib libphoenix-kernel-ipc-queue.a

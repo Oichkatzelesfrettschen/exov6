@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-kernel-lattice-ipc.a "CMakeFiles/phoenix-kernel-lattice-ipc.dir/lattice_ipc.c.o"
+/usr/bin/ranlib libphoenix-kernel-lattice-ipc.a

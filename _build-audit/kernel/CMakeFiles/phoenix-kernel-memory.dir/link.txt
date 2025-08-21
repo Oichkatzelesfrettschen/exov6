@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-kernel-memory.a "CMakeFiles/phoenix-kernel-memory.dir/cap_mem.c.o"
+/usr/bin/ranlib libphoenix-kernel-memory.a

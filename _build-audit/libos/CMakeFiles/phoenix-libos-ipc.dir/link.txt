@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-ipc.a "CMakeFiles/phoenix-libos-ipc.dir/ipc.c.o"
+/usr/bin/ranlib libphoenix-libos-ipc.a

@@ -1,0 +1,1 @@
+/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/user-forktest.dir/link.d "CMakeFiles/user-forktest.dir/forktest.c.o" -o forktest  libphoenix-ulib.a libphoenix-umalloc.a libphoenix-printf.a libphoenix-caplib.a libphoenix-ulib.a

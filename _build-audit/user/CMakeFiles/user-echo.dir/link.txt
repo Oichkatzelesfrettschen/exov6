@@ -1,0 +1,1 @@
+/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/user-echo.dir/link.d "CMakeFiles/user-echo.dir/echo.c.o" -o echo  libphoenix-ulib.a libphoenix-umalloc.a libphoenix-printf.a libphoenix-caplib.a libphoenix-ulib.a

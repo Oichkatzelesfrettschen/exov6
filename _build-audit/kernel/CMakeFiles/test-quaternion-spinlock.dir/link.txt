@@ -1,0 +1,1 @@
+/usr/bin/clang -Xlinker --dependency-file=CMakeFiles/test-quaternion-spinlock.dir/link.d "CMakeFiles/test-quaternion-spinlock.dir/test_quaternion_spinlock.c.o" -o test-quaternion-spinlock  ../src/arch/libphoenix-arch-x86-legacy.a ../src/arch/libphoenix-arch-x86-modern.a ../src/arch/libphoenix-simd.a
