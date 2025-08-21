@@ -1,6 +1,10 @@
 #include "chan.h"
 #include "user.h"
 #include "caplib.h"
+#include <stdlib.h>
+
+/* Forward declaration of custom printf function */
+void user_printf(int fd, const char *fmt, ...);
 
 /**
  * @brief Allocate a new channel.
@@ -32,7 +36,7 @@ void chan_destroy(chan_t *c) { free(c); }
 EXO_NODISCARD int chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg,
                                      size_t len) {
   if (len > c->msg_size) {
-    printf(2, "chan_endpoint_send: size %d > %d\n", (int)len, (int)c->msg_size);
+    user_printf(2, "chan_endpoint_send: size %d > %d\n", (int)len, (int)c->msg_size);
     return -1;
   }
   return cap_send(dest, msg, len);
@@ -50,7 +54,7 @@ EXO_NODISCARD int chan_endpoint_send(chan_t *c, exo_cap dest, const void *msg,
 EXO_NODISCARD int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg,
                                      size_t len) {
   if (len > c->msg_size) {
-    printf(2, "chan_endpoint_recv: size %d > %d\n", (int)len, (int)c->msg_size);
+    user_printf(2, "chan_endpoint_recv: size %d > %d\n", (int)len, (int)c->msg_size);
     return -1;
   }
   return cap_recv(src, msg, len);

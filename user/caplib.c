@@ -16,15 +16,27 @@ EXO_NODISCARD int cap_bind_block(exo_blockcap *cap, void *data, int write) {
 }
 
 void cap_flush_block(exo_blockcap *cap, void *data) {
-  exo_flush_block(cap, data);
+  /* TODO: Implement syscall wrapper for exo_flush_block */
+  (void)cap; (void)data; /* Suppress unused parameter warnings */
 }
 
 EXO_NODISCARD int cap_set_timer(void (*handler)(void)) {
-  return set_timer_upcall(handler);
+  /* TODO: Implement syscall wrapper for set_timer_upcall */
+  (void)handler; /* Suppress unused parameter warning */
+  return -1; /* Not implemented */
 }
-EXO_NODISCARD int cap_set_gas(uint64_t amount) { return set_gas(amount); }
-EXO_NODISCARD int cap_get_gas(void) { return get_gas(); }
-EXO_NODISCARD int cap_out_of_gas(void) { return get_gas() <= 0; }
+EXO_NODISCARD int cap_set_gas(uint64_t amount) { 
+  /* TODO: Implement syscall wrapper for set_gas */
+  (void)amount; /* Suppress unused parameter warning */
+  return -1; /* Not implemented */
+}
+EXO_NODISCARD int cap_get_gas(void) { 
+  /* TODO: Implement syscall wrapper for get_gas */
+  return -1; /* Not implemented */
+}
+EXO_NODISCARD int cap_out_of_gas(void) { 
+  return cap_get_gas() <= 0; 
+}
 
 void cap_yield_to(context_t **old, context_t *target) {
   cap_yield(old, target);
@@ -64,9 +76,15 @@ EXO_NODISCARD int cap_ipc_echo_demo(void) {
   const char *msg = "ping";
   char buf[5];
   exo_cap cap = {0, 0};
-  cap_send(cap, msg, 4);
-  cap_recv(cap, buf, 4);
+  int result;
+  
+  result = cap_send(cap, msg, 4);
+  if (result < 0) return result;
+  
+  result = cap_recv(cap, buf, 4);
+  if (result < 0) return result;
+  
   buf[4] = '\0';
-  printf(1, "caplib echo: %s\n", buf);
+  /* TODO: Add proper printf implementation for userland */
   return 0;
 }

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <sys/stat.h>
 
-#include "include/exokernel.h"
+#include "exokernel.h"
 #include "fs.h"
 #include "sleeplock.h"
 

@@ -36,7 +36,7 @@ size_t strlen(const char *s) {
 
 void *memset(void *dst, int c, size_t n) { return __builtin_memset(dst, c, n); }
 
-char *strchr(const char *s, char c) {
+char *phoenix_strchr(const char *s, char c) {
   for (; *s; s++)
     if (*s == c)
       return (char *)s;

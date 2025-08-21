@@ -1,6 +1,7 @@
 #include "types.h"
 #include "stat.h"
 #include "user.h"
+#include <unistd.h>
 
 static void
 putc(int fd, char c)
@@ -37,7 +38,7 @@ printint(int fd, int xx, int base, int sgn)
 
 // Print to the given fd. Only understands %d, %x, %p, %s.
 void
-printf(int fd, const char *fmt, ...)
+user_printf(int fd, const char *fmt, ...)
 {
   char *s;
   int c, i, state;
