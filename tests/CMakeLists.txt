@@ -30,13 +30,13 @@ endif()
 
 # Test host stubs
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libos_host_stubs.c")
-    exov6_add_library(exov6-test-host-stubs
+    phoenix_add_library(phoenix-test-host-stubs
         STATIC
         SOURCES libos_host_stubs.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-libos
+        DEPENDENCIES phoenix-libos
     )
 endif()
 
@@ -180,18 +180,18 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/microbench")
         foreach(bench_source ${MICROBENCH_SOURCES})
             get_filename_component(bench_name ${bench_source} NAME_WE)
             
-            exov6_add_executable(microbench-${bench_name}
+            phoenix_add_executable(microbench-${bench_name}
                 SOURCES ${bench_source}
                 INCLUDES 
                     ${CMAKE_CURRENT_SOURCE_DIR}/microbench
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/include
                 DEPENDENCIES 
-                    exov6-libos
-                    exov6-architecture
+                    phoenix-libos
+                    phoenix-architecture
             )
             
-            set_target_properties(exov6-microbench-${bench_name} PROPERTIES 
+            set_target_properties(microbench-${bench_name} PROPERTIES 
                 OUTPUT_NAME "microbench-${bench_name}"
                 PREFIX ""
             )
@@ -199,7 +199,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/microbench")
             # Add as test
             add_test(
                 NAME microbench-${bench_name}
-                COMMAND exov6-microbench-${bench_name}
+                COMMAND phoenix-microbench-${bench_name}
             )
             
             set_tests_properties(microbench-${bench_name} PROPERTIES
@@ -215,7 +215,7 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Test with kernel if available
-if(TARGET exov6-kernel)
+if(TARGET phoenix-kernel)
     # Kernel integration test
     add_test(
         NAME kernel-boot-test
@@ -231,7 +231,7 @@ if(TARGET exov6-kernel)
     if(QEMU_EXECUTABLE)
         add_test(
             NAME qemu-kernel-test
-            COMMAND timeout 30 ${QEMU_EXECUTABLE} -nographic -kernel $<TARGET_FILE:exov6-kernel> -serial stdio
+            COMMAND timeout 30 ${QEMU_EXECUTABLE} -nographic -kernel $<TARGET_FILE:phoenix-kernel> -serial stdio
         )
         
         set_tests_properties(qemu-kernel-test PROPERTIES
@@ -242,7 +242,7 @@ if(TARGET exov6-kernel)
 endif()
 
 # LibOS integration tests
-if(TARGET exov6-libos)
+if(TARGET phoenix-libos)
     add_test(
         NAME libos-integration-test
         COMMAND ${CMAKE_COMMAND} -E echo "LibOS integration test placeholder"
@@ -259,10 +259,10 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Create stress test targets if stress test programs exist
-if(EXISTS "${CMAKE_SOURCE_DIR}/user/stressfs.c" AND TARGET exov6-user-stressfs)
+if(EXISTS "${CMAKE_SOURCE_DIR}/user/stressfs.c" AND TARGET phoenix-user-stressfs)
     add_test(
         NAME stress-filesystem
-        COMMAND exov6-user-stressfs
+        COMMAND phoenix-user-stressfs
     )
     
     set_tests_properties(stress-filesystem PROPERTIES
@@ -281,10 +281,10 @@ if(VALGRIND_EXECUTABLE)
     # Add valgrind test for each microbenchmark
     file(GLOB MICROBENCH_TARGETS microbench-*)
     foreach(bench_target ${MICROBENCH_TARGETS})
-        if(TARGET exov6-${bench_target})
+        if(TARGET phoenix-${bench_target})
             add_test(
                 NAME valgrind-${bench_target}
-                COMMAND ${VALGRIND_EXECUTABLE} --error-exitcode=1 --leak-check=full $<TARGET_FILE:exov6-${bench_target}>
+                COMMAND ${VALGRIND_EXECUTABLE} --error-exitcode=1 --leak-check=full $<TARGET_FILE:phoenix-${bench_target}>
             )
             
             set_tests_properties(valgrind-${bench_target} PROPERTIES
@@ -400,14 +400,14 @@ endif()
 
 # Collect all test targets
 set(TEST_TARGETS)
-if(TARGET exov6-test-host-stubs)
-    list(APPEND TEST_TARGETS exov6-test-host-stubs)
+if(TARGET phoenix-test-host-stubs)
+    list(APPEND TEST_TARGETS phoenix-test-host-stubs)
 endif()
 
 # Add microbenchmark targets
 get_directory_property(ALL_TARGETS BUILDSYSTEM_TARGETS)
 foreach(target ${ALL_TARGETS})
-    if(target MATCHES "^exov6-microbench-")
+    if(target MATCHES "^phoenix-microbench-")
         list(APPEND TEST_TARGETS ${target})
     endif()
 endforeach()

@@ -5,73 +5,73 @@
 # ═════════════════════════════════════════════════════════════════════
 
 # User library (ulib) - Core user space functionality
-exov6_add_library(exov6-ulib
+phoenix_add_library(phoenix-ulib
     STATIC
     SOURCES ulib.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-protocols
+    DEPENDENCIES phoenix-protocols
 )
 
 # User memory allocator (umalloc)
-exov6_add_library(exov6-umalloc
+phoenix_add_library(phoenix-umalloc
     STATIC
     SOURCES umalloc.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-ulib
+    DEPENDENCIES phoenix-ulib
 )
 
 # Printf implementation
-exov6_add_library(exov6-printf
+phoenix_add_library(phoenix-printf
     STATIC
     SOURCES printf.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-ulib
+    DEPENDENCIES phoenix-ulib
 )
 
 # Capability library (caplib)
-exov6_add_library(exov6-caplib
+phoenix_add_library(phoenix-caplib
     STATIC
     SOURCES caplib.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-ulib exov6-protocols
+    DEPENDENCIES phoenix-ulib phoenix-protocols
 )
 
 # Channel library (chan)
-exov6_add_library(exov6-chan
+phoenix_add_library(phoenix-chan
     STATIC
     SOURCES chan.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-caplib exov6-protocols
+    DEPENDENCIES phoenix-caplib phoenix-protocols
 )
 
 # Door library (door)
-exov6_add_library(exov6-door
+phoenix_add_library(phoenix-door
     STATIC
     SOURCES door.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-caplib exov6-protocols
+    DEPENDENCIES phoenix-caplib phoenix-protocols
 )
 
 # Math core library
-exov6_add_library(exov6-math-core
+phoenix_add_library(phoenix-math-core
     STATIC
     SOURCES math_core.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-architecture
+    DEPENDENCIES phoenix-architecture
 )
 
 # ═════════════════════════════════════════════════════════════════════
@@ -81,14 +81,14 @@ exov6_add_library(exov6-math-core
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libos")
     # User-level scheduler
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libos/sched.c")
-        exov6_add_library(exov6-user-sched
+        phoenix_add_library(phoenix-user-sched
             STATIC
             SOURCES libos/sched.c
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}/libos
                 ${CMAKE_CURRENT_SOURCE_DIR}
                 ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES exov6-caplib exov6-chan
+            DEPENDENCIES phoenix-caplib phoenix-chan
         )
     endif()
     
@@ -99,14 +99,14 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libos")
         list(REMOVE_ITEM USER_LIBOS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/libos/sched.c")
         
         if(USER_LIBOS_SOURCES)
-            exov6_add_library(exov6-user-libos-extra
+            phoenix_add_library(phoenix-user-libos-extra
                 STATIC
                 SOURCES ${USER_LIBOS_SOURCES}
                 INCLUDES 
                     ${CMAKE_CURRENT_SOURCE_DIR}/libos
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/include
-                DEPENDENCIES exov6-caplib exov6-chan
+                DEPENDENCIES phoenix-caplib phoenix-chan
             )
         endif()
     endif()
@@ -136,19 +136,19 @@ set(USER_APPS
 # Build each user application
 foreach(app ${USER_APPS})
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${app}.c")
-        exov6_add_executable(user-${app}
+        phoenix_add_executable(user-${app}
             SOURCES ${app}.c
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}
                 ${CMAKE_SOURCE_DIR}/include
             DEPENDENCIES 
-                exov6-ulib 
-                exov6-umalloc 
-                exov6-printf 
-                exov6-caplib
+                phoenix-ulib 
+                phoenix-umalloc 
+                phoenix-printf 
+                phoenix-caplib
         )
         
-        # Set output name without prefix (the framework adds exov6- prefix)
+        # Set output name without prefix (the framework adds phoenix- prefix)
         set_target_properties(user-${app} PROPERTIES 
             OUTPUT_NAME ${app}
             PREFIX ""
@@ -160,18 +160,18 @@ endforeach()
 
 # Special applications with additional dependencies
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fileserver.c")
-    exov6_add_executable(user-fileserver
+    phoenix_add_executable(user-fileserver
         SOURCES fileserver.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
         DEPENDENCIES 
-            exov6-ulib 
-            exov6-umalloc 
-            exov6-printf 
-            exov6-caplib
-            exov6-chan
-            exov6-door
+            phoenix-ulib 
+            phoenix-umalloc 
+            phoenix-printf 
+            phoenix-caplib
+            phoenix-chan
+            phoenix-door
     )
     set_target_properties(user-fileserver PROPERTIES 
         OUTPUT_NAME fileserver
@@ -190,16 +190,16 @@ set(TEST_APPS
 
 foreach(test_app ${TEST_APPS})
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${test_app}.c")
-        exov6_add_executable(user-${test_app}
+        phoenix_add_executable(user-${test_app}
             SOURCES ${test_app}.c
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}
                 ${CMAKE_SOURCE_DIR}/include
             DEPENDENCIES 
-                exov6-ulib 
-                exov6-umalloc 
-                exov6-printf 
-                exov6-caplib
+                phoenix-ulib 
+                phoenix-umalloc 
+                phoenix-printf 
+                phoenix-caplib
         )
         
         set_target_properties(user-${test_app} PROPERTIES 
@@ -217,24 +217,24 @@ endforeach()
 
 # Create meta-library that includes all core userland components
 set(USERLAND_LIBS
-    exov6-ulib
-    exov6-umalloc
-    exov6-printf
-    exov6-caplib
-    exov6-chan
-    exov6-door
-    exov6-math-core
+    phoenix-ulib
+    phoenix-umalloc
+    phoenix-printf
+    phoenix-caplib
+    phoenix-chan
+    phoenix-door
+    phoenix-math-core
 )
 
 # Add user-level libos components if they exist
-if(TARGET exov6-user-sched)
-    list(APPEND USERLAND_LIBS exov6-user-sched)
+if(TARGET phoenix-user-sched)
+    list(APPEND USERLAND_LIBS phoenix-user-sched)
 endif()
-if(TARGET exov6-user-libos-extra)
-    list(APPEND USERLAND_LIBS exov6-user-libos-extra)
+if(TARGET phoenix-user-libos-extra)
+    list(APPEND USERLAND_LIBS phoenix-user-libos-extra)
 endif()
 
-exov6_add_library(exov6-userland
+phoenix_add_library(phoenix-userland
     INTERFACE
     DEPENDENCIES ${USERLAND_LIBS}
     INCLUDES 
@@ -247,7 +247,7 @@ exov6_add_library(exov6-userland
 # ═════════════════════════════════════════════════════════════════════
 
 set(EXOV6_USERLAND_TARGETS
-    exov6-userland
+    phoenix-userland
     ${USERLAND_LIBS}
     PARENT_SCOPE
 )
@@ -255,7 +255,7 @@ set(EXOV6_USERLAND_TARGETS
 message(STATUS "Userland zone configured:")
 message(STATUS "  - Core libraries: ✓")
 message(STATUS "  - User applications: ✓")
-if(TARGET exov6-user-sched)
+if(TARGET phoenix-user-sched)
     message(STATUS "  - User-level scheduler: ✓")
 endif()
 message(STATUS "  - Test applications: ✓")

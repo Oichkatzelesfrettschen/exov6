@@ -57,7 +57,7 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc|ppc")
 endif()
 
 # Create SIMD dispatch library
-exov6_add_library(exov6-simd
+phoenix_add_library(phoenix-simd
     STATIC
     SOURCES ${SIMD_SOURCES}
     INCLUDES 
@@ -67,7 +67,7 @@ exov6_add_library(exov6-simd
 )
 
 # Apply architecture-specific optimizations
-configure_arch_optimizations(exov6-simd)
+configure_arch_optimizations(phoenix-simd)
 
 # ═════════════════════════════════════════════════════════════════════
 # ARCHITECTURE-SPECIFIC LIBRARIES
@@ -77,13 +77,13 @@ configure_arch_optimizations(exov6-simd)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/x86/legacy")
     file(GLOB X86_LEGACY_SOURCES x86/legacy/*.c)
     if(X86_LEGACY_SOURCES)
-        exov6_add_library(exov6-arch-x86-legacy
+        phoenix_add_library(phoenix-arch-x86-legacy
             STATIC
             SOURCES ${X86_LEGACY_SOURCES}
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}/x86/legacy
                 ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES exov6-simd
+            DEPENDENCIES phoenix-simd
         )
     endif()
 endif()
@@ -92,13 +92,13 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/x86/modern")
     file(GLOB X86_MODERN_SOURCES x86/modern/*.c)
     if(X86_MODERN_SOURCES)
-        exov6_add_library(exov6-arch-x86-modern
+        phoenix_add_library(phoenix-arch-x86-modern
             STATIC
             SOURCES ${X86_MODERN_SOURCES}
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}/x86/modern
                 ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES exov6-simd
+            DEPENDENCIES phoenix-simd
         )
     endif()
 endif()
@@ -107,13 +107,13 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
     file(GLOB ARM_SOURCES arm/*.c)
     if(ARM_SOURCES)
-        exov6_add_library(exov6-arch-arm
+        phoenix_add_library(phoenix-arch-arm
             STATIC
             SOURCES ${ARM_SOURCES}
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}/arm
                 ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES exov6-simd
+            DEPENDENCIES phoenix-simd
         )
     endif()
 endif()
@@ -122,13 +122,13 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/aarch64")
     file(GLOB AARCH64_SOURCES aarch64/*.c)
     if(AARCH64_SOURCES)
-        exov6_add_library(exov6-arch-aarch64
+        phoenix_add_library(phoenix-arch-aarch64
             STATIC
             SOURCES ${AARCH64_SOURCES}
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}/aarch64
                 ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES exov6-simd
+            DEPENDENCIES phoenix-simd
         )
     endif()
 endif()
@@ -137,13 +137,13 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ppc")
     file(GLOB PPC_SOURCES ppc/*.c)
     if(PPC_SOURCES)
-        exov6_add_library(exov6-arch-ppc
+        phoenix_add_library(phoenix-arch-ppc
             STATIC
             SOURCES ${PPC_SOURCES}
             INCLUDES 
                 ${CMAKE_CURRENT_SOURCE_DIR}/ppc
                 ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES exov6-simd
+            DEPENDENCIES phoenix-simd
         )
     endif()
 endif()
@@ -152,7 +152,7 @@ endif()
 if(MCU AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/mcu")
     file(GLOB MCU_SOURCES mcu/*.c)
     if(MCU_SOURCES)
-        exov6_add_library(exov6-arch-mcu
+        phoenix_add_library(phoenix-arch-mcu
             STATIC
             SOURCES ${MCU_SOURCES}
             INCLUDES 
@@ -161,8 +161,8 @@ if(MCU AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/mcu")
         )
         
         # MCU-specific optimizations
-        target_compile_definitions(exov6-arch-mcu PRIVATE MCU=1)
-        target_compile_options(exov6-arch-mcu PRIVATE -Os)  # Optimize for size
+        target_compile_definitions(phoenix-arch-mcu PRIVATE MCU=1)
+        target_compile_options(phoenix-arch-mcu PRIVATE -Os)  # Optimize for size
     endif()
 endif()
 
@@ -170,7 +170,7 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/generic")
     file(GLOB GENERIC_SOURCES generic/*.c)
     if(GENERIC_SOURCES)
-        exov6_add_library(exov6-arch-generic
+        phoenix_add_library(phoenix-arch-generic
             STATIC
             SOURCES ${GENERIC_SOURCES}
             INCLUDES 
@@ -185,40 +185,40 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Create a meta-library that includes all relevant architecture components
-set(ARCH_DEPENDENCIES exov6-simd)
+set(ARCH_DEPENDENCIES phoenix-simd)
 
 # Add platform-specific libraries
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|i.86")
-    if(TARGET exov6-arch-x86-legacy)
-        list(APPEND ARCH_DEPENDENCIES exov6-arch-x86-legacy)
+    if(TARGET phoenix-arch-x86-legacy)
+        list(APPEND ARCH_DEPENDENCIES phoenix-arch-x86-legacy)
     endif()
-    if(TARGET exov6-arch-x86-modern)
-        list(APPEND ARCH_DEPENDENCIES exov6-arch-x86-modern)
+    if(TARGET phoenix-arch-x86-modern)
+        list(APPEND ARCH_DEPENDENCIES phoenix-arch-x86-modern)
     endif()
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-    if(TARGET exov6-arch-aarch64)
-        list(APPEND ARCH_DEPENDENCIES exov6-arch-aarch64)
+    if(TARGET phoenix-arch-aarch64)
+        list(APPEND ARCH_DEPENDENCIES phoenix-arch-aarch64)
     endif()
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-    if(TARGET exov6-arch-arm)
-        list(APPEND ARCH_DEPENDENCIES exov6-arch-arm)
+    if(TARGET phoenix-arch-arm)
+        list(APPEND ARCH_DEPENDENCIES phoenix-arch-arm)
     endif()
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc|ppc")
-    if(TARGET exov6-arch-ppc)
-        list(APPEND ARCH_DEPENDENCIES exov6-arch-ppc)
+    if(TARGET phoenix-arch-ppc)
+        list(APPEND ARCH_DEPENDENCIES phoenix-arch-ppc)
     endif()
 endif()
 
-if(TARGET exov6-arch-generic)
-    list(APPEND ARCH_DEPENDENCIES exov6-arch-generic)
+if(TARGET phoenix-arch-generic)
+    list(APPEND ARCH_DEPENDENCIES phoenix-arch-generic)
 endif()
 
-if(MCU AND TARGET exov6-arch-mcu)
-    list(APPEND ARCH_DEPENDENCIES exov6-arch-mcu)
+if(MCU AND TARGET phoenix-arch-mcu)
+    list(APPEND ARCH_DEPENDENCIES phoenix-arch-mcu)
 endif()
 
 # Create interface library that pulls in all architecture components
-exov6_add_library(exov6-architecture
+phoenix_add_library(phoenix-architecture
     INTERFACE
     DEPENDENCIES ${ARCH_DEPENDENCIES}
     INCLUDES 
@@ -232,29 +232,29 @@ exov6_add_library(exov6-architecture
 
 # Export targets for use by other zones
 set(EXOV6_ARCH_TARGETS
-    exov6-simd
-    exov6-architecture
+    phoenix-simd
+    phoenix-architecture
     PARENT_SCOPE
 )
 
 message(STATUS "Architecture zone configured:")
 message(STATUS "  - SIMD dispatch: ✓")
 message(STATUS "  - Platform: ${CMAKE_SYSTEM_PROCESSOR}")
-if(TARGET exov6-arch-x86-legacy)
+if(TARGET phoenix-arch-x86-legacy)
     message(STATUS "  - x86 legacy: ✓")
 endif()
-if(TARGET exov6-arch-x86-modern)
+if(TARGET phoenix-arch-x86-modern)
     message(STATUS "  - x86 modern: ✓")
 endif()
-if(TARGET exov6-arch-arm)
+if(TARGET phoenix-arch-arm)
     message(STATUS "  - ARM: ✓")
 endif()
-if(TARGET exov6-arch-aarch64)
+if(TARGET phoenix-arch-aarch64)
     message(STATUS "  - AArch64: ✓")
 endif()
-if(TARGET exov6-arch-ppc)
+if(TARGET phoenix-arch-ppc)
     message(STATUS "  - PowerPC: ✓")
 endif()
-if(MCU AND TARGET exov6-arch-mcu)
+if(MCU AND TARGET phoenix-arch-mcu)
     message(STATUS "  - MCU: ✓")
 endif()

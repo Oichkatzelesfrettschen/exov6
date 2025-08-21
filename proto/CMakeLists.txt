@@ -13,7 +13,7 @@ if(BISON_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/example.y")
     )
     
     # Create parser library
-    exov6_add_library(exov6-example-parser
+    phoenix_add_library(phoenix-example-parser
         STATIC
         SOURCES ${BISON_example_parser_OUTPUTS}
         INCLUDES 
@@ -22,7 +22,7 @@ if(BISON_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/example.y")
     )
     
     add_custom_target(example_bison DEPENDS ${BISON_example_parser_OUTPUTS})
-    add_dependencies(exov6-example-parser example_bison)
+    add_dependencies(phoenix-example-parser example_bison)
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -77,7 +77,7 @@ if(USE_CAPNP)
     
     if(CAPNP_SOURCES)
         # Create Cap'n Proto library
-        exov6_add_library(exov6-capnp
+        phoenix_add_library(phoenix-capnp
             STATIC
             SOURCES ${CAPNP_SOURCES}
             INCLUDES 
@@ -89,10 +89,10 @@ if(USE_CAPNP)
         
         # Create custom target for generated files
         add_custom_target(capnp_generated DEPENDS ${CAPNP_HEADERS})
-        add_dependencies(exov6-capnp capnp_generated)
+        add_dependencies(phoenix-capnp capnp_generated)
         
         # Legacy alias
-        add_library(capnp ALIAS exov6-capnp)
+        add_library(capnp ALIAS phoenix-capnp)
     endif()
 endif()
 
@@ -101,7 +101,7 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Create interface library for protocol headers
-exov6_add_library(exov6-protocols
+phoenix_add_library(phoenix-protocols
     INTERFACE
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -111,15 +111,15 @@ exov6_add_library(exov6-protocols
 
 # Add dependencies to protocol implementations
 set(PROTOCOL_DEPS)
-if(TARGET exov6-example-parser)
-    list(APPEND PROTOCOL_DEPS exov6-example-parser)
+if(TARGET phoenix-example-parser)
+    list(APPEND PROTOCOL_DEPS phoenix-example-parser)
 endif()
-if(TARGET exov6-capnp)
-    list(APPEND PROTOCOL_DEPS exov6-capnp)
+if(TARGET phoenix-capnp)
+    list(APPEND PROTOCOL_DEPS phoenix-capnp)
 endif()
 
 if(PROTOCOL_DEPS)
-    target_link_libraries(exov6-protocols INTERFACE ${PROTOCOL_DEPS})
+    target_link_libraries(phoenix-protocols INTERFACE ${PROTOCOL_DEPS})
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -127,19 +127,19 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 set(EXOV6_PROTOCOL_TARGETS
-    exov6-protocols
+    phoenix-protocols
     PARENT_SCOPE
 )
 
-if(TARGET exov6-capnp)
-    set(EXOV6_CAPNP_TARGET exov6-capnp PARENT_SCOPE)
+if(TARGET phoenix-capnp)
+    set(EXOV6_CAPNP_TARGET phoenix-capnp PARENT_SCOPE)
 endif()
 
 message(STATUS "Protocols zone configured:")
-if(BISON_FOUND AND TARGET exov6-example-parser)
+if(BISON_FOUND AND TARGET phoenix-example-parser)
     message(STATUS "  - Bison parser: ✓")
 endif()
-if(USE_CAPNP AND TARGET exov6-capnp)
+if(USE_CAPNP AND TARGET phoenix-capnp)
     message(STATUS "  - Cap'n Proto: ✓")
 else()
     message(STATUS "  - Cap'n Proto: Disabled")

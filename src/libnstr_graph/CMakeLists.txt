@@ -1,7 +1,7 @@
 # src/libnstr_graph/CMakeLists.txt - NStr Graph Library
 
 # Create NStr Graph library using ExoV6 framework
-exov6_add_library(exov6-nstr-graph
+phoenix_add_library(phoenix-nstr-graph
     STATIC
     SOURCES nstr_graph.c
     INCLUDES 
@@ -10,7 +10,7 @@ exov6_add_library(exov6-nstr-graph
 )
 
 # Create shared library variant
-exov6_add_library(exov6-nstr-graph-shared
+phoenix_add_library(phoenix-nstr-graph-shared
     SHARED
     SOURCES nstr_graph.c
     INCLUDES 
@@ -19,11 +19,11 @@ exov6_add_library(exov6-nstr-graph-shared
 )
 
 # Set output name for shared library
-set_target_properties(exov6-nstr-graph-shared PROPERTIES 
-    OUTPUT_NAME "exov6-nstr-graph"
+set_target_properties(phoenix-nstr-graph-shared PROPERTIES 
+    OUTPUT_NAME "phoenix-nstr-graph"
     PREFIX "lib"
 )
 
 # Legacy aliases for backward compatibility
-add_library(nstr_graph ALIAS exov6-nstr-graph)
-add_library(nstr_graph_shared ALIAS exov6-nstr-graph-shared)
+add_library(nstr_graph ALIAS phoenix-nstr-graph)
+add_library(nstr_graph_shared ALIAS phoenix-nstr-graph-shared)

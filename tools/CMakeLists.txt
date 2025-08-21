@@ -6,7 +6,7 @@
 
 # Phoenix metrics tool
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/phoenix_metrics.c")
-    exov6_add_executable(phoenix-metrics
+    phoenix_add_executable(phoenix-metrics
         SOURCES phoenix_metrics.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
@@ -14,18 +14,18 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/phoenix_metrics.c")
         DEFINITIONS PHOENIX_METRICS_MAIN
     )
     
-    set_target_properties(exov6-phoenix-metrics PROPERTIES 
+    set_target_properties(phoenix-metrics PROPERTIES 
         OUTPUT_NAME "phoenix-metrics"
         PREFIX ""
     )
     
     # Create phoenix_prof alias for backward compatibility
-    add_executable(phoenix_prof ALIAS exov6-phoenix-metrics)
+    add_executable(phoenix_prof ALIAS phoenix-metrics)
 endif()
 
 # Compiler utilities
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/compiler_utils.c")
-    exov6_add_library(exov6-compiler-utils
+    phoenix_add_library(phoenix-compiler-utils
         STATIC
         SOURCES compiler_utils.c
         INCLUDES 
@@ -34,7 +34,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/compiler_utils.c")
     )
     
     # Create compiler utilities executable
-    exov6_add_executable(compiler-utils
+    phoenix_add_executable(compiler-utils
         SOURCES compiler_utils.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
@@ -42,7 +42,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/compiler_utils.c")
         DEFINITIONS COMPILER_UTILS_MAIN
     )
     
-    set_target_properties(exov6-compiler-utils PROPERTIES 
+    set_target_properties(compiler-utils PROPERTIES 
         OUTPUT_NAME "compiler-utils"
         PREFIX ""
     )
@@ -124,14 +124,14 @@ endif()
 
 # Network Compiler Compiler (if needed)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncc.c")
-    exov6_add_executable(ncc
+    phoenix_add_executable(ncc
         SOURCES ncc.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
     )
     
-    set_target_properties(exov6-ncc PROPERTIES 
+    set_target_properties(ncc PROPERTIES 
         OUTPUT_NAME "ncc"
         PREFIX ""
     )
@@ -189,10 +189,10 @@ if(Python3_FOUND AND EXISTS "${CMAKE_BINARY_DIR}/bin/file-organizer")
 endif()
 
 # Code metrics target
-if(TARGET exov6-phoenix-metrics)
+if(TARGET phoenix-metrics)
     add_custom_target(code-metrics
-        COMMAND exov6-phoenix-metrics "${CMAKE_SOURCE_DIR}"
-        DEPENDS exov6-phoenix-metrics
+        COMMAND phoenix-metrics "${CMAKE_SOURCE_DIR}"
+        DEPENDS phoenix-metrics
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
         COMMENT "Generating code metrics"
     )
@@ -212,22 +212,22 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Install C++ tools
-if(TARGET exov6-phoenix-metrics)
-    install(TARGETS exov6-phoenix-metrics
+if(TARGET phoenix-metrics)
+    install(TARGETS phoenix-metrics
         RUNTIME DESTINATION bin
         COMPONENT tools
     )
 endif()
 
-if(TARGET exov6-compiler-utils)
-    install(TARGETS exov6-compiler-utils
+if(TARGET phoenix-compiler-utils)
+    install(TARGETS phoenix-compiler-utils
         RUNTIME DESTINATION bin
         COMPONENT tools
     )
 endif()
 
-if(TARGET exov6-ncc)
-    install(TARGETS exov6-ncc
+if(TARGET phoenix-ncc)
+    install(TARGETS phoenix-ncc
         RUNTIME DESTINATION bin
         COMPONENT tools
     )
@@ -272,14 +272,14 @@ set(EXOV6_TOOL_TARGETS
 
 # Collect tool targets
 set(TOOL_TARGETS)
-if(TARGET exov6-phoenix-metrics)
-    list(APPEND TOOL_TARGETS exov6-phoenix-metrics)
+if(TARGET phoenix-metrics)
+    list(APPEND TOOL_TARGETS phoenix-metrics)
 endif()
-if(TARGET exov6-compiler-utils)
-    list(APPEND TOOL_TARGETS exov6-compiler-utils)
+if(TARGET phoenix-compiler-utils)
+    list(APPEND TOOL_TARGETS phoenix-compiler-utils)
 endif()
-if(TARGET exov6-ncc)
-    list(APPEND TOOL_TARGETS exov6-ncc)
+if(TARGET phoenix-ncc)
+    list(APPEND TOOL_TARGETS phoenix-ncc)
 endif()
 
 if(TOOL_TARGETS)
@@ -287,13 +287,13 @@ if(TOOL_TARGETS)
 endif()
 
 message(STATUS "Tools zone configured:")
-if(TARGET exov6-phoenix-metrics)
+if(TARGET phoenix-metrics)
     message(STATUS "  - Phoenix metrics: ✓")
 endif()
-if(TARGET exov6-compiler-utils)
+if(TARGET phoenix-compiler-utils)
     message(STATUS "  - Compiler utilities: ✓")
 endif()
-if(TARGET exov6-ncc)
+if(TARGET phoenix-ncc)
     message(STATUS "  - Network compiler: ✓")
 endif()
 if(Python3_FOUND)

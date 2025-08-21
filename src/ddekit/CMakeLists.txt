@@ -8,14 +8,14 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/badgerferret")
 endif()
 
 # Create DDEKit library using ExoV6 framework
-exov6_add_library(exov6-ddekit
+phoenix_add_library(phoenix-ddekit
     STATIC
     SOURCES ${DDEKIT_SOURCES}
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES exov6-architecture
+    DEPENDENCIES phoenix-architecture
 )
 
 # Legacy alias for backward compatibility
-add_library(ddekit ALIAS exov6-ddekit)
+add_library(ddekit ALIAS phoenix-ddekit)

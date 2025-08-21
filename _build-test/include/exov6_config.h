@@ -1,5 +1,5 @@
-#ifndef EXOV6_CONFIG_H
-#define EXOV6_CONFIG_H
+#ifndef PHOENIX_CONFIG_H
+#define PHOENIX_CONFIG_H
 
 /* System capabilities */
 #define HAVE_STDATOMIC_H 1
@@ -52,11 +52,11 @@
 #define PAGE_SIZE 4096
 #define MEMORY_SIZE_MB 15995
 
-/* ExoV6 version */
-#define EXOV6_VERSION_MAJOR 0
-#define EXOV6_VERSION_MINOR 6
-#define EXOV6_VERSION_PATCH 0
-#define EXOV6_VERSION "0.6.0"
+/* Phoenix Exokernel version */
+#define PHOENIX_VERSION_MAJOR 1
+#define PHOENIX_VERSION_MINOR 0
+#define PHOENIX_VERSION_PATCH 0
+#define PHOENIX_VERSION "1.0.0"
 
 /* Build configuration */
 /* #undef USE_LTO */
@@ -74,4 +74,4 @@
 /* #undef ENABLE_UBSAN */
 /* #undef ENABLE_MSAN */
 
-#endif /* EXOV6_CONFIG_H */
+#endif /* PHOENIX_CONFIG_H */

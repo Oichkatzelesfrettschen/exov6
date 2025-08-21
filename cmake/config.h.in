@@ -1,5 +1,5 @@
-#ifndef EXOV6_CONFIG_H
-#define EXOV6_CONFIG_H
+#ifndef PHOENIX_CONFIG_H
+#define PHOENIX_CONFIG_H
 
 /* System capabilities */
 #cmakedefine HAVE_STDATOMIC_H 1
@@ -52,11 +52,11 @@
 #define PAGE_SIZE @PAGE_SIZE@
 #cmakedefine MEMORY_SIZE_MB @MEMORY_SIZE_MB@
 
-/* ExoV6 version */
-#define EXOV6_VERSION_MAJOR @EXOV6_VERSION_MAJOR@
-#define EXOV6_VERSION_MINOR @EXOV6_VERSION_MINOR@
-#define EXOV6_VERSION_PATCH @EXOV6_VERSION_PATCH@
-#define EXOV6_VERSION "@EXOV6_VERSION@"
+/* Phoenix Exokernel version */
+#define PHOENIX_VERSION_MAJOR @PHOENIX_VERSION_MAJOR@
+#define PHOENIX_VERSION_MINOR @PHOENIX_VERSION_MINOR@
+#define PHOENIX_VERSION_PATCH @PHOENIX_VERSION_PATCH@
+#define PHOENIX_VERSION "@PHOENIX_VERSION@"
 
 /* Build configuration */
 #cmakedefine USE_LTO 1
@@ -74,4 +74,4 @@
 #cmakedefine ENABLE_UBSAN 1
 #cmakedefine ENABLE_MSAN 1
 
-#endif /* EXOV6_CONFIG_H */
+#endif /* PHOENIX_CONFIG_H */

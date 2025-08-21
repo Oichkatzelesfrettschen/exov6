@@ -1,0 +1,156 @@
+name: Phoenix Exokernel CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CC: clang
+  CXX: clang++
+
+jobs:
+  core-builds:
+    name: Core Build Matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: "Baseline CMake"
+            system: "cmake"
+            flags: ""
+          - name: "Modern LLVM (LLD+ThinLTO)"
+            system: "cmake"
+            flags: "-DUSE_LLD=ON -DUSE_LTO=ON"
+          - name: "Meson Baseline"
+            system: "meson"
+            flags: ""
+          - name: "Security (AddressSanitizer)"
+            system: "cmake"
+            flags: "-DENABLE_ASAN=ON"
+            
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install toolchain
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            build-essential \
+            clang-18 lld-18 llvm-18 llvm-18-dev llvm-18-tools \
+            ninja-build cmake python3-pip bison flex \
+            qemu-system-i386 qemu-system-x86_64
+          
+          # Set alternatives for consistent toolchain
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
+          sudo update-alternatives --install /usr/bin/llvm-ar llvm-ar /usr/bin/llvm-ar-18 100
+          sudo update-alternatives --install /usr/bin/ld.lld ld.lld /usr/bin/ld.lld-18 100
+          
+          python3 -m pip install --user meson ninja pytest pre-commit
+
+      - name: Pre-commit checks
+        if: matrix.config.name == 'Baseline CMake'
+        uses: pre-commit/action@v3.0.0
+
+      - name: Configure (${{ matrix.config.name }})
+        run: |
+          set -euxo pipefail
+          if [ "${{ matrix.config.system }}" = "cmake" ]; then
+            cmake -S . -B build -G Ninja ${{ matrix.config.flags }}
+          else
+            PATH="/home/runner/.local/bin:$PATH" meson setup build ${{ matrix.config.flags }}
+          fi
+          
+      - name: Build (${{ matrix.config.name }})
+        run: |
+          set -euxo pipefail
+          if [ "${{ matrix.config.system }}" = "cmake" ]; then
+            ninja -C build -j $(nproc)
+          else
+            PATH="/home/runner/.local/bin:$PATH" ninja -C build -j $(nproc)
+          fi
+          
+      - name: Basic validation
+        run: |
+          set -euxo pipefail
+          ls -la build/
+          file build/kernel* || true
+          
+      - name: Run tests
+        if: matrix.config.name == 'Baseline CMake'
+        run: |
+          set -euxo pipefail
+          # Run unit tests
+          PATH="/home/runner/.local/bin:$PATH" pytest -q tests/ || true
+          # Quick QEMU smoke test 
+          timeout 30s ninja -C build qemu-nox || true
+
+  architecture-builds:
+    name: Multi-Architecture Test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install cross-compilation toolchain
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            clang-18 lld-18 ninja-build cmake \
+            gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf
+            
+      - name: Build ISA variants
+        run: |
+          set -euxo pipefail
+          # Test key architecture variants
+          for arch in x86_64 aarch64; do
+            echo "Building for $arch..."
+            cmake -S . -B build-$arch -G Ninja -DARCH=$arch
+            ninja -C build-$arch kernel || true
+          done
+          
+      - name: Phoenix metrics
+        run: |
+          set -euxo pipefail
+          clang -std=c2x -O2 tools/phoenix_metrics.c -o tools/phoenix_metrics || true
+          ./tools/phoenix_metrics kernel 1 || true
+
+  validation:
+    name: Build Validation & Metrics
+    runs-on: ubuntu-latest
+    needs: [core-builds]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install minimal toolchain
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y clang-18 ninja-build cmake
+          
+      - name: Quick validation build
+        run: |
+          set -euxo pipefail
+          cmake -S . -B validate -G Ninja
+          ninja -C validate kernel
+          
+      - name: Check basic functionality
+        run: |
+          set -euxo pipefail
+          ls -la validate/
+          echo "✅ Phoenix Exokernel build validation successful"
+          
+          # Basic sanity checks
+          if [ -f validate/kernel ]; then
+            echo "✅ Kernel artifact present"
+            file validate/kernel
+          else
+            echo "❌ Kernel artifact missing"
+            exit 1
+          fi

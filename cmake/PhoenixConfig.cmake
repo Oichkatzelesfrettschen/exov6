@@ -1,10 +1,10 @@
-# ExoV6Config.cmake - Main configuration module for ExoV6 project
+# PhoenixConfig.cmake - Main configuration module for Phoenix Exokernel project
 
 # Set project information
-set(EXOV6_VERSION_MAJOR 0)
-set(EXOV6_VERSION_MINOR 6)
-set(EXOV6_VERSION_PATCH 0)
-set(EXOV6_VERSION "${EXOV6_VERSION_MAJOR}.${EXOV6_VERSION_MINOR}.${EXOV6_VERSION_PATCH}")
+set(PHOENIX_VERSION_MAJOR 1)
+set(PHOENIX_VERSION_MINOR 0)
+set(PHOENIX_VERSION_PATCH 0)
+set(PHOENIX_VERSION "${PHOENIX_VERSION_MAJOR}.${PHOENIX_VERSION_MINOR}.${PHOENIX_VERSION_PATCH}")
 
 # Include required modules
 include(CheckCCompilerFlag)
@@ -12,7 +12,7 @@ include(CheckCXXCompilerFlag)
 include(CMakePackageConfigHelpers)
 
 # Set C23 standard requirements
-function(exov6_set_standards target)
+function(phoenix_set_standards target)
     set_target_properties(${target} PROPERTIES
         C_STANDARD 23
         C_STANDARD_REQUIRED ON
@@ -25,7 +25,7 @@ function(exov6_set_standards target)
 endfunction()
 
 # Apply common compile options
-function(exov6_apply_common_options target)
+function(phoenix_apply_common_options target)
     target_compile_options(${target} PRIVATE
         -Wall
         -Werror
@@ -36,42 +36,42 @@ function(exov6_apply_common_options target)
     )
     
     # Apply standards
-    exov6_set_standards(${target})
+    phoenix_set_standards(${target})
 endfunction()
 
 # Configure LLVM tools detection
-function(exov6_detect_llvm_tools)
+function(phoenix_detect_llvm_tools)
     if(CMAKE_C_COMPILER_ID MATCHES "Clang")
         # Find LLVM tools with version suffix
-        find_program(EXOV6_LLVM_AR NAMES llvm-ar-18 llvm-ar)
-        find_program(EXOV6_LLVM_OBJCOPY NAMES llvm-objcopy-18 llvm-objcopy)
-        find_program(EXOV6_LLVM_STRIP NAMES llvm-strip-18 llvm-strip)
-        find_program(EXOV6_LLVM_NM NAMES llvm-nm-18 llvm-nm)
-        find_program(EXOV6_LLVM_OBJDUMP NAMES llvm-objdump-18 llvm-objdump)
-        find_program(EXOV6_LLVM_OPT NAMES opt-18 opt)
+        find_program(PHOENIX_LLVM_AR NAMES llvm-ar-18 llvm-ar)
+        find_program(PHOENIX_LLVM_OBJCOPY NAMES llvm-objcopy-18 llvm-objcopy)
+        find_program(PHOENIX_LLVM_STRIP NAMES llvm-strip-18 llvm-strip)
+        find_program(PHOENIX_LLVM_NM NAMES llvm-nm-18 llvm-nm)
+        find_program(PHOENIX_LLVM_OBJDUMP NAMES llvm-objdump-18 llvm-objdump)
+        find_program(PHOENIX_LLVM_OPT NAMES opt-18 opt)
         
-        if(EXOV6_LLVM_AR)
-            set(CMAKE_AR "${EXOV6_LLVM_AR}" PARENT_SCOPE)
-            message(STATUS "ExoV6: Using LLVM archiver: ${EXOV6_LLVM_AR}")
+        if(PHOENIX_LLVM_AR)
+            set(CMAKE_AR "${PHOENIX_LLVM_AR}" PARENT_SCOPE)
+            message(STATUS "ExoV6: Using LLVM archiver: ${PHOENIX_LLVM_AR}")
         endif()
         
-        if(EXOV6_LLVM_OBJCOPY)
-            set(CMAKE_OBJCOPY "${EXOV6_LLVM_OBJCOPY}" PARENT_SCOPE)
+        if(PHOENIX_LLVM_OBJCOPY)
+            set(CMAKE_OBJCOPY "${PHOENIX_LLVM_OBJCOPY}" PARENT_SCOPE)
         endif()
         
-        if(EXOV6_LLVM_STRIP)
-            set(CMAKE_STRIP "${EXOV6_LLVM_STRIP}" PARENT_SCOPE)
+        if(PHOENIX_LLVM_STRIP)
+            set(CMAKE_STRIP "${PHOENIX_LLVM_STRIP}" PARENT_SCOPE)
         endif()
         
-        set(EXOV6_LLVM_TOOLS_AVAILABLE TRUE PARENT_SCOPE)
+        set(PHOENIX_LLVM_TOOLS_AVAILABLE TRUE PARENT_SCOPE)
     else()
-        set(EXOV6_LLVM_TOOLS_AVAILABLE FALSE PARENT_SCOPE)
+        set(PHOENIX_LLVM_TOOLS_AVAILABLE FALSE PARENT_SCOPE)
         message(WARNING "ExoV6: LLVM tools require Clang compiler")
     endif()
 endfunction()
 
 # Configure modern LLVM features
-function(exov6_configure_llvm_features target)
+function(phoenix_configure_llvm_features target)
     if(NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
         message(WARNING "ExoV6: LLVM features require Clang compiler")
         return()
@@ -92,7 +92,7 @@ function(exov6_configure_llvm_features target)
     endif()
     
     # Polly optimizations
-    if(USE_POLLY AND EXOV6_LLVM_OPT)
+    if(USE_POLLY AND PHOENIX_LLVM_OPT)
         target_compile_options(${target} PRIVATE
             -mllvm -polly
             -mllvm -polly-vectorizer=stripmine
@@ -122,7 +122,7 @@ function(exov6_configure_llvm_features target)
 endfunction()
 
 # Configure feature-based compilation
-function(exov6_configure_features target)
+function(phoenix_configure_features target)
     if(USE_TICKET_LOCK)
         target_compile_definitions(${target} PRIVATE USE_TICKET_LOCK)
     endif()
@@ -148,54 +148,54 @@ function(exov6_configure_features target)
 endfunction()
 
 # Create an ExoV6 library target with all configurations
-function(exov6_add_library target_name)
-    cmake_parse_arguments(EXOV6_LIB "STATIC;SHARED;INTERFACE" "TYPE" "SOURCES;INCLUDES;DEPENDENCIES;DEFINITIONS" ${ARGN})
+function(phoenix_add_library target_name)
+    cmake_parse_arguments(PHOENIX_LIB "STATIC;SHARED;INTERFACE" "TYPE" "SOURCES;INCLUDES;DEPENDENCIES;DEFINITIONS" ${ARGN})
     
-    if(EXOV6_LIB_STATIC OR (NOT EXOV6_LIB_SHARED AND NOT EXOV6_LIB_INTERFACE))
+    if(PHOENIX_LIB_STATIC OR (NOT PHOENIX_LIB_SHARED AND NOT PHOENIX_LIB_INTERFACE))
         set(lib_type STATIC)
-    elseif(EXOV6_LIB_SHARED)
+    elseif(PHOENIX_LIB_SHARED)
         set(lib_type SHARED)
-    elseif(EXOV6_LIB_INTERFACE)
+    elseif(PHOENIX_LIB_INTERFACE)
         set(lib_type INTERFACE)
     endif()
     
     if(lib_type STREQUAL "INTERFACE")
         add_library(${target_name} INTERFACE)
     else()
-        add_library(${target_name} ${lib_type} ${EXOV6_LIB_SOURCES})
+        add_library(${target_name} ${lib_type} ${PHOENIX_LIB_SOURCES})
     endif()
     
     # Apply common configurations
     if(NOT lib_type STREQUAL "INTERFACE")
-        exov6_apply_common_options(${target_name})
-        exov6_configure_llvm_features(${target_name})
-        exov6_configure_features(${target_name})
+        phoenix_apply_common_options(${target_name})
+        phoenix_configure_llvm_features(${target_name})
+        phoenix_configure_features(${target_name})
     endif()
     
     # Set include directories
-    if(EXOV6_LIB_INCLUDES)
+    if(PHOENIX_LIB_INCLUDES)
         if(lib_type STREQUAL "INTERFACE")
-            target_include_directories(${target_name} INTERFACE ${EXOV6_LIB_INCLUDES})
+            target_include_directories(${target_name} INTERFACE ${PHOENIX_LIB_INCLUDES})
         else()
-            target_include_directories(${target_name} PUBLIC ${EXOV6_LIB_INCLUDES})
+            target_include_directories(${target_name} PUBLIC ${PHOENIX_LIB_INCLUDES})
         endif()
     endif()
     
     # Set dependencies
-    if(EXOV6_LIB_DEPENDENCIES)
+    if(PHOENIX_LIB_DEPENDENCIES)
         if(lib_type STREQUAL "INTERFACE")
-            target_link_libraries(${target_name} INTERFACE ${EXOV6_LIB_DEPENDENCIES})
+            target_link_libraries(${target_name} INTERFACE ${PHOENIX_LIB_DEPENDENCIES})
         else()
-            target_link_libraries(${target_name} PUBLIC ${EXOV6_LIB_DEPENDENCIES})
+            target_link_libraries(${target_name} PUBLIC ${PHOENIX_LIB_DEPENDENCIES})
         endif()
     endif()
     
     # Set definitions
-    if(EXOV6_LIB_DEFINITIONS)
+    if(PHOENIX_LIB_DEFINITIONS)
         if(lib_type STREQUAL "INTERFACE")
-            target_compile_definitions(${target_name} INTERFACE ${EXOV6_LIB_DEFINITIONS})
+            target_compile_definitions(${target_name} INTERFACE ${PHOENIX_LIB_DEFINITIONS})
         else()
-            target_compile_definitions(${target_name} PUBLIC ${EXOV6_LIB_DEFINITIONS})
+            target_compile_definitions(${target_name} PUBLIC ${PHOENIX_LIB_DEFINITIONS})
         endif()
     endif()
     
@@ -208,29 +208,29 @@ function(exov6_add_library target_name)
 endfunction()
 
 # Create an ExoV6 executable target with all configurations
-function(exov6_add_executable target_name)
-    cmake_parse_arguments(EXOV6_EXE "" "" "SOURCES;INCLUDES;DEPENDENCIES;DEFINITIONS" ${ARGN})
+function(phoenix_add_executable target_name)
+    cmake_parse_arguments(PHOENIX_EXE "" "" "SOURCES;INCLUDES;DEPENDENCIES;DEFINITIONS" ${ARGN})
     
-    add_executable(${target_name} ${EXOV6_EXE_SOURCES})
+    add_executable(${target_name} ${PHOENIX_EXE_SOURCES})
     
     # Apply common configurations
-    exov6_apply_common_options(${target_name})
-    exov6_configure_llvm_features(${target_name})
-    exov6_configure_features(${target_name})
+    phoenix_apply_common_options(${target_name})
+    phoenix_configure_llvm_features(${target_name})
+    phoenix_configure_features(${target_name})
     
     # Set include directories
-    if(EXOV6_EXE_INCLUDES)
-        target_include_directories(${target_name} PRIVATE ${EXOV6_EXE_INCLUDES})
+    if(PHOENIX_EXE_INCLUDES)
+        target_include_directories(${target_name} PRIVATE ${PHOENIX_EXE_INCLUDES})
     endif()
     
     # Set dependencies
-    if(EXOV6_EXE_DEPENDENCIES)
-        target_link_libraries(${target_name} PRIVATE ${EXOV6_EXE_DEPENDENCIES})
+    if(PHOENIX_EXE_DEPENDENCIES)
+        target_link_libraries(${target_name} PRIVATE ${PHOENIX_EXE_DEPENDENCIES})
     endif()
     
     # Set definitions
-    if(EXOV6_EXE_DEFINITIONS)
-        target_compile_definitions(${target_name} PRIVATE ${EXOV6_EXE_DEFINITIONS})
+    if(PHOENIX_EXE_DEFINITIONS)
+        target_compile_definitions(${target_name} PRIVATE ${PHOENIX_EXE_DEFINITIONS})
     endif()
     
     # Set properties

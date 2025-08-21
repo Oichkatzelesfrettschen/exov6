@@ -77,6 +77,21 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/runner/work/exov6/exov6/_build-test/kernel/cmake_install.cmake")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/runner/work/exov6/exov6/_build-test/tools/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/runner/work/exov6/exov6/_build-test/demos/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/runner/work/exov6/exov6/_build-test/tests/cmake_install.cmake")
+endif()
+
 if(CMAKE_INSTALL_COMPONENT STREQUAL "kernel" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/kernel" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/kernel")
@@ -94,11 +109,11 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "kernel" OR NOT CMAKE_INSTALL_COMPONENT)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "development" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/exov6" TYPE DIRECTORY FILES "/home/runner/work/exov6/exov6/include/" FILES_MATCHING REGEX "/[^/]*\\.h$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/phoenix" TYPE DIRECTORY FILES "/home/runner/work/exov6/exov6/include/" FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "development" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/exov6" TYPE FILE FILES "/home/runner/work/exov6/exov6/_build-test/include/exov6_config.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/phoenix" TYPE FILE FILES "/home/runner/work/exov6/exov6/_build-test/include/phoenix_config.h")
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT

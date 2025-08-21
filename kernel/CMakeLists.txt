@@ -6,7 +6,7 @@
 
 if(MCU)
     # MCU-specific kernel build
-    exov6_add_executable(kernel-mcu
+    phoenix_add_executable(kernel-mcu
         SOURCES 
             picokernel.c
             ${CMAKE_SOURCE_DIR}/user/blink.c
@@ -16,17 +16,17 @@ if(MCU)
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/src/arch/mcu
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
         DEFINITIONS MCU=1
     )
     
-    set_target_properties(exov6-kernel-mcu PROPERTIES 
+    set_target_properties(phoenix-kernel-mcu PROPERTIES 
         OUTPUT_NAME "kernel-mcu"
         PREFIX ""
     )
     
     # Create alias for main kernel target
-    add_executable(exov6-kernel ALIAS exov6-kernel-mcu)
+    add_executable(phoenix-kernel ALIAS phoenix-kernel-mcu)
     
     message(STATUS "Kernel zone configured for MCU target")
     return()
@@ -66,7 +66,7 @@ list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*picokernel.*")
 # KERNEL EXECUTABLE
 # ═════════════════════════════════════════════════════════════════════
 
-exov6_add_executable(kernel
+phoenix_add_executable(kernel
     SOURCES ${ALL_KERNEL_SOURCES}
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -76,15 +76,15 @@ exov6_add_executable(kernel
         ${CMAKE_SOURCE_DIR}/proto
         ${CMAKE_SOURCE_DIR}/libos/stubs
     DEPENDENCIES 
-        exov6-architecture
-        exov6-ddekit
-        exov6-nstr-graph
-        exov6-protocols
+        phoenix-architecture
+        phoenix-ddekit
+        phoenix-nstr-graph
+        phoenix-protocols
 )
 
 # Add Cap'n Proto dependency if enabled
-if(USE_CAPNP AND TARGET exov6-capnp)
-    target_link_libraries(kernel PRIVATE exov6-capnp)
+if(USE_CAPNP AND TARGET phoenix-capnp)
+    target_link_libraries(kernel PRIVATE phoenix-capnp)
 endif()
 
 # Set kernel-specific properties
@@ -122,92 +122,92 @@ endif()
 
 # Security audit module
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cap_security.c")
-    exov6_add_library(exov6-kernel-security
+    phoenix_add_library(phoenix-kernel-security
         STATIC
         SOURCES cap_security.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
-    target_link_libraries(kernel PRIVATE exov6-kernel-security)
+    target_link_libraries(kernel PRIVATE phoenix-kernel-security)
 endif()
 
 # Memory management module
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cap_mem.c")
-    exov6_add_library(exov6-kernel-memory
+    phoenix_add_library(phoenix-kernel-memory
         STATIC
         SOURCES cap_mem.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
-    target_link_libraries(kernel PRIVATE exov6-kernel-memory)
+    target_link_libraries(kernel PRIVATE phoenix-kernel-memory)
 endif()
 
 # IPC queue module
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/exo_ipc_queue.c")
-    exov6_add_library(exov6-kernel-ipc-queue
+    phoenix_add_library(phoenix-kernel-ipc-queue
         STATIC
         SOURCES exo_ipc_queue.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
-    target_link_libraries(kernel PRIVATE exov6-kernel-ipc-queue)
+    target_link_libraries(kernel PRIVATE phoenix-kernel-ipc-queue)
 endif()
 
 # Streaming module
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/streams.c")
-    exov6_add_library(exov6-kernel-streams
+    phoenix_add_library(phoenix-kernel-streams
         STATIC
         SOURCES streams.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
-    target_link_libraries(kernel PRIVATE exov6-kernel-streams)
+    target_link_libraries(kernel PRIVATE phoenix-kernel-streams)
 endif()
 
 # Lattice IPC module
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lattice_ipc.c")
-    exov6_add_library(exov6-kernel-lattice-ipc
+    phoenix_add_library(phoenix-kernel-lattice-ipc
         STATIC
         SOURCES lattice_ipc.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
-    target_link_libraries(kernel PRIVATE exov6-kernel-lattice-ipc)
+    target_link_libraries(kernel PRIVATE phoenix-kernel-lattice-ipc)
 endif()
 
 # Crypto module
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/crypto.c")
-    exov6_add_library(exov6-kernel-crypto
+    phoenix_add_library(phoenix-kernel-crypto
         STATIC
         SOURCES crypto.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
-    target_link_libraries(kernel PRIVATE exov6-kernel-crypto)
+    target_link_libraries(kernel PRIVATE phoenix-kernel-crypto)
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -216,13 +216,13 @@ endif()
 
 # Test spinlock executable (if test sources exist)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_quaternion_spinlock.c")
-    exov6_add_executable(test-quaternion-spinlock
+    phoenix_add_executable(test-quaternion-spinlock
         SOURCES test_quaternion_spinlock.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES exov6-architecture
+        DEPENDENCIES phoenix-architecture
     )
     
     set_target_properties(test-quaternion-spinlock PROPERTIES 
@@ -260,8 +260,8 @@ set(EXOV6_KERNEL_TARGETS
 # Export optional kernel modules
 set(KERNEL_MODULE_TARGETS)
 foreach(module security memory ipc-queue streams lattice-ipc crypto)
-    if(TARGET exov6-kernel-${module})
-        list(APPEND KERNEL_MODULE_TARGETS exov6-kernel-${module})
+    if(TARGET phoenix-kernel-${module})
+        list(APPEND KERNEL_MODULE_TARGETS phoenix-kernel-${module})
     endif()
 endforeach()
 
@@ -280,6 +280,6 @@ endif()
 if(USE_CAPNP)
     message(STATUS "  - Cap'n Proto support: ✓")
 endif()
-if(TARGET exov6-test-quaternion-spinlock)
+if(TARGET phoenix-test-quaternion-spinlock)
     message(STATUS "  - Test utilities: ✓")
 endif()
