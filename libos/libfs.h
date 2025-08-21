@@ -5,7 +5,7 @@
 
 #include "file.h"
 #include "fs.h"
-#include "include/exokernel.h"
+#include "exokernel.h"
 
 /**
  * @brief Read a block from the backing store.

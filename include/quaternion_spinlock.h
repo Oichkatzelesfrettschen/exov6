@@ -19,6 +19,9 @@ typedef struct {
     struct cpu *cpu;                 // CPU holding the lock
 } qspin_lock_t;
 
+/* Alias for compatibility */
+typedef qspin_lock_t quaternion_spinlock_t;
+
 void qspin_lock_init(qspin_lock_t* lock, const char* name); // New init function
 void qspin_lock(qspin_lock_t* lock, int cpu_id); // Matches framework, cpu_id for fairness
 void qspin_unlock(qspin_lock_t* lock);

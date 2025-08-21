@@ -38,8 +38,6 @@
 /home/runner/work/exov6/exov6/_build-test/src/libnstr_graph/CMakeFiles/install.dir
 /home/runner/work/exov6/exov6/_build-test/src/libnstr_graph/CMakeFiles/install/local.dir
 /home/runner/work/exov6/exov6/_build-test/src/libnstr_graph/CMakeFiles/install/strip.dir
-/home/runner/work/exov6/exov6/_build-test/proto/CMakeFiles/phoenix-example-parser.dir
-/home/runner/work/exov6/exov6/_build-test/proto/CMakeFiles/example_bison.dir
 /home/runner/work/exov6/exov6/_build-test/proto/CMakeFiles/package.dir
 /home/runner/work/exov6/exov6/_build-test/proto/CMakeFiles/package_source.dir
 /home/runner/work/exov6/exov6/_build-test/proto/CMakeFiles/edit_cache.dir

@@ -1,4 +1,4 @@
-#include "include/exokernel.h"
+#include "exokernel.h"
 #include "exo_ipc.h"
 #include "ipc.h"
 #include "proc.h"

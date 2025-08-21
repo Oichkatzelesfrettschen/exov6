@@ -7,7 +7,7 @@
 
 # =============================================================================
 # Project: PhoenixExokernel
-# Configurations: 
+# Configurations: Debug
 # =============================================================================
 # =============================================================================
 
@@ -22,7 +22,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-simd_unscanned_
+rule C_COMPILER__phoenix-simd_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -32,7 +32,7 @@ rule C_COMPILER__phoenix-simd_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-simd_
+rule C_STATIC_LIBRARY_LINKER__phoenix-simd_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -41,7 +41,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-simd_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-arch-x86-legacy_unscanned_
+rule C_COMPILER__phoenix-arch-x86-legacy_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -51,7 +51,7 @@ rule C_COMPILER__phoenix-arch-x86-legacy_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-arch-x86-legacy_
+rule C_STATIC_LIBRARY_LINKER__phoenix-arch-x86-legacy_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -60,7 +60,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-arch-x86-legacy_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-arch-x86-modern_unscanned_
+rule C_COMPILER__phoenix-arch-x86-modern_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -70,7 +70,7 @@ rule C_COMPILER__phoenix-arch-x86-modern_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-arch-x86-modern_
+rule C_STATIC_LIBRARY_LINKER__phoenix-arch-x86-modern_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -79,7 +79,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-arch-x86-modern_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-arch-arm_unscanned_
+rule C_COMPILER__phoenix-arch-arm_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -89,7 +89,7 @@ rule C_COMPILER__phoenix-arch-arm_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-arch-arm_
+rule C_STATIC_LIBRARY_LINKER__phoenix-arch-arm_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -98,7 +98,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-arch-arm_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-arch-ppc_unscanned_
+rule C_COMPILER__phoenix-arch-ppc_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -108,7 +108,7 @@ rule C_COMPILER__phoenix-arch-ppc_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-arch-ppc_
+rule C_STATIC_LIBRARY_LINKER__phoenix-arch-ppc_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -117,7 +117,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-arch-ppc_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-ddekit_unscanned_
+rule C_COMPILER__phoenix-ddekit_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -127,7 +127,7 @@ rule C_COMPILER__phoenix-ddekit_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-ddekit_
+rule C_STATIC_LIBRARY_LINKER__phoenix-ddekit_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -136,7 +136,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-ddekit_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-nstr-graph_unscanned_
+rule C_COMPILER__phoenix-nstr-graph_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -146,7 +146,7 @@ rule C_COMPILER__phoenix-nstr-graph_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-nstr-graph_
+rule C_STATIC_LIBRARY_LINKER__phoenix-nstr-graph_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -155,7 +155,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-nstr-graph_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-nstr-graph-shared_unscanned_
+rule C_COMPILER__phoenix-nstr-graph-shared_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -165,7 +165,7 @@ rule C_COMPILER__phoenix-nstr-graph-shared_unscanned_
 #############################################
 # Rule for linking C shared library.
 
-rule C_SHARED_LIBRARY_LINKER__phoenix-nstr-graph-shared_
+rule C_SHARED_LIBRARY_LINKER__phoenix-nstr-graph-shared_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang -fPIC $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS $LINK_FLAGS -shared $SONAME_FLAG$SONAME -o $TARGET_FILE $in $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -176,7 +176,7 @@ rule C_SHARED_LIBRARY_LINKER__phoenix-nstr-graph-shared_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-example-parser_unscanned_
+rule C_COMPILER__phoenix-ulib_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -186,7 +186,7 @@ rule C_COMPILER__phoenix-example-parser_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-example-parser_
+rule C_STATIC_LIBRARY_LINKER__phoenix-ulib_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -195,7 +195,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-example-parser_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-ulib_unscanned_
+rule C_COMPILER__phoenix-umalloc_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -205,7 +205,7 @@ rule C_COMPILER__phoenix-ulib_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-ulib_
+rule C_STATIC_LIBRARY_LINKER__phoenix-umalloc_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -214,7 +214,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-ulib_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-umalloc_unscanned_
+rule C_COMPILER__phoenix-printf_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -224,7 +224,7 @@ rule C_COMPILER__phoenix-umalloc_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-umalloc_
+rule C_STATIC_LIBRARY_LINKER__phoenix-printf_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -233,7 +233,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-umalloc_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-printf_unscanned_
+rule C_COMPILER__phoenix-caplib_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -243,7 +243,7 @@ rule C_COMPILER__phoenix-printf_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-printf_
+rule C_STATIC_LIBRARY_LINKER__phoenix-caplib_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -252,7 +252,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-printf_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-caplib_unscanned_
+rule C_COMPILER__phoenix-chan_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -262,7 +262,7 @@ rule C_COMPILER__phoenix-caplib_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-caplib_
+rule C_STATIC_LIBRARY_LINKER__phoenix-chan_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -271,7 +271,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-caplib_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-chan_unscanned_
+rule C_COMPILER__phoenix-door_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -281,7 +281,7 @@ rule C_COMPILER__phoenix-chan_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-chan_
+rule C_STATIC_LIBRARY_LINKER__phoenix-door_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -290,7 +290,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-chan_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-door_unscanned_
+rule C_COMPILER__phoenix-math-core_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -300,7 +300,7 @@ rule C_COMPILER__phoenix-door_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-door_
+rule C_STATIC_LIBRARY_LINKER__phoenix-math-core_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -309,7 +309,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-door_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-math-core_unscanned_
+rule C_COMPILER__phoenix-user-sched_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -319,7 +319,7 @@ rule C_COMPILER__phoenix-math-core_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-math-core_
+rule C_STATIC_LIBRARY_LINKER__phoenix-user-sched_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -328,26 +328,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-math-core_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-user-sched_unscanned_
-  depfile = $DEP_FILE
-  deps = gcc
-  command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
-  description = Building C object $out
-
-
-#############################################
-# Rule for linking C static library.
-
-rule C_STATIC_LIBRARY_LINKER__phoenix-user-sched_
-  command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
-  description = Linking C static library $TARGET_FILE
-  restat = $RESTAT
-
-
-#############################################
-# Rule for compiling C files.
-
-rule C_COMPILER__user-blink_unscanned_
+rule C_COMPILER__user-blink_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -357,7 +338,7 @@ rule C_COMPILER__user-blink_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-blink_
+rule C_EXECUTABLE_LINKER__user-blink_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -368,7 +349,7 @@ rule C_EXECUTABLE_LINKER__user-blink_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-cat_unscanned_
+rule C_COMPILER__user-cat_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -378,7 +359,7 @@ rule C_COMPILER__user-cat_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-cat_
+rule C_EXECUTABLE_LINKER__user-cat_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -389,7 +370,7 @@ rule C_EXECUTABLE_LINKER__user-cat_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-echo_unscanned_
+rule C_COMPILER__user-echo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -399,7 +380,7 @@ rule C_COMPILER__user-echo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-echo_
+rule C_EXECUTABLE_LINKER__user-echo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -410,7 +391,7 @@ rule C_EXECUTABLE_LINKER__user-echo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-grep_unscanned_
+rule C_COMPILER__user-grep_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -420,7 +401,7 @@ rule C_COMPILER__user-grep_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-grep_
+rule C_EXECUTABLE_LINKER__user-grep_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -431,7 +412,7 @@ rule C_EXECUTABLE_LINKER__user-grep_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-init_unscanned_
+rule C_COMPILER__user-init_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -441,7 +422,7 @@ rule C_COMPILER__user-init_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-init_
+rule C_EXECUTABLE_LINKER__user-init_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -452,7 +433,7 @@ rule C_EXECUTABLE_LINKER__user-init_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-kill_unscanned_
+rule C_COMPILER__user-kill_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -462,7 +443,7 @@ rule C_COMPILER__user-kill_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-kill_
+rule C_EXECUTABLE_LINKER__user-kill_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -473,7 +454,7 @@ rule C_EXECUTABLE_LINKER__user-kill_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-ln_unscanned_
+rule C_COMPILER__user-ln_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -483,7 +464,7 @@ rule C_COMPILER__user-ln_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-ln_
+rule C_EXECUTABLE_LINKER__user-ln_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -494,7 +475,7 @@ rule C_EXECUTABLE_LINKER__user-ln_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-ls_unscanned_
+rule C_COMPILER__user-ls_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -504,7 +485,7 @@ rule C_COMPILER__user-ls_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-ls_
+rule C_EXECUTABLE_LINKER__user-ls_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -515,7 +496,7 @@ rule C_EXECUTABLE_LINKER__user-ls_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-mkdir_unscanned_
+rule C_COMPILER__user-mkdir_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -525,7 +506,7 @@ rule C_COMPILER__user-mkdir_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-mkdir_
+rule C_EXECUTABLE_LINKER__user-mkdir_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -536,7 +517,7 @@ rule C_EXECUTABLE_LINKER__user-mkdir_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-rm_unscanned_
+rule C_COMPILER__user-rm_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -546,7 +527,7 @@ rule C_COMPILER__user-rm_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-rm_
+rule C_EXECUTABLE_LINKER__user-rm_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -557,7 +538,7 @@ rule C_EXECUTABLE_LINKER__user-rm_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-sh_unscanned_
+rule C_COMPILER__user-sh_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -567,7 +548,7 @@ rule C_COMPILER__user-sh_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-sh_
+rule C_EXECUTABLE_LINKER__user-sh_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -578,7 +559,7 @@ rule C_EXECUTABLE_LINKER__user-sh_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-wc_unscanned_
+rule C_COMPILER__user-wc_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -588,7 +569,7 @@ rule C_COMPILER__user-wc_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-wc_
+rule C_EXECUTABLE_LINKER__user-wc_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -599,7 +580,7 @@ rule C_EXECUTABLE_LINKER__user-wc_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-zombie_unscanned_
+rule C_COMPILER__user-zombie_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -609,7 +590,7 @@ rule C_COMPILER__user-zombie_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-zombie_
+rule C_EXECUTABLE_LINKER__user-zombie_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -620,7 +601,7 @@ rule C_EXECUTABLE_LINKER__user-zombie_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-fileserver_unscanned_
+rule C_COMPILER__user-fileserver_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -630,7 +611,7 @@ rule C_COMPILER__user-fileserver_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-fileserver_
+rule C_EXECUTABLE_LINKER__user-fileserver_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -641,7 +622,7 @@ rule C_EXECUTABLE_LINKER__user-fileserver_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-usertests_unscanned_
+rule C_COMPILER__user-usertests_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -651,7 +632,7 @@ rule C_COMPILER__user-usertests_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-usertests_
+rule C_EXECUTABLE_LINKER__user-usertests_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -662,7 +643,7 @@ rule C_EXECUTABLE_LINKER__user-usertests_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-forktest_unscanned_
+rule C_COMPILER__user-forktest_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -672,7 +653,7 @@ rule C_COMPILER__user-forktest_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-forktest_
+rule C_EXECUTABLE_LINKER__user-forktest_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -683,7 +664,7 @@ rule C_EXECUTABLE_LINKER__user-forktest_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__user-stressfs_unscanned_
+rule C_COMPILER__user-stressfs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -693,7 +674,7 @@ rule C_COMPILER__user-stressfs_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__user-stressfs_
+rule C_EXECUTABLE_LINKER__user-stressfs_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -704,7 +685,7 @@ rule C_EXECUTABLE_LINKER__user-stressfs_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-fs_unscanned_
+rule C_COMPILER__phoenix-libos-fs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -714,7 +695,7 @@ rule C_COMPILER__phoenix-libos-fs_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-fs_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-fs_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -723,7 +704,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-fs_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-file_unscanned_
+rule C_COMPILER__phoenix-libos-file_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -733,7 +714,7 @@ rule C_COMPILER__phoenix-libos-file_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-file_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-file_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -742,7 +723,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-file_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-posix_unscanned_
+rule C_COMPILER__phoenix-libos-posix_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -752,7 +733,7 @@ rule C_COMPILER__phoenix-libos-posix_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-posix_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-posix_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -761,7 +742,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-posix_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-termios_unscanned_
+rule C_COMPILER__phoenix-libos-termios_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -771,7 +752,7 @@ rule C_COMPILER__phoenix-libos-termios_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-termios_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-termios_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -780,7 +761,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-termios_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-ipc_unscanned_
+rule C_COMPILER__phoenix-libos-ipc_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -790,7 +771,7 @@ rule C_COMPILER__phoenix-libos-ipc_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-ipc_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-ipc_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -799,7 +780,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-ipc_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-service_unscanned_
+rule C_COMPILER__phoenix-libos-service_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -809,7 +790,7 @@ rule C_COMPILER__phoenix-libos-service_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-service_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-service_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -818,7 +799,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-service_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-cap_unscanned_
+rule C_COMPILER__phoenix-libos-cap_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -828,7 +809,7 @@ rule C_COMPILER__phoenix-libos-cap_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-cap_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-cap_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -837,7 +818,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-cap_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-msg-router_unscanned_
+rule C_COMPILER__phoenix-libos-msg-router_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -847,7 +828,7 @@ rule C_COMPILER__phoenix-libos-msg-router_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-msg-router_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-msg-router_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -856,7 +837,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-msg-router_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-resource-account_unscanned_
+rule C_COMPILER__phoenix-libos-resource-account_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -866,7 +847,7 @@ rule C_COMPILER__phoenix-libos-resource-account_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-resource-account_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-resource-account_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -875,7 +856,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-resource-account_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-registration_unscanned_
+rule C_COMPILER__phoenix-libos-registration_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -885,7 +866,7 @@ rule C_COMPILER__phoenix-libos-registration_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-registration_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-registration_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -894,7 +875,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-registration_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-affine-runtime_unscanned_
+rule C_COMPILER__phoenix-libos-affine-runtime_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -904,7 +885,7 @@ rule C_COMPILER__phoenix-libos-affine-runtime_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-affine-runtime_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-affine-runtime_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -913,7 +894,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-affine-runtime_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-posix-stubs_unscanned_
+rule C_COMPILER__phoenix-libos-posix-stubs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -923,7 +904,7 @@ rule C_COMPILER__phoenix-libos-posix-stubs_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-posix-stubs_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-posix-stubs_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -932,7 +913,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-posix-stubs_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-baremetal-stubs_unscanned_
+rule C_COMPILER__phoenix-libos-baremetal-stubs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -942,7 +923,7 @@ rule C_COMPILER__phoenix-libos-baremetal-stubs_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-baremetal-stubs_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-baremetal-stubs_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -951,7 +932,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-baremetal-stubs_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-9p-stubs_unscanned_
+rule C_COMPILER__phoenix-libos-9p-stubs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -961,7 +942,7 @@ rule C_COMPILER__phoenix-libos-9p-stubs_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-9p-stubs_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-9p-stubs_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -970,7 +951,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-9p-stubs_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-sched_unscanned_
+rule C_COMPILER__phoenix-libos-sched_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -980,7 +961,7 @@ rule C_COMPILER__phoenix-libos-sched_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-sched_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-sched_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -989,7 +970,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-sched_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-libos-sched-helpers_unscanned_
+rule C_COMPILER__phoenix-libos-sched-helpers_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -999,7 +980,7 @@ rule C_COMPILER__phoenix-libos-sched-helpers_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-libos-sched-helpers_
+rule C_STATIC_LIBRARY_LINKER__phoenix-libos-sched-helpers_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1008,7 +989,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-libos-sched-helpers_
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__kernel_unscanned_
+rule ASM_COMPILER__kernel_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1018,7 +999,7 @@ rule ASM_COMPILER__kernel_unscanned_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__kernel_unscanned_
+rule C_COMPILER__kernel_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1028,7 +1009,7 @@ rule C_COMPILER__kernel_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__kernel_
+rule C_EXECUTABLE_LINKER__kernel_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1039,7 +1020,7 @@ rule C_EXECUTABLE_LINKER__kernel_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-kernel-security_unscanned_
+rule C_COMPILER__phoenix-kernel-security_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1049,7 +1030,7 @@ rule C_COMPILER__phoenix-kernel-security_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-security_
+rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-security_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1058,7 +1039,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-security_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-kernel-memory_unscanned_
+rule C_COMPILER__phoenix-kernel-memory_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1068,7 +1049,7 @@ rule C_COMPILER__phoenix-kernel-memory_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-memory_
+rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-memory_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1077,7 +1058,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-memory_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-kernel-ipc-queue_unscanned_
+rule C_COMPILER__phoenix-kernel-ipc-queue_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1087,7 +1068,7 @@ rule C_COMPILER__phoenix-kernel-ipc-queue_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-ipc-queue_
+rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-ipc-queue_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1096,7 +1077,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-ipc-queue_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-kernel-streams_unscanned_
+rule C_COMPILER__phoenix-kernel-streams_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1106,7 +1087,7 @@ rule C_COMPILER__phoenix-kernel-streams_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-streams_
+rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-streams_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1115,7 +1096,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-streams_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-kernel-lattice-ipc_unscanned_
+rule C_COMPILER__phoenix-kernel-lattice-ipc_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1125,7 +1106,7 @@ rule C_COMPILER__phoenix-kernel-lattice-ipc_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-lattice-ipc_
+rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-lattice-ipc_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1134,7 +1115,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-lattice-ipc_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-kernel-crypto_unscanned_
+rule C_COMPILER__phoenix-kernel-crypto_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1144,7 +1125,7 @@ rule C_COMPILER__phoenix-kernel-crypto_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-crypto_
+rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-crypto_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1153,7 +1134,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-kernel-crypto_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__test-quaternion-spinlock_unscanned_
+rule C_COMPILER__test-quaternion-spinlock_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1163,7 +1144,7 @@ rule C_COMPILER__test-quaternion-spinlock_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__test-quaternion-spinlock_
+rule C_EXECUTABLE_LINKER__test-quaternion-spinlock_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1174,7 +1155,7 @@ rule C_EXECUTABLE_LINKER__test-quaternion-spinlock_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-metrics_unscanned_
+rule C_COMPILER__phoenix-metrics_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1184,7 +1165,7 @@ rule C_COMPILER__phoenix-metrics_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__phoenix-metrics_
+rule C_EXECUTABLE_LINKER__phoenix-metrics_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1195,7 +1176,7 @@ rule C_EXECUTABLE_LINKER__phoenix-metrics_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-compiler-utils_unscanned_
+rule C_COMPILER__phoenix-compiler-utils_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1205,7 +1186,7 @@ rule C_COMPILER__phoenix-compiler-utils_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-compiler-utils_
+rule C_STATIC_LIBRARY_LINKER__phoenix-compiler-utils_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1214,7 +1195,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-compiler-utils_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__compiler-utils_unscanned_
+rule C_COMPILER__compiler-utils_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1224,7 +1205,7 @@ rule C_COMPILER__compiler-utils_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__compiler-utils_
+rule C_EXECUTABLE_LINKER__compiler-utils_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1235,7 +1216,7 @@ rule C_EXECUTABLE_LINKER__compiler-utils_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__ncc_unscanned_
+rule C_COMPILER__ncc_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1245,7 +1226,7 @@ rule C_COMPILER__ncc_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__ncc_
+rule C_EXECUTABLE_LINKER__ncc_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1256,7 +1237,7 @@ rule C_EXECUTABLE_LINKER__ncc_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__msgqueue-demo_unscanned_
+rule C_COMPILER__msgqueue-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1266,7 +1247,7 @@ rule C_COMPILER__msgqueue-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__msgqueue-demo_
+rule C_EXECUTABLE_LINKER__msgqueue-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1277,7 +1258,7 @@ rule C_EXECUTABLE_LINKER__msgqueue-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__fib-big-demo_unscanned_
+rule C_COMPILER__fib-big-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1287,7 +1268,7 @@ rule C_COMPILER__fib-big-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__fib-big-demo_
+rule C_EXECUTABLE_LINKER__fib-big-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1298,7 +1279,7 @@ rule C_EXECUTABLE_LINKER__fib-big-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__wumpus-game_unscanned_
+rule C_COMPILER__wumpus-game_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1308,7 +1289,7 @@ rule C_COMPILER__wumpus-game_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__wumpus-game_
+rule C_EXECUTABLE_LINKER__wumpus-game_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1319,7 +1300,7 @@ rule C_EXECUTABLE_LINKER__wumpus-game_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__hello-channel-demo_unscanned_
+rule C_COMPILER__hello-channel-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1329,7 +1310,7 @@ rule C_COMPILER__hello-channel-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__hello-channel-demo_
+rule C_EXECUTABLE_LINKER__hello-channel-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1340,7 +1321,7 @@ rule C_EXECUTABLE_LINKER__hello-channel-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__typed-chan-demo_unscanned_
+rule C_COMPILER__typed-chan-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1350,7 +1331,7 @@ rule C_COMPILER__typed-chan-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__typed-chan-demo_
+rule C_EXECUTABLE_LINKER__typed-chan-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1361,7 +1342,7 @@ rule C_EXECUTABLE_LINKER__typed-chan-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__typed-chan-send_unscanned_
+rule C_COMPILER__typed-chan-send_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1371,7 +1352,7 @@ rule C_COMPILER__typed-chan-send_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__typed-chan-send_
+rule C_EXECUTABLE_LINKER__typed-chan-send_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1382,7 +1363,7 @@ rule C_EXECUTABLE_LINKER__typed-chan-send_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__typed-chan-recv_unscanned_
+rule C_COMPILER__typed-chan-recv_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1392,7 +1373,7 @@ rule C_COMPILER__typed-chan-recv_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__typed-chan-recv_
+rule C_EXECUTABLE_LINKER__typed-chan-recv_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1403,7 +1384,7 @@ rule C_EXECUTABLE_LINKER__typed-chan-recv_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__affine-channel-demo_unscanned_
+rule C_COMPILER__affine-channel-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1413,7 +1394,7 @@ rule C_COMPILER__affine-channel-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__affine-channel-demo_
+rule C_EXECUTABLE_LINKER__affine-channel-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1424,7 +1405,7 @@ rule C_EXECUTABLE_LINKER__affine-channel-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__beatty-demo_unscanned_
+rule C_COMPILER__beatty-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1434,7 +1415,7 @@ rule C_COMPILER__beatty-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__beatty-demo_
+rule C_EXECUTABLE_LINKER__beatty-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1445,7 +1426,7 @@ rule C_EXECUTABLE_LINKER__beatty-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__dag-demo_unscanned_
+rule C_COMPILER__dag-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1455,7 +1436,7 @@ rule C_COMPILER__dag-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__dag-demo_
+rule C_EXECUTABLE_LINKER__dag-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1466,7 +1447,7 @@ rule C_EXECUTABLE_LINKER__dag-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__beatty-dag-demo_unscanned_
+rule C_COMPILER__beatty-dag-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1476,7 +1457,7 @@ rule C_COMPILER__beatty-dag-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__beatty-dag-demo_
+rule C_EXECUTABLE_LINKER__beatty-dag-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1487,7 +1468,7 @@ rule C_EXECUTABLE_LINKER__beatty-dag-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__chan-beatty-rcrs-demo_unscanned_
+rule C_COMPILER__chan-beatty-rcrs-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1497,7 +1478,7 @@ rule C_COMPILER__chan-beatty-rcrs-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__chan-beatty-rcrs-demo_
+rule C_EXECUTABLE_LINKER__chan-beatty-rcrs-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1508,7 +1489,7 @@ rule C_EXECUTABLE_LINKER__chan-beatty-rcrs-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__chan-dag-supervisor-demo_unscanned_
+rule C_COMPILER__chan-dag-supervisor-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1518,7 +1499,7 @@ rule C_COMPILER__chan-dag-supervisor-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__chan-dag-supervisor-demo_
+rule C_EXECUTABLE_LINKER__chan-dag-supervisor-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1529,7 +1510,7 @@ rule C_EXECUTABLE_LINKER__chan-dag-supervisor-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__fbdev-demo_unscanned_
+rule C_COMPILER__fbdev-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1539,7 +1520,7 @@ rule C_COMPILER__fbdev-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__fbdev-demo_
+rule C_EXECUTABLE_LINKER__fbdev-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1550,7 +1531,7 @@ rule C_EXECUTABLE_LINKER__fbdev-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__hv-demo_unscanned_
+rule C_COMPILER__hv-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1560,7 +1541,7 @@ rule C_COMPILER__hv-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__hv-demo_
+rule C_EXECUTABLE_LINKER__hv-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1571,7 +1552,7 @@ rule C_EXECUTABLE_LINKER__hv-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__ddekit-port-demo_unscanned_
+rule C_COMPILER__ddekit-port-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1581,7 +1562,7 @@ rule C_COMPILER__ddekit-port-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__ddekit-port-demo_
+rule C_EXECUTABLE_LINKER__ddekit-port-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1592,7 +1573,7 @@ rule C_EXECUTABLE_LINKER__ddekit-port-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__qspin-demo_unscanned_
+rule C_COMPILER__qspin-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1602,7 +1583,7 @@ rule C_COMPILER__qspin-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__qspin-demo_
+rule C_EXECUTABLE_LINKER__qspin-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1613,7 +1594,7 @@ rule C_EXECUTABLE_LINKER__qspin-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__microkernel-rcrs-demo_unscanned_
+rule C_COMPILER__microkernel-rcrs-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1623,7 +1604,7 @@ rule C_COMPILER__microkernel-rcrs-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__microkernel-rcrs-demo_
+rule C_EXECUTABLE_LINKER__microkernel-rcrs-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1634,7 +1615,7 @@ rule C_EXECUTABLE_LINKER__microkernel-rcrs-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__irq-lambda-policy-demo_unscanned_
+rule C_COMPILER__irq-lambda-policy-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1644,7 +1625,7 @@ rule C_COMPILER__irq-lambda-policy-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__irq-lambda-policy-demo_
+rule C_EXECUTABLE_LINKER__irq-lambda-policy-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1655,7 +1636,7 @@ rule C_EXECUTABLE_LINKER__irq-lambda-policy-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__libos-posix-extra-test_unscanned_
+rule C_COMPILER__libos-posix-extra-test_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1665,7 +1646,7 @@ rule C_COMPILER__libos-posix-extra-test_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__libos-posix-extra-test_
+rule C_EXECUTABLE_LINKER__libos-posix-extra-test_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1676,7 +1657,7 @@ rule C_EXECUTABLE_LINKER__libos-posix-extra-test_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__posix-cwd-test_unscanned_
+rule C_COMPILER__posix-cwd-test_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1686,7 +1667,7 @@ rule C_COMPILER__posix-cwd-test_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__posix-cwd-test_
+rule C_EXECUTABLE_LINKER__posix-cwd-test_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1697,7 +1678,7 @@ rule C_EXECUTABLE_LINKER__posix-cwd-test_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__posix-misc-test_unscanned_
+rule C_COMPILER__posix-misc-test_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1707,7 +1688,7 @@ rule C_COMPILER__posix-misc-test_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__posix-misc-test_
+rule C_EXECUTABLE_LINKER__posix-misc-test_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1718,7 +1699,7 @@ rule C_EXECUTABLE_LINKER__posix-misc-test_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__posix-socket-test_unscanned_
+rule C_COMPILER__posix-socket-test_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1728,7 +1709,7 @@ rule C_COMPILER__posix-socket-test_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__posix-socket-test_
+rule C_EXECUTABLE_LINKER__posix-socket-test_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1739,7 +1720,7 @@ rule C_EXECUTABLE_LINKER__posix-socket-test_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__exo-stream-demo_unscanned_
+rule C_COMPILER__exo-stream-demo_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1749,7 +1730,7 @@ rule C_COMPILER__exo-stream-demo_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__exo-stream-demo_
+rule C_EXECUTABLE_LINKER__exo-stream-demo_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1760,7 +1741,7 @@ rule C_EXECUTABLE_LINKER__exo-stream-demo_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__phoenix-test-host-stubs_unscanned_
+rule C_COMPILER__phoenix-test-host-stubs_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1770,7 +1751,7 @@ rule C_COMPILER__phoenix-test-host-stubs_unscanned_
 #############################################
 # Rule for linking C static library.
 
-rule C_STATIC_LIBRARY_LINKER__phoenix-test-host-stubs_
+rule C_STATIC_LIBRARY_LINKER__phoenix-test-host-stubs_Debug
   command = $PRE_LINK && /usr/local/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/llvm-ar-18 qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
@@ -1779,7 +1760,7 @@ rule C_STATIC_LIBRARY_LINKER__phoenix-test-host-stubs_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__microbench-cap_verify_bench_unscanned_
+rule C_COMPILER__microbench-cap_verify_bench_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1789,7 +1770,7 @@ rule C_COMPILER__microbench-cap_verify_bench_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__microbench-cap_verify_bench_
+rule C_EXECUTABLE_LINKER__microbench-cap_verify_bench_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1800,7 +1781,7 @@ rule C_EXECUTABLE_LINKER__microbench-cap_verify_bench_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__microbench-exo_yield_to_bench_unscanned_
+rule C_COMPILER__microbench-exo_yield_to_bench_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1810,7 +1791,7 @@ rule C_COMPILER__microbench-exo_yield_to_bench_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__microbench-exo_yield_to_bench_
+rule C_EXECUTABLE_LINKER__microbench-exo_yield_to_bench_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1821,7 +1802,7 @@ rule C_EXECUTABLE_LINKER__microbench-exo_yield_to_bench_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__microbench-lattice_pipe_bench_unscanned_
+rule C_COMPILER__microbench-lattice_pipe_bench_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1831,7 +1812,7 @@ rule C_COMPILER__microbench-lattice_pipe_bench_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__microbench-lattice_pipe_bench_
+rule C_EXECUTABLE_LINKER__microbench-lattice_pipe_bench_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
@@ -1842,7 +1823,7 @@ rule C_EXECUTABLE_LINKER__microbench-lattice_pipe_bench_
 #############################################
 # Rule for compiling C files.
 
-rule C_COMPILER__microbench-proc_cap_test_unscanned_
+rule C_COMPILER__microbench-proc_cap_test_unscanned_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = ${LAUNCHER}${CODE_CHECK}/usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -1852,7 +1833,7 @@ rule C_COMPILER__microbench-proc_cap_test_unscanned_
 #############################################
 # Rule for linking C executable.
 
-rule C_EXECUTABLE_LINKER__microbench-proc_cap_test_
+rule C_EXECUTABLE_LINKER__microbench-proc_cap_test_Debug
   depfile = $DEP_FILE
   deps = gcc
   command = $PRE_LINK && /usr/bin/clang $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD

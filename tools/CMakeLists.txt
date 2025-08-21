@@ -25,27 +25,9 @@ endif()
 
 # Compiler utilities
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/compiler_utils.c")
-    phoenix_add_library(phoenix-compiler-utils
-        STATIC
-        SOURCES compiler_utils.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
-    )
-    
-    # Create compiler utilities executable
-    phoenix_add_executable(compiler-utils
-        SOURCES compiler_utils.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
-        DEFINITIONS COMPILER_UTILS_MAIN
-    )
-    
-    set_target_properties(compiler-utils PROPERTIES 
-        OUTPUT_NAME "compiler-utils"
-        PREFIX ""
-    )
+    # Host tool - use standard library and minimal includes
+    add_library(phoenix-compiler-utils STATIC compiler_utils.c)
+    target_include_directories(phoenix-compiler-utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -124,12 +106,9 @@ endif()
 
 # Network Compiler Compiler (if needed)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncc.c")
-    phoenix_add_executable(ncc
-        SOURCES ncc.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
-    )
+    add_executable(ncc ncc.c)
+    target_include_directories(ncc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    target_link_libraries(ncc PRIVATE phoenix-compiler-utils)
     
     set_target_properties(ncc PROPERTIES 
         OUTPUT_NAME "ncc"
