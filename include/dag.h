@@ -2,10 +2,8 @@
 #include "types.h"
 #include "exo.h"
 
-/* Forward declaration */
+/* Forward declarations to avoid circular dependencies */
 struct lattice_channel;
-#include "lattice_ipc.h"
-
 struct dag_node;
 
 struct dag_node_list {

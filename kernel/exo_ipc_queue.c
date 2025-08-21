@@ -8,7 +8,7 @@
 #include <string.h>
 #include "ipc_debug.h"
 #define EXO_KERNEL
-#include "include/exokernel.h"
+#include "exokernel.h"
 #include "ipc_queue.h"
 
 struct mailbox ipcs;

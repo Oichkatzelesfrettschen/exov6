@@ -164,10 +164,12 @@ _Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
 #ifndef __ASSEMBLER__
 #ifdef __x86_64__
 typedef uint64_t pte_t;
+typedef uint64_t pde_t;   /* Page directory entry */
 typedef uint64_t pdpe_t;
 typedef uint64_t pml4e_t;
 #else
 typedef uint32_t pte_t;
+typedef uint32_t pde_t;   /* Page directory entry */
 #endif
 
 // Task state segment format

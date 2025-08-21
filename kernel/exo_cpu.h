@@ -15,6 +15,7 @@
 #ifndef EXO_CONTEXT_T
 #define EXO_CONTEXT_T
 #if defined(__x86_64__)
+#ifndef CONTEXT64_DEFINED
 struct context64 {
   uint64_t r15;
   uint64_t r14;
@@ -24,6 +25,8 @@ struct context64 {
   uint64_t rbp;
   uint64_t rip;
 };
+#define CONTEXT64_DEFINED
+#endif
 typedef struct context64 context_t;
 #elif defined(__aarch64__)
 struct context64 {

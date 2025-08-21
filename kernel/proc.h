@@ -55,6 +55,7 @@ struct context {
 _Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
 #if defined(__x86_64__)
+#ifndef CONTEXT64_DEFINED
 struct context64 {
   unsigned long r15;
   unsigned long r14;
@@ -64,6 +65,8 @@ struct context64 {
   unsigned long rbp;
   unsigned long rip;
 };
+#define CONTEXT64_DEFINED
+#endif
 #elif defined(__aarch64__)
 struct context64 {
   unsigned long x19;

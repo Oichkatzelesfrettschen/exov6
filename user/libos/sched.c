@@ -1,4 +1,5 @@
 #include "libos/sched.h"
+#include "caplib.h"
 
 #define MAX_PROCS 64
 
@@ -19,23 +20,24 @@ static void sched_tick(void) {
         return;
     for(int i = 0; i < nprocs; i++) {
         cur = (cur + 1) % nprocs;
-        set_gas(GAS_SLICE);
-        cap_yield_to_cap(runq[cur]);
+        if (cap_set_gas(GAS_SLICE) < 0) continue;
+        if (cap_yield_to_cap(runq[cur]) < 0) continue;
         if(!cap_out_of_gas())
             break;
     }
 }
 
 void sched_install_timer(void) {
-    cap_set_timer(sched_tick);
+    (void)cap_set_timer(sched_tick); /* Ignore return value for timer setup */
 }
 
 void sched_run(void) {
     sched_install_timer();
     if(nprocs > 0){
         cur = 0;
-        set_gas(GAS_SLICE);
-        cap_yield_to_cap(runq[cur]);
+        if (cap_set_gas(GAS_SLICE) == 0) {
+            (void)cap_yield_to_cap(runq[cur]); /* Start first process */
+        }
     }
     while(1)
         sched_tick();

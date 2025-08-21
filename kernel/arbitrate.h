@@ -9,6 +9,9 @@
 extern "C" {
 #endif
 
+/* Forward declare spinlock - it should be defined in spinlock.h */
+struct spinlock;
+
 struct arbitrate_entry {
   uint32_t type;
   uint32_t resource_id;
@@ -26,31 +29,9 @@ typedef int (*arbitrate_policy_t)(uint32_t type, uint32_t resource_id,
 void arbitrate_init(arbitrate_policy_t policy);
 void arbitrate_use_table(struct arbitrate_table *t);
 void arbitrate_register_policy(arbitrate_policy_t policy);
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif // ARBITRATE_H
-
-#ifndef SPINLOCK_H
-#define SPINLOCK_H
-
-#include <stdatomic.h>
-
-struct spinlock {
-  atomic_flag flag;
-};
-
-static inline void spinlock_init(struct spinlock *lock) {
-  atomic_flag_clear(&lock->flag);
-}
-
-static inline void spinlock_lock(struct spinlock *lock) {
-  while (atomic_flag_test_and_set(&lock->flag)) { /* spin */ }
-}
-
-static inline void spinlock_unlock(struct spinlock *lock) {
-  atomic_flag_clear(&lock->flag);
-}
-
-#endif // SPINLOCK_H

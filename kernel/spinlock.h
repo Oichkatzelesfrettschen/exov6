@@ -39,7 +39,7 @@ struct spinlock {
 /**
  * @brief Initialise a spinlock with the provided name.
  */
-void initlock(struct spinlock *lk, char *name);
+void initlock(struct spinlock *lk, const char *name);
 
 /** Ensure cache_line_size is initialized at program startup. */
 __attribute__((constructor))
