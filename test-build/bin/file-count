@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/local/bin/node "/home/runner/work/exov6/exov6/test-build/bin/file-count.js" "$@"
