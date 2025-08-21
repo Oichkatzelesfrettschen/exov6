@@ -64,8 +64,19 @@ EXO_NODISCARD int cap_ipc_echo_demo(void) {
   const char *msg = "ping";
   char buf[5];
   exo_cap cap = {0, 0};
-  cap_send(cap, msg, 4);
-  cap_recv(cap, buf, 4);
+  
+  int result = cap_send(cap, msg, 4);
+  if (result != 0) {
+    printf(2, "caplib echo: send failed\n");
+    return result;
+  }
+  
+  result = cap_recv(cap, buf, 4);
+  if (result != 0) {
+    printf(2, "caplib echo: recv failed\n");
+    return result;
+  }
+  
   buf[4] = '\0';
   printf(1, "caplib echo: %s\n", buf);
   return 0;

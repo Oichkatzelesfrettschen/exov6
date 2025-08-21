@@ -31,4 +31,37 @@ typedef long intptr_t;
 typedef unsigned long uintptr_t;
 #endif
 
+/* Least-width integer types required by stdatomic.h */
+#ifndef __int_least8_t_defined
+#define __int_least8_t_defined
+typedef int8_t int_least8_t;
+typedef uint8_t uint_least8_t;
+typedef int16_t int_least16_t;
+typedef uint16_t uint_least16_t;
+typedef int32_t int_least32_t;
+typedef uint32_t uint_least32_t;
+typedef int64_t int_least64_t;
+typedef uint64_t uint_least64_t;
+#endif
+
+/* Fast minimum-width integer types */
+#ifndef __int_fast8_t_defined
+#define __int_fast8_t_defined
+typedef int8_t int_fast8_t;
+typedef uint8_t uint_fast8_t;
+typedef int16_t int_fast16_t;
+typedef uint16_t uint_fast16_t;
+typedef int32_t int_fast32_t;
+typedef uint32_t uint_fast32_t;
+typedef int64_t int_fast64_t;
+typedef uint64_t uint_fast64_t;
+#endif
+
+/* Maximum-width integer types */
+#ifndef __intmax_t_defined
+#define __intmax_t_defined
+typedef int64_t intmax_t;
+typedef uint64_t uintmax_t;
+#endif
+
 #endif /* _STDINT_H */

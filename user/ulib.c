@@ -2,12 +2,10 @@
 #include "stat.h"
 #include "fcntl.h"
 #include "user.h"
-#include <string.h>
-#include <unistd.h>
 
 /* Declare system call prototypes to avoid implicit declarations */
 int open(const char *path, int flags, ...);
-ssize_t read(int fd, void *buf, size_t n);
+int read(int fd, void *buf, int n);
 int fstat(int fd, struct stat *st);
 int close(int fd);
 
