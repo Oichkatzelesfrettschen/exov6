@@ -59,7 +59,7 @@
 #define PHOENIX_VERSION "1.0.0"
 
 /* Build configuration */
-#define USE_LTO 1
+/* #undef USE_LTO */
 #define USE_LLD 1
 #define USE_POLLY 1
 /* #undef USE_SIMD */

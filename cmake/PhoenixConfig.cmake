@@ -95,8 +95,6 @@ function(phoenix_configure_llvm_features target)
     if(USE_POLLY AND PHOENIX_LLVM_OPT)
         target_compile_options(${target} PRIVATE
             -mllvm -polly
-            -mllvm -polly-vectorizer=stripmine
-            -mllvm -polly-parallel
         )
         message(STATUS "ExoV6: Enabled Polly optimizations for ${target}")
     endif()
