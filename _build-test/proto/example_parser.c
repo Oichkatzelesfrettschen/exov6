@@ -70,8 +70,14 @@
 #line 1 "/home/runner/work/exov6/exov6/proto/example.y"
 
 /* Example Bison grammar */
+#include <stdio.h>
+#include <stdlib.h>
 
-#line 75 "/home/runner/work/exov6/exov6/_build-test/proto/example_parser.c"
+/* Forward declarations */
+int yylex(void);
+void yyerror(const char *s);
+
+#line 81 "/home/runner/work/exov6/exov6/_build-test/proto/example_parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -489,7 +495,7 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,     9,     9
+       0,    15,    15
 };
 #endif
 
@@ -1045,7 +1051,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1049 "/home/runner/work/exov6/exov6/_build-test/proto/example_parser.c"
+#line 1055 "/home/runner/work/exov6/exov6/_build-test/proto/example_parser.c"
 
       default: break;
     }
@@ -1238,5 +1244,15 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 13 "/home/runner/work/exov6/exov6/proto/example.y"
+#line 19 "/home/runner/work/exov6/exov6/proto/example.y"
 
+
+/* Lexical analyzer - minimal implementation */
+int yylex(void) {
+    return 0; /* EOF */
+}
+
+/* Error handler */
+void yyerror(const char *s) {
+    fprintf(stderr, "Parse error: %s\n", s);
+}
