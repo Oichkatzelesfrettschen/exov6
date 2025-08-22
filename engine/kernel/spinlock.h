@@ -1,59 +1,65 @@
 #pragma once
 
+#include <stdatomic.h>
 #include <stddef.h>
 #include <stdint.h>
 #include "config.h"
 
-// Forward declaration of struct cpu, representing a CPU structure used in spinlock debugging.
+/**
+ * Forward declaration of CPU descriptor used for debugging ownership.
+ */
 struct cpu;
 
-// Ticket-based mutual exclusion lock.
+/** Ticket-based mutual exclusion lock. */
 struct ticketlock {
-  _Atomic uint16_t head;
-  _Atomic uint16_t tail;
+  _Atomic uint16_t head; /**< Next ticket to serve. */
+  _Atomic uint16_t tail; /**< Next ticket to issue. */
 };
 
+/** Spinlock implemented via a ticket lock with debug information. */
 struct spinlock {
-  struct ticketlock ticket; // Ticket lock implementation
-  char *lock_name_ptr;  // Pointer to the name of the lock (null-terminated string).
-  // For debugging:
-  uint32_t pcs[10]; // Stores the call stack for debugging purposes.
-                    // The call stack (an array of program counters) that locked the lock.
-                    // This array is intended to store up to 10 program counters (return addresses)
-                    // from the call stack at the time the lock was acquired. It is primarily used
-                    // for debugging purposes to trace the code path that led to the lock being held.
-                    // The exact mechanism for capturing these program counters is implementation-specific
-                    // and may involve walking the stack or using compiler-provided intrinsics.
-  struct cpu *cpu;  // The cpu holding the lock.
+  struct ticketlock ticket; /**< Ticket lock state. */
+  char *name;               /**< Human-readable lock identifier. */
+  uint32_t pcs[10];         /**< Call stack PCs at lock acquisition. */
+  struct cpu *cpu;          /**< CPU currently holding the lock. */
 };
-extern size_t cache_line_size;
-// Represents the size of a cache line in bytes, used for optimizing spinlock alignment.
-// It is initialized by the detect_cache_line_size() function at runtime.
+
+/** Size in bytes of a processor cache line. */
 extern size_t cache_line_size;
 
-// Ensure cache_line_size is initialized during program startup.
-__attribute__((constructor)) static void initialize_cache_line_size(void) {
-  if (cache_line_size == 0) {
-    detect_cache_line_size();
-#endif // CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
-}
+/**
+ * Detect the architecture's cache line size at runtime.
+ */
 void detect_cache_line_size(void);
-void initlock(struct spinlock *lk, char *lock_name_ptr);
-// Enable spinlock functionality for symmetric multiprocessing (SMP) systems,
-// unless explicitly configured for a uniprocessor setup.
+
+/**
+ * Initialise a spinlock with a descriptive name.
+ *
+ * \param lk   Spinlock to initialise.
+ * \param name Null-terminated label used for diagnostics.
+ */
+void initlock(struct spinlock *lk, char *name);
+
 #if CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
-// void initlock(struct spinlock *lk, char *name); // Removed duplicate declaration
+/** Acquire a spinlock, blocking until it becomes available. */
 void acquire(struct spinlock *lk);
+
+/** Release a previously acquired spinlock. */
 void release(struct spinlock *lk);
 #endif
-// Returns the recommended alignment for instances of struct spinlock.
-// Aligning spinlocks to the cache line size helps avoid false sharing,
-// which can significantly improve performance in multi-core systems.
-  // Assume cache_line_size is initialized during program startup.
-  // No need to call detect_cache_line_size here.
+
+/**
+ * Obtain the recommended alignment for \ref spinlock.
+ *
+ * The alignment equals the runtime-detected cache line width to minimise
+ * false sharing across cores.
+ *
+ * \returns Number of bytes to align a spinlock instance.
+ */
+static inline size_t spinlock_align(void)
+{
+  if (!cache_line_size) {
+    detect_cache_line_size();
   }
   return cache_line_size;
 }
-
-#endif // CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
-

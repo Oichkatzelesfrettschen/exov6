@@ -104,13 +104,13 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/x86/modern")
 endif()
 
 # ARM Support
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
     file(GLOB ARM_SOURCES arm/*.c)
     if(ARM_SOURCES)
         phoenix_add_library(phoenix-arch-arm
             STATIC
             SOURCES ${ARM_SOURCES}
-            INCLUDES 
+            INCLUDES
                 ${CMAKE_CURRENT_SOURCE_DIR}/arm
                 ${CMAKE_SOURCE_DIR}/include
             DEPENDENCIES phoenix-simd
@@ -119,13 +119,13 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
 endif()
 
 # AArch64 Support
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/aarch64")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/aarch64")
     file(GLOB AARCH64_SOURCES aarch64/*.c)
     if(AARCH64_SOURCES)
         phoenix_add_library(phoenix-arch-aarch64
             STATIC
             SOURCES ${AARCH64_SOURCES}
-            INCLUDES 
+            INCLUDES
                 ${CMAKE_CURRENT_SOURCE_DIR}/aarch64
                 ${CMAKE_SOURCE_DIR}/include
             DEPENDENCIES phoenix-simd
@@ -134,13 +134,13 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/aarch64")
 endif()
 
 # PowerPC Support
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ppc")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc|ppc" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ppc")
     file(GLOB PPC_SOURCES ppc/*.c)
     if(PPC_SOURCES)
         phoenix_add_library(phoenix-arch-ppc
             STATIC
             SOURCES ${PPC_SOURCES}
-            INCLUDES 
+            INCLUDES
                 ${CMAKE_CURRENT_SOURCE_DIR}/ppc
                 ${CMAKE_SOURCE_DIR}/include
             DEPENDENCIES phoenix-simd
