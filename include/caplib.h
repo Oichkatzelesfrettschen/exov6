@@ -26,3 +26,11 @@ EXO_NODISCARD int cap_write_disk(exo_blockcap cap, const void *src,
 EXO_NODISCARD int cap_ipc_echo_demo(void);
 EXO_NODISCARD int cap_inc(uint16_t id);
 EXO_NODISCARD int cap_dec(uint16_t id);
+
+/**
+ * @brief Revoke a capability, invalidating it system-wide.
+ *
+ * @param id Capability identifier.
+ * @return 0 on success, or a negative error code.
+ */
+EXO_NODISCARD int cap_revoke(uint16_t id);

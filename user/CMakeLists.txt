@@ -117,8 +117,12 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Core user applications
+#
+# The microcontroller-specific "blink" demo relies on MCU headers
+# that are only available when the MCU build option is enabled.  Building it
+# unconditionally causes missing-header failures on hosted builds.  We therefore
+# keep it separate and inject it only when the MCU option is active.
 set(USER_APPS
-    blink
     cat
     echo
     grep
@@ -132,6 +136,11 @@ set(USER_APPS
     wc
     zombie
 )
+
+# Conditionally include MCU demos
+if(MCU)
+    list(INSERT USER_APPS 0 blink)
+endif()
 
 # Build each user application
 foreach(app ${USER_APPS})
