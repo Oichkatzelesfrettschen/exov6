@@ -1,5 +1,4 @@
-#ifndef COMPILER_UTILS_H
-#define COMPILER_UTILS_H
+#pragma once
 
 char getsuf(const char *s);
 char *setsuf(char *s, char suf);

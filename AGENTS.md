@@ -4,7 +4,7 @@ All modifications must strive for modern, idiomatic code using clear functional 
 
 Documentation should remain synchronized with the code. Run `doxygen docs/Doxyfile` and `make -C docs/sphinx` to ensure the documentation builds.
 
-All C code in this repository targets the latest C23 standard. Use modern language features and idioms whenever possible and refactor existing sources progressively toward pure C23 style.
+All C code in this repository targets ISO C17 with strict POSIX-2024 (SUSv5) compliance. Prefer portable, standard APIs and progressively refactor toward clean C17 style.
 
 Additional repository checks:
 - On entry, diff `setup.sh` against https://raw.githubusercontent.com/Oichkatzelesfrettschen/exov6/master/setup.sh. If differences exist, update and commit as `auto-heal setup.sh`.
@@ -12,5 +12,5 @@ Additional repository checks:
 - Run `pre-commit` hooks.
 - Execute `pytest` to run the unit tests.
 - Build documentation with `doxygen docs/Doxyfile` and `make -C docs/sphinx`.
-- Ensure C sources compile with `-std=c2x`.
+- Ensure C sources compile with `-std=c17`.
 - Prefer offline caches in `offline_packages/` when network access fails.

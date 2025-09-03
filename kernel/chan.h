@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 #include "caplib.h"
 
 // Generic channel descriptor storing expected message size and type

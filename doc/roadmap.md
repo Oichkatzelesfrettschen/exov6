@@ -38,7 +38,8 @@ The prototype STREAMS stack still requires several features:
 
 ### Long Term
 
-- Kernel: mature the capability system and research new security policies.
-- libOS: maintain POSIX compliance as features grow, keeping most logic outside the kernel.
-- Scheduler: experiment with alternative models and allow hot-swapping of schedulers.
+- Kernel: mature the capability system and research new security policies (see `doc/security_policy_research.md` for an outline of research areas).
+- libOS: maintain POSIX compliance as features grow, keeping most logic outside the kernel (see `libos/compatibility_roadmap.md` for detailed roadmap).
+- Scheduler: experiment with alternative models and allow hot-swapping of schedulers (e.g., via `exo_stream_hot_swap` for graceful transitions).
 - Driver model: evolve toward a robust user space framework that isolates misbehaving drivers and supports dynamic restarts.
+- Performance: empirically validate analytical performance bounds (see `docs/empirical_performance_validation.md`).

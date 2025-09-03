@@ -74,7 +74,7 @@ def test_cycle_detection():
         subprocess.check_call(
             [
                 "gcc",
-                "-std=c2x",
+                "-std=c17",
                 "-Wall",
                 "-Werror",
                 str(src),

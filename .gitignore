@@ -20,3 +20,5 @@ node_modules/
 
 # Local caches
 .cache/
+openposixtestsuite/
+test_isolation/

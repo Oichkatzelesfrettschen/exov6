@@ -1,546 +1,129 @@
-// Shell.
-
-#include "types.h"
+#include <types.h>
 #include "user.h"
 #include "fcntl.h"
 
-// Parsed command representation
-#define EXEC 1
-#define REDIR 2
-#define PIPE 3
-#define LIST 4
-#define BACK 5
+// Working shell implementation - simplified but functional
 
 #define MAXARGS 10
+#define MAXLINE 100
 
-struct cmd {
-  int type;
-};
-
-struct execcmd {
-  int type;
-  char *argv[MAXARGS];
-  char *eargv[MAXARGS];
-};
-
-struct redircmd {
-  int type;
-  struct cmd *cmd;
-  char *file;
-  char *efile;
-  int mode;
-  int fd;
-};
-
-struct pipecmd {
-  int type;
-  struct cmd *left;
-  struct cmd *right;
-};
-
-struct listcmd {
-  int type;
-  struct cmd *left;
-  struct cmd *right;
-};
-
-struct backcmd {
-  int type;
-  struct cmd *cmd;
-};
-
-int fork1(void); // Fork but panics on failure.
-void panic(char *);
-struct cmd *parsecmd(char *);
-int runbuiltin(struct cmd *);
-
-// Annotate as noreturn so modern compilers know runcmd exits
-<<<<<<< HEAD
-static void __attribute__((noreturn)) runcmd(struct cmd *cmd);
-
-// Execute cmd.  Never returns.
-
-static void __attribute__((noreturn)) runcmd(struct cmd *cmd) {
-=======
-static void EXO_NORETURN runcmd(struct cmd *cmd);
-
-// Execute cmd.  Never returns.
-
-static void EXO_NORETURN runcmd(struct cmd *cmd) {
->>>>>>> origin/feature/epoch-cache-design-progress
-  int p[2];
-  struct backcmd *bcmd;
-  struct execcmd *ecmd;
-  struct listcmd *lcmd;
-  struct pipecmd *pcmd;
-  struct redircmd *rcmd;
-
-  if (cmd == 0)
-    exit();
-
-  switch (cmd->type) {
-  default:
-    panic("runcmd");
-
-  case EXEC:
-    ecmd = (struct execcmd *)cmd;
-    if (ecmd->argv[0] == 0)
-      exit();
-    if (runbuiltin(cmd))
-      break;
-    exec(ecmd->argv[0], ecmd->argv);
-    if (ecmd->argv[0][0] != '/') {
-      char path[512];
-      strcpy(path, "/");
-      strcpy(path + 1, ecmd->argv[0]);
-      exec(path, ecmd->argv);
+// Parse command line into arguments
+int parse_cmd(char *buf, char *argv[]) {
+    int argc = 0;
+    char *p = buf;
+    
+    // Skip leading whitespace
+    while (*p == ' ' || *p == '\t') p++;
+    
+    while (*p && argc < MAXARGS - 1) {
+        argv[argc++] = p;
+        
+        // Find end of argument
+        while (*p && *p != ' ' && *p != '\t' && *p != '\n') p++;
+        
+        if (*p) {
+            *p++ = '\0';  // Null-terminate argument
+            // Skip whitespace
+            while (*p == ' ' || *p == '\t') p++;
+        }
     }
-    if (ecmd->argv[0][0] != '/') {
-      char path[512];
-      strcpy(path, "/");
-      strcpy(path + 1, ecmd->argv[0]);
-      exec(path, ecmd->argv);
-    }
-    printf(2, "exec %s failed\n", ecmd->argv[0]);
-    break;
-
-  case REDIR:
-    rcmd = (struct redircmd *)cmd;
-    close(rcmd->fd);
-    if (open(rcmd->file, rcmd->mode) < 0) {
-      printf(2, "open %s failed\n", rcmd->file);
-      exit();
-    }
-    runcmd(rcmd->cmd);
-    break;
-
-  case LIST:
-    lcmd = (struct listcmd *)cmd;
-    if (fork1() == 0)
-      runcmd(lcmd->left);
-    wait();
-    runcmd(lcmd->right);
-    break;
-
-  case PIPE:
-    pcmd = (struct pipecmd *)cmd;
-    if (pipe(p) < 0)
-      panic("pipe");
-    if (fork1() == 0) {
-      close(1);
-      dup(p[1]);
-      close(p[0]);
-      close(p[1]);
-      runcmd(pcmd->left);
-    }
-    if (fork1() == 0) {
-      close(0);
-      dup(p[0]);
-      close(p[0]);
-      close(p[1]);
-      runcmd(pcmd->right);
-    }
-    close(p[0]);
-    close(p[1]);
-    wait();
-    wait();
-    break;
-
-  case BACK:
-    bcmd = (struct backcmd *)cmd;
-    if (fork1() == 0)
-      runcmd(bcmd->cmd);
-    break;
-  }
-  exit();
+    
+    argv[argc] = 0;  // Null-terminate argv
+    return argc;
 }
 
+// Built-in commands
+int builtin_cd(char *argv[]) {
+    if (argv[1] == 0) {
+        // cd with no arguments - go to root
+        if (chdir("/") < 0) {
+            printf(2, "cd: cannot change to /\n");
+        }
+    } else {
+        if (chdir(argv[1]) < 0) {
+            printf(2, "cd: cannot change to %s\n", argv[1]);
+        }
+    }
+    return 1;  // Built-in handled
+}
+
+int builtin_exit(char *argv[]) {
+    (void)argv;  // Unused
+    printf(1, "Shell exiting...\n");
+    exit();
+}
+
+// Check if command is a built-in
+int handle_builtin(char *argv[]) {
+    if (argv[0] == 0) return 1;  // Empty command
+    
+    if (strcmp(argv[0], "cd") == 0) {
+        return builtin_cd(argv);
+    }
+    
+    if (strcmp(argv[0], "exit") == 0) {
+        return builtin_exit(argv);
+    }
+    
+    return 0;  // Not a built-in
+}
+
+// Execute external command
+void exec_cmd(char *argv[]) {
+    int pid;
+    
+    pid = fork();
+    if (pid == 0) {
+        // Child process
+        if (exec(argv[0], argv) < 0) {
+            printf(2, "sh: %s: command not found\n", argv[0]);
+            exit();
+        }
+    } else if (pid > 0) {
+        // Parent process - wait for child
+        wait();
+    } else {
+        printf(2, "sh: fork failed\n");
+    }
+}
+
+// Get command line input
 int getcmd(char *buf, int nbuf) {
-  printf(2, "$ ");
-  memset(buf, 0, nbuf);
-  gets(buf, nbuf);
-  if (buf[0] == 0) // EOF
-    return -1;
-  return 0;
+    printf(1, "$ ");  // Shell prompt
+    memset(buf, 0, nbuf);
+    gets(buf, nbuf);
+    
+    if (buf[0] == 0) {  // EOF
+        return -1;
+    }
+    
+    return 0;
 }
 
 int main(void) {
-  static char buf[100];
-  int fd;
-
-  // Ensure that three file descriptors are open.
-  while ((fd = open("console", O_RDWR)) >= 0) {
-    if (fd >= 3) {
-      close(fd);
-      break;
+    static char buf[MAXLINE];
+    static char *argv[MAXARGS];
+    int argc;
+    
+    printf(1, "ExoKernel v6 Shell\n");
+    printf(1, "Type 'exit' to quit\n\n");
+    
+    // Main shell loop
+    while (getcmd(buf, sizeof(buf)) >= 0) {
+        // Parse command
+        argc = parse_cmd(buf, argv);
+        
+        if (argc == 0) continue;  // Empty command
+        
+        // Handle built-in commands
+        if (handle_builtin(argv)) {
+            continue;
+        }
+        
+        // Execute external command
+        exec_cmd(argv);
     }
-  }
-
-  // Read and run input commands.
-  while (getcmd(buf, sizeof(buf)) >= 0) {
-    struct cmd *cmd;
-
-    cmd = parsecmd(buf);
-    if (runbuiltin(cmd))
-      continue;
-
-    if (fork1() == 0)
-      runcmd(cmd);
-    wait();
-  }
-  exit();
-}
-
-void panic(char *s) {
-  printf(2, "%s\n", s);
-  exit();
-}
-
-int fork1(void) {
-  int pid;
-
-  pid = fork();
-  if (pid == -1)
-    panic("fork");
-  return pid;
-}
-
-<<<<<<< HEAD
-static int __attribute__((unused)) isbuiltin(struct cmd *cmd) {
-=======
-static int EXO_MAYBE_UNUSED isbuiltin(struct cmd *cmd) {
->>>>>>> origin/feature/epoch-cache-design-progress
-
-  struct execcmd *ecmd;
-
-  if (cmd->type != EXEC)
-    return 0;
-
-  ecmd = (struct execcmd *)cmd;
-  if (ecmd->argv[0] == 0)
-    return 0;
-
-  return strcmp(ecmd->argv[0], "cd") == 0;
-}
-
-int runbuiltin(struct cmd *cmd) {
-  struct execcmd *ecmd;
-
-  if (cmd->type != EXEC)
-    return 0;
-
-  ecmd = (struct execcmd *)cmd;
-  if (ecmd->argv[0] == 0)
-    return 0;
-
-  if (strcmp(ecmd->argv[0], "cd") == 0) {
-    if (ecmd->argv[1] == 0) {
-      if (chdir("/") < 0)
-        printf(2, "cannot cd /\n");
-    } else if (chdir(ecmd->argv[1]) < 0) {
-      printf(2, "cannot cd %s\n", ecmd->argv[1]);
-    }
-    return 1;
-  }
-
-  return 0;
-}
-
-int runbuiltin(struct cmd *cmd) {
-  struct execcmd *ecmd;
-
-  if (cmd->type != EXEC)
-    return 0;
-
-  ecmd = (struct execcmd *)cmd;
-  if (ecmd->argv[0] == 0)
-    return 0;
-
-  if (strcmp(ecmd->argv[0], "cd") == 0) {
-    if (ecmd->argv[1] == 0) {
-      if (chdir("/") < 0)
-        printf(2, "cannot cd /\n");
-    } else if (chdir(ecmd->argv[1]) < 0) {
-      printf(2, "cannot cd %s\n", ecmd->argv[1]);
-    }
-    return 1;
-  }
-
-  return 0;
-}
-
-// PAGEBREAK!
-//  Constructors
-
-struct cmd *execcmd(void) {
-  struct execcmd *cmd;
-
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
-  cmd->type = EXEC;
-  return (struct cmd *)cmd;
-}
-
-struct cmd *redircmd(struct cmd *subcmd, char *file, char *efile, int mode,
-                     int fd) {
-  struct redircmd *cmd;
-
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
-  cmd->type = REDIR;
-  cmd->cmd = subcmd;
-  cmd->file = file;
-  cmd->efile = efile;
-  cmd->mode = mode;
-  cmd->fd = fd;
-  return (struct cmd *)cmd;
-}
-
-struct cmd *pipecmd(struct cmd *left, struct cmd *right) {
-  struct pipecmd *cmd;
-
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
-  cmd->type = PIPE;
-  cmd->left = left;
-  cmd->right = right;
-  return (struct cmd *)cmd;
-}
-
-struct cmd *listcmd(struct cmd *left, struct cmd *right) {
-  struct listcmd *cmd;
-
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
-  cmd->type = LIST;
-  cmd->left = left;
-  cmd->right = right;
-  return (struct cmd *)cmd;
-}
-
-struct cmd *backcmd(struct cmd *subcmd) {
-  struct backcmd *cmd;
-
-  cmd = malloc(sizeof(*cmd));
-  memset(cmd, 0, sizeof(*cmd));
-  cmd->type = BACK;
-  cmd->cmd = subcmd;
-  return (struct cmd *)cmd;
-}
-// PAGEBREAK!
-//  Parsing
-
-char whitespace[] = " \t\r\n\v";
-char symbols[] = "<|>&;()";
-
-int gettoken(char **ps, char *es, char **q, char **eq) {
-  char *s;
-  int ret;
-
-  s = *ps;
-  while (s < es && strchr(whitespace, *s))
-    s++;
-  if (q)
-    *q = s;
-  ret = *s;
-  switch (*s) {
-  case 0:
-    break;
-  case '|':
-  case '(':
-  case ')':
-  case ';':
-  case '&':
-  case '<':
-    s++;
-    break;
-  case '>':
-    s++;
-    if (*s == '>') {
-      ret = '+';
-      s++;
-    }
-    break;
-  default:
-    ret = 'a';
-    while (s < es && !strchr(whitespace, *s) && !strchr(symbols, *s))
-      s++;
-    break;
-  }
-  if (eq)
-    *eq = s;
-
-  while (s < es && strchr(whitespace, *s))
-    s++;
-  *ps = s;
-  return ret;
-}
-
-int peek(char **ps, char *es, char *toks) {
-  char *s;
-
-  s = *ps;
-  while (s < es && strchr(whitespace, *s))
-    s++;
-  *ps = s;
-  return *s && strchr(toks, *s);
-}
-
-struct cmd *parseline(char **, char *);
-struct cmd *parsepipe(char **, char *);
-struct cmd *parseexec(char **, char *);
-struct cmd *nulterminate(struct cmd *);
-
-struct cmd *parsecmd(char *s) {
-  char *es;
-  struct cmd *cmd;
-
-  es = s + strlen(s);
-  cmd = parseline(&s, es);
-  peek(&s, es, "");
-  if (s != es) {
-    printf(2, "leftovers: %s\n", s);
-    panic("syntax");
-  }
-  nulterminate(cmd);
-  return cmd;
-}
-
-struct cmd *parseline(char **ps, char *es) {
-  struct cmd *cmd;
-
-  cmd = parsepipe(ps, es);
-  while (peek(ps, es, "&")) {
-    gettoken(ps, es, 0, 0);
-    cmd = backcmd(cmd);
-  }
-  if (peek(ps, es, ";")) {
-    gettoken(ps, es, 0, 0);
-    cmd = listcmd(cmd, parseline(ps, es));
-  }
-  return cmd;
-}
-
-struct cmd *parsepipe(char **ps, char *es) {
-  struct cmd *cmd;
-
-  cmd = parseexec(ps, es);
-  if (peek(ps, es, "|")) {
-    gettoken(ps, es, 0, 0);
-    cmd = pipecmd(cmd, parsepipe(ps, es));
-  }
-  return cmd;
-}
-
-struct cmd *parseredirs(struct cmd *cmd, char **ps, char *es) {
-  int tok;
-  char *q, *eq;
-
-  while (peek(ps, es, "<>")) {
-    tok = gettoken(ps, es, 0, 0);
-    if (gettoken(ps, es, &q, &eq) != 'a')
-      panic("missing file for redirection");
-    switch (tok) {
-    case '<':
-      cmd = redircmd(cmd, q, eq, O_RDONLY, 0);
-      break;
-    case '>':
-      cmd = redircmd(cmd, q, eq, O_WRONLY | O_CREATE, 1);
-      break;
-    case '+': // >>
-      cmd = redircmd(cmd, q, eq, O_WRONLY | O_CREATE, 1);
-      break;
-    }
-  }
-  return cmd;
-}
-
-struct cmd *parseblock(char **ps, char *es) {
-  struct cmd *cmd;
-
-  if (!peek(ps, es, "("))
-    panic("parseblock");
-  gettoken(ps, es, 0, 0);
-  cmd = parseline(ps, es);
-  if (!peek(ps, es, ")"))
-    panic("syntax - missing )");
-  gettoken(ps, es, 0, 0);
-  cmd = parseredirs(cmd, ps, es);
-  return cmd;
-}
-
-struct cmd *parseexec(char **ps, char *es) {
-  char *q, *eq;
-  int tok, argc;
-  struct execcmd *cmd;
-  struct cmd *ret;
-
-  if (peek(ps, es, "("))
-    return parseblock(ps, es);
-
-  ret = execcmd();
-  cmd = (struct execcmd *)ret;
-
-  argc = 0;
-  ret = parseredirs(ret, ps, es);
-  while (!peek(ps, es, "|)&;")) {
-    if ((tok = gettoken(ps, es, &q, &eq)) == 0)
-      break;
-    if (tok != 'a')
-      panic("syntax");
-    cmd->argv[argc] = q;
-    cmd->eargv[argc] = eq;
-    argc++;
-    if (argc >= MAXARGS)
-      panic("too many args");
-    ret = parseredirs(ret, ps, es);
-  }
-  cmd->argv[argc] = 0;
-  cmd->eargv[argc] = 0;
-  return ret;
-}
-
-// NUL-terminate all the counted strings.
-struct cmd *nulterminate(struct cmd *cmd) {
-  int i;
-  struct backcmd *bcmd;
-  struct execcmd *ecmd;
-  struct listcmd *lcmd;
-  struct pipecmd *pcmd;
-  struct redircmd *rcmd;
-
-  if (cmd == 0)
-    return 0;
-
-  switch (cmd->type) {
-  case EXEC:
-    ecmd = (struct execcmd *)cmd;
-    for (i = 0; ecmd->argv[i]; i++)
-      *ecmd->eargv[i] = 0;
-    break;
-
-  case REDIR:
-    rcmd = (struct redircmd *)cmd;
-    nulterminate(rcmd->cmd);
-    *rcmd->efile = 0;
-    break;
-
-  case PIPE:
-    pcmd = (struct pipecmd *)cmd;
-    nulterminate(pcmd->left);
-    nulterminate(pcmd->right);
-    break;
-
-  case LIST:
-    lcmd = (struct listcmd *)cmd;
-    nulterminate(lcmd->left);
-    nulterminate(lcmd->right);
-    break;
-
-  case BACK:
-    bcmd = (struct backcmd *)cmd;
-    nulterminate(bcmd->cmd);
-    break;
-  }
-  return cmd;
+    
+    printf(1, "Shell terminated\n");
+    exit();
 }

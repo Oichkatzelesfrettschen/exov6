@@ -10,13 +10,9 @@ def build_lib():
     if LIB.exists():
         return
     build_dir = ROOT / 'build'
-    subprocess.check_call([
-        'cmake', '-S', str(ROOT), '-B', str(build_dir), '-G', 'Ninja',
-        '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
-    ])
-    subprocess.check_call([
-        'cmake', '--build', str(build_dir), '--target', 'nstr_graph_shared'
-    ])
+    if not build_dir.exists():
+        subprocess.check_call(['meson', 'setup', str(build_dir)])
+    subprocess.check_call(['meson', 'compile', '-C', str(build_dir), 'nstr_graph_shared'])
 
 
 def load_lib():

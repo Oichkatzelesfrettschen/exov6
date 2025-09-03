@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 #include "user.h"
 
 /* Lightweight capability wrapper used by libSMK. */

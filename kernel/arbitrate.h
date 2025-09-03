@@ -1,7 +1,7 @@
 #ifndef ARBITRATE_H
 #define ARBITRATE_H
 
-#include "types.h"
+#include <types.h>
 #include <stdint.h>
 #include <stdatomic.h>
 

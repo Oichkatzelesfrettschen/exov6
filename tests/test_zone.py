@@ -58,7 +58,7 @@ def compile_and_run(body):
         (pathlib.Path(td)/"mmu.h").write_text('#include "include/types.h"\n#include "include/mmu.h"\n')
         (pathlib.Path(td)/"memlayout.h").write_text('#include "include/memlayout.h"\n')
         subprocess.check_call([
-            CC,"-std=c23","-Wall","-Werror","-Wno-unused-function",
+            CC,"-std=c17","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
             str(src),

@@ -1,6 +1,6 @@
 #pragma once
 #include "exo.h"
-#include <compiler_attrs.h>
+#include "compiler_attrs.h"
 
 exo_cap exo_alloc_page(void);
 EXO_NODISCARD int exo_unbind_page(exo_cap cap);

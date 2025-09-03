@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 
 double phi(void);
 uint64_t fib(uint32_t n);

@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 #include "exo.h"
 
 /*
@@ -14,6 +14,10 @@
 
 #ifndef EXO_CONTEXT_T
 #define EXO_CONTEXT_T
+
+// Only define context64 if not already defined
+#ifndef CONTEXT64_DEFINED
+#define CONTEXT64_DEFINED
 #if defined(__x86_64__)
 struct context64 {
   uint64_t r15;
@@ -24,6 +28,12 @@ struct context64 {
   uint64_t rbp;
   uint64_t rip;
 };
+#endif
+#endif
+
+#ifndef CONTEXT_T_DEFINED
+#define CONTEXT_T_DEFINED
+#if defined(__x86_64__)
 typedef struct context64 context_t;
 #elif defined(__aarch64__)
 struct context64 {
@@ -51,6 +61,8 @@ struct context {
 };
 typedef struct context context_t;
 #endif
+#endif /* CONTEXT_T_DEFINED */
+
 #endif /* EXO_CONTEXT_T */
 
 void swtch(context_t **old, context_t *new);

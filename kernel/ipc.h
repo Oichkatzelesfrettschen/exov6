@@ -38,6 +38,8 @@ static inline size_t msg_desc_size(const struct msg_type_desc *d) {
 }
 
 static inline int zipc_call(zipc_msg_t *m) {
+  // Portable IPC implementation - avoid x86-specific assembly
+#ifdef __x86_64__
   register uint64_t rdi __asm("rdi") = m->badge;
   register uint64_t rsi __asm("rsi") = m->w0;
   register uint64_t rdx __asm("rdx") = m->w1;
@@ -51,5 +53,9 @@ static inline int zipc_call(zipc_msg_t *m) {
   m->w1 = rdx;
   m->w2 = rcx;
   m->w3 = r8;
+#else
+  // ARM64/other architecture stub
+  (void)m;
+#endif
   return 0;
 }

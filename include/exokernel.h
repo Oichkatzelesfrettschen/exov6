@@ -1,5 +1,6 @@
 #pragma once
 #include "types.h"
+#include "compiler_attrs.h"
 #include "exo.h"
 #include "syscall.h"
 
@@ -59,15 +60,13 @@ EXO_NODISCARD int exo_hv_launch(HypervisorCap hv, const char *path);
  * runnable task. */
 EXO_NODISCARD int exo_yield_to(exo_cap target);
 
-/* Send 'len' bytes from 'buf' to destination capability 'dest'.  Any queuing
- * or flow control is managed in user space. */
+/* Send/recv primitives (guarded to allow test overrides) */
+#if defined(EXO_KERNEL) || defined(EXO_USER_EXO_IPC_DECLS)
 EXO_NODISCARD int exo_send(exo_cap dest, const void *buf, uint64_t len);
-
-/* Receive up to 'len' bytes from source capability 'src' into 'buf'.  The call
- * blocks according to policy implemented by the library OS. */
 EXO_NODISCARD int exo_recv(exo_cap src, void *buf, uint64_t len);
 EXO_NODISCARD int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
                                  unsigned timeout);
+#endif
 
 /* Read or write arbitrary byte ranges using a block capability. */
 EXO_NODISCARD int exo_read_disk(exo_blockcap cap, void *dst, uint64_t off,
@@ -82,6 +81,7 @@ EXO_NODISCARD int exo_irq_ack(exo_cap cap);
 #endif /* EXO_KERNEL */
 
 /* Enumeration of syscall numbers for the primitives. */
+#ifdef EXO_KERNEL
 enum exo_syscall {
   EXO_SYSCALL_ALLOC_PAGE = SYS_exo_alloc_page,
   EXO_SYSCALL_UNBIND_PAGE = SYS_exo_unbind_page,
@@ -107,3 +107,4 @@ enum exo_syscall {
   EXO_SYSCALL_SERVICE_REGISTER = SYS_service_register,
   EXO_SYSCALL_SERVICE_ADD_DEP = SYS_service_add_dependency,
 };
+#endif /* EXO_KERNEL */

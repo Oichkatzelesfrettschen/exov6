@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 #include "caplib.h"
 
 [[nodiscard]] int driver_spawn(const char *path, char *const argv[]);

@@ -5,7 +5,7 @@
 
 #include "exo_ipc.h"
 #include "lattice_types.h"
-#include "../kernel/quaternion_spinlock.h"
+#include "quaternion_spinlock.h"
 #include "octonion.h"
 #include "dag.h"
 
@@ -19,7 +19,12 @@
  * relaxed _Atomic updates.
  */
 typedef struct lattice_channel {
+#ifndef EXO_KERNEL
+  /* host build: lightweight lock placeholder */
+  int lock;
+#else
   quaternion_spinlock_t lock; /**< Guards all mutable channel state. */
+#endif
   exo_cap cap;                /**< Capability handle for peer comm. */
   lattice_public_key_t pub;   /**< Per-channel post-quantum public key. */
   lattice_secret_key_t priv;  /**< Per-channel post-quantum private key. */
@@ -124,3 +129,10 @@ void lattice_close(lattice_channel_t *chan);
  * @return      0 on success, negative on error.
  */
 [[nodiscard]] int lattice_channel_submit(lattice_channel_t *chan);
+
+#ifndef EXO_KERNEL
+/* Host build: define WITH_QLOCK as a no-op scope and shim type */
+#ifndef WITH_QLOCK
+#define WITH_QLOCK(q) for (int _once = 0; !_once; _once = 1)
+#endif
+#endif

@@ -2,18 +2,19 @@
 
 #include "param.h"
 #include "mmu.h"
-#include "x86.h"
+#include <arch_x86_64.h>
 #include "spinlock.h"
 #include "ipc.h"
 #include "exo.h"
 
 // Context used for kernel context switches.
+#ifndef CONTEXT_T_DEFINED
+#define CONTEXT_T_DEFINED
 #if defined(__x86_64__) || defined(__aarch64__)
-struct context64;
 typedef struct context64 context_t;
 #else
-struct context;
 typedef struct context context_t;
+#endif
 #endif
 
 // Per-CPU state
@@ -54,17 +55,7 @@ struct context {
 // Check that context saved by swtch.S matches this layout (5 registers)
 _Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
-#if defined(__x86_64__)
-struct context64 {
-  unsigned long r15;
-  unsigned long r14;
-  unsigned long r13;
-  unsigned long r12;
-  unsigned long rbx;
-  unsigned long rbp;
-  unsigned long rip;
-};
-#elif defined(__aarch64__)
+#if defined(__aarch64__)
 struct context64 {
   unsigned long x19;
   unsigned long x20;

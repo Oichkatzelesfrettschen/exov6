@@ -157,7 +157,7 @@ These are based on the current implementation as reviewed.
 
 ## 6. Future Work
 
-- **Concrete Data Structures**: Refine these bounds once concrete data structures for representing category sets, managing free capability slots, and potentially mapping domain IDs to VT indices are chosen for the C23 implementation.
+- **Concrete Data Structures**: Refine these bounds once concrete data structures for representing category sets, managing free capability slots, and potentially mapping domain IDs to VT indices are chosen for the C17 implementation.
 - **Average-Case and Amortized Analysis**: For operations involving dynamic data structures (e.g., hash tables for category sets, optimized free lists), average-case or amortized analysis might provide a more typical performance expectation than worst-case.
 - **Space Complexity**: Analyze the space complexity of these structures (e.g., VTs require O(N_dom) per domain, GDTs, page tables, capability table itself).
 - **Contention Modeling**: For operations requiring locks (e.g., `cap_table_alloc`), model performance under contention in a multi-core environment.

@@ -163,7 +163,8 @@ typedef uint64_t pte_t;
 typedef uint64_t pdpe_t;
 typedef uint64_t pml4e_t;
 #else
-typedef uint32_t pte_t;
+// Use consistent 64-bit types from include/types.h
+// typedef uint32_t pte_t;  // Commented out - using types.h definition
 #endif
 
 // Task state segment format

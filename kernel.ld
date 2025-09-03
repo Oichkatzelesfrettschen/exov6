@@ -1,64 +1,75 @@
-/* Simple linker script for the JOS kernel.
-   See the GNU ld 'info' manual ("info ld") to learn the syntax. */
+/* Linker script for ExoKernel v6 x86_64 */
 
-OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
-OUTPUT_ARCH(i386)
+OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64", "elf64-x86-64")
+OUTPUT_ARCH(i386:x86-64)
 ENTRY(_start)
 
 SECTIONS
 {
-	/* Link the kernel at this address: "." means the current address */
-        /* Must be equal to KERNLINK */
-	. = 0x80100000;
+  /* Link at high half of virtual address space */
+  . = 0xFFFFFFFF80100000;
 
-	.text : AT(0x100000) {
-		*(.text .stub .text.* .gnu.linkonce.t.*)
-	}
+  /* Ensure multiboot header is early in file */
+  .text : AT(0x100000) {
+    *(.multiboot)
+    *(.text .stub .text.* .gnu.linkonce.t.*)
+    . = ALIGN(0x1000);
+    PROVIDE(etext = .);
+  }
 
-	PROVIDE(etext = .);	/* Define the 'etext' symbol to this value */
+  /* Read-only data */
+  .rodata : {
+    *(.rodata .rodata.* .gnu.linkonce.r.*)
+  }
 
-	.rodata : {
-		*(.rodata .rodata.* .gnu.linkonce.r.*)
-	}
+  /* Ensure proper alignment for data section */
+  . = ALIGN(0x1000);
 
-	/* Include debugging information in kernel memory */
-	.stab : {
-		PROVIDE(__STAB_BEGIN__ = .);
-		*(.stab);
-		PROVIDE(__STAB_END__ = .);
-	}
+  /* Read-write data (initialized) */
+  .data : {
+    *(.data .data.* .gnu.linkonce.d.*)
+    PROVIDE(edata = .);
+  }
 
-	.stabstr : {
-		PROVIDE(__STABSTR_BEGIN__ = .);
-		*(.stabstr);
-		PROVIDE(__STABSTR_END__ = .);
-	}
+  /* Uninitialized data (BSS) */
+  .bss : {
+    *(.dynbss)
+    *(.bss .bss.* .gnu.linkonce.b.*)
+    *(COMMON)
+    . = ALIGN(0x1000);
+    PROVIDE(end = .);
+  }
 
-	/* Adjust the address for the data segment to the next page */
-	. = ALIGN(0x1000);
+  /* Debugging sections */
+  .stab 0 : { *(.stab) }
+  .stabstr 0 : { *(.stabstr) }
+  .stab.excl 0 : { *(.stab.excl) }
+  .stab.exclstr 0 : { *(.stab.exclstr) }
+  .stab.index 0 : { *(.stab.index) }
+  .stab.indexstr 0 : { *(.stab.indexstr) }
+  .comment 0 : { *(.comment) }
 
-	/* Conventionally, Unix linkers provide pseudo-symbols
-	 * etext, edata, and end, at the end of the text, data, and bss.
-	 * For the kernel mapping, we need the address at the beginning
-	 * of the data section, but that's not one of the conventional
-	 * symbols, because the convention started before there was a
-	 * read-only rodata section between text and data. */
-	PROVIDE(data = .);
+  /* DWARF debug sections */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) }
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) }
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) }
+  .debug_pubtypes 0 : { *(.debug_pubtypes) }
+  .debug_ranges   0 : { *(.debug_ranges) }
+  .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
 
-	/* The data segment */
-	.data : {
-		*(.data)
-	}
-
-	PROVIDE(edata = .);
-
-	.bss : {
-		*(.bss)
-	}
-
-	PROVIDE(end = .);
-
-	/DISCARD/ : {
-		*(.eh_frame .note.GNU-stack)
-	}
+  /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
 }

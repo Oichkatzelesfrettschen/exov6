@@ -65,6 +65,8 @@ static int check_irq_cap(exo_cap cap, uint32_t need) {
 [[nodiscard]] int exo_irq_ack(exo_cap cap) {
   if (!check_irq_cap(cap, EXO_RIGHT_W))
     return -EPERM;
+  // Acknowledge the interrupt at the hardware level
+  lapiceoi();
   return 0;
 }
 

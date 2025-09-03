@@ -2,7 +2,7 @@
 
 #include "param.h"
 #include "mmu.h"
-#include "x86.h"
+#include <arch.h>
 #include "spinlock.h"
 #include "ipc.h"
 #include "exo.h"

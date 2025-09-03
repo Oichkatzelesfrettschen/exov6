@@ -2,7 +2,7 @@
 
 This document synthesizes the current architecture of the FeuerBird exokernel
 project as reflected in the source tree and accompanying documentation.
-It is intended as a modern roadmap for future refactoring and C23 migration.
+It is intended as a modern roadmap for future refactoring under ISO C17 with strict POSIX-2024 (SUSv5) conformance.
 
 ## 1. Architectural Overview
 
@@ -48,8 +48,8 @@ prioritizing refactoring work.
 
 ## 3. Design Goals
 
-1. **Modern C23 Compliance** – all compilation units should build with
-   `-std=c2x`. The build system currently uses mixed standards; migration is
+1. **Modern C17 Compliance** – all compilation units should build with
+   `-std=c17`. The build system currently uses mixed standards; migration is
    ongoing.
 2. **Functional Decomposition** – deeply nested logic should be refactored into
    concise static functions with Doxygen comments as mandated by `AGENTS.md`.
@@ -63,10 +63,10 @@ prioritizing refactoring work.
 
 ## 4. Future Work
 
-- **C23 Refactoring** – adopt `[[deprecated]]`, `static_assert`, and modern
+- **C17 Refactoring** – adopt portable `_Static_assert`, feature-test macros, and standard idioms.
   initializer syntax across the code base.
 - **Scheduler Visualization** – integrate graph generation tooling from
-  `tools/header_graph.py` with the Beatty DAG infrastructure to aid debugging.
+  `tools/scheduler_visualizer.py` with the Beatty DAG infrastructure to aid debugging.
 - **Hypervisor Expansion** – extend capability support for guest I/O and memory
   mapping; document in an updated hypervisor specification.
 - **POSIX Test Coverage** – increase pytest coverage as outlined in

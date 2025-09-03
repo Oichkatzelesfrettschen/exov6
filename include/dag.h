@@ -1,7 +1,8 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
-#include "lattice_ipc.h"
+/* Forward-declare lattice_channel_t to avoid cyclic include with lattice_ipc.h */
+typedef struct lattice_channel lattice_channel_t;
 
 struct dag_node;
 

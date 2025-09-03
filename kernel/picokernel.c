@@ -1,5 +1,5 @@
 #include "arch/mcu/gpio.h"
-#include "types.h"
+#include <types.h>
 #include "cap.h"
 
 struct simple_cap {

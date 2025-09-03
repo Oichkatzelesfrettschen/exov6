@@ -9,7 +9,7 @@ This document outlines conceptual test cases designed to falsify—that is, to f
 The test cases describe scenarios, conditions, or states that, if observed or achievable within a formal model (like a TLA+ specification checked by TLC) or a concrete implementation, would indicate a flaw or a contradiction to the defined properties, theorems, or invariants. These conceptual tests serve multiple purposes:
 - Guide the development and refinement of formal models by highlighting edge cases and critical properties to verify.
 - Assist in formulating specific assertions, invariants, and temporal properties to be checked by model checkers like TLC.
-- Provide a basis for developing concrete unit and integration tests for the eventual C23 implementation of these mechanisms.
+- Provide a basis for developing concrete unit and integration tests for the eventual C17 implementation of these mechanisms.
 - Serve as pedagogical tools to help understand the implications and guarantees of each formal specification.
 
 The focus is on identifying conditions that *should not* occur if the specifications are correctly defined and implemented.
@@ -190,6 +190,6 @@ These tests describe scenarios that, if allowed by the TLA+ model, would violate
     - **Invariants**: Many of these tests are direct checks against defined invariants (e.g., `InvariantEpochMonotonicity`).
     - **State Constraints or Properties**: Some tests can be translated into temporal properties or state assertions that TLC can check (e.g., ensuring that if a delegation occurs, the rights attenuation property holds for the resulting capability).
     - **Deadlock Checks**: While not explicitly falsification tests for properties, checking for deadlock (`CHECK deadlock FALSE`) is crucial and can reveal issues in action definitions that might relate to pre-conditions not being met as expected.
-- **Implementation Testing**: These conceptual scenarios form the basis for creating unit tests, integration tests, and system-level tests for the C23 implementation, ensuring it adheres to the formal specifications.
+- **Implementation Testing**: These conceptual scenarios form the basis for creating unit tests, integration tests, and system-level tests for the C17 implementation, ensuring it adheres to the formal specifications.
 
 This document serves as a foundational guide for rigorous verification and validation of FeuerBird's core security mechanisms, bridging the gap between formal specification and practical testing.

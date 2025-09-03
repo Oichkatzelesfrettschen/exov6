@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 
 struct exo_sched_ops {
   void (*halt)(void);

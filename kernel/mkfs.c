@@ -6,11 +6,60 @@
 #include <assert.h>
 
 #define stat xv6_stat  // avoid clash with host struct stat
-#include "types.h"
-#include "fs.h"
-#include "stat.h"
-#include "param.h"
-#include "generic_utils.h"
+
+// Define types locally to avoid header conflicts
+typedef unsigned int   uint;
+typedef unsigned short ushort;
+typedef unsigned char  uchar;
+typedef uint pde_t;
+
+// Define parameters first
+#define BSIZE 512
+#define FSSIZE 10000
+#define MAXOPBLOCKS  10
+#define LOGSIZE      (MAXOPBLOCKS*3)
+#define NBUF         (MAXOPBLOCKS*3)
+#define FSMAGIC 0x10203040
+#define NDIRECT 12
+#define NINDIRECT (BSIZE / sizeof(uint))
+#define MAXFILE (NDIRECT + NINDIRECT)
+#define T_DIR  1
+#define T_FILE 2
+#define T_DEV  3
+#define ROOTINO 1
+#define DIRSIZ 14
+#define IPB (BSIZE / sizeof(struct dinode))
+#define IBLOCK(i, sb)     ((i) / IPB + (sb).inodestart)
+#define BPB (BSIZE*8)
+#define BBLOCK(b, sb) ((b)/BPB + (sb).bmapstart)
+#define DIRENT_SIZE (sizeof(struct dirent))
+#define GU_MIN(a, b) ((a) < (b) ? (a) : (b))
+
+// Define filesystem structures directly to avoid header issues
+struct superblock {
+  uint size;         // Size of file system image (blocks)
+  uint nblocks;      // Number of data blocks
+  uint ninodes;      // Number of inodes.
+  uint nlog;         // Number of log blocks
+  uint logstart;     // Block number of first log block
+  uint inodestart;   // Block number of first inode block
+  uint bmapstart;    // Block number of first free map block
+};
+
+struct dinode {
+  short type;           // File type
+  short major;          // Major device number (T_DEV only)
+  short minor;          // Minor device number (T_DEV only)
+  short nlink;          // Number of links to inode in file system
+  uint size;            // Size of file (bytes)
+  uint addrs[NDIRECT+1];   // Data block addresses
+};
+
+struct dirent {
+  ushort inum;
+  char name[DIRSIZ];
+};
+
 
 #ifndef static_assert
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
