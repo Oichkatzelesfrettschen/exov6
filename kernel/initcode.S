@@ -6,6 +6,7 @@
 
 
 # exec(init, argv)
+.code32
 .globl start
 start:
   pushl $argv

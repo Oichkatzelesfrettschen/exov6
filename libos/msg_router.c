@@ -1,4 +1,4 @@
-#include "microkernel/microkernel.h"
+#include "../include/exokernel.h"
 
 #define MAX_ENDPOINTS 16
 static exo_cap endpoints[MAX_ENDPOINTS];
@@ -7,7 +7,7 @@ static int endpoint_count;
 int mk_route_message(exo_cap dest, const void *buf, size_t len) {
     for (int i = 0; i < endpoint_count; i++) {
         if (endpoints[i].id == dest.id)
-            return cap_send(dest, buf, len);
+            return exo_send(dest, buf, len);
     }
     return -1;
 }

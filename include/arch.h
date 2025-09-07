@@ -98,6 +98,49 @@ static inline void sfence(void) {
     __asm__ volatile("sfence" : : : "memory");
 }
 
+// Atomic exchange
+static inline uint32_t xchg(volatile uint32_t *ptr, uint32_t val) {
+    __asm__ volatile("xchgl %0, %1"
+                     : "=r"(val)
+                     : "m"(*ptr), "0"(val)
+                     : "memory");
+    return val;
+}
+
+// Invalidate TLB entry
+static inline void invlpg(void *va) {
+    __asm__ volatile("invlpg (%0)" : : "r"(va) : "memory");
+}
+
+// Load GDT - needs both pointer and size
+static inline void lgdt(void *p, int size) {
+    struct {
+        uint16_t limit;
+        uintptr_t base;
+    } __attribute__((packed)) gdtr;
+    
+    gdtr.limit = size - 1;
+    gdtr.base = (uintptr_t)p;
+    
+    __asm__ volatile("lgdt %0" : : "m"(gdtr) : "memory");
+}
+
+// Load CR3 (page directory base)
+#ifdef __x86_64__
+static inline void lcr3(uint64_t val) {
+    __asm__ volatile("movq %0, %%cr3" : : "r"(val));
+}
+#else
+static inline void lcr3(uint32_t val) {
+    __asm__ volatile("movl %0, %%cr3" : : "r"(val));
+}
+#endif
+
+// Load task register
+static inline void ltr(uint16_t sel) {
+    __asm__ volatile("ltr %0" : : "r"(sel));
+}
+
 // Bulk data transfer
 static inline void insl(int port, void *addr, int cnt) {
     __asm__ volatile("cld\n\t"

@@ -2,6 +2,21 @@
 #include "chan.h"
 #include "caplib.h"
 
+// Define nodiscard attribute for functions whose return values must be checked
+#ifndef EXO_NODISCARD
+  #if defined(__has_attribute)
+    #if __has_attribute(nodiscard)
+      #define EXO_NODISCARD [[nodiscard]]
+    #elif __has_attribute(warn_unused_result)
+      #define EXO_NODISCARD __attribute__((warn_unused_result))
+    #else
+      #define EXO_NODISCARD
+    #endif
+  #else
+    #define EXO_NODISCARD
+  #endif
+#endif
+
 // Affine channel wrapper allowing at most one send and one receive
 typedef struct affine_chan {
   chan_t base;

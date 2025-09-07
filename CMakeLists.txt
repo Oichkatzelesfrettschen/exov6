@@ -10,13 +10,33 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(ARCH "x86_64" CACHE STRING "Target architecture")
 set(CMAKE_SYSTEM_PROCESSOR ${ARCH})
 
-# Compiler flags
-add_compile_options(
-    -Wall -Werror -Wextra
-    -fno-omit-frame-pointer
+# Force x86_64 definitions
+add_definitions(-D__x86_64__ -D__LP64__)
+
+# Enable legacy types during migration
+add_definitions(-DLEGACY_TYPES_COMPATIBILITY)
+
+# Cross-compilation from ARM64 to x86_64
+if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -target x86_64-unknown-none-elf")
+    set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -target x86_64-unknown-none-elf")
+endif()
+
+# Default compiler flags for host tools
+set(HOST_COMPILE_FLAGS -Wall -Wextra -O2)
+
+# Kernel-specific compiler flags (freestanding environment)
+set(KERNEL_COMPILE_FLAGS
+    -ffreestanding
+    -fno-builtin
     -fno-stack-protector
-    -D_POSIX_C_SOURCE=200809L
-    -D_DEFAULT_SOURCE
+    -fno-omit-frame-pointer
+    -nostdlib
+    -mcmodel=kernel
+    -mno-red-zone
+    -mno-sse
+    -Wall -Wextra
+    -target x86_64-unknown-none-elf
 )
 
 # Debug/Release
@@ -51,13 +71,8 @@ endforeach()
 # Object file directories for intermediate build artifacts
 set(CMAKE_OBJECT_PATH_PREFIX ${CMAKE_BINARY_DIR}/obj/)
 
-# Include directories (reorganized)
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/kernel
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/libos
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/sys
-)
+# Include directories will be set per target
+# No global includes to avoid host/target conflicts
 
 # ============================================================================
 # Kernel Components (Organized by Subsystem)
@@ -220,6 +235,7 @@ set(LIBOS_FS_SOURCES
     libos/fs/fs.c
     libos/fs/fs_ext.c
     libos/fs/file.c
+    libos/libfs_stubs.c
 )
 
 # Memory management
@@ -316,21 +332,31 @@ endforeach()
 # Libraries
 # ============================================================================
 
-# Kernel library
+# Kernel library (freestanding)
 add_library(kernel STATIC ${KERNEL_SOURCES})
-target_compile_options(kernel PRIVATE
-    -ffreestanding
-    -mcmodel=kernel
+target_compile_options(kernel PRIVATE ${KERNEL_COMPILE_FLAGS})
+target_include_directories(kernel PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/kernel
 )
 
-# LibOS library
+# LibOS library (also freestanding)
 add_library(libos STATIC ${LIBOS_SOURCES})
+target_compile_options(libos PRIVATE ${KERNEL_COMPILE_FLAGS})
+target_include_directories(libos PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/libos
+)
 
 # ============================================================================
 # Tools
 # ============================================================================
 
+# Host tool: mkfs (built with host compiler, NO kernel headers)
 add_executable(mkfs tools/mkfs.c)
+target_compile_options(mkfs PRIVATE ${HOST_COMPILE_FLAGS})
+# Do NOT include our headers for host tools - use system headers only
+target_include_directories(mkfs PRIVATE)
 set_target_properties(mkfs PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/tools
 )
@@ -351,16 +377,26 @@ add_custom_command(
     DEPENDS kernel/boot/bootmain.c kernel/boot/bootasm.S
 )
 
-# Kernel executable
+# Kernel executable (freestanding)
 add_executable(kernel.elf ${KERNEL_SOURCES})
+target_compile_options(kernel.elf PRIVATE ${KERNEL_COMPILE_FLAGS})
+target_include_directories(kernel.elf PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/kernel
+)
+target_link_options(kernel.elf PRIVATE
+    -T ${CMAKE_SOURCE_DIR}/kernel.ld
+    -nostdlib
+    -static
+)
 set_target_properties(kernel.elf PROPERTIES
-    LINK_FLAGS "-T ${CMAKE_SOURCE_DIR}/kernel.ld -m elf_x86_64"
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
 # File system image
 add_custom_command(
     OUTPUT fs.img
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tools/mkfs fs.img ${CMAKE_SOURCE_DIR}/README ${USER_PROGRAMS}
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tools/mkfs fs.img ${CMAKE_SOURCE_DIR}/README.md ${USER_PROGRAMS}
     DEPENDS mkfs ${USER_PROGRAMS}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/fs/bin
 )
@@ -484,9 +520,9 @@ install(DIRECTORY include/ DESTINATION include/feuerbird)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
     add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Generating documentation"
+        COMMENT "Generating API documentation (see README.md for complete project documentation)"
     )
 endif()
 

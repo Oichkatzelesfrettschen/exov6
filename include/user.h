@@ -1,9 +1,13 @@
 #pragma once
 
 #include <types.h>
+#include "exo.h"  // for exo_cap and exo_blockcap types
+#include "service.h"  // for service_options_t
 
 struct stat;
 struct rtcdate;
+struct trapframe;
+struct endpoint;
 
 // system calls
 int fork(void);
@@ -29,12 +33,12 @@ int sleep(int);
 int uptime(void);
 int mappte(void *, void *, int);
 
-int exo_pctr_transfer(int cap);
+void exo_pctr_transfer(struct trapframe *tf);
 
 int set_timer_upcall(void (*handler)(void));
 exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
-int exo_alloc_block(uint dev, exo_blockcap *cap);
+int exo_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap);
 int exo_bind_block(exo_blockcap *cap, void *data, int write);
 int exo_flush_block(exo_blockcap *cap, void *data);
 int exo_yield_to(exo_cap target);
@@ -53,6 +57,9 @@ int service_add_dependency(const char *name, const char *dependency);
 int libos_service_register(const char *name, const char *path,
                            service_options_t opts);
 int libos_service_add_dependency(const char *name, const char *dependency);
+
+#include "ipc.h"  // for zipc_msg_t
+void endpoint_send(struct endpoint *ep, zipc_msg_t *msg);
 
 // ulib.c
 int stat(const char *, struct stat *);

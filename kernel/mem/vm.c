@@ -1,7 +1,7 @@
 #include "param.h"
 #include <types.h>
 #include "defs.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
@@ -113,12 +113,16 @@ static struct kmap {
   uint phys_start;
   uint phys_end;
   int perm;
-} kmap[] = {
- { (void*)KERNBASE, 0,             EXTMEM,    PTE_W}, // I/O space
- { (void*)KERNLINK, V2P(KERNLINK), V2P(data), 0},     // kern text+rodata
- { (void*)data,     V2P(data),     PHYSTOP,   PTE_W}, // kern data+memory
- { (void*)DEVSPACE, DEVSPACE,      0,         PTE_W}, // more devices
-};
+} kmap[4];  // Initialize at runtime
+
+// Initialize kmap array at runtime since data symbol is not compile-time constant
+static void init_kmap(void) {
+  extern char data[];  // kernel data segment start
+  kmap[0] = (struct kmap){ (void*)KERNBASE, 0,             EXTMEM,    PTE_W}; // I/O space
+  kmap[1] = (struct kmap){ (void*)KERNLINK, V2P(KERNLINK), V2P(data), 0};     // kern text+rodata
+  kmap[2] = (struct kmap){ (void*)data,     V2P(data),     PHYSTOP,   PTE_W}; // kern data+memory
+  kmap[3] = (struct kmap){ (void*)DEVSPACE, DEVSPACE,      0,         PTE_W}; // more devices
+}
 
 // Set up kernel part of a page table.
 pde_t*
@@ -126,6 +130,13 @@ setupkvm(void)
 {
   pde_t *pgdir;
   struct kmap *k;
+  static int kmap_initialized = 0;
+  
+  // Initialize kmap on first call
+  if (!kmap_initialized) {
+    init_kmap();
+    kmap_initialized = 1;
+  }
 
   if((pgdir = (pde_t*)kalloc()) == 0)
     return 0;
@@ -190,7 +201,7 @@ switchuvm(struct proc *p)
 // Load the initcode into address 0 of pgdir.
 // sz must be less than a page.
 void
-inituvm(pde_t *pgdir, char *init, size_t sz)
+inituvm(pde_t *pgdir, char *init, uint sz)
 {
   char *mem;
 
@@ -205,7 +216,7 @@ inituvm(pde_t *pgdir, char *init, size_t sz)
 // Load a program segment into pgdir.  addr must be page-aligned
 // and the pages from addr to addr+sz must already be mapped.
 int
-loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, size_t sz)
+loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
 {
   uint i, pa, n;
   pte_t *pte;
@@ -229,7 +240,7 @@ loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, size_t sz)
 // Allocate page tables and physical memory to grow process from oldsz to
 // newsz, which need not be page aligned.  Returns new size or 0 on error.
 int
-allocuvm(pde_t *pgdir, size_t oldsz, size_t newsz)
+allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
   char *mem;
   uint a;
@@ -263,7 +274,7 @@ allocuvm(pde_t *pgdir, size_t oldsz, size_t newsz)
 // need to be less than oldsz.  oldsz can be larger than the actual
 // process size.  Returns the new process size.
 int
-deallocuvm(pde_t *pgdir, size_t oldsz, size_t newsz)
+deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
   pte_t *pte;
   uint a, pa;
@@ -275,7 +286,11 @@ deallocuvm(pde_t *pgdir, size_t oldsz, size_t newsz)
   for(; a  < oldsz; a += PGSIZE){
     pte = walkpgdir(pgdir, (char*)a, 0);
     if(!pte)
+#ifdef __x86_64__
+      a = PGADDR(0, 0, PDX(a) + 1, 0, 0) - PGSIZE;
+#else
       a = PGADDR(PDX(a) + 1, 0, 0) - PGSIZE;
+#endif
     else if((*pte & PTE_P) != 0){
       pa = PTE_ADDR(*pte);
       if(pa == 0)
@@ -346,7 +361,7 @@ insert_pte(pde_t *pgdir, void *va,
 // Given a parent process's page table, create a copy
 // of it for a child.
 pde_t*
-copyuvm(pde_t *pgdir, size_t sz)
+copyuvm(pde_t *pgdir, uint sz)
 {
   pde_t *d;
   pte_t *pte;
@@ -398,9 +413,9 @@ uva2ka(pde_t *pgdir, char *uva)
 // uva2ka ensures this only works for PTE_U pages.
 int
 #if defined(__x86_64__) || defined(__aarch64__)
-copyout(pde_t *pgdir, uint64 va, void *p, size_t len)
+copyout(pde_t *pgdir, uint64 va, void *p, uint len)
 #else
-copyout(pde_t *pgdir, uint va, void *p, size_t len)
+copyout(pde_t *pgdir, uint va, void *p, uint len)
 #endif
 {
   char *buf, *pa0;

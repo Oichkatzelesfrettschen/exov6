@@ -6,6 +6,7 @@
 #include "spinlock.h"
 #include "ipc.h"
 #include "exo.h"
+#include <sys/types.h>  // For uid_t, gid_t
 
 // Context used for kernel context switches.
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -107,6 +108,10 @@ struct proc {
   char *kstack;                  // Bottom of kernel stack for this process
   enum procstate state;          // Process state
   int pid;                       // Process ID
+  uid_t uid;                     // User ID (for POSIX compatibility)
+  gid_t gid;                     // Group ID (for POSIX compatibility)
+  int ngroups;                   // Number of supplementary groups
+  gid_t groups[32];              // Supplementary group IDs (NGROUPS_MAX)
   struct proc *parent;           // Parent process
   struct trapframe *tf;          // Trap frame for current syscall
   context_t *context;            // swtch() here to run process
@@ -129,7 +134,7 @@ struct proc {
 
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 280, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 424, "struct proc size incorrect");
 #else
 _Static_assert(sizeof(struct proc) == 168, "struct proc size incorrect");
 #endif

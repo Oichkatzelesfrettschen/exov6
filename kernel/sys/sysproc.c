@@ -12,24 +12,27 @@
 #include "cap.h"
 #include "proc.h"
 #include "spinlock.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 // clang-format on
 
 int sys_fork(void) { return fork(); }
 
 int sys_exit(void) {
-  exit();
+  int status;
+  if (argint(0, &status) < 0)
+    status = 0;  // Default to 0 if no status provided
+  kexit(status);
   return 0; // not reached
 }
 
-int sys_wait(void) { return wait(); }
+int sys_wait(void) { return kwait(); }
 
 int sys_kill(void) {
   int pid;
 
   if (argint(0, &pid) < 0)
     return -1;
-  return kill(pid);
+  return kkill(pid);
 }
 
 int sys_getpid(void) { return myproc()->pid; }

@@ -1,5 +1,5 @@
 #include <types.h>
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "defs.h"
 #include "kbd.h"
 

@@ -7,7 +7,7 @@
 #include "mmu.h"
 #include "param.h"
 #include "proc.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 // clang-format on
 
 #define GAS_PER_SYSCALL 1 // Define gas consumed per syscall

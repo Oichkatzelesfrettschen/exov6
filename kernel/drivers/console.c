@@ -14,7 +14,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include <string.h>
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "fastipc.h"
 #include "tty.h"
 

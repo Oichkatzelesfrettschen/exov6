@@ -55,7 +55,7 @@ static void restart_service(service_entry_t *s) {
   if (pid == 0) {
     char *argv[] = {s->path, NULL};
     exec(s->path, argv);
-    exit();
+    exit(1);
   } else if (pid > 0) {
     s->proc = proc_by_pid(pid);
   }

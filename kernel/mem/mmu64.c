@@ -78,13 +78,19 @@ setupkvm64(void)
 {
   pml4e_t *pml4;
   struct kmap { void *virt; uint32_t phys_start; uint32_t phys_end; int perm; };
-  static struct kmap kmap[] = {
-    { (void*)KERNBASE, 0,             EXTMEM,    PTE_W},
-    { (void*)KERNLINK, V2P(KERNLINK), V2P(data), 0},
-    { (void*)data,     V2P(data),     PHYSTOP,   PTE_W},
-    { (void*)DEVSPACE, DEVSPACE,      0,         PTE_W},
-  };
+  static struct kmap kmap[4];
+  static int kmap_initialized = 0;
   struct kmap *k;
+  
+  // Initialize at runtime since data is not compile-time constant
+  if (!kmap_initialized) {
+    extern char data[];
+    kmap[0] = (struct kmap){ (void*)KERNBASE, 0,             EXTMEM,    PTE_W};
+    kmap[1] = (struct kmap){ (void*)KERNLINK, V2P(KERNLINK), V2P(data), 0};
+    kmap[2] = (struct kmap){ (void*)data,     V2P(data),     PHYSTOP,   PTE_W};
+    kmap[3] = (struct kmap){ (void*)DEVSPACE, DEVSPACE,      0,         PTE_W};
+    kmap_initialized = 1;
+  }
 
   if((pml4 = (pml4e_t*)kalloc()) == 0)
     return 0;

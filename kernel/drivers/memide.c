@@ -6,7 +6,7 @@
 #include "param.h"
 #include "mmu.h"
 #include "proc.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "traps.h"
 #include "spinlock.h"
 #include "sleeplock.h"

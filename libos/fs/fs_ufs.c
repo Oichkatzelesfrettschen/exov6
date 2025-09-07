@@ -68,8 +68,8 @@ int libfs_write(struct file *f, const void *buf, size_t n) {
     return r;
 }
 
-void libfs_close(struct file *f) {
-    fileclose(f);
+int libfs_close(struct file *f) {
+    return fileclose(f);
 }
 
 int libfs_unlink(const char *path) {

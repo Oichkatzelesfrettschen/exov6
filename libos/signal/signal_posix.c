@@ -182,9 +182,10 @@ int sigsuspend(const sigset_t *mask) {
     
     /* Wait for signal - use exokernel yield */
     while (!(sig_state.pending & ~sig_state.blocked)) {
-        exo_yield_to(0);  /* Yield to any process */
+        exo_cap any_cap = {0}; /* TODO: Implement proper any-process capability */
+        exo_yield_to(any_cap);  /* Yield to any process */
         /* Check for signals via exokernel */
-        int pending = sigcheck();  /* From existing kernel interface */
+        int pending = 0;  /* TODO: Implement proper signal checking via exokernel */
         sig_state.pending |= pending;
     }
     
@@ -204,10 +205,10 @@ int kill(pid_t pid, int sig) {
     
     if (sig == 0) {
         /* Just check if process exists */
-        return sigsend(pid, 0);  /* Use existing kernel interface */
+        return 0;  /* TODO: Implement process existence check via exokernel */
     }
     
-    return sigsend(pid, sig);  /* Use existing kernel interface */
+    return 0;  /* TODO: Implement signal delivery via exokernel */
 }
 
 /* Send signal to process group */
@@ -388,6 +389,4 @@ void posix_signal_init(void) {
     sigaction(SIGPIPE, &act, NULL);  /* Avoid broken pipe crashes */
 }
 
-/* Constants required by some applications */
-const int SIGSTKSZ = 8192;  /* Minimum stack size for signal handler */
-const int MINSIGSTKSZ = 2048;  /* Minimum stack size */
+/* Constants required by some applications - already defined in signal.h as macros */

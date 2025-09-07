@@ -1,5 +1,5 @@
 #include <types.h>
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "traps.h"
 
 // I/O Addresses of the two programmable interrupt controllers

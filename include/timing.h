@@ -31,12 +31,14 @@ static inline uint64_t rdtsc_serialized(void) {
     // For now, assume it's available on modern x86-64
     // TODO: Add CPUID detection
     
+    uint32_t lo, hi;
     __asm__ __volatile__(
         "rdtscp"
-        : "=a"((uint32_t)tsc), "=d"((uint32_t)(tsc >> 32)), "=c"(aux)
+        : "=a"(lo), "=d"(hi), "=c"(aux)
         :
         : "memory"
     );
+    tsc = ((uint64_t)hi << 32) | lo;
     
     return tsc;
 }
@@ -59,12 +61,14 @@ static inline uint64_t rdtsc_fenced(void) {
         : "memory"
     );
     
+    uint32_t lo, hi;
     __asm__ __volatile__(
         "rdtsc"
-        : "=a"((uint32_t)tsc), "=d"((uint32_t)(tsc >> 32))
+        : "=a"(lo), "=d"(hi)
         :
         : "memory"
     );
+    tsc = ((uint64_t)hi << 32) | lo;
     
     return tsc;
 }
@@ -78,13 +82,15 @@ static inline uint64_t rdtsc_fenced(void) {
 static inline uint64_t rdtsc_lfence(void) {
     uint64_t tsc;
     
+    uint32_t lo, hi;
     __asm__ __volatile__(
         "lfence\n\t"
         "rdtsc"
-        : "=a"((uint32_t)tsc), "=d"((uint32_t)(tsc >> 32))
+        : "=a"(lo), "=d"(hi)
         :
         : "memory"
     );
+    tsc = ((uint64_t)hi << 32) | lo;
     
     return tsc;
 }

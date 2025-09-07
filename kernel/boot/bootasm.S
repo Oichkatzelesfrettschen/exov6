@@ -17,6 +17,7 @@
 
 #include "memlayout.h"
 #include "mmu.h"
+#include "asm.h"
 #include "arch/asm_common.h"
 
 .code16
@@ -58,7 +59,7 @@ spin32:
 
 enter64:
   // Set up a 64-bit code segment in the GDT or LDT before jumping here
-  ljmp    $(SEG_KCODE64 << 3), $start64
+  ljmp    $(3 << 3), $start64    # 64-bit code segment is at GDT index 3
 
 .code64
 start64:

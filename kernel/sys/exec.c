@@ -4,7 +4,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "defs.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "elf.h"
 #include <string.h>
 

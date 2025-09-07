@@ -4,13 +4,53 @@
 #include <string.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <stdint.h>
+#include <sys/stat.h>
 
-#define stat xv6_stat  // avoid clash with host struct stat
-#include "types.h"
-#include "fs.h"
-#include "stat.h"
-#include "param.h"
-#include "generic_utils.h"
+// Avoid including kernel headers - define what we need locally
+#define BSIZE 512
+#define NDIRECT 12
+#define NINDIRECT (BSIZE / sizeof(uint32_t))
+#define MAXFILE (NDIRECT + NINDIRECT)
+#define ROOTINO 1
+#define FSSIZE 1000
+#define LOGSIZE 30
+#define IPB (BSIZE / sizeof(struct dinode))
+#define BPB (BSIZE * 8)
+
+// File types
+#define T_DIR  1
+#define T_FILE 2
+#define T_DEV  3
+
+// Filesystem structures
+struct superblock {
+    uint32_t size;
+    uint32_t nblocks;
+    uint32_t ninodes;
+    uint32_t nlog;
+    uint32_t logstart;
+    uint32_t inodestart;
+    uint32_t bmapstart;
+};
+
+struct dinode {
+    short type;
+    short major;
+    short minor;
+    short nlink;
+    uint32_t size;
+    uint32_t addrs[NDIRECT + 1];
+};
+
+struct dirent {
+    uint16_t inum;
+    char name[14];
+};
+
+#define IBLOCK(i, sb) ((i) / IPB + sb.inodestart)
+#define BBLOCK(b, sb) (b/BPB + sb.bmapstart)
+#define GU_MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #ifndef static_assert
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
@@ -95,13 +135,13 @@ main(int argc, char *argv[])
   nmeta = 2 + nlog + ninodeblocks + nbitmap;
   nblocks = FSSIZE - nmeta;
 
-  sb.size = xint(FSSIZE);
-  sb.nblocks = xint(nblocks);
-  sb.ninodes = xint(NINODES);
-  sb.nlog = xint(nlog);
-  sb.logstart = xint(2);
-  sb.inodestart = xint(2+nlog);
-  sb.bmapstart = xint(2+nlog+ninodeblocks);
+  sb.size = FSSIZE;
+  sb.nblocks = nblocks;
+  sb.ninodes = NINODES;
+  sb.nlog = nlog;
+  sb.logstart = 2;
+  sb.inodestart = 2+nlog;
+  sb.bmapstart = 2+nlog+ninodeblocks;
 
   printf("nmeta %d (boot, super, log blocks %u inode blocks %u, bitmap blocks %u) blocks %d total %d\n",
          nmeta, nlog, ninodeblocks, nbitmap, nblocks, FSSIZE);
@@ -118,18 +158,24 @@ main(int argc, char *argv[])
   rootino = ialloc(T_DIR);
   assert(rootino == ROOTINO);
 
-  bzero(&de, sizeof(de));
-  de.inum = xshort(rootino);
-  strcpy(de.name, ".");
+  memset(&de, 0, sizeof(de));
+  de.inum = rootino;
+  strncpy(de.name, ".", sizeof(de.name));
   iappend(rootino, &de, sizeof(de));
 
-  bzero(&de, sizeof(de));
-  de.inum = xshort(rootino);
-  strcpy(de.name, "..");
+  memset(&de, 0, sizeof(de));
+  de.inum = rootino;
+  strncpy(de.name, "..", sizeof(de.name));
   iappend(rootino, &de, sizeof(de));
 
   for(i = 2; i < argc; i++){
-    assert(index(argv[i], '/') == 0);
+    // Get basename of file
+    char *fname = strrchr(argv[i], '/');
+    if (fname)
+      fname++;
+    else
+      fname = argv[i];
+    assert(strlen(fname) < sizeof(de.name));
 
     if((fd = open(argv[i], 0)) < 0){
       perror(argv[i]);
@@ -145,9 +191,9 @@ main(int argc, char *argv[])
 
     inum = ialloc(T_FILE);
 
-    bzero(&de, sizeof(de));
-    de.inum = xshort(inum);
-    strncpy(de.name, argv[i], DIRSIZ);
+    memset(&de, 0, sizeof(de));
+    de.inum = inum;
+    strncpy(de.name, fname, sizeof(de.name) - 1);
     iappend(rootino, &de, sizeof(de));
 
     while((cc = read(fd, buf, sizeof(buf))) > 0)
@@ -227,7 +273,7 @@ ialloc(uint16_t type)
   uint32_t inum = freeinode++;
   struct dinode din;
 
-  bzero(&din, sizeof(din));
+  memset(&din, 0, sizeof(din));
   din.type = xshort(type);
   din.nlink = xshort(1);
   din.size = xint(0);
@@ -243,7 +289,7 @@ balloc(int used)
 
   printf("balloc: first %d blocks have been allocated\n", used);
   assert(used < BSIZE*8);
-  bzero(buf, BSIZE);
+  memset(buf, 0, BSIZE);
   for(i = 0; i < used; i++){
     buf[i/8] = buf[i/8] | (0x1 << (i%8));
   }
@@ -286,7 +332,7 @@ iappend(uint32_t inum, void *xp, int n)
     }
     n1 = GU_MIN(n, (fbn + 1) * BSIZE - off);
     rsect(x, buf);
-    bcopy(p, buf + off - (fbn * BSIZE), n1);
+    memcpy(p, buf + off - (fbn * BSIZE), n1);
     wsect(x, buf);
     n -= n1;
     off += n1;

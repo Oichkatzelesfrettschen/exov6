@@ -4,7 +4,9 @@
 #include "spinlock.h"
 #include <stddef.h>
 
+/* Forward declarations */
 struct zone;
+typedef struct exo_cap exo_cap;
 
 // Header stored before each allocated object
 struct zone_obj {

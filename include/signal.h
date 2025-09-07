@@ -48,6 +48,9 @@ extern "C" {
 #define _NSIG           64  /* Biggest signal number + 1 */
 #define NSIG            _NSIG
 
+/* Signal stack size */
+#define SIGSTKSZ        8192
+
 /* Signal handling constants */
 #define SIG_DFL         ((void (*)(int))0)     /* Default action */
 #define SIG_IGN         ((void (*)(int))1)     /* Ignore signal */

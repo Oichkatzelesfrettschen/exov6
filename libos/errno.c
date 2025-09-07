@@ -2,6 +2,10 @@
 #include <errno.h>
 #include <string.h>
 
+/* Declare snprintf and strcpy since we don't have full stdio.h in kernel */
+int snprintf(char *str, size_t size, const char *format, ...);
+char *strcpy(char *dst, const char *src);
+
 /* Thread-local errno implementation using C17 _Thread_local */
 _Thread_local int errno = 0;
 

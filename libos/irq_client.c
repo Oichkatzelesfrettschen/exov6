@@ -1,4 +1,4 @@
-#include "include/exokernel.h"
+#include "../include/exokernel.h"
 #include "libos/irq_client.h"
 
 int irq_wait(exo_cap cap, unsigned *irq_no) {

@@ -12,7 +12,7 @@
 #include "proc.h"
 #include "spinlock.h"
 #include <types.h>
-#include <arch_x86_64.h>
+#include "arch.h"
 
 extern struct ptable ptable;
 void exo_pctr_transfer(struct trapframe *tf) {

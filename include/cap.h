@@ -13,6 +13,9 @@
 /** Opaque capability identifier type. */
 typedef uint64_t cap_id_t;
 
+/** Maximum number of capabilities in the system */
+#define CAP_MAX 65536
+
 /**
  * @brief Capability type discriminator.
  */

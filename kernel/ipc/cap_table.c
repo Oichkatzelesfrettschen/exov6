@@ -33,13 +33,13 @@ void cap_table_init(void)
   cap_table_ready = 1;
 }
 
-/** Allocate an entry and return encoded id (negative on failure). */
-int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner)
+/** Allocate an entry and return encoded id (0 on failure). */
+cap_id_t cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner)
 {
-  if (!cap_table_ready || type == CAP_TYPE_NONE) return -1;
+  if (!cap_table_ready || type == CAP_TYPE_NONE) return 0;
   acquire(&cap_lock);
   uint16_t idx = free_head;
-  if (idx == 0) { release(&cap_lock); return -1; }
+  if (idx == 0) { release(&cap_lock); return 0; }
   free_head = next_free[idx];
   struct cap_entry *e = &cap_table[idx];
   e->type = type;
@@ -48,7 +48,7 @@ int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t 
   e->resource = resource;
   e->rights = rights;
   e->owner = owner;
-  int id = (int)make_id(idx, e->epoch);
+  cap_id_t id = make_id(idx, e->epoch);
   release(&cap_lock);
   return id;
 }

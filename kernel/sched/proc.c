@@ -3,7 +3,7 @@
 #include "param.h"
 #include "memlayout.h"
 #include "mmu.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "proc.h"
 #include "spinlock.h"
 #include "service.h"
@@ -316,7 +316,7 @@ int fork(void) {
 // Exit the current process.  Does not return.
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.
-_Noreturn void exit(int status) {
+_Noreturn void kexit(int status) {
   struct proc *curproc = myproc();
   struct proc *p;
   int fd;
@@ -363,7 +363,7 @@ _Noreturn void exit(int status) {
 
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
-int wait(void) {
+int kwait(void) {
   struct proc *p;
   int havekids, pid;
   struct proc *curproc = myproc();
@@ -590,7 +590,7 @@ void wakeup(void *chan) {
 // Kill the process with the given pid.
 // Process won't exit until it returns
 // to user space (see trap in trap.c).
-int kill(int pid) {
+int kkill(int pid) {
   struct proc *p;
 
   acquire(&ptable.lock);

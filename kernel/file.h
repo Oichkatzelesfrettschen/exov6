@@ -1,7 +1,9 @@
 #pragma once
 
+#include "exokernel.h"  // For exo_blockcap
+
 struct file {
-  enum { FD_NONE, FD_PIPE, FD_INODE } type;
+  enum { FD_NONE, FD_PIPE, FD_INODE, FD_CAP } type;
   size_t ref; // reference count
   char readable;
   char writable;
@@ -9,6 +11,8 @@ struct file {
   struct inode *ip;
   size_t off;
   int flags;
+  exo_blockcap cap;     // Exokernel block capability for file operations
+  size_t *sizep;        // Pointer to file size (for extending files)
 };
 
 
@@ -24,12 +28,15 @@ struct inode {
   short major;
   short minor;
   short nlink;
+  uint32_t mode;      // File permissions/mode
+  uint32_t uid;       // Owner user ID
+  uint32_t gid;       // Owner group ID
   size_t size;
   uint32_t addrs[NDIRECT+1];
 };
 // Must match on-disk inode layout when compiled for 32-bit targets.
 #ifndef __x86_64__
-_Static_assert(sizeof(struct inode) == 144, "struct inode size incorrect");
+_Static_assert(sizeof(struct inode) == 156, "struct inode size incorrect");
 #endif
 
 // table mapping major device number to

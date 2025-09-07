@@ -16,6 +16,7 @@
 #include "exo.h"
 #include "errno.h"
 #include <stddef.h>
+#include <stdlib.h>
 #include <sys/mman.h>
 
 // Memory region tracking
@@ -144,27 +145,21 @@ libos_mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset)
         mapped_addr = addr;
     }
     
-    // Request memory capability from exokernel
-    mem_cap = exo_request_memory(len);
-    if (mem_cap.id == 0) {
-        errno = ENOMEM;
-        return MAP_FAILED;
-    }
-    
     // Set protection flags
     uint32_t exo_prot = 0;
     if (prot & PROT_READ)  exo_prot |= EXO_PROT_READ;
     if (prot & PROT_WRITE) exo_prot |= EXO_PROT_WRITE;
     if (prot & PROT_EXEC)  exo_prot |= EXO_PROT_EXEC;
     
-    if (exo_set_protection(mem_cap, exo_prot) < 0) {
-        exo_release_capability(mem_cap);
-        errno = EACCES;
+    // Request memory capability from exokernel
+    mem_cap = exo_request_memory(len, exo_prot);
+    if (mem_cap.id == 0) {
+        errno = ENOMEM;
         return MAP_FAILED;
     }
     
     // Map capability to virtual address
-    if (exo_map_capability(mem_cap, mapped_addr) < 0) {
+    if (exo_map_capability(mem_cap, mapped_addr, len, exo_prot) == NULL) {
         exo_release_capability(mem_cap);
         errno = ENOMEM;
         return MAP_FAILED;

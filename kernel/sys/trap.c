@@ -6,7 +6,7 @@
 #include "spinlock.h"
 #include "traps.h"
 #include <types.h>
-#include <arch_x86_64.h>
+#include "arch.h"
 
 #define GAS_PER_TRAP 1 // Define gas consumed per trap/interrupt
 

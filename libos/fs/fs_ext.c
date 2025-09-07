@@ -13,7 +13,10 @@
 #include "types.h"
 #include "defs.h"
 #include "param.h"
-#include "stat.h"
+#include <sys/stat.h>
+#include <sys/xattr.h>
+#include <unistd.h>
+#include <string.h>
 #include "mmu.h"
 #include "proc.h"
 #include "fs.h"
@@ -22,7 +25,7 @@
 #include "file.h"
 #include "fcntl.h"
 #include "syscall.h"
-#include "libos.h"
+/* #include "libos.h" - not needed */
 #include <errno.h>
 
 // Process umask value (thread-local in multi-threaded environments)

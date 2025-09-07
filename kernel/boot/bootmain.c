@@ -7,7 +7,7 @@
 
 #include <types.h>
 #include "elf.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "memlayout.h"
 #include "stdint.h"
 

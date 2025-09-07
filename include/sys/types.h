@@ -15,6 +15,7 @@ extern "C" {
 typedef int             pid_t;      /* Process ID */
 typedef unsigned int    uid_t;      /* User ID */
 typedef unsigned int    gid_t;      /* Group ID */
+typedef pid_t           id_t;       /* Generic ID type */
 
 /* File system types */
 typedef unsigned long   dev_t;      /* Device ID */
@@ -29,6 +30,10 @@ typedef long            blkcnt_t;   /* Block count */
 typedef long            time_t;     /* Time in seconds since epoch */
 typedef long            clock_t;    /* Clock ticks */
 typedef long            suseconds_t; /* Signed number of microseconds */
+typedef unsigned long   useconds_t;  /* Unsigned microseconds */
+
+/* I/O types */
+typedef long            ssize_t;     /* Signed size type */
 
 /* Socket types */
 typedef unsigned int    socklen_t;  /* Socket address length */
@@ -40,6 +45,8 @@ typedef uint32_t        in_addr_t;  /* Internet address */
 typedef int             key_t;      /* IPC key */
 
 /* Thread types - basic definitions */
+#ifndef _PTHREAD_TYPES_DEFINED
+#define _PTHREAD_TYPES_DEFINED
 typedef unsigned long   pthread_t;  /* Thread identifier */
 typedef union {
     char __size[40];
@@ -67,7 +74,10 @@ typedef union {
 } pthread_condattr_t;
 
 typedef unsigned int    pthread_key_t;
-typedef int             pthread_once_t;
+typedef union {
+    int __i[1];
+    void *__p[1];
+} pthread_once_t;
 
 typedef union {
     char __size[56];
@@ -78,6 +88,7 @@ typedef union {
     char __size[8];
     long __align;
 } pthread_rwlockattr_t;
+#endif /* _PTHREAD_TYPES_DEFINED */
 
 /* Additional POSIX types */
 typedef int             clockid_t;  /* Clock identifier */

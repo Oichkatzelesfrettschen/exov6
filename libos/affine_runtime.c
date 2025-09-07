@@ -1,6 +1,11 @@
 
 #include "affine_runtime.h"
-#include "ulib.h" // for malloc/free
+#include <stdlib.h> // for malloc/free
+
+/* Forward declarations for missing functions */
+size_t msg_desc_size(const struct msg_type_desc *desc);
+int cap_inc(uint32_t cap_id);
+int cap_revoke(uint32_t cap_id);
 
 // Allocate an affine channel
 EXO_NODISCARD affine_chan_t *

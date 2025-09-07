@@ -1,4 +1,9 @@
-#include "microkernel/microkernel.h"
+#include "../include/exokernel.h"
+
+// Missing type definition
+typedef struct {
+    uint64_t used;
+} mk_account_t;
 
 void mk_account_init(mk_account_t *a) {
     if (a)

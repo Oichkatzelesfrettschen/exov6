@@ -1,5 +1,15 @@
 #pragma once
 
+/**
+ * @file fs.h
+ * @brief On-disk file system format - unified across kernel and userspace
+ * 
+ * C17-compliant filesystem interface harmonizing all system zones.
+ */
+
+#include <stdint.h>
+#include <stddef.h>
+
 // On-disk file system format.
 // Both the kernel and user programs use this header file.
 

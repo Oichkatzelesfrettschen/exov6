@@ -20,6 +20,29 @@
 #include <sys/wait.h>
 #include <sys/resource.h>
 #include <unistd.h>
+#include <stdlib.h>  /* for malloc */
+#include <string.h>  /* for memcpy */
+#include "file_types.h"  /* for T_FILE */
+#include "elf.h"  /* for struct elfhdr, struct proghdr */
+#include "file.h"  /* for struct inode */
+
+// Forward declaration for process type
+typedef struct process process_t;
+
+// Forward declarations  
+static int setup_cow_memory(process_t *child, process_t *parent);
+static int setup_child_context(process_t *child, process_t *parent);
+static int clear_user_memory(process_t *p);
+static int load_segment(struct inode *ip, uint32_t off, uint32_t vaddr, uint32_t filesz, uint32_t memsz, uint32_t flags);
+static uint32_t setup_stack(char **argv, char **envp, int *argc);
+static int commit_exec(uint32_t entry, uint32_t sp, int argc);
+static int remove_child(process_t *parent, process_t *child);
+static int send_signal(process_t *p, int sig);
+static int calculate_priority(int nice);
+static int can_signal(process_t *src, process_t *dest);
+static int kill_pgrp(pid_t pgid, int sig);
+static int kill_all(int sig);
+void wakeup1(void *chan);
 
 // Process table
 #define MAX_PROCESSES 65536
@@ -110,7 +133,7 @@ typedef struct process {
     // Context for switching
     struct context *context;
     struct trapframe *tf;
-} process_t;
+};
 
 // Global process table
 static process_t proc_table[MAX_PROCESSES];
@@ -191,7 +214,7 @@ alloc_process(void)
             
             // Request capabilities from exokernel
             p->proc_cap = exo_create_process_cap();
-            p->mem_cap = exo_request_memory(PGSIZE * 16);  // Initial memory
+            p->mem_cap = exo_request_memory(PGSIZE * 16, EXO_PROT_READ | EXO_PROT_WRITE);  // Initial memory
             p->cpu_cap = exo_request_cpu();
             
             // Initialize signals
@@ -298,7 +321,7 @@ libos_fork(void)
     release(&child->lock);
     
     // Schedule child
-    exo_schedule_process(child->cpu_cap);
+    exo_schedule_process(child->proc_cap, child->cpu_cap);
     
     // Return appropriately
     if (child == current_proc) {
@@ -317,7 +340,7 @@ static int
 setup_cow_memory(process_t *child, process_t *parent)
 {
     // Request COW capability from exokernel
-    exo_cap cow_cap = exo_create_cow_mapping(parent->mem_cap);
+    exo_cap cow_cap = exo_create_cow_mapping(parent->mem_cap, PGSIZE * 16);
     if (cow_cap.id == 0) {
         return -1;
     }
@@ -329,7 +352,7 @@ setup_cow_memory(process_t *child, process_t *parent)
     child->stack_top = parent->stack_top;
     
     // Mark parent pages as COW
-    exo_mark_cow(parent->mem_cap);
+    exo_mark_cow(parent->mem_cap, (void*)0x50000000, PGSIZE * 16);
     
     return 0;
 }
@@ -389,7 +412,7 @@ libos_execve(const char *path, char *const argv[], char *const envp[])
     }
     
     // Clear old memory (preserve capabilities)
-    clear_user_memory();
+    clear_user_memory(current_proc);
     
     // Load program segments
     for (i = 0, off = elf.phoff; i < elf.phnum; i++, off += sizeof(ph)) {
@@ -547,7 +570,7 @@ libos_waitpid(pid_t pid, int *status, int options)
         }
         
         // Sleep waiting for child
-        sleep(current_proc, &current_proc->lock);
+        ksleep(current_proc, &current_proc->lock);
     }
 }
 

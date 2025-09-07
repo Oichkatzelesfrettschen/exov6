@@ -2,6 +2,10 @@
 #include <stddef.h>
 #include "types.h"
 
+#ifndef EXO_NORETURN
+#define EXO_NORETURN __attribute__((noreturn))
+#endif
+
 typedef struct {
   int pid;
 } proc_handle_t;

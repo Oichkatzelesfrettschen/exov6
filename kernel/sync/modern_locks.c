@@ -6,7 +6,7 @@
 #include <types.h>
 #include "defs.h"
 #include "param.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "proc.h"
 #include "spinlock.h"
 #include "modern_locks.h"

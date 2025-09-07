@@ -205,6 +205,12 @@ int     setgroups(size_t size, const gid_t *list);
 char   *getlogin(void);
 int     getlogin_r(char *name, size_t namesize);
 
+/* File access constants for access() */
+#define R_OK    4       /* Test for read permission */
+#define W_OK    2       /* Test for write permission */  
+#define X_OK    1       /* Test for execute permission */
+#define F_OK    0       /* Test for existence */
+
 /* File operations */
 int     access(const char *path, int amode);
 int     faccessat(int fd, const char *path, int amode, int flag);

@@ -21,7 +21,7 @@
 #include <string.h>
 #include <errno.h>
 #define EXO_KERNEL
-#include "include/exokernel.h"
+#include "../../include/exokernel.h"
 #include "buf.h"
 #include "file.h"
 #include "exo.h"

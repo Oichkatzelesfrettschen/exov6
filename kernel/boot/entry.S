@@ -41,6 +41,7 @@ multiboot_header:
 _start = V2P_WO(entry)
 
 # Entering xv6 on boot processor, with paging off.
+.code32
 .globl entry
 entry:
   # Turn on page size extension for 4Mbyte pages

@@ -1,4 +1,4 @@
-#include "microkernel/microkernel.h"
+#include "../include/exokernel.h"
 #include "affine_runtime.h"
 
 lambda_cap_t *mk_lambda_cap_create(lambda_fn fn, void *env, exo_cap cap) {

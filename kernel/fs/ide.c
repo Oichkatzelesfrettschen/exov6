@@ -6,8 +6,8 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
-#include <arch_x86_64.h>
-#include "traps.h"
+#include "arch.h"
+#include "../traps.h"
 #include "spinlock.h"
 #include "sleeplock.h"
 #include "fs.h"
@@ -160,7 +160,7 @@ iderw(struct buf *b)
 
   // Wait for request to finish.
   while((b->flags & (B_VALID|B_DIRTY)) != B_VALID){
-    sleep(b, &idelock);
+    ksleep(b, &idelock);
   }
 
 

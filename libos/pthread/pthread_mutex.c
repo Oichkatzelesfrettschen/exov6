@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 #include "exo.h"
 
 /* Internal mutex structure */
@@ -67,7 +68,7 @@ int pthread_mutex_destroy(pthread_mutex_t *mutex) {
     }
     
     /* Release exokernel resources */
-    if (impl->mutex_cap) {
+    if (impl->mutex_cap.id != 0) {
         exo_unbind_page(impl->mutex_cap);
     }
     
@@ -86,7 +87,8 @@ int pthread_mutex_lock(pthread_mutex_t *mutex) {
     case PTHREAD_MUTEX_NORMAL:
         /* Simple lock - may deadlock if same thread locks twice */
         while (__sync_val_compare_and_swap(&impl->locked, 0, 1) != 0) {
-            exo_yield_to(0);  /* Yield to other threads */
+            exo_cap sched_cap = pthread_get_scheduler_cap(self);
+            exo_yield_to(sched_cap);  /* Yield to scheduler */
         }
         impl->owner = self;
         break;
@@ -99,7 +101,8 @@ int pthread_mutex_lock(pthread_mutex_t *mutex) {
         }
         /* Fall through for first lock */
         while (__sync_val_compare_and_swap(&impl->locked, 0, 1) != 0) {
-            exo_yield_to(0);
+            exo_cap sched_cap = pthread_get_scheduler_cap(self);
+            exo_yield_to(sched_cap);
         }
         impl->owner = self;
         impl->count = 1;
@@ -110,7 +113,8 @@ int pthread_mutex_lock(pthread_mutex_t *mutex) {
             return EDEADLK;  /* Would deadlock */
         }
         while (__sync_val_compare_and_swap(&impl->locked, 0, 1) != 0) {
-            exo_yield_to(0);
+            exo_cap sched_cap = pthread_get_scheduler_cap(self);
+            exo_yield_to(sched_cap);
         }
         impl->owner = self;
         break;

@@ -8,7 +8,7 @@
 #include "memlayout.h"
 #include "traps.h"
 #include "mmu.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include <string.h>
 
 // Local APIC registers, divided by 4 for use as uint32_t[] indices.

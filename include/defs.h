@@ -38,11 +38,11 @@ struct dag_node;
 // process table defined in proc.c
 extern struct ptable ptable;
 
-#include "kernel/exo_cpu.h"
-#include "kernel/exo_disk.h"
-#include "kernel/exo_ipc.h"
+#include "exo_cpu.h"
+#include "exo_disk.h"
+#include "exo_ipc.h"
 #include "ipc.h"
-#include "kernel/exo_mem.h"
+#include "exo_mem.h"
 #include "fastipc.h"
 #include "ipc.h"
 
@@ -54,9 +54,9 @@ void bwrite(struct buf *);
 
 // console.c
 void consoleinit(void);
-void cprintf(char *, ...);
+void cprintf(const char* fmt, ...);  // Unified signature with exo.h
 void consoleintr(int (*)(void));
-[[noreturn]] void panic(char *);
+[[noreturn]] void panic(const char* msg);
 
 // exec.c
 int exec(char *, char **);
@@ -64,7 +64,7 @@ int exec(char *, char **);
 // file.c
 
 struct file *filealloc(void);
-void fileclose(struct file *);
+int fileclose(struct file *);
 struct file *filedup(struct file *);
 void fileinit(void);
 int fileread(struct file *, char *, size_t n);
@@ -142,10 +142,10 @@ int pipewrite(struct pipe *, struct file *, char *, size_t);
 // PAGEBREAK: 16
 //  proc.c
 int cpuid(void);
-void exit(void);
+void kexit(int status);  /* Kernel exit - renamed to avoid POSIX conflict */
 int fork(void);
 int growproc(int);
-int kill(int);
+int kkill(int);    /* Kernel kill - renamed to avoid POSIX conflict */
 int sigsend(int, int);
 struct cpu *mycpu(void);
 struct proc *myproc();
@@ -154,9 +154,9 @@ void procdump(void);
 [[noreturn]] void scheduler(void);
 void sched(void);
 void setproc(struct proc *);
-void sleep(void *, struct spinlock *);
+void ksleep(void *, struct spinlock *);  /* Kernel internal sleep - renamed to avoid POSIX conflict */
 void userinit(void);
-int wait(void);
+int kwait(void);  /* Kernel wait - renamed to avoid POSIX conflict */
 void wakeup(void *);
 void yield(void);
 struct proc *pctr_lookup(uint);
@@ -169,7 +169,7 @@ void swtch(context_t **, context_t *);
 void acquire(struct spinlock *);
 void getcallerpcs(void *, uint *);
 int holding(struct spinlock *);
-void initlock(struct spinlock *, char *);
+void initlock(struct spinlock *, const char *);
 void release(struct spinlock *);
 void pushcli(void);
 void popcli(void);
@@ -197,8 +197,6 @@ int argstr(int, char **);
 int fetchint(uint, int *);
 int fetchstr(uint, char **);
 void syscall(void);
-
-syscall(void);
 
 // timer.c
 void timerinit(void);
@@ -247,15 +245,9 @@ exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
 exo_cap cap_new(uint id, uint rights, uint owner);
 int cap_verify(exo_cap);
-struct exo_blockcap exo_alloc_block(uint dev, uint rights);
-int exo_bind_block(struct exo_blockcap *, struct buf *, int);
-void exo_flush_block(struct exo_blockcap *, void *);
-void cap_table_init(void);
-int cap_table_alloc(uint16_t, uint, uint, uint);
-int cap_table_lookup(uint16_t, struct cap_entry *);
-void cap_table_inc(uint16_t);
-void cap_table_dec(uint16_t);
-int cap_table_remove(uint16_t);
+/* Block capability functions now declared in exokernel.h */
+// Cap table functions are declared in cap.h
+void cap_crypto_init(void);
 void exo_stream_register(struct exo_stream *);
 void exo_stream_halt(void);
 void exo_stream_yield(void);

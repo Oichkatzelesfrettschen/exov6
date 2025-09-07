@@ -108,8 +108,9 @@ static void thread_wrapper(void *arg) {
         free(tcb);
     }
     
-    /* Exit thread via exokernel */
-    exo_yield_to(0);  /* Never returns */
+    /* Exit thread via exokernel - use proper scheduler capability */
+    exo_cap sched_cap = pthread_get_scheduler_cap(pthread_self());
+    exo_yield_to(sched_cap);  /* Transfer control to scheduler */
 }
 
 /* POSIX thread creation */
@@ -194,7 +195,8 @@ int pthread_join(pthread_t thread, void **retval) {
     
     /* Wait for thread to finish */
     while (tcb->state == PTHREAD_STATE_RUNNING) {
-        exo_yield_to(0);  /* Yield and check again */
+        exo_cap sched_cap = pthread_get_scheduler_cap(pthread_self());
+        exo_yield_to(sched_cap);  /* Yield to scheduler and check again */
         usleep(1000);     /* Small delay */
     }
     

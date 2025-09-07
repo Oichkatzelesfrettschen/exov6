@@ -25,28 +25,9 @@ typedef struct msg_type_desc {
   size_t msg_size; // total message size in bytes
 } msg_type_desc;
 
-<<<<<<< HEAD
-<<<<<<< HEAD:ipc.h
-
-<<<<<<< HEAD:ipc.h
-
-=======
->>>>>>> 4962afb (Extend endpoint type checking):ipc.h
-=======
->>>>>>> ca87b1b (caplib.h)
 static inline size_t msg_desc_size(const struct msg_type_desc *d) {
   return d ? d->msg_size : sizeof(zipc_msg_t);
 }
-
-<<<<<<< HEAD
-<<<<<<< HEAD:ipc.h
-
-=======
->>>>>>> 2840a64 (Fix build issues and add setup script):ipc.h
-=======
->>>>>>> 4962afb (Extend endpoint type checking):ipc.h
-=======
->>>>>>> ca87b1b (caplib.h)
 static inline int zipc_call(zipc_msg_t *m) {
   register uint64_t rdi __asm("rdi") = m->badge;
   register uint64_t rsi __asm("rsi") = m->w0;

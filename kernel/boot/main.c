@@ -6,10 +6,10 @@
 #include "proc.h"
 #include "dag.h"
 #include "cap.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include <string.h>
 #include "exo_stream.h"
-#include "kernel/exo_ipc.h"
+#include "exo_ipc.h"
 
 static void startothers(void);
 static _Noreturn void mpmain(void);

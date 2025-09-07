@@ -7,7 +7,7 @@
 #include "param.h"
 #include "memlayout.h"
 #include "mp.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 #include "mmu.h"
 #include "proc.h"
 #include <string.h>

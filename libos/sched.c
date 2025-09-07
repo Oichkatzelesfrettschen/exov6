@@ -1,5 +1,11 @@
 #include "libos/sched.h"
 
+// Forward declarations for capability scheduler functions
+int cap_out_of_gas(void);
+void set_gas(int amount);
+void cap_yield_to_cap(exo_cap cap);
+void cap_set_timer(void (*handler)(void));
+
 #define MAX_PROCS 64
 
 static exo_cap runq[MAX_PROCS];

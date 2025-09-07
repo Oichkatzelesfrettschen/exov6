@@ -9,15 +9,13 @@
  *   int cap_revoke(int cap_id);
  *   int cap_refcount(int cap_id, int *out_count);
  */
-#include "exokernel/exokernel.h"
+#include "../include/exokernel.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct {
-    int id;
-} exo_cap;
+/* exo_cap is already defined in exo.h (via exokernel.h) */
 
 /* allocate a fresh page-cap */
 exo_cap  mk_cap_alloc_page(void);

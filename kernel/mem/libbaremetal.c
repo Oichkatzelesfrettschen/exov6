@@ -1,5 +1,5 @@
 #include "libos/baremetal.h"
-#include <arch_x86_64.h>
+#include "arch.h"
 
 /* Simple wrappers around the architecture-specific port I/O helpers. */
 
