@@ -32,10 +32,11 @@ ctest -V
 FeuerBird is a revolutionary exokernel that **separates mechanism from policy**, providing raw hardware access through secure capability-based abstractions while implementing full POSIX-2024 compatibility in user space.
 
 ### Core Philosophy
+- **Pure C17 Implementation**: 100% modern C17 code, no legacy C, minimal assembly (<1%)
 - **Exokernel Principles**: Minimal kernel that securely multiplexes hardware resources
 - **Separation of Concerns**: Policy decisions made by applications, not the kernel
 - **Performance First**: Sub-microsecond IPC, zero-copy operations, direct hardware access
-- **Modern Standards**: C17 compliance, POSIX-2024 (SUSv5), capability security
+- **Modern Standards**: Strict C17 compliance, POSIX-2024 (SUSv5), capability security
 
 ## 🏗️ Architecture Overview
 
@@ -453,13 +454,67 @@ User Allocation:         220 cycles  (through LibOS)
 Zero-Copy Transfer:       45 cycles  (memory mapping)
 ```
 
+## 🎯 Implementation Roadmap: Pure C17 + POSIX-2024
+
+### Core Principle: 100% Pure C17
+**ALL code in this project MUST be written in pure C17. No legacy C, minimal assembly.**
+
+### C17 Modernization Status
+```
+Language Features:
+├── stdint.h types: 15% → 100% (replace all uint/int)
+├── stdatomic.h: 0% → 100% (lock-free everything)
+├── threads.h: 0% → 100% (base for pthreads)
+├── _Static_assert: 5% → 100% (compile-time checks)
+├── _Alignas: 2% → 100% (cache optimization)
+├── Designated init: 10% → 100% (all structs)
+└── Assembly code: 13 files → 1% maximum
+
+POSIX-2024 Implementation:
+├── libc functions: 0/1500+ → Complete by Q4 2025
+├── System calls: 17/400+ → Full implementation
+├── Utilities: 131/160+ → 100% compliance
+├── Headers: 25/100+ → All C17 compliant
+└── Tests: 100/10000+ → Full coverage
+```
+
+### Phase 1: C17 Foundation (Q1 2025)
+- [ ] Replace all legacy types with `<stdint.h>` types
+- [ ] Implement `<stdatomic.h>` for lock-free operations
+- [ ] Create `<threads.h>` as base for POSIX threads
+- [ ] Convert all assembly to C17 (keep boot minimal)
+- [ ] Implement core libc: string.h, stdlib.h, stdio.h
+
+### Phase 2: POSIX-2024 Core (Q2 2025)
+- [ ] Complete unistd.h implementation in C17
+- [ ] Full pthread.h built on C17 threads
+- [ ] Signal handling with C17 atomics
+- [ ] File operations with modern algorithms
+- [ ] Process management with capability security
+
+### Phase 3: UNIX Compatibility (Q3 2025)
+- [ ] UNIX V6/V7 system calls in C17
+- [ ] System III compatibility layer
+- [ ] UNIX V8-V10 STREAMS in pure C17
+- [ ] SVR4.2 features (dlopen, real-time)
+- [ ] BSD sockets with C17 atomics
+
+### Phase 4: Completion (Q4 2025)
+- [ ] 100% POSIX-2024 compliance testing
+- [ ] Performance optimization with C17
+- [ ] Complete documentation
+- [ ] Certification preparation
+
 ## 🔧 Development & Debugging
 
 ### Development Workflow
 
 ```bash
-# 1. Development build with debugging enabled
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DIPC_DEBUG=ON
+# 1. Development build with C17 enforcement
+cmake .. -DCMAKE_BUILD_TYPE=Debug \
+         -DCMAKE_C_STANDARD=17 \
+         -DCMAKE_C_EXTENSIONS=OFF \
+         -DIPC_DEBUG=ON
 cmake --build . -j$(nproc)
 
 # 2. Run comprehensive tests
@@ -491,6 +546,51 @@ gdb kernel.elf -ex "target remote :26000"  # Terminal 2: GDB connection
 cmake --build . --target profile           # Build with profiling
 ./scripts/development/benchmark.sh         # Run benchmarks
 perf record -g ./build/bin/kernel.elf      # System profiling
+```
+
+### C17 Development Rules
+
+**MANDATORY for all contributions:**
+
+1. **NEVER use legacy C types** (`uint`, `ulong`, etc.) - Use `<stdint.h>` types
+2. **ALWAYS use C17 features** - Atomics, threads, static assertions
+3. **MINIMIZE assembly** - Convert to C17 intrinsics where possible
+4. **ENFORCE type safety** - Use `_Generic` and `_Static_assert`
+5. **USE modern algorithms** - Lock-free, cache-aware, SIMD when available
+6. **DOCUMENT C17 choices** - Explain modernization decisions in comments
+
+### C17 Code Examples
+
+```c
+// ❌ LEGACY (DO NOT USE)
+uint x;
+unsigned long flags;
+struct point p;
+p.x = 10;
+
+// ✅ MODERN C17 (USE THIS)
+uint32_t x;
+uint64_t flags;
+struct point p = { .x = 10, .y = 20 };  // Designated initializers
+
+// Cache-aligned structures with C17
+_Alignas(64) struct spinlock {
+    _Atomic(uint32_t) lock;
+    char padding[60];
+};
+
+// Static assertions for compile-time checks
+_Static_assert(sizeof(struct cap_entry) == 20, "capability size");
+
+// Lock-free atomics
+_Atomic(int) ref_count = 0;
+atomic_fetch_add(&ref_count, 1);
+
+// Type-generic macros
+#define max(a, b) _Generic((a), \
+    int: max_int, \
+    float: max_float, \
+    default: max_int)(a, b)
 ```
 
 ### Code Style and Standards

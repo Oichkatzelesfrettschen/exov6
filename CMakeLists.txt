@@ -1,10 +1,28 @@
 cmake_minimum_required(VERSION 3.20)
 project(FeuerBird VERSION 1.0.0 LANGUAGES C ASM)
 
-# C17 standard (POSIX-2024 compliance)
+# C17 standard (POSIX-2024 compliance) - STRICT ENFORCEMENT
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_C_EXTENSIONS OFF)  # NO GNU extensions - pure C17 only
+
+# Verify C17 compiler support
+include(CheckCSourceCompiles)
+check_c_source_compiles("
+    #include <stdatomic.h>
+    #include <threads.h>
+    #include <stdalign.h>
+    int main() { 
+        _Atomic(int) x = 0; 
+        _Static_assert(1, \"C17 required\");
+        _Alignas(64) char buf[64];
+        return 0; 
+    }
+" HAS_FULL_C17_SUPPORT)
+
+if(NOT HAS_FULL_C17_SUPPORT)
+    message(FATAL_ERROR "Full C17 support is required. Please use a modern compiler (Clang 15+ or GCC 11+)")
+endif()
 
 # Native x86_64 build
 set(ARCH "x86_64" CACHE STRING "Target architecture")
@@ -22,8 +40,17 @@ if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
     set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -target x86_64-unknown-none-elf")
 endif()
 
+# C17 strict compiler flags
+set(C17_STRICT_FLAGS 
+    -std=c17
+    -Wpedantic
+    -Wvla  # No variable-length arrays
+    -Wno-gnu-zero-variadic-macro-arguments
+    -D_POSIX_C_SOURCE=202405L  # POSIX-2024
+)
+
 # Default compiler flags for host tools
-set(HOST_COMPILE_FLAGS -Wall -Wextra -O2)
+set(HOST_COMPILE_FLAGS -Wall -Wextra -O2 ${C17_STRICT_FLAGS})
 
 # Kernel-specific compiler flags (freestanding environment)
 set(KERNEL_COMPILE_FLAGS
@@ -37,6 +64,7 @@ set(KERNEL_COMPILE_FLAGS
     -mno-sse
     -Wall -Wextra
     -target x86_64-unknown-none-elf
+    ${C17_STRICT_FLAGS}
 )
 
 # Debug/Release
