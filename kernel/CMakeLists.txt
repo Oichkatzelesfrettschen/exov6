@@ -283,3 +283,7 @@ endif()
 if(TARGET phoenix-test-quaternion-spinlock)
     message(STATUS "  - Test utilities: ✓")
 endif()
+# Kernel test modules
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
