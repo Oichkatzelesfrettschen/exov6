@@ -7,7 +7,7 @@
 # File system service
 phoenix_add_library(phoenix-libos-fs
     STATIC
-    SOURCES fs.c
+    SOURCES fs/fs.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
@@ -17,7 +17,7 @@ phoenix_add_library(phoenix-libos-fs
 # File operations
 phoenix_add_library(phoenix-libos-file
     STATIC
-    SOURCES file.c
+    SOURCES fs/file.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
@@ -27,7 +27,7 @@ phoenix_add_library(phoenix-libos-file
 # POSIX compatibility layer
 phoenix_add_library(phoenix-libos-posix
     STATIC
-    SOURCES posix.c
+    SOURCES posix/posix.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
