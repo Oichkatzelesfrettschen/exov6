@@ -1,34 +1,32 @@
-# tests/CMakeLists.txt - Comprehensive Test Suite
+# tests/CMakeLists.txt - Pure C17 Test Suite (No Python Dependencies)
+cmake_minimum_required(VERSION 3.16)
 
 # ═════════════════════════════════════════════════════════════════════
-# TEST FRAMEWORK SETUP
+# TEST FRAMEWORK SETUP - PURE C17
 # ═════════════════════════════════════════════════════════════════════
 
 # Enable testing
 enable_testing()
 
-# Find Python for test framework
-find_package(Python3 COMPONENTS Interpreter)
+# Set C17 standard for all tests
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
-# Find pytest if available
-if(Python3_FOUND)
-    execute_process(
-        COMMAND ${Python3_EXECUTABLE} -m pytest --version
-        OUTPUT_VARIABLE PYTEST_VERSION
-        ERROR_QUIET
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    if(PYTEST_VERSION)
-        set(PYTEST_FOUND TRUE)
-        message(STATUS "Found pytest: ${PYTEST_VERSION}")
-    endif()
+# ═════════════════════════════════════════════════════════════════════
+# C17 TEST SUITE
+# ═════════════════════════════════════════════════════════════════════
+
+# Add C17 test subdirectory
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/c17")
+    add_subdirectory(c17)
+    set(C17_TESTS_AVAILABLE TRUE)
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
-# C TEST UTILITIES
+# TEST HOST STUBS
 # ═════════════════════════════════════════════════════════════════════
 
-# Test host stubs
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libos_host_stubs.c")
     phoenix_add_library(phoenix-test-host-stubs
         STATIC
@@ -41,137 +39,10 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libos_host_stubs.c")
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
-# PYTHON TEST MODULES
-# ═════════════════════════════════════════════════════════════════════
-
-if(PYTEST_FOUND)
-    # Core system tests
-    set(PYTHON_TESTS
-        test_arbitrate.py
-        test_beatty_cycle.py
-        test_build_script.py
-        test_cap_entry_cpp.py
-        test_cap_newtypes.py
-        test_cap_revoke.py
-        test_cap_types.py
-        test_chan_endpoint.py
-        test_dag_cycle.py
-        test_door.py
-        test_encrypt_mod.py
-        test_exo_ipc_direct.py
-        test_exo_recv_timed.py
-        test_flow_pid.py
-        test_formal_models.py
-        test_iommu.py
-        test_irq.py
-        test_lattice_channel_dag.py
-        test_lattice_dag.py
-        test_lattice_ipc.py
-        test_libnstr_graph.py
-        test_libos_env.py
-        test_locks.py
-        test_lockstress.py
-        test_mailbox_isolation.py
-        test_octonion.py
-        test_posix_apis.py
-        test_posix_compat.py
-        test_ptrace_concurrent.py
-        test_simulate.py
-        test_spinlock_align.py
-        test_stream_module.py
-        test_streams_log.py
-        test_sys_ipc.py
-        test_ticket_spinlock_processes.py
-        test_ticket_spinlock_threads.py
-        test_uv_spinlock_processes.py
-        test_uv_spinlock_threads.py
-        test_zone.py
-    )
-    
-    # Create individual test targets for each Python test
-    foreach(test_file ${PYTHON_TESTS})
-        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${test_file}")
-            # Extract test name from filename
-            string(REGEX REPLACE "test_(.+)\\.py$" "\\1" test_name ${test_file})
-            string(REPLACE "_" "-" test_target_name ${test_name})
-            
-            add_test(
-                NAME python-${test_target_name}
-                COMMAND ${Python3_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR}/${test_file} -v
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            )
-            
-            # Set test properties
-            set_tests_properties(python-${test_target_name} PROPERTIES
-                LABELS "python;unit"
-                TIMEOUT 300
-            )
-        endif()
-    endforeach()
-    
-    # Create aggregate test targets
-    add_custom_target(test-python-all
-        COMMAND ${Python3_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR} -v
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running all Python tests"
-    )
-    
-    # Category-specific test targets
-    add_custom_target(test-python-capabilities
-        COMMAND ${Python3_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR} -k "cap_" -v
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running capability tests"
-    )
-    
-    add_custom_target(test-python-locks
-        COMMAND ${Python3_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR} -k "lock" -v
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running lock tests"
-    )
-    
-    add_custom_target(test-python-ipc
-        COMMAND ${Python3_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR} -k "ipc" -v
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running IPC tests"
-    )
-    
-    add_custom_target(test-python-posix
-        COMMAND ${Python3_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR} -k "posix" -v
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running POSIX tests"
-    )
-endif()
-
-# ═════════════════════════════════════════════════════════════════════
-# BATS TESTING FRAMEWORK
-# ═════════════════════════════════════════════════════════════════════
-
-find_program(BATS_EXECUTABLE bats)
-if(BATS_EXECUTABLE AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/benchmarks.bats")
-    add_test(
-        NAME bats-benchmarks
-        COMMAND ${BATS_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/benchmarks.bats
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    )
-    
-    set_tests_properties(bats-benchmarks PROPERTIES
-        LABELS "bats;benchmark"
-        TIMEOUT 600
-    )
-    
-    add_custom_target(test-benchmarks
-        COMMAND ${BATS_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/benchmarks.bats
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Running benchmark tests"
-    )
-endif()
-
-# ═════════════════════════════════════════════════════════════════════
 # MICROBENCHMARK SUITE
 # ═════════════════════════════════════════════════════════════════════
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/microbench")
-    # Add microbenchmark subdirectory if it has CMakeLists.txt
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/microbench/CMakeLists.txt")
         add_subdirectory(microbench)
     else()
@@ -299,11 +170,14 @@ endif()
 # SECURITY TESTS
 # ═════════════════════════════════════════════════════════════════════
 
-# Security audit test (if security audit script exists)
-if(EXISTS "${CMAKE_SOURCE_DIR}/test_security_audit.py" AND Python3_FOUND)
+# Security audit test (pure C implementation)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/c17/security/test_security_audit.c")
+    add_executable(test-security-audit c17/security/test_security_audit.c)
+    target_link_libraries(test-security-audit test_framework)
+    
     add_test(
         NAME security-audit
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/test_security_audit.py
+        COMMAND test-security-audit
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
     
@@ -316,13 +190,6 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 # TEST CONFIGURATION AND METADATA
 # ═════════════════════════════════════════════════════════════════════
-
-# Create test configuration file
-configure_file(
-    "${CMAKE_SOURCE_DIR}/pytest.ini"
-    "${CMAKE_BINARY_DIR}/pytest.ini"
-    COPYONLY
-)
 
 # Set common test environment
 set_tests_properties(${test_targets} PROPERTIES
@@ -347,7 +214,7 @@ add_custom_target(test-full
 
 # Performance test suite
 add_custom_target(test-performance
-    COMMAND ${CMAKE_CTEST_COMMAND} -L "performance|microbench" --output-on-failure
+    COMMAND ${CMAKE_CTEST_COMMAND} -L "performance|microbench|benchmark" --output-on-failure
     COMMENT "Running performance tests"
 )
 
@@ -368,6 +235,27 @@ add_custom_target(test-security
     COMMAND ${CMAKE_CTEST_COMMAND} -L "security" --output-on-failure
     COMMENT "Running security tests"
 )
+
+# POSIX compliance test suite
+add_custom_target(test-posix
+    COMMAND ${CMAKE_CTEST_COMMAND} -L "posix|compliance" --output-on-failure
+    COMMENT "Running POSIX compliance tests"
+)
+
+# C17 unit tests
+if(C17_TESTS_AVAILABLE)
+    add_custom_target(test-c17-unit
+        COMMAND ${CMAKE_CTEST_COMMAND} -L "unit" --output-on-failure
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests/c17
+        COMMENT "Running C17 unit tests"
+    )
+    
+    add_custom_target(test-c17-all
+        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests/c17
+        COMMENT "Running all C17 tests"
+    )
+endif()
 
 # ═════════════════════════════════════════════════════════════════════
 # TEST REPORTING
@@ -414,12 +302,13 @@ endforeach()
 
 set(EXOV6_TEST_TARGETS ${TEST_TARGETS} PARENT_SCOPE)
 
-message(STATUS "Tests zone configured:")
-if(PYTEST_FOUND)
-    message(STATUS "  - Python tests: ✓")
-endif()
-if(BATS_EXECUTABLE)
-    message(STATUS "  - BATS tests: ✓")
+# ═════════════════════════════════════════════════════════════════════
+# STATUS MESSAGES
+# ═════════════════════════════════════════════════════════════════════
+
+message(STATUS "Tests zone configured (Pure C17, No Python):")
+if(C17_TESTS_AVAILABLE)
+    message(STATUS "  - C17 test suite: ✓")
 endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/microbench")
     message(STATUS "  - Microbenchmarks: ✓")
@@ -430,4 +319,5 @@ endif()
 if(QEMU_EXECUTABLE)
     message(STATUS "  - QEMU integration: ✓")
 endif()
-message(STATUS "  - Test categories: unit, integration, performance, memory, security")
+message(STATUS "  - Test categories: unit, integration, performance, memory, security, posix")
+message(STATUS "  - Build system: Pure CMake (no external dependencies)")
