@@ -77,7 +77,7 @@ void pipeclose(struct pipe *p, int writable) {
 }
 
 // PAGEBREAK: 40
-int pipewrite(struct pipe *p, struct file *f, const char *addr, size_t n) {
+int pipewrite(struct pipe *p, struct file *f, char *addr, size_t n) {
   size_t i;
 
   acquire(&p->lock);
@@ -92,7 +92,7 @@ int pipewrite(struct pipe *p, struct file *f, const char *addr, size_t n) {
         return -1;
       }
       wakeup(&p->nread);
-      sleep(&p->nwrite, &p->lock); // DOC: pipewrite-sleep
+      ksleep(&p->nwrite, &p->lock); // DOC: pipewrite-sleep
     }
     p->data[p->nwrite++ % PIPESIZE] = addr[i];
   }
@@ -114,7 +114,7 @@ int piperead(struct pipe *p, struct file *f, char *addr, size_t n) {
       release(&p->lock);
       return -1;
     }
-    sleep(&p->nread, &p->lock); // DOC: piperead-sleep
+    ksleep(&p->nread, &p->lock); // DOC: piperead-sleep
   }
   for (i = 0; i < n; i++) { // DOC: piperead-copy
     if (p->nread == p->nwrite)

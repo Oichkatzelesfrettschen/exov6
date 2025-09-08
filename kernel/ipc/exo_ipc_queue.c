@@ -8,7 +8,7 @@
 #include <string.h>
 #include "ipc_debug.h"
 #define EXO_KERNEL
-#include "include/exokernel.h"
+#include "../../include/exokernel.h"
 #include "ipc_queue.h"
 
 struct mailbox ipcs;
@@ -60,7 +60,7 @@ int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   while (mb->w - mb->r == MAILBOX_BUFSZ) {
     IPC_LOG("send waiting: mailbox full");
     wakeup(&mb->r);
-    sleep(&mb->w, &mb->lock);
+    ksleep(&mb->w, &mb->lock);
   }
   mb->buf[mb->w % MAILBOX_BUFSZ].msg = m;
   mb->buf[mb->w % MAILBOX_BUFSZ].frame = fr;
@@ -85,7 +85,7 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
   while (mb->r == mb->w) {
     IPC_LOG("recv waiting: mailbox empty");
     wakeup(&mb->w);
-    sleep(&mb->r, &mb->lock);
+    ksleep(&mb->r, &mb->lock);
   }
   struct ipc_entry e = mb->buf[mb->r % MAILBOX_BUFSZ];
   mb->r++;
@@ -129,7 +129,7 @@ int exo_ipc_queue_recv_timed(exo_cap src, void *buf, uint64_t len,
   while (ipcs.r == ipcs.w && timeout > 0) {
     IPC_LOG("recv_timed waiting");
     wakeup(&ipcs.w);
-    sleep(&ipcs.r, &ipcs.lock);
+    ksleep(&ipcs.r, &ipcs.lock);
     timeout--;
   }
   if (ipcs.r == ipcs.w) {

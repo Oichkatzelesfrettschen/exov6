@@ -1,6 +1,19 @@
 #include <string.h>
-#include <stdlib.h>
+#include "defs.h"
 #include "libos/posix.h"
+
+/* Kernel strdup implementation */
+static char* kstrdup(const char *s) {
+    if (!s) return NULL;
+    size_t len = strlen(s) + 1;
+    char *copy = kalloc();
+    if (!copy) return NULL;
+    memmove(copy, s, len);
+    return copy;
+}
+
+#define strdup kstrdup
+#define free kfree
 
 #ifndef LIBOS_MAXENV
 #define LIBOS_MAXENV 32

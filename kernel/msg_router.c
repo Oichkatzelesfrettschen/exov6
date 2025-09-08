@@ -1,4 +1,7 @@
-#include "microkernel/microkernel.h"
+#include "defs.h"
+#include "cap.h"
+#include "exo.h"
+#include "caplib.h"
 
 #define MAX_ENDPOINTS 16
 static exo_cap endpoints[MAX_ENDPOINTS];

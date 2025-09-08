@@ -5,11 +5,12 @@
 #include "proc.h"
 #include "defs.h"
 #include "arch.h"
+#include "trapframe.h"
 #include "elf.h"
 #include <string.h>
 
 int
-exec(const char *path, char *const argv[])
+exec(char *path, char **argv)
 {
   char *s, *last;
   int i, off;
@@ -22,7 +23,7 @@ exec(const char *path, char *const argv[])
 
   begin_op();
 
-  if((ip = namei((char *)path)) == 0){
+  if((ip = namei(path)) == 0){
     end_op();
     cprintf("exec: fail\n");
     return -1;

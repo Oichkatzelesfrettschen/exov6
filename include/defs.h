@@ -97,8 +97,18 @@ void iderw(struct buf *);
 
 // ioapic.c
 void ioapicenable(int irq, int cpu);
+void ioapicdisable(int irq);
+void ioapiceoi(int irq);
 extern uchar ioapicid;
 void ioapicinit(void);
+struct ioapic_info {
+    uint32_t id;
+    uint32_t version;
+    uint32_t max_entries;
+    uint64_t base_addr;
+    uint32_t gsi_base;
+};
+void ioapicinfo(int apic_id, struct ioapic_info *info);
 
 // kalloc.c
 char *kalloc(void);

@@ -1,4 +1,4 @@
-#include "include/octonion.h"
+#include "octonion.h"
 
 /**
  * @file octonion.c
@@ -16,10 +16,10 @@ octonion_t octonion_add(octonion_t a, octonion_t b) {
 
 /** Multiply two octonions using the Cayley–Dickson construction. */
 octonion_t octonion_mul(octonion_t a, octonion_t b) {
-  quaternion_t a_l = {a.coeffs.e0, a.coeffs.e1, a.coeffs.e2, a.coeffs.e3};
-  quaternion_t a_r = {a.coeffs.e4, a.coeffs.e5, a.coeffs.e6, a.coeffs.e7};
-  quaternion_t b_l = {b.coeffs.e0, b.coeffs.e1, b.coeffs.e2, b.coeffs.e3};
-  quaternion_t b_r = {b.coeffs.e4, b.coeffs.e5, b.coeffs.e6, b.coeffs.e7};
+  quaternion_t a_l = {a.e0, a.e1, a.e2, a.e3};
+  quaternion_t a_r = {a.e4, a.e5, a.e6, a.e7};
+  quaternion_t b_l = {b.e0, b.e1, b.e2, b.e3};
+  quaternion_t b_r = {b.e4, b.e5, b.e6, b.e7};
 
   quaternion_t left = quaternion_multiply(a_l, b_l);
   quaternion_t tmp = quaternion_multiply(quaternion_conjugate(b_r), a_r);
@@ -35,8 +35,8 @@ octonion_t octonion_mul(octonion_t a, octonion_t b) {
   right.y += tmp.y;
   right.z += tmp.z;
 
-  return (octonion_t){.coeffs = {left.w, left.x, left.y, left.z, right.w,
-                                 right.x, right.y, right.z}};
+  return (octonion_t){.e0 = left.w, .e1 = left.x, .e2 = left.y, .e3 = left.z,
+                      .e4 = right.w, .e5 = right.x, .e6 = right.y, .e7 = right.z};
 }
 
 /** Compute the multiplicative inverse of an octonion. */

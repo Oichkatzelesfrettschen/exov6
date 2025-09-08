@@ -3,6 +3,8 @@
 // This file contains definitions for the
 // x86 memory management unit (MMU).
 
+#include "../include/memlayout.h"  // For PGSIZE, PGROUNDUP, PGROUNDDOWN
+
 // Eflags register
 #define FL_IF 0x00000200 // Interrupt Enable
 
@@ -122,7 +124,8 @@ _Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
 #define NPDENTRIES 1024 // # directory entries per page directory
 #define NPTENTRIES 1024 // # PTEs per page table
 #endif
-#define PGSIZE 4096 // bytes mapped by a page
+
+// Page size and alignment macros are defined in memlayout.h
 
 #ifdef __x86_64__
 #define PTSHIFT 12
@@ -133,9 +136,6 @@ _Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
 #define PTXSHIFT 12 // offset of PTX in a linear address
 #define PDXSHIFT 22 // offset of PDX in a linear address
 #endif
-
-#define PGROUNDUP(sz) (((sz) + PGSIZE - 1) & ~(PGSIZE - 1))
-#define PGROUNDDOWN(a) (((a)) & ~(PGSIZE - 1))
 
 // Page table/directory entry flags.
 #define PTE_P 0x001  // Present

@@ -18,6 +18,28 @@
 #include "proc.h"
 #include "spinlock.h"
 
+/* CPU identification */
+static inline void get_cpuid(uint32_t info, uint32_t *eaxp, uint32_t *ebxp, uint32_t *ecxp, uint32_t *edxp) {
+    uint32_t eax, ebx, ecx, edx;
+    __asm__ volatile("cpuid"
+                     : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
+                     : "a"(info));
+    if (eaxp) *eaxp = eax;
+    if (ebxp) *ebxp = ebx;
+    if (ecxp) *ecxp = ecx;
+    if (edxp) *edxp = edx;
+}
+
+/* Read RFLAGS register */
+static inline uint64_t read_rflags(void) {
+    uint64_t rflags;
+    __asm__ volatile("pushfq; popq %0" : "=r"(rflags));
+    return rflags;
+}
+
+/* CPU pause for spinlocks */
+extern void pause(void);
+
 // Configuration for exponential backoff
 #define BACKOFF_MIN 10
 #define BACKOFF_MAX 1024
@@ -30,7 +52,7 @@ void detect_cache_line_size(void) {
   uint32_t eax, ebx, ecx, edx;
   
   // CPUID function 0x01 gives cache line size in EBX bits 15:8
-  cpuid(0x01, &eax, &ebx, &ecx, &edx);
+  get_cpuid(0x01, &eax, &ebx, &ecx, &edx);
   cache_line_size = ((ebx >> 8) & 0xFF) * 8;
   
   // Fallback to 64 if detection fails

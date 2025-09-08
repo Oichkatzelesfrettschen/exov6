@@ -72,7 +72,7 @@ typedef uint64_t time_ns_t;    // Time in nanoseconds
 typedef uint64_t ticks_t;      // System ticks
 
 // Capability types
-typedef uint64_t cap_id_t;     // Capability ID
+// cap_id_t is defined in cap.h
 typedef uint32_t cap_rights_t; // Capability rights
 
 // ============================================================================

@@ -2,6 +2,7 @@
 #include <procwrap.h>
 #include <capwrap.h>
 #include "user.h"
+#include "defs.h"  /* For yield() */
 
 void ddekit_init(void) {}
 

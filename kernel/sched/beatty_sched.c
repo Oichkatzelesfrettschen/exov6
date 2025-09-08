@@ -3,7 +3,7 @@
 #include "spinlock.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
-#include "math_core.h"
+#include "q16_fixed.h"  /* Use Q16.16 fixed-point instead of math_core.h */
 #include "dag.h"
 
 static struct spinlock beatty_lock;
@@ -33,8 +33,10 @@ static bool push(struct node_vec *v, struct dag_node *n) {
 static exo_cap task_a;
 static exo_cap task_b;
 static uint64_t na, nb;
-static double alpha;
-static double beta;
+
+/* Use Q16.16 fixed-point for Beatty sequences */
+static q16_t alpha;  /* First irrational (golden ratio) */
+static q16_t beta;   /* Second irrational (1/(1-1/φ)) */
 
 void beatty_sched_set_tasks(exo_cap a, exo_cap b) {
   acquire(&beatty_lock);
@@ -49,10 +51,13 @@ static void beatty_halt(void) { /* nothing */ }
 
 static void beatty_yield(void) {
   acquire(&beatty_lock);
-  double va = alpha * (double)na;
-  double vb = beta * (double)nb;
+  
+  /* Calculate Beatty sequence values using Q16.16 */
+  uint32_t beatty_a = q16_beatty(na, alpha);
+  uint32_t beatty_b = q16_beatty(nb, beta);
+  
   exo_cap next;
-  if ((uint64_t)va < (uint64_t)vb) {
+  if (beatty_a < beatty_b) {
     next = task_a;
     na++;
   } else {
@@ -67,12 +72,13 @@ static void beatty_yield(void) {
 
 void beatty_sched_init(void) {
   initlock(&beatty_lock, "beatty");
-#ifdef HAVE_DECIMAL_FLOAT
-  alpha = dec64_to_double(phi());
-#else
-  alpha = phi();
-#endif
-  beta = alpha / (alpha - 1.0);
+  
+  /* Initialize golden ratio and its complement for Beatty sequences */
+  alpha = Q16_PHI;  /* φ = 1.618... */
+  
+  /* Calculate β = φ/(φ-1) = φ² for complementary Beatty sequence */
+  /* Since φ² = φ + 1, we can compute: β = φ + 1 */
+  beta = q16_add(Q16_PHI, Q16_ONE);  /* β ≈ 2.618... */
   beatty_ops.halt = beatty_halt;
   beatty_ops.yield = beatty_yield;
   beatty_ops.next = 0;

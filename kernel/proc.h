@@ -29,6 +29,12 @@ struct cpu {
   int ncli;                    // Depth of pushcli nesting.
   int intena;                  // Were interrupts enabled before pushcli?
   struct proc *proc;           // The process running on this cpu or null
+  
+  // Unified lock system support
+  struct mcs_node {
+    _Atomic bool locked;
+    _Atomic(struct mcs_node *) next;
+  } mcs_node;                  // Per-CPU MCS lock node
 };
 
 extern struct cpu cpus[NCPU];
@@ -113,6 +119,7 @@ struct proc {
   uint64_t gas_remaining;          // Remaining CPU budget
   int preferred_node;            // NUMA allocation preference
   int out_of_gas;                // Flag set when gas runs out
+  struct proc *next_wait;        // Next process in sleeplock wait queue
   struct mailbox *mailbox;       // Per-process IPC mailbox
   struct proc *rq_next;          // Run queue next pointer
   struct proc *rq_prev;          // Run queue previous pointer

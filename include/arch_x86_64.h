@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "memlayout.h"  // For PGSIZE and memory constants
 
 // Register types
 typedef uint64_t arch_reg_t;
@@ -14,9 +15,7 @@ typedef uint64_t pde_t;
 typedef uint64_t pte_t;
 typedef uint64_t pml4e_t;
 
-// Memory constants
-#define PGSIZE 4096
-#define PGSHIFT 12
+// Memory constants defined in memlayout.h
 
 // Segment selectors
 #define SEG_KCODE 1

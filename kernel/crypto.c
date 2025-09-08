@@ -3,7 +3,8 @@
 #include <pqcrypto/kyber512.h>
 #endif
 #include <string.h> // For strlen, memcpy, memset, and NULL
-#include <stdio.h>  // For temporary printf warning
+/* stdio.h not available in kernel - use cprintf for warnings */
+#include "defs.h"
 
 // NOTE: THIS IS A STUB IMPLEMENTATION AND NOT CRYPTOGRAPHICALLY SECURE.
 // It should be replaced with a proper KDF (e.g., HKDF-SHA256).

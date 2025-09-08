@@ -21,17 +21,24 @@ struct arb_entry {
   int owner;
 };
 
+struct arb_log_entry {
+  int type;
+  int resource_id;
+  int owner;
+  int granted;
+};
+
 static struct {
   struct spinlock lock;
   int inited;
-  arb_policy_fn policy;
+  arbitrate_policy_t policy;
   struct arb_entry table[ARB_MAX_ENTRIES];
   struct arb_log_entry log[ARB_LOG_SIZE];
   int log_head;
   int log_size;
 } state;
 
-static int default_policy(int type, int id, int cur_owner, int requester)
+static int default_policy(uint32_t type, uint32_t id, uint32_t cur_owner, uint32_t requester)
 {
   (void)type; (void)id;
   return cur_owner == 0 || cur_owner == requester;
@@ -57,7 +64,7 @@ void arbitrate_init(void)
  * Set arbitration policy.
  * @param fn Optional policy function; NULL selects default.
  */
-void arbitrate_set_policy(arb_policy_fn fn)
+void arbitrate_set_policy(arbitrate_policy_t fn)
 {
   arbitrate_init();
   acquire(&state.lock);

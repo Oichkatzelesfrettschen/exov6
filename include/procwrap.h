@@ -12,4 +12,4 @@ typedef struct {
 
 int proc_spawn(proc_handle_t *p, const char *path, char *const argv[]);
 int proc_wait(proc_handle_t *p);
-void proc_exit(int code) EXO_NORETURN;
+EXO_NORETURN void proc_exit(int code);

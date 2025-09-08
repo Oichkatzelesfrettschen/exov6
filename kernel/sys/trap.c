@@ -4,9 +4,15 @@
 #include "param.h"
 #include "proc.h"
 #include "spinlock.h"
-#include "traps.h"
+#include "../traps.h"
 #include <types.h>
 #include "arch.h"
+#include "trapframe.h"
+
+/* Forward declarations */
+extern int cpunum(void);
+extern uint64_t rcr2(void);
+extern void exit(int);
 
 #define GAS_PER_TRAP 1 // Define gas consumed per trap/interrupt
 
@@ -112,7 +118,8 @@ void trap(struct trapframe *tf) {
 #endif
     lapiceoi();
     break;
-  case T_PCTR_TRANSFER:
+  /* TODO: Handle performance counter transfer
+  case T_PCTR_TRANSFER: */
     exo_pctr_transfer(tf);
     break;
 

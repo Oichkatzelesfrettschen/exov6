@@ -6,20 +6,19 @@ static struct exo_ipc_ops ipc_ops;
 
 void exo_ipc_register(struct exo_ipc_ops *ops) { ipc_ops = *ops; }
 
-EXO_NODISCARD int exo_send(exo_cap dest, const void *buf, uint64_t len) {
+int exo_send(exo_cap dest, const void *buf, uint64_t len) {
   if (ipc_ops.send)
     return ipc_ops.send(dest, buf, len);
   return -1;
 }
 
-EXO_NODISCARD int exo_recv(exo_cap src, void *buf, uint64_t len) {
+int exo_recv(exo_cap src, void *buf, uint64_t len) {
   if (ipc_ops.recv)
     return ipc_ops.recv(src, buf, len);
   return -1;
 }
 
-EXO_NODISCARD int exo_recv_timed(exo_cap src, void *buf, uint64_t len,
-                                 unsigned timeout) {
+int exo_recv_timed(exo_cap src, void *buf, uint64_t len, unsigned timeout) {
   for (unsigned i = 0; i < timeout; i++) {
     int r = exo_recv(src, buf, len);
     if (r != 0)

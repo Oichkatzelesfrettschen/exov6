@@ -51,7 +51,7 @@ void endpoint_send(struct endpoint *ep, zipc_msg_t *m) {
   endpoint_init(ep);
   acquire(&ep->lock);
   while (ep->q && ep->r == ep->w) {
-    sleep(&ep->r, &ep->lock);
+    ksleep(&ep->r, &ep->lock);
   }
   if (!ep->q) {
     release(&ep->lock);

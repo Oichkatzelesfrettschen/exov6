@@ -1,0 +1,11 @@
+# Hashes of file build rules.
+20f54e0530c698efe03e4239619d1fa1 CMakeFiles/analyze
+ada8fa2c7f7daed53bd1cd3a515510aa CMakeFiles/docs
+4f5d79eb84b2ea3e341ceac76d376093 CMakeFiles/format
+8c9770c51b458d87efb634edbb7d665f CMakeFiles/lint
+b2156a22f20741f9054e5a78491b007c CMakeFiles/qemu
+336ae8f859ac87871bfdd22e4b2bd8ff CMakeFiles/qemu-gdb
+f8a7675caa2d967375687d820dfbe8cc CMakeFiles/qemu-nox
+85f416452c15921242df35aa8836e14f bootblock
+c7adde229fbcd44f7d2766a4c54cbbde fs.img
+8c8c8df4d6724365bd3ce3ddffaa3422 xv6.img

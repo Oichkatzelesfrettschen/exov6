@@ -11,6 +11,10 @@
 #include "spinlock.h"
 #include "modern_locks.h"
 
+// Forward declare CPU functions
+extern void cpu_pause(void);
+extern void pause(void);
+
 /*
  * MCS Lock Implementation
  * Each CPU spins on its own cache line for optimal performance
@@ -39,7 +43,7 @@ void mcs_acquire(struct mcs_lock *lock, struct mcs_node *node) {
         
         // Spin on our local locked flag
         while (atomic_load(&node->locked)) {
-            pause();  // CPU hint for spinning
+            cpu_pause();  // CPU hint for spinning
         }
     }
     
@@ -60,7 +64,7 @@ void mcs_release(struct mcs_lock *lock, struct mcs_node *node) {
         
         // Someone is adding themselves, wait for link
         while ((next = (struct mcs_node *)node->next) == NULL) {
-            pause();
+            cpu_pause();
         }
     }
     
@@ -99,7 +103,7 @@ void rwlock_acquire_read(struct rwlock *lock) {
         // Wait for writer to finish
         while (atomic_load(&lock->lock) < 0 || 
                atomic_load(&lock->writers_waiting) > 0) {
-            pause();
+            cpu_pause();
         }
         
         // Try to increment reader count
@@ -179,7 +183,7 @@ uint32_t seqlock_read_begin(struct seqlock *lock) {
         // Wait if writer is active (odd sequence number)
         if (seq & 1) {
             while (atomic_load(&lock->sequence) & 1) {
-                pause();
+                cpu_pause();
             }
             continue;
         }
@@ -249,7 +253,7 @@ void hybrid_acquire(struct hybrid_lock *lock) {
         // In a real implementation, we would sleep here
         // For now, continue spinning with backoff
         for (int i = 0; i < 1000; i++) {
-            pause();
+            cpu_pause();
         }
     }
     

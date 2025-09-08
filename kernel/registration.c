@@ -1,14 +1,33 @@
-#include "microkernel/microkernel.h"
+/**
+ * @file registration.c 
+ * @brief Process registration using exokernel capabilities
+ * Migrated from microkernel to pure exokernel infrastructure
+ */
+
+#include "defs.h"
 #include "ipc.h"
-#include "syscall.h"
-#include "user.h"
+#include "cap.h"
+#include "exo.h"
+#include "exokernel.h"
+#include "proc.h"
 
-#define MK_MSG_REGISTER 3
+#define EXO_MSG_REGISTER 3
 
-int microkernel_register(void) {
-    zipc_msg_t m = {0};
-    m.w0 = MK_MSG_REGISTER;
-    m.w1 = getpid();
-    endpoint_send(&m);
+/**
+ * Register process with exokernel capability system
+ * Replaces microkernel registration with exokernel capabilities
+ */
+int exokernel_register(void) {
+    struct proc *p = myproc();
+    if (!p) return -1;
+    
+    /* Allocate capability for process registration */
+    cap_id_t cap = cap_table_alloc(CAP_TYPE_PROCESS, p->pid, 
+                                   EXO_RIGHT_R | EXO_RIGHT_W | EXO_RIGHT_X, p->pid);
+    if (!cap) return -1;
+    
+    /* Mark process as registered with exokernel */
+    p->state = RUNNABLE;
+    
     return 0;
 }

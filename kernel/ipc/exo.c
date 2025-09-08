@@ -13,6 +13,7 @@
 #include "spinlock.h"
 #include <types.h>
 #include "arch.h"
+#include "trapframe.h"
 
 extern struct ptable ptable;
 void exo_pctr_transfer(struct trapframe *tf) {
@@ -33,7 +34,7 @@ void exo_pctr_transfer(struct trapframe *tf) {
  * Stub syscalls: provide minimal implementations so the kernel links.
  */
 int exo_yield_to(exo_cap target) { (void)target; return -1; }
-int exo_read_disk(exo_cap cap, void *dst, uint64_t off, uint64_t n)
-{ (void)cap; (void)dst; (void)off; (void)n; return -1; }
-int exo_write_disk(exo_cap cap, const void *src, uint64_t off, uint64_t n)
-{ (void)cap; (void)src; (void)off; (void)n; return -1; }
+int exo_read_disk(struct exo_blockcap cap, void *dst, uint64_t off, uint64_t n)
+{ (void)cap.dev; (void)dst; (void)off; (void)n; return -1; }
+int exo_write_disk(struct exo_blockcap cap, const void *src, uint64_t off, uint64_t n)
+{ (void)cap.dev; (void)src; (void)off; (void)n; return -1; }

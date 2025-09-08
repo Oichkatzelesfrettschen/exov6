@@ -1,0 +1,1 @@
+/usr/bin/clang -target x86_64-unknown-none-elf -target x86_64-unknown-none-elf -O3 -DNDEBUG CMakeFiles/mkfs.dir/tools/mkfs.c.obj -o bin/tools/mkfs

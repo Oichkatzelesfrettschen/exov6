@@ -1,0 +1,1 @@
+/usr/bin/cc  -target x86_64-unknown-none-elf -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/mkfs.dir/tools/mkfs.c.o -o bin/tools/mkfs

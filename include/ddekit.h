@@ -1,6 +1,7 @@
 #pragma once
 #include "types.h"
 #include "caplib.h"
+#include "compiler_attrs.h"
 
 struct ddekit_process {
   int pid;
@@ -10,7 +11,7 @@ void ddekit_init(void);
 int ddekit_process_spawn(struct ddekit_process *p, const char *path,
                          char *const argv[]);
 int ddekit_process_wait(struct ddekit_process *p);
-void ddekit_process_exit(int code) EXO_NORETURN;
+EXO_NORETURN void ddekit_process_exit(int code);
 void ddekit_yield(void);
 
 exo_cap ddekit_cap_alloc_page(void);

@@ -11,7 +11,7 @@
 #include "sleeplock.h"
 
 void
-initsleeplock(struct sleeplock *lk, const char *name)
+initsleeplock(struct sleeplock *lk, char *name)
 {
   initlock(&lk->lk, "sleep lock");
   lk->name = name;
@@ -24,7 +24,7 @@ acquiresleep(struct sleeplock *lk)
 {
   acquire(&lk->lk);
   while (lk->locked) {
-    sleep(lk, &lk->lk);
+    ksleep(lk, &lk->lk);
   }
   lk->locked = 1;
   lk->pid = myproc()->pid;

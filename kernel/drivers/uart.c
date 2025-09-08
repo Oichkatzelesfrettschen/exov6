@@ -13,6 +13,7 @@
 #include "arch.h"
 
 #define COM1    0x3f8
+#define IRQ_COM1 4      // Serial port 1 IRQ
 
 static int uart;    // is there a uart?
 

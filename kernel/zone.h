@@ -18,7 +18,7 @@ struct slab {
   struct slab *next;
   struct zone *zone;
   int zone_id;
-  exo_cap cap;
+  cap_id_t cap;
   struct zone_obj *free;
   int inuse;
 };

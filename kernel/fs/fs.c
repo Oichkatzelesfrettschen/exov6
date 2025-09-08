@@ -506,14 +506,14 @@ int readi(struct inode *ip, char *dst, uint off, size_t n) {
 // PAGEBREAK!
 // Write data to inode.
 // Caller must hold ip->lock.
-int writei(struct inode *ip, const char *src, uint32_t off, size_t n) {
+int writei(struct inode *ip, char *src, uint off, size_t n) {
   size_t tot, m;
   struct buf *bp;
 
   if (ip->type == T_DEV) {
     if (ip->major < 0 || ip->major >= NDEV || !devsw[ip->major].write)
       return -1;
-    return devsw[ip->major].write(ip, (char *)src, n);
+    return devsw[ip->major].write(ip, src, n);
   }
 
   if (off > ip->size || off + n < off)
@@ -543,7 +543,7 @@ int namecmp(const char *s, const char *t) { return strncmp(s, t, DIRSIZ); }
 
 // Look for a directory entry in a directory.
 // If found, set *poff to byte offset of entry.
-struct inode *dirlookup(struct inode *dp, const char *name, uint32_t *poff) {
+struct inode *dirlookup(struct inode *dp, char *name, uint *poff) {
   uint off, inum;
   struct dirent de;
 
@@ -568,7 +568,7 @@ struct inode *dirlookup(struct inode *dp, const char *name, uint32_t *poff) {
 }
 
 // Write a new directory entry (name, inum) into the directory dp.
-int dirlink(struct inode *dp, const char *name, uint32_t inum) {
+int dirlink(struct inode *dp, char *name, uint inum) {
   int off;
   struct dirent de;
   struct inode *ip;
@@ -670,11 +670,11 @@ static struct inode *namex(char *path, int nameiparent, char *name) {
   return ip;
 }
 
-struct inode *namei(const char *path) {
+struct inode *namei(char *path) {
   char name[DIRSIZ];
-  return namex((char *)path, 0, name);
+  return namex(path, 0, name);
 }
 
-struct inode *nameiparent(const char *path, char *name) {
-  return namex((char *)path, 1, name);
+struct inode *nameiparent(char *path, char *name) {
+  return namex(path, 1, name);
 }

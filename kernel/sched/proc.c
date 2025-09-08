@@ -8,6 +8,14 @@
 #include "spinlock.h"
 #include "service.h"
 #include <string.h>
+#include "trapframe.h"
+
+// Forward declare CPU flag functions
+uint64_t read_flags(void);
+void write_flags(uint64_t flags);
+
+// Forward declare service function (defined in service.c)
+void service_notify_exit(struct proc *p);
 
 #define GAS_PER_TICK 10 // Define gas consumed per scheduler tick
 
@@ -403,7 +411,7 @@ int kwait(void) {
     }
 
     // Wait for children to exit.  (See wakeup1 call in proc_exit.)
-    sleep(curproc, &ptable.lock); // DOC: wait-sleep
+    ksleep(curproc, &ptable.lock); // DOC: wait-sleep
   }
 }
 
@@ -534,7 +542,7 @@ void forkret(void) {
 
 // Atomically release lock and sleep on chan.
 // Reacquires lock when awakened.
-void sleep(void *chan, struct spinlock *lk) {
+void ksleep(void *chan, struct spinlock *lk) {
   struct proc *p = myproc();
 
   if (p == 0)

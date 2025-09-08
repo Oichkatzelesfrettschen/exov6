@@ -4,16 +4,22 @@
  */
 
 #include <types.h>
-#include "include/spinlock.h"    /* struct spinlock, initlock, acquire, release */
+#include "spinlock.h"    /* struct spinlock, initlock, acquire, release */
 #include "dag.h"         /* struct dag_node, struct dag_node_list */
-#include "lattice_ipc.h" /* lattice_yield_to() */
+/* Forward declarations for lattice IPC */
+extern int lattice_yield_to(int pid);
+
+/* Kernel memory allocation */
+extern void *kalloc(void);
+extern void kfree(void *);
 #include "exo_stream.h"  /* exo_stream_register() */
 #include "exo_cpu.h"     /* exo_yield_to() */
 #include <string.h>      /* memset */
 #include <stdint.h>      /* standard integer types */
 #include <stdbool.h>     /* bool */
-#include <stdlib.h>
-#include <assert.h>
+/* Kernel-safe assert macro */
+extern void panic(const char *);
+#define assert(x) do { if (!(x)) panic("Assertion failed: " #x); } while(0)
 
 /* Maximum depth for DFS in cycle detection */
 #define DAG_MAX_DEPTH 64
@@ -91,7 +97,7 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
     return;
   }
 
-  struct dag_node_list *link = (struct dag_node_list *)malloc(sizeof(*link));
+  struct dag_node_list *link = (struct dag_node_list *)kalloc();
   if (!link) {
     release(&dag_lock);
     assert(0 && "dag_node_add_dep: out of memory");
@@ -104,7 +110,8 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
 
   child->pending++;
   if (!child->deps) {
-    child->deps = (struct dag_node **)malloc(sizeof(*child->deps) * DAG_MAX_DEPTH);
+    /* Allocate space for DAG_MAX_DEPTH pointers */
+    child->deps = (struct dag_node **)kalloc();
     child->ndeps = 0;
   }
   if (child->ndeps < DAG_MAX_DEPTH) {
@@ -139,7 +146,7 @@ int dag_add_edge(struct dag_node *parent, struct dag_node *child) {
     release(&dag_lock);
     return -1;
   }
-  struct dag_node_list *link = (struct dag_node_list *)malloc(sizeof(*link));
+  struct dag_node_list *link = (struct dag_node_list *)kalloc();
   if (!link) {
     release(&dag_lock);
     return -1;
@@ -149,7 +156,8 @@ int dag_add_edge(struct dag_node *parent, struct dag_node *child) {
   parent->children = link;
   child->pending++;
   if (!child->deps) {
-    child->deps = (struct dag_node **)malloc(sizeof(*child->deps) * DAG_MAX_DEPTH);
+    /* Allocate space for DAG_MAX_DEPTH pointers */
+    child->deps = (struct dag_node **)kalloc();
     child->ndeps = 0;
   }
   if (child->ndeps < DAG_MAX_DEPTH) {
@@ -174,7 +182,8 @@ static void dag_yield(void) {
   }
 
   if (n->chan) {
-    (void)lattice_yield_to(n->chan);
+    /* TODO: Convert channel to PID for lattice_yield_to */
+    (void)n->chan; /* lattice_yield_to needs PID, not channel */
   } else {
     (void)exo_yield_to(n->ctx);
   }

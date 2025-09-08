@@ -125,6 +125,19 @@ static inline void lgdt(void *p, int size) {
     __asm__ volatile("lgdt %0" : : "m"(gdtr) : "memory");
 }
 
+// Load IDT - needs both pointer and size
+static inline void lidt(void *p, int size) {
+    struct {
+        uint16_t limit;
+        uintptr_t base;
+    } __attribute__((packed)) idtr;
+    
+    idtr.limit = size - 1;
+    idtr.base = (uintptr_t)p;
+    
+    __asm__ volatile("lidt %0" : : "m"(idtr) : "memory");
+}
+
 // Load CR3 (page directory base)
 #ifdef __x86_64__
 static inline void lcr3(uint64_t val) {

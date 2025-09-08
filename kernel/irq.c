@@ -4,7 +4,7 @@
 #include "cap.h"
 #include <errno.h>
 #define EXO_KERNEL
-#include "include/exokernel.h"
+#include "exokernel.h"
 
 #define IRQ_BUFSZ 32
 

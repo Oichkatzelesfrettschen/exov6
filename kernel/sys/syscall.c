@@ -8,6 +8,7 @@
 #include "param.h"
 #include "proc.h"
 #include "arch.h"
+#include "trapframe.h"
 // clang-format on
 
 #define GAS_PER_SYSCALL 1 // Define gas consumed per syscall
@@ -19,7 +20,7 @@
 // to a saved program counter, and then the first argument.
 
 // Fetch the int at addr from the current process.
-int fetchint(uintptr_t addr, int *ip) {
+int fetchint(uint addr, int *ip) {
   struct proc *curproc = myproc();
 
   if (addr >= curproc->sz || addr + 4 > curproc->sz)
@@ -31,7 +32,7 @@ int fetchint(uintptr_t addr, int *ip) {
 // Fetch the nul-terminated string at addr from the current process.
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
-int fetchstr(uintptr_t addr, char **pp) {
+int fetchstr(uint addr, char **pp) {
   char *s, *ep;
   struct proc *curproc = myproc();
 
@@ -167,45 +168,45 @@ extern int sys_service_register(void);
 extern int sys_service_add_dependency(void);
 
 static int (*syscalls[])(void) = {
-    [SYS_fork] sys_fork,
-    [SYS_exit] sys_exit,
-    [SYS_wait] sys_wait,
-    [SYS_pipe] sys_pipe,
-    [SYS_kill] sys_kill,
-    [SYS_exec] sys_exec,
-    [SYS_getpid] sys_getpid,
-    [SYS_sbrk] sys_sbrk,
-    [SYS_sleep] sys_sleep,
-    [SYS_uptime] sys_uptime,
-    [SYS_mappte] sys_mappte,
-    [SYS_set_timer_upcall] sys_set_timer_upcall,
-    [SYS_exo_alloc_page] sys_exo_alloc_page,
-    [SYS_exo_unbind_page] sys_exo_unbind_page,
-    [SYS_exo_alloc_block] sys_exo_alloc_block,
-    [SYS_exo_bind_block] sys_exo_bind_block,
-    [SYS_exo_yield_to] sys_exo_yield_to,
-    [SYS_exo_read_disk] sys_exo_read_disk,
-    [SYS_exo_write_disk] sys_exo_write_disk,
-    [SYS_exo_alloc_ioport] sys_exo_alloc_ioport,
-    [SYS_exo_bind_irq] sys_exo_bind_irq,
-    [SYS_exo_alloc_dma] sys_exo_alloc_dma,
-    [SYS_exo_send] sys_exo_send,
-    [SYS_exo_recv] sys_exo_recv,
-    [SYS_exo_recv_timed] sys_exo_recv_timed,
-    [SYS_endpoint_send] sys_endpoint_send,
-    [SYS_endpoint_recv] sys_endpoint_recv,
-    [SYS_proc_alloc] sys_proc_alloc,
-    [SYS_set_gas] sys_set_gas,
-    [SYS_get_gas] sys_get_gas,
-    [SYS_set_numa_node] sys_set_numa_node,
-    [SYS_fcntl] sys_fcntl,
-    [SYS_sigsend] sys_sigsend,
-    [SYS_sigcheck] sys_sigcheck,
-    [SYS_cap_inc] sys_cap_inc,
-    [SYS_cap_dec] sys_cap_dec,
-    [SYS_ipc] sys_ipc,
-    [SYS_service_register] sys_service_register,
-    [SYS_service_add_dependency] sys_service_add_dependency,
+    [SYS_fork] = sys_fork,
+    [SYS_exit] = sys_exit,
+    [SYS_wait] = sys_wait,
+    [SYS_pipe] = sys_pipe,
+    [SYS_kill] = sys_kill,
+    [SYS_exec] = sys_exec,
+    [SYS_getpid] = sys_getpid,
+    [SYS_sbrk] = sys_sbrk,
+    [SYS_sleep] = sys_sleep,
+    [SYS_uptime] = sys_uptime,
+    [SYS_mappte] = sys_mappte,
+    [SYS_set_timer_upcall] = sys_set_timer_upcall,
+    [SYS_exo_alloc_page] = sys_exo_alloc_page,
+    [SYS_exo_unbind_page] = sys_exo_unbind_page,
+    [SYS_exo_alloc_block] = sys_exo_alloc_block,
+    [SYS_exo_bind_block] = sys_exo_bind_block,
+    [SYS_exo_yield_to] = sys_exo_yield_to,
+    [SYS_exo_read_disk] = sys_exo_read_disk,
+    [SYS_exo_write_disk] = sys_exo_write_disk,
+    [SYS_exo_alloc_ioport] = sys_exo_alloc_ioport,
+    [SYS_exo_bind_irq] = sys_exo_bind_irq,
+    [SYS_exo_alloc_dma] = sys_exo_alloc_dma,
+    [SYS_exo_send] = sys_exo_send,
+    [SYS_exo_recv] = sys_exo_recv,
+    [SYS_exo_recv_timed] = sys_exo_recv_timed,
+    [SYS_endpoint_send] = sys_endpoint_send,
+    [SYS_endpoint_recv] = sys_endpoint_recv,
+    [SYS_proc_alloc] = sys_proc_alloc,
+    [SYS_set_gas] = sys_set_gas,
+    [SYS_get_gas] = sys_get_gas,
+    [SYS_set_numa_node] = sys_set_numa_node,
+    [SYS_fcntl] = sys_fcntl,
+    [SYS_sigsend] = sys_sigsend,
+    [SYS_sigcheck] = sys_sigcheck,
+    [SYS_cap_inc] = sys_cap_inc,
+    [SYS_cap_dec] = sys_cap_dec,
+    [SYS_ipc] = sys_ipc_fast,
+    [SYS_service_register] = sys_service_register,
+    [SYS_service_add_dependency] = sys_service_add_dependency,
 };
 
 void syscall(void) {

@@ -1,0 +1,1 @@
+/usr/bin/cc  -target x86_64-unknown-none-elf -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names -N -e main CMakeFiles/_dd.dir/user/dd.c.o CMakeFiles/_dd.dir/user/ulib.c.o CMakeFiles/_dd.dir/user/printf.c.o CMakeFiles/_dd.dir/user/umalloc.c.o CMakeFiles/_dd.dir/user/usys.S.o -o fs/bin/_dd  lib/liblibos.a

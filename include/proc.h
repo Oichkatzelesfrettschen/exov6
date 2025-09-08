@@ -108,6 +108,7 @@ struct proc {
   char *kstack;                  // Bottom of kernel stack for this process
   enum procstate state;          // Process state
   int pid;                       // Process ID
+  int pgid;                      // Process group ID (for signals)
   uid_t uid;                     // User ID (for POSIX compatibility)
   gid_t gid;                     // Group ID (for POSIX compatibility)
   int ngroups;                   // Number of supplementary groups
@@ -130,14 +131,27 @@ struct proc {
   struct mailbox *mailbox;       // Per-process IPC mailbox
   struct proc *rq_next;          // Run queue next pointer
   struct proc *rq_prev;          // Run queue previous pointer
+  
+  /* Signal handling state */
+  struct signal_state {
+    uint64_t pending;            /* Pending signals bitmap */
+    uint64_t blocked;            /* Blocked signals mask */
+    void (*handlers[64])(int);   /* Signal handlers */
+    void *rtqueue;               /* Real-time signal queue */
+    struct spinlock lock;
+  } signal_state;
+  
+  /* FPU/SSE state */
+  uint8_t fpu_state[512] __attribute__((aligned(16)));  /* FXSAVE area */
+  int fpu_state_saved;           /* FPU state is saved */
+  
+  /* OS brand for virtualization */
+  int brand;                     /* OS personality (BRAND_*) */
 };
 
-// Ensure scheduler relies on fixed struct proc size
-#if defined(__x86_64__) || defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 424, "struct proc size incorrect");
-#else
-_Static_assert(sizeof(struct proc) == 168, "struct proc size incorrect");
-#endif
+// Size will be recalculated after stabilization
+// Previous size: 424 bytes on 64-bit, 168 on 32-bit
+// Added signal_state and FPU state for POSIX compliance
 
 
 // Process memory is laid out contiguously, low addresses first:

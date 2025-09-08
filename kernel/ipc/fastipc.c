@@ -8,6 +8,7 @@
 #include "proc.h"
 #include "defs.h"
 #include "fastipc.h"
+#include "trapframe.h"
 
 #define FASTIPC_BUFSZ 64
 

@@ -1,0 +1,1 @@
+/usr/bin/clang -target x86_64-unknown-none-elf -target x86_64-unknown-none-elf -O3 -DNDEBUG -N -e main CMakeFiles/_du.dir/user/du.c.obj CMakeFiles/_du.dir/user/ulib.c.obj CMakeFiles/_du.dir/user/printf.c.obj CMakeFiles/_du.dir/user/umalloc.c.obj CMakeFiles/_du.dir/user/usys.S.obj -o fs/bin/_du  lib/liblibos.a

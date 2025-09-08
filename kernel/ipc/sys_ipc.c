@@ -2,6 +2,15 @@
 #include "spinlock.h"
 #include <stddef.h>
 
+/* Function declarations */
+#ifndef EXO_KERNEL
+static int argint(int n, int *ip);
+static int argptr(int n, char **pp, size_t size);
+#else
+int argint(int, int *);
+int argptr(int, char **, size_t);
+#endif
+
 #ifndef TRACEPOINT
 #define TRACEPOINT(x, ...)
 #endif
@@ -73,9 +82,8 @@ sys_ipc(void)
 
     return 0;
 }
-/* Host compilation: provide minimal argint prototype when not linking kernel. */
+/* Host compilation: provide minimal argint implementation when not linking kernel. */
 #ifndef EXO_KERNEL
 static int argint(int n, int *ip) { (void)n; (void)ip; return -1; }
-#else
-int argint(int, int *);
+static int argptr(int n, char **pp, size_t size) { (void)n; (void)pp; (void)size; return -1; }
 #endif

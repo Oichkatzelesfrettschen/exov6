@@ -11,6 +11,15 @@
 #include "arch.h"
 #include <string.h>
 
+/* IRQ definitions */
+#ifndef T_IRQ0
+#define T_IRQ0          32      // IRQ 0 corresponds to interrupt 32
+#endif
+
+#define IRQ_TIMER       0       // Timer interrupt
+#define IRQ_SPURIOUS    31      // Spurious interrupt  
+#define IRQ_ERROR       19      // Error interrupt
+
 // Local APIC registers, divided by 4 for use as uint32_t[] indices.
 #define ID      (0x0020/4)   // ID
 #define VER     (0x0030/4)   // Version

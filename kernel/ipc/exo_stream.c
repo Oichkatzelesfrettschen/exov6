@@ -16,7 +16,7 @@ void exo_stream_register(struct exo_stream *stream) {
   release(&streamlock);
 }
 
-static void default_halt(void) { asm volatile("hlt"); }
+static void default_halt(void) { __asm__ volatile("hlt"); }
 
 void exo_stream_halt(void) {
   struct exo_sched_ops *m;

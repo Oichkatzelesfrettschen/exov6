@@ -1,6 +1,12 @@
 #pragma once
 
 #include "exokernel.h"  // For exo_blockcap
+#include "sleeplock.h"  // For struct sleeplock
+
+/* Filesystem constants */
+#define NDIRECT 12
+#define BSIZE 512  
+#define NINDIRECT (BSIZE / sizeof(uint32_t))
 
 struct file {
   enum { FD_NONE, FD_PIPE, FD_INODE, FD_CAP } type;

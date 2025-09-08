@@ -30,9 +30,9 @@ pte_t *pte_lookup(pde_t *pgdir, const void *va) {
 // Invalidate a single TLB entry corresponding to va.
 void tlb_flush_page(void *va) {
 #ifdef __x86_64__
-  asm volatile("invlpg (%0)" : : "r"(va) : "memory");
+  __asm__ volatile("invlpg (%0)" : : "r"(va) : "memory");
 #else
-  asm volatile("invlpg (%0)" : : "r"(va) : "memory");
+  __asm__ volatile("invlpg (%0)" : : "r"(va) : "memory");
 #endif
 }
 

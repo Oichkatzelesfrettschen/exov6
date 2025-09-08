@@ -1,12 +1,22 @@
-#include "arch/mcu/gpio.h"
-#include <types.h>
-#include "cap.h"
+/**
+ * @file picokernel.c
+ * @brief Minimal exokernel core with capability management
+ * Replaces MCU-specific code with pure exokernel abstractions
+ */
 
-struct simple_cap {
-  uintptr_t addr;
+#include "defs.h"
+#include "cap.h"
+#include "exo.h"
+#include <types.h>
+
+/* Exokernel capability structure - simplified for picokernel */
+struct exo_simple_cap {
+    cap_id_t cap_id;      /* Capability table ID */
+    uint32_t resource;    /* Resource identifier */
+    uint32_t rights;      /* Access rights */
 };
 
-static struct simple_cap table[1];
+static struct exo_simple_cap exo_table[64];  /* Small capability table */
 
 uint32_t cap_alloc_gpio(uintptr_t addr) {
   table[0].addr = addr;

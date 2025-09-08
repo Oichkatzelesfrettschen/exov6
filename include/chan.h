@@ -12,22 +12,13 @@
 #include <stdbool.h>
 #include "types.h"
 #include "exo.h"
-
-// Forward declaration
-struct msg_type_desc;
+#include "ipc.h"  // For msg_type_desc
 
 // Generic channel descriptor storing expected message size and type
 typedef struct chan {
     size_t msg_size;
     const struct msg_type_desc *desc;
 } chan_t;
-
-// Message type descriptor
-struct msg_type_desc {
-    size_t size;
-    uint32_t type_id;
-    const char* name;
-};
 
 // Allocate a channel expecting messages of specified descriptor
 chan_t *chan_create(const struct msg_type_desc *desc);
@@ -44,9 +35,7 @@ int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg, size_t len);
 // Provides mychan_t type with create/send/recv functions
 #define CHAN_DECLARE(name, type)                                               \
   static const struct msg_type_desc name##_typedesc = {                        \
-      .size = sizeof(type),                                                    \
-      .type_id = 0,                                                            \
-      .name = #name                                                            \
+      .msg_size = sizeof(type)                                                 \
   };                                                                           \
   typedef struct {                                                             \
     chan_t base;                                                               \

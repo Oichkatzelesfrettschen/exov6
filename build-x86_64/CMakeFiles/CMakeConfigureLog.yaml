@@ -1,0 +1,2321 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineSystem.cmake:12 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_UNAME"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "uname"
+    candidate_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/uname"
+      - "/Users/eirikr/.pyenv/shims/uname"
+      - "/opt/homebrew/bin/uname"
+      - "/opt/homebrew/sbin/uname"
+      - "/usr/local/bin/uname"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/uname"
+      - "/System/Cryptexes/App/usr/bin/uname"
+    found: "/usr/bin/uname"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineSystem.cmake:207 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The target system is: Generic -  - x86_64
+      The host system is: Darwin - 25.0.0 - arm64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeUnixFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "gmake"
+      - "make"
+      - "smake"
+    candidate_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/gmake"
+      - "/Users/eirikr/.pyenv/shims/gmake"
+    found: "/opt/homebrew/bin/gmake"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompiler.cmake:115 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:67 (_cmake_find_compiler_path)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "clang"
+    candidate_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/clang"
+      - "/Users/eirikr/.pyenv/shims/clang"
+      - "/opt/homebrew/bin/clang"
+      - "/opt/homebrew/sbin/clang"
+      - "/usr/local/bin/clang"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/clang"
+      - "/System/Cryptexes/App/usr/bin/clang"
+    found: "/usr/bin/clang"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCCompilerId.c.in"
+    candidate_directories:
+      - "/opt/homebrew/share/cmake/Modules/"
+    found: "/opt/homebrew/share/cmake/Modules/CMakeCCompilerId.c.in"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+      Compiler: /usr/bin/clang 
+      Build flags: -target;x86_64-unknown-none-elf
+      Id flags:  
+      
+      The output was:
+      1
+      ld: unknown file type in '/var/folders/v7/x3qh2zln3f97rxbrhl_1fl780000gn/T/CMakeCCompilerId-884520.o'
+      clang: error: linker command failed with exit code 1 (use -v to see invocation)
+      clang: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
+      
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCCompilerId.c.in"
+    candidate_directories:
+      - "/opt/homebrew/share/cmake/Modules/"
+    found: "/opt/homebrew/share/cmake/Modules/CMakeCCompilerId.c.in"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/bin/clang 
+      Build flags: -target;x86_64-unknown-none-elf
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+      
+      The C compiler identification is Clang, found in:
+        /Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/4.1.1/CompilerIdC/CMakeCCompilerId.o
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-ar"
+      - "ar"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-ar"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ar"
+      - "/Users/eirikr/.pyenv/shims/llvm-ar"
+      - "/opt/homebrew/bin/llvm-ar"
+      - "/opt/homebrew/sbin/llvm-ar"
+      - "/usr/local/bin/llvm-ar"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ar"
+      - "/System/Cryptexes/App/usr/bin/llvm-ar"
+      - "/bin/llvm-ar"
+      - "/usr/sbin/llvm-ar"
+      - "/sbin/llvm-ar"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ar"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ar"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ar"
+      - "/opt/X11/bin/llvm-ar"
+      - "/Library/Apple/usr/bin/llvm-ar"
+      - "/Library/TeX/texbin/llvm-ar"
+      - "/usr/local/share/dotnet/llvm-ar"
+      - "/Users/eirikr/.dotnet/tools/llvm-ar"
+      - "/usr/local/go/bin/llvm-ar"
+      - "/usr/local/opt/fzf/bin/llvm-ar"
+    found: "/usr/bin/ar"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RANLIB"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-ranlib"
+      - "ranlib"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-ranlib"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ranlib"
+      - "/Users/eirikr/.pyenv/shims/llvm-ranlib"
+      - "/opt/homebrew/bin/llvm-ranlib"
+      - "/opt/homebrew/sbin/llvm-ranlib"
+      - "/usr/local/bin/llvm-ranlib"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ranlib"
+      - "/System/Cryptexes/App/usr/bin/llvm-ranlib"
+      - "/bin/llvm-ranlib"
+      - "/usr/sbin/llvm-ranlib"
+      - "/sbin/llvm-ranlib"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ranlib"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ranlib"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ranlib"
+      - "/opt/X11/bin/llvm-ranlib"
+      - "/Library/Apple/usr/bin/llvm-ranlib"
+      - "/Library/TeX/texbin/llvm-ranlib"
+      - "/usr/local/share/dotnet/llvm-ranlib"
+      - "/Users/eirikr/.dotnet/tools/llvm-ranlib"
+      - "/usr/local/go/bin/llvm-ranlib"
+      - "/usr/local/opt/fzf/bin/llvm-ranlib"
+    found: "/usr/bin/ranlib"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_STRIP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-strip"
+      - "strip"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-strip"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-strip"
+      - "/Users/eirikr/.pyenv/shims/llvm-strip"
+      - "/opt/homebrew/bin/llvm-strip"
+      - "/opt/homebrew/sbin/llvm-strip"
+      - "/usr/local/bin/llvm-strip"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-strip"
+      - "/System/Cryptexes/App/usr/bin/llvm-strip"
+      - "/bin/llvm-strip"
+      - "/usr/sbin/llvm-strip"
+      - "/sbin/llvm-strip"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-strip"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-strip"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-strip"
+      - "/opt/X11/bin/llvm-strip"
+      - "/Library/Apple/usr/bin/llvm-strip"
+      - "/Library/TeX/texbin/llvm-strip"
+      - "/usr/local/share/dotnet/llvm-strip"
+      - "/Users/eirikr/.dotnet/tools/llvm-strip"
+      - "/usr/local/go/bin/llvm-strip"
+      - "/usr/local/opt/fzf/bin/llvm-strip"
+    found: "/usr/bin/strip"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ld.lld"
+      - "ld"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/ld.lld"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/ld.lld"
+      - "/Users/eirikr/.pyenv/shims/ld.lld"
+    found: "/opt/homebrew/bin/ld.lld"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_NM"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-nm"
+      - "nm"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-nm"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-nm"
+      - "/Users/eirikr/.pyenv/shims/llvm-nm"
+      - "/opt/homebrew/bin/llvm-nm"
+      - "/opt/homebrew/sbin/llvm-nm"
+      - "/usr/local/bin/llvm-nm"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-nm"
+      - "/System/Cryptexes/App/usr/bin/llvm-nm"
+      - "/bin/llvm-nm"
+      - "/usr/sbin/llvm-nm"
+      - "/sbin/llvm-nm"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-nm"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-nm"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-nm"
+      - "/opt/X11/bin/llvm-nm"
+      - "/Library/Apple/usr/bin/llvm-nm"
+      - "/Library/TeX/texbin/llvm-nm"
+      - "/usr/local/share/dotnet/llvm-nm"
+      - "/Users/eirikr/.dotnet/tools/llvm-nm"
+      - "/usr/local/go/bin/llvm-nm"
+      - "/usr/local/opt/fzf/bin/llvm-nm"
+    found: "/usr/bin/nm"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJDUMP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-objdump"
+      - "objdump"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-objdump"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-objdump"
+      - "/Users/eirikr/.pyenv/shims/llvm-objdump"
+      - "/opt/homebrew/bin/llvm-objdump"
+      - "/opt/homebrew/sbin/llvm-objdump"
+      - "/usr/local/bin/llvm-objdump"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-objdump"
+      - "/System/Cryptexes/App/usr/bin/llvm-objdump"
+      - "/bin/llvm-objdump"
+      - "/usr/sbin/llvm-objdump"
+      - "/sbin/llvm-objdump"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-objdump"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-objdump"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-objdump"
+      - "/opt/X11/bin/llvm-objdump"
+      - "/Library/Apple/usr/bin/llvm-objdump"
+      - "/Library/TeX/texbin/llvm-objdump"
+      - "/usr/local/share/dotnet/llvm-objdump"
+      - "/Users/eirikr/.dotnet/tools/llvm-objdump"
+      - "/usr/local/go/bin/llvm-objdump"
+      - "/usr/local/opt/fzf/bin/llvm-objdump"
+    found: "/usr/bin/objdump"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJCOPY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-objcopy"
+      - "objcopy"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-objcopy"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-objcopy"
+      - "/Users/eirikr/.pyenv/shims/llvm-objcopy"
+      - "/opt/homebrew/bin/llvm-objcopy"
+      - "/opt/homebrew/sbin/llvm-objcopy"
+      - "/usr/local/bin/llvm-objcopy"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-objcopy"
+      - "/System/Cryptexes/App/usr/bin/llvm-objcopy"
+      - "/bin/llvm-objcopy"
+      - "/usr/sbin/llvm-objcopy"
+      - "/sbin/llvm-objcopy"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-objcopy"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-objcopy"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-objcopy"
+      - "/opt/X11/bin/llvm-objcopy"
+      - "/Library/Apple/usr/bin/llvm-objcopy"
+      - "/Library/TeX/texbin/llvm-objcopy"
+      - "/usr/local/share/dotnet/llvm-objcopy"
+      - "/Users/eirikr/.dotnet/tools/llvm-objcopy"
+      - "/usr/local/go/bin/llvm-objcopy"
+      - "/usr/local/opt/fzf/bin/llvm-objcopy"
+      - "/usr/bin/objcopy"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/objcopy"
+      - "/Users/eirikr/.pyenv/shims/objcopy"
+      - "/opt/homebrew/bin/objcopy"
+      - "/opt/homebrew/sbin/objcopy"
+      - "/usr/local/bin/objcopy"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/objcopy"
+      - "/System/Cryptexes/App/usr/bin/objcopy"
+      - "/bin/objcopy"
+      - "/usr/sbin/objcopy"
+      - "/sbin/objcopy"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/objcopy"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/objcopy"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/objcopy"
+      - "/opt/X11/bin/objcopy"
+      - "/Library/Apple/usr/bin/objcopy"
+      - "/Library/TeX/texbin/objcopy"
+      - "/usr/local/share/dotnet/objcopy"
+      - "/Users/eirikr/.dotnet/tools/objcopy"
+      - "/usr/local/go/bin/objcopy"
+      - "/usr/local/opt/fzf/bin/objcopy"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_READELF"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-readelf"
+      - "readelf"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-readelf"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-readelf"
+      - "/Users/eirikr/.pyenv/shims/llvm-readelf"
+      - "/opt/homebrew/bin/llvm-readelf"
+      - "/opt/homebrew/sbin/llvm-readelf"
+      - "/usr/local/bin/llvm-readelf"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-readelf"
+      - "/System/Cryptexes/App/usr/bin/llvm-readelf"
+      - "/bin/llvm-readelf"
+      - "/usr/sbin/llvm-readelf"
+      - "/sbin/llvm-readelf"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-readelf"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-readelf"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-readelf"
+      - "/opt/X11/bin/llvm-readelf"
+      - "/Library/Apple/usr/bin/llvm-readelf"
+      - "/Library/TeX/texbin/llvm-readelf"
+      - "/usr/local/share/dotnet/llvm-readelf"
+      - "/Users/eirikr/.dotnet/tools/llvm-readelf"
+      - "/usr/local/go/bin/llvm-readelf"
+      - "/usr/local/opt/fzf/bin/llvm-readelf"
+      - "/usr/bin/readelf"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/readelf"
+      - "/Users/eirikr/.pyenv/shims/readelf"
+      - "/opt/homebrew/bin/readelf"
+      - "/opt/homebrew/sbin/readelf"
+      - "/usr/local/bin/readelf"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/readelf"
+      - "/System/Cryptexes/App/usr/bin/readelf"
+      - "/bin/readelf"
+      - "/usr/sbin/readelf"
+      - "/sbin/readelf"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/readelf"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/readelf"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/readelf"
+      - "/opt/X11/bin/readelf"
+      - "/Library/Apple/usr/bin/readelf"
+      - "/Library/TeX/texbin/readelf"
+      - "/usr/local/share/dotnet/readelf"
+      - "/Users/eirikr/.dotnet/tools/readelf"
+      - "/usr/local/go/bin/readelf"
+      - "/usr/local/opt/fzf/bin/readelf"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_DLLTOOL"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-dlltool"
+      - "dlltool"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-dlltool"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-dlltool"
+      - "/Users/eirikr/.pyenv/shims/llvm-dlltool"
+      - "/opt/homebrew/bin/llvm-dlltool"
+      - "/opt/homebrew/sbin/llvm-dlltool"
+      - "/usr/local/bin/llvm-dlltool"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-dlltool"
+      - "/System/Cryptexes/App/usr/bin/llvm-dlltool"
+      - "/bin/llvm-dlltool"
+      - "/usr/sbin/llvm-dlltool"
+      - "/sbin/llvm-dlltool"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-dlltool"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-dlltool"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-dlltool"
+      - "/opt/X11/bin/llvm-dlltool"
+      - "/Library/Apple/usr/bin/llvm-dlltool"
+      - "/Library/TeX/texbin/llvm-dlltool"
+      - "/usr/local/share/dotnet/llvm-dlltool"
+      - "/Users/eirikr/.dotnet/tools/llvm-dlltool"
+      - "/usr/local/go/bin/llvm-dlltool"
+      - "/usr/local/opt/fzf/bin/llvm-dlltool"
+      - "/usr/bin/dlltool"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/dlltool"
+      - "/Users/eirikr/.pyenv/shims/dlltool"
+      - "/opt/homebrew/bin/dlltool"
+      - "/opt/homebrew/sbin/dlltool"
+      - "/usr/local/bin/dlltool"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/dlltool"
+      - "/System/Cryptexes/App/usr/bin/dlltool"
+      - "/bin/dlltool"
+      - "/usr/sbin/dlltool"
+      - "/sbin/dlltool"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/dlltool"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/dlltool"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/dlltool"
+      - "/opt/X11/bin/dlltool"
+      - "/Library/Apple/usr/bin/dlltool"
+      - "/Library/TeX/texbin/dlltool"
+      - "/usr/local/share/dotnet/dlltool"
+      - "/Users/eirikr/.dotnet/tools/dlltool"
+      - "/usr/local/go/bin/dlltool"
+      - "/usr/local/opt/fzf/bin/dlltool"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_ADDR2LINE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-addr2line"
+      - "addr2line"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-addr2line"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-addr2line"
+      - "/Users/eirikr/.pyenv/shims/llvm-addr2line"
+      - "/opt/homebrew/bin/llvm-addr2line"
+      - "/opt/homebrew/sbin/llvm-addr2line"
+      - "/usr/local/bin/llvm-addr2line"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-addr2line"
+      - "/System/Cryptexes/App/usr/bin/llvm-addr2line"
+      - "/bin/llvm-addr2line"
+      - "/usr/sbin/llvm-addr2line"
+      - "/sbin/llvm-addr2line"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-addr2line"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-addr2line"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-addr2line"
+      - "/opt/X11/bin/llvm-addr2line"
+      - "/Library/Apple/usr/bin/llvm-addr2line"
+      - "/Library/TeX/texbin/llvm-addr2line"
+      - "/usr/local/share/dotnet/llvm-addr2line"
+      - "/Users/eirikr/.dotnet/tools/llvm-addr2line"
+      - "/usr/local/go/bin/llvm-addr2line"
+      - "/usr/local/opt/fzf/bin/llvm-addr2line"
+      - "/usr/bin/addr2line"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/addr2line"
+      - "/Users/eirikr/.pyenv/shims/addr2line"
+      - "/opt/homebrew/bin/addr2line"
+      - "/opt/homebrew/sbin/addr2line"
+      - "/usr/local/bin/addr2line"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/addr2line"
+      - "/System/Cryptexes/App/usr/bin/addr2line"
+      - "/bin/addr2line"
+      - "/usr/sbin/addr2line"
+      - "/sbin/addr2line"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/addr2line"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/addr2line"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/addr2line"
+      - "/opt/X11/bin/addr2line"
+      - "/Library/Apple/usr/bin/addr2line"
+      - "/Library/TeX/texbin/addr2line"
+      - "/usr/local/share/dotnet/addr2line"
+      - "/Users/eirikr/.dotnet/tools/addr2line"
+      - "/usr/local/go/bin/addr2line"
+      - "/usr/local/opt/fzf/bin/addr2line"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_TAPI"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "tapi"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/tapi"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/tapi"
+      - "/Users/eirikr/.pyenv/shims/tapi"
+      - "/opt/homebrew/bin/tapi"
+      - "/opt/homebrew/sbin/tapi"
+      - "/usr/local/bin/tapi"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/tapi"
+      - "/System/Cryptexes/App/usr/bin/tapi"
+      - "/bin/tapi"
+      - "/usr/sbin/tapi"
+      - "/sbin/tapi"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/tapi"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/tapi"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/tapi"
+      - "/opt/X11/bin/tapi"
+      - "/Library/Apple/usr/bin/tapi"
+      - "/Library/TeX/texbin/tapi"
+      - "/usr/local/share/dotnet/tapi"
+      - "/Users/eirikr/.dotnet/tools/tapi"
+      - "/usr/local/go/bin/tapi"
+      - "/usr/local/opt/fzf/bin/tapi"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Compiler/Clang-FindBinUtils.cmake:26 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_AR"
+    description: "LLVM archiver"
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-ar-17.0"
+      - "llvm-ar-17"
+      - "llvm-ar17"
+      - "llvm-ar"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-ar-17.0"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ar-17.0"
+      - "/Users/eirikr/.pyenv/shims/llvm-ar-17.0"
+      - "/opt/homebrew/bin/llvm-ar-17.0"
+      - "/opt/homebrew/sbin/llvm-ar-17.0"
+      - "/usr/local/bin/llvm-ar-17.0"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ar-17.0"
+      - "/System/Cryptexes/App/usr/bin/llvm-ar-17.0"
+      - "/bin/llvm-ar-17.0"
+      - "/usr/sbin/llvm-ar-17.0"
+      - "/sbin/llvm-ar-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ar-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ar-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ar-17.0"
+      - "/opt/X11/bin/llvm-ar-17.0"
+      - "/Library/Apple/usr/bin/llvm-ar-17.0"
+      - "/Library/TeX/texbin/llvm-ar-17.0"
+      - "/usr/local/share/dotnet/llvm-ar-17.0"
+      - "/Users/eirikr/.dotnet/tools/llvm-ar-17.0"
+      - "/usr/local/go/bin/llvm-ar-17.0"
+      - "/usr/local/opt/fzf/bin/llvm-ar-17.0"
+      - "/usr/bin/llvm-ar-17"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ar-17"
+      - "/Users/eirikr/.pyenv/shims/llvm-ar-17"
+      - "/opt/homebrew/bin/llvm-ar-17"
+      - "/opt/homebrew/sbin/llvm-ar-17"
+      - "/usr/local/bin/llvm-ar-17"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ar-17"
+      - "/System/Cryptexes/App/usr/bin/llvm-ar-17"
+      - "/bin/llvm-ar-17"
+      - "/usr/sbin/llvm-ar-17"
+      - "/sbin/llvm-ar-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ar-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ar-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ar-17"
+      - "/opt/X11/bin/llvm-ar-17"
+      - "/Library/Apple/usr/bin/llvm-ar-17"
+      - "/Library/TeX/texbin/llvm-ar-17"
+      - "/usr/local/share/dotnet/llvm-ar-17"
+      - "/Users/eirikr/.dotnet/tools/llvm-ar-17"
+      - "/usr/local/go/bin/llvm-ar-17"
+      - "/usr/local/opt/fzf/bin/llvm-ar-17"
+      - "/usr/bin/llvm-ar17"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ar17"
+      - "/Users/eirikr/.pyenv/shims/llvm-ar17"
+      - "/opt/homebrew/bin/llvm-ar17"
+      - "/opt/homebrew/sbin/llvm-ar17"
+      - "/usr/local/bin/llvm-ar17"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ar17"
+      - "/System/Cryptexes/App/usr/bin/llvm-ar17"
+      - "/bin/llvm-ar17"
+      - "/usr/sbin/llvm-ar17"
+      - "/sbin/llvm-ar17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ar17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ar17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ar17"
+      - "/opt/X11/bin/llvm-ar17"
+      - "/Library/Apple/usr/bin/llvm-ar17"
+      - "/Library/TeX/texbin/llvm-ar17"
+      - "/usr/local/share/dotnet/llvm-ar17"
+      - "/Users/eirikr/.dotnet/tools/llvm-ar17"
+      - "/usr/local/go/bin/llvm-ar17"
+      - "/usr/local/opt/fzf/bin/llvm-ar17"
+      - "/usr/bin/llvm-ar"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ar"
+      - "/Users/eirikr/.pyenv/shims/llvm-ar"
+      - "/opt/homebrew/bin/llvm-ar"
+      - "/opt/homebrew/sbin/llvm-ar"
+      - "/usr/local/bin/llvm-ar"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ar"
+      - "/System/Cryptexes/App/usr/bin/llvm-ar"
+      - "/bin/llvm-ar"
+      - "/usr/sbin/llvm-ar"
+      - "/sbin/llvm-ar"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ar"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ar"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ar"
+      - "/opt/X11/bin/llvm-ar"
+      - "/Library/Apple/usr/bin/llvm-ar"
+      - "/Library/TeX/texbin/llvm-ar"
+      - "/usr/local/share/dotnet/llvm-ar"
+      - "/Users/eirikr/.dotnet/tools/llvm-ar"
+      - "/usr/local/go/bin/llvm-ar"
+      - "/usr/local/opt/fzf/bin/llvm-ar"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Compiler/Clang-FindBinUtils.cmake:38 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_RANLIB"
+    description: "Generate index for LLVM archive"
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-ranlib-17.0"
+      - "llvm-ranlib-17"
+      - "llvm-ranlib17"
+      - "llvm-ranlib"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/llvm-ranlib-17.0"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ranlib-17.0"
+      - "/Users/eirikr/.pyenv/shims/llvm-ranlib-17.0"
+      - "/opt/homebrew/bin/llvm-ranlib-17.0"
+      - "/opt/homebrew/sbin/llvm-ranlib-17.0"
+      - "/usr/local/bin/llvm-ranlib-17.0"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ranlib-17.0"
+      - "/System/Cryptexes/App/usr/bin/llvm-ranlib-17.0"
+      - "/bin/llvm-ranlib-17.0"
+      - "/usr/sbin/llvm-ranlib-17.0"
+      - "/sbin/llvm-ranlib-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ranlib-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ranlib-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ranlib-17.0"
+      - "/opt/X11/bin/llvm-ranlib-17.0"
+      - "/Library/Apple/usr/bin/llvm-ranlib-17.0"
+      - "/Library/TeX/texbin/llvm-ranlib-17.0"
+      - "/usr/local/share/dotnet/llvm-ranlib-17.0"
+      - "/Users/eirikr/.dotnet/tools/llvm-ranlib-17.0"
+      - "/usr/local/go/bin/llvm-ranlib-17.0"
+      - "/usr/local/opt/fzf/bin/llvm-ranlib-17.0"
+      - "/usr/bin/llvm-ranlib-17"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ranlib-17"
+      - "/Users/eirikr/.pyenv/shims/llvm-ranlib-17"
+      - "/opt/homebrew/bin/llvm-ranlib-17"
+      - "/opt/homebrew/sbin/llvm-ranlib-17"
+      - "/usr/local/bin/llvm-ranlib-17"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ranlib-17"
+      - "/System/Cryptexes/App/usr/bin/llvm-ranlib-17"
+      - "/bin/llvm-ranlib-17"
+      - "/usr/sbin/llvm-ranlib-17"
+      - "/sbin/llvm-ranlib-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ranlib-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ranlib-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ranlib-17"
+      - "/opt/X11/bin/llvm-ranlib-17"
+      - "/Library/Apple/usr/bin/llvm-ranlib-17"
+      - "/Library/TeX/texbin/llvm-ranlib-17"
+      - "/usr/local/share/dotnet/llvm-ranlib-17"
+      - "/Users/eirikr/.dotnet/tools/llvm-ranlib-17"
+      - "/usr/local/go/bin/llvm-ranlib-17"
+      - "/usr/local/opt/fzf/bin/llvm-ranlib-17"
+      - "/usr/bin/llvm-ranlib17"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ranlib17"
+      - "/Users/eirikr/.pyenv/shims/llvm-ranlib17"
+      - "/opt/homebrew/bin/llvm-ranlib17"
+      - "/opt/homebrew/sbin/llvm-ranlib17"
+      - "/usr/local/bin/llvm-ranlib17"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ranlib17"
+      - "/System/Cryptexes/App/usr/bin/llvm-ranlib17"
+      - "/bin/llvm-ranlib17"
+      - "/usr/sbin/llvm-ranlib17"
+      - "/sbin/llvm-ranlib17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ranlib17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ranlib17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ranlib17"
+      - "/opt/X11/bin/llvm-ranlib17"
+      - "/Library/Apple/usr/bin/llvm-ranlib17"
+      - "/Library/TeX/texbin/llvm-ranlib17"
+      - "/usr/local/share/dotnet/llvm-ranlib17"
+      - "/Users/eirikr/.dotnet/tools/llvm-ranlib17"
+      - "/usr/local/go/bin/llvm-ranlib17"
+      - "/usr/local/opt/fzf/bin/llvm-ranlib17"
+      - "/usr/bin/llvm-ranlib"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/llvm-ranlib"
+      - "/Users/eirikr/.pyenv/shims/llvm-ranlib"
+      - "/opt/homebrew/bin/llvm-ranlib"
+      - "/opt/homebrew/sbin/llvm-ranlib"
+      - "/usr/local/bin/llvm-ranlib"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/llvm-ranlib"
+      - "/System/Cryptexes/App/usr/bin/llvm-ranlib"
+      - "/bin/llvm-ranlib"
+      - "/usr/sbin/llvm-ranlib"
+      - "/sbin/llvm-ranlib"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/llvm-ranlib"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/llvm-ranlib"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/llvm-ranlib"
+      - "/opt/X11/bin/llvm-ranlib"
+      - "/Library/Apple/usr/bin/llvm-ranlib"
+      - "/Library/TeX/texbin/llvm-ranlib"
+      - "/usr/local/share/dotnet/llvm-ranlib"
+      - "/Users/eirikr/.dotnet/tools/llvm-ranlib"
+      - "/usr/local/go/bin/llvm-ranlib"
+      - "/usr/local/opt/fzf/bin/llvm-ranlib"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Compiler/Clang-FindBinUtils.cmake:50 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_CLANG_SCAN_DEPS"
+    description: "`clang-scan-deps` dependency scanner"
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "clang-scan-deps-17.0"
+      - "clang-scan-deps-17"
+      - "clang-scan-deps17"
+      - "clang-scan-deps"
+    candidate_directories:
+      - "/usr/bin/"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/bin/clang-scan-deps-17.0"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/clang-scan-deps-17.0"
+      - "/Users/eirikr/.pyenv/shims/clang-scan-deps-17.0"
+      - "/opt/homebrew/bin/clang-scan-deps-17.0"
+      - "/opt/homebrew/sbin/clang-scan-deps-17.0"
+      - "/usr/local/bin/clang-scan-deps-17.0"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/clang-scan-deps-17.0"
+      - "/System/Cryptexes/App/usr/bin/clang-scan-deps-17.0"
+      - "/bin/clang-scan-deps-17.0"
+      - "/usr/sbin/clang-scan-deps-17.0"
+      - "/sbin/clang-scan-deps-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/clang-scan-deps-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/clang-scan-deps-17.0"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/clang-scan-deps-17.0"
+      - "/opt/X11/bin/clang-scan-deps-17.0"
+      - "/Library/Apple/usr/bin/clang-scan-deps-17.0"
+      - "/Library/TeX/texbin/clang-scan-deps-17.0"
+      - "/usr/local/share/dotnet/clang-scan-deps-17.0"
+      - "/Users/eirikr/.dotnet/tools/clang-scan-deps-17.0"
+      - "/usr/local/go/bin/clang-scan-deps-17.0"
+      - "/usr/local/opt/fzf/bin/clang-scan-deps-17.0"
+      - "/usr/bin/clang-scan-deps-17"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/clang-scan-deps-17"
+      - "/Users/eirikr/.pyenv/shims/clang-scan-deps-17"
+      - "/opt/homebrew/bin/clang-scan-deps-17"
+      - "/opt/homebrew/sbin/clang-scan-deps-17"
+      - "/usr/local/bin/clang-scan-deps-17"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/clang-scan-deps-17"
+      - "/System/Cryptexes/App/usr/bin/clang-scan-deps-17"
+      - "/bin/clang-scan-deps-17"
+      - "/usr/sbin/clang-scan-deps-17"
+      - "/sbin/clang-scan-deps-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/clang-scan-deps-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/clang-scan-deps-17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/clang-scan-deps-17"
+      - "/opt/X11/bin/clang-scan-deps-17"
+      - "/Library/Apple/usr/bin/clang-scan-deps-17"
+      - "/Library/TeX/texbin/clang-scan-deps-17"
+      - "/usr/local/share/dotnet/clang-scan-deps-17"
+      - "/Users/eirikr/.dotnet/tools/clang-scan-deps-17"
+      - "/usr/local/go/bin/clang-scan-deps-17"
+      - "/usr/local/opt/fzf/bin/clang-scan-deps-17"
+      - "/usr/bin/clang-scan-deps17"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/clang-scan-deps17"
+      - "/Users/eirikr/.pyenv/shims/clang-scan-deps17"
+      - "/opt/homebrew/bin/clang-scan-deps17"
+      - "/opt/homebrew/sbin/clang-scan-deps17"
+      - "/usr/local/bin/clang-scan-deps17"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/clang-scan-deps17"
+      - "/System/Cryptexes/App/usr/bin/clang-scan-deps17"
+      - "/bin/clang-scan-deps17"
+      - "/usr/sbin/clang-scan-deps17"
+      - "/sbin/clang-scan-deps17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/clang-scan-deps17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/clang-scan-deps17"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/clang-scan-deps17"
+      - "/opt/X11/bin/clang-scan-deps17"
+      - "/Library/Apple/usr/bin/clang-scan-deps17"
+      - "/Library/TeX/texbin/clang-scan-deps17"
+      - "/usr/local/share/dotnet/clang-scan-deps17"
+      - "/Users/eirikr/.dotnet/tools/clang-scan-deps17"
+      - "/usr/local/go/bin/clang-scan-deps17"
+      - "/usr/local/opt/fzf/bin/clang-scan-deps17"
+      - "/usr/bin/clang-scan-deps"
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/clang-scan-deps"
+      - "/Users/eirikr/.pyenv/shims/clang-scan-deps"
+      - "/opt/homebrew/bin/clang-scan-deps"
+      - "/opt/homebrew/sbin/clang-scan-deps"
+      - "/usr/local/bin/clang-scan-deps"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/clang-scan-deps"
+      - "/System/Cryptexes/App/usr/bin/clang-scan-deps"
+      - "/bin/clang-scan-deps"
+      - "/usr/sbin/clang-scan-deps"
+      - "/sbin/clang-scan-deps"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/clang-scan-deps"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/clang-scan-deps"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/clang-scan-deps"
+      - "/opt/X11/bin/clang-scan-deps"
+      - "/Library/Apple/usr/bin/clang-scan-deps"
+      - "/Library/TeX/texbin/clang-scan-deps"
+      - "/usr/local/share/dotnet/clang-scan-deps"
+      - "/Users/eirikr/.dotnet/tools/clang-scan-deps"
+      - "/usr/local/go/bin/clang-scan-deps"
+      - "/usr/local/opt/fzf/bin/clang-scan-deps"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompiler.cmake:115 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:64 (_cmake_find_compiler_path)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_ASM_COMPILER_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "clang"
+    candidate_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+    searched_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/clang"
+      - "/Users/eirikr/.pyenv/shims/clang"
+      - "/opt/homebrew/bin/clang"
+      - "/opt/homebrew/sbin/clang"
+      - "/usr/local/bin/clang"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/clang"
+      - "/System/Cryptexes/App/usr/bin/clang"
+    found: "/usr/bin/clang"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1303 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:170 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Checking whether the ASM compiler is GNU using "--version" did not match "(GNU assembler)|(GCC)|(Free Software Foundation)":
+      Apple clang version 17.0.0 (clang-1700.3.19.1)
+      Target: arm64-apple-darwin25.0.0
+      Thread model: posix
+      InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1290 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:170 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Checking whether the ASM compiler is AppleClang using "--version" matched "(Apple (clang|LLVM) version)":
+      Apple clang version 17.0.0 (clang-1700.3.19.1)
+      Target: arm64-apple-darwin25.0.0
+      Thread model: posix
+      InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG"
+      binary: "/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "-target x86_64-unknown-none-elf"
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_639ee/fast
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_639ee.dir/build.make CMakeFiles/cmTC_639ee.dir/build
+        gmake[1]: Entering directory '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG'
+        Building C object CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj
+        /usr/bin/clang   -target x86_64-unknown-none-elf    -v -MD -MT CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj.d -o CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        Apple clang version 17.0.0 (clang-1700.3.19.1)
+        Target: x86_64-unknown-none-elf
+        Thread model: posix
+        InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-unknown-none-elf -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG -target-linker-version 1221.4 -v -fcoverage-compilation-dir=/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -sys-header-deps -I/usr/local/include -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -x c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 17.0.0 (clang-1700.3.19.1) default target arm64-apple-darwin25.0.0
+        ignoring nonexistent directory "/usr/include"
+        ignoring duplicate directory "/usr/local/include"
+          as it is a non-system directory that duplicates a system directory
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/local/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/17/include
+        End of search list.
+        Linking C static library libcmTC_639ee.a
+        /opt/homebrew/bin/cmake -P CMakeFiles/cmTC_639ee.dir/cmake_clean_target.cmake
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_639ee.dir/link.txt --verbose=1
+        warning: /Library/Developer/CommandLineTools/usr/bin/ranlib: archive library: libcmTC_639ee.a the table of contents is empty (no object file members in the library define global symbols)
+        /usr/bin/ar qc libcmTC_639ee.a CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj
+        /usr/bin/ranlib libcmTC_639ee.a
+        gmake[1]: Leaving directory '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:217 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/local/include]
+          add: [/Library/Developer/CommandLineTools/usr/lib/clang/17/include]
+        end of search list found
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/Library/Developer/CommandLineTools/usr/lib/clang/17/include] ==> [/Library/Developer/CommandLineTools/usr/lib/clang/17/include]
+        implicit include dirs: [/usr/local/include;/Library/Developer/CommandLineTools/usr/lib/clang/17/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG']
+        ignore line: []
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_639ee/fast]
+        ignore line: [/opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_639ee.dir/build.make CMakeFiles/cmTC_639ee.dir/build]
+        ignore line: [gmake[1]: Entering directory '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG']
+        ignore line: [Building C object CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj]
+        ignore line: [/usr/bin/clang   -target x86_64-unknown-none-elf    -v -MD -MT CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj.d -o CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Apple clang version 17.0.0 (clang-1700.3.19.1)]
+        ignore line: [Target: x86_64-unknown-none-elf]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
+        ignore line: [ "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple x86_64-unknown-none-elf -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG -target-linker-version 1221.4 -v -fcoverage-compilation-dir=/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/17 -dependency-file CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -sys-header-deps -I/usr/local/include -ferror-limit 19 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj -x c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 17.0.0 (clang-1700.3.19.1) default target arm64-apple-darwin25.0.0]
+        ignore line: [ignoring nonexistent directory "/usr/include"]
+        ignore line: [ignoring duplicate directory "/usr/local/include"]
+        ignore line: [  as it is a non-system directory that duplicates a system directory]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /Library/Developer/CommandLineTools/usr/lib/clang/17/include]
+        ignore line: [End of search list.]
+        ignore line: [Linking C static library libcmTC_639ee.a]
+        ignore line: [/opt/homebrew/bin/cmake -P CMakeFiles/cmTC_639ee.dir/cmake_clean_target.cmake]
+        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_639ee.dir/link.txt --verbose=1]
+        ignore line: [warning: /Library/Developer/CommandLineTools/usr/bin/ranlib: archive library: libcmTC_639ee.a the table of contents is empty (no object file members in the library define global symbols)]
+        ignore line: [/usr/bin/ar qc libcmTC_639ee.a CMakeFiles/cmTC_639ee.dir/CMakeCCompilerABI.c.obj]
+        ignore line: [/usr/bin/ranlib libcmTC_639ee.a]
+        ignore line: [gmake[1]: Leaving directory '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-QXswwG']
+        ignore line: []
+        ignore line: []
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CheckCSourceCompiles.cmake:103 (cmake_check_source_compiles)"
+      - "CMakeLists.txt:13 (check_c_source_compiles)"
+    checks:
+      - "Performing Test HAS_C17_SUPPORT"
+    directories:
+      source: "/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-TvYiOc"
+      binary: "/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-TvYiOc"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "-target x86_64-unknown-none-elf"
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "HAS_C17_SUPPORT"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-TvYiOc'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /opt/homebrew/bin/gmake -f Makefile cmTC_0271a/fast
+        /opt/homebrew/bin/gmake  -f CMakeFiles/cmTC_0271a.dir/build.make CMakeFiles/cmTC_0271a.dir/build
+        gmake[1]: Entering directory '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-TvYiOc'
+        Building C object CMakeFiles/cmTC_0271a.dir/src.c.obj
+        /usr/bin/clang -DHAS_C17_SUPPORT  -target x86_64-unknown-none-elf  -std=c17 -MD -MT CMakeFiles/cmTC_0271a.dir/src.c.obj -MF CMakeFiles/cmTC_0271a.dir/src.c.obj.d -o CMakeFiles/cmTC_0271a.dir/src.c.obj -c /Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-TvYiOc/src.c
+        Linking C static library libcmTC_0271a.a
+        /opt/homebrew/bin/cmake -P CMakeFiles/cmTC_0271a.dir/cmake_clean_target.cmake
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0271a.dir/link.txt --verbose=1
+        warning: /Library/Developer/CommandLineTools/usr/bin/ranlib: archive library: libcmTC_0271a.a the table of contents is empty (no object file members in the library define global symbols)
+        /usr/bin/ar qc libcmTC_0271a.a CMakeFiles/cmTC_0271a.dir/src.c.obj
+        /usr/bin/ranlib libcmTC_0271a.a
+        gmake[1]: Leaving directory '/Users/eirikr/Documents/GitHub/exov6/build-x86_64/CMakeFiles/CMakeScratch/TryCompile-TvYiOc'
+        
+      exitCode: 0
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindDoxygen.cmake:753 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/FindDoxygen.cmake:937 (_Doxygen_find_doxygen)"
+      - "CMakeLists.txt:587 (find_package)"
+    mode: "program"
+    variable: "DOXYGEN_EXECUTABLE"
+    description: "Doxygen documentation generation tool (https://www.doxygen.nl)"
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "doxygen"
+    candidate_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+      - "/Applications/Doxygen.app/Contents/Resources/"
+      - "/Applications/Doxygen.app/Contents/MacOS/"
+      - "/Applications/Utilities/Doxygen.app/Contents/Resources/"
+      - "/Applications/Utilities/Doxygen.app/Contents/MacOS/"
+    searched_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/doxygen"
+      - "/Users/eirikr/.pyenv/shims/doxygen"
+    found: "/opt/homebrew/bin/doxygen"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PROGRAM_PATH:
+        - "/bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/FindDoxygen.cmake:840 (find_program)"
+      - "/opt/homebrew/share/cmake/Modules/FindDoxygen.cmake:941 (_Doxygen_find_dot)"
+      - "CMakeLists.txt:587 (find_package)"
+    mode: "program"
+    variable: "DOXYGEN_DOT_EXECUTABLE"
+    description: "Dot tool for use with Doxygen"
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "dot"
+    candidate_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/"
+      - "/Users/eirikr/.pyenv/shims/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
+      - "/usr/local/bin/"
+      - "/Users/eirikr/.local/share/zinit/polaris/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/opt/X11/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Library/TeX/texbin/"
+      - "/usr/local/share/dotnet/"
+      - "/Users/eirikr/.dotnet/tools/"
+      - "/usr/local/go/bin/"
+      - "/usr/local/opt/fzf/bin/"
+      - "/ATT/Graphviz/bin/"
+      - "C:/Program Files/ATT/Graphviz/bin/"
+      - "/Applications/Graphviz.app/Contents/MacOS/"
+      - "/Applications/Utilities/Graphviz.app/Contents/MacOS/"
+      - "/Applications/Doxygen.app/Contents/Resources/"
+      - "/Applications/Doxygen.app/Contents/MacOS/"
+      - "/Applications/Utilities/Doxygen.app/Contents/Resources/"
+      - "/Applications/Utilities/Doxygen.app/Contents/MacOS/"
+    searched_directories:
+      - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims/dot"
+      - "/Users/eirikr/.pyenv/shims/dot"
+    found: "/opt/homebrew/bin/dot"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/Cellar/pyenv-virtualenv/1.2.4/shims"
+        - "/Users/eirikr/.pyenv/shims"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/Users/eirikr/.local/share/zinit/polaris/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/opt/X11/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Library/TeX/texbin"
+        - "/usr/local/share/dotnet"
+        - "/Users/eirikr/.dotnet/tools"
+        - "/usr/local/go/bin"
+        - "/usr/local/opt/fzf/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PROGRAM_PATH:
+        - "/bin"
+...
