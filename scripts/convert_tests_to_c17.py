@@ -179,14 +179,14 @@ def main():
         
         try:
             c_file = convert_python_test_to_c17(py_test, output_dir)
-            print(f"  ✓ {py_test.name} -> {c_file.relative_to(Path.cwd())}")
+            print(f"  ✓ {py_test.name} -> {c_file}")
         except Exception as e:
             print(f"  ✗ {py_test.name}: {e}")
     
     # Create Makefiles
     for subdir in ["unit", "integration", "performance", "posix"]:
         makefile = create_test_makefile(c17_dir / subdir)
-        print(f"Created {makefile.relative_to(Path.cwd())}")
+        print(f"Created {makefile}")
     
     print("\nConversion complete!")
     print("Next steps:")
