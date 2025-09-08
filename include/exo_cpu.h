@@ -1,6 +1,7 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
+#include "compiler_attrs.h"
 
 /*
  * Exokernel CPU interface used by user-level schedulers.

@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "kernel_compat.h"
 #include "config.h"
 
 /** Forward declaration for CPU reference in spinlock. */
@@ -19,8 +20,8 @@ void detect_cache_line_size(void);
  * Provides fair FIFO ordering of lock acquisition.
  */
 struct ticketlock {
-    volatile uint16_t head; /**< Next ticket number to service. */
-    volatile uint16_t tail; /**< Current ticket being served. */
+    _Atomic uint16_t head; /**< Next ticket number to service. */
+    _Atomic uint16_t tail; /**< Current ticket being served. */
 };
 
 /**
@@ -30,7 +31,7 @@ struct ticketlock {
  */
 struct spinlock {
     struct ticketlock ticket; /**< Underlying ticket lock. */
-    const char *name;               /**< Human-readable lock name. */
+    char *name;               /**< Human-readable lock name. */
     uint32_t pcs[10];         /**< Call stack at acquisition for debugging. */
     struct cpu *cpu;          /**< CPU that currently holds the lock. */
 };
@@ -38,7 +39,7 @@ struct spinlock {
 /**
  * @brief Initialise a spinlock with the provided name.
  */
-void initlock(struct spinlock *lk, const char *name);
+void initlock(struct spinlock *lk, char *name);
 
 /** Ensure cache_line_size is initialized at program startup. */
 __attribute__((constructor))

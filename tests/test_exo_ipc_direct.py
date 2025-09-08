@@ -82,7 +82,7 @@ def compile_and_run():
             "#ifndef TEST_STDINT_H\n#define TEST_STDINT_H\n#include </usr/include/stdint.h>\n#endif\n"
         )
         subprocess.check_call([
-            CC,"-std=c17","-Wall","-Werror","-Wno-unused-function",
+            CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
             "-idirafter", str(ROOT/"include"),

@@ -27,7 +27,7 @@ def compile_and_run(source: pathlib.Path) -> None:
         )
         cmd = [
             "gcc",
-            "-std=c17",
+            "-std=c2x",
             "-Wall",
             "-Werror",
             "-I",

@@ -3,6 +3,7 @@
 #include "compiler_attrs.h"
 #include "exo.h"
 #include "syscall.h"
+#include "compiler_attrs.h"
 
 /* Capability access rights. */
 #define EXO_RIGHT_R 0x1

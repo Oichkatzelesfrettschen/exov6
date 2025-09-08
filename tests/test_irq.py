@@ -62,7 +62,7 @@ def compile_and_run():
         subprocess.check_call(
             [
                 CC,
-                "-std=c17",
+                "-std=c2x",
                 "-Wall",
                 "-Werror","-Wno-unused-function",
                 "-I",

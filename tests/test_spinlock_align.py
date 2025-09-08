@@ -25,7 +25,7 @@ def compile_and_run(use_stub):
         if use_stub:
             (pathlib.Path(td)/"spinlock.h").write_text('#include "include/libos/spinlock.h"\n')
         cmd = [
-            CC,"-std=c17","-Wall","-Werror","-Wno-unused-function",
+            CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(td),
             "-I", str(ROOT),
             "-idirafter", str(ROOT/"include"),

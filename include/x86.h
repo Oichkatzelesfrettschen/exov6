@@ -45,84 +45,65 @@ typedef uint64_t arch_reg_t;
 #endif
 
 // =============================================================================
-// I/O PORT OPERATIONS MODULE (x86 only)
+// I/O PORT OPERATIONS MODULE
 // =============================================================================
 
-#if defined(__i386__) || defined(__x86_64__)
 static inline unsigned char inb(ushort port) {
   unsigned char data;
   __asm__ volatile("inb %w1, %b0" : "=a"(data) : "Nd"(port) : "memory");
   return data;
 }
+
 static inline ushort inw(ushort port) {
   ushort data;
   __asm__ volatile("inw %w1, %w0" : "=a"(data) : "Nd"(port) : "memory");
   return data;
 }
+
 static inline uint inl(ushort port) {
   uint data;
   __asm__ volatile("inl %w1, %0" : "=a"(data) : "Nd"(port) : "memory");
   return data;
 }
+
 static inline void outb(ushort port, unsigned char data) {
   __asm__ volatile("outb %b0, %w1" : : "a"(data), "Nd"(port) : "memory");
 }
+
 static inline void outw(ushort port, ushort data) {
   __asm__ volatile("outw %w0, %w1" : : "a"(data), "Nd"(port) : "memory");
 }
+
 static inline void outl(ushort port, uint data) {
   __asm__ volatile("outl %0, %w1" : : "a"(data), "Nd"(port) : "memory");
 }
-#else
-static inline unsigned char inb(ushort port) { (void)port; return 0; }
-static inline ushort inw(ushort port) { (void)port; return 0; }
-static inline uint inl(ushort port) { (void)port; return 0; }
-static inline void outb(ushort port, unsigned char data) { (void)port; (void)data; }
-static inline void outw(ushort port, ushort data) { (void)port; (void)data; }
-static inline void outl(ushort port, uint data) { (void)port; (void)data; }
-#endif
 
 // =============================================================================
 // BULK DATA TRANSFER MODULE
 // =============================================================================
 
 static inline void insl(int port, void *addr, int cnt) {
-#if defined(__i386__) || defined(__x86_64__)
   __asm__ volatile("cld\n\t"
                    "rep insl"
                    : "=D"(addr), "=c"(cnt)
                    : "d"(port), "0"(addr), "1"(cnt)
                    : "memory", "cc");
-  (void)addr; (void)cnt; (void)port;
-#else
-  (void)port; (void)addr; (void)cnt;
-#endif
 }
 
 static inline void outsw(int port, const void *addr, int cnt) {
-#if defined(__i386__) || defined(__x86_64__)
   __asm__ volatile("cld\n\t"
                    "rep outsw"
                    : "=S"(addr), "=c"(cnt)
                    : "d"(port), "0"(addr), "1"(cnt)
                    : "cc");
-  (void)addr; (void)cnt; (void)port;
-#else
-  (void)port; (void)addr; (void)cnt;
-#endif
 }
 
 static inline void outsl(int port, const void *addr, int cnt) {
-#if defined(__i386__) || defined(__x86_64__)
   __asm__ volatile("cld\n\t"
                    "rep outsl"
                    : "=S"(addr), "=c"(cnt)
                    : "d"(port), "0"(addr), "1"(cnt)
                    : "cc");
-  (void)addr; (void)cnt; (void)port;
-#else
-  (void)port; (void)addr; (void)cnt;
-#endif
 }
 
 // =============================================================================
@@ -204,20 +185,16 @@ static inline void ltr(ushort sel) {
 
 static inline arch_reg_t read_flags(void) {
   arch_reg_t flags;
-#if defined(__x86_64__)
-  __asm__ volatile("pushfq\n\t"
-                   "popq %0"
-                   : "=r"(flags)
-                   :
-                   : "memory");
-#elif defined(__i386__)
-  __asm__ volatile("pushfl\n\t"
-                   "popl %0"
+#ifdef __x86_64__
+  __asm__ volatile(PUSH_INSTR " %%rflags\n\t" POP_INSTR " %0"
                    : "=r"(flags)
                    :
                    : "memory");
 #else
-  flags = 0;
+  __asm__ volatile(PUSH_INSTR " %%eflags\n\t" POP_INSTR " %0"
+                   : "=r"(flags)
+                   :
+                   : "memory");
 #endif
   return flags;
 }
@@ -238,18 +215,9 @@ static inline void write_flags(arch_reg_t flags) {
 #endif
 }
 
-static inline void cli(void) {
-#if defined(__i386__) || defined(__x86_64__)
-  __asm__ volatile("cli" ::: "memory");
-#endif
-}
+static inline void cli(void) { __asm__ volatile("cli" ::: "memory"); }
 
-static inline void sti(void) {
-#if defined(__i386__) || defined(__x86_64__)
-  __asm__ volatile("sti" ::: "memory");
-#endif
-}
-
+static inline void sti(void) { __asm__ volatile("sti" ::: "memory"); }
 
 static inline void hlt(void) { __asm__ volatile("hlt" ::: "memory"); }
 
@@ -448,6 +416,4 @@ struct trapframe {
 // `loadgs(v)` loads the value `v`
 // into the GS segment register.
 #define loadgs(v) load_gs(v)
-#pragma once
 
-// Duplicate definitions removed - using earlier implementations

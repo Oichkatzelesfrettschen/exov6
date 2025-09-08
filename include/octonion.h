@@ -11,28 +11,16 @@
 #ifndef OCTONION_H
 #define OCTONION_H
 
+#include "kernel_compat.h"
+
+/* Kernel-compatible includes */
+#ifndef __KERNEL__
+#include <math.h>        /* sqrt, fabs */
 #include <string.h>      /* memcmp */
-#include <stdint.h>      /* Fixed point types */
+#include <stdatomic.h>   /* atomic operations */
+#endif
 
 #include "lattice_types.h"  /* defines octonion_t */
-
-/* Kernel-safe math functions */
-extern uint32_t kisqrt32(uint32_t x);
-extern int32_t kabs32(int32_t x);
-
-/* Fixed-point square root for doubles */
-static inline double ksqrt_double(double x) {
-    /* Convert to fixed point, sqrt, convert back */
-    if (x < 0) return 0;
-    uint32_t fixed = (uint32_t)(x * 65536.0);
-    uint32_t result = kisqrt32(fixed);
-    return result / 256.0;  /* sqrt scales by 256 */
-}
-
-/* Absolute value for doubles */
-static inline double kfabs(double x) {
-    return x < 0 ? -x : x;
-}
 
 /**
  * @brief Quaternion type (4D extension of complex numbers).
@@ -78,7 +66,7 @@ static inline double quaternion_norm_sq(quaternion_t q) {
  * @brief Norm (magnitude) of a quaternion.
  */
 static inline double quaternion_norm(quaternion_t q) {
-    return ksqrt_double(quaternion_norm_sq(q));
+    return sqrt(quaternion_norm_sq(q));
 }
 
 /**
@@ -155,7 +143,7 @@ static inline double octonion_norm_sq(octonion_t o) {
  * @brief Norm (magnitude) of an octonion.
  */
 static inline double octonion_norm(octonion_t o) {
-    return ksqrt_double(octonion_norm_sq(o));
+    return sqrt(octonion_norm_sq(o));
 }
 
 /**
@@ -175,7 +163,7 @@ static inline octonion_t octonion_inverse(octonion_t o) {
  * @brief Busy‐wait delay scaled by a norm—useful for hyperbolic pause.
  */
 static inline void hyperbolic_pause(double norm_val) {
-    unsigned long delay = (unsigned long)(kfabs(norm_val) * 100.0);
+    unsigned long delay = (unsigned long)(fabs(norm_val) * 100.0);
     if (delay == 0) delay = 1;
     for (volatile unsigned long i = 0; i < delay; ++i) { }
 }

@@ -1,4 +1,6 @@
 #include "libos/sched.h"
+#include "caplib.h"
+#include "user.h"
 
 // Forward declarations for capability scheduler functions
 int cap_out_of_gas(void);
@@ -26,14 +28,14 @@ static void sched_tick(void) {
     for(int i = 0; i < nprocs; i++) {
         cur = (cur + 1) % nprocs;
         set_gas(GAS_SLICE);
-        cap_yield_to_cap(runq[cur]);
+        (void)cap_yield_to_cap(runq[cur]);
         if(!cap_out_of_gas())
             break;
     }
 }
 
 void sched_install_timer(void) {
-    cap_set_timer(sched_tick);
+    (void)cap_set_timer(sched_tick);
 }
 
 void sched_run(void) {
@@ -41,7 +43,7 @@ void sched_run(void) {
     if(nprocs > 0){
         cur = 0;
         set_gas(GAS_SLICE);
-        cap_yield_to_cap(runq[cur]);
+        (void)cap_yield_to_cap(runq[cur]);
     }
     while(1)
         sched_tick();

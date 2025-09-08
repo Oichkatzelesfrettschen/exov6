@@ -24,7 +24,7 @@ def compile_and_run():
         exe = pathlib.Path(td)/"test"
         src.write_text(C_CODE)
         subprocess.check_call([
-            CC,"-std=c17","-Wall","-Werror","-Wno-unused-function",
+            CC,"-std=c2x","-Wall","-Werror","-Wno-unused-function",
             "-I", str(ROOT),
             "-idirafter", str(ROOT/"include"),
             str(src), str(ROOT/"libos/env.c"),

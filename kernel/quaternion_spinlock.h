@@ -1,6 +1,6 @@
 #pragma once
 #include "rspinlock.h"
-#include <stdbool.h>
+#include "kernel_compat.h"
 
 /**
  * @brief Quaternion spinlock providing recursive locking semantics.

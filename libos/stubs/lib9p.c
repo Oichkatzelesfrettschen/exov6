@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "libos/lib9p.h"
 #include <arpa/inet.h>
 #include <string.h>

@@ -10,13 +10,11 @@ default_api.read_file(absolute_path = "/Users/eirikr/Documents/GitHub/exov6/kern
 #include "types.h"
 #include "exo.h"
 #include "defs.h"
+#include "cap_security.h"
 #include <string.h>
 
-/** Secret key used for capability HMAC. */
-static const uint8_t cap_secret[32] = {
-    0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef, 0xfe, 0xdc, 0xba,
-    0x98, 0x76, 0x54, 0x32, 0x10, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x11,
-    0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb};
+/** Forward declaration for secure secret access */
+const uint8_t *cap_get_secret(void);
 
 /**
  * Compute a 64-bit FNV-1a hash over a buffer.
@@ -63,11 +61,15 @@ static void compute_tag(uint id, uint rights, uint owner, hash256_t *out) {
     uint rights;
     uint owner;
   } tmp = {id, rights, owner};
-  uint8_t buf[sizeof(cap_secret) + sizeof(tmp)];
+  const uint8_t *cap_secret = cap_get_secret();
+  uint8_t buf[32 + sizeof(tmp)]; /* 32 bytes for secret + tmp size */
 
-  memmove(buf, cap_secret, sizeof(cap_secret));
-  memmove(buf + sizeof(cap_secret), &tmp, sizeof(tmp));
+  memmove(buf, cap_secret, 32);
+  memmove(buf + 32, &tmp, sizeof(tmp));
   hash256(buf, sizeof(buf), out);
+  
+  /* Clear sensitive data from stack */
+  cap_secure_clear(buf, sizeof(buf));
 }
 
 /**
@@ -96,6 +98,6 @@ exo_cap cap_new(uint id, uint rights, uint owner) {
 int cap_verify(exo_cap c) {
   hash256_t h;
   compute_tag(c.id, c.rights, c.owner, &h);
-  return memcmp(h.parts, c.auth_tag.parts, sizeof(h.parts)) == 0;
+  return cap_verify_constant_time(&h, &c.auth_tag);
 }
 ```

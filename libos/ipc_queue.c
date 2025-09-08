@@ -1,8 +1,7 @@
-#include "../include/exokernel.h"
+#include "exokernel.h"
 #include "exo_ipc.h"
 #include "ipc.h"
 #include "proc.h"
-#include "../include/defs.h"
 #include <string.h>
 #include <errno.h>
 #include "ipc_debug.h"

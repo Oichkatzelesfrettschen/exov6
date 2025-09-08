@@ -102,7 +102,7 @@ def compile_and_run(code: str) -> int:
         )
         subprocess.check_call([
             CC,
-            "-std=c17",
+            "-std=c2x",
             "-Wall",
             "-Werror",
             "-Wno-unused-function",
@@ -182,3 +182,4 @@ def test_lattice_ipc_basic() -> None:
 def test_lattice_ipc_errors() -> None:
     """Ensure send/recv failures propagate negative return codes."""
     assert compile_and_run(C_CODE_ERROR) == 0
+

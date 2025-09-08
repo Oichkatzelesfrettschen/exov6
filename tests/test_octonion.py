@@ -57,7 +57,7 @@ def compile_and_run():
         subprocess.check_call(
             [
                 CC,
-                "-std=c23",
+                "-std=c2x",
                 "-O3",
                 "-march=native",
                 "-ffast-math",

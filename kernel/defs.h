@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <stdnoreturn.h>
+#include "kernel_compat.h"
 
-#include <types.h>
+#include "types.h"
 #include "param.h"
 #include <compiler_attrs.h>
 
@@ -21,24 +21,15 @@
 #include "exo_disk.h"
 #include "exo_ipc.h"
 #include "fastipc.h"
-#include "exokernel.h"
 
-#if defined(EXO_KERNEL)
-# ifdef __x86_64__
-#  include "arch_x86_64.h"
-   typedef struct context64 context_t;
-# elif defined(__aarch64__)
-#  include "arch_aarch64.h"
-   typedef struct context64 context_t;
-# else
-   typedef struct context context_t;
-# endif
+#ifdef __x86_64__
+# include "trapframe64.h"
+  typedef struct context64 context_t;
+#elif defined(__aarch64__)
+# include "trapframe64.h"
+  typedef struct context64 context_t;
 #else
-  /* Host-compiled tests do not include trapframe headers; provide a minimal alias. */
-  #ifndef CONTEXT_T_DEFINED
-  #define CONTEXT_T_DEFINED
   typedef struct context context_t;
-  #endif
 #endif
 
 #define EXO_CONTEXT_T
@@ -69,14 +60,12 @@ extern struct spinlock sched_lock;
 void binit(void);
 struct buf *bread(uint32_t dev, uint32_t blockno);
 void brelse(struct buf *);
-void bwrite(struct buf *);
 
 // console.c
 void consoleinit(void);
 void cprintf(const char *, ...);
 void consoleintr(int (*)(void));
 _Noreturn void panic(const char *);
-void cap_crypto_init(void);
 
 // exec.c
 int exec(const char *path, char *const argv[]);
@@ -162,7 +151,7 @@ void cpuid(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
 _Noreturn void exit(int status);
 int fork(void);
 int growproc(int);
-int kkill(int);    /* Kernel kill - renamed to avoid POSIX conflict */
+int kill(int);
 int sigsend(int pid, int sig);
 struct cpu *mycpu(void);
 struct proc *myproc(void);
@@ -259,8 +248,8 @@ exo_cap exo_alloc_page(void);
 int exo_unbind_page(exo_cap);
 exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner);
 int cap_verify(exo_cap);
-int exo_alloc_block(uint32_t dev, uint32_t rights, struct exo_blockcap *cap);
-int exo_bind_block(struct exo_blockcap *cap, void *data, int write);
+struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights);
+int exo_bind_block(struct exo_blockcap *, struct buf *, int);
 void exo_flush_block(struct exo_blockcap *, void *);
 exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
 int exo_irq_wait(exo_cap cap, uint32_t *irqp);
@@ -269,11 +258,11 @@ int irq_trigger(uint32_t irq);
 exo_cap exo_alloc_ioport(uint32_t port);
 exo_cap exo_bind_irq(uint32_t irq);
 exo_cap exo_alloc_dma(uint32_t chan);
-HypervisorCap exo_alloc_hypervisor(void);
+exo_cap exo_alloc_hypervisor(void);
 int hv_launch_guest(exo_cap cap, const char *path);
 
 void cap_table_init(void);
-cap_id_t cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner);
+int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner);
 int cap_table_lookup(cap_id_t id, struct cap_entry *out);
 void cap_table_inc(cap_id_t id);
 void cap_table_dec(cap_id_t id);

@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "include/exokernel.h"
+#include "exokernel.h"
 #include "fs.h"
 #include "sleeplock.h"
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # FeuerBird exokernel build system setup script
-# Meson + Ninja build system setup targeting C17 (SUSv5) compliance
+# Modern build system setup targeting C23 compliance
 
 set -euo pipefail
 
@@ -39,17 +39,17 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Check compiler C17 support
-check_c17_support() {
+# Check compiler C23 support
+check_c23_support() {
     local compiler="$1"
-    log_info "Checking C17 support for $compiler"
+    log_info "Checking C23 support for $compiler"
     
-    if ! "$compiler" -std=c17 -xc /dev/null -c -o /dev/null 2>/dev/null; then
-        log_error "$compiler does not support -std=c17 (C17)"
+    if ! "$compiler" -std=c2x -xc /dev/null -c -o /dev/null 2>/dev/null; then
+        log_error "$compiler does not support -std=c2x (C23)"
         return 1
     fi
     
-    log_success "$compiler supports C17"
+    log_success "$compiler supports C23"
     return 0
 }
 
@@ -114,7 +114,7 @@ verify_toolchain() {
     
     for compiler in "${compilers[@]}"; do
         if command_exists "$compiler"; then
-            if check_c17_support "$compiler"; then
+            if check_c23_support "$compiler"; then
                 found_compiler="$compiler"
                 break
             fi
@@ -122,7 +122,7 @@ verify_toolchain() {
     done
     
     if [[ -z "$found_compiler" ]]; then
-        log_error "No C17-capable compiler found. Please install clang or gcc with C17 support."
+        log_error "No C23-capable compiler found. Please install clang or gcc with C23 support."
         return 1
     fi
     
@@ -183,7 +183,16 @@ test_build_systems() {
         fi
     fi
     
-    # CMake support removed; Meson is the only supported build system.
+    # Test CMake
+    if command_exists cmake; then
+        log_info "Testing CMake build system"
+        if cmake -B _build-cmake . >/dev/null 2>&1; then
+            log_success "CMake configuration successful"
+            rm -rf _build-cmake
+        else
+            log_warning "CMake configuration failed - will need fixes"
+        fi
+    fi
     
     # Test Make
     log_info "Testing Makefile"
