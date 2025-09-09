@@ -1,0 +1,393 @@
+# ExoV6 Modern CMake Build System - C17 + POSIX 2024
+cmake_minimum_required(VERSION 3.20)
+
+# Set compilers and language before project declaration
+if(NOT DEFINED CMAKE_C_COMPILER)
+    find_program(CLANG_EXECUTABLE NAMES clang-18 clang)
+    if(CLANG_EXECUTABLE)
+        set(CMAKE_C_COMPILER ${CLANG_EXECUTABLE})
+    endif()
+endif()
+
+# Project declaration with modern CMake
+project(ExoV6
+    VERSION 1.0.0
+    DESCRIPTION "POSIX 2024 Compliant Exokernel with Mathematical Security"
+    HOMEPAGE_URL "https://github.com/Oichkatzelesfrettschen/exov6"
+    LANGUAGES C ASM
+)
+
+# ═════════════════════════════════════════════════════════════════════
+# BUILD SYSTEM CONFIGURATION
+# ═════════════════════════════════════════════════════════════════════
+
+# Modern CMake features
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_COLOR_DIAGNOSTICS ON)
+
+# Build configuration
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
+endif()
+
+# Architecture detection and validation
+if(NOT DEFINED ARCH)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64)$")
+        set(ARCH "x86_64")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)$")
+        set(ARCH "aarch64")
+    else()
+        message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+    endif()
+endif()
+
+message(STATUS "Building for architecture: ${ARCH}")
+
+# ═════════════════════════════════════════════════════════════════════
+# COMPILER CONFIGURATION
+# ═════════════════════════════════════════════════════════════════════
+
+# Modern C17 compiler flags
+set(CMAKE_C_FLAGS_BASE
+    "-std=c17"
+    "-Wall -Wextra -Werror"
+    "-Wstrict-prototypes"
+    "-Wmissing-prototypes"
+    "-Wold-style-definition"
+    "-Wpointer-arith"
+    "-Wcast-align"
+    "-Wwrite-strings"
+    "-Wunreachable-code"
+    "-Wformat=2"
+    "-Wformat-security"
+    "-Wvla"
+    "-Wdate-time"
+    "-Wnull-dereference"
+    "-Wduplicated-branches"
+    "-Wduplicated-cond"
+    "-Wlogical-op"
+    "-Wshift-overflow=2"
+    "-Wcast-qual"
+    "-Wstringop-overflow=4"
+)
+
+# Architecture-specific flags
+if(ARCH STREQUAL "x86_64")
+    list(APPEND CMAKE_C_FLAGS_BASE
+        "-march=x86-64-v2"  # Require SSE4.2, POPCNT
+        "-mtune=generic"
+        "-mcx16"            # Enable 16-byte compare-and-swap
+        "-mno-red-zone"     # Kernel requirement
+    )
+elseif(ARCH STREQUAL "aarch64")
+    list(APPEND CMAKE_C_FLAGS_BASE
+        "-march=armv8-a+crypto"
+        "-mtune=generic"
+        "-mcpu=generic+crypto"
+    )
+endif()
+
+# Join flags into single string
+string(REPLACE ";" " " CMAKE_C_FLAGS_BASE "${CMAKE_C_FLAGS_BASE}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_BASE}")
+
+# Configuration-specific flags
+set(CMAKE_C_FLAGS_DEBUG "-g3 -O0 -DDEBUG=1 -fno-omit-frame-pointer")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG -flto=thin")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG")
+set(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG -flto=thin")
+
+# Sanitizers for debug builds
+option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+option(ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer" OFF)
+option(ENABLE_TSAN "Enable ThreadSanitizer" OFF)
+
+if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address")
+    set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+endif()
+
+if(ENABLE_UBSAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=undefined")
+    set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=undefined")
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# INCLUDE DIRECTORIES
+# ═════════════════════════════════════════════════════════════════════
+
+# Project-wide include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/hal
+    ${CMAKE_SOURCE_DIR}/include/arch
+    ${CMAKE_SOURCE_DIR}/kernel
+    ${CMAKE_SOURCE_DIR}/libos
+    ${CMAKE_BINARY_DIR}/include
+)
+
+# Architecture-specific includes
+include_directories(${CMAKE_SOURCE_DIR}/include/arch/${ARCH})
+
+# ═════════════════════════════════════════════════════════════════════
+# FEATURE DETECTION
+# ═════════════════════════════════════════════════════════════════════
+
+include(CheckCCompilerFlag)
+include(CheckIncludeFile)
+include(CheckSymbolExists)
+
+# Check for C17 features
+check_c_compiler_flag("-std=c17" HAVE_C17)
+if(NOT HAVE_C17)
+    message(FATAL_ERROR "C17 support required")
+endif()
+
+# Check for atomic support
+check_include_file("stdatomic.h" HAVE_STDATOMIC_H)
+if(NOT HAVE_STDATOMIC_H)
+    message(FATAL_ERROR "stdatomic.h required for C17 atomic operations")
+endif()
+
+# Check for thread-local storage
+check_c_compiler_flag("-D_THREAD_LOCAL_TEST='_Thread_local int x;'" HAVE_THREAD_LOCAL)
+if(NOT HAVE_THREAD_LOCAL)
+    message(WARNING "_Thread_local not supported, some optimizations disabled")
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# CONFIGURATION HEADER GENERATION
+# ═════════════════════════════════════════════════════════════════════
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/config.h.in
+    ${CMAKE_BINARY_DIR}/include/config.h
+    @ONLY
+)
+
+# ═════════════════════════════════════════════════════════════════════
+# UTILITY FUNCTIONS
+# ═════════════════════════════════════════════════════════════════════
+
+# Function to add executable with consistent flags
+function(exov6_add_executable target)
+    cmake_parse_arguments(EXE 
+        "KERNEL;USERLAND" 
+        "OUTPUT_NAME" 
+        "SOURCES;LIBRARIES;INCLUDES" 
+        ${ARGN}
+    )
+    
+    add_executable(${target} ${EXE_SOURCES})
+    
+    if(EXE_OUTPUT_NAME)
+        set_target_properties(${target} PROPERTIES OUTPUT_NAME ${EXE_OUTPUT_NAME})
+    endif()
+    
+    if(EXE_INCLUDES)
+        target_include_directories(${target} PRIVATE ${EXE_INCLUDES})
+    endif()
+    
+    if(EXE_LIBRARIES)
+        target_link_libraries(${target} ${EXE_LIBRARIES})
+    endif()
+    
+    # Kernel-specific settings
+    if(EXE_KERNEL)
+        target_compile_definitions(${target} PRIVATE KERNEL=1)
+        set_target_properties(${target} PROPERTIES
+            LINK_FLAGS "-nostdlib -static"
+        )
+    endif()
+    
+    # Userland-specific settings
+    if(EXE_USERLAND)
+        target_compile_definitions(${target} PRIVATE USERLAND=1)
+    endif()
+endfunction()
+
+# Function to add library with consistent flags
+function(exov6_add_library target)
+    cmake_parse_arguments(LIB 
+        "STATIC;SHARED;HEADER_ONLY" 
+        "" 
+        "SOURCES;LIBRARIES;INCLUDES;PUBLIC_HEADERS" 
+        ${ARGN}
+    )
+    
+    if(LIB_HEADER_ONLY)
+        add_library(${target} INTERFACE)
+        if(LIB_INCLUDES)
+            target_include_directories(${target} INTERFACE ${LIB_INCLUDES})
+        endif()
+    else()
+        if(LIB_SHARED)
+            add_library(${target} SHARED ${LIB_SOURCES})
+        else()
+            add_library(${target} STATIC ${LIB_SOURCES})
+        endif()
+        
+        if(LIB_INCLUDES)
+            target_include_directories(${target} PRIVATE ${LIB_INCLUDES})
+        endif()
+        
+        if(LIB_LIBRARIES)
+            target_link_libraries(${target} ${LIB_LIBRARIES})
+        endif()
+    endif()
+    
+    if(LIB_PUBLIC_HEADERS)
+        set_target_properties(${target} PROPERTIES
+            PUBLIC_HEADER "${LIB_PUBLIC_HEADERS}"
+        )
+    endif()
+endfunction()
+
+# ═════════════════════════════════════════════════════════════════════
+# BUILD TARGETS
+# ═════════════════════════════════════════════════════════════════════
+
+# Build options
+option(BUILD_KERNEL "Build kernel" ON)
+option(BUILD_LIBOS "Build LibOS" ON)
+option(BUILD_USERLAND "Build userland utilities" ON)
+option(BUILD_TESTS "Build test suite" ON)
+option(BUILD_TOOLS "Build development tools" ON)
+option(BUILD_DEMOS "Build demonstration programs" ON)
+
+# HAL Library (Architecture abstraction)
+exov6_add_library(hal STATIC
+    SOURCES
+        src/hal/${ARCH}/hal_${ARCH}.c
+    INCLUDES
+        include/hal
+        include/arch/${ARCH}
+    PUBLIC_HEADERS
+        include/hal/hal_interface.h
+)
+
+# Architecture-specific library
+if(EXISTS ${CMAKE_SOURCE_DIR}/src/arch/${ARCH})
+    add_subdirectory(src/arch/${ARCH})
+endif()
+
+# Core components
+if(BUILD_KERNEL)
+    add_subdirectory(kernel)
+endif()
+
+if(BUILD_LIBOS)
+    add_subdirectory(libos)
+endif()
+
+if(BUILD_USERLAND)
+    add_subdirectory(user)
+endif()
+
+if(BUILD_TOOLS)
+    add_subdirectory(tools)
+endif()
+
+if(BUILD_DEMOS)
+    add_subdirectory(demos)
+endif()
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# INSTALLATION
+# ═════════════════════════════════════════════════════════════════════
+
+# Install HAL headers
+install(DIRECTORY include/hal/
+    DESTINATION include/exov6/hal
+    FILES_MATCHING PATTERN "*.h"
+)
+
+# Install architecture headers
+install(DIRECTORY include/arch/
+    DESTINATION include/exov6/arch
+    FILES_MATCHING PATTERN "*.h"
+)
+
+# ═════════════════════════════════════════════════════════════════════
+# RUNTIME TARGETS
+# ═════════════════════════════════════════════════════════════════════
+
+find_program(QEMU_EXECUTABLE
+    NAMES qemu-system-${ARCH} qemu-system-x86_64 qemu
+    DOC "QEMU system emulator"
+)
+
+if(QEMU_EXECUTABLE AND BUILD_KERNEL)
+    add_custom_target(qemu
+        COMMAND ${QEMU_EXECUTABLE} 
+            -machine q35
+            -cpu max
+            -smp 4
+            -m 1G
+            -nographic
+            -serial stdio
+            -kernel $<TARGET_FILE:kernel>
+        DEPENDS kernel
+        USES_TERMINAL
+        COMMENT "Running ExoV6 in QEMU"
+    )
+    
+    add_custom_target(qemu-debug
+        COMMAND ${QEMU_EXECUTABLE}
+            -machine q35
+            -cpu max
+            -smp 4
+            -m 1G
+            -nographic
+            -serial stdio
+            -s -S
+            -kernel $<TARGET_FILE:kernel>
+        DEPENDS kernel
+        USES_TERMINAL
+        COMMENT "Running ExoV6 in QEMU with GDB server (port 1234)"
+    )
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# STATUS REPORT
+# ═════════════════════════════════════════════════════════════════════
+
+message(STATUS "═══════════════════════════════════════════════════════════")
+message(STATUS "ExoV6 Build Configuration")
+message(STATUS "═══════════════════════════════════════════════════════════")
+message(STATUS "Version: ${PROJECT_VERSION}")
+message(STATUS "Architecture: ${ARCH}")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "C Compiler: ${CMAKE_C_COMPILER}")
+message(STATUS "C Standard: C${CMAKE_C_STANDARD}")
+
+message(STATUS "Components:")
+message(STATUS "  Kernel: ${BUILD_KERNEL}")
+message(STATUS "  LibOS: ${BUILD_LIBOS}")
+message(STATUS "  Userland: ${BUILD_USERLAND}")
+message(STATUS "  Tests: ${BUILD_TESTS}")
+message(STATUS "  Tools: ${BUILD_TOOLS}")
+message(STATUS "  Demos: ${BUILD_DEMOS}")
+
+if(ENABLE_ASAN OR ENABLE_UBSAN OR ENABLE_TSAN)
+    message(STATUS "Sanitizers:")
+    if(ENABLE_ASAN)
+        message(STATUS "  AddressSanitizer: ON")
+    endif()
+    if(ENABLE_UBSAN)
+        message(STATUS "  UndefinedBehaviorSanitizer: ON")
+    endif()
+    if(ENABLE_TSAN)
+        message(STATUS "  ThreadSanitizer: ON")
+    endif()
+endif()
+
+message(STATUS "═══════════════════════════════════════════════════════════")

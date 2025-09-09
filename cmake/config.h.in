@@ -1,5 +1,16 @@
-#ifndef PHOENIX_CONFIG_H
+#ifndef EXOV6_CONFIG_H
+#define EXOV6_CONFIG_H
+
+/* Project Information */
+#define EXOV6_PROJECT_NAME "@PROJECT_NAME@"
+#define EXOV6_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define EXOV6_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define EXOV6_VERSION_PATCH @PROJECT_VERSION_PATCH@
+#define EXOV6_VERSION "@PROJECT_VERSION@"
+
+/* Legacy Phoenix compatibility */
 #define PHOENIX_CONFIG_H
+#define PHOENIX_VERSION "@PROJECT_VERSION@"
 
 /* System capabilities */
 #cmakedefine HAVE_STDATOMIC_H 1
