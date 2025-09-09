@@ -13,7 +13,7 @@
  */
 
 #include "types.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "user.h"
 
 static int aflag = 0;     // Multiple arguments

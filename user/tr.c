@@ -27,7 +27,7 @@
  */
 
 #include "types.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "user.h"
 
 #define CHAR_SET_SIZE 256

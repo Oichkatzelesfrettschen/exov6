@@ -2,7 +2,7 @@
 // must be reparented at exit.
 
 #include "types.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "user.h"
 
 int

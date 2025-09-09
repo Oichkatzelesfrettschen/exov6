@@ -24,7 +24,7 @@ struct arbitrate_table {
 typedef int (*arbitrate_policy_t)(uint32_t type, uint32_t resource_id,
                                   uint32_t current_owner, uint32_t new_owner);
 
-void arbitrate_init(void);
+void arbitrate_init(arbitrate_policy_t policy);
 void arbitrate_init_with_policy(arbitrate_policy_t policy);
 void arbitrate_use_table(struct arbitrate_table *t);
 void arbitrate_register_policy(arbitrate_policy_t policy);

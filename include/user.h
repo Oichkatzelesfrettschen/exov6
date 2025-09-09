@@ -1,7 +1,7 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
-#include "stat.h"
+#include "sys/stat.h"
 
 /* Prevent conflicts with system headers */
 #ifndef PHOENIX_USER_H_DECLS

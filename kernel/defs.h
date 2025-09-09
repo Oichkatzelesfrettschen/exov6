@@ -23,10 +23,10 @@
 #include "fastipc.h"
 
 #ifdef __x86_64__
-# include "trapframe64.h"
+# include "trapframe.h"
   typedef struct context64 context_t;
 #elif defined(__aarch64__)
-# include "trapframe64.h"
+# include "trapframe.h"
   typedef struct context64 context_t;
 #else
   typedef struct context context_t;

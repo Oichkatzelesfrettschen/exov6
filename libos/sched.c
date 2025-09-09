@@ -4,9 +4,9 @@
 
 // Forward declarations for capability scheduler functions
 int cap_out_of_gas(void);
-void set_gas(int amount);
-void cap_yield_to_cap(exo_cap cap);
-void cap_set_timer(void (*handler)(void));
+int set_gas(uint64_t amount);
+int cap_yield_to_cap(exo_cap cap);
+int cap_set_timer(void (*handler)(void));
 
 #define MAX_PROCS 64
 

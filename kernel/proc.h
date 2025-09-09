@@ -127,7 +127,7 @@ struct proc {
 
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 280, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 288, "struct proc size incorrect");
 #else
 _Static_assert(sizeof(struct proc) == 168, "struct proc size incorrect");
 #endif

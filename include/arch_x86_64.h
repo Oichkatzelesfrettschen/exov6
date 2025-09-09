@@ -43,6 +43,8 @@ struct context64 {
 #endif
 
 // Trap frame for interrupts and system calls
+#ifndef TRAPFRAME_DEFINED
+#define TRAPFRAME_DEFINED
 struct trapframe {
   // Pushed by entry code
   uint64_t r15, r14, r13, r12, r11, r10, r9, r8;
@@ -59,6 +61,7 @@ struct trapframe {
   uint64_t rsp;
   uint64_t ss;
 } __attribute__((packed));
+#endif
 
 // I/O port operations
 static inline uint8_t inb(uint16_t port) {

@@ -12,7 +12,7 @@
  *   pingdriver
  */
 #include "fcntl.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "types.h"
 #include "user.h"
 #include "ipc.h"

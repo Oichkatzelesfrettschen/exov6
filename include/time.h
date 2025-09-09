@@ -8,6 +8,10 @@
 #include <sys/types.h>
 #include <stdint.h>
 
+// Forward declarations
+struct sigevent;
+struct itimerspec;
+
 // Clock types
 #define CLOCK_REALTIME           0
 #define CLOCK_MONOTONIC          1
