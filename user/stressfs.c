@@ -8,7 +8,7 @@
 //      asm volatile("");
 
 #include "types.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "user.h"
 #include "fs.h"
 #include "fcntl.h"
@@ -45,5 +45,5 @@ main(int argc, char *argv[])
 
   wait();
 
-  exit();
+  exit(0);
 }

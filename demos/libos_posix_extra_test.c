@@ -1,6 +1,6 @@
 #include "libos/posix.h"
 #include "user.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "signal.h"
 #include <sys/socket.h>
 #include <netinet/in.h>

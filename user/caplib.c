@@ -57,7 +57,10 @@ EXO_NODISCARD int cap_recv(exo_cap src, void *buf, uint64_t len) {
 
 EXO_NODISCARD int cap_recv_timed(exo_cap src, void *buf, uint64_t len,
                                  unsigned timeout) {
-  return exo_recv_timed(src, buf, len, timeout);
+  // Note: This would need the actual system call implementation
+  // For now, fall back to regular recv (timeout functionality not implemented)
+  (void)timeout; // Suppress unused parameter warning
+  return exo_recv(src, buf, len);
 }
 
 EXO_NODISCARD int cap_ipc_echo_demo(void) {

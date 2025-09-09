@@ -22,13 +22,13 @@ struct ticketlock {
 /* Spinlock with debugging support */
 struct spinlock {
     struct ticketlock ticket;  /* Underlying ticket lock */
-    char *name;               /* Human-readable identifier */
-    uint32_t pcs[10];        /* Call stack at acquisition */
-    struct cpu *cpu;         /* CPU holding the lock */
+    const char *name;          /* Human-readable identifier */
+    uint32_t pcs[10];         /* Call stack at acquisition */
+    struct cpu *cpu;          /* CPU holding the lock */
 };
 
 /* Initialize spinlock with name */
-void initlock(struct spinlock *lk, char *name);
+void initlock(struct spinlock *lk, const char *name);
 
 #if CONFIG_SMP && !defined(SPINLOCK_UNIPROCESSOR)
 /* SMP spinlock operations */

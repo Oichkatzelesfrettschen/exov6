@@ -8,14 +8,46 @@
 
 #include <types.h>
 #include <stdint.h>
+#include <stdatomic.h>
+#include "param.h"
 #include "defs.h"
 #include "proc.h"
 #include "exo.h"
 #include "spinlock.h"
 #include "memlayout.h"
+#include "string.h"
+// APIC register ID (if not defined elsewhere)
+#ifndef ID
+#define ID      (0x0020/4)   // APIC ID register
+#endif
 #include "mmu.h"
 #include "arch.h"
 #include "trap.h"
+#include "service.h"
+
+/* Buffer flags for disk I/O */
+#ifndef B_VALID
+#define B_VALID     0x2  /* Buffer has valid data */
+#define B_DIRTY     0x4  /* Buffer needs to be written */
+#endif
+
+/* Minimal buf structure for compilation */
+struct buf {
+    int flags;
+    uint32_t dev;
+    uint32_t blockno;
+    char data[512];  /* Block data */
+};
+
+/* Process management globals */
+struct proc *initproc = NULL;  /* Initial process - defined here */
+
+/* Minimal scheduler operations structure */
+struct exo_sched_ops {
+    int (*init)(void);
+    int (*schedule)(void);
+    int (*yield)(void);
+};
 
 /* CPU identification using APIC ID */
 int cpunum(void) {
@@ -32,7 +64,7 @@ int cpunum(void) {
 }
 
 /* Read CR2 register (page fault linear address) */
-uint64_t rcr2(void) {
+uint64_t read_cr2_impl(void) {
     uint64_t cr2;
     __asm__ volatile("movq %%cr2, %0" : "=r"(cr2));
     return cr2;
@@ -45,7 +77,7 @@ void cpu_pause(void) {
 }
 
 /* Alternative pause implementation */
-void pause(void) {
+void cpu_pause_alt(void) {
     cpu_pause();
 }
 
@@ -61,7 +93,7 @@ exo_cap exo_bind_irq(uint32_t irq) {
     exo_cap cap = {0};
     
     if (irq >= MAX_IRQS) {
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -70,7 +102,7 @@ exo_cap exo_bind_irq(uint32_t irq) {
     /* Check if IRQ is already allocated */
     if (irq_table.allocated[irq]) {
         release(&irq_table.lock);
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -80,16 +112,19 @@ exo_cap exo_bind_irq(uint32_t irq) {
     irq_table.owner_pid[irq] = p->pid;
     
     /* Enable IRQ in I/O APIC */
+    /* TODO: Implement IOAPIC configuration */
+    /*
     if (ioapic) {
         ioapicenable(irq, cpunum());
     }
+    */
     
     release(&irq_table.lock);
     
     /* Return IRQ capability */
-    cap.type = EXO_CAP_IRQ;
+    cap.pa = EXO_CAP_IRQ;  /* Use pa field to store type */
     cap.id = (irq << 16) | 0xCAFE;
-    cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
+    cap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
     cap.owner = p->pid;
     return cap;
 }
@@ -106,7 +141,7 @@ exo_cap exo_alloc_dma(uint32_t channel) {
     exo_cap cap = {0};
     
     if (channel >= MAX_DMA_CHANNELS) {
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -115,7 +150,7 @@ exo_cap exo_alloc_dma(uint32_t channel) {
     /* Check if DMA channel is already allocated */
     if (dma_table.allocated[channel]) {
         release(&dma_table.lock);
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -143,32 +178,31 @@ exo_cap exo_alloc_dma(uint32_t channel) {
     release(&dma_table.lock);
     
     /* Return DMA capability */
-    cap.type = EXO_CAP_DMA;
+    cap.pa = EXO_CAP_DMA;  /* Use pa field to store type */
     cap.id = (channel << 20) | 0xDEAD;
-    cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
+    cap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
     cap.owner = p->pid;
     return cap;
 }
 
 /* Block device binding for direct disk access */
-int exo_bind_block(void *cap, void *buf, int write) {
-    struct exo_blockcap *bcap = (struct exo_blockcap *)cap;
-    struct buf *b = (struct buf *)buf;
+int exo_bind_block(struct exo_blockcap *bcap, struct buf *buf, int write) {
+    struct buf *b = buf;
     
     if (!bcap || !b) {
         return -1;
     }
     
     /* Validate capability */
-    if (bcap->cap.type != EXO_CAP_BLOCK) {
+    if (bcap->rights != EXO_CAP_BLOCK) {  /* Check capability type */
         return -1;
     }
     
     /* Check permissions */
-    if (write && !(bcap->cap.perm & EXO_CAP_WRITE)) {
+    if (write && !(bcap->rights & EXO_CAP_WRITE)) {
         return -1;
     }
-    if (!write && !(bcap->cap.perm & EXO_CAP_READ)) {
+    if (!write && !(bcap->rights & EXO_CAP_READ)) {
         return -1;
     }
     
@@ -330,14 +364,14 @@ void exit(int status) {
     acquire(&ptable.lock);
     
     /* Parent might be sleeping in wait() */
-    wakeup1(curproc->parent);
+    wakeup(curproc->parent);
     
     /* Pass abandoned children to init */
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
         if(p->parent == curproc) {
             p->parent = initproc;
             if(p->state == ZOMBIE) {
-                wakeup1(initproc);
+                wakeup(initproc);
             }
         }
     }
@@ -456,13 +490,10 @@ struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t blockno) {
     struct proc *p = myproc();
     
     /* Initialize block capability */
-    bcap.cap.type = EXO_CAP_BLOCK;
-    bcap.cap.id = (dev << 16) | (blockno & 0xFFFF);
-    bcap.cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
-    bcap.cap.owner = p->pid;
-    
     bcap.dev = dev;
     bcap.blockno = blockno;
+    bcap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
+    bcap.owner = p->pid;
     
     return bcap;
 }
@@ -474,15 +505,15 @@ exo_cap exo_alloc_ioport(uint32_t port) {
     
     /* Check if port is in valid range */
     if (port > 0xFFFF) {
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
     /* For now, allow any port allocation */
     /* In a real system, we'd track port ownership */
-    cap.type = EXO_CAP_IOPORT;
+    cap.pa = EXO_CAP_IOPORT;  /* Use pa field to store type */
     cap.id = port;
-    cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
+    cap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
     cap.owner = p->pid;
     
     /* Enable I/O port access in IOPL */
@@ -510,7 +541,7 @@ static struct {
     int nservices;
 } service_table;
 
-int service_register(const char *name, const char *path, int restart) {
+int service_register(const char *name, const char *path, service_options_t opts) {
     acquire(&service_table.lock);
     
     if (service_table.nservices >= MAX_SERVICES) {
@@ -521,7 +552,7 @@ int service_register(const char *name, const char *path, int restart) {
     struct service *s = &service_table.services[service_table.nservices];
     strncpy(s->name, name, sizeof(s->name) - 1);
     strncpy(s->path, path, sizeof(s->path) - 1);
-    s->auto_restart = restart;
+    s->auto_restart = opts.auto_restart;
     s->pid = 0;
     s->state = 0;
     s->ndeps = 0;
@@ -653,9 +684,5 @@ void sleep(void *chan, struct spinlock *lk) {
 void cprintf(const char *fmt, ...) {
     /* This would normally be implemented with full printf support */
     /* For now, just output characters directly to console */
-    int i, c;
-    
-    for(i = 0; (c = fmt[i] & 0xff) != 0; i++) {
-        consputc(c);
-    }
+    cprintf("%s", fmt);
 }

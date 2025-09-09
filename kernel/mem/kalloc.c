@@ -76,8 +76,8 @@ void kfree(char *v) {
   int idx = V2P(v) / PGSIZE;
   r->cap = page_caps[idx];
   if (cap_table_ready && page_caps[idx].id == 0) {
-    int id = cap_table_alloc(CAP_TYPE_PAGE, V2P(v), 0, 0);
-    if (id >= 0)
+    cap_id_t id = cap_table_alloc(CAP_TYPE_PAGE, V2P(v), 0, 0);
+    if (id > 0)
       page_caps[idx] = cap_new(id, 0, 0);
     r->cap = page_caps[idx];
   }
@@ -107,8 +107,8 @@ char *kalloc(void) {
         release(&kmem.lock[node]);
       int idx = V2P(r) / PGSIZE;
       if (cap_table_ready && page_caps[idx].id == 0) {
-        int id = cap_table_alloc(CAP_TYPE_PAGE, V2P(r), 0, 0);
-        if (id >= 0)
+        cap_id_t id = cap_table_alloc(CAP_TYPE_PAGE, V2P(r), 0, 0);
+        if (id > 0)
           page_caps[idx] = cap_new(id, 0, 0);
       }
       break;

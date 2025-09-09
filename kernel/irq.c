@@ -2,7 +2,13 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "cap.h"
-#include <errno.h>
+#include "errno.h"
+
+/* Ensure ENOSPC is defined */
+#ifndef ENOSPC
+#define ENOSPC 28
+#endif
+
 #define EXO_KERNEL
 #include "exokernel.h"
 

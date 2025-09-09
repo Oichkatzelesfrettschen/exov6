@@ -28,7 +28,7 @@ usage(void)
 {
   printf(2, "Usage: cp [-ipr] source target\n");
   printf(2, "       cp [-ipr] source... directory\n");
-  exit();
+  exit(0);
 }
 
 static int
@@ -247,14 +247,14 @@ main(int argc, char *argv[])
     
     if(!is_directory(target)) {
       printf(2, "cp: target '%s' is not a directory\n", target);
-      exit();
+      exit(0);
     }
     
     // Copy each source to target directory
     for(i = opt_end; i < argc - 1; i++) {
       build_dest_path(dest_path, target, argv[i]);
       if(copy_file(argv[i], dest_path) < 0) {
-        exit();
+        exit(0);
       }
     }
   }
@@ -270,9 +270,9 @@ main(int argc, char *argv[])
     }
     
     if(copy_file(src, dst) < 0) {
-      exit();
+      exit(0);
     }
   }
   
-  exit();
+  exit(0);
 }

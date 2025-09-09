@@ -1,6 +1,6 @@
 #include <types.h>
 #include "user.h"
-#include "stat.h"
+#include "sys/stat.h"
 
 // Working test implementation - replaces test_real.c stub
 

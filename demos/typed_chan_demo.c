@@ -1,7 +1,6 @@
 #include "types.h"
 #include "user.h"
-#include "chan.h"
-#include "capnp_helpers.h"
+#include "unified_chan.h"
 
 typedef struct {
     uint8_t len;
@@ -27,6 +26,7 @@ static size_t VarMsg_decode(VarMsg *m, const unsigned char *buf) {
 
 #define VarMsg_MESSAGE_SIZE 9
 
+/* Now CHAN_DECLARE_VAR is provided by unified system */
 CHAN_DECLARE_VAR(ping_chan, VarMsg);
 
 int

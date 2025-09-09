@@ -55,30 +55,6 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/src/arch/arm -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o src/arch/CMakeFiles/phoenix-arch-arm.dir/arm/simd_neon.c.o -c /home/runner/work/exov6/exov6/src/arch/arm/simd_neon.c",
-  "file": "/home/runner/work/exov6/exov6/src/arch/arm/simd_neon.c",
-  "output": "src/arch/CMakeFiles/phoenix-arch-arm.dir/arm/simd_neon.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/src/arch/arm -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o src/arch/CMakeFiles/phoenix-arch-arm.dir/arm/simd_neon_cap.c.o -c /home/runner/work/exov6/exov6/src/arch/arm/simd_neon_cap.c",
-  "file": "/home/runner/work/exov6/exov6/src/arch/arm/simd_neon_cap.c",
-  "output": "src/arch/CMakeFiles/phoenix-arch-arm.dir/arm/simd_neon_cap.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/src/arch/ppc -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o src/arch/CMakeFiles/phoenix-arch-ppc.dir/ppc/simd_altivec.c.o -c /home/runner/work/exov6/exov6/src/arch/ppc/simd_altivec.c",
-  "file": "/home/runner/work/exov6/exov6/src/arch/ppc/simd_altivec.c",
-  "output": "src/arch/CMakeFiles/phoenix-arch-ppc.dir/ppc/simd_altivec.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/src/arch/ppc -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o src/arch/CMakeFiles/phoenix-arch-ppc.dir/ppc/simd_altivec_cap.c.o -c /home/runner/work/exov6/exov6/src/arch/ppc/simd_altivec_cap.c",
-  "file": "/home/runner/work/exov6/exov6/src/arch/ppc/simd_altivec_cap.c",
-  "output": "src/arch/CMakeFiles/phoenix-arch-ppc.dir/ppc/simd_altivec_cap.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o src/ddekit/CMakeFiles/phoenix-ddekit.dir/stub.c.o -c /home/runner/work/exov6/exov6/src/ddekit/stub.c",
   "file": "/home/runner/work/exov6/exov6/src/ddekit/stub.c",
   "output": "src/ddekit/CMakeFiles/phoenix-ddekit.dir/stub.c.o"
@@ -142,12 +118,6 @@
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/user/libos -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o user/CMakeFiles/phoenix-user-sched.dir/libos/sched.c.o -c /home/runner/work/exov6/exov6/user/libos/sched.c",
   "file": "/home/runner/work/exov6/exov6/user/libos/sched.c",
   "output": "user/CMakeFiles/phoenix-user-sched.dir/libos/sched.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o user/CMakeFiles/user-blink.dir/blink.c.o -c /home/runner/work/exov6/exov6/user/blink.c",
-  "file": "/home/runner/work/exov6/exov6/user/blink.c",
-  "output": "user/CMakeFiles/user-blink.dir/blink.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -247,21 +217,21 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o libos/CMakeFiles/phoenix-libos-fs.dir/fs.c.o -c /home/runner/work/exov6/exov6/libos/fs.c",
-  "file": "/home/runner/work/exov6/exov6/libos/fs.c",
-  "output": "libos/CMakeFiles/phoenix-libos-fs.dir/fs.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o libos/CMakeFiles/phoenix-libos-fs.dir/fs/fs.c.o -c /home/runner/work/exov6/exov6/libos/fs/fs.c",
+  "file": "/home/runner/work/exov6/exov6/libos/fs/fs.c",
+  "output": "libos/CMakeFiles/phoenix-libos-fs.dir/fs/fs.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o libos/CMakeFiles/phoenix-libos-file.dir/file.c.o -c /home/runner/work/exov6/exov6/libos/file.c",
-  "file": "/home/runner/work/exov6/exov6/libos/file.c",
-  "output": "libos/CMakeFiles/phoenix-libos-file.dir/file.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o libos/CMakeFiles/phoenix-libos-file.dir/fs/file.c.o -c /home/runner/work/exov6/exov6/libos/fs/file.c",
+  "file": "/home/runner/work/exov6/exov6/libos/fs/file.c",
+  "output": "libos/CMakeFiles/phoenix-libos-file.dir/fs/file.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o libos/CMakeFiles/phoenix-libos-posix.dir/posix.c.o -c /home/runner/work/exov6/exov6/libos/posix.c",
-  "file": "/home/runner/work/exov6/exov6/libos/posix.c",
-  "output": "libos/CMakeFiles/phoenix-libos-posix.dir/posix.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o libos/CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o -c /home/runner/work/exov6/exov6/libos/posix/posix.c",
+  "file": "/home/runner/work/exov6/exov6/libos/posix/posix.c",
+  "output": "libos/CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -349,75 +319,15 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/beatty_dag_stream.c.o -c /home/runner/work/exov6/exov6/kernel/beatty_dag_stream.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/beatty_dag_stream.c",
-  "output": "kernel/CMakeFiles/kernel.dir/beatty_dag_stream.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/beatty_sched.c.o -c /home/runner/work/exov6/exov6/kernel/beatty_sched.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/beatty_sched.c",
-  "output": "kernel/CMakeFiles/kernel.dir/beatty_sched.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/bio.c.o -c /home/runner/work/exov6/exov6/kernel/bio.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/bio.c",
-  "output": "kernel/CMakeFiles/kernel.dir/bio.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/bootmain.c.o -c /home/runner/work/exov6/exov6/kernel/bootmain.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/bootmain.c",
-  "output": "kernel/CMakeFiles/kernel.dir/bootmain.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/cap.c.o -c /home/runner/work/exov6/exov6/kernel/cap.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/cap.c",
-  "output": "kernel/CMakeFiles/kernel.dir/cap.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/cap_mem.c.o -c /home/runner/work/exov6/exov6/kernel/cap_mem.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/cap_mem.c",
-  "output": "kernel/CMakeFiles/kernel.dir/cap_mem.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/cap_security.c.o -c /home/runner/work/exov6/exov6/kernel/cap_security.c",
   "file": "/home/runner/work/exov6/exov6/kernel/cap_security.c",
   "output": "kernel/CMakeFiles/kernel.dir/cap_security.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/cap_table.c.o -c /home/runner/work/exov6/exov6/kernel/cap_table.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/cap_table.c",
-  "output": "kernel/CMakeFiles/kernel.dir/cap_table.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/capnp_helpers.c.o -c /home/runner/work/exov6/exov6/kernel/capnp_helpers.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/capnp_helpers.c",
-  "output": "kernel/CMakeFiles/kernel.dir/capnp_helpers.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/capwrap.c.o -c /home/runner/work/exov6/exov6/kernel/capwrap.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/capwrap.c",
-  "output": "kernel/CMakeFiles/kernel.dir/capwrap.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/chan.c.o -c /home/runner/work/exov6/exov6/kernel/chan.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/chan.c",
-  "output": "kernel/CMakeFiles/kernel.dir/chan.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/console.c.o -c /home/runner/work/exov6/exov6/kernel/console.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/console.c",
-  "output": "kernel/CMakeFiles/kernel.dir/console.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/cpu_flags.c.o -c /home/runner/work/exov6/exov6/kernel/cpu_flags.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/cpu_flags.c",
+  "output": "kernel/CMakeFiles/kernel.dir/cpu_flags.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -427,105 +337,15 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/dag_sched.c.o -c /home/runner/work/exov6/exov6/kernel/dag_sched.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/dag_sched.c",
-  "output": "kernel/CMakeFiles/kernel.dir/dag_sched.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/ddekit.c.o -c /home/runner/work/exov6/exov6/kernel/ddekit.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/ddekit.c",
-  "output": "kernel/CMakeFiles/kernel.dir/ddekit.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/driver.c.o -c /home/runner/work/exov6/exov6/kernel/driver.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/driver.c",
-  "output": "kernel/CMakeFiles/kernel.dir/driver.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/endpoint.c.o -c /home/runner/work/exov6/exov6/kernel/endpoint.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/endpoint.c",
-  "output": "kernel/CMakeFiles/kernel.dir/endpoint.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/env.c.o -c /home/runner/work/exov6/exov6/kernel/env.c",
   "file": "/home/runner/work/exov6/exov6/kernel/env.c",
   "output": "kernel/CMakeFiles/kernel.dir/env.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exec.c.o -c /home/runner/work/exov6/exov6/kernel/exec.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exec.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exec.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo.c.o -c /home/runner/work/exov6/exov6/kernel/exo.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exo.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo_cpu.c.o -c /home/runner/work/exov6/exov6/kernel/exo_cpu.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo_cpu.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exo_cpu.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo_disk.c.o -c /home/runner/work/exov6/exov6/kernel/exo_disk.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo_disk.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exo_disk.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/exo_ipc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo_ipc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exo_ipc.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo_ipc_queue.c.o -c /home/runner/work/exov6/exov6/kernel/exo_ipc_queue.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo_ipc_queue.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exo_ipc_queue.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo_stream.c.o -c /home/runner/work/exov6/exov6/kernel/exo_stream.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo_stream.c",
-  "output": "kernel/CMakeFiles/kernel.dir/exo_stream.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/fastipc.c.o -c /home/runner/work/exov6/exov6/kernel/fastipc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/fastipc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/fastipc.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/fs.c.o -c /home/runner/work/exov6/exov6/kernel/fs.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/fs.c",
-  "output": "kernel/CMakeFiles/kernel.dir/fs.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/ide.c.o -c /home/runner/work/exov6/exov6/kernel/ide.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/ide.c",
-  "output": "kernel/CMakeFiles/kernel.dir/ide.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/ioapic.c.o -c /home/runner/work/exov6/exov6/kernel/ioapic.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/ioapic.c",
-  "output": "kernel/CMakeFiles/kernel.dir/ioapic.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/iommu.c.o -c /home/runner/work/exov6/exov6/kernel/iommu.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/iommu.c",
-  "output": "kernel/CMakeFiles/kernel.dir/iommu.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/exo_impl.c.o -c /home/runner/work/exov6/exov6/kernel/exo_impl.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/exo_impl.c",
+  "output": "kernel/CMakeFiles/kernel.dir/exo_impl.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -535,15 +355,15 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/kalloc.c.o -c /home/runner/work/exov6/exov6/kernel/kalloc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/kalloc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/kalloc.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/kernel_stub.c.o -c /home/runner/work/exov6/exov6/kernel/kernel_stub.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/kernel_stub.c",
+  "output": "kernel/CMakeFiles/kernel.dir/kernel_stub.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/kbd.c.o -c /home/runner/work/exov6/exov6/kernel/kbd.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/kbd.c",
-  "output": "kernel/CMakeFiles/kernel.dir/kbd.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/kmath.c.o -c /home/runner/work/exov6/exov6/kernel/kmath.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/kmath.c",
+  "output": "kernel/CMakeFiles/kernel.dir/kmath.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -553,51 +373,9 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/lapic.c.o -c /home/runner/work/exov6/exov6/kernel/lapic.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/lapic.c",
-  "output": "kernel/CMakeFiles/kernel.dir/lapic.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/lattice_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/lattice_ipc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/lattice_ipc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/lattice_ipc.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/lib9p.c.o -c /home/runner/work/exov6/exov6/kernel/lib9p.c",
   "file": "/home/runner/work/exov6/exov6/kernel/lib9p.c",
   "output": "kernel/CMakeFiles/kernel.dir/lib9p.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/libbaremetal.c.o -c /home/runner/work/exov6/exov6/kernel/libbaremetal.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/libbaremetal.c",
-  "output": "kernel/CMakeFiles/kernel.dir/libbaremetal.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/log.c.o -c /home/runner/work/exov6/exov6/kernel/log.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/log.c",
-  "output": "kernel/CMakeFiles/kernel.dir/log.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/main.c.o -c /home/runner/work/exov6/exov6/kernel/main.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/main.c",
-  "output": "kernel/CMakeFiles/kernel.dir/main.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/main64.c.o -c /home/runner/work/exov6/exov6/kernel/main64.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/main64.c",
-  "output": "kernel/CMakeFiles/kernel.dir/main64.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/memide.c.o -c /home/runner/work/exov6/exov6/kernel/memide.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/memide.c",
-  "output": "kernel/CMakeFiles/kernel.dir/memide.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -613,18 +391,6 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/mmu64.c.o -c /home/runner/work/exov6/exov6/kernel/mmu64.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/mmu64.c",
-  "output": "kernel/CMakeFiles/kernel.dir/mmu64.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/mp.c.o -c /home/runner/work/exov6/exov6/kernel/mp.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/mp.c",
-  "output": "kernel/CMakeFiles/kernel.dir/mp.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/msg_router.c.o -c /home/runner/work/exov6/exov6/kernel/msg_router.c",
   "file": "/home/runner/work/exov6/exov6/kernel/msg_router.c",
   "output": "kernel/CMakeFiles/kernel.dir/msg_router.c.o"
@@ -637,45 +403,15 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/picirq.c.o -c /home/runner/work/exov6/exov6/kernel/picirq.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/picirq.c",
-  "output": "kernel/CMakeFiles/kernel.dir/picirq.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/q16_fixed.c.o -c /home/runner/work/exov6/exov6/kernel/q16_fixed.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/q16_fixed.c",
+  "output": "kernel/CMakeFiles/kernel.dir/q16_fixed.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/pipe.c.o -c /home/runner/work/exov6/exov6/kernel/pipe.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/pipe.c",
-  "output": "kernel/CMakeFiles/kernel.dir/pipe.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/proc.c.o -c /home/runner/work/exov6/exov6/kernel/proc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/proc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/proc.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/qspinlock.c.o -c /home/runner/work/exov6/exov6/kernel/qspinlock.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/qspinlock.c",
-  "output": "kernel/CMakeFiles/kernel.dir/qspinlock.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/quaternion_spinlock.c.o -c /home/runner/work/exov6/exov6/kernel/quaternion_spinlock.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/quaternion_spinlock.c",
-  "output": "kernel/CMakeFiles/kernel.dir/quaternion_spinlock.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/rcu.c.o -c /home/runner/work/exov6/exov6/kernel/rcu.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/rcu.c",
-  "output": "kernel/CMakeFiles/kernel.dir/rcu.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/rcu_fastpath.c.o -c /home/runner/work/exov6/exov6/kernel/rcu_fastpath.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/rcu_fastpath.c",
-  "output": "kernel/CMakeFiles/kernel.dir/rcu_fastpath.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/q16_octonion.c.o -c /home/runner/work/exov6/exov6/kernel/q16_octonion.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/q16_octonion.c",
+  "output": "kernel/CMakeFiles/kernel.dir/q16_octonion.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -691,27 +427,9 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/rspinlock.c.o -c /home/runner/work/exov6/exov6/kernel/rspinlock.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/rspinlock.c",
-  "output": "kernel/CMakeFiles/kernel.dir/rspinlock.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/service.c.o -c /home/runner/work/exov6/exov6/kernel/service.c",
   "file": "/home/runner/work/exov6/exov6/kernel/service.c",
   "output": "kernel/CMakeFiles/kernel.dir/service.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/sleeplock.c.o -c /home/runner/work/exov6/exov6/kernel/sleeplock.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/sleeplock.c",
-  "output": "kernel/CMakeFiles/kernel.dir/sleeplock.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/spinlock.c.o -c /home/runner/work/exov6/exov6/kernel/spinlock.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/spinlock.c",
-  "output": "kernel/CMakeFiles/kernel.dir/spinlock.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -721,57 +439,9 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/string.c.o -c /home/runner/work/exov6/exov6/kernel/string.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/string.c",
-  "output": "kernel/CMakeFiles/kernel.dir/string.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/sys_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/sys_ipc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/sys_ipc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/sys_ipc.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/syscall.c.o -c /home/runner/work/exov6/exov6/kernel/syscall.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/syscall.c",
-  "output": "kernel/CMakeFiles/kernel.dir/syscall.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/sysfile.c.o -c /home/runner/work/exov6/exov6/kernel/sysfile.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/sysfile.c",
-  "output": "kernel/CMakeFiles/kernel.dir/sysfile.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/sysproc.c.o -c /home/runner/work/exov6/exov6/kernel/sysproc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/sysproc.c",
-  "output": "kernel/CMakeFiles/kernel.dir/sysproc.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/trap.c.o -c /home/runner/work/exov6/exov6/kernel/trap.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/trap.c",
-  "output": "kernel/CMakeFiles/kernel.dir/trap.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/tty.c.o -c /home/runner/work/exov6/exov6/kernel/tty.c",
   "file": "/home/runner/work/exov6/exov6/kernel/tty.c",
   "output": "kernel/CMakeFiles/kernel.dir/tty.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/uart.c.o -c /home/runner/work/exov6/exov6/kernel/uart.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/uart.c",
-  "output": "kernel/CMakeFiles/kernel.dir/uart.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/vm.c.o -c /home/runner/work/exov6/exov6/kernel/vm.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/vm.c",
-  "output": "kernel/CMakeFiles/kernel.dir/vm.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -781,15 +451,9 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/bootasm.S.o -c /home/runner/work/exov6/exov6/kernel/bootasm.S",
-  "file": "/home/runner/work/exov6/exov6/kernel/bootasm.S",
-  "output": "kernel/CMakeFiles/kernel.dir/bootasm.S.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/entry.S.o -c /home/runner/work/exov6/exov6/kernel/entry.S",
-  "file": "/home/runner/work/exov6/exov6/kernel/entry.S",
-  "output": "kernel/CMakeFiles/kernel.dir/entry.S.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/zone_isolation.c.o -c /home/runner/work/exov6/exov6/kernel/zone_isolation.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/zone_isolation.c",
+  "output": "kernel/CMakeFiles/kernel.dir/zone_isolation.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -817,9 +481,9 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/trapasm.S.o -c /home/runner/work/exov6/exov6/kernel/trapasm.S",
-  "file": "/home/runner/work/exov6/exov6/kernel/trapasm.S",
-  "output": "kernel/CMakeFiles/kernel.dir/trapasm.S.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/kernel/hypervisor -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph -I/home/runner/work/exov6/exov6/_build-test/proto -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o -c /home/runner/work/exov6/exov6/kernel/hypervisor/hypervisor.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/hypervisor/hypervisor.c",
+  "output": "kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -829,27 +493,9 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/phoenix-kernel-memory.dir/cap_mem.c.o -c /home/runner/work/exov6/exov6/kernel/cap_mem.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/cap_mem.c",
-  "output": "kernel/CMakeFiles/phoenix-kernel-memory.dir/cap_mem.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/phoenix-kernel-ipc-queue.dir/exo_ipc_queue.c.o -c /home/runner/work/exov6/exov6/kernel/exo_ipc_queue.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/exo_ipc_queue.c",
-  "output": "kernel/CMakeFiles/phoenix-kernel-ipc-queue.dir/exo_ipc_queue.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/phoenix-kernel-streams.dir/streams.c.o -c /home/runner/work/exov6/exov6/kernel/streams.c",
   "file": "/home/runner/work/exov6/exov6/kernel/streams.c",
   "output": "kernel/CMakeFiles/phoenix-kernel-streams.dir/streams.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/phoenix-kernel-lattice-ipc.dir/lattice_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/lattice_ipc.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/lattice_ipc.c",
-  "output": "kernel/CMakeFiles/phoenix-kernel-lattice-ipc.dir/lattice_ipc.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -859,9 +505,21 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o kernel/CMakeFiles/test-quaternion-spinlock.dir/test_quaternion_spinlock.c.o -c /home/runner/work/exov6/exov6/kernel/test_quaternion_spinlock.c",
-  "file": "/home/runner/work/exov6/exov6/kernel/test_quaternion_spinlock.c",
-  "output": "kernel/CMakeFiles/test-quaternion-spinlock.dir/test_quaternion_spinlock.c.o"
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/kernel -g -std=c17 -Wall -Wextra -Werror -o kernel/tests/CMakeFiles/kernel-tests.dir/minimal_test.c.o -c /home/runner/work/exov6/exov6/kernel/tests/minimal_test.c",
+  "file": "/home/runner/work/exov6/exov6/kernel/tests/minimal_test.c",
+  "output": "kernel/tests/CMakeFiles/kernel-tests.dir/minimal_test.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -g -o kernel/tests/CMakeFiles/kernel-asm-tests.dir/minimal_boot.S.o -c /home/runner/work/exov6/exov6/kernel/tests/minimal_boot.S",
+  "file": "/home/runner/work/exov6/exov6/kernel/tests/minimal_boot.S",
+  "output": "kernel/tests/CMakeFiles/kernel-asm-tests.dir/minimal_boot.S.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -g -o kernel/tests/CMakeFiles/kernel-asm-tests.dir/test_bootasm.S.o -c /home/runner/work/exov6/exov6/kernel/tests/test_bootasm.S",
+  "file": "/home/runner/work/exov6/exov6/kernel/tests/test_bootasm.S",
+  "output": "kernel/tests/CMakeFiles/kernel-asm-tests.dir/test_bootasm.S.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
@@ -871,19 +529,13 @@
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/include -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o tools/CMakeFiles/phoenix-compiler-utils.dir/compiler_utils.c.o -c /home/runner/work/exov6/exov6/tools/compiler_utils.c",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/tools -g -o tools/CMakeFiles/phoenix-compiler-utils.dir/compiler_utils.c.o -c /home/runner/work/exov6/exov6/tools/compiler_utils.c",
   "file": "/home/runner/work/exov6/exov6/tools/compiler_utils.c",
   "output": "tools/CMakeFiles/phoenix-compiler-utils.dir/compiler_utils.c.o"
 },
 {
   "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -DCOMPILER_UTILS_MAIN -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/include -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o tools/CMakeFiles/compiler-utils.dir/compiler_utils.c.o -c /home/runner/work/exov6/exov6/tools/compiler_utils.c",
-  "file": "/home/runner/work/exov6/exov6/tools/compiler_utils.c",
-  "output": "tools/CMakeFiles/compiler-utils.dir/compiler_utils.c.o"
-},
-{
-  "directory": "/home/runner/work/exov6/exov6/_build-test",
-  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/include -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o tools/CMakeFiles/ncc.dir/ncc.c.o -c /home/runner/work/exov6/exov6/tools/ncc.c",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/tools -g -o tools/CMakeFiles/ncc.dir/ncc.c.o -c /home/runner/work/exov6/exov6/tools/ncc.c",
   "file": "/home/runner/work/exov6/exov6/tools/ncc.c",
   "output": "tools/CMakeFiles/ncc.dir/ncc.c.o"
 },
@@ -1060,5 +712,245 @@
   "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/tests/microbench -I/home/runner/work/exov6/exov6/tests -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/libos/capnp -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/_build-test/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/user/libos -g -std=c23 -Wall -Werror -g3 -O0 -std=c2x -o tests/CMakeFiles/microbench-proc_cap_test.dir/microbench/proc_cap_test.c.o -c /home/runner/work/exov6/exov6/tests/microbench/proc_cap_test.c",
   "file": "/home/runner/work/exov6/exov6/tests/microbench/proc_cap_test.c",
   "output": "tests/CMakeFiles/microbench-proc_cap_test.dir/microbench/proc_cap_test.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/CMakeFiles/test_framework.dir/test_framework.c.o -c /home/runner/work/exov6/exov6/tests/c17/test_framework.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/test_framework.c",
+  "output": "tests/c17/CMakeFiles/test_framework.dir/test_framework.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_arbitrate.dir/test_arbitrate.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_arbitrate.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_arbitrate.c",
+  "output": "tests/c17/unit/CMakeFiles/test_arbitrate.dir/test_arbitrate.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/test_beatty_cycle.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_beatty_cycle.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_beatty_cycle.c",
+  "output": "tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/test_beatty_cycle.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_build_script.dir/test_build_script.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_build_script.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_build_script.c",
+  "output": "tests/c17/unit/CMakeFiles/test_build_script.dir/test_build_script.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/test_cap_entry_cpp.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_cap_entry_cpp.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_cap_entry_cpp.c",
+  "output": "tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/test_cap_entry_cpp.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/test_cap_newtypes.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_cap_newtypes.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_cap_newtypes.c",
+  "output": "tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/test_cap_newtypes.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_cap_revoke.dir/test_cap_revoke.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_cap_revoke.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_cap_revoke.c",
+  "output": "tests/c17/unit/CMakeFiles/test_cap_revoke.dir/test_cap_revoke.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_cap_types.dir/test_cap_types.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_cap_types.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_cap_types.c",
+  "output": "tests/c17/unit/CMakeFiles/test_cap_types.dir/test_cap_types.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/test_chan_endpoint.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_chan_endpoint.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_chan_endpoint.c",
+  "output": "tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/test_chan_endpoint.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_dag_cycle.dir/test_dag_cycle.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_dag_cycle.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_dag_cycle.c",
+  "output": "tests/c17/unit/CMakeFiles/test_dag_cycle.dir/test_dag_cycle.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_door.dir/test_door.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_door.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_door.c",
+  "output": "tests/c17/unit/CMakeFiles/test_door.dir/test_door.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/test_encrypt_mod.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_encrypt_mod.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_encrypt_mod.c",
+  "output": "tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/test_encrypt_mod.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/test_exo_recv_timed.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_exo_recv_timed.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_exo_recv_timed.c",
+  "output": "tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/test_exo_recv_timed.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_flow_pid.dir/test_flow_pid.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_flow_pid.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_flow_pid.c",
+  "output": "tests/c17/unit/CMakeFiles/test_flow_pid.dir/test_flow_pid.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_formal_models.dir/test_formal_models.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_formal_models.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_formal_models.c",
+  "output": "tests/c17/unit/CMakeFiles/test_formal_models.dir/test_formal_models.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_iommu.dir/test_iommu.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_iommu.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_iommu.c",
+  "output": "tests/c17/unit/CMakeFiles/test_iommu.dir/test_iommu.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_irq.dir/test_irq.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_irq.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_irq.c",
+  "output": "tests/c17/unit/CMakeFiles/test_irq.dir/test_irq.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/test_lattice_channel_dag.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_lattice_channel_dag.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_lattice_channel_dag.c",
+  "output": "tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/test_lattice_channel_dag.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_lattice_dag.dir/test_lattice_dag.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_lattice_dag.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_lattice_dag.c",
+  "output": "tests/c17/unit/CMakeFiles/test_lattice_dag.dir/test_lattice_dag.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/test_libnstr_graph.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_libnstr_graph.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_libnstr_graph.c",
+  "output": "tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/test_libnstr_graph.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_libos_env.dir/test_libos_env.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_libos_env.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_libos_env.c",
+  "output": "tests/c17/unit/CMakeFiles/test_libos_env.dir/test_libos_env.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_locks.dir/test_locks.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_locks.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_locks.c",
+  "output": "tests/c17/unit/CMakeFiles/test_locks.dir/test_locks.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_lockstress.dir/test_lockstress.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_lockstress.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_lockstress.c",
+  "output": "tests/c17/unit/CMakeFiles/test_lockstress.dir/test_lockstress.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/test_mailbox_isolation.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_mailbox_isolation.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_mailbox_isolation.c",
+  "output": "tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/test_mailbox_isolation.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_octonion.dir/test_octonion.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_octonion.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_octonion.c",
+  "output": "tests/c17/unit/CMakeFiles/test_octonion.dir/test_octonion.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/test_ptrace_concurrent.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_ptrace_concurrent.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_ptrace_concurrent.c",
+  "output": "tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/test_ptrace_concurrent.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_simulate.dir/test_simulate.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_simulate.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_simulate.c",
+  "output": "tests/c17/unit/CMakeFiles/test_simulate.dir/test_simulate.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_spinlock_align.dir/test_spinlock_align.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_spinlock_align.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_spinlock_align.c",
+  "output": "tests/c17/unit/CMakeFiles/test_spinlock_align.dir/test_spinlock_align.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_stream_module.dir/test_stream_module.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_stream_module.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_stream_module.c",
+  "output": "tests/c17/unit/CMakeFiles/test_stream_module.dir/test_stream_module.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_streams_log.dir/test_streams_log.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_streams_log.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_streams_log.c",
+  "output": "tests/c17/unit/CMakeFiles/test_streams_log.dir/test_streams_log.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/test_ticket_spinlock_processes.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_ticket_spinlock_processes.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_ticket_spinlock_processes.c",
+  "output": "tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/test_ticket_spinlock_processes.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/test_ticket_spinlock_threads.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_ticket_spinlock_threads.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_ticket_spinlock_threads.c",
+  "output": "tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/test_ticket_spinlock_threads.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/test_uv_spinlock_processes.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_uv_spinlock_processes.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_uv_spinlock_processes.c",
+  "output": "tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/test_uv_spinlock_processes.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/test_uv_spinlock_threads.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_uv_spinlock_threads.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_uv_spinlock_threads.c",
+  "output": "tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/test_uv_spinlock_threads.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/unit/CMakeFiles/test_zone.dir/test_zone.c.o -c /home/runner/work/exov6/exov6/tests/c17/unit/test_zone.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/unit/test_zone.c",
+  "output": "tests/c17/unit/CMakeFiles/test_zone.dir/test_zone.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/integration/CMakeFiles/test_exo_ipc_direct.dir/test_exo_ipc_direct.c.o -c /home/runner/work/exov6/exov6/tests/c17/integration/test_exo_ipc_direct.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/integration/test_exo_ipc_direct.c",
+  "output": "tests/c17/integration/CMakeFiles/test_exo_ipc_direct.dir/test_exo_ipc_direct.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/integration/CMakeFiles/test_lattice_ipc.dir/test_lattice_ipc.c.o -c /home/runner/work/exov6/exov6/tests/c17/integration/test_lattice_ipc.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/integration/test_lattice_ipc.c",
+  "output": "tests/c17/integration/CMakeFiles/test_lattice_ipc.dir/test_lattice_ipc.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/integration/CMakeFiles/test_sys_ipc.dir/test_sys_ipc.c.o -c /home/runner/work/exov6/exov6/tests/c17/integration/test_sys_ipc.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/integration/test_sys_ipc.c",
+  "output": "tests/c17/integration/CMakeFiles/test_sys_ipc.dir/test_sys_ipc.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/posix/CMakeFiles/test_posix_apis.dir/test_posix_apis.c.o -c /home/runner/work/exov6/exov6/tests/c17/posix/test_posix_apis.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/posix/test_posix_apis.c",
+  "output": "tests/c17/posix/CMakeFiles/test_posix_apis.dir/test_posix_apis.c.o"
+},
+{
+  "directory": "/home/runner/work/exov6/exov6/_build-test",
+  "command": "/usr/bin/clang -I/home/runner/work/exov6/exov6/_build-test/include -I/home/runner/work/exov6/exov6/../../include -I/home/runner/work/exov6/exov6/../../kernel -I/home/runner/work/exov6/exov6/../../libos  -Wall -Werror -Wextra -g -O0 -fsanitize=address,undefined -std=c17 -o tests/c17/posix/CMakeFiles/test_posix_compat.dir/test_posix_compat.c.o -c /home/runner/work/exov6/exov6/tests/c17/posix/test_posix_compat.c",
+  "file": "/home/runner/work/exov6/exov6/tests/c17/posix/test_posix_compat.c",
+  "output": "tests/c17/posix/CMakeFiles/test_posix_compat.dir/test_posix_compat.c.o"
 }
 ]

@@ -7,6 +7,7 @@
 
 #include <sys/types.h>
 #include <stdint.h>
+#include <signal.h>
 
 // Wait options
 #define WNOHANG    0x01

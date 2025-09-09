@@ -1,5 +1,5 @@
 #include "capnp_helpers.h"
-#include <string.h>
+#include "../string.h"
 #include <stdlib.h>
 
 // =============================================================================

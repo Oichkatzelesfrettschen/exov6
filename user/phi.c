@@ -1,5 +1,5 @@
 #include "types.h"
-#include "stat.h"
+#include "sys/stat.h"
 #include "user.h"
 
 // compute nth Fibonacci number
@@ -59,12 +59,12 @@ main(int argc, char *argv[])
 {
   if(argc == 1){
     demo();
-    exit();
+    exit(0);
   }
 
   if(argc != 3){
     printf(2, "Usage: phi n m\n");
-    exit();
+    exit(0);
   }
 
   int n = atoi(argv[1]);
@@ -73,5 +73,5 @@ main(int argc, char *argv[])
   int p = pow2(m);
   int g = gcd(f, p);
   printf(1, "fib(%d)=%d 2^%d=%d gcd=%d\n", n, f, m, p, g);
-  exit();
+  exit(0);
 }

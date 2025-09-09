@@ -11,6 +11,10 @@
 
 #include <stdint.h>
 
+// Only define if not already defined in arch_x86_64.h
+#ifndef TRAPFRAME_DEFINED
+#define TRAPFRAME_DEFINED
+
 #ifdef __x86_64__
 
 /**
@@ -182,3 +186,5 @@ static inline void trapframe_set_sp(struct trapframe *tf, uint64_t sp) {
     tf->sp = sp;
 }
 #endif
+
+#endif // TRAPFRAME_DEFINED

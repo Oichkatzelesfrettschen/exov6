@@ -123,13 +123,17 @@ struct proc {
   struct mailbox *mailbox;       // Per-process IPC mailbox
   struct proc *rq_next;          // Run queue next pointer
   struct proc *rq_prev;          // Run queue previous pointer
+  
+  /* Process exit and IPC state */
+  int exit_status;               /* Exit status for wait() */
+  void *ipc_chan;                /* IPC channel for communication */
 };
 
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
-_Static_assert(sizeof(struct proc) == 280, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 304, "struct proc size incorrect");  // Updated for added fields
 #else
-_Static_assert(sizeof(struct proc) == 168, "struct proc size incorrect");
+_Static_assert(sizeof(struct proc) == 184, "struct proc size incorrect");  // Updated for added fields
 #endif
 
 

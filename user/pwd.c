@@ -9,10 +9,10 @@ int main(void) {
     // Get current working directory
     if (getcwd(buf, sizeof(buf)) == 0) {
         printf(2, "pwd: cannot determine current directory\n");
-        exit();
+        exit(0);
     }
     
     // Print current working directory
     printf(1, "%s\n", buf);
-    exit();
+    exit(0);
 }

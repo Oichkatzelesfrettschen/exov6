@@ -1,7 +1,7 @@
 #pragma once
 #include "types.h"
 #include "exo.h"
-#include "stat.h"
+#include "sys/stat.h"
 
 /* Prevent conflicts with system headers */
 #ifndef PHOENIX_USER_H_DECLS
@@ -247,7 +247,7 @@ int uptime(void);
  */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-library-redeclaration"
-[[noreturn]] void exit(void);
+[[noreturn]] void exit(int status);
 #pragma clang diagnostic pop
 
 /**

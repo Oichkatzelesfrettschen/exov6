@@ -1,7 +1,8 @@
 #pragma once
 
 #include "param.h"
-#include "mmu.h"
+#include "arch_x86_64.h"  // For pde_t and architecture types
+#include "../kernel/mmu.h"
 #include <arch.h>
 #include "spinlock.h"
 #include "ipc.h"
@@ -17,7 +18,7 @@ struct context;
 typedef struct context context_t;
 #endif
 
-// Per-CPU state
+// Per-CPU state (cache-line aligned for performance)
 struct cpu {
   uint8_t apicid;                // Local APIC ID
   context_t *scheduler;        // swtch() here to enter scheduler
@@ -29,7 +30,7 @@ struct cpu {
   int ncli;                    // Depth of pushcli nesting.
   int intena;                  // Were interrupts enabled before pushcli?
   struct proc *proc;           // The process running on this cpu or null
-};
+} __attribute__((aligned(64)));
 
 extern struct cpu cpus[NCPU];
 extern int ncpu;
@@ -144,6 +145,10 @@ struct proc {
   /* FPU/SSE state */
   uint8_t fpu_state[512] __attribute__((aligned(16)));  /* FXSAVE area */
   int fpu_state_saved;           /* FPU state is saved */
+  
+  /* Process exit and IPC state */
+  int exit_status;               /* Exit status for wait() */
+  void *ipc_chan;                /* IPC channel for communication */
   
   /* OS brand for virtualization */
   int brand;                     /* OS personality (BRAND_*) */

@@ -308,7 +308,7 @@ int execute_simple_command(shell_context_t *ctx, simple_command_t *cmd) {
         // Execute command
         exec(cmd->argv[0], cmd->argv);
         shell_error(ctx, "%s: command not found", cmd->argv[0]);
-        exit(); // No argument version
+        exit(0); // No argument version
     } else if (pid > 0) {
         // Parent process - wait for child
         int status;

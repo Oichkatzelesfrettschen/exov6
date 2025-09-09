@@ -7,11 +7,11 @@ int main(void){
     int p[2];
     if(pipe(p) < 0){
         printf(1, "pipe failed\n");
-        exit();
+        exit(0);
     }
     if(fcntl(p[0], F_SETFL, O_NONBLOCK) < 0){
         printf(1, "fcntl failed\n");
-        exit();
+        exit(0);
     }
     char buf[4];
     int r = read(p[0], buf, sizeof(buf));
@@ -20,5 +20,5 @@ int main(void){
     int s = sigcheck();
     printf(1, "sig=%d\n", s);
     printf(1, "nbtest done\n");
-    exit();
+    exit(0);
 }

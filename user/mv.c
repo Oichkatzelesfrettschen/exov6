@@ -24,7 +24,7 @@ usage(void)
 {
   printf(2, "Usage: mv [-if] source target\n");
   printf(2, "       mv [-if] source... directory\n");
-  exit();
+  exit(0);
 }
 
 static int
@@ -230,7 +230,7 @@ main(int argc, char *argv[])
     
     if(!is_directory(target)) {
       printf(2, "mv: target '%s' is not a directory\n", target);
-      exit();
+      exit(0);
     }
     
     // Move each source to target directory
@@ -247,9 +247,9 @@ main(int argc, char *argv[])
     const char *dst = argv[opt_end + 1];
     
     if(move_file(src, dst) < 0) {
-      exit();
+      exit(0);
     }
   }
   
-  exit();
+  exit(0);
 }

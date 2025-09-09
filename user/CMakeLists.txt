@@ -7,7 +7,7 @@
 # User library (ulib) - Core user space functionality
 phoenix_add_library(phoenix-ulib
     STATIC
-    SOURCES ulib.c
+    SOURCES ulib.c usys.S
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
