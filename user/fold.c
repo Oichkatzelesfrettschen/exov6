@@ -34,7 +34,7 @@ static int width = DEFAULT_WIDTH;
 
 static void usage(void) {
     printf(STDERR, "Usage: fold [-bs] [-w width] [file...]\n");
-    exit();
+    exit(0);
 }
 
 // Check if character is a good break point
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
                     width = atoi(argv[++i]);
                     if (width <= 0) {
                         printf(STDERR, "fold: invalid width '%s'\n", argv[i]);
-                        exit();
+                        exit(0);
                     }
                 } else {
                     printf(STDERR, "fold: option -w requires an argument\n");
@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
                 width = atoi(argv[i] + 2);
                 if (width <= 0) {
                     printf(STDERR, "fold: invalid width '%s'\n", argv[i] + 2);
-                    exit();
+                    exit(0);
                 }
             } else if (strcmp(argv[i], "--") == 0) {
                 file_args_start = i + 1;
@@ -246,5 +246,5 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    exit();
+    exit(0);
 }

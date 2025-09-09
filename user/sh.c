@@ -50,7 +50,7 @@ int builtin_cd(char *argv[]) {
 int builtin_exit(char *argv[]) {
     (void)argv;  // Unused
     printf(1, "Shell exiting...\n");
-    exit();
+    exit(0);
 }
 
 // Check if command is a built-in
@@ -77,7 +77,7 @@ void exec_cmd(char *argv[]) {
         // Child process
         if (exec(argv[0], argv) < 0) {
             printf(2, "sh: %s: command not found\n", argv[0]);
-            exit();
+            exit(0);
         }
     } else if (pid > 0) {
         // Parent process - wait for child
@@ -125,5 +125,5 @@ int main(void) {
     }
     
     printf(1, "Shell terminated\n");
-    exit();
+    exit(0);
 }

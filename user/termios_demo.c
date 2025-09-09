@@ -6,7 +6,7 @@
 int main(void) {
   if (!isatty(0)) {
     printf(1, "stdin is not a tty\n");
-    exit();
+    exit(0);
   }
 
   printf(1, "tty name: %s\n", ttyname(0));
@@ -22,5 +22,5 @@ int main(void) {
   t.c_lflag |= ECHO;
   tcsetattr(0, 0, &t);
   printf(1, "You typed: %s\n", buf);
-  exit();
+  exit(0);
 }

@@ -56,7 +56,7 @@ static char *output_format = NULL; // Output format (-o)
 
 static void usage(void) {
     printf(STDERR, "Usage: join [-a FILENUM] [-e STRING] [-j FIELD] [-o FORMAT] [-t CHAR] [-v FILENUM] [-1 FIELD] [-2 FIELD] file1 file2\n");
-    exit();
+    exit(0);
 }
 
 // Hash function (djb2 algorithm)
@@ -224,7 +224,7 @@ static void process_join(const char *file1, const char *file2) {
     fd1 = open(file1, O_RDONLY);
     if (fd1 < 0) {
         printf(STDERR, "join: cannot open '%s'\n", file1);
-        exit();
+        exit(0);
     }
     
     // Read file1 line by line and hash
@@ -238,7 +238,7 @@ static void process_join(const char *file1, const char *file2) {
     fd2 = open(file2, O_RDONLY);
     if (fd2 < 0) {
         printf(STDERR, "join: cannot open '%s'\n", file2);
-        exit();
+        exit(0);
     }
     
     while (read_line(fd2, line, MAX_LINE) > 0) {
@@ -353,5 +353,5 @@ int main(int argc, char *argv[]) {
     // Process join
     process_join(argv[i], argv[i + 1]);
     
-    exit();
+    exit(0);
 }

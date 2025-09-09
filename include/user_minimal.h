@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>  // For size_t
 #include <types.h>
 
 // Missing types
@@ -25,14 +26,14 @@ struct stat {
 
 // System calls - minimal working set  
 int fork(void);
-void exit(void) __attribute__((noreturn));
+void exit(int status) __attribute__((noreturn));
 int wait(int *status);
 int pipe(int *);
 int write(int, const void *, int);  // Simplified - use int instead of size_t
 int read(int, void *, int);         // Simplified - use int instead of size_t
 int close(int);
 int kill(int);
-int exec(char *, char **);
+int exec(const char *, char **);
 int open(const char *, int);
 int mknod(const char *, short, short);
 int unlink(const char *);
@@ -64,21 +65,21 @@ struct dirent {
 
 // String functions - basic implementations
 int strcmp(const char *, const char *);
-int strncmp(const char *, const char *, int);
+int strncmp(const char *, const char *, size_t);
 char *strcpy(char *, const char *);
-char *strncpy(char *, const char *, int);
+char *strncpy(char *, const char *, size_t);
 char *strcat(char *, const char *);
-void *memmove(void *, const void *, int);
-char *strchr(const char *, char c);
+void *memmove(void *, const void *, size_t);
+char *strchr(const char *, int c);
 char *strrchr(const char *, int c);
-int strlen(const char *);
-void *memset(void *, int, int);
-void *malloc(int);
+size_t strlen(const char *);
+void *memset(void *, int, size_t);
+void *malloc(size_t);
 void free(void *);
 int atoi(const char *);
 
-// I/O functions
-void printf(int, const char *, ...);
+// I/O functions  
+void printf(int fd, const char *, ...);  // Custom printf with file descriptor
 char *gets(char *, int max);
 
 // Special file descriptor numbers

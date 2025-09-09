@@ -247,7 +247,7 @@ int uptime(void);
  */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-library-redeclaration"
-[[noreturn]] void exit(void);
+[[noreturn]] void exit(int status);
 #pragma clang diagnostic pop
 
 /**

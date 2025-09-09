@@ -14,5 +14,5 @@ int main(void) {
   memset(buf, 0, sizeof(buf));
   fs_read_block(blk, buf);
   printf(1, "fs demo: %s\n", buf);
-  exit();
+  exit(0);
 }

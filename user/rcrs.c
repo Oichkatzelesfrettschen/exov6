@@ -112,11 +112,11 @@ int main(void) {
   memset(drv, 0, sizeof(drv));
   int n = parse_config("drivers.conf", drv, MAX_DRIVERS);
   if (n <= 0)
-    exit();
+    exit(0);
 
   int p[2];
   if (pipe(p) < 0)
-    exit();
+    exit(0);
 
   if (fork() == 0) {
     close(p[0]);

@@ -1,45 +1,45 @@
 # usys.S - User System Call Interface
 
-This assembly file defines the system call interface for user programs in the ExoKernel operating system. It provides assembly stubs that translate user-space function calls into kernel system calls.
-
-## Architecture Support
-- **x86 (32-bit)**: Uses `int $T_SYSCALL` instruction with parameters in `%eax`
-- **x86_64 (64-bit)**: Uses `syscall` instruction with parameters in `%rax`
-
-## System Call Categories
-
-### Standard POSIX System Calls
-- Process management: `fork`, `exit`, `wait`, `getpid`, `exec`, `kill`
-- File operations: `open`, `close`, `read`, `write`, `fstat`, `link`, `unlink`
-- Directory operations: `mkdir`, `chdir`, `mknod`
-- Memory management: `sbrk`
-- I/O operations: `pipe`, `dup`
-- Time operations: `sleep`, `uptime`
-
-### ExoKernel-Specific System Calls
-- Memory management: `mappte`, `exo_unbind_page`, `exo_alloc_block`, `exo_bind_block`
-- Process control: `exo_yield_to`, `proc_alloc`
-- I/O operations: `exo_read_disk`, `exo_write_disk`, `exo_flush_block`
-- Communication: `exo_send`, `exo_recv`, `endpoint_send`, `endpoint_recv`
-- Resource management: `set_gas`, `get_gas`, `set_numa_node`
-- Capabilities: `cap_dec`, `cap_inc`
-- Signal handling: `sigsend`
-- Timer management: `set_timer_upcall`
-- File control: `fcntl`
-
-## Special Functions
-
-### exo_pctr_transfer
-A performance counter transfer function that handles architecture-specific register loading:
-- **x86**: Loads value from stack into `%eax` register
-- **x86_64**: Loads value from `%rdi` into `%rax` register
-- Triggers `T_PCTR_TRANSFER` interrupt for performance counter data transfer between processes or kernel components
-
-## Notes
-- The `SYSCALL` macro automatically generates the appropriate assembly code for each architecture
-- All system calls follow the standard calling convention for their respective architectures
-- The `set_timer_upcall` system call is duplicated in the source and allows processes to handle timer interrupts in user space
-#include "syscall.h"
+# This assembly file defines the system call interface for user programs in the ExoKernel operating system. It provides assembly stubs that translate user-space function calls into kernel system calls.
+# 
+# ## Architecture Support
+# - **x86 (32-bit)**: Uses `int $T_SYSCALL` instruction with parameters in `%eax`
+# - **x86_64 (64-bit)**: Uses `syscall` instruction with parameters in `%rax`
+# 
+# ## System Call Categories
+# 
+# ### Standard POSIX System Calls
+# - Process management: `fork`, `exit`, `wait`, `getpid`, `exec`, `kill`
+# - File operations: `open`, `close`, `read`, `write`, `fstat`, `link`, `unlink`
+# - Directory operations: `mkdir`, `chdir`, `mknod`
+# - Memory management: `sbrk`
+# - I/O operations: `pipe`, `dup`
+# - Time operations: `sleep`, `uptime`
+# 
+# ### ExoKernel-Specific System Calls
+# - Memory management: `mappte`, `exo_unbind_page`, `exo_alloc_block`, `exo_bind_block`
+# - Process control: `exo_yield_to`, `proc_alloc`
+# - I/O operations: `exo_read_disk`, `exo_write_disk`, `exo_flush_block`
+# - Communication: `exo_send`, `exo_recv`, `endpoint_send`, `endpoint_recv`
+# - Resource management: `set_gas`, `get_gas`, `set_numa_node`
+# - Capabilities: `cap_dec`, `cap_inc`
+# - Signal handling: `sigsend`
+# - Timer management: `set_timer_upcall`
+# - File control: `fcntl`
+# 
+# ## Special Functions
+# 
+# ### exo_pctr_transfer
+# A performance counter transfer function that handles architecture-specific register loading:
+# - **x86**: Loads value from stack into `%eax` register
+# - **x86_64**: Loads value from `%rdi` into `%rax` register
+# - Triggers `T_PCTR_TRANSFER` interrupt for performance counter data transfer between processes or kernel components
+# 
+# ## Notes
+# - The `SYSCALL` macro automatically generates the appropriate assembly code for each architecture
+# - All system calls follow the standard calling convention for their respective architectures
+# - The `set_timer_upcall` system call is duplicated in the source and allows processes to handle timer interrupts in user space
+#include "syscall_asm.h"
 #include "traps.h"
 
 #ifndef __x86_64__
@@ -121,9 +121,8 @@ exo_pctr_transfer:
 #endif
 
 SYSCALL(set_timer_upcall)
-// The set_timer_upcall system call sets a user-level upcall handler for timer events.
-// This allows the process to handle timer interrupts in user space.
-SYSCALL(set_timer_upcall)
+# The set_timer_upcall system call sets a user-level upcall handler for timer events.
+# This allows the process to handle timer interrupts in user space.
 SYSCALL(exo_unbind_page)
 SYSCALL(exo_alloc_block)
 SYSCALL(exo_bind_block)
@@ -143,7 +142,6 @@ SYSCALL(fcntl)
 SYSCALL(sigsend)
 SYSCALL(cap_dec)
 SYSCALL(cap_inc)
-SYSCALL(cap_dec)
 
 SYSCALL(service_register)
 SYSCALL(service_add_dependency)
