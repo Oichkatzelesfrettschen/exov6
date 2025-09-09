@@ -2,7 +2,7 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "cap.h"
-#include <errno.h>
+#include "errno.h"
 #define EXO_KERNEL
 #include "exokernel.h"
 

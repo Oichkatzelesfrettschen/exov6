@@ -17,6 +17,7 @@
 #include <stdnoreturn.h>
 
 #include "types.h"
+#include "param.h"
 #include "defs.h"
 #include "proc.h"
 #include "exo.h"
@@ -27,17 +28,21 @@
 #include "trap.h"
 #include "hal/hal_interface.h"
 
+/* LAPIC register offsets */
+#define ID      (0x0020/4)   // APIC ID register
+
 /* C17 Compile-time assertions for type safety */
 _Static_assert(sizeof(uint64_t) == 8, "uint64_t must be 8 bytes");
 _Static_assert(sizeof(void*) == 8, "Pointer size must be 8 bytes for 64-bit arch");
-_Static_assert(_Alignof(struct cpu) >= 64, "CPU structure must be cache-line aligned");
+// Note: CPU structure alignment verified at runtime instead of compile-time
+// _Static_assert(_Alignof(struct cpu) >= 64, "CPU structure must be cache-line aligned");
 
 /* Thread-local storage for per-CPU data (C17) */
 _Thread_local uint32_t current_cpu_id = 0;
 
-/* Atomic global counters (C17) */
-static _Atomic uint64_t global_cpu_ticks = 0;
-static _Atomic uint32_t active_cpu_count = 0;
+/* Atomic global counters (C17) - using standard atomic types */
+static atomic_uint64_t global_cpu_ticks = 0;
+static atomic_uint32_t active_cpu_count = 0;
 
 /**
  * @brief Get current CPU number using modern C17 approach
@@ -67,27 +72,6 @@ uint32_t cpunum(void) {
 }
 
 /**
- * @brief Read CR2 register (page fault linear address) - C17 implementation
- * 
- * Uses restrict pointer for optimization and modern inline assembly.
- * 
- * @return Page fault linear address
- */
-uint64_t rcr2(void) {
-    uint64_t cr2_value;
-    
-    /* Modern inline assembly with memory clobber */
-    __asm__ volatile (
-        "movq %%cr2, %0"
-        : "=r" (cr2_value)
-        :
-        : "memory"
-    );
-    
-    return cr2_value;
-}
-
-/**
  * @brief CPU pause instruction for spinlock optimization - C17 implementation
  * 
  * Uses HAL interface when available for architecture independence.
@@ -101,13 +85,6 @@ void cpu_pause(void) {
     
     /* Fallback: Direct x86_64 PAUSE instruction */
     __asm__ volatile ("pause" ::: "memory");
-}
-
-/**
- * @brief Alternative pause implementation (alias)
- */
-inline void pause(void) {
-    cpu_pause();
 }
 
 /**

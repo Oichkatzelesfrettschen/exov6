@@ -159,6 +159,7 @@ int kkill(int);    /* Kernel kill - renamed to avoid POSIX conflict */
 int sigsend(int, int);
 struct cpu *mycpu(void);
 struct proc *myproc();
+extern struct proc *initproc;  /* Initial process */
 void pinit(void);
 void procdump(void);
 [[noreturn]] void scheduler(void);

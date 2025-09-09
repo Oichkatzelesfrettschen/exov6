@@ -8,13 +8,13 @@
 
 #include <types.h>
 #include <stdint.h>
+#include "param.h"
 #include "defs.h"
 #include "proc.h"
 #include "exo.h"
 #include "spinlock.h"
 #include "memlayout.h"
 #include "string.h"
-#include "buf.h"  // For struct buf definition
 // APIC register ID (if not defined elsewhere)
 #ifndef ID
 #define ID      (0x0020/4)   // APIC ID register
@@ -22,6 +22,7 @@
 #include "mmu.h"
 #include "arch.h"
 #include "trap.h"
+#include "service.h"
 
 /* CPU identification using APIC ID */
 int cpunum(void) {
@@ -338,14 +339,14 @@ void exit(int status) {
     acquire(&ptable.lock);
     
     /* Parent might be sleeping in wait() */
-    wakeup1(curproc->parent);
+    wakeup(curproc->parent);
     
     /* Pass abandoned children to init */
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
         if(p->parent == curproc) {
             p->parent = initproc;
             if(p->state == ZOMBIE) {
-                wakeup1(initproc);
+                wakeup(initproc);
             }
         }
     }
@@ -479,7 +480,7 @@ exo_cap exo_alloc_ioport(uint32_t port) {
     
     /* Check if port is in valid range */
     if (port > 0xFFFF) {
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -515,7 +516,7 @@ static struct {
     int nservices;
 } service_table;
 
-int service_register(const char *name, const char *path, int restart) {
+int service_register(const char *name, const char *path, service_options_t opts) {
     acquire(&service_table.lock);
     
     if (service_table.nservices >= MAX_SERVICES) {
@@ -526,7 +527,7 @@ int service_register(const char *name, const char *path, int restart) {
     struct service *s = &service_table.services[service_table.nservices];
     strncpy(s->name, name, sizeof(s->name) - 1);
     strncpy(s->path, path, sizeof(s->path) - 1);
-    s->auto_restart = restart;
+    s->auto_restart = opts.auto_restart;
     s->pid = 0;
     s->state = 0;
     s->ndeps = 0;
@@ -658,9 +659,5 @@ void sleep(void *chan, struct spinlock *lk) {
 void cprintf(const char *fmt, ...) {
     /* This would normally be implemented with full printf support */
     /* For now, just output characters directly to console */
-    int i, c;
-    
-    for(i = 0; (c = fmt[i] & 0xff) != 0; i++) {
-        consputc(c);
-    }
+    cprintf("%s", fmt);
 }
