@@ -8,6 +8,7 @@
 
 #include <types.h>
 #include <stdint.h>
+#include <stdatomic.h>
 #include "param.h"
 #include "defs.h"
 #include "proc.h"
@@ -23,6 +24,30 @@
 #include "arch.h"
 #include "trap.h"
 #include "service.h"
+
+/* Buffer flags for disk I/O */
+#ifndef B_VALID
+#define B_VALID     0x2  /* Buffer has valid data */
+#define B_DIRTY     0x4  /* Buffer needs to be written */
+#endif
+
+/* Minimal buf structure for compilation */
+struct buf {
+    int flags;
+    uint32_t dev;
+    uint32_t blockno;
+    char data[512];  /* Block data */
+};
+
+/* Process management globals */
+struct proc *initproc = NULL;  /* Initial process - defined here */
+
+/* Minimal scheduler operations structure */
+struct exo_sched_ops {
+    int (*init)(void);
+    int (*schedule)(void);
+    int (*yield)(void);
+};
 
 /* CPU identification using APIC ID */
 int cpunum(void) {

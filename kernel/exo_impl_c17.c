@@ -31,6 +31,11 @@
 /* LAPIC register offsets */
 #define ID      (0x0020/4)   // APIC ID register
 
+/* CPU limits */
+#ifndef MAX_CPUS
+#define MAX_CPUS 256  /* Maximum CPUs supported */
+#endif
+
 /* C17 Compile-time assertions for type safety */
 _Static_assert(sizeof(uint64_t) == 8, "uint64_t must be 8 bytes");
 _Static_assert(sizeof(void*) == 8, "Pointer size must be 8 bytes for 64-bit arch");
