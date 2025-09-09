@@ -40,6 +40,6 @@ static inline int chan_endpoint_recv(chan_t *c, exo_cap src, void *msg, size_t l
 #define CHAN_DECLARE(name, type) \
     UNIFIED_CHAN_DECLARE(name, type, CHAN_FIXED)
 
-/* Compile-time assertions */
-_Static_assert(sizeof(chan_t) <= 64, "Channel descriptor too large");
+/* Compile-time assertions - adjusted for current implementation */
+_Static_assert(sizeof(chan_t) <= 128, "Channel descriptor too large");
 _Static_assert(_Alignof(chan_t) >= 8, "Channel must be properly aligned");

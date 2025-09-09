@@ -65,29 +65,5 @@ int lambda_cap_delegate(lambda_cap_t *lc, uint16_t new_owner);
 // Revoke invalidates the capability via the kernel
 int lambda_cap_revoke(lambda_cap_t *lc);
 
-// Macro to declare an affine typed channel using Cap'n Proto helpers
-#define AFFINE_CHAN_DECLARE(name, type)                                        \
-  static const struct msg_type_desc name##_typedesc = {                        \
-      type##_MESSAGE_SIZE, 0, (msg_encode_fn)type##_encode,                    \
-      (msg_decode_fn)type##_decode};                                           \
-  typedef struct {                                                             \
-    affine_chan_t base;                                                        \
-  } name##_t;                                                                  \
-  static inline name##_t *name##_create(void) {                                \
-    return (name##_t *)affine_chan_create(&name##_typedesc);                   \
-  }                                                                            \
-  static inline void name##_destroy(name##_t *c) {                             \
-    affine_chan_destroy(&c->base);                                             \
-  }                                                                            \
-  static inline int name##_send(name##_t *c, exo_cap dest, const type *m) {    \
-    unsigned char buf[type##_MESSAGE_SIZE];                                    \
-    size_t len = type##_encode(m, buf);                                        \
-    return affine_chan_send(&c->base, dest, buf, len);                         \
-  }                                                                            \
-  static inline int name##_recv(name##_t *c, exo_cap src, type *m) {           \
-    unsigned char buf[type##_MESSAGE_SIZE];                                    \
-    int r = affine_chan_recv(&c->base, src, buf, type##_MESSAGE_SIZE);         \
-    if (r >= 0)                                                                \
-      type##_decode(m, buf);                                                   \
-    return r;                                                                  \
-  }
+// Note: AFFINE_CHAN_DECLARE macro is now provided by unified_chan.h 
+// to avoid redefinition conflicts with the unified channel system.

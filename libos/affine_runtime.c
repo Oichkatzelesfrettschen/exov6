@@ -4,16 +4,17 @@
 
 /* Forward declarations for missing functions */
 size_t msg_desc_size(const struct msg_type_desc *desc);
-int cap_inc(uint32_t cap_id);
-int cap_revoke(uint32_t cap_id);
+int cap_inc(uint16_t cap_id);
+int cap_revoke(uint16_t cap_id);
 
 // Allocate an affine channel
 EXO_NODISCARD affine_chan_t *
 affine_chan_create(const struct msg_type_desc *desc) {
   affine_chan_t *c = malloc(sizeof(affine_chan_t));
   if (c) {
-    c->base.desc = desc;
-    c->base.msg_size = msg_desc_size(desc);
+    // Use unified channel interface
+    c->base.type_desc = desc;
+    c->base.properties = CHAN_AFFINE;
     c->used_send = 0;
     c->used_recv = 0;
   }

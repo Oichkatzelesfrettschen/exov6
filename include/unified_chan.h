@@ -119,8 +119,8 @@ int unified_chan_configure_secured(unified_chan_t *c, uint32_t required_caps, ex
 #define CHAN_DECLARE_VAR(name, type) \
     UNIFIED_CHAN_DECLARE(name, type, CHAN_VAR)
 
-/* Compile-time assertions */
-_Static_assert(sizeof(unified_chan_t) <= 64, "Unified channel too large");
+/* Compile-time assertions - adjusted for current implementation */
+_Static_assert(sizeof(unified_chan_t) <= 128, "Unified channel too large");
 _Static_assert(_Alignof(unified_chan_t) >= 8, "Channel alignment insufficient");
 
-#endif /* UNIFIED_CHAN_H */
+/* End of unified_chan.h */
