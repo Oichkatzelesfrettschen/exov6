@@ -1,7 +1,8 @@
 #pragma once
 
 #include "param.h"
-#include "mmu.h"
+#include "arch_x86_64.h"  // For pde_t and architecture types
+#include "../kernel/mmu.h"
 #include <arch.h>
 #include "spinlock.h"
 #include "ipc.h"
@@ -30,7 +31,6 @@ struct cpu {
   int intena;                  // Were interrupts enabled before pushcli?
   struct proc *proc;           // The process running on this cpu or null
 } __attribute__((aligned(64)));
-};
 
 extern struct cpu cpus[NCPU];
 extern int ncpu;
