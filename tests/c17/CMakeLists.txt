@@ -41,11 +41,11 @@ add_custom_target(run-c17-tests
     COMMENT "Running all C17 tests"
 )
 
-# Generate test report
-add_custom_target(test-report
+# Generate C17 test report
+add_custom_target(c17-test-report
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure --verbose
-    COMMAND ${CMAKE_COMMAND} -E echo "Test execution complete"
+    COMMAND ${CMAKE_COMMAND} -E echo "C17 test execution complete"
     DEPENDS all_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Generating test report"
+    COMMENT "Generating C17 test report"
 )
