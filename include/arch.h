@@ -45,7 +45,10 @@ static inline void outsw(int port, const void *addr, int cnt) {
 typedef uint64_t arch_word_t;
 typedef uint64_t reg_t;
 
-// I/O port operations
+// I/O port operations - only define if not already defined
+#ifndef _ARCH_IO_FUNCTIONS_DEFINED
+#define _ARCH_IO_FUNCTIONS_DEFINED
+
 static inline uint8_t inb(uint16_t port) {
     uint8_t data;
     __asm__ volatile("inb %1,%0" : "=a"(data) : "d"(port) : "memory");
@@ -211,6 +214,8 @@ static inline void stosl(void *addr, int data, int cnt) {
                      : "a"(data), "0"(addr), "1"(cnt)
                      : "memory", "cc");
 }
+
+#endif /* _ARCH_IO_FUNCTIONS_DEFINED */
 
 #else
 // Generic/unknown architecture - all stubs

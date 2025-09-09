@@ -4,7 +4,7 @@
 #include "../../include/defs.h"
 #include "../../include/proc.h"
 #include "../../include/memlayout.h"
-#include <string.h>
+#include "../string.h"
 #include <errno.h>
 
 /**

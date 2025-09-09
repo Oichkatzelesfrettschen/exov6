@@ -262,7 +262,7 @@ exo_cap exo_alloc_hypervisor(void);
 int hv_launch_guest(exo_cap cap, const char *path);
 
 void cap_table_init(void);
-int cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner);
+cap_id_t cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner);
 int cap_table_lookup(cap_id_t id, struct cap_entry *out);
 void cap_table_inc(cap_id_t id);
 void cap_table_dec(cap_id_t id);

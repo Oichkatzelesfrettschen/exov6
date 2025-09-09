@@ -7,7 +7,7 @@
 #include "arch.h"
 #include "trapframe.h"
 #include "elf.h"
-#include <string.h>
+#include "../string.h"
 
 int
 exec(char *path, char **argv)

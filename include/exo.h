@@ -27,6 +27,20 @@ typedef struct exo_cap {
     hash256_t auth_tag;  /* Authentication tag */
 } exo_cap;
 
+/* Capability type constants */
+#define EXO_CAP_INVALID    0
+#define EXO_CAP_PAGE       1
+#define EXO_CAP_IRQ        2
+#define EXO_CAP_DMA        3
+#define EXO_CAP_HYPERVISOR 4
+#define EXO_CAP_BLOCK      5
+#define EXO_CAP_IOPORT     6
+
+/* Capability rights constants */
+#define EXO_CAP_READ       (1 << 0)
+#define EXO_CAP_WRITE      (1 << 1)
+#define EXO_CAP_EXECUTE    (1 << 2)
+
 /* Block device capability */
 typedef struct exo_blockcap {
     uint32_t dev;        /* Device number */

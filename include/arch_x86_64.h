@@ -63,7 +63,10 @@ struct trapframe {
 } __attribute__((packed));
 #endif
 
-// I/O port operations
+// I/O port operations - only define if not already defined
+#ifndef _ARCH_IO_FUNCTIONS_DEFINED
+#define _ARCH_IO_FUNCTIONS_DEFINED
+
 static inline uint8_t inb(uint16_t port) {
   uint8_t data;
   __asm__ volatile("inb %w1, %b0" : "=a"(data) : "Nd"(port));
@@ -230,6 +233,8 @@ static inline void stosq(void *addr, uint64_t data, int cnt) {
                    : "0"(addr), "1"(cnt), "a"(data)
                    : "memory", "cc");
 }
+
+#endif /* _ARCH_IO_FUNCTIONS_DEFINED */
 
 // CPUID instruction
 static inline void cpuid(uint32_t leaf, uint32_t *eax, uint32_t *ebx, 

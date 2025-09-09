@@ -1,6 +1,6 @@
-#include <string.h>
 #include "defs.h"
 #include "libos/posix.h"
+#include "string.h"
 
 /* Kernel strdup implementation */
 static char* kstrdup(const char *s) {

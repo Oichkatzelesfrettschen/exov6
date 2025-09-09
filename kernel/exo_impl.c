@@ -13,6 +13,12 @@
 #include "exo.h"
 #include "spinlock.h"
 #include "memlayout.h"
+#include "string.h"
+#include "buf.h"  // For struct buf definition
+// APIC register ID (if not defined elsewhere)
+#ifndef ID
+#define ID      (0x0020/4)   // APIC ID register
+#endif
 #include "mmu.h"
 #include "arch.h"
 #include "trap.h"
@@ -32,7 +38,7 @@ int cpunum(void) {
 }
 
 /* Read CR2 register (page fault linear address) */
-uint64_t rcr2(void) {
+uint64_t read_cr2_impl(void) {
     uint64_t cr2;
     __asm__ volatile("movq %%cr2, %0" : "=r"(cr2));
     return cr2;
@@ -45,7 +51,7 @@ void cpu_pause(void) {
 }
 
 /* Alternative pause implementation */
-void pause(void) {
+void cpu_pause_alt(void) {
     cpu_pause();
 }
 
@@ -61,7 +67,7 @@ exo_cap exo_bind_irq(uint32_t irq) {
     exo_cap cap = {0};
     
     if (irq >= MAX_IRQS) {
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -70,7 +76,7 @@ exo_cap exo_bind_irq(uint32_t irq) {
     /* Check if IRQ is already allocated */
     if (irq_table.allocated[irq]) {
         release(&irq_table.lock);
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -80,16 +86,19 @@ exo_cap exo_bind_irq(uint32_t irq) {
     irq_table.owner_pid[irq] = p->pid;
     
     /* Enable IRQ in I/O APIC */
+    /* TODO: Implement IOAPIC configuration */
+    /*
     if (ioapic) {
         ioapicenable(irq, cpunum());
     }
+    */
     
     release(&irq_table.lock);
     
     /* Return IRQ capability */
-    cap.type = EXO_CAP_IRQ;
+    cap.pa = EXO_CAP_IRQ;  /* Use pa field to store type */
     cap.id = (irq << 16) | 0xCAFE;
-    cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
+    cap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
     cap.owner = p->pid;
     return cap;
 }
@@ -106,7 +115,7 @@ exo_cap exo_alloc_dma(uint32_t channel) {
     exo_cap cap = {0};
     
     if (channel >= MAX_DMA_CHANNELS) {
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -115,7 +124,7 @@ exo_cap exo_alloc_dma(uint32_t channel) {
     /* Check if DMA channel is already allocated */
     if (dma_table.allocated[channel]) {
         release(&dma_table.lock);
-        cap.type = EXO_CAP_INVALID;
+        cap.id = EXO_CAP_INVALID;
         return cap;
     }
     
@@ -143,32 +152,31 @@ exo_cap exo_alloc_dma(uint32_t channel) {
     release(&dma_table.lock);
     
     /* Return DMA capability */
-    cap.type = EXO_CAP_DMA;
+    cap.pa = EXO_CAP_DMA;  /* Use pa field to store type */
     cap.id = (channel << 20) | 0xDEAD;
-    cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
+    cap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
     cap.owner = p->pid;
     return cap;
 }
 
 /* Block device binding for direct disk access */
-int exo_bind_block(void *cap, void *buf, int write) {
-    struct exo_blockcap *bcap = (struct exo_blockcap *)cap;
-    struct buf *b = (struct buf *)buf;
+int exo_bind_block(struct exo_blockcap *bcap, struct buf *buf, int write) {
+    struct buf *b = buf;
     
     if (!bcap || !b) {
         return -1;
     }
     
     /* Validate capability */
-    if (bcap->cap.type != EXO_CAP_BLOCK) {
+    if (bcap->rights != EXO_CAP_BLOCK) {  /* Check capability type */
         return -1;
     }
     
     /* Check permissions */
-    if (write && !(bcap->cap.perm & EXO_CAP_WRITE)) {
+    if (write && !(bcap->rights & EXO_CAP_WRITE)) {
         return -1;
     }
-    if (!write && !(bcap->cap.perm & EXO_CAP_READ)) {
+    if (!write && !(bcap->rights & EXO_CAP_READ)) {
         return -1;
     }
     
@@ -456,13 +464,10 @@ struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t blockno) {
     struct proc *p = myproc();
     
     /* Initialize block capability */
-    bcap.cap.type = EXO_CAP_BLOCK;
-    bcap.cap.id = (dev << 16) | (blockno & 0xFFFF);
-    bcap.cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
-    bcap.cap.owner = p->pid;
-    
     bcap.dev = dev;
     bcap.blockno = blockno;
+    bcap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
+    bcap.owner = p->pid;
     
     return bcap;
 }
@@ -480,9 +485,9 @@ exo_cap exo_alloc_ioport(uint32_t port) {
     
     /* For now, allow any port allocation */
     /* In a real system, we'd track port ownership */
-    cap.type = EXO_CAP_IOPORT;
+    cap.pa = EXO_CAP_IOPORT;  /* Use pa field to store type */
     cap.id = port;
-    cap.perm = EXO_CAP_READ | EXO_CAP_WRITE;
+    cap.rights = EXO_CAP_READ | EXO_CAP_WRITE;
     cap.owner = p->pid;
     
     /* Enable I/O port access in IOPL */
