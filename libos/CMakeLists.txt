@@ -108,10 +108,20 @@ phoenix_add_library(phoenix-libos-registration
 phoenix_add_library(phoenix-libos-affine-runtime
     STATIC
     SOURCES affine_runtime.c
-    INCLUDES 
+    INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
     DEPENDENCIES phoenix-architecture
+)
+
+# Neural network utilities
+phoenix_add_library(phoenix-libos-nn
+    STATIC
+    SOURCES aether_nn.c
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-userland
 )
 
 # ═════════════════════════════════════════════════════════════════════
