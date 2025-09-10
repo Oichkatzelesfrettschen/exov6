@@ -1,5 +1,6 @@
 #include "aether_nn.h"
 
+#include <assert.h>
 #include <math.h>
 #include <stdalign.h>
 #include <stdlib.h>
@@ -57,8 +58,14 @@ void ann_tensor_zero(ann_Tensor t) {
     t.data[i] = 0.0f;
 }
 
+// Copy tensor data with bounds checking to prevent out-of-bounds reads.
+// If the source tensor is smaller than the destination, only the available
+// elements are copied. This defensive approach preserves safety in
+// release builds while still flagging logical errors via assertion.
 void ann_tensor_copy(ann_Tensor dst, ann_Tensor src) {
-  for (ann_usize i = 0; i < dst.n; i++)
+  assert(src.n >= dst.n && "ann_tensor_copy: source tensor too small");
+  ann_usize n = dst.n < src.n ? dst.n : src.n;
+  for (ann_usize i = 0; i < n; i++)
     dst.data[i] = src.data[i];
 }
 
@@ -79,6 +86,8 @@ ann_f32 ann_binary_ce(ann_f32 yhat, ann_f32 y) {
 }
 
 ann_f32 ann_softmax_inplace(ann_f32 *z, ann_usize C) {
+  if (C == 0)
+    return -INFINITY;
   ann_f32 m = z[0];
   for (ann_usize i = 1; i < C; i++)
     if (z[i] > m)
@@ -372,7 +381,12 @@ ann_f32 ann_softmax_ce_from_logits_train(ann_Dense *L, ann_Tensor x,
                                          ann_f32 *out_logits) {
   ann_usize C = L->out;
   ann_f32 zbuf[128];
-  ann_f32 *z = (C <= 128) ? zbuf : (ann_f32 *)malloc(C * sizeof(ann_f32));
+  ann_f32 *z = zbuf;
+  if (C > 128) {
+    z = (ann_f32 *)malloc(C * sizeof(ann_f32));
+    if (!z)
+      return NAN;
+  }
   for (ann_usize o = 0; o < C; o++) {
     const ann_f32 *wrow = &L->W[o * L->in];
     z[o] = L->b[o] + ann_dot(wrow, x.data, L->in);
