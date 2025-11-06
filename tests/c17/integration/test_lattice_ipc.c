@@ -37,6 +37,8 @@ static int test_lattice_ipc_errors(void) {
 }
 
 int main(int argc, char *argv[]) {
+    (void)argc;  /* Unused parameter */
+    (void)argv;  /* Unused parameter */
     int failures = 0;
     
     printf("=== %s Test Suite (C17) ===\n", "Lattice Ipc");

@@ -273,6 +273,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "kernel/CMakeFiles/phoenix-kernel-streams.dir/DependInfo.cmake"
   "kernel/CMakeFiles/phoenix-kernel-crypto.dir/DependInfo.cmake"
   "tools/CMakeFiles/phoenix-metrics.dir/DependInfo.cmake"
+  "tools/CMakeFiles/phoenix-compiler-utils.dir/DependInfo.cmake"
   "tools/CMakeFiles/ncc.dir/DependInfo.cmake"
   "tools/CMakeFiles/analyze-headers.dir/DependInfo.cmake"
   "tools/CMakeFiles/organize-files.dir/DependInfo.cmake"

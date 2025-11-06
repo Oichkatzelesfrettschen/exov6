@@ -14,9 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-//No help, variable specified on the command line.
-ARCH:UNINITIALIZED=x86_64
-
 //Build demonstration programs
 BUILD_DEMOS:BOOL=ON
 

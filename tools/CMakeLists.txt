@@ -4,15 +4,12 @@
 # ANALYSIS AND METRICS TOOLS
 # ═════════════════════════════════════════════════════════════════════
 
-# Phoenix metrics tool
+# Phoenix metrics tool - Host tool, no kernel headers
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/phoenix_metrics.c")
-    phoenix_add_executable(phoenix-metrics
-        SOURCES phoenix_metrics.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
-        DEFINITIONS PHOENIX_METRICS_MAIN
-    )
+    add_executable(phoenix-metrics phoenix_metrics.c)
+    target_include_directories(phoenix-metrics PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    target_compile_definitions(phoenix-metrics PRIVATE PHOENIX_METRICS_MAIN)
+    target_compile_options(phoenix-metrics PRIVATE -Wall -Wextra)
     
     set_target_properties(phoenix-metrics PROPERTIES 
         OUTPUT_NAME "phoenix-metrics"

@@ -107,7 +107,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"development\" \"kernel\" \"tools\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Unspecified\" \"development\" \"kernel\" \"tools\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -817,6 +817,19 @@ phoenix-metrics: cmake_check_build_system
 phoenix-metrics/fast:
 	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/phoenix-metrics.dir/build.make tools/CMakeFiles/phoenix-metrics.dir/build
 .PHONY : phoenix-metrics/fast
+
+#=============================================================================
+# Target rules for targets named phoenix-compiler-utils
+
+# Build rule for target.
+phoenix-compiler-utils: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-compiler-utils
+.PHONY : phoenix-compiler-utils
+
+# fast build rule for target.
+phoenix-compiler-utils/fast:
+	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/phoenix-compiler-utils.dir/build.make tools/CMakeFiles/phoenix-compiler-utils.dir/build
+.PHONY : phoenix-compiler-utils/fast
 
 #=============================================================================
 # Target rules for targets named ncc
@@ -2061,6 +2074,7 @@ help:
 	@echo "... phoenix-arch-x86-modern"
 	@echo "... phoenix-caplib"
 	@echo "... phoenix-chan"
+	@echo "... phoenix-compiler-utils"
 	@echo "... phoenix-ddekit"
 	@echo "... phoenix-door"
 	@echo "... phoenix-kernel-crypto"
