@@ -31,6 +31,8 @@ static int test_exo_recv_timeout(void) {
 }
 
 int main(int argc, char *argv[]) {
+    (void)argc;  /* Unused parameter */
+    (void)argv;  /* Unused parameter */
     int failures = 0;
     
     printf("=== %s Test Suite (C17) ===\n", "Exo Recv Timed");

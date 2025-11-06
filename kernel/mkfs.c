@@ -335,7 +335,7 @@ iappend(uint32_t inum, void *xp, int n)
     }
     n1 = GU_MIN(n, (fbn + 1) * BSIZE - off);
     rsect(x, buf);
-    bcopy(p, buf + off - (fbn * BSIZE), n1);
+    memmove(p, buf + off - (fbn * BSIZE), n1);
     wsect(x, buf);
     n -= n1;
     off += n1;

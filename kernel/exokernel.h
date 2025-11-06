@@ -3,6 +3,9 @@
 #include "exo.h"
 #include "syscall.h"
 
+/* Forward declarations */
+struct buf;
+
 /* Capability access rights. */
 #define EXO_RIGHT_R 0x1
 #define EXO_RIGHT_W 0x2
@@ -33,14 +36,13 @@ exo_cap exo_alloc_page(void);
  * on success and -1 on failure. */
 [[nodiscard]] int exo_unbind_page(exo_cap cap);
 
-/* Allocate a disk block capability for device 'dev'.  On success the
- * capability is stored in *cap and zero is returned. */
-[[nodiscard]] int exo_alloc_block(uint32_t dev, uint32_t rights, exo_blockcap *cap);
+/* Allocate a disk block capability for device 'dev'.  Returns block capability. */
+struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights);
 
 /* Bind the block capability to the buffer 'data'.  If 'write' is non-zero the
  * contents of the buffer are written to disk; otherwise the block is read into
  * the buffer.  Returns 0 on success. */
-[[nodiscard]] int exo_bind_block(exo_blockcap *cap, void *data, int write);
+[[nodiscard]] int exo_bind_block(struct exo_blockcap *cap, struct buf *data, int write);
 
 /* Allocate a capability referencing an I/O port. */
 exo_cap exo_alloc_ioport(uint32_t port);
@@ -50,8 +52,8 @@ exo_cap exo_bind_irq(uint32_t irq);
 
 /* Allocate a DMA buffer page and return a capability for channel 'chan'. */
 exo_cap exo_alloc_dma(uint32_t chan);
-HypervisorCap exo_alloc_hypervisor(void);
-[[nodiscard]] int exo_hv_launch(HypervisorCap hv, const char *path);
+exo_cap exo_alloc_hypervisor(void);
+[[nodiscard]] int hv_launch_guest(exo_cap hv, const char *path);
 
 /* Switch to the context referenced by 'target'.  The caller's context must be
  * saved in a user-managed structure.  The kernel does not choose the next

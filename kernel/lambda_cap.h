@@ -14,6 +14,7 @@
 #include "types.h"
 #include "cap.h"
 #include "spinlock.h"
+#include "lattice_types.h"  /* For octonion_t definition */
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,21 +86,8 @@ struct s_expr {
     struct s_expr *next;      /* For memory management */
 };
 
-/* Octonion structure for 8-dimensional mathematics */
-typedef struct octonion {
-    union {
-        double coeffs[8];           /* e₀, e₁, e₂, e₃, e₄, e₅, e₆, e₇ */
-        struct {
-            double e0, e1, e2, e3;  /* Quaternion-like part */
-            double e4, e5, e6, e7;  /* Octonion extension */
-        };
-        struct {
-            double real;            /* Real part */
-            double i, j, k;         /* Quaternion imaginary */
-            double l, m, n, o;      /* Octonion extension */
-        };
-    };
-} octonion_t;
+/* Octonion type from lattice_types.h - do not redefine */
+/* #include "lattice_types.h" for octonion_t */
 
 /* Superforce-powered Lambda capability integrating all theories */
 struct lambda_cap {

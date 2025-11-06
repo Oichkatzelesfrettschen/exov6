@@ -265,8 +265,19 @@ void q16_mul_vec4(q16_t *result, const q16_t *a, const q16_t *b) {
     __m128i vb = _mm_load_si128((__m128i*)b);
     
     /* Multiply and shift - requires some manipulation for Q16.16 */
+#if defined(__SSE4_1__) || defined(__AVX__)
+    /* SSE4.1 32-bit integer multiply */
     __m128i lo = _mm_mullo_epi32(va, vb);
     __m128i hi = _mm_mulhi_epi32(va, vb);
+#else
+    /* Fallback to scalar for systems without SSE4.1 */
+    q16_t result[4];
+    for (int i = 0; i < 4; i++) {
+        int64_t prod = (int64_t)a[i] * (int64_t)b[i];
+        result[i] = (q16_t)(prod >> 16);
+    }
+    return _mm_loadu_si128((__m128i*)result);
+#endif
     
     /* Combine and shift right by 16 */
     __m128i result_lo = _mm_srli_epi32(lo, 16);
@@ -284,12 +295,27 @@ q16_t q16_dot_vec4(const q16_t *a, const q16_t *b) {
     __m128i va = _mm_load_si128((__m128i*)a);
     __m128i vb = _mm_load_si128((__m128i*)b);
     
-    /* Multiply elements */
+#if defined(__SSE4_1__) || defined(__AVX__)
+    /* Optimized path with SSE4.1 */
     __m128i prod = _mm_mullo_epi32(va, vb);
     
-    /* Horizontal add to sum all elements */
+    /* Horizontal add requires SSE3/SSSE3 */
     __m128i sum1 = _mm_hadd_epi32(prod, prod);
     __m128i sum2 = _mm_hadd_epi32(sum1, sum1);
+#else
+    /* Fallback to scalar */
+    int32_t temp[4];
+    _mm_storeu_si128((__m128i*)temp, va);
+    int32_t tempb[4];
+    _mm_storeu_si128((__m128i*)tempb, vb);
+    
+    q16_t sum = 0;
+    for (int i = 0; i < 4; i++) {
+        int64_t prod = (int64_t)temp[i] * (int64_t)tempb[i];
+        sum += (q16_t)(prod >> 16);
+    }
+    return sum;
+#endif
     
     /* Extract result and shift for Q16.16 */
     int32_t result = _mm_cvtsi128_si32(sum2);
