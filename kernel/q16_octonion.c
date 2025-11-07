@@ -317,25 +317,23 @@ void q16_octonion_sub_simd_x2(q16_octonion_t *result, const q16_octonion_t *a, c
 }
 
 /**
- * Scale two octonions by a scalar using SSE2.
+ * Scale two octonions by a scalar with optimal SIMD path selection
+ * Fallback hierarchy: SSE4.1 → SSE2 → MMX → Scalar
  */
 void q16_octonion_scale_simd_x2(q16_octonion_t *result, const q16_octonion_t *a, q16_t scalar) {
-    __m128i scalar_vec = _mm_set1_epi32(scalar);  /* Broadcast scalar */
+#if defined(__SSE4_1__) || defined(__AVX__)
+    /* SSE4.1 path: Native 32-bit multiply */
+    __m128i scalar_vec = _mm_set1_epi32(scalar);
     
-    /* Process first octonion */
+    /* Process first octonion (8 components = 2 x 128-bit vectors) */
     __m128i a1 = _mm_load_si128((__m128i*)&a[0].v[0]);
-    
-    /* Perform 32x32->64 bit multiplications */
     __m128i lo1 = _mm_mullo_epi32(a1, scalar_vec);
     __m128i hi1 = _mm_mulhi_epi32(a1, scalar_vec);
-    
-    /* Combine and shift for Q16.16 result */
     __m128i result1_lo = _mm_srli_epi32(lo1, 16);
     __m128i result1_hi = _mm_slli_epi32(hi1, 16);
     __m128i result1 = _mm_or_si128(result1_lo, result1_hi);
     _mm_store_si128((__m128i*)&result[0].v[0], result1);
     
-    /* Continue for remaining components... */
     __m128i a2 = _mm_load_si128((__m128i*)&a[0].v[4]);
     __m128i lo2 = _mm_mullo_epi32(a2, scalar_vec);
     __m128i hi2 = _mm_mulhi_epi32(a2, scalar_vec);
@@ -360,6 +358,72 @@ void q16_octonion_scale_simd_x2(q16_octonion_t *result, const q16_octonion_t *a,
     __m128i result4_hi = _mm_slli_epi32(hi4, 16);
     __m128i result4 = _mm_or_si128(result4_lo, result4_hi);
     _mm_store_si128((__m128i*)&result[1].v[4], result4);
+    
+#elif defined(__SSE2__)
+    /* SSE2 path: 16-bit multiply with unpacking */
+    __m128i scalar_vec = _mm_set1_epi32(scalar);
+    __m128i scalar_lo = _mm_and_si128(scalar_vec, _mm_set1_epi32(0xFFFF));
+    __m128i scalar_hi = _mm_srli_epi32(scalar_vec, 16);
+    
+    for (int oct = 0; oct < 2; oct++) {
+        for (int vec = 0; vec < 2; vec++) {
+            __m128i va = _mm_load_si128((__m128i*)&a[oct].v[vec * 4]);
+            
+            __m128i va_lo = _mm_and_si128(va, _mm_set1_epi32(0xFFFF));
+            __m128i va_hi = _mm_srli_epi32(va, 16);
+            
+            __m128i prod_ll = _mm_mullo_epi16(va_lo, scalar_lo);
+            __m128i prod_lh = _mm_mullo_epi16(va_lo, scalar_hi);
+            __m128i prod_hl = _mm_mullo_epi16(va_hi, scalar_lo);
+            __m128i prod_hh = _mm_mullo_epi16(va_hi, scalar_hi);
+            
+            __m128i mid = _mm_add_epi32(prod_lh, prod_hl);
+            __m128i mid_shifted = _mm_add_epi32(_mm_srli_epi32(prod_ll, 16), mid);
+            __m128i high_shifted = _mm_slli_epi32(prod_hh, 16);
+            __m128i vr = _mm_add_epi32(high_shifted, mid_shifted);
+            
+            _mm_store_si128((__m128i*)&result[oct].v[vec * 4], vr);
+        }
+    }
+    
+#elif defined(__MMX__)
+    /* MMX path: Process 2 components at a time */
+    for (int oct = 0; oct < 2; oct++) {
+        for (int i = 0; i < 4; i++) {
+            __m64 *ma = (__m64*)&a[oct].v[i * 2];
+            __m64 *mr = (__m64*)&result[oct].v[i * 2];
+            __m64 scalar_vec = _mm_set1_pi32(scalar);
+            
+            __m64 va = *ma;
+            __m64 va_lo = _mm_and_si64(va, _mm_set1_pi32(0xFFFF));
+            __m64 va_hi = _mm_srli_pi32(va, 16);
+            __m64 scalar_lo = _mm_and_si64(scalar_vec, _mm_set1_pi32(0xFFFF));
+            __m64 scalar_hi = _mm_srli_pi32(scalar_vec, 16);
+            
+            __m64 prod_ll = _mm_mullo_pi16(va_lo, scalar_lo);
+            __m64 prod_lh = _mm_mullo_pi16(va_lo, scalar_hi);
+            __m64 prod_hl = _mm_mullo_pi16(va_hi, scalar_lo);
+            __m64 prod_hh = _mm_mullo_pi16(va_hi, scalar_hi);
+            
+            __m64 mid = _mm_add_pi32(prod_lh, prod_hl);
+            __m64 mid_shifted = _mm_add_pi32(_mm_srli_pi32(prod_ll, 16), mid);
+            __m64 high_shifted = _mm_slli_pi32(prod_hh, 16);
+            __m64 vr = _mm_add_pi32(high_shifted, mid_shifted);
+            
+            *mr = vr;
+        }
+    }
+    _mm_empty();
+    
+#else
+    /* Scalar fallback */
+    for (int oct = 0; oct < 2; oct++) {
+        for (int i = 0; i < 8; i++) {
+            int64_t prod = (int64_t)a[oct].v[i] * (int64_t)scalar;
+            result[oct].v[i] = (q16_t)(prod >> 16);
+        }
+    }
+#endif
 }
 
 #endif /* __SSE2__ */

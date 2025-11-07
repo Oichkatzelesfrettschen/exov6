@@ -12,6 +12,7 @@
  */
 
 #include <stdint.h>
+#include <stddef.h>  /* For size_t */
 #include <stdbool.h>
 #include "cap.h"
 

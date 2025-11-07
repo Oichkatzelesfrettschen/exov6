@@ -832,6 +832,19 @@ phoenix-compiler-utils/fast:
 .PHONY : phoenix-compiler-utils/fast
 
 #=============================================================================
+# Target rules for targets named mkfs
+
+# Build rule for target.
+mkfs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mkfs
+.PHONY : mkfs
+
+# fast build rule for target.
+mkfs/fast:
+	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/mkfs.dir/build.make tools/CMakeFiles/mkfs.dir/build
+.PHONY : mkfs/fast
+
+#=============================================================================
 # Target rules for targets named ncc
 
 # Build rule for target.
@@ -2068,6 +2081,7 @@ help:
 	@echo "... microbench-lattice_pipe_bench"
 	@echo "... microbench-proc_cap_test"
 	@echo "... microkernel-rcrs-demo"
+	@echo "... mkfs"
 	@echo "... msgqueue-demo"
 	@echo "... ncc"
 	@echo "... phoenix-arch-x86-legacy"

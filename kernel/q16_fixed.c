@@ -257,69 +257,193 @@ void q16_add_vec4(q16_t *result, const q16_t *a, const q16_t *b) {
 }
 
 /**
- * Multiply 4 Q16.16 values in parallel
- * Cost: 3-5 cycles throughput
+ * Multiply 4 Q16.16 values in parallel with optimal SIMD path selection
+ * Fallback hierarchy: SSE4.1 → SSE2 → MMX → Scalar
+ * Cost: 3-5 cycles (SSE4.1), 8-12 cycles (SSE2), 15-20 cycles (MMX), 25+ cycles (scalar)
  */
 void q16_mul_vec4(q16_t *result, const q16_t *a, const q16_t *b) {
+#if defined(__SSE4_1__) || defined(__AVX__)
+    /* SSE4.1 path: Native 32-bit integer multiply (fastest) */
     __m128i va = _mm_load_si128((__m128i*)a);
     __m128i vb = _mm_load_si128((__m128i*)b);
     
-    /* Multiply and shift - requires some manipulation for Q16.16 */
-#if defined(__SSE4_1__) || defined(__AVX__)
-    /* SSE4.1 32-bit integer multiply */
     __m128i lo = _mm_mullo_epi32(va, vb);
     __m128i hi = _mm_mulhi_epi32(va, vb);
-#else
-    /* Fallback to scalar for systems without SSE4.1 */
-    q16_t result[4];
-    for (int i = 0; i < 4; i++) {
-        int64_t prod = (int64_t)a[i] * (int64_t)b[i];
-        result[i] = (q16_t)(prod >> 16);
-    }
-    return _mm_loadu_si128((__m128i*)result);
-#endif
     
-    /* Combine and shift right by 16 */
+    /* Combine and shift right by 16 for Q16.16 */
     __m128i result_lo = _mm_srli_epi32(lo, 16);
     __m128i result_hi = _mm_slli_epi32(hi, 16);
     __m128i vr = _mm_or_si128(result_lo, result_hi);
     
     _mm_store_si128((__m128i*)result, vr);
-}
-
-/**
- * Compute dot product of two Q16.16 vectors
- * Cost: ~10 cycles for 4 elements
- */
-q16_t q16_dot_vec4(const q16_t *a, const q16_t *b) {
+    
+#elif defined(__SSE2__)
+    /* SSE2 path: Use 16-bit multiply with unpacking */
     __m128i va = _mm_load_si128((__m128i*)a);
     __m128i vb = _mm_load_si128((__m128i*)b);
     
+    /* Split into high/low 16-bit parts */
+    __m128i va_lo = _mm_and_si128(va, _mm_set1_epi32(0xFFFF));
+    __m128i va_hi = _mm_srli_epi32(va, 16);
+    __m128i vb_lo = _mm_and_si128(vb, _mm_set1_epi32(0xFFFF));
+    __m128i vb_hi = _mm_srli_epi32(vb, 16);
+    
+    /* (a_hi * b_hi) << 32 + (a_hi * b_lo + a_lo * b_hi) << 16 + a_lo * b_lo */
+    /* For Q16.16: result = (a * b) >> 16 */
+    __m128i prod_ll = _mm_mullo_epi16(va_lo, vb_lo);  /* Low * Low */
+    __m128i prod_lh = _mm_mullo_epi16(va_lo, vb_hi);  /* Low * High */
+    __m128i prod_hl = _mm_mullo_epi16(va_hi, vb_lo);  /* High * Low */
+    __m128i prod_hh = _mm_mullo_epi16(va_hi, vb_hi);  /* High * High */
+    
+    /* Combine: result = (prod_hh << 16) + prod_lh + prod_hl + (prod_ll >> 16) */
+    __m128i mid = _mm_add_epi32(prod_lh, prod_hl);
+    __m128i mid_shifted = _mm_add_epi32(_mm_srli_epi32(prod_ll, 16), mid);
+    __m128i high_shifted = _mm_slli_epi32(prod_hh, 16);
+    __m128i vr = _mm_add_epi32(high_shifted, mid_shifted);
+    
+    _mm_store_si128((__m128i*)result, vr);
+    
+#elif defined(__MMX__)
+    /* MMX path: 64-bit SIMD, process 2 at a time */
+    __m64 *ma = (__m64*)a;
+    __m64 *mb = (__m64*)b;
+    __m64 *mr = (__m64*)result;
+    
+    for (int i = 0; i < 2; i++) {
+        /* Load 2 Q16.16 values */
+        __m64 va = ma[i];
+        __m64 vb = mb[i];
+        
+        /* 32-bit multiply via 16-bit operations */
+        __m64 va_lo = _mm_and_si64(va, _mm_set1_pi32(0xFFFF));
+        __m64 va_hi = _mm_srli_pi32(va, 16);
+        __m64 vb_lo = _mm_and_si64(vb, _mm_set1_pi32(0xFFFF));
+        __m64 vb_hi = _mm_srli_pi32(vb, 16);
+        
+        __m64 prod_ll = _mm_mullo_pi16(va_lo, vb_lo);
+        __m64 prod_lh = _mm_mullo_pi16(va_lo, vb_hi);
+        __m64 prod_hl = _mm_mullo_pi16(va_hi, vb_lo);
+        __m64 prod_hh = _mm_mullo_pi16(va_hi, vb_hi);
+        
+        __m64 mid = _mm_add_pi32(prod_lh, prod_hl);
+        __m64 mid_shifted = _mm_add_pi32(_mm_srli_pi32(prod_ll, 16), mid);
+        __m64 high_shifted = _mm_slli_pi32(prod_hh, 16);
+        __m64 vr = _mm_add_pi32(high_shifted, mid_shifted);
+        
+        mr[i] = vr;
+    }
+    _mm_empty();  /* Required after MMX operations */
+    
+#else
+    /* Scalar fallback: Portable C implementation */
+    for (int i = 0; i < 4; i++) {
+        int64_t prod = (int64_t)a[i] * (int64_t)b[i];
+        result[i] = (q16_t)(prod >> 16);
+    }
+#endif
+}
+
+/**
+ * Compute dot product of two Q16.16 vectors with optimal SIMD path
+ * Fallback hierarchy: SSE4.1 → SSE3 → SSE2 → MMX → Scalar
+ * Cost: ~10 cycles (SSE4.1), ~15 cycles (SSE3), ~20 cycles (SSE2), ~30 cycles (MMX), ~40 cycles (scalar)
+ */
+q16_t q16_dot_vec4(const q16_t *a, const q16_t *b) {
 #if defined(__SSE4_1__) || defined(__AVX__)
-    /* Optimized path with SSE4.1 */
+    /* SSE4.1 path with native 32-bit multiply */
+    __m128i va = _mm_load_si128((__m128i*)a);
+    __m128i vb = _mm_load_si128((__m128i*)b);
+    
     __m128i prod = _mm_mullo_epi32(va, vb);
     
-    /* Horizontal add requires SSE3/SSSE3 */
+    #if defined(__SSSE3__)
+    /* Horizontal add available in SSE3/SSSE3 */
     __m128i sum1 = _mm_hadd_epi32(prod, prod);
     __m128i sum2 = _mm_hadd_epi32(sum1, sum1);
-#else
-    /* Fallback to scalar */
-    int32_t temp[4];
-    _mm_storeu_si128((__m128i*)temp, va);
-    int32_t tempb[4];
-    _mm_storeu_si128((__m128i*)tempb, vb);
     
+    /* Extract result and shift for Q16.16 */
+    int32_t result_i32 = _mm_cvtsi128_si32(sum2);
+    return (q16_t)(result_i32 >> 16);
+    #else
+    /* Manual horizontal add for SSE4.1 without SSSE3 */
+    int32_t temp[4];
+    _mm_storeu_si128((__m128i*)temp, prod);
+    int64_t sum = (int64_t)temp[0] + temp[1] + temp[2] + temp[3];
+    return (q16_t)(sum >> 16);
+    #endif
+    
+#elif defined(__SSE2__)
+    /* SSE2 path: Use 16-bit multiply with manual accumulation */
+    __m128i va = _mm_load_si128((__m128i*)a);
+    __m128i vb = _mm_load_si128((__m128i*)b);
+    
+    /* Split and multiply */
+    __m128i va_lo = _mm_and_si128(va, _mm_set1_epi32(0xFFFF));
+    __m128i va_hi = _mm_srli_epi32(va, 16);
+    __m128i vb_lo = _mm_and_si128(vb, _mm_set1_epi32(0xFFFF));
+    __m128i vb_hi = _mm_srli_epi32(vb, 16);
+    
+    __m128i prod_ll = _mm_mullo_epi16(va_lo, vb_lo);
+    __m128i prod_lh = _mm_mullo_epi16(va_lo, vb_hi);
+    __m128i prod_hl = _mm_mullo_epi16(va_hi, vb_lo);
+    __m128i prod_hh = _mm_mullo_epi16(va_hi, vb_hi);
+    
+    /* Combine products */
+    __m128i mid = _mm_add_epi32(prod_lh, prod_hl);
+    __m128i mid_shifted = _mm_add_epi32(_mm_srli_epi32(prod_ll, 16), mid);
+    __m128i high_shifted = _mm_slli_epi32(prod_hh, 16);
+    __m128i prod = _mm_add_epi32(high_shifted, mid_shifted);
+    
+    /* Manual horizontal sum */
+    int32_t temp[4];
+    _mm_storeu_si128((__m128i*)temp, prod);
+    int64_t sum = (int64_t)temp[0] + temp[1] + temp[2] + temp[3];
+    return (q16_t)(sum >> 16);
+    
+#elif defined(__MMX__)
+    /* MMX path */
+    q16_t sum = 0;
+    __m64 *ma = (__m64*)a;
+    __m64 *mb = (__m64*)b;
+    
+    for (int i = 0; i < 2; i++) {
+        __m64 va = ma[i];
+        __m64 vb = mb[i];
+        
+        /* 32-bit multiply via 16-bit operations */
+        __m64 va_lo = _mm_and_si64(va, _mm_set1_pi32(0xFFFF));
+        __m64 va_hi = _mm_srli_pi32(va, 16);
+        __m64 vb_lo = _mm_and_si64(vb, _mm_set1_pi32(0xFFFF));
+        __m64 vb_hi = _mm_srli_pi32(vb, 16);
+        
+        __m64 prod_ll = _mm_mullo_pi16(va_lo, vb_lo);
+        __m64 prod_lh = _mm_mullo_pi16(va_lo, vb_hi);
+        __m64 prod_hl = _mm_mullo_pi16(va_hi, vb_lo);
+        __m64 prod_hh = _mm_mullo_pi16(va_hi, vb_hi);
+        
+        __m64 mid = _mm_add_pi32(prod_lh, prod_hl);
+        __m64 mid_shifted = _mm_add_pi32(_mm_srli_pi32(prod_ll, 16), mid);
+        __m64 high_shifted = _mm_slli_pi32(prod_hh, 16);
+        __m64 prod = _mm_add_pi32(high_shifted, mid_shifted);
+        
+        /* Extract and accumulate */
+        int32_t temp[2];
+        *(__m64*)temp = prod;
+        sum += (q16_t)((int64_t)temp[0] >> 16);
+        sum += (q16_t)((int64_t)temp[1] >> 16);
+    }
+    _mm_empty();
+    return sum;
+    
+#else
+    /* Scalar fallback */
     q16_t sum = 0;
     for (int i = 0; i < 4; i++) {
-        int64_t prod = (int64_t)temp[i] * (int64_t)tempb[i];
+        int64_t prod = (int64_t)a[i] * (int64_t)b[i];
         sum += (q16_t)(prod >> 16);
     }
     return sum;
 #endif
-    
-    /* Extract result and shift for Q16.16 */
-    int32_t result = _mm_cvtsi128_si32(sum2);
-    return result >> Q16_SHIFT;
 }
 
 #endif /* __SSE2__ */

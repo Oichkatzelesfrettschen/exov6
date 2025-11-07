@@ -101,6 +101,19 @@ endif()
 # BUILD TOOLS
 # ═════════════════════════════════════════════════════════════════════
 
+# mkfs - File system creation tool (host tool)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/mkfs_standalone.c")
+    add_executable(mkfs mkfs_standalone.c)
+    target_include_directories(mkfs PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    )
+    set_target_properties(mkfs PROPERTIES 
+        OUTPUT_NAME "mkfs"
+        PREFIX ""
+    )
+endif()
+
 # Network Compiler Compiler (if needed)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncc.c")
     add_executable(ncc ncc.c)

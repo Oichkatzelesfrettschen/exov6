@@ -649,12 +649,14 @@ tests/c17/unit/clean: tests/c17/unit/CMakeFiles/unit_tests.dir/clean
 # Recursive "all" directory target.
 tools/all: tools/CMakeFiles/phoenix-metrics.dir/all
 tools/all: tools/CMakeFiles/phoenix-compiler-utils.dir/all
+tools/all: tools/CMakeFiles/mkfs.dir/all
 tools/all: tools/CMakeFiles/ncc.dir/all
 .PHONY : tools/all
 
 # Recursive "codegen" directory target.
 tools/codegen: tools/CMakeFiles/phoenix-metrics.dir/codegen
 tools/codegen: tools/CMakeFiles/phoenix-compiler-utils.dir/codegen
+tools/codegen: tools/CMakeFiles/mkfs.dir/codegen
 tools/codegen: tools/CMakeFiles/ncc.dir/codegen
 .PHONY : tools/codegen
 
@@ -665,6 +667,7 @@ tools/preinstall:
 # Recursive "clean" directory target.
 tools/clean: tools/CMakeFiles/phoenix-metrics.dir/clean
 tools/clean: tools/CMakeFiles/phoenix-compiler-utils.dir/clean
+tools/clean: tools/CMakeFiles/mkfs.dir/clean
 tools/clean: tools/CMakeFiles/ncc.dir/clean
 tools/clean: tools/CMakeFiles/analyze-headers.dir/clean
 tools/clean: tools/CMakeFiles/organize-files.dir/clean
@@ -831,12 +834,12 @@ src/arch/CMakeFiles/phoenix-arch-x86-legacy.dir/clean:
 src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/all: src/arch/CMakeFiles/phoenix-simd.dir/all
 	$(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-arch-x86-modern"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=28 "Built target phoenix-arch-x86-modern"
 .PHONY : src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/all
 
 # Build rule for subdir invocation for target.
 src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/rule
@@ -848,7 +851,7 @@ phoenix-arch-x86-modern: src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/rule
 # codegen rule for target.
 src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-arch-x86-modern"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=28 "Finished codegen for target phoenix-arch-x86-modern"
 .PHONY : src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/codegen
 
 # clean rule for target.
@@ -865,7 +868,7 @@ src/ddekit/CMakeFiles/phoenix-ddekit.dir/all: src/arch/CMakeFiles/phoenix-arch-x
 src/ddekit/CMakeFiles/phoenix-ddekit.dir/all: src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/all
 	$(MAKE) $(MAKESILENT) -f src/ddekit/CMakeFiles/phoenix-ddekit.dir/build.make src/ddekit/CMakeFiles/phoenix-ddekit.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/ddekit/CMakeFiles/phoenix-ddekit.dir/build.make src/ddekit/CMakeFiles/phoenix-ddekit.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=30 "Built target phoenix-ddekit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-ddekit"
 .PHONY : src/ddekit/CMakeFiles/phoenix-ddekit.dir/all
 
 # Build rule for subdir invocation for target.
@@ -882,7 +885,7 @@ phoenix-ddekit: src/ddekit/CMakeFiles/phoenix-ddekit.dir/rule
 # codegen rule for target.
 src/ddekit/CMakeFiles/phoenix-ddekit.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src/ddekit/CMakeFiles/phoenix-ddekit.dir/build.make src/ddekit/CMakeFiles/phoenix-ddekit.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=30 "Finished codegen for target phoenix-ddekit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-ddekit"
 .PHONY : src/ddekit/CMakeFiles/phoenix-ddekit.dir/codegen
 
 # clean rule for target.
@@ -1057,12 +1060,12 @@ user/CMakeFiles/phoenix-printf.dir/clean:
 user/CMakeFiles/phoenix-caplib.dir/all: user/CMakeFiles/phoenix-ulib.dir/all
 	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/depend
 	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=28 "Built target phoenix-caplib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-caplib"
 .PHONY : user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/phoenix-caplib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-caplib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/phoenix-caplib.dir/rule
@@ -1074,7 +1077,7 @@ phoenix-caplib: user/CMakeFiles/phoenix-caplib.dir/rule
 # codegen rule for target.
 user/CMakeFiles/phoenix-caplib.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=28 "Finished codegen for target phoenix-caplib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-caplib"
 .PHONY : user/CMakeFiles/phoenix-caplib.dir/codegen
 
 # clean rule for target.
@@ -1095,7 +1098,7 @@ user/CMakeFiles/phoenix-chan.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/phoenix-chan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-chan.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/phoenix-chan.dir/rule
@@ -1128,7 +1131,7 @@ user/CMakeFiles/phoenix-door.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/phoenix-door.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-door.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/phoenix-door.dir/rule
@@ -1162,7 +1165,7 @@ user/CMakeFiles/phoenix-math-core.dir/all: src/arch/CMakeFiles/phoenix-arch-x86-
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/phoenix-math-core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-math-core.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/phoenix-math-core.dir/rule
@@ -1191,7 +1194,7 @@ user/CMakeFiles/phoenix-user-sched.dir/all: user/CMakeFiles/phoenix-caplib.dir/a
 user/CMakeFiles/phoenix-user-sched.dir/all: user/CMakeFiles/phoenix-chan.dir/all
 	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/depend
 	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-user-sched"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=52 "Built target phoenix-user-sched"
 .PHONY : user/CMakeFiles/phoenix-user-sched.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1208,7 +1211,7 @@ phoenix-user-sched: user/CMakeFiles/phoenix-user-sched.dir/rule
 # codegen rule for target.
 user/CMakeFiles/phoenix-user-sched.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-user-sched"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=52 "Finished codegen for target phoenix-user-sched"
 .PHONY : user/CMakeFiles/phoenix-user-sched.dir/codegen
 
 # clean rule for target.
@@ -1231,7 +1234,7 @@ user/CMakeFiles/user-cat.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-cat.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-cat.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-cat.dir/rule
@@ -1266,7 +1269,7 @@ user/CMakeFiles/user-echo.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-echo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-echo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-echo.dir/rule
@@ -1301,7 +1304,7 @@ user/CMakeFiles/user-grep.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-grep.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-grep.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-grep.dir/rule
@@ -1336,7 +1339,7 @@ user/CMakeFiles/user-init.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-init.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-init.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-init.dir/rule
@@ -1371,7 +1374,7 @@ user/CMakeFiles/user-kill.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-kill.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-kill.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-kill.dir/rule
@@ -1406,7 +1409,7 @@ user/CMakeFiles/user-ln.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-ln.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-ln.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-ln.dir/rule
@@ -1441,7 +1444,7 @@ user/CMakeFiles/user-ls.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-ls.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-ls.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-ls.dir/rule
@@ -1476,7 +1479,7 @@ user/CMakeFiles/user-mkdir.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-mkdir.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-mkdir.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-mkdir.dir/rule
@@ -1511,7 +1514,7 @@ user/CMakeFiles/user-rm.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-rm.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-rm.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-rm.dir/rule
@@ -1546,7 +1549,7 @@ user/CMakeFiles/user-sh.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-sh.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-sh.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-sh.dir/rule
@@ -1581,7 +1584,7 @@ user/CMakeFiles/user-wc.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-wc.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-wc.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-wc.dir/rule
@@ -1616,7 +1619,7 @@ user/CMakeFiles/user-zombie.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-zombie.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-zombie.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-zombie.dir/rule
@@ -1653,7 +1656,7 @@ user/CMakeFiles/user-fileserver.dir/all: user/CMakeFiles/phoenix-door.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-fileserver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-fileserver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-fileserver.dir/rule
@@ -1688,7 +1691,7 @@ user/CMakeFiles/user-usertests.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-usertests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-usertests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-usertests.dir/rule
@@ -1723,7 +1726,7 @@ user/CMakeFiles/user-forktest.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-forktest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-forktest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-forktest.dir/rule
@@ -1758,7 +1761,7 @@ user/CMakeFiles/user-stressfs.dir/all: user/CMakeFiles/phoenix-caplib.dir/all
 
 # Build rule for subdir invocation for target.
 user/CMakeFiles/user-stressfs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-stressfs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : user/CMakeFiles/user-stressfs.dir/rule
@@ -1800,7 +1803,7 @@ libos/CMakeFiles/phoenix-libos-fs.dir/all: user/CMakeFiles/phoenix-user-sched.di
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-fs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-fs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-fs.dir/rule
@@ -1843,7 +1846,7 @@ libos/CMakeFiles/phoenix-libos-file.dir/all: libos/CMakeFiles/phoenix-libos-fs.d
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-file.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-file.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-file.dir/rule
@@ -1885,7 +1888,7 @@ libos/CMakeFiles/phoenix-libos-posix.dir/all: user/CMakeFiles/phoenix-user-sched
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-posix.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-posix.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-posix.dir/rule
@@ -1928,7 +1931,7 @@ libos/CMakeFiles/phoenix-libos-termios.dir/all: libos/CMakeFiles/phoenix-libos-p
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-termios.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-termios.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-termios.dir/rule
@@ -1970,7 +1973,7 @@ libos/CMakeFiles/phoenix-libos-ipc.dir/all: user/CMakeFiles/phoenix-user-sched.d
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-ipc.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-ipc.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-ipc.dir/rule
@@ -2013,7 +2016,7 @@ libos/CMakeFiles/phoenix-libos-service.dir/all: libos/CMakeFiles/phoenix-libos-i
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-service.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-service.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-service.dir/rule
@@ -2055,7 +2058,7 @@ libos/CMakeFiles/phoenix-libos-cap.dir/all: user/CMakeFiles/phoenix-user-sched.d
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-cap.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-cap.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-cap.dir/rule
@@ -2098,7 +2101,7 @@ libos/CMakeFiles/phoenix-libos-msg-router.dir/all: libos/CMakeFiles/phoenix-libo
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-msg-router.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-msg-router.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-msg-router.dir/rule
@@ -2142,7 +2145,7 @@ libos/CMakeFiles/phoenix-libos-resource-account.dir/all: libos/CMakeFiles/phoeni
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-resource-account.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-resource-account.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-resource-account.dir/rule
@@ -2186,7 +2189,7 @@ libos/CMakeFiles/phoenix-libos-registration.dir/all: libos/CMakeFiles/phoenix-li
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-registration.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-registration.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-registration.dir/rule
@@ -2220,7 +2223,7 @@ libos/CMakeFiles/phoenix-libos-affine-runtime.dir/all: src/arch/CMakeFiles/phoen
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-affine-runtime.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-affine-runtime.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-affine-runtime.dir/rule
@@ -2262,7 +2265,7 @@ libos/CMakeFiles/phoenix-libos-nn.dir/all: user/CMakeFiles/phoenix-user-sched.di
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-nn.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-nn.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-nn.dir/rule
@@ -2338,7 +2341,7 @@ libos/CMakeFiles/phoenix-libos-sched.dir/all: libos/CMakeFiles/phoenix-libos-ser
 
 # Build rule for subdir invocation for target.
 libos/CMakeFiles/phoenix-libos-sched.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : libos/CMakeFiles/phoenix-libos-sched.dir/rule
@@ -2406,7 +2409,7 @@ kernel/CMakeFiles/phoenix-kernel-security.dir/all: src/arch/CMakeFiles/phoenix-a
 kernel/CMakeFiles/phoenix-kernel-security.dir/all: src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/all
 	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/phoenix-kernel-security.dir/build.make kernel/CMakeFiles/phoenix-kernel-security.dir/depend
 	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/phoenix-kernel-security.dir/build.make kernel/CMakeFiles/phoenix-kernel-security.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=32 "Built target phoenix-kernel-security"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-kernel-security"
 .PHONY : kernel/CMakeFiles/phoenix-kernel-security.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2423,7 +2426,7 @@ phoenix-kernel-security: kernel/CMakeFiles/phoenix-kernel-security.dir/rule
 # codegen rule for target.
 kernel/CMakeFiles/phoenix-kernel-security.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/phoenix-kernel-security.dir/build.make kernel/CMakeFiles/phoenix-kernel-security.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=32 "Finished codegen for target phoenix-kernel-security"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-kernel-security"
 .PHONY : kernel/CMakeFiles/phoenix-kernel-security.dir/codegen
 
 # clean rule for target.
@@ -2445,7 +2448,7 @@ kernel/CMakeFiles/phoenix-kernel-streams.dir/all: src/arch/CMakeFiles/phoenix-ar
 
 # Build rule for subdir invocation for target.
 kernel/CMakeFiles/phoenix-kernel-streams.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kernel/CMakeFiles/phoenix-kernel-streams.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : kernel/CMakeFiles/phoenix-kernel-streams.dir/rule
@@ -2474,12 +2477,12 @@ kernel/CMakeFiles/phoenix-kernel-crypto.dir/all: src/arch/CMakeFiles/phoenix-arc
 kernel/CMakeFiles/phoenix-kernel-crypto.dir/all: src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/all
 	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/phoenix-kernel-crypto.dir/build.make kernel/CMakeFiles/phoenix-kernel-crypto.dir/depend
 	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/phoenix-kernel-crypto.dir/build.make kernel/CMakeFiles/phoenix-kernel-crypto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-kernel-crypto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=32 "Built target phoenix-kernel-crypto"
 .PHONY : kernel/CMakeFiles/phoenix-kernel-crypto.dir/all
 
 # Build rule for subdir invocation for target.
 kernel/CMakeFiles/phoenix-kernel-crypto.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kernel/CMakeFiles/phoenix-kernel-crypto.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : kernel/CMakeFiles/phoenix-kernel-crypto.dir/rule
@@ -2491,7 +2494,7 @@ phoenix-kernel-crypto: kernel/CMakeFiles/phoenix-kernel-crypto.dir/rule
 # codegen rule for target.
 kernel/CMakeFiles/phoenix-kernel-crypto.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/phoenix-kernel-crypto.dir/build.make kernel/CMakeFiles/phoenix-kernel-crypto.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-kernel-crypto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=32 "Finished codegen for target phoenix-kernel-crypto"
 .PHONY : kernel/CMakeFiles/phoenix-kernel-crypto.dir/codegen
 
 # clean rule for target.
@@ -2538,12 +2541,12 @@ tools/CMakeFiles/phoenix-metrics.dir/clean:
 tools/CMakeFiles/phoenix-compiler-utils.dir/all:
 	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/phoenix-compiler-utils.dir/build.make tools/CMakeFiles/phoenix-compiler-utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/phoenix-compiler-utils.dir/build.make tools/CMakeFiles/phoenix-compiler-utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target phoenix-compiler-utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=30 "Built target phoenix-compiler-utils"
 .PHONY : tools/CMakeFiles/phoenix-compiler-utils.dir/all
 
 # Build rule for subdir invocation for target.
 tools/CMakeFiles/phoenix-compiler-utils.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tools/CMakeFiles/phoenix-compiler-utils.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tools/CMakeFiles/phoenix-compiler-utils.dir/rule
@@ -2555,13 +2558,45 @@ phoenix-compiler-utils: tools/CMakeFiles/phoenix-compiler-utils.dir/rule
 # codegen rule for target.
 tools/CMakeFiles/phoenix-compiler-utils.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/phoenix-compiler-utils.dir/build.make tools/CMakeFiles/phoenix-compiler-utils.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target phoenix-compiler-utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=30 "Finished codegen for target phoenix-compiler-utils"
 .PHONY : tools/CMakeFiles/phoenix-compiler-utils.dir/codegen
 
 # clean rule for target.
 tools/CMakeFiles/phoenix-compiler-utils.dir/clean:
 	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/phoenix-compiler-utils.dir/build.make tools/CMakeFiles/phoenix-compiler-utils.dir/clean
 .PHONY : tools/CMakeFiles/phoenix-compiler-utils.dir/clean
+
+#=============================================================================
+# Target rules for target tools/CMakeFiles/mkfs.dir
+
+# All Build rule for target.
+tools/CMakeFiles/mkfs.dir/all:
+	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/mkfs.dir/build.make tools/CMakeFiles/mkfs.dir/depend
+	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/mkfs.dir/build.make tools/CMakeFiles/mkfs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=25 "Built target mkfs"
+.PHONY : tools/CMakeFiles/mkfs.dir/all
+
+# Build rule for subdir invocation for target.
+tools/CMakeFiles/mkfs.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tools/CMakeFiles/mkfs.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
+.PHONY : tools/CMakeFiles/mkfs.dir/rule
+
+# Convenience name for target.
+mkfs: tools/CMakeFiles/mkfs.dir/rule
+.PHONY : mkfs
+
+# codegen rule for target.
+tools/CMakeFiles/mkfs.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/mkfs.dir/build.make tools/CMakeFiles/mkfs.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=25 "Finished codegen for target mkfs"
+.PHONY : tools/CMakeFiles/mkfs.dir/codegen
+
+# clean rule for target.
+tools/CMakeFiles/mkfs.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tools/CMakeFiles/mkfs.dir/build.make tools/CMakeFiles/mkfs.dir/clean
+.PHONY : tools/CMakeFiles/mkfs.dir/clean
 
 #=============================================================================
 # Target rules for target tools/CMakeFiles/ncc.dir
@@ -2575,7 +2610,7 @@ tools/CMakeFiles/ncc.dir/all: tools/CMakeFiles/phoenix-compiler-utils.dir/all
 
 # Build rule for subdir invocation for target.
 tools/CMakeFiles/ncc.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tools/CMakeFiles/ncc.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tools/CMakeFiles/ncc.dir/rule
@@ -2754,7 +2789,7 @@ demos/CMakeFiles/msgqueue-demo.dir/all: libos/CMakeFiles/phoenix-libos-baremetal
 demos/CMakeFiles/msgqueue-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/msgqueue-demo.dir/build.make demos/CMakeFiles/msgqueue-demo.dir/depend
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/msgqueue-demo.dir/build.make demos/CMakeFiles/msgqueue-demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=25 "Built target msgqueue-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target msgqueue-demo"
 .PHONY : demos/CMakeFiles/msgqueue-demo.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2771,7 +2806,7 @@ msgqueue-demo: demos/CMakeFiles/msgqueue-demo.dir/rule
 # codegen rule for target.
 demos/CMakeFiles/msgqueue-demo.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/msgqueue-demo.dir/build.make demos/CMakeFiles/msgqueue-demo.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=25 "Finished codegen for target msgqueue-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target msgqueue-demo"
 .PHONY : demos/CMakeFiles/msgqueue-demo.dir/codegen
 
 # clean rule for target.
@@ -2815,7 +2850,7 @@ demos/CMakeFiles/fib-big-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/fib-big-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/fib-big-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/fib-big-demo.dir/rule
@@ -2870,7 +2905,7 @@ demos/CMakeFiles/wumpus-game.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/a
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/wumpus-game.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/wumpus-game.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/wumpus-game.dir/rule
@@ -2925,7 +2960,7 @@ demos/CMakeFiles/hello-channel-demo.dir/all: libos/CMakeFiles/phoenix-libos-sche
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/hello-channel-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/hello-channel-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/hello-channel-demo.dir/rule
@@ -2980,7 +3015,7 @@ demos/CMakeFiles/typed-chan-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.d
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/typed-chan-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/typed-chan-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/typed-chan-demo.dir/rule
@@ -3035,7 +3070,7 @@ demos/CMakeFiles/typed-chan-send.dir/all: libos/CMakeFiles/phoenix-libos-sched.d
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/typed-chan-send.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/typed-chan-send.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/typed-chan-send.dir/rule
@@ -3090,7 +3125,7 @@ demos/CMakeFiles/typed-chan-recv.dir/all: libos/CMakeFiles/phoenix-libos-sched.d
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/typed-chan-recv.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/typed-chan-recv.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/typed-chan-recv.dir/rule
@@ -3145,7 +3180,7 @@ demos/CMakeFiles/affine-channel-demo.dir/all: libos/CMakeFiles/phoenix-libos-sch
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/affine-channel-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/affine-channel-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/affine-channel-demo.dir/rule
@@ -3200,7 +3235,7 @@ demos/CMakeFiles/beatty-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/a
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/beatty-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/beatty-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/beatty-demo.dir/rule
@@ -3255,7 +3290,7 @@ demos/CMakeFiles/dag-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/dag-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/dag-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/dag-demo.dir/rule
@@ -3310,7 +3345,7 @@ demos/CMakeFiles/beatty-dag-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.d
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/beatty-dag-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/beatty-dag-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/beatty-dag-demo.dir/rule
@@ -3365,7 +3400,7 @@ demos/CMakeFiles/chan-beatty-rcrs-demo.dir/all: libos/CMakeFiles/phoenix-libos-s
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/chan-beatty-rcrs-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/chan-beatty-rcrs-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/chan-beatty-rcrs-demo.dir/rule
@@ -3420,7 +3455,7 @@ demos/CMakeFiles/chan-dag-supervisor-demo.dir/all: libos/CMakeFiles/phoenix-libo
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/chan-dag-supervisor-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/chan-dag-supervisor-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/chan-dag-supervisor-demo.dir/rule
@@ -3475,7 +3510,7 @@ demos/CMakeFiles/fbdev-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/al
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/fbdev-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/fbdev-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/fbdev-demo.dir/rule
@@ -3530,7 +3565,7 @@ demos/CMakeFiles/hv-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/hv-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/hv-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/hv-demo.dir/rule
@@ -3636,12 +3671,12 @@ demos/CMakeFiles/qspin-demo.dir/all: libos/CMakeFiles/phoenix-libos-baremetal-st
 demos/CMakeFiles/qspin-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/qspin-demo.dir/build.make demos/CMakeFiles/qspin-demo.dir/depend
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/qspin-demo.dir/build.make demos/CMakeFiles/qspin-demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target qspin-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=55 "Built target qspin-demo"
 .PHONY : demos/CMakeFiles/qspin-demo.dir/all
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/qspin-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/qspin-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/qspin-demo.dir/rule
@@ -3653,7 +3688,7 @@ qspin-demo: demos/CMakeFiles/qspin-demo.dir/rule
 # codegen rule for target.
 demos/CMakeFiles/qspin-demo.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/qspin-demo.dir/build.make demos/CMakeFiles/qspin-demo.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target qspin-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=55 "Finished codegen for target qspin-demo"
 .PHONY : demos/CMakeFiles/qspin-demo.dir/codegen
 
 # clean rule for target.
@@ -3691,12 +3726,12 @@ demos/CMakeFiles/microkernel-rcrs-demo.dir/all: libos/CMakeFiles/phoenix-libos-b
 demos/CMakeFiles/microkernel-rcrs-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/microkernel-rcrs-demo.dir/build.make demos/CMakeFiles/microkernel-rcrs-demo.dir/depend
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/microkernel-rcrs-demo.dir/build.make demos/CMakeFiles/microkernel-rcrs-demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target microkernel-rcrs-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=24 "Built target microkernel-rcrs-demo"
 .PHONY : demos/CMakeFiles/microkernel-rcrs-demo.dir/all
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/microkernel-rcrs-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/microkernel-rcrs-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/microkernel-rcrs-demo.dir/rule
@@ -3708,7 +3743,7 @@ microkernel-rcrs-demo: demos/CMakeFiles/microkernel-rcrs-demo.dir/rule
 # codegen rule for target.
 demos/CMakeFiles/microkernel-rcrs-demo.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/microkernel-rcrs-demo.dir/build.make demos/CMakeFiles/microkernel-rcrs-demo.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target microkernel-rcrs-demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=24 "Finished codegen for target microkernel-rcrs-demo"
 .PHONY : demos/CMakeFiles/microkernel-rcrs-demo.dir/codegen
 
 # clean rule for target.
@@ -3751,7 +3786,7 @@ demos/CMakeFiles/irq-lambda-policy-demo.dir/all: libos/CMakeFiles/phoenix-libos-
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/irq-lambda-policy-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/irq-lambda-policy-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/irq-lambda-policy-demo.dir/rule
@@ -3806,7 +3841,7 @@ demos/CMakeFiles/libos-posix-extra-test.dir/all: libos/CMakeFiles/phoenix-libos-
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/libos-posix-extra-test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/libos-posix-extra-test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/libos-posix-extra-test.dir/rule
@@ -3856,7 +3891,7 @@ demos/CMakeFiles/posix-cwd-test.dir/all: libos/CMakeFiles/phoenix-libos-baremeta
 demos/CMakeFiles/posix-cwd-test.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/posix-cwd-test.dir/build.make demos/CMakeFiles/posix-cwd-test.dir/depend
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/posix-cwd-test.dir/build.make demos/CMakeFiles/posix-cwd-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=52 "Built target posix-cwd-test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target posix-cwd-test"
 .PHONY : demos/CMakeFiles/posix-cwd-test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3873,7 +3908,7 @@ posix-cwd-test: demos/CMakeFiles/posix-cwd-test.dir/rule
 # codegen rule for target.
 demos/CMakeFiles/posix-cwd-test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/posix-cwd-test.dir/build.make demos/CMakeFiles/posix-cwd-test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=52 "Finished codegen for target posix-cwd-test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target posix-cwd-test"
 .PHONY : demos/CMakeFiles/posix-cwd-test.dir/codegen
 
 # clean rule for target.
@@ -3916,7 +3951,7 @@ demos/CMakeFiles/posix-misc-test.dir/all: libos/CMakeFiles/phoenix-libos-sched.d
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/posix-misc-test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/posix-misc-test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/posix-misc-test.dir/rule
@@ -3966,12 +4001,12 @@ demos/CMakeFiles/posix-socket-test.dir/all: libos/CMakeFiles/phoenix-libos-barem
 demos/CMakeFiles/posix-socket-test.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/posix-socket-test.dir/build.make demos/CMakeFiles/posix-socket-test.dir/depend
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/posix-socket-test.dir/build.make demos/CMakeFiles/posix-socket-test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target posix-socket-test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=54 "Built target posix-socket-test"
 .PHONY : demos/CMakeFiles/posix-socket-test.dir/all
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/posix-socket-test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/posix-socket-test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/posix-socket-test.dir/rule
@@ -3983,7 +4018,7 @@ posix-socket-test: demos/CMakeFiles/posix-socket-test.dir/rule
 # codegen rule for target.
 demos/CMakeFiles/posix-socket-test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/posix-socket-test.dir/build.make demos/CMakeFiles/posix-socket-test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target posix-socket-test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=54 "Finished codegen for target posix-socket-test"
 .PHONY : demos/CMakeFiles/posix-socket-test.dir/codegen
 
 # clean rule for target.
@@ -4026,7 +4061,7 @@ demos/CMakeFiles/exo-stream-demo.dir/all: libos/CMakeFiles/phoenix-libos-sched.d
 
 # Build rule for subdir invocation for target.
 demos/CMakeFiles/exo-stream-demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demos/CMakeFiles/exo-stream-demo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : demos/CMakeFiles/exo-stream-demo.dir/rule
@@ -4081,7 +4116,7 @@ tests/CMakeFiles/phoenix-test-host-stubs.dir/all: libos/CMakeFiles/phoenix-libos
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/phoenix-test-host-stubs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/phoenix-test-host-stubs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/phoenix-test-host-stubs.dir/rule
@@ -4131,7 +4166,7 @@ tests/CMakeFiles/microbench-cap_verify_bench.dir/all: libos/CMakeFiles/phoenix-l
 tests/CMakeFiles/microbench-cap_verify_bench.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-cap_verify_bench.dir/build.make tests/CMakeFiles/microbench-cap_verify_bench.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-cap_verify_bench.dir/build.make tests/CMakeFiles/microbench-cap_verify_bench.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=22 "Built target microbench-cap_verify_bench"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target microbench-cap_verify_bench"
 .PHONY : tests/CMakeFiles/microbench-cap_verify_bench.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4148,7 +4183,7 @@ microbench-cap_verify_bench: tests/CMakeFiles/microbench-cap_verify_bench.dir/ru
 # codegen rule for target.
 tests/CMakeFiles/microbench-cap_verify_bench.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-cap_verify_bench.dir/build.make tests/CMakeFiles/microbench-cap_verify_bench.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=22 "Finished codegen for target microbench-cap_verify_bench"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target microbench-cap_verify_bench"
 .PHONY : tests/CMakeFiles/microbench-cap_verify_bench.dir/codegen
 
 # clean rule for target.
@@ -4186,12 +4221,12 @@ tests/CMakeFiles/microbench-exo_yield_to_bench.dir/all: libos/CMakeFiles/phoenix
 tests/CMakeFiles/microbench-exo_yield_to_bench.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-exo_yield_to_bench.dir/build.make tests/CMakeFiles/microbench-exo_yield_to_bench.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-exo_yield_to_bench.dir/build.make tests/CMakeFiles/microbench-exo_yield_to_bench.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target microbench-exo_yield_to_bench"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=22 "Built target microbench-exo_yield_to_bench"
 .PHONY : tests/CMakeFiles/microbench-exo_yield_to_bench.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/microbench-exo_yield_to_bench.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 19
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/microbench-exo_yield_to_bench.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/microbench-exo_yield_to_bench.dir/rule
@@ -4203,7 +4238,7 @@ microbench-exo_yield_to_bench: tests/CMakeFiles/microbench-exo_yield_to_bench.di
 # codegen rule for target.
 tests/CMakeFiles/microbench-exo_yield_to_bench.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-exo_yield_to_bench.dir/build.make tests/CMakeFiles/microbench-exo_yield_to_bench.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target microbench-exo_yield_to_bench"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=22 "Finished codegen for target microbench-exo_yield_to_bench"
 .PHONY : tests/CMakeFiles/microbench-exo_yield_to_bench.dir/codegen
 
 # clean rule for target.
@@ -4246,7 +4281,7 @@ tests/CMakeFiles/microbench-lattice_pipe_bench.dir/all: libos/CMakeFiles/phoenix
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/microbench-lattice_pipe_bench.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/microbench-lattice_pipe_bench.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/microbench-lattice_pipe_bench.dir/rule
@@ -4296,7 +4331,7 @@ tests/CMakeFiles/microbench-proc_cap_test.dir/all: libos/CMakeFiles/phoenix-libo
 tests/CMakeFiles/microbench-proc_cap_test.dir/all: libos/CMakeFiles/phoenix-libos-sched.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-proc_cap_test.dir/build.make tests/CMakeFiles/microbench-proc_cap_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-proc_cap_test.dir/build.make tests/CMakeFiles/microbench-proc_cap_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=24 "Built target microbench-proc_cap_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target microbench-proc_cap_test"
 .PHONY : tests/CMakeFiles/microbench-proc_cap_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4313,7 +4348,7 @@ microbench-proc_cap_test: tests/CMakeFiles/microbench-proc_cap_test.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/microbench-proc_cap_test.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-proc_cap_test.dir/build.make tests/CMakeFiles/microbench-proc_cap_test.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=24 "Finished codegen for target microbench-proc_cap_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target microbench-proc_cap_test"
 .PHONY : tests/CMakeFiles/microbench-proc_cap_test.dir/codegen
 
 # clean rule for target.
@@ -4328,12 +4363,12 @@ tests/CMakeFiles/microbench-proc_cap_test.dir/clean:
 tests/CMakeFiles/test-quick.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-quick.dir/build.make tests/CMakeFiles/test-quick.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-quick.dir/build.make tests/CMakeFiles/test-quick.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test-quick"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=58 "Built target test-quick"
 .PHONY : tests/CMakeFiles/test-quick.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/test-quick.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/test-quick.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/test-quick.dir/rule
@@ -4345,7 +4380,7 @@ test-quick: tests/CMakeFiles/test-quick.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/test-quick.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-quick.dir/build.make tests/CMakeFiles/test-quick.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test-quick"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=58 "Finished codegen for target test-quick"
 .PHONY : tests/CMakeFiles/test-quick.dir/codegen
 
 # clean rule for target.
@@ -4360,12 +4395,12 @@ tests/CMakeFiles/test-quick.dir/clean:
 tests/CMakeFiles/test-full.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-full.dir/build.make tests/CMakeFiles/test-full.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-full.dir/build.make tests/CMakeFiles/test-full.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=56 "Built target test-full"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test-full"
 .PHONY : tests/CMakeFiles/test-full.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/test-full.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/test-full.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/test-full.dir/rule
@@ -4377,7 +4412,7 @@ test-full: tests/CMakeFiles/test-full.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/test-full.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-full.dir/build.make tests/CMakeFiles/test-full.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=56 "Finished codegen for target test-full"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test-full"
 .PHONY : tests/CMakeFiles/test-full.dir/codegen
 
 # clean rule for target.
@@ -4392,12 +4427,12 @@ tests/CMakeFiles/test-full.dir/clean:
 tests/CMakeFiles/test-performance.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-performance.dir/build.make tests/CMakeFiles/test-performance.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-performance.dir/build.make tests/CMakeFiles/test-performance.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=57 "Built target test-performance"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test-performance"
 .PHONY : tests/CMakeFiles/test-performance.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/test-performance.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/test-performance.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/test-performance.dir/rule
@@ -4409,7 +4444,7 @@ test-performance: tests/CMakeFiles/test-performance.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/test-performance.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-performance.dir/build.make tests/CMakeFiles/test-performance.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=57 "Finished codegen for target test-performance"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test-performance"
 .PHONY : tests/CMakeFiles/test-performance.dir/codegen
 
 # clean rule for target.
@@ -4456,12 +4491,12 @@ tests/CMakeFiles/test-integration.dir/clean:
 tests/CMakeFiles/test-memory.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-memory.dir/build.make tests/CMakeFiles/test-memory.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-memory.dir/build.make tests/CMakeFiles/test-memory.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test-memory"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=57 "Built target test-memory"
 .PHONY : tests/CMakeFiles/test-memory.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/test-memory.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/test-memory.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/test-memory.dir/rule
@@ -4473,7 +4508,7 @@ test-memory: tests/CMakeFiles/test-memory.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/test-memory.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-memory.dir/build.make tests/CMakeFiles/test-memory.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test-memory"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=57 "Finished codegen for target test-memory"
 .PHONY : tests/CMakeFiles/test-memory.dir/codegen
 
 # clean rule for target.
@@ -4552,12 +4587,12 @@ tests/CMakeFiles/test-posix.dir/clean:
 tests/CMakeFiles/test-c17-unit.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-c17-unit.dir/build.make tests/CMakeFiles/test-c17-unit.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-c17-unit.dir/build.make tests/CMakeFiles/test-c17-unit.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test-c17-unit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=56 "Built target test-c17-unit"
 .PHONY : tests/CMakeFiles/test-c17-unit.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/test-c17-unit.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/test-c17-unit.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/test-c17-unit.dir/rule
@@ -4569,7 +4604,7 @@ test-c17-unit: tests/CMakeFiles/test-c17-unit.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/test-c17-unit.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-c17-unit.dir/build.make tests/CMakeFiles/test-c17-unit.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test-c17-unit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=56 "Finished codegen for target test-c17-unit"
 .PHONY : tests/CMakeFiles/test-c17-unit.dir/codegen
 
 # clean rule for target.
@@ -4616,12 +4651,12 @@ tests/CMakeFiles/test-c17-all.dir/clean:
 tests/CMakeFiles/test-report.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-report.dir/build.make tests/CMakeFiles/test-report.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-report.dir/build.make tests/CMakeFiles/test-report.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=58 "Built target test-report"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test-report"
 .PHONY : tests/CMakeFiles/test-report.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/test-report.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/test-report.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/CMakeFiles/test-report.dir/rule
@@ -4633,7 +4668,7 @@ test-report: tests/CMakeFiles/test-report.dir/rule
 # codegen rule for target.
 tests/CMakeFiles/test-report.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-report.dir/build.make tests/CMakeFiles/test-report.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=58 "Finished codegen for target test-report"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test-report"
 .PHONY : tests/CMakeFiles/test-report.dir/codegen
 
 # clean rule for target.
@@ -4680,12 +4715,12 @@ tests/c17/CMakeFiles/test_framework.dir/clean:
 tests/c17/CMakeFiles/run-c17-tests.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/c17/CMakeFiles/run-c17-tests.dir/build.make tests/c17/CMakeFiles/run-c17-tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/CMakeFiles/run-c17-tests.dir/build.make tests/c17/CMakeFiles/run-c17-tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=55 "Built target run-c17-tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target run-c17-tests"
 .PHONY : tests/c17/CMakeFiles/run-c17-tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/c17/CMakeFiles/run-c17-tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/CMakeFiles/run-c17-tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/CMakeFiles/run-c17-tests.dir/rule
@@ -4697,7 +4732,7 @@ run-c17-tests: tests/c17/CMakeFiles/run-c17-tests.dir/rule
 # codegen rule for target.
 tests/c17/CMakeFiles/run-c17-tests.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/CMakeFiles/run-c17-tests.dir/build.make tests/c17/CMakeFiles/run-c17-tests.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=55 "Finished codegen for target run-c17-tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target run-c17-tests"
 .PHONY : tests/c17/CMakeFiles/run-c17-tests.dir/codegen
 
 # clean rule for target.
@@ -4761,7 +4796,7 @@ tests/c17/unit/CMakeFiles/test_aether_nn.dir/all: tests/c17/CMakeFiles/test_fram
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_aether_nn.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_aether_nn.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_aether_nn.dir/rule
@@ -4800,12 +4835,12 @@ tests/c17/unit/CMakeFiles/test_arbitrate.dir/all: libos/CMakeFiles/phoenix-libos
 tests/c17/unit/CMakeFiles/test_arbitrate.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_arbitrate.dir/build.make tests/c17/unit/CMakeFiles/test_arbitrate.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_arbitrate.dir/build.make tests/c17/unit/CMakeFiles/test_arbitrate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_arbitrate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=60 "Built target test_arbitrate"
 .PHONY : tests/c17/unit/CMakeFiles/test_arbitrate.dir/all
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_arbitrate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_arbitrate.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_arbitrate.dir/rule
@@ -4817,7 +4852,7 @@ test_arbitrate: tests/c17/unit/CMakeFiles/test_arbitrate.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_arbitrate.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_arbitrate.dir/build.make tests/c17/unit/CMakeFiles/test_arbitrate.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_arbitrate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=60 "Finished codegen for target test_arbitrate"
 .PHONY : tests/c17/unit/CMakeFiles/test_arbitrate.dir/codegen
 
 # clean rule for target.
@@ -4844,7 +4879,7 @@ tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/all: libos/CMakeFiles/phoenix-li
 tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=60 "Built target test_beatty_cycle"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_beatty_cycle"
 .PHONY : tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4861,7 +4896,7 @@ test_beatty_cycle: tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=60 "Finished codegen for target test_beatty_cycle"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_beatty_cycle"
 .PHONY : tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/codegen
 
 # clean rule for target.
@@ -4893,7 +4928,7 @@ tests/c17/unit/CMakeFiles/test_build_script.dir/all: tests/c17/CMakeFiles/test_f
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_build_script.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_build_script.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_build_script.dir/rule
@@ -4932,12 +4967,12 @@ tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/all: libos/CMakeFiles/phoenix-l
 tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/build.make tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/build.make tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_cap_entry_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=62 "Built target test_cap_entry_cpp"
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/all
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/rule
@@ -4949,7 +4984,7 @@ test_cap_entry_cpp: tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/build.make tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_cap_entry_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=62 "Finished codegen for target test_cap_entry_cpp"
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/codegen
 
 # clean rule for target.
@@ -4976,7 +5011,7 @@ tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/all: libos/CMakeFiles/phoenix-li
 tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/build.make tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/build.make tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=62 "Built target test_cap_newtypes"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_cap_newtypes"
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4993,7 +5028,7 @@ test_cap_newtypes: tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/build.make tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=62 "Finished codegen for target test_cap_newtypes"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_cap_newtypes"
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/codegen
 
 # clean rule for target.
@@ -5025,7 +5060,7 @@ tests/c17/unit/CMakeFiles/test_cap_revoke.dir/all: tests/c17/CMakeFiles/test_fra
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_cap_revoke.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_cap_revoke.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_revoke.dir/rule
@@ -5064,12 +5099,12 @@ tests/c17/unit/CMakeFiles/test_cap_types.dir/all: libos/CMakeFiles/phoenix-libos
 tests/c17/unit/CMakeFiles/test_cap_types.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_types.dir/build.make tests/c17/unit/CMakeFiles/test_cap_types.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_types.dir/build.make tests/c17/unit/CMakeFiles/test_cap_types.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_cap_types"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=64 "Built target test_cap_types"
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_types.dir/all
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_cap_types.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_cap_types.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_types.dir/rule
@@ -5081,7 +5116,7 @@ test_cap_types: tests/c17/unit/CMakeFiles/test_cap_types.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_cap_types.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_types.dir/build.make tests/c17/unit/CMakeFiles/test_cap_types.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_cap_types"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=64 "Finished codegen for target test_cap_types"
 .PHONY : tests/c17/unit/CMakeFiles/test_cap_types.dir/codegen
 
 # clean rule for target.
@@ -5108,7 +5143,7 @@ tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/all: libos/CMakeFiles/phoenix-l
 tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/build.make tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/build.make tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=64 "Built target test_chan_endpoint"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_chan_endpoint"
 .PHONY : tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/all
 
 # Build rule for subdir invocation for target.
@@ -5125,7 +5160,7 @@ test_chan_endpoint: tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/build.make tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=64 "Finished codegen for target test_chan_endpoint"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_chan_endpoint"
 .PHONY : tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/codegen
 
 # clean rule for target.
@@ -5157,7 +5192,7 @@ tests/c17/unit/CMakeFiles/test_dag_cycle.dir/all: tests/c17/CMakeFiles/test_fram
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_dag_cycle.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_dag_cycle.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_dag_cycle.dir/rule
@@ -5196,12 +5231,12 @@ tests/c17/unit/CMakeFiles/test_door.dir/all: libos/CMakeFiles/phoenix-libos-nn.d
 tests/c17/unit/CMakeFiles/test_door.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_door.dir/build.make tests/c17/unit/CMakeFiles/test_door.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_door.dir/build.make tests/c17/unit/CMakeFiles/test_door.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_door"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=66 "Built target test_door"
 .PHONY : tests/c17/unit/CMakeFiles/test_door.dir/all
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_door.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_door.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_door.dir/rule
@@ -5213,7 +5248,7 @@ test_door: tests/c17/unit/CMakeFiles/test_door.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_door.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_door.dir/build.make tests/c17/unit/CMakeFiles/test_door.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_door"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=66 "Finished codegen for target test_door"
 .PHONY : tests/c17/unit/CMakeFiles/test_door.dir/codegen
 
 # clean rule for target.
@@ -5240,7 +5275,7 @@ tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/all: libos/CMakeFiles/phoenix-lib
 tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/all: tests/c17/CMakeFiles/test_framework.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/build.make tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/build.make tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=66 "Built target test_encrypt_mod"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target test_encrypt_mod"
 .PHONY : tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/all
 
 # Build rule for subdir invocation for target.
@@ -5257,7 +5292,7 @@ test_encrypt_mod: tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/rule
 # codegen rule for target.
 tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/build.make tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=66 "Finished codegen for target test_encrypt_mod"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target test_encrypt_mod"
 .PHONY : tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/codegen
 
 # clean rule for target.
@@ -5289,7 +5324,7 @@ tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/all: tests/c17/CMakeFiles/test
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/rule
@@ -5333,7 +5368,7 @@ tests/c17/unit/CMakeFiles/test_flow_pid.dir/all: tests/c17/CMakeFiles/test_frame
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_flow_pid.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_flow_pid.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_flow_pid.dir/rule
@@ -5377,7 +5412,7 @@ tests/c17/unit/CMakeFiles/test_formal_models.dir/all: tests/c17/CMakeFiles/test_
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_formal_models.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_formal_models.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_formal_models.dir/rule
@@ -5421,7 +5456,7 @@ tests/c17/unit/CMakeFiles/test_iommu.dir/all: tests/c17/CMakeFiles/test_framewor
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_iommu.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_iommu.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_iommu.dir/rule
@@ -5465,7 +5500,7 @@ tests/c17/unit/CMakeFiles/test_irq.dir/all: tests/c17/CMakeFiles/test_framework.
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_irq.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_irq.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_irq.dir/rule
@@ -5509,7 +5544,7 @@ tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/all: tests/c17/CMakeFiles
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/rule
@@ -5553,7 +5588,7 @@ tests/c17/unit/CMakeFiles/test_lattice_dag.dir/all: tests/c17/CMakeFiles/test_fr
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_lattice_dag.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_lattice_dag.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_lattice_dag.dir/rule
@@ -5597,7 +5632,7 @@ tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/all: tests/c17/CMakeFiles/test_
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/rule
@@ -5641,7 +5676,7 @@ tests/c17/unit/CMakeFiles/test_libos_env.dir/all: tests/c17/CMakeFiles/test_fram
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_libos_env.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_libos_env.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_libos_env.dir/rule
@@ -5685,7 +5720,7 @@ tests/c17/unit/CMakeFiles/test_locks.dir/all: tests/c17/CMakeFiles/test_framewor
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_locks.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_locks.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_locks.dir/rule
@@ -5729,7 +5764,7 @@ tests/c17/unit/CMakeFiles/test_lockstress.dir/all: tests/c17/CMakeFiles/test_fra
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_lockstress.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_lockstress.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_lockstress.dir/rule
@@ -5773,7 +5808,7 @@ tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/all: tests/c17/CMakeFiles/t
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/rule
@@ -5817,7 +5852,7 @@ tests/c17/unit/CMakeFiles/test_octonion.dir/all: tests/c17/CMakeFiles/test_frame
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_octonion.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_octonion.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_octonion.dir/rule
@@ -5861,7 +5896,7 @@ tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/all: tests/c17/CMakeFiles/t
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/rule
@@ -5905,7 +5940,7 @@ tests/c17/unit/CMakeFiles/test_simulate.dir/all: tests/c17/CMakeFiles/test_frame
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_simulate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_simulate.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_simulate.dir/rule
@@ -5949,7 +5984,7 @@ tests/c17/unit/CMakeFiles/test_spinlock_align.dir/all: tests/c17/CMakeFiles/test
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_spinlock_align.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_spinlock_align.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_spinlock_align.dir/rule
@@ -5993,7 +6028,7 @@ tests/c17/unit/CMakeFiles/test_stream_module.dir/all: tests/c17/CMakeFiles/test_
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_stream_module.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_stream_module.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_stream_module.dir/rule
@@ -6037,7 +6072,7 @@ tests/c17/unit/CMakeFiles/test_streams_log.dir/all: tests/c17/CMakeFiles/test_fr
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_streams_log.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_streams_log.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_streams_log.dir/rule
@@ -6081,7 +6116,7 @@ tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/all: tests/c17/CMak
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/rule
@@ -6125,7 +6160,7 @@ tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/all: tests/c17/CMakeF
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/rule
@@ -6169,7 +6204,7 @@ tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/all: tests/c17/CMakeFil
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/rule
@@ -6213,7 +6248,7 @@ tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/all: tests/c17/CMakeFiles
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/rule
@@ -6257,7 +6292,7 @@ tests/c17/unit/CMakeFiles/test_zone.dir/all: tests/c17/CMakeFiles/test_framework
 
 # Build rule for subdir invocation for target.
 tests/c17/unit/CMakeFiles/test_zone.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_zone.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/unit/CMakeFiles/test_zone.dir/rule
@@ -6508,12 +6543,12 @@ tests/c17/posix/CMakeFiles/test_posix_compat.dir/clean:
 tests/c17/posix/CMakeFiles/posix_tests.dir/all:
 	$(MAKE) $(MAKESILENT) -f tests/c17/posix/CMakeFiles/posix_tests.dir/build.make tests/c17/posix/CMakeFiles/posix_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/c17/posix/CMakeFiles/posix_tests.dir/build.make tests/c17/posix/CMakeFiles/posix_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=54 "Built target posix_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Built target posix_tests"
 .PHONY : tests/c17/posix/CMakeFiles/posix_tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/c17/posix/CMakeFiles/posix_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/posix/CMakeFiles/posix_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/work/exov6/exov6/build-x86_64/CMakeFiles 0
 .PHONY : tests/c17/posix/CMakeFiles/posix_tests.dir/rule
@@ -6525,7 +6560,7 @@ posix_tests: tests/c17/posix/CMakeFiles/posix_tests.dir/rule
 # codegen rule for target.
 tests/c17/posix/CMakeFiles/posix_tests.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f tests/c17/posix/CMakeFiles/posix_tests.dir/build.make tests/c17/posix/CMakeFiles/posix_tests.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num=54 "Finished codegen for target posix_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/work/exov6/exov6/build-x86_64/CMakeFiles --progress-num= "Finished codegen for target posix_tests"
 .PHONY : tests/c17/posix/CMakeFiles/posix_tests.dir/codegen
 
 # clean rule for target.

@@ -2,6 +2,7 @@
 #define ZONE_H
 
 #include "spinlock.h"
+#include "cap.h"  /* For cap_id_t */
 #include <stddef.h>
 
 /* Forward declarations */

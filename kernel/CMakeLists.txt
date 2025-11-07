@@ -36,8 +36,12 @@ endif()
 # KERNEL SOURCE COLLECTION
 # ═════════════════════════════════════════════════════════════════════
 
-# Core kernel sources
+# Core kernel sources (exclude host tools like mkfs.c)
 file(GLOB KERNEL_CORE_SOURCES *.c)
+list(REMOVE_ITEM KERNEL_CORE_SOURCES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/mkfs.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/mkfs_standalone.c"
+)
 
 # Assembly sources
 file(GLOB KERNEL_ASM_SOURCES *.S)
