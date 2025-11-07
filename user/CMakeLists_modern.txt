@@ -1,0 +1,234 @@
+# user/CMakeLists.txt - Modern Modular Userland Build System
+# Auto-discovers and builds all user programs organized by category
+
+cmake_minimum_required(VERSION 3.16)
+
+# ═════════════════════════════════════════════════════════════════════
+# CORE USER LIBRARIES
+# ═════════════════════════════════════════════════════════════════════
+
+# User library (ulib) - Core user space functionality
+phoenix_add_library(phoenix-ulib
+    STATIC
+    SOURCES ulib.c usys.S
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-protocols
+)
+
+# User memory allocator (umalloc)
+phoenix_add_library(phoenix-umalloc
+    STATIC
+    SOURCES umalloc.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-ulib
+)
+
+# Printf implementation
+phoenix_add_library(phoenix-printf
+    STATIC
+    SOURCES printf.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-ulib
+)
+
+# Capability library (caplib)
+phoenix_add_library(phoenix-caplib
+    STATIC
+    SOURCES caplib.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-ulib phoenix-protocols
+)
+
+# Channel library (chan)
+phoenix_add_library(phoenix-chan
+    STATIC
+    SOURCES chan.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-caplib phoenix-protocols
+)
+
+# Door library (door)
+phoenix_add_library(phoenix-door
+    STATIC
+    SOURCES door.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-caplib phoenix-protocols
+)
+
+# Math core library
+phoenix_add_library(phoenix-math-core
+    STATIC
+    SOURCES math_core.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-architecture
+)
+
+# ═════════════════════════════════════════════════════════════════════
+# AUTO-DISCOVERY: CATEGORIZED USER PROGRAMS
+# ═════════════════════════════════════════════════════════════════════
+
+# Core utilities - file operations
+set(CORE_UTILS
+    cat cp mv rm ls mkdir ln touch pwd chmod chown chgrp
+)
+
+# Text processing utilities
+set(TEXT_PROCESSING
+    grep sed awk cut tr sort uniq wc head tail diff patch
+)
+
+# Archive and compression
+set(ARCHIVE_UTILS
+    tar gzip bzip2 zip unzip compress ar
+)
+
+# Shell and scripting
+set(SHELL_UTILS
+    sh mksh echo env export alias command
+)
+
+# System utilities
+set(SYSTEM_UTILS
+    ps kill top df du mount umount init
+)
+
+# Network utilities
+set(NETWORK_UTILS
+    ping netstat ifconfig route
+)
+
+# Development tools
+set(DEV_TOOLS
+    cc make cmake gdb nm objdump strip
+)
+
+# Test programs
+set(TEST_PROGRAMS
+    usertests forktest stressfs zombie
+)
+
+# Special programs (manually specified due to extra dependencies)
+set(SPECIAL_PROGRAMS
+    fileserver
+)
+
+# Combine all categories
+set(ALL_USER_PROGRAMS
+    ${CORE_UTILS}
+    ${TEXT_PROCESSING}
+    ${ARCHIVE_UTILS}
+    ${SHELL_UTILS}
+    ${SYSTEM_UTILS}
+    ${NETWORK_UTILS}
+    ${DEV_TOOLS}
+    ${TEST_PROGRAMS}
+)
+
+# MCU-specific programs
+if(MCU)
+    list(INSERT ALL_USER_PROGRAMS 0 blink)
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# BUILD STANDARD PROGRAMS
+# ═════════════════════════════════════════════════════════════════════
+
+# Standard dependencies for most programs
+set(STANDARD_DEPS
+    phoenix-ulib
+    phoenix-umalloc
+    phoenix-printf
+    phoenix-caplib
+)
+
+# Build each discovered program
+foreach(app ${ALL_USER_PROGRAMS})
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${app}.c")
+        phoenix_add_executable(user-${app}
+            SOURCES ${app}.c
+            INCLUDES 
+                ${CMAKE_CURRENT_SOURCE_DIR}
+                ${CMAKE_SOURCE_DIR}/include
+            DEPENDENCIES ${STANDARD_DEPS}
+        )
+        
+        set_target_properties(user-${app} PROPERTIES 
+            OUTPUT_NAME ${app}
+            PREFIX ""
+        )
+    else()
+        message(STATUS "Skipping ${app} - source file not found")
+    endif()
+endforeach()
+
+# ═════════════════════════════════════════════════════════════════════
+# SPECIAL PROGRAMS WITH EXTRA DEPENDENCIES
+# ═════════════════════════════════════════════════════════════════════
+
+# File server - needs channel and door libraries
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fileserver.c")
+    phoenix_add_executable(user-fileserver
+        SOURCES fileserver.c
+        INCLUDES 
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_SOURCE_DIR}/include
+        DEPENDENCIES 
+            ${STANDARD_DEPS}
+            phoenix-chan
+            phoenix-door
+    )
+    set_target_properties(user-fileserver PROPERTIES 
+        OUTPUT_NAME fileserver
+        PREFIX ""
+    )
+endif()
+
+# ═════════════════════════════════════════════════════════════════════
+# AGGREGATE TARGETS FOR ORGANIZED BUILDING
+# ═════════════════════════════════════════════════════════════════════
+
+# Create convenience targets for building by category
+add_custom_target(userland-core DEPENDS ${CORE_UTILS})
+add_custom_target(userland-text DEPENDS ${TEXT_PROCESSING})
+add_custom_target(userland-archive DEPENDS ${ARCHIVE_UTILS})
+add_custom_target(userland-shell DEPENDS ${SHELL_UTILS})
+add_custom_target(userland-system DEPENDS ${SYSTEM_UTILS})
+add_custom_target(userland-network DEPENDS ${NETWORK_UTILS})
+add_custom_target(userland-dev DEPENDS ${DEV_TOOLS})
+add_custom_target(userland-test DEPENDS ${TEST_PROGRAMS})
+
+# Aggregate target for all userland
+add_custom_target(userland-all DEPENDS 
+    userland-core
+    userland-text
+    userland-archive
+    userland-shell
+    userland-system
+    userland-network
+    userland-dev
+    userland-test
+)
+
+message(STATUS "Userland configured:")
+message(STATUS "  Core utilities: ${CORE_UTILS}")
+message(STATUS "  Text processing: ${TEXT_PROCESSING}")  
+message(STATUS "  Archive tools: ${ARCHIVE_UTILS}")
+message(STATUS "  Shell tools: ${SHELL_UTILS}")
+message(STATUS "  System tools: ${SYSTEM_UTILS}")
+message(STATUS "  Network tools: ${NETWORK_UTILS}")
+message(STATUS "  Dev tools: ${DEV_TOOLS}")
+message(STATUS "  Test programs: ${TEST_PROGRAMS}")

@@ -127,12 +127,12 @@ int main(int argc, char *argv[]) {
     assert(rootino == ROOTINO);
 
     // Add . and .. entries to root
-    bzero(&de, sizeof(de));
+    memset(&de, 0, sizeof(de));
     de.inum = rootino;
     strcpy(de.name, ".");
     iappend(rootino, &de, sizeof(de));
 
-    bzero(&de, sizeof(de));
+    memset(&de, 0, sizeof(de));
     de.inum = rootino;
     strcpy(de.name, "..");
     iappend(rootino, &de, sizeof(de));
@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 
         inum = ialloc(T_FILE);
 
-        bzero(&de, sizeof(de));
+        memset(&de, 0, sizeof(de));
         de.inum = inum;
         strncpy(de.name, shortname, DIRSIZ);
         iappend(rootino, &de, sizeof(de));
@@ -235,7 +235,7 @@ uint ialloc(ushort type) {
     uint inum = freeinode++;
     struct dinode din;
 
-    bzero(&din, sizeof(din));
+    memset(&din, 0, sizeof(din));
     din.type = type;
     din.nlink = 1;
     din.size = 0;
@@ -289,7 +289,7 @@ void iappend(uint inum, void *xp, int n) {
         if(n1 > n)
             n1 = n;
         rsect(x, buf);
-        bcopy(p, buf + (off % BSIZE), n1);
+        memmove(p, buf + (off % BSIZE), n1);
         wsect(x, buf);
         n -= n1;
         off += n1;

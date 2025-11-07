@@ -274,69 +274,9 @@ static void beatty_schedule(void) {
     }
 }
 
-struct exo_sched_ops *beatty_sched_ops(void) {
-    static struct exo_sched_ops ops = {
-        .init = beatty_init,
-        .schedule = beatty_schedule,
-        .next = NULL
-    };
-    return &ops;
-}
-
-/* DAG scheduler operations */
-static void dag_init(void) {
-    /* Initialize DAG scheduler structures */
-    /* Set up task dependency graph */
-}
-
-static void dag_schedule(void) {
-    /* DAG-based scheduling with dependency resolution */
-    struct proc *p;
-    struct cpu *c = mycpu();
-    
-    c->proc = 0;
-    
-    for(;;) {
-        sti();
-        
-        acquire(&ptable.lock);
-        
-        /* Find a process with no pending dependencies */
-        for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
-            if(p->state != RUNNABLE) {
-                continue;
-            }
-            
-            /* Check if all dependencies are satisfied */
-            int deps_ready = 1;
-            /* In a real implementation, check p->dependencies */
-            
-            if (!deps_ready) {
-                continue;
-            }
-            
-            /* Run this process */
-            c->proc = p;
-            switchuvm(p);
-            p->state = RUNNING;
-            
-            swtch(&(c->scheduler), p->context);
-            switchkvm();
-            
-            c->proc = 0;
-        }
-        release(&ptable.lock);
-    }
-}
-
-struct exo_sched_ops *dag_sched_ops(void) {
-    static struct exo_sched_ops ops = {
-        .init = dag_init,
-        .schedule = dag_schedule,
-        .next = NULL
-    };
-    return &ops;
-}
+/* Scheduler operations are implemented in kernel/sched/ */
+/* beatty_sched_ops() is in kernel/sched/beatty_sched.c */
+/* dag_sched_ops() is in kernel/sched/dag_sched.c */
 
 /* Process exit implementation */
 void exit(int status) {
@@ -470,6 +410,14 @@ void atomic_sub(volatile uint32_t *addr, uint32_t val) {
                      : "+m" (*addr)
                      : "r" (val));
 }
+
+/* Undefined the macros before defining wrapper functions */
+#ifdef atomic_load
+#undef atomic_load
+#endif
+#ifdef atomic_store
+#undef atomic_store
+#endif
 
 uint32_t atomic_load(volatile uint32_t *addr) {
     /* Atomic load with acquire semantics */

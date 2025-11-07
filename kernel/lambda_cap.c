@@ -24,12 +24,14 @@
 #include "cap.h" 
 #include "lambda_cap.h"
 #include "string.h"
+#include "lattice_types.h"  /* For floating-point octonion_t */
 #include "q16_octonion.h"
 #include <stdatomic.h>
 #include <stdbool.h>
 
 /* Forward declarations for standard library functions */
-static uint32_t strlen(const char *s) {
+/* Local string length utility to avoid conflict with kernel string.h */
+static uint32_t local_strlen(const char *s) {
     const char *p = s;
     while (*p) p++;
     return p - s;
@@ -608,7 +610,7 @@ struct s_expr *s_expr_atom(const char *symbol) {
     struct s_expr *expr = s_expr_alloc(S_ATOM);
     if (!expr) return NULL;
     
-    uint32_t len = strlen(symbol) + 1;
+    uint32_t len = local_strlen(symbol) + 1;
     expr->data.atom.symbol = (char*)lambda_cap_alloc(len);
     if (!expr->data.atom.symbol) {
         lambda_cap_free(expr);
@@ -643,7 +645,7 @@ struct s_expr *s_expr_lambda(const char *param, struct s_expr *body) {
     struct s_expr *expr = s_expr_alloc(S_LAMBDA);
     if (!expr) return NULL;
     
-    uint32_t len = strlen(param) + 1;
+    uint32_t len = local_strlen(param) + 1;
     expr->data.lambda.param = (char*)lambda_cap_alloc(len);
     if (!expr->data.lambda.param) {
         lambda_cap_free(expr);
@@ -796,7 +798,7 @@ int s_expr_print(struct s_expr *expr, char *buffer, uint32_t max_len) {
     
     switch (expr->type) {
         case S_ATOM: {
-            uint32_t len = strlen(expr->data.atom.symbol);
+            uint32_t len = local_strlen(expr->data.atom.symbol);
             if (len >= max_len) len = max_len - 1;
             memcpy(buffer, expr->data.atom.symbol, len);
             buffer[len] = '\0';
@@ -838,7 +840,7 @@ int s_expr_print(struct s_expr *expr, char *buffer, uint32_t max_len) {
         }
             
         case S_STRING: {
-            uint32_t str_len = strlen(expr->data.string.data) + 2; /* +2 for quotes */
+            uint32_t str_len = local_strlen(expr->data.string.data) + 2; /* +2 for quotes */
             if (str_len >= max_len) str_len = max_len - 1;
             if (max_len >= 3) {
                 buffer[0] = '"';
@@ -858,7 +860,7 @@ int s_expr_print(struct s_expr *expr, char *buffer, uint32_t max_len) {
             /* Manual formatting for lambda */
             const char *prefix = "(lambda ";
             uint32_t prefix_len = 8; /* length of "(lambda " */
-            uint32_t param_len = strlen(expr->data.lambda.param);
+            uint32_t param_len = local_strlen(expr->data.lambda.param);
             uint32_t total_len = prefix_len + param_len + 1; /* +1 for space */
             if (total_len >= max_len) total_len = max_len - 1;
             
@@ -1212,7 +1214,7 @@ octonion_t octonion_create(double e0, double e1, double e2, double e3,
 octonion_t octonion_add(octonion_t a, octonion_t b) {
     octonion_t result;
     for (int i = 0; i < 8; i++) {
-        result.coeffs[i] = a.coeffs[i] + b.coeffs[i];
+        result.v[i] = a.v[i] + b.v[i];
     }
     return result;
 }
@@ -1223,7 +1225,7 @@ octonion_t octonion_add(octonion_t a, octonion_t b) {
 octonion_t octonion_sub(octonion_t a, octonion_t b) {
     octonion_t result;
     for (int i = 0; i < 8; i++) {
-        result.coeffs[i] = a.coeffs[i] - b.coeffs[i];
+        result.v[i] = a.v[i] - b.v[i];
     }
     return result;
 }
@@ -1233,9 +1235,9 @@ octonion_t octonion_sub(octonion_t a, octonion_t b) {
  */
 octonion_t octonion_conjugate(octonion_t a) {
     octonion_t result;
-    result.coeffs[0] = a.coeffs[0];   /* Real part unchanged */
+    result.v[0] = a.v[0];   /* Real part unchanged */
     for (int i = 1; i < 8; i++) {
-        result.coeffs[i] = -a.coeffs[i];  /* Negate imaginary parts */
+        result.v[i] = -a.v[i];  /* Negate imaginary parts */
     }
     return result;
 }
@@ -1329,7 +1331,7 @@ octonion_t octonion_normalize(octonion_t a) {
     }
     
     for (int i = 0; i < 8; i++) {
-        result.coeffs[i] = a.coeffs[i] / norm;
+        result.v[i] = a.v[i] / norm;
     }
     return result;
 }

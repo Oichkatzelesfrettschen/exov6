@@ -19,7 +19,7 @@ iputtest(void)
 {
   printf(stdout, "iput test\n");
 
-  if(mkdir("iputdir") < 0){
+  if(mkdir("iputdir", 0755) < 0){
     printf(stdout, "mkdir failed\n");
     exit(0);
   }
@@ -52,7 +52,7 @@ exitiputtest(void)
     exit(0);
   }
   if(pid == 0){
-    if(mkdir("iputdir") < 0){
+    if(mkdir("iputdir", 0755) < 0){
       printf(stdout, "mkdir failed\n");
       exit(0);
     }
@@ -87,7 +87,7 @@ openiputtest(void)
   int pid;
 
   printf(stdout, "openiput test\n");
-  if(mkdir("oidir") < 0){
+  if(mkdir("oidir", 0755) < 0){
     printf(stdout, "mkdir oidir failed\n");
     exit(0);
   }
@@ -268,7 +268,7 @@ void dirtest(void)
 {
   printf(stdout, "mkdir test\n");
 
-  if(mkdir("dir0") < 0){
+  if(mkdir("dir0", 0755) < 0){
     printf(stdout, "mkdir failed\n");
     exit(0);
   }
@@ -964,7 +964,7 @@ subdir(void)
   printf(1, "subdir test\n");
 
   unlink("ff");
-  if(mkdir("dd") != 0){
+  if(mkdir("dd", 0755) != 0){
     printf(1, "subdir mkdir dd failed\n");
     exit(0);
   }
@@ -982,7 +982,7 @@ subdir(void)
     exit(0);
   }
 
-  if(mkdir("/dd/dd") != 0){
+  if(mkdir("/dd/dd", 0755) != 0){
     printf(1, "subdir mkdir dd/dd failed\n");
     exit(0);
   }
@@ -1086,15 +1086,15 @@ subdir(void)
     printf(1, "link dd/ff dd/dd/ffff succeeded!\n");
     exit(0);
   }
-  if(mkdir("dd/ff/ff") == 0){
+  if(mkdir("dd/ff/ff", 0755) == 0){
     printf(1, "mkdir dd/ff/ff succeeded!\n");
     exit(0);
   }
-  if(mkdir("dd/xx/ff") == 0){
+  if(mkdir("dd/xx/ff", 0755) == 0){
     printf(1, "mkdir dd/xx/ff succeeded!\n");
     exit(0);
   }
-  if(mkdir("dd/dd/ffff") == 0){
+  if(mkdir("dd/dd/ffff", 0755) == 0){
     printf(1, "mkdir dd/dd/ffff succeeded!\n");
     exit(0);
   }
@@ -1233,11 +1233,11 @@ fourteen(void)
   // DIRSIZ is 14.
   printf(1, "fourteen test\n");
 
-  if(mkdir("12345678901234") != 0){
+  if(mkdir("12345678901234", 0755) != 0){
     printf(1, "mkdir 12345678901234 failed\n");
     exit(0);
   }
-  if(mkdir("12345678901234/123456789012345") != 0){
+  if(mkdir("12345678901234/123456789012345", 0755) != 0){
     printf(1, "mkdir 12345678901234/123456789012345 failed\n");
     exit(0);
   }
@@ -1254,11 +1254,11 @@ fourteen(void)
   }
   close(fd);
 
-  if(mkdir("12345678901234/12345678901234") == 0){
+  if(mkdir("12345678901234/12345678901234", 0755) == 0){
     printf(1, "mkdir 12345678901234/12345678901234 succeeded!\n");
     exit(0);
   }
-  if(mkdir("123456789012345/12345678901234") == 0){
+  if(mkdir("123456789012345/12345678901234", 0755) == 0){
     printf(1, "mkdir 12345678901234/123456789012345 succeeded!\n");
     exit(0);
   }
@@ -1270,7 +1270,7 @@ void
 rmdot(void)
 {
   printf(1, "rmdot test\n");
-  if(mkdir("dots") != 0){
+  if(mkdir("dots", 0755) != 0){
     printf(1, "mkdir dots failed\n");
     exit(0);
   }
@@ -1332,7 +1332,7 @@ dirfile(void)
     printf(1, "create dirfile/xx succeeded!\n");
     exit(0);
   }
-  if(mkdir("dirfile/xx") == 0){
+  if(mkdir("dirfile/xx", 0755) == 0){
     printf(1, "mkdir dirfile/xx succeeded!\n");
     exit(0);
   }
@@ -1374,7 +1374,7 @@ iref(void)
 
   // the 50 is NINODE
   for(i = 0; i < 50 + 1; i++){
-    if(mkdir("irefd") != 0){
+    if(mkdir("irefd", 0755) != 0){
       printf(1, "mkdir irefd failed\n");
       exit(0);
     }
@@ -1383,7 +1383,7 @@ iref(void)
       exit(0);
     }
 
-    mkdir("");
+    mkdir("", 0755);
     link("README", "");
     fd = open("", O_CREATE);
     if(fd >= 0)
@@ -1512,7 +1512,7 @@ sbrktest(void)
   }
 
   a = sbrk(0);
-  c = sbrk(-(sbrk(0) - oldbrk));
+  c = sbrk(-((char *)sbrk(0) - (char *)oldbrk));
   if(c != a){
     printf(stdout, "sbrk downsize failed, a %x c %x\n", a, c);
     exit(0);
@@ -1565,8 +1565,8 @@ sbrktest(void)
     exit(0);
   }
 
-  if(sbrk(0) > oldbrk)
-    sbrk(-(sbrk(0) - oldbrk));
+  if((char *)sbrk(0) > (char *)oldbrk)
+    sbrk(-((char *)sbrk(0) - (char *)oldbrk));
 
   printf(stdout, "sbrk test OK\n");
 }
@@ -1575,7 +1575,7 @@ void
 validateint(int *p)
 {
   int res;
-  asm("mov %%esp, %%ebx\n\t"
+  __asm__("mov %%esp, %%ebx\n\t"
       "mov %3, %%esp\n\t"
       "int %2\n\t"
       "mov %%ebx, %%esp" :
@@ -1736,9 +1736,9 @@ uio()
     port = RTC_ADDR;
     val = 0x09;  /* year */
     /* http://wiki.osdev.org/Inline_Assembly/Examples */
-    asm volatile("outb %0,%1"::"a"(val), "d" (port));
+    __asm__ volatile("outb %0,%1"::"a"(val), "d" (port));
     port = RTC_DATA;
-    asm volatile("inb %1,%0" : "=a" (val) : "d" (port));
+    __asm__ volatile("inb %1,%0" : "=a" (val) : "d" (port));
     printf(1, "uio: uio succeeded; test FAILED\n");
     exit(0);
   } else if(pid < 0){

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
 
 static uint64_t simd_instr_count = 0;

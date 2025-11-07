@@ -31,6 +31,8 @@ static int test_beatty_cycle_detection(void) {
 }
 
 int main(int argc, char *argv[]) {
+    (void)argc;  /* Unused parameter */
+    (void)argv;  /* Unused parameter */
     int failures = 0;
     
     printf("=== %s Test Suite (C17) ===\n", "Beatty Cycle");

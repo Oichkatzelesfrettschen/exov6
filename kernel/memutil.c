@@ -1,6 +1,9 @@
 #include <types.h>
 #include "memlayout.h"
 #include "mmu.h"
+#ifdef __x86_64__
+#include "arch_x86_64.h"
+#endif
 
 // Lookup a page table entry without allocating pages.
 pte_t *pte_lookup(pde_t *pgdir, const void *va) {

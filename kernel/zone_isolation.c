@@ -6,7 +6,7 @@
 #include "defs.h"
 #include "spinlock.h"
 #include "kalloc.h"
-#include "vm.h"
+#include "mmu.h"  /* Changed from vm.h to mmu.h */
 #include <string.h>
 #include <stdatomic.h>
 #include "proc.h"
