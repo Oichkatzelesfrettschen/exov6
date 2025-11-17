@@ -66,6 +66,22 @@ extern struct mcs_node mcs_nodes[NCPU][MCS_NODES_PER_CPU];
  * ======================================================================== */
 
 /**
+ * QSpinlock performance statistics
+ */
+struct qspin_stats {
+    uint64_t fast_path_count;       /**< Uncontended acquisitions */
+    uint64_t slow_path_count;       /**< Had to queue */
+    uint64_t local_handoff_count;   /**< Woke local NUMA waiter */
+    uint64_t remote_handoff_count;  /**< Woke remote NUMA waiter */
+    uint64_t total_spin_cycles;     /**< Total TSC cycles spinning */
+    uint64_t max_spin_cycles;       /**< Longest spin time */
+    uint64_t max_queue_depth;       /**< Most waiters queued */
+    uint64_t total_hold_cycles;     /**< Total TSC cycles held */
+    uint64_t max_hold_cycles;       /**< Longest hold time */
+    uint64_t acquire_count;         /**< Total acquisitions */
+} __attribute__((aligned(64)));
+
+/**
  * NUMA-aware queued spinlock
  * Based on Linux MCS implementation
  *
@@ -83,12 +99,19 @@ struct qspinlock {
             uint16_t tail;     /**< Tail CPU + index */
         };
     };
-} __attribute__((aligned(4)));
+    struct qspin_stats stats;       /**< Performance statistics */
+    uint64_t last_acquire_tsc;      /**< TSC when lock was acquired */
+    uint32_t last_owner_numa;       /**< NUMA node of last owner */
+} __attribute__((aligned(128)));  /* Double cache line for stats */
 
 void qspin_init(struct qspinlock *lock);
 void qspin_lock(struct qspinlock *lock);
 int qspin_trylock(struct qspinlock *lock);
 void qspin_unlock(struct qspinlock *lock);
+
+/* Statistics functions */
+void qspin_dump_stats(struct qspinlock *lock, const char *name);
+void qspin_reset_stats(struct qspinlock *lock);
 
 /* ========================================================================
  * Adaptive Mutex

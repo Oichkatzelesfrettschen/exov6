@@ -215,6 +215,21 @@ uint32_t lock_get_cpu_numa_node(uint32_t cpu_id) {
  */
 void qspin_init(struct qspinlock *lock) {
     atomic_store_explicit(&lock->val, 0, memory_order_relaxed);
+
+    // Initialize statistics
+    lock->stats.fast_path_count = 0;
+    lock->stats.slow_path_count = 0;
+    lock->stats.local_handoff_count = 0;
+    lock->stats.remote_handoff_count = 0;
+    lock->stats.total_spin_cycles = 0;
+    lock->stats.max_spin_cycles = 0;
+    lock->stats.max_queue_depth = 0;
+    lock->stats.total_hold_cycles = 0;
+    lock->stats.max_hold_cycles = 0;
+    lock->stats.acquire_count = 0;
+
+    lock->last_acquire_tsc = 0;
+    lock->last_owner_numa = 0;
 }
 
 /**
@@ -239,9 +254,19 @@ static inline void decode_tail(uint16_t tail, uint32_t *cpu_id, uint32_t *node_i
  */
 static inline int qspin_trylock_fast(struct qspinlock *lock) {
     uint32_t expected = 0;
-    return atomic_compare_exchange_strong_explicit(
-        &lock->val, &expected, 1,
-        memory_order_acquire, memory_order_relaxed);
+    if (atomic_compare_exchange_strong_explicit(
+            &lock->val, &expected, 1,
+            memory_order_acquire, memory_order_relaxed)) {
+        // Fast path success - record statistics
+        __sync_fetch_and_add(&lock->stats.fast_path_count, 1);
+        __sync_fetch_and_add(&lock->stats.acquire_count, 1);
+
+        lock->last_acquire_tsc = rdtsc();
+        lock->last_owner_numa = get_numa_node(mycpu() - cpus);
+
+        return 1;
+    }
+    return 0;
 }
 
 /**
@@ -311,7 +336,12 @@ void qspin_lock(struct qspinlock *lock) {
         }
     }
 
+    // Record slow path
+    __sync_fetch_and_add(&lock->stats.slow_path_count, 1);
+    __sync_fetch_and_add(&lock->stats.acquire_count, 1);
+
     // Spin on our locked flag with exponential backoff
+    uint64_t spin_start = rdtsc();
     int backoff = ADAPTIVE_SPIN_MIN_CYCLES;
     while (atomic_load_explicit(&node->locked, memory_order_acquire)) {
         for (int i = 0; i < backoff; i++) {
@@ -330,7 +360,24 @@ void qspin_lock(struct qspinlock *lock) {
         }
     }
 
+    // Record spin time
+    uint64_t spin_cycles = rdtsc() - spin_start;
+    __sync_fetch_and_add(&lock->stats.total_spin_cycles, spin_cycles);
+
+    // Update max spin time (atomic max)
+    uint64_t old_max = lock->stats.max_spin_cycles;
+    while (spin_cycles > old_max) {
+        if (__sync_bool_compare_and_swap(&lock->stats.max_spin_cycles,
+                                         old_max, spin_cycles)) {
+            break;
+        }
+        old_max = lock->stats.max_spin_cycles;
+    }
+
     // We have the lock now
+    lock->last_acquire_tsc = rdtsc();
+    lock->last_owner_numa = my_numa;
+
     mfence();  // Memory barrier
 }
 
@@ -346,6 +393,20 @@ int qspin_trylock(struct qspinlock *lock) {
  * Release lock
  */
 void qspin_unlock(struct qspinlock *lock) {
+    // Track hold time
+    uint64_t hold_cycles = rdtsc() - lock->last_acquire_tsc;
+    __sync_fetch_and_add(&lock->stats.total_hold_cycles, hold_cycles);
+
+    // Update max hold time
+    uint64_t old_max = lock->stats.max_hold_cycles;
+    while (hold_cycles > old_max) {
+        if (__sync_bool_compare_and_swap(&lock->stats.max_hold_cycles,
+                                         old_max, hold_cycles)) {
+            break;
+        }
+        old_max = lock->stats.max_hold_cycles;
+    }
+
     mfence();  // Memory barrier before release
 
     // Fast path: no waiters
@@ -379,9 +440,11 @@ void qspin_unlock(struct qspinlock *lock) {
         if (next_local != NULL) {
             // Local waiter available - prefer it (NUMA optimization)
             next_to_wake = next_local;
+            __sync_fetch_and_add(&lock->stats.local_handoff_count, 1);
         } else {
             // No local waiter - wake remote waiter
             next_to_wake = next_global;
+            __sync_fetch_and_add(&lock->stats.remote_handoff_count, 1);
         }
 
         // Wake the chosen waiter
@@ -444,6 +507,72 @@ void qspin_dump_state(struct qspinlock *lock) {
                 atomic_load_explicit(&node->locked, memory_order_relaxed),
                 node->numa_node);
     }
+}
+
+/* ========================================================================
+ * Statistics and Debugging
+ * ======================================================================== */
+
+/**
+ * Print qspinlock statistics
+ */
+void qspin_dump_stats(struct qspinlock *lock, const char *name) {
+    struct qspin_stats *s = &lock->stats;
+
+    cprintf("=== QSpinlock Stats: %s ===\n", name);
+    cprintf("Acquisitions:\n");
+    cprintf("  Total:        %llu\n", s->acquire_count);
+
+    if (s->acquire_count > 0) {
+        cprintf("  Fast path:    %llu (%.1f%%)\n",
+                s->fast_path_count,
+                100.0 * s->fast_path_count / s->acquire_count);
+        cprintf("  Slow path:    %llu (%.1f%%)\n",
+                s->slow_path_count,
+                100.0 * s->slow_path_count / s->acquire_count);
+    }
+
+    uint64_t total_handoffs = s->local_handoff_count + s->remote_handoff_count;
+    if (total_handoffs > 0) {
+        cprintf("\nNUMA Handoffs:\n");
+        cprintf("  Local:        %llu (%.1f%%)\n",
+                s->local_handoff_count,
+                100.0 * s->local_handoff_count / total_handoffs);
+        cprintf("  Remote:       %llu (%.1f%%)\n",
+                s->remote_handoff_count,
+                100.0 * s->remote_handoff_count / total_handoffs);
+    }
+
+    if (s->slow_path_count > 0) {
+        cprintf("\nContention:\n");
+        cprintf("  Max queue:    %llu waiters\n", s->max_queue_depth);
+        cprintf("  Avg spin:     %llu cycles\n",
+                s->total_spin_cycles / s->slow_path_count);
+        cprintf("  Max spin:     %llu cycles\n", s->max_spin_cycles);
+    }
+
+    if (s->acquire_count > 0) {
+        cprintf("\nHold Time:\n");
+        cprintf("  Avg hold:     %llu cycles\n",
+                s->total_hold_cycles / s->acquire_count);
+        cprintf("  Max hold:     %llu cycles\n", s->max_hold_cycles);
+    }
+}
+
+/**
+ * Reset qspinlock statistics
+ */
+void qspin_reset_stats(struct qspinlock *lock) {
+    lock->stats.fast_path_count = 0;
+    lock->stats.slow_path_count = 0;
+    lock->stats.local_handoff_count = 0;
+    lock->stats.remote_handoff_count = 0;
+    lock->stats.total_spin_cycles = 0;
+    lock->stats.max_spin_cycles = 0;
+    lock->stats.max_queue_depth = 0;
+    lock->stats.total_hold_cycles = 0;
+    lock->stats.max_hold_cycles = 0;
+    lock->stats.acquire_count = 0;
 }
 
 /* ========================================================================
