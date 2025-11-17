@@ -24,6 +24,34 @@
 #include "proc.h"
 
 /* ========================================================================
+ * Architecture-Specific Helpers
+ * ======================================================================== */
+
+/**
+ * Read Time-Stamp Counter (non-serialized)
+ * For lock timing, we don't need full serialization - just cycle counting
+ */
+static inline uint64_t rdtsc(void) {
+    uint32_t lo, hi;
+    __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi));
+    return ((uint64_t)hi << 32) | lo;
+}
+
+/**
+ * Memory fence (full barrier)
+ */
+static inline void mfence(void) {
+    __asm__ __volatile__("mfence" ::: "memory");
+}
+
+/**
+ * CPU pause hint (for spin loops)
+ */
+static inline void pause(void) {
+    __asm__ __volatile__("pause" ::: "memory");
+}
+
+/* ========================================================================
  * Per-CPU MCS Node Arrays
  * ======================================================================== */
 

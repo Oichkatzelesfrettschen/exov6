@@ -79,6 +79,10 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/rcu.c")
     list(APPEND SYNC_SOURCES sync/rcu.c)
 endif()
+# NUMA-aware queued spinlock (qspinlock) - new lock subsystem
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/qspinlock.c")
+    list(APPEND SYNC_SOURCES sync/qspinlock.c)
+endif()
 
 # Device drivers
 set(DRIVER_SOURCES)
@@ -201,6 +205,15 @@ endif()
 
 if(USE_SIMD)
     target_compile_definitions(kernel PRIVATE USE_SIMD)
+endif()
+
+# New lock subsystem feature flags
+option(USE_EXOLOCK "Enable new ExoLock subsystem (qspinlock, adaptive mutex, etc.)" OFF)
+if(USE_EXOLOCK)
+    target_compile_definitions(kernel PRIVATE USE_EXOLOCK)
+    message(STATUS "  - ExoLock subsystem: ENABLED")
+else()
+    message(STATUS "  - ExoLock subsystem: DISABLED (use -DUSE_EXOLOCK=ON to enable)")
 endif()
 
 # Apply additional CPU flags if specified
