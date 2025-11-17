@@ -130,6 +130,37 @@ void lattice_close(lattice_channel_t *chan);
  */
 [[nodiscard]] int lattice_channel_submit(lattice_channel_t *chan);
 
+/**
+ * @brief Sign a message with lattice-based cryptography.
+ *
+ * @param chan  Channel with private key.
+ * @param buf   Data to sign.
+ * @param len   Length of data.
+ * @param sig   Output signature buffer.
+ * @return      0 on success, negative on error.
+ */
+[[nodiscard]] int lattice_sign(lattice_channel_t *chan, const void *buf,
+                                size_t len, lattice_sig_t *sig);
+
+/**
+ * @brief Send a message over the channel (wrapper for lattice_send).
+ *
+ * @param chan  Initialized channel.
+ * @param buf   Data to send.
+ * @param len   Data length.
+ * @return      Bytes sent on success, negative on error.
+ */
+[[nodiscard]] int lattice_channel_send(lattice_channel_t *chan, const void *buf,
+                                        size_t len);
+
+/**
+ * @brief Initialize the lattice crypto subsystem.
+ *
+ * Sets up global crypto state, RNG, etc.
+ * @return      0 on success, negative on error.
+ */
+[[nodiscard]] int lattice_crypto_init(void);
+
 #ifndef EXO_KERNEL
 /* Host build: define WITH_QLOCK as a no-op scope and shim type */
 #ifndef WITH_QLOCK

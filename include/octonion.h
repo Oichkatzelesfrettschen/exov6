@@ -168,4 +168,11 @@ static inline void hyperbolic_pause(double norm_val) {
     for (volatile unsigned long i = 0; i < delay; ++i) { }
 }
 
+/**
+ * @brief Generate an identity octonion (1, 0, 0, 0, 0, 0, 0, 0).
+ */
+static inline octonion_t octonion_generate_identity(void) {
+    return octonion_create(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+}
+
 #endif /* OCTONION_H */

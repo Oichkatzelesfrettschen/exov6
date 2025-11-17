@@ -57,6 +57,24 @@ typedef union {
     uint64_t raw;
 } capnp_pointer_t;
 
+// Cap'n Proto error codes
+typedef enum {
+    CAPNP_OK = 0,
+    CAPNP_ERROR_INVALID_MESSAGE = -1,
+    CAPNP_ERROR_OUT_OF_MEMORY = -2,
+    CAPNP_ERROR_INVALID_SEGMENT = -3
+} capnp_error_t;
+
+// Cap'n Proto message builder
+#define CAPNP_MAX_SEGMENTS 16
+typedef struct {
+    uint8_t *segments[CAPNP_MAX_SEGMENTS];
+    size_t segment_sizes[CAPNP_MAX_SEGMENTS];
+    size_t segment_used[CAPNP_MAX_SEGMENTS];
+    uint32_t segment_count;
+    uint32_t current_segment;
+} capnp_builder_t;
+
 // Message descriptor
 typedef struct {
     uint32_t size;
@@ -71,6 +89,16 @@ void capnp_init(void);
 capnp_pointer_t capnp_make_struct_pointer(uint32_t offset, uint16_t data_words, uint16_t ptr_words);
 capnp_pointer_t capnp_make_list_pointer(uint32_t offset, capnp_list_element_type_t element_type, uint32_t count);
 capnp_pointer_t capnp_make_far_pointer(uint32_t segment_id, uint32_t offset, bool landing_pad);
+
+// Cap'n Proto builder API
+capnp_error_t capnp_builder_init(capnp_builder_t *builder, uint8_t *buffer, size_t buffer_size);
+void *capnp_builder_alloc(capnp_builder_t *builder, size_t bytes);
+capnp_error_t capnp_builder_new_segment(capnp_builder_t *builder, size_t min_size);
+
+// Utility functions
+size_t capnp_align_to_word(size_t bytes);
+size_t capnp_bytes_to_words(size_t bytes);
+size_t capnp_words_to_bytes(size_t words);
 
 // Static assertions for ABI compatibility
 _Static_assert(sizeof(capnp_pointer_t) == 8, "Cap'n Proto pointer must be 64-bit");

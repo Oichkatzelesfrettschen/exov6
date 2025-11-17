@@ -45,6 +45,7 @@ typedef struct exo_cap {
 #define EXO_RIGHT_R        EXO_CAP_READ
 #define EXO_RIGHT_W        EXO_CAP_WRITE
 #define EXO_RIGHT_X        EXO_CAP_EXECUTE
+#define EXO_RIGHT_EXEC     EXO_CAP_EXECUTE  /* Alternative name */
 
 /* Block device capability */
 typedef struct exo_blockcap {
