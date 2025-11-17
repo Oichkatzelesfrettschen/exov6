@@ -32,8 +32,10 @@ test-build/
 openposixtestsuite/
 test_isolation/
 
-# QSpinlock test binaries
+# Lock subsystem test binaries
 kernel/sync/test_qspinlock
 kernel/sync/bench_qspinlock
 kernel/sync/test_lwkt_token
 kernel/sync/bench_lwkt_token
+kernel/sync/test_dag
+kernel/sync/bench_dag
