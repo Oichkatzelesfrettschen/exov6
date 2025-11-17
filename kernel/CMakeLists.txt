@@ -38,13 +38,26 @@ endif()
 
 # Core kernel sources (exclude host tools like mkfs.c)
 file(GLOB KERNEL_CORE_SOURCES *.c)
-list(REMOVE_ITEM KERNEL_CORE_SOURCES 
+list(REMOVE_ITEM KERNEL_CORE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/mkfs.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/mkfs_standalone.c"
 )
 
-# Assembly sources
-file(GLOB KERNEL_ASM_SOURCES *.S)
+# Assembly sources - architecture-specific
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_C_COMPILER_TARGET MATCHES "x86_64" OR NOT CMAKE_SYSTEM_PROCESSOR MATCHES "i[3-6]86")
+    # x86_64 build - use only compatible assembly
+    set(KERNEL_ASM_SOURCES
+        swtch.S  # Already has x86_64 support via #ifdef
+    )
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/swtch64.S")
+        list(APPEND KERNEL_ASM_SOURCES swtch64.S)
+    endif()
+    # Exclude 32-bit only files: entryother.S, initcode.S
+else()
+    # i386 build - use all assembly
+    file(GLOB KERNEL_ASM_SOURCES *.S)
+    list(FILTER KERNEL_ASM_SOURCES EXCLUDE REGEX "test_")
+endif()
 
 # Architecture-specific sources from src/arch (already compiled into architecture libs)
 # These are included via library dependencies

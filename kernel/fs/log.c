@@ -46,7 +46,7 @@ struct log {
   int dev;
   struct logheader lh;
 };
-struct log log;
+struct log fs_log;
 
 static void recover_from_log(void);
 static void commit();
@@ -58,11 +58,11 @@ initlog(int dev)
     panic("initlog: too big logheader");
 
   struct superblock sb;
-  initlock(&log.lock, "log");
+  initlock(&fs_log.lock, "log");
   readsb(dev, &sb);
-  log.start = sb.logstart;
-  log.size = sb.nlog;
-  log.dev = dev;
+  fs_log.start = sb.logstart;
+  fs_log.size = sb.nlog;
+  fs_log.dev = dev;
   recover_from_log();
 }
 
@@ -72,9 +72,9 @@ install_trans(void)
 {
   int tail;
 
-  for (tail = 0; tail < log.lh.n; tail++) {
-    struct buf *lbuf = bread(log.dev, log.start+tail+1); // read log block
-    struct buf *dbuf = bread(log.dev, log.lh.block[tail]); // read dst
+  for (tail = 0; tail < fs_log.lh.n; tail++) {
+    struct buf *lbuf = bread(fs_log.dev, fs_log.start+tail+1); // read log block
+    struct buf *dbuf = bread(fs_log.dev, fs_log.lh.block[tail]); // read dst
     memmove(dbuf->data, lbuf->data, BSIZE);  // copy block to dst
     bwrite(dbuf);  // write dst to disk
     brelse(lbuf);
@@ -86,12 +86,12 @@ install_trans(void)
 static void
 read_head(void)
 {
-  struct buf *buf = bread(log.dev, log.start);
+  struct buf *buf = bread(fs_log.dev, fs_log.start);
   struct logheader *lh = (struct logheader *) (buf->data);
   int i;
-  log.lh.n = lh->n;
-  for (i = 0; i < log.lh.n; i++) {
-    log.lh.block[i] = lh->block[i];
+  fs_log.lh.n = lh->n;
+  for (i = 0; i < fs_log.lh.n; i++) {
+    fs_log.lh.block[i] = lh->block[i];
   }
   brelse(buf);
 }
@@ -102,12 +102,12 @@ read_head(void)
 static void
 write_head(void)
 {
-  struct buf *buf = bread(log.dev, log.start);
+  struct buf *buf = bread(fs_log.dev, fs_log.start);
   struct logheader *hb = (struct logheader *) (buf->data);
   int i;
-  hb->n = log.lh.n;
-  for (i = 0; i < log.lh.n; i++) {
-    hb->block[i] = log.lh.block[i];
+  hb->n = fs_log.lh.n;
+  for (i = 0; i < fs_log.lh.n; i++) {
+    hb->block[i] = fs_log.lh.block[i];
   }
   bwrite(buf);
   brelse(buf);
@@ -118,7 +118,7 @@ recover_from_log(void)
 {
   read_head();
   install_trans(); // if committed, copy from log to disk
-  log.lh.n = 0;
+  fs_log.lh.n = 0;
   write_head(); // clear the log
 }
 
@@ -126,16 +126,16 @@ recover_from_log(void)
 void
 begin_op(void)
 {
-  acquire(&log.lock);
+  acquire(&fs_log.lock);
   while(1){
-    if(log.committing){
-      ksleep(&log, &log.lock);
-    } else if(log.lh.n + (log.outstanding+1)*MAXOPBLOCKS > LOGSIZE){
+    if(fs_log.committing){
+      ksleep(&log, &fs_log.lock);
+    } else if(fs_log.lh.n + (fs_log.outstanding+1)*MAXOPBLOCKS > LOGSIZE){
       // this op might exhaust log space; wait for commit.
-      ksleep(&log, &log.lock);
+      ksleep(&log, &fs_log.lock);
     } else {
-      log.outstanding += 1;
-      release(&log.lock);
+      fs_log.outstanding += 1;
+      release(&fs_log.lock);
       break;
     }
   }
@@ -148,41 +148,41 @@ end_op(void)
 {
   int do_commit = 0;
 
-  acquire(&log.lock);
-  log.outstanding -= 1;
-  if(log.committing)
-    panic("log.committing");
-  if(log.outstanding == 0){
+  acquire(&fs_log.lock);
+  fs_log.outstanding -= 1;
+  if(fs_log.committing)
+    panic("fs_log.committing");
+  if(fs_log.outstanding == 0){
     do_commit = 1;
-    log.committing = 1;
+    fs_log.committing = 1;
   } else {
     // begin_op() may be waiting for log space,
-    // and decrementing log.outstanding has decreased
+    // and decrementing fs_log.outstanding has decreased
     // the amount of reserved space.
     wakeup(&log);
   }
-  release(&log.lock);
+  release(&fs_log.lock);
 
   if(do_commit){
     // call commit w/o holding locks, since not allowed
     // to sleep with locks.
     commit();
-    acquire(&log.lock);
-    log.committing = 0;
+    acquire(&fs_log.lock);
+    fs_log.committing = 0;
     wakeup(&log);
-    release(&log.lock);
+    release(&fs_log.lock);
   }
 }
 
-// Copy modified blocks from cache to log.
+// Copy modified blocks from cache to fs_log.
 static void
 write_log(void)
 {
   int tail;
 
-  for (tail = 0; tail < log.lh.n; tail++) {
-    struct buf *to = bread(log.dev, log.start+tail+1); // log block
-    struct buf *from = bread(log.dev, log.lh.block[tail]); // cache block
+  for (tail = 0; tail < fs_log.lh.n; tail++) {
+    struct buf *to = bread(fs_log.dev, fs_log.start+tail+1); // log block
+    struct buf *from = bread(fs_log.dev, fs_log.lh.block[tail]); // cache block
     memmove(to->data, from->data, BSIZE);
     bwrite(to);  // write the log
     brelse(from);
@@ -193,11 +193,11 @@ write_log(void)
 static void
 commit()
 {
-  if (log.lh.n > 0) {
+  if (fs_log.lh.n > 0) {
     write_log();     // Write modified blocks from cache to log
     write_head();    // Write header to disk -- the real commit
     install_trans(); // Now install writes to home locations
-    log.lh.n = 0;
+    fs_log.lh.n = 0;
     write_head();    // Erase the transaction from the log
   }
 }
@@ -216,19 +216,19 @@ log_write(struct buf *b)
 {
   int i;
 
-  if (log.lh.n >= LOGSIZE || log.lh.n >= log.size - 1)
+  if (fs_log.lh.n >= LOGSIZE || fs_log.lh.n >= fs_log.size - 1)
     panic("too big a transaction");
-  if (log.outstanding < 1)
+  if (fs_log.outstanding < 1)
     panic("log_write outside of trans");
 
-  acquire(&log.lock);
-  for (i = 0; i < log.lh.n; i++) {
-    if (log.lh.block[i] == b->blockno)   // log absorbtion
+  acquire(&fs_log.lock);
+  for (i = 0; i < fs_log.lh.n; i++) {
+    if (fs_log.lh.block[i] == b->blockno)   // log absorbtion
       break;
   }
-  log.lh.block[i] = b->blockno;
-  if (i == log.lh.n)
-    log.lh.n++;
+  fs_log.lh.block[i] = b->blockno;
+  if (i == fs_log.lh.n)
+    fs_log.lh.n++;
   b->flags |= B_DIRTY; // prevent eviction
-  release(&log.lock);
+  release(&fs_log.lock);
 }
