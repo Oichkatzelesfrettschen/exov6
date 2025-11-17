@@ -19,6 +19,7 @@
 #include "param.h"
 #include "arch.h"
 #include "memlayout.h"
+#include "compiler_attrs.h"
 #include "exo_lock.h"
 #include "proc.h"
 
@@ -37,9 +38,9 @@ struct mcs_node mcs_nodes[NCPU][MCS_NODES_PER_CPU] __attribute__((aligned(64)));
  * @param idx Node index (0-3 for nesting level)
  * @return Pointer to MCS node
  */
-static inline struct mcs_node *get_mcs_node(int idx) {
+static EXO_ALWAYS_INLINE struct mcs_node *get_mcs_node(int idx) {
     struct cpu *c = mycpu();
-    if (idx >= MCS_NODES_PER_CPU) {
+    if (unlikely(idx >= MCS_NODES_PER_CPU)) {
         panic("qspinlock: MCS node index out of range");
     }
     return &mcs_nodes[c - cpus][idx];
@@ -190,8 +191,8 @@ void lock_detect_numa_topology(void) {
 /**
  * Get NUMA node for given CPU
  */
-static inline uint32_t get_numa_node(uint32_t cpu_id) {
-    if (cpu_id >= NCPU) return 0;
+static EXO_ALWAYS_INLINE uint32_t get_numa_node(uint32_t cpu_id) {
+    if (unlikely(cpu_id >= NCPU)) return 0;
     return cpu_to_numa[cpu_id];
 }
 
@@ -236,14 +237,14 @@ void qspin_init(struct qspinlock *lock) {
  * Encode CPU ID and node index into tail value
  * Format: (cpu_id << 2) | node_idx
  */
-static inline uint16_t encode_tail(uint32_t cpu_id, uint32_t node_idx) {
+static EXO_ALWAYS_INLINE uint16_t encode_tail(uint32_t cpu_id, uint32_t node_idx) {
     return (uint16_t)((cpu_id << 2) | (node_idx & 0x3));
 }
 
 /**
  * Decode tail value into CPU ID and node index
  */
-static inline void decode_tail(uint16_t tail, uint32_t *cpu_id, uint32_t *node_idx) {
+static EXO_ALWAYS_INLINE void decode_tail(uint16_t tail, uint32_t *cpu_id, uint32_t *node_idx) {
     *cpu_id = tail >> 2;
     *node_idx = tail & 0x3;
 }
@@ -251,12 +252,14 @@ static inline void decode_tail(uint16_t tail, uint32_t *cpu_id, uint32_t *node_i
 /**
  * Try to acquire lock (fast path - no contention)
  * Returns 1 on success, 0 on failure
+ *
+ * OPTIMIZATION: Force inline to minimize overhead on uncontended path
  */
-static inline int qspin_trylock_fast(struct qspinlock *lock) {
+static EXO_ALWAYS_INLINE int qspin_trylock_fast(struct qspinlock *lock) {
     uint32_t expected = 0;
-    if (atomic_compare_exchange_strong_explicit(
+    if (likely(atomic_compare_exchange_strong_explicit(
             &lock->val, &expected, 1,
-            memory_order_acquire, memory_order_relaxed)) {
+            memory_order_acquire, memory_order_relaxed))) {
         // Fast path success - record statistics
         __sync_fetch_and_add(&lock->stats.fast_path_count, 1);
         __sync_fetch_and_add(&lock->stats.acquire_count, 1);
@@ -275,8 +278,8 @@ static inline int qspin_trylock_fast(struct qspinlock *lock) {
 void qspin_lock(struct qspinlock *lock) {
     uint64_t start_tsc = rdtsc();
 
-    // Fast path: try to acquire immediately
-    if (qspin_trylock_fast(lock)) {
+    // Fast path: try to acquire immediately (LIKELY: most locks are uncontended)
+    if (likely(qspin_trylock_fast(lock))) {
         return;
     }
 
@@ -296,7 +299,7 @@ void qspin_lock(struct qspinlock *lock) {
         }
     }
 
-    if (node_idx >= MCS_NODES_PER_CPU) {
+    if (unlikely(node_idx >= MCS_NODES_PER_CPU)) {
         panic("qspinlock: all MCS nodes in use (too many nested locks)");
     }
 
@@ -314,14 +317,14 @@ void qspin_lock(struct qspinlock *lock) {
     uint32_t old_val = atomic_exchange_explicit(&lock->val, my_tail << 16,
                                                 memory_order_acquire);
 
-    if (old_val == 0) {
-        // We got the lock immediately
+    if (unlikely(old_val == 0)) {
+        // We got the lock immediately (unlikely since fast path failed)
         return;
     }
 
     // There's a predecessor: link ourselves into the queue
     uint16_t old_tail = old_val >> 16;
-    if (old_tail != 0) {
+    if (likely(old_tail != 0)) {
         uint32_t pred_cpu, pred_idx;
         decode_tail(old_tail, &pred_cpu, &pred_idx);
         struct mcs_node *pred = &mcs_nodes[pred_cpu][pred_idx];
@@ -330,7 +333,7 @@ void qspin_lock(struct qspinlock *lock) {
         atomic_store_explicit(&pred->next, node, memory_order_release);
 
         // HIERARCHICAL QUEUE: Link into local queue if same NUMA node
-        if (pred->numa_node == my_numa) {
+        if (likely(pred->numa_node == my_numa)) {
             node->is_local = 1;
             atomic_store_explicit(&pred->local_next, node, memory_order_release);
         }
@@ -348,13 +351,13 @@ void qspin_lock(struct qspinlock *lock) {
             pause();  // CPU hint: we're spinning
         }
 
-        if (backoff < ADAPTIVE_SPIN_MAX_CYCLES) {
+        if (likely(backoff < ADAPTIVE_SPIN_MAX_CYCLES)) {
             backoff *= 2;
         }
 
         // Check for lock timeout (resurrection server integration)
         uint64_t elapsed = rdtsc() - start_tsc;
-        if (elapsed > LOCK_TIMEOUT_CYCLES) {
+        if (unlikely(elapsed > LOCK_TIMEOUT_CYCLES)) {
             cprintf("WARNING: qspinlock timeout after %llu cycles\n", elapsed);
             // TODO: Trigger resurrection server
         }
@@ -409,20 +412,20 @@ void qspin_unlock(struct qspinlock *lock) {
 
     mfence();  // Memory barrier before release
 
-    // Fast path: no waiters
+    // Fast path: no waiters (LIKELY: most releases are uncontended)
     uint32_t val = atomic_load_explicit(&lock->val, memory_order_relaxed);
-    if (val == 1) {
+    if (likely(val == 1)) {
         uint32_t expected = 1;
-        if (atomic_compare_exchange_strong_explicit(
+        if (likely(atomic_compare_exchange_strong_explicit(
                 &lock->val, &expected, 0,
-                memory_order_release, memory_order_relaxed)) {
+                memory_order_release, memory_order_relaxed))) {
             return;
         }
     }
 
     // Slow path: hand off to next waiter
     uint16_t tail = val >> 16;
-    if (tail != 0) {
+    if (likely(tail != 0)) {
         uint32_t cpu_id, node_idx;
         decode_tail(tail, &cpu_id, &node_idx);
         struct mcs_node *node = &mcs_nodes[cpu_id][node_idx];
@@ -437,8 +440,9 @@ void qspin_unlock(struct qspinlock *lock) {
         struct mcs_node *next_local = atomic_load_explicit(&node->local_next, memory_order_acquire);
         struct mcs_node *next_to_wake;
 
-        if (next_local != NULL) {
+        if (likely(next_local != NULL)) {
             // Local waiter available - prefer it (NUMA optimization)
+            // LIKELY: local waiters common in NUMA-aware systems
             next_to_wake = next_local;
             __sync_fetch_and_add(&lock->stats.local_handoff_count, 1);
         } else {

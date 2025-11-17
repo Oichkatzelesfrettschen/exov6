@@ -38,3 +38,19 @@
 #else
 #define EXO_MAYBE_UNUSED
 #endif
+
+/* Branch prediction hints */
+#if defined(__GNUC__) || defined(__clang__)
+#define likely(x)       __builtin_expect(!!(x), 1)
+#define unlikely(x)     __builtin_expect(!!(x), 0)
+#else
+#define likely(x)       (x)
+#define unlikely(x)     (x)
+#endif
+
+/* Force inlining for performance-critical paths */
+#if EXO_HAS_ATTR(always_inline)
+#define EXO_ALWAYS_INLINE __attribute__((always_inline)) inline
+#else
+#define EXO_ALWAYS_INLINE inline
+#endif
