@@ -93,6 +93,10 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/priority.c")
     list(APPEND SYNC_SOURCES sync/priority.c)
 endif()
+# LWKT tokens - CPU-owned soft locks with automatic release on context switch
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/lwkt_token.c")
+    list(APPEND SYNC_SOURCES sync/lwkt_token.c)
+endif()
 
 # Device drivers
 set(DRIVER_SOURCES)

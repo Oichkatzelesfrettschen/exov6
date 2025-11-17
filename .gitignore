@@ -35,3 +35,5 @@ test_isolation/
 # QSpinlock test binaries
 kernel/sync/test_qspinlock
 kernel/sync/bench_qspinlock
+kernel/sync/test_lwkt_token
+kernel/sync/bench_lwkt_token
