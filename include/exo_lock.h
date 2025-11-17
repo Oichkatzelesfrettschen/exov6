@@ -102,9 +102,11 @@ struct qspinlock {
     struct qspin_stats stats;       /**< Performance statistics */
     uint64_t last_acquire_tsc;      /**< TSC when lock was acquired */
     uint32_t last_owner_numa;       /**< NUMA node of last owner */
+    const char *name;               /**< Debug name */
+    uint32_t dag_level;             /**< DAG deadlock prevention level */
 } __attribute__((aligned(128)));  /* Double cache line for stats */
 
-void qspin_init(struct qspinlock *lock);
+void qspin_init(struct qspinlock *lock, const char *name, uint32_t dag_level);
 void qspin_lock(struct qspinlock *lock);
 int qspin_trylock(struct qspinlock *lock);
 void qspin_unlock(struct qspinlock *lock);
@@ -353,6 +355,7 @@ struct lwkt_token {
     /* Cold path: metadata */
     uint32_t hash;                  /**< Token pool hash */
     const char *name;               /**< Debug name */
+    uint32_t dag_level;             /**< DAG deadlock prevention level */
     uint64_t acquire_tsc;           /**< Timestamp of acquisition */
 
     /* Statistics (separate cache line for minimal false sharing) */
@@ -371,7 +374,7 @@ extern struct lwkt_token token_pool[TOKEN_POOL_SIZE];
 extern struct cpu_token_list cpu_tokens[NCPU];
 
 /* Core token API */
-void token_init(struct lwkt_token *token, const char *name);
+void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level);
 void token_acquire(struct lwkt_token *token);
 void token_release(struct lwkt_token *token);
 void token_release_all(void);  /**< Release all tokens on block */
@@ -428,6 +431,126 @@ struct lock_dag_node {
  * Returns 0 on success, -1 on violation
  */
 int dag_verify_order(struct lock_dag_node *new_lock);
+
+/* ========================================================================
+ * DAG Lock Hierarchy and Tracking (Phase 4)
+ * ======================================================================== */
+
+/* Lock hierarchy levels (DAG ordering) */
+#define LOCK_LEVEL_NONE         0   /**< No ordering requirement */
+#define LOCK_LEVEL_SCHEDULER    10  /**< Scheduler internal locks */
+#define LOCK_LEVEL_PROCESS      20  /**< Process table, thread management */
+#define LOCK_LEVEL_MEMORY       30  /**< Page tables, allocators */
+#define LOCK_LEVEL_VFS          40  /**< File system metadata */
+#define LOCK_LEVEL_IPC          50  /**< IPC queues, pipes */
+#define LOCK_LEVEL_CAPABILITY   60  /**< Capability tables */
+#define LOCK_LEVEL_DEVICE       70  /**< Device drivers */
+#define LOCK_LEVEL_USER         80  /**< User-visible resources */
+#define LOCK_LEVEL_MAX          100 /**< Maximum level */
+
+/* Lock type constants for DAG tracking */
+#define LOCK_TYPE_QSPIN         0
+#define LOCK_TYPE_ADAPTIVE      1
+#define LOCK_TYPE_TOKEN         2
+#define LOCK_TYPE_SLEEP         3
+
+/* Maximum locks held simultaneously per thread */
+#define MAX_HELD_LOCKS          16
+
+/**
+ * Per-lock acquisition record
+ * Tracks when and where a lock was acquired
+ */
+struct lock_acquisition {
+    void *lock_addr;           /**< Address of lock structure */
+    const char *lock_name;     /**< Debug name */
+    uint32_t dag_level;        /**< DAG level at acquisition */
+    uint32_t lock_type;        /**< LOCK_TYPE_* constant */
+    uint64_t acquire_tsc;      /**< Acquisition timestamp (TSC) */
+    const char *file;          /**< Source file */
+    int line;                  /**< Source line number */
+} __attribute__((aligned(64)));
+
+/**
+ * Per-thread lock tracking
+ * Stack of currently held locks for DAG validation
+ */
+struct thread_lock_tracker {
+    struct lock_acquisition stack[MAX_HELD_LOCKS];
+    uint32_t depth;            /**< Current stack depth */
+    uint32_t max_depth;        /**< Maximum depth reached */
+    uint32_t violations;       /**< DAG violations detected */
+    uint32_t highest_level;    /**< Highest DAG level currently held */
+} __attribute__((aligned(128)));
+
+/**
+ * Global DAG statistics
+ */
+struct dag_stats {
+    _Atomic uint64_t total_acquisitions;
+    _Atomic uint64_t dag_checks;
+    _Atomic uint64_t violations_detected;
+    _Atomic uint64_t violations_by_level[LOCK_LEVEL_MAX];
+    _Atomic uint64_t max_chain_length;
+} __attribute__((aligned(128)));
+
+extern struct dag_stats global_dag_stats;
+
+/* DAG API */
+
+/**
+ * Get current thread's lock tracker
+ * @return Pointer to tracker or NULL if not available
+ */
+struct thread_lock_tracker *get_lock_tracker(void);
+
+/**
+ * Validate lock acquisition against DAG ordering
+ * @param lock_addr Address of lock being acquired
+ * @param name Lock name (debug)
+ * @param dag_level DAG level of lock
+ * @param lock_type Type of lock (LOCK_TYPE_*)
+ * @param file Source file
+ * @param line Source line
+ * @return 1 if acquisition is safe, 0 if would violate DAG
+ */
+int dag_validate_acquisition(void *lock_addr, const char *name,
+                             uint32_t dag_level, uint32_t lock_type,
+                             const char *file, int line);
+
+/**
+ * Track lock acquisition in DAG
+ * @param lock_addr Address of lock acquired
+ * @param name Lock name (debug)
+ * @param dag_level DAG level of lock
+ * @param lock_type Type of lock (LOCK_TYPE_*)
+ * @param file Source file
+ * @param line Source line
+ */
+void dag_lock_acquired(void *lock_addr, const char *name,
+                      uint32_t dag_level, uint32_t lock_type,
+                      const char *file, int line);
+
+/**
+ * Track lock release in DAG
+ * @param lock_addr Address of lock being released
+ */
+void dag_lock_released(void *lock_addr);
+
+/**
+ * Dump DAG statistics
+ */
+void dag_dump_stats(void);
+
+/**
+ * Reset DAG statistics
+ */
+void dag_reset_stats(void);
+
+/**
+ * Initialize DAG subsystem
+ */
+void dag_init(void);
 
 /* ========================================================================
  * Unified Lock Structure

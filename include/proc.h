@@ -9,6 +9,11 @@
 #include "exo.h"
 #include <sys/types.h>  // For uid_t, gid_t
 
+/* Forward declarations for DAG tracking */
+#ifdef USE_DAG_CHECKING
+struct thread_lock_tracker;
+#endif
+
 // Context used for kernel context switches.
 #if defined(__x86_64__) || defined(__aarch64__)
 struct context64;
@@ -152,6 +157,11 @@ struct proc {
   
   /* OS brand for virtualization */
   int brand;                     /* OS personality (BRAND_*) */
+
+#ifdef USE_DAG_CHECKING
+  /* DAG lock ordering tracker (Phase 4) */
+  struct thread_lock_tracker lock_tracker;
+#endif
 };
 
 // Size will be recalculated after stabilization
