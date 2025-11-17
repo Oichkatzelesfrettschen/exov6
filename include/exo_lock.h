@@ -292,24 +292,101 @@ int thread_queue_empty(struct thread_queue *q);
  * ======================================================================== */
 
 /**
- * LWKT token - CPU-owned, released on thread block
- * Perfect for exokernel capability traversal
+ * LWKT (Light-Weight Kernel Thread) Token
+ *
+ * Inspired by DragonFlyBSD's LWKT token design:
+ * - CPU-owned (not thread-owned)
+ * - Automatically released on context switch/block
+ * - No sleep/wakeup mechanism (pure spin)
+ * - Extremely low overhead
+ * - Perfect for exokernel capability traversal
+ *
+ * Key properties:
+ * - One owner CPU at a time (or none)
+ * - Multiple tokens can be held simultaneously per CPU
+ * - Tokens released in batch on scheduler entry
+ * - Hash-based pool distribution reduces contention
+ *
+ * Optimal for: Very short critical sections (< 1μs)
  */
-struct lwkt_token {
-    _Atomic uint32_t cpu_owner;  /**< CPU ID holding token (0 = free) */
-    uint32_t hash;               /**< Token pool hash */
-    const char *name;            /**< Debug name */
-    uint64_t acquire_tsc;        /**< Timestamp of acquisition */
+
+/* Per-CPU token ownership tracking */
+#define MAX_TOKENS_PER_CPU 16  /**< Max simultaneous tokens per CPU */
+
+struct cpu_token_list {
+    struct lwkt_token *tokens[MAX_TOKENS_PER_CPU];
+    uint32_t count;
 } __attribute__((aligned(64)));
 
-/* Token pool for hash-based distribution */
-#define TOKEN_POOL_SIZE 256
-extern struct lwkt_token token_pool[TOKEN_POOL_SIZE];
+/* Token pool configuration */
+#define TOKEN_POOL_SIZE 256         /**< Pool size (power of 2) */
+#define TOKEN_POOL_HASH_BITS 8      /**< Hash bits for pool lookup */
+#define TOKEN_FREE_MARKER NCPU      /**< Free token marker (invalid CPU ID) */
 
+/**
+ * LWKT token statistics
+ */
+struct lwkt_token_stats {
+    uint64_t acquire_count;         /**< Total acquisitions */
+    uint64_t release_count;         /**< Total releases */
+    uint64_t contention_count;      /**< Times had to wait */
+    uint64_t total_hold_cycles;     /**< Total cycles held */
+    uint64_t max_hold_cycles;       /**< Longest hold time */
+    uint64_t reacquire_count;       /**< Already owned (fast path) */
+
+    /* Per-CPU acquisition tracking */
+    uint64_t cpu_acquire_count[NCPU]; /**< Acquisitions per CPU */
+} __attribute__((aligned(128)));
+
+/**
+ * LWKT token structure
+ *
+ * Memory layout (cache-optimized):
+ * - Atomic owner field (hot path)
+ * - Metadata (cold path)
+ * - Statistics (separate cache line)
+ */
+struct lwkt_token {
+    /* Hot path: atomic owner */
+    _Atomic uint32_t owner_cpu;     /**< CPU ID holding token (TOKEN_FREE_MARKER = free) */
+
+    /* Cold path: metadata */
+    uint32_t hash;                  /**< Token pool hash */
+    const char *name;               /**< Debug name */
+    uint64_t acquire_tsc;           /**< Timestamp of acquisition */
+
+    /* Statistics (separate cache line for minimal false sharing) */
+    struct lwkt_token_stats stats;
+
+    /* Padding */
+    uint8_t _pad[0];
+} __attribute__((aligned(256)));
+
+/* Compile-time size check */
+_Static_assert(sizeof(struct lwkt_token) <= 512,
+              "lwkt_token too large - optimize structure");
+
+/* Token pool for hash-based distribution */
+extern struct lwkt_token token_pool[TOKEN_POOL_SIZE];
+extern struct cpu_token_list cpu_tokens[NCPU];
+
+/* Core token API */
 void token_init(struct lwkt_token *token, const char *name);
 void token_acquire(struct lwkt_token *token);
 void token_release(struct lwkt_token *token);
 void token_release_all(void);  /**< Release all tokens on block */
+
+/* Token pool API */
+void token_pool_init(void);
+struct lwkt_token *token_pool_get(void *resource);  /**< Get token for resource */
+
+/* Verification and debugging */
+int token_holding(struct lwkt_token *token);
+void token_assert_held(struct lwkt_token *token);
+
+/* Statistics */
+void token_dump_stats(struct lwkt_token *token, const char *name);
+void token_reset_stats(struct lwkt_token *token);
 
 /* ========================================================================
  * Priority Sleeping Lock
