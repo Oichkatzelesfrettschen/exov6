@@ -1,5 +1,8 @@
 #pragma once
 
+#include <types.h>
+#include "qspinlock.h"
+
 // Long-term locks for processes
 struct sleeplock {
   uint32_t locked;       // Is the lock held?

@@ -16,6 +16,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "qspinlock.h"
 #include "sleeplock.h"
 #include "fs.h"
 #include <string.h>
@@ -218,14 +219,14 @@ static void bfree(int dev, uint b) {
 // read or write that inode's ip->valid, ip->size, ip->type, &c.
 
 struct {
-  struct spinlock lock;
+  struct qspinlock lock;
   struct inode inode[NINODE];
 } icache;
 
 void iinit(int dev) {
   int i = 0;
 
-  initlock(&icache.lock, "icache");
+  qspin_init(&icache.lock, "icache", LOCK_LEVEL_FILESYSTEM);
   for (i = 0; i < NINODE; i++) {
     initsleeplock(&icache.inode[i].lock, "inode", LOCK_LEVEL_FILESYSTEM + 1);
   }
@@ -289,14 +290,14 @@ void iupdate(struct inode *ip) {
 static struct inode *iget(uint dev, uint inum) {
   struct inode *ip, *empty;
 
-  acquire(&icache.lock);
+  qspin_lock(&icache.lock);
 
   // Is the inode already cached?
   empty = 0;
   for (ip = &icache.inode[0]; ip < &icache.inode[NINODE]; ip++) {
     if (ip->ref > 0 && ip->dev == dev && ip->inum == inum) {
       ip->ref++;
-      release(&icache.lock);
+      qspin_unlock(&icache.lock);
       return ip;
     }
     if (empty == 0 && ip->ref == 0) // Remember empty slot.
@@ -312,7 +313,7 @@ static struct inode *iget(uint dev, uint inum) {
   ip->inum = inum;
   ip->ref = 1;
   ip->valid = 0;
-  release(&icache.lock);
+  qspin_unlock(&icache.lock);
 
   return ip;
 }
@@ -320,9 +321,9 @@ static struct inode *iget(uint dev, uint inum) {
 // Increment reference count for ip.
 // Returns ip to enable ip = idup(ip1) idiom.
 struct inode *idup(struct inode *ip) {
-  acquire(&icache.lock);
+  qspin_lock(&icache.lock);
   ip->ref++;
-  release(&icache.lock);
+  qspin_unlock(&icache.lock);
   return ip;
 }
 
@@ -371,9 +372,9 @@ void iunlock(struct inode *ip) {
 void iput(struct inode *ip) {
   acquiresleep(&ip->lock);
   if (ip->valid && ip->nlink == 0) {
-    acquire(&icache.lock);
+    qspin_lock(&icache.lock);
     int r = ip->ref;
-    release(&icache.lock);
+    qspin_unlock(&icache.lock);
     if (r == 1) {
       // inode has no links and no other references: truncate and free.
       itrunc(ip);
@@ -384,9 +385,9 @@ void iput(struct inode *ip) {
   }
   releasesleep(&ip->lock);
 
-  acquire(&icache.lock);
+  qspin_lock(&icache.lock);
   ip->ref--;
-  release(&icache.lock);
+  qspin_unlock(&icache.lock);
 }
 
 // Common idiom: unlock, then put.

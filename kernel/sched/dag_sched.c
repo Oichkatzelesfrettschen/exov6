@@ -5,6 +5,7 @@
 
 #include <types.h>
 #include "spinlock.h"    /* struct spinlock, initlock, acquire, release */
+#include "qspinlock.h"   /* struct qspinlock, qspin_init, qspin_lock, qspin_unlock */
 #include "dag.h"         /* struct dag_node, struct dag_node_list */
 /* Forward declarations for lattice IPC */
 extern int lattice_yield_to(int pid);
@@ -25,7 +26,7 @@ extern void panic(const char *);
 #define DAG_MAX_DEPTH 64
 
 /* Global scheduler state */
-static struct spinlock dag_lock;
+static struct qspinlock dag_lock;
 static struct dag_node *ready_head = NULL;
 
 /* Helper container for DFS traversal */
@@ -89,17 +90,17 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
     return;
   }
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
 
   /* reject if dependency would create a cycle */
   if (path_exists(child, parent)) {
-    release(&dag_lock);
+    qspin_unlock(&dag_lock);
     return;
   }
 
   struct dag_node_list *link = (struct dag_node_list *)kalloc();
   if (!link) {
-    release(&dag_lock);
+    qspin_unlock(&dag_lock);
     assert(0 && "dag_node_add_dep: out of memory");
     return;
   }
@@ -118,37 +119,37 @@ void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
     child->deps[child->ndeps++] = parent;
   }
 
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 }
 
 /**
  * @brief Submit node @p n to the scheduler (if no cycles).
  */
 int dag_sched_submit(struct dag_node *n) {
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   if (creates_cycle(n)) {
-    release(&dag_lock);
+    qspin_unlock(&dag_lock);
     return -1;
   }
   if (n->pending == 0 && !n->done) {
     enqueue_ready(n);
   }
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
   return 0;
 }
 
 /* Provide a simple wrapper expected by lattice_ipc */
 int dag_add_edge(struct dag_node *parent, struct dag_node *child) {
   if (!parent || !child) return -1;
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   /* adding parent->child would create a cycle if child already reaches parent */
   if (path_exists(child, parent)) {
-    release(&dag_lock);
+    qspin_unlock(&dag_lock);
     return -1;
   }
   struct dag_node_list *link = (struct dag_node_list *)kalloc();
   if (!link) {
-    release(&dag_lock);
+    qspin_unlock(&dag_lock);
     return -1;
   }
   link->node = child;
@@ -163,7 +164,7 @@ int dag_add_edge(struct dag_node *parent, struct dag_node *child) {
   if (child->ndeps < DAG_MAX_DEPTH) {
     child->deps[child->ndeps++] = parent;
   }
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
   return 0;
 }
 
@@ -173,9 +174,9 @@ int dag_add_edge(struct dag_node *parent, struct dag_node *child) {
 static void dag_yield(void) {
   struct dag_node *n;
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   n = dequeue_ready();
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 
   if (!n) {
     return;
@@ -188,9 +189,9 @@ static void dag_yield(void) {
     (void)exo_yield_to(n->ctx);
   }
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   dag_mark_done(n);
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 }
 
 /**
@@ -201,25 +202,25 @@ void dag_sched_yield_to(struct dag_node *n) {
     return;
   }
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   if (n->pending > 0 || n->done) {
-    release(&dag_lock);
+    qspin_unlock(&dag_lock);
     return;
   }
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 
   (void)exo_yield_to(n->ctx);
 
-  acquire(&dag_lock);
+  qspin_lock(&dag_lock);
   dag_mark_done(n);
-  release(&dag_lock);
+  qspin_unlock(&dag_lock);
 }
 
 /**
  * @brief Initialize the DAG scheduler.
  */
 void dag_sched_init(void) {
-  initlock(&dag_lock, "dag");
+  qspin_init(&dag_lock, "dag", LOCK_LEVEL_SCHEDULER);
   static struct exo_sched_ops ops = {
       .halt = dag_halt, .yield = dag_yield, .next = NULL};
   static struct exo_stream stream = {.head = &ops};

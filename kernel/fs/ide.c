@@ -9,6 +9,7 @@
 #include "arch.h"
 #include "../traps.h"
 #include "spinlock.h"
+#include "qspinlock.h"
 #include "sleeplock.h"
 #include "fs.h"
 #include "buf.h"
@@ -28,7 +29,7 @@
 // idequeue->qnext points to the next buf to be processed.
 // You must hold idelock while manipulating queue.
 
-static struct spinlock idelock;
+static struct qspinlock idelock;
 static struct buf *idequeue;
 
 static int havedisk1;
@@ -52,7 +53,7 @@ ideinit(void)
 {
   int i;
 
-  initlock(&idelock, "ide");
+  qspin_init(&idelock, "ide", LOCK_LEVEL_DEVICE);
   ioapicenable(IRQ_IDE, ncpu - 1);
   idewait(0);
 
@@ -106,10 +107,10 @@ ideintr(void)
   struct buf *b;
 
   // First queued buffer is the active request.
-  acquire(&idelock);
+  qspin_lock(&idelock);
 
   if((b = idequeue) == 0){
-    release(&idelock);
+    qspin_unlock(&idelock);
     return;
   }
   idequeue = b->qnext;
@@ -127,7 +128,7 @@ ideintr(void)
   if(idequeue != 0)
     idestart(idequeue);
 
-  release(&idelock);
+  qspin_unlock(&idelock);
 }
 
 //PAGEBREAK!
@@ -146,7 +147,7 @@ iderw(struct buf *b)
   if(b->dev != 0 && !havedisk1)
     panic("iderw: ide disk 1 not present");
 
-  acquire(&idelock);  //DOC:acquire-lock
+  qspin_lock(&idelock);  //DOC:acquire-lock
 
   // Append b to idequeue.
   b->qnext = 0;
@@ -164,5 +165,5 @@ iderw(struct buf *b)
   }
 
 
-  release(&idelock);
+  qspin_unlock(&idelock);
 }

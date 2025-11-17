@@ -1,12 +1,13 @@
 #include <types.h>
 #include "defs.h"
 #include "spinlock.h"
+#include "qspinlock.h"
 #include "exo_stream.h"
 #include "exo_cpu.h"
 #include "q16_fixed.h"  /* Use Q16.16 fixed-point instead of math_core.h */
 #include "dag.h"
 
-static struct spinlock beatty_lock;
+static struct qspinlock beatty_lock;
 static struct exo_sched_ops beatty_ops;
 static struct exo_stream beatty_stream;
 
@@ -39,18 +40,18 @@ static q16_t alpha;  /* First irrational (golden ratio) */
 static q16_t beta;   /* Second irrational (1/(1-1/φ)) */
 
 void beatty_sched_set_tasks(exo_cap a, exo_cap b) {
-  acquire(&beatty_lock);
+  qspin_lock(&beatty_lock);
   task_a = a;
   task_b = b;
   na = 1;
   nb = 1;
-  release(&beatty_lock);
+  qspin_unlock(&beatty_lock);
 }
 
 static void beatty_halt(void) { /* nothing */ }
 
 static void beatty_yield(void) {
-  acquire(&beatty_lock);
+  qspin_lock(&beatty_lock);
   
   /* Calculate Beatty sequence values using Q16.16 */
   uint32_t beatty_a = q16_beatty(na, alpha);
@@ -64,14 +65,14 @@ static void beatty_yield(void) {
     next = task_b;
     nb++;
   }
-  release(&beatty_lock);
+  qspin_unlock(&beatty_lock);
 
   if (next.pa)
     exo_yield_to(next);
 }
 
 void beatty_sched_init(void) {
-  initlock(&beatty_lock, "beatty");
+  qspin_init(&beatty_lock, "beatty", LOCK_LEVEL_SCHEDULER);
   
   /* Initialize golden ratio and its complement for Beatty sequences */
   alpha = Q16_PHI;  /* φ = 1.618... */
@@ -127,13 +128,13 @@ static bool creates_cycle(struct dag_node *n) {
  * Returns ``-1`` if the submission would create a cycle.
  */
 int dag_sched_submit(struct dag_node *n) {
-  acquire(&beatty_lock);
+  qspin_lock(&beatty_lock);
   if (creates_cycle(n)) {
-    release(&beatty_lock);
+    qspin_unlock(&beatty_lock);
     return -1;
   }
   if (n->pending == 0 && !n->done)
     n->next = 0; /* ready list unused in Beatty scheduler */
-  release(&beatty_lock);
+  qspin_unlock(&beatty_lock);
   return 0;
 }

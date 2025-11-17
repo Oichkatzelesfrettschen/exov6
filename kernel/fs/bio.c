@@ -22,15 +22,16 @@
 #include "defs.h"
 #include "param.h"
 #include "spinlock.h"
+#include "qspinlock.h"
 #include "sleeplock.h"
 #include "fs.h"
 #include "buf.h"
 
 struct {
-  struct spinlock lock;
+  struct qspinlock lock;
   struct buf buf[NBUF];
   // protects deferred releases
-  struct spinlock rlock;
+  struct qspinlock rlock;
 
   // Linked list of all buffers, through prev/next.
   // head.next is most recently used.
@@ -42,8 +43,8 @@ binit(void)
 {
   struct buf *b;
 
-  initlock(&bcache.lock, "bcache");
-  initlock(&bcache.rlock, "bcache_rcu");
+  qspin_init(&bcache.lock, "bcache", LOCK_LEVEL_FILESYSTEM);
+  qspin_init(&bcache.rlock, "bcache_rcu", LOCK_LEVEL_FILESYSTEM);
 
 //PAGEBREAK!
   // Create linked list of buffers
@@ -67,13 +68,13 @@ bget(uint32_t dev, uint32_t blockno)
 {
   struct buf *b;
 
-  acquire(&bcache.lock);
+  qspin_lock(&bcache.lock);
 
   // Is the block already cached?
   for(b = bcache.head.next; b != &bcache.head; b = b->next){
     if(b->dev == dev && b->blockno == blockno){
       b->refcnt++;
-      release(&bcache.lock);
+      qspin_unlock(&bcache.lock);
       acquiresleep(&b->lock);
       return b;
     }
@@ -88,7 +89,7 @@ bget(uint32_t dev, uint32_t blockno)
       b->blockno = blockno;
       b->flags = 0;
       b->refcnt = 1;
-      release(&bcache.lock);
+      qspin_unlock(&bcache.lock);
       acquiresleep(&b->lock);
       return b;
     }
@@ -132,22 +133,22 @@ brelse(struct buf *b)
   size_t r = __sync_sub_and_fetch(&b->rcref, 1);
   rcu_read_unlock();
 
-  acquire(&bcache.lock);
+  qspin_lock(&bcache.lock);
   b->refcnt--;
   int free = (b->refcnt == 0);
-  release(&bcache.lock);
+  qspin_unlock(&bcache.lock);
 
   if(free){
     if(r > 0)
       rcu_synchronize();
-    acquire(&bcache.lock);
+    qspin_lock(&bcache.lock);
     b->next->prev = b->prev;
     b->prev->next = b->next;
     b->next = bcache.head.next;
     b->prev = &bcache.head;
     bcache.head.next->prev = b;
     bcache.head.next = b;
-    release(&bcache.lock);
+    qspin_unlock(&bcache.lock);
   }
 }
 //PAGEBREAK!

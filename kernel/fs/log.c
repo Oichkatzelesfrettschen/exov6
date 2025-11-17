@@ -2,6 +2,7 @@
 #include "defs.h"
 #include "param.h"
 #include "spinlock.h"
+#include "adaptive_mutex.h"
 #include "sleeplock.h"
 #include "fs.h"
 #include "buf.h"
@@ -38,7 +39,7 @@ struct logheader {
 };
 
 struct log {
-  struct spinlock lock;
+  struct adaptive_mutex lock;
   int start;
   int size;
   int outstanding; // how many FS sys calls are executing.
@@ -58,7 +59,7 @@ initlog(int dev)
     panic("initlog: too big logheader");
 
   struct superblock sb;
-  initlock(&fs_log.lock, "log");
+  adaptive_mutex_init(&fs_log.lock, "log", LOCK_LEVEL_FILESYSTEM);
   readsb(dev, &sb);
   fs_log.start = sb.logstart;
   fs_log.size = sb.nlog;
@@ -126,7 +127,7 @@ recover_from_log(void)
 void
 begin_op(void)
 {
-  acquire(&fs_log.lock);
+  adaptive_mutex_lock(&fs_log.lock);
   while(1){
     if(fs_log.committing){
       ksleep(&log, &fs_log.lock);
@@ -135,7 +136,7 @@ begin_op(void)
       ksleep(&log, &fs_log.lock);
     } else {
       fs_log.outstanding += 1;
-      release(&fs_log.lock);
+      adaptive_mutex_unlock(&fs_log.lock);
       break;
     }
   }
@@ -148,7 +149,7 @@ end_op(void)
 {
   int do_commit = 0;
 
-  acquire(&fs_log.lock);
+  adaptive_mutex_lock(&fs_log.lock);
   fs_log.outstanding -= 1;
   if(fs_log.committing)
     panic("fs_log.committing");
@@ -161,16 +162,16 @@ end_op(void)
     // the amount of reserved space.
     wakeup(&log);
   }
-  release(&fs_log.lock);
+  adaptive_mutex_unlock(&fs_log.lock);
 
   if(do_commit){
     // call commit w/o holding locks, since not allowed
     // to sleep with locks.
     commit();
-    acquire(&fs_log.lock);
+    adaptive_mutex_lock(&fs_log.lock);
     fs_log.committing = 0;
     wakeup(&log);
-    release(&fs_log.lock);
+    adaptive_mutex_unlock(&fs_log.lock);
   }
 }
 
@@ -221,7 +222,7 @@ log_write(struct buf *b)
   if (fs_log.outstanding < 1)
     panic("log_write outside of trans");
 
-  acquire(&fs_log.lock);
+  adaptive_mutex_lock(&fs_log.lock);
   for (i = 0; i < fs_log.lh.n; i++) {
     if (fs_log.lh.block[i] == b->blockno)   // log absorbtion
       break;
@@ -230,5 +231,5 @@ log_write(struct buf *b)
   if (i == fs_log.lh.n)
     fs_log.lh.n++;
   b->flags |= B_DIRTY; // prevent eviction
-  release(&fs_log.lock);
+  adaptive_mutex_unlock(&fs_log.lock);
 }

@@ -207,7 +207,7 @@ void timerinit(void);
 void idtinit(void);
 extern uint32_t ticks;
 void tvinit(void);
-extern struct spinlock tickslock;
+extern struct qspinlock tickslock;
 void exo_pctr_transfer(struct trapframe *tf);
 
 // uart.c

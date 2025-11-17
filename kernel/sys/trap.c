@@ -4,6 +4,7 @@
 #include "param.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "qspinlock.h"
 #include "../traps.h"
 #include <types.h>
 #include "arch.h"
@@ -19,7 +20,7 @@ extern void exit(int);
 // Interrupt descriptor table (shared by all CPUs).
 struct gatedesc idt[256];
 extern uint32_t vectors[]; // in vectors.S: array of 256 entry pointers
-struct spinlock tickslock;
+struct qspinlock tickslock;
 uint32_t ticks;
 
 void tvinit(void) {
@@ -34,7 +35,7 @@ void tvinit(void) {
   SETGATE(idt[T_PCTR_TRANSFER], 1, SEG_KCODE<<3, vectors[T_PCTR_TRANSFER], DPL_USER);
 
 
-  initlock(&tickslock, "time");
+  qspin_init(&tickslock, "time", LOCK_LEVEL_DEVICE);
 }
 
 void idtinit(void) { lidt(idt, sizeof(idt)); }
@@ -64,10 +65,10 @@ void trap(struct trapframe *tf) {
   switch (tf->trapno) {
   case T_IRQ0 + IRQ_TIMER:
     if (cpunum() == 0) {
-      acquire(&tickslock);
+      qspin_lock(&tickslock);
       ticks++;
       wakeup(&ticks);
-      release(&tickslock);
+      qspin_unlock(&tickslock);
     }
     if (myproc()) {
       // This gas consumption is already handled at the top of trap()

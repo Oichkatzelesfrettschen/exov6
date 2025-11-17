@@ -7,6 +7,10 @@
 #include "ipc.h"
 #include "exo.h"
 
+#ifdef USE_DAG_CHECKING
+#include "exo_lock.h"  // For struct thread_lock_tracker (Phase 4-6)
+#endif
+
 // Context used for kernel context switches.
 #ifndef CONTEXT_T_DEFINED
 #define CONTEXT_T_DEFINED
@@ -127,11 +131,20 @@ struct proc {
   /* Process exit and IPC state */
   int exit_status;               /* Exit status for wait() */
   void *ipc_chan;                /* IPC channel for communication */
+
+#ifdef USE_DAG_CHECKING
+  /* DAG lock ordering tracker (Phase 4-6) */
+  struct thread_lock_tracker lock_tracker;
+#endif
 };
 
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
+#ifdef USE_DAG_CHECKING
+_Static_assert(sizeof(struct proc) <= 512, "struct proc size too large");  // Updated for DAG tracker
+#else
 _Static_assert(sizeof(struct proc) == 304, "struct proc size incorrect");  // Updated for added fields
+#endif
 #else
 _Static_assert(sizeof(struct proc) == 184, "struct proc size incorrect");  // Updated for added fields
 #endif
