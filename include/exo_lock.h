@@ -117,24 +117,175 @@ void qspin_reset_stats(struct qspinlock *lock);
  * Adaptive Mutex
  * ======================================================================== */
 
+/* Forward declaration for turnstile */
+struct turnstile;
+struct thread;
+
+/* Adaptive mutex configuration */
+#define ADAPTIVE_SPIN_LIMIT_DEFAULT 100    /**< Default max spin iterations */
+#define ADAPTIVE_SPIN_MIN_BACKOFF   10     /**< Min backoff cycles */
+#define ADAPTIVE_SPIN_MAX_BACKOFF   1000   /**< Max backoff cycles */
+
+/* Invalid CPU/thread markers */
+#define INVALID_CPU ((uint32_t)-1)
+#define INVALID_TID ((uint32_t)-1)
+
 /**
- * Adaptive mutex with turnstile
- * Spins if owner is running, blocks otherwise
+ * Adaptive mutex performance statistics
+ */
+struct adaptive_mutex_stats {
+    uint64_t acquire_count;           /**< Total acquisitions */
+    uint64_t spin_acquire_count;      /**< Acquired while spinning */
+    uint64_t block_acquire_count;     /**< Acquired after blocking */
+    uint64_t trylock_success_count;   /**< Successful trylock attempts */
+    uint64_t trylock_fail_count;      /**< Failed trylock attempts */
+    uint64_t total_spin_cycles;       /**< Total TSC cycles spent spinning */
+    uint64_t total_block_cycles;      /**< Total TSC cycles spent blocked */
+    uint64_t max_spin_cycles;         /**< Longest spin time */
+    uint64_t max_block_cycles;        /**< Longest block time */
+    uint64_t max_hold_cycles;         /**< Longest hold time */
+    uint64_t contention_count;        /**< Times lock was contended */
+    uint64_t owner_running_count;     /**< Times owner was running (spin) */
+    uint64_t owner_blocked_count;     /**< Times owner was blocked (no spin) */
+    uint64_t priority_inherit_count;  /**< Times PI was triggered */
+} __attribute__((aligned(128)));
+
+/**
+ * Adaptive mutex with turnstile queuing
+ *
+ * Key features:
+ * - Spins if lock holder is running (likely to release soon)
+ * - Blocks on turnstile if lock holder is sleeping/preempted
+ * - Supports priority inheritance for real-time tasks
+ * - NUMA-aware spinning behavior
+ * - Comprehensive performance statistics
+ *
+ * Optimal for: 10μs - 100μs critical sections
+ *
+ * Memory layout (cache-aligned):
+ * - Atomic state fields (1 cache line)
+ * - Configuration and pointers (1 cache line)
+ * - Statistics (2 cache lines)
  */
 struct adaptive_mutex {
-    _Atomic uint64_t owner;     /**< Owner thread ID (or 0 if free) */
-    _Atomic uint32_t waiters;   /**< Number of waiters */
-    void *turnstile;            /**< Wait queue (allocated on contention) */
-    uint32_t flags;             /**< Lock flags (priority inheritance, etc.) */
-} __attribute__((aligned(64)));
+    /* Hot path: atomic state (frequently accessed) */
+    _Atomic uint32_t locked;           /**< 0 = free, 1 = locked */
+    _Atomic uint32_t owner_cpu;        /**< CPU ID of current holder */
+    _Atomic uint32_t owner_tid;        /**< Thread ID of current holder */
+    _Atomic uint32_t waiters;          /**< Number of threads waiting */
 
+    /* Configuration and cold path data */
+    struct turnstile *turnstile;       /**< Wait queue for blockers */
+    uint32_t spin_limit;               /**< Max spin iterations before blocking */
+    uint32_t flags;                    /**< Behavior flags */
+    const char *name;                  /**< Debug name */
+    uint32_t dag_level;                /**< DAG deadlock prevention level */
+
+    /* Statistics (separate cache lines to avoid false sharing) */
+    struct adaptive_mutex_stats stats;
+
+    /* Padding to ensure cache line alignment */
+    uint8_t _pad[0];
+} __attribute__((aligned(256)));  /* 4 cache lines for full structure */
+
+/* Compile-time size check */
+_Static_assert(sizeof(struct adaptive_mutex) <= 512,
+              "adaptive_mutex too large - optimize structure");
+
+/* Adaptive mutex flags */
 #define ADAPTIVE_FLAG_PRIO_INHERIT  0x1  /**< Enable priority inheritance */
 #define ADAPTIVE_FLAG_REALTIME      0x2  /**< Real-time priority */
+#define ADAPTIVE_FLAG_NUMA_AWARE    0x4  /**< NUMA-aware spinning */
+#define ADAPTIVE_FLAG_STATS_ENABLED 0x8  /**< Track detailed statistics */
 
-void adaptive_init(struct adaptive_mutex *lock, uint32_t flags);
-void adaptive_lock(struct adaptive_mutex *lock);
-int adaptive_trylock(struct adaptive_mutex *lock);
-void adaptive_unlock(struct adaptive_mutex *lock);
+/* Adaptive mutex API */
+void adaptive_mutex_init(struct adaptive_mutex *mutex, const char *name,
+                        uint32_t dag_level, uint32_t flags);
+void adaptive_mutex_lock(struct adaptive_mutex *mutex);
+int adaptive_mutex_trylock(struct adaptive_mutex *mutex);
+void adaptive_mutex_unlock(struct adaptive_mutex *mutex);
+
+/* Statistics and debugging */
+void adaptive_mutex_dump_stats(struct adaptive_mutex *mutex, const char *name);
+void adaptive_mutex_reset_stats(struct adaptive_mutex *mutex);
+
+/* Advanced operations */
+int adaptive_mutex_holding(struct adaptive_mutex *mutex);
+void adaptive_mutex_set_spin_limit(struct adaptive_mutex *mutex, uint32_t limit);
+
+/* ========================================================================
+ * Turnstile (Wait Queue for Adaptive Mutex)
+ * ======================================================================== */
+
+/**
+ * Thread queue node
+ * Used in turnstile FIFO queue
+ */
+struct thread_queue_node {
+    struct thread *thread;             /**< Waiting thread */
+    struct thread_queue_node *next;    /**< Next in queue */
+    struct thread_queue_node *prev;    /**< Previous in queue */
+    uint32_t priority;                 /**< Thread priority (for PI) */
+    uint64_t enqueue_tsc;              /**< When thread joined queue */
+} __attribute__((aligned(64)));
+
+/**
+ * Thread wait queue (FIFO with priority inheritance support)
+ */
+struct thread_queue {
+    struct thread_queue_node *head;    /**< First waiter */
+    struct thread_queue_node *tail;    /**< Last waiter */
+    uint32_t count;                    /**< Number of waiters */
+    uint32_t max_priority;             /**< Highest priority in queue */
+} __attribute__((aligned(64)));
+
+/**
+ * Turnstile - wait queue with priority inheritance
+ *
+ * Design based on FreeBSD turnstiles:
+ * - One turnstile per blocking lock
+ * - FIFO ordering for fairness
+ * - Priority inheritance to prevent priority inversion
+ * - Statistics for performance analysis
+ *
+ * Turnstiles are allocated on first contention and recycled.
+ */
+struct turnstile {
+    struct thread_queue waiters;       /**< FIFO wait queue */
+    _Atomic uint32_t count;            /**< Number of waiters (atomic for stats) */
+    struct adaptive_mutex *mutex;      /**< Associated mutex */
+
+    /* Priority inheritance state */
+    uint8_t priority_inherited;        /**< 1 if PI is active */
+    uint8_t _pad1[3];
+    uint32_t inherited_priority;       /**< Priority we inherited */
+    uint32_t original_priority;        /**< Original owner priority */
+
+    /* Statistics */
+    uint64_t total_wait_time;          /**< Total wait time of all threads */
+    uint64_t max_wait_time;            /**< Longest wait time */
+    uint64_t wakeup_count;             /**< Total wakeups */
+
+    /* Debugging */
+    const char *name;                  /**< Debug name (from mutex) */
+} __attribute__((aligned(128)));
+
+/* Turnstile pool size (pre-allocated for performance) */
+#define TURNSTILE_POOL_SIZE 64
+
+/* Turnstile API */
+struct turnstile *turnstile_alloc(struct adaptive_mutex *mutex);
+void turnstile_free(struct turnstile *ts);
+void turnstile_wait(struct turnstile *ts, struct thread *thread);
+struct thread *turnstile_wake_one(struct turnstile *ts);
+void turnstile_wake_all(struct turnstile *ts);
+int turnstile_has_waiters(struct turnstile *ts);
+
+/* Thread queue operations */
+void thread_queue_init(struct thread_queue *q);
+void thread_queue_push(struct thread_queue *q, struct thread *thread, uint32_t priority);
+struct thread *thread_queue_pop(struct thread_queue *q);
+int thread_queue_empty(struct thread_queue *q);
 
 /* ========================================================================
  * LWKT Token (Soft Lock)
