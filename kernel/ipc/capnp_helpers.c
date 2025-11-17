@@ -147,28 +147,28 @@ void *capnp_builder_new_list(capnp_builder_t *builder,
 
   size_t element_size = 0;
   switch (element_type) {
-  case CAPNP_LIST_VOID:
+  case CAPNP_ELEMENT_VOID:
     element_size = 0;
     break;
-  case CAPNP_LIST_BIT:
+  case CAPNP_ELEMENT_BIT:
     element_size = (count + 7) / 8;
     break;
-  case CAPNP_LIST_BYTE:
+  case CAPNP_ELEMENT_BYTE:
     element_size = count;
     break;
-  case CAPNP_LIST_TWO_BYTES:
+  case CAPNP_ELEMENT_TWO_BYTES:
     element_size = count * 2;
     break;
-  case CAPNP_LIST_FOUR_BYTES:
+  case CAPNP_ELEMENT_FOUR_BYTES:
     element_size = count * 4;
     break;
-  case CAPNP_LIST_EIGHT_BYTES:
+  case CAPNP_ELEMENT_EIGHT_BYTES:
     element_size = count * 8;
     break;
-  case CAPNP_LIST_POINTER:
+  case CAPNP_ELEMENT_POINTER:
     element_size = count * 8;
     break;
-  case CAPNP_LIST_COMPOSITE:
+  case CAPNP_ELEMENT_COMPOSITE:
     element_size = count * 8;
     break; // Simplified
   }
@@ -247,7 +247,7 @@ capnp_error_t capnp_builder_set_text(capnp_builder_t *builder, void *struct_ptr,
 
   // Create list pointer for text (text is a list of bytes)
   capnp_pointer_t ptr =
-      capnp_make_list_pointer(0, CAPNP_LIST_BYTE, text_len + 1);
+      capnp_make_list_pointer(0, CAPNP_ELEMENT_BYTE, text_len + 1);
 
   // Calculate offset from struct to text data
   uintptr_t struct_addr = (uintptr_t)struct_ptr;
@@ -443,7 +443,7 @@ const char *capnp_reader_get_text(capnp_reader_t *reader,
   ptr.raw = capnp_le64(ptr_field->raw);
 
   if (ptr.common.type != CAPNP_PTR_LIST ||
-      ptr.list_ptr.element_type != CAPNP_LIST_BYTE) {
+      ptr.list_ptr.element_type != CAPNP_ELEMENT_BYTE) {
     return NULL;
   }
 

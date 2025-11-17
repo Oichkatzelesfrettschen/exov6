@@ -62,8 +62,23 @@ typedef enum {
     CAPNP_OK = 0,
     CAPNP_ERROR_INVALID_MESSAGE = -1,
     CAPNP_ERROR_OUT_OF_MEMORY = -2,
-    CAPNP_ERROR_INVALID_SEGMENT = -3
+    CAPNP_ERROR_INVALID_SEGMENT = -3,
+    CAPNP_ERROR_INVALID_SCHEMA = -4
 } capnp_error_t;
+
+// Cap'n Proto schema types (minimal stubs for kernel use)
+typedef struct {
+    uint64_t id;
+    uint16_t data_word_count;
+    uint16_t pointer_count;
+    const char *name;
+} capnp_struct_schema_t;
+
+typedef struct {
+    uint16_t slot;
+    uint8_t type;
+    const char *name;
+} capnp_field_t;
 
 // Cap'n Proto message builder
 #define CAPNP_MAX_SEGMENTS 16
@@ -82,7 +97,7 @@ typedef struct {
 } msg_desc_t;
 
 // Function declarations
-size_t msg_desc_size(const msg_desc_t* desc);
+size_t capnp_msg_desc_size(const msg_desc_t* desc);  /* Renamed to avoid conflict with ipc.h */
 void capnp_init(void);
 
 // Cap'n Proto pointer constructors
