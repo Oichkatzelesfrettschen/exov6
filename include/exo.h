@@ -41,6 +41,11 @@ typedef struct exo_cap {
 #define EXO_CAP_WRITE      (1 << 1)
 #define EXO_CAP_EXECUTE    (1 << 2)
 
+/* Legacy aliases for compatibility with kernel code */
+#define EXO_RIGHT_R        EXO_CAP_READ
+#define EXO_RIGHT_W        EXO_CAP_WRITE
+#define EXO_RIGHT_X        EXO_CAP_EXECUTE
+
 /* Block device capability */
 typedef struct exo_blockcap {
     uint32_t dev;        /* Device number */

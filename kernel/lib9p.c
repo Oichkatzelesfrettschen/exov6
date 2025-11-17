@@ -12,9 +12,9 @@
  */
 
 #include "defs.h"
-#include "cap.h" 
+#include "cap.h"
 #include "exo.h"
-#include "exokernel.h"
+/* Note: Use kernel/defs.h instead of include/exokernel.h for kernel code */
 #include "proc.h"
 #include "lambda_cap.h"
 #include "string.h"

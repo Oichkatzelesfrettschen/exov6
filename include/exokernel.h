@@ -1,14 +1,23 @@
 #pragma once
+
+/* Userspace API header - do not include from kernel code! */
+/* Use kernel/defs.h instead for kernel implementations */
+#ifdef __EXOLOCK_H_INCLUDED
+#warning "exokernel.h is userspace API - kernel should use defs.h"
+#endif
+
 #include "types.h"
 #include "compiler_attrs.h"
 #include "exo.h"
 #include "syscall.h"
 #include "compiler_attrs.h"
 
-/* Capability access rights. */
+/* Capability access rights (also defined in exo.h for kernel) */
+#ifndef EXO_RIGHT_R
 #define EXO_RIGHT_R 0x1
 #define EXO_RIGHT_W 0x2
 #define EXO_RIGHT_X 0x4
+#endif
 #define EXO_RIGHT_CTL 0x8
 
 static inline int cap_has_rights(uint32_t rights, uint32_t need) {

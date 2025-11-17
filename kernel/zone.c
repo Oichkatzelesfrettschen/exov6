@@ -1,5 +1,5 @@
+#include "defs.h"  /* Must be first to set __EXOLOCK_H_INCLUDED guard */
 #include "zone.h"
-#include "defs.h"
 #include "mmu.h"
 #include "memlayout.h"
 

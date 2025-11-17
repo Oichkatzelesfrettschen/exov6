@@ -37,7 +37,8 @@ void release(struct spinlock *lk);
 int holding(struct spinlock *lk);
 
 /* Queued spinlock support (legacy placeholders - use exo_lock.h for real qspinlock) */
-#if !defined(USE_TICKET_LOCK) && !defined(USE_EXOLOCK)
+/* DEPRECATED: Use exo_lock.h and struct qspinlock instead */
+#if !defined(USE_TICKET_LOCK) && !defined(USE_EXOLOCK) && !defined(__EXOLOCK_H_INCLUDED)
 void qspin_lock(struct spinlock *lk);
 void qspin_unlock(struct spinlock *lk);
 #endif

@@ -20,7 +20,7 @@
 #include "types.h"
 #include "defs.h"
 #include "exo.h"
-#include "exokernel.h"
+/* Note: Use kernel/defs.h instead of include/exokernel.h for kernel code */
 #include "cap.h" 
 #include "lambda_cap.h"
 #include "string.h"

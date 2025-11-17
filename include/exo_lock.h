@@ -15,6 +15,10 @@
  * @date 2025-11-17
  */
 
+/* Guard to prevent old spinlock.h from declaring conflicting qspin_* functions */
+#define __EXOLOCK_H_INCLUDED
+#define __EXOLOCK_TYPES_DEFINED
+
 #include <stdatomic.h>
 #include <stdint.h>
 #include <stddef.h>

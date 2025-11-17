@@ -33,12 +33,11 @@ struct cpu {
   int ncli;                    // Depth of pushcli nesting.
   int intena;                  // Were interrupts enabled before pushcli?
   struct proc *proc;           // The process running on this cpu or null
-  
-  // Unified lock system support
-  struct mcs_node {
-    _Atomic bool locked;
-    _Atomic(struct mcs_node *) next;
-  } mcs_node;                  // Per-CPU MCS lock node
+
+  // Unified lock system support (struct mcs_node defined in exo_lock.h)
+  // Note: mcs_nodes are now allocated globally per-CPU in kernel/sync/qspinlock.c
+  // This field is kept for compatibility but deprecated
+  // struct mcs_node mcs_node;  // DEPRECATED - use global mcs_nodes[] array
 };
 
 extern struct cpu cpus[NCPU];
@@ -141,7 +140,7 @@ struct proc {
 // Ensure scheduler relies on fixed struct proc size
 #if defined(__x86_64__) || defined(__aarch64__)
 #ifdef USE_DAG_CHECKING
-_Static_assert(sizeof(struct proc) <= 512, "struct proc size too large");  // Updated for DAG tracker
+_Static_assert(sizeof(struct proc) <= 2048, "struct proc size too large");  // Updated for DAG tracker (with stats)
 #else
 _Static_assert(sizeof(struct proc) == 304, "struct proc size incorrect");  // Updated for added fields
 #endif

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <types.h>
-#include "qspinlock.h"
+#include "exo_lock.h"  /* Use modern qspinlock from unified header */
 
 // Long-term locks for processes
 struct sleeplock {

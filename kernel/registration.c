@@ -8,7 +8,7 @@
 #include "ipc.h"
 #include "cap.h"
 #include "exo.h"
-#include "exokernel.h"
+/* Note: Use kernel/defs.h instead of include/exokernel.h for kernel code */
 #include "proc.h"
 
 #define EXO_MSG_REGISTER 3

@@ -12,6 +12,9 @@
 # include "config.h"
 #endif
 
+/* Use modern lock subsystem - prevents spinlock.h from declaring conflicting qspin_* */
+#define __EXOLOCK_H_INCLUDED
+
 #include "spinlock.h"
 #include "proc.h"
 #include "ipc.h"
@@ -179,9 +182,16 @@ void initlock(struct spinlock *, const char *name);
 void release(struct spinlock *);
 void pushcli(void);
 void popcli(void);
+/* Modern qspinlock functions moved to exo_lock.h
+ * Use: #include "exo_lock.h" and struct qspinlock (not struct spinlock!)
+ *
+ * Legacy compatibility wrappers (deprecated):
+ */
+#ifdef USE_LEGACY_SPINLOCK_API
 void qspin_lock(struct spinlock *);
 void qspin_unlock(struct spinlock *);
 int qspin_trylock(struct spinlock *);
+#endif
 
 // sleeplock.c
 void acquiresleep(struct sleeplock *);
