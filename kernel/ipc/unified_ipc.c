@@ -24,7 +24,7 @@
 #include <stdalign.h>
 
 #include "types.h"
-#include "capability.h"
+#include "cap.h"  /* Capability system */
 #include "ipc.h"
 #include "hal/hal.h"
 
