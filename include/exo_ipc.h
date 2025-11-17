@@ -4,6 +4,10 @@
 #include "compiler_attrs.h"
 #include "exo.h"
 
+/* Guard against duplicate definitions with kernel/exo_ipc.h */
+#ifndef EXO_IPC_TYPES_DEFINED
+#define EXO_IPC_TYPES_DEFINED
+
 typedef enum {
   IPC_STATUS_SUCCESS = 0,
   IPC_STATUS_TIMEOUT,
@@ -15,6 +19,8 @@ struct exo_ipc_ops {
   int (*send)(exo_cap dest, const void *buf, uint64_t len);
   int (*recv)(exo_cap src, void *buf, uint64_t len);
 };
+
+#endif /* EXO_IPC_TYPES_DEFINED */
 
 void exo_ipc_register(struct exo_ipc_ops *ops);
 #if defined(EXO_KERNEL) || defined(EXO_USER_EXO_IPC_DECLS)
