@@ -96,3 +96,24 @@ int cap_table_remove(cap_id_t id);
 
 /** Convenience alias for revoke semantics. */
 int cap_revoke(cap_id_t id);
+
+/**
+ * @brief Capability validation result codes
+ */
+typedef enum {
+    VALIDATION_SUCCESS = 0,      /**< Capability is valid */
+    VALIDATION_INVALID_ID = 1,   /**< Invalid capability ID */
+    VALIDATION_REVOKED = 2,      /**< Capability has been revoked */
+    VALIDATION_TYPE_MISMATCH = 3,/**< Capability type mismatch */
+    VALIDATION_INSUFFICIENT_RIGHTS = 4, /**< Insufficient rights */
+    VALIDATION_OWNER_MISMATCH = 5,/**< Owner mismatch */
+    VALIDATION_EXPIRED = 6       /**< Capability has expired */
+} cap_validation_result_t;
+
+/**
+ * @brief Validate a capability and retrieve its entry
+ * @param id Capability identifier
+ * @param out_entry_if_valid Destination for entry if valid (can be NULL)
+ * @return Validation result code
+ */
+cap_validation_result_t cap_validate_unified(cap_id_t id, struct cap_entry *out_entry_if_valid);

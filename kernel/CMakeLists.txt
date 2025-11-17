@@ -55,11 +55,87 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/hypervisor")
     file(GLOB HYPERVISOR_SOURCES hypervisor/*.c)
 endif()
 
+# Synchronization primitives (use only working implementation)
+set(SYNC_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/spinlock.c")
+    list(APPEND SYNC_SOURCES sync/spinlock.c)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/sleeplock.c")
+    list(APPEND SYNC_SOURCES sync/sleeplock.c)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/rcu.c")
+    list(APPEND SYNC_SOURCES sync/rcu.c)
+endif()
+
+# Device drivers
+set(DRIVER_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/drivers")
+    file(GLOB_RECURSE DRIVER_SOURCES drivers/*.c)
+endif()
+
+# File system
+set(FS_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fs")
+    file(GLOB_RECURSE FS_SOURCES fs/*.c)
+endif()
+
+# Memory management
+set(MEM_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/mem")
+    file(GLOB_RECURSE MEM_SOURCES mem/*.c)
+endif()
+
+# IPC
+set(IPC_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ipc")
+    file(GLOB_RECURSE IPC_SOURCES ipc/*.c)
+endif()
+
+# Scheduler
+set(SCHED_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sched")
+    file(GLOB_RECURSE SCHED_SOURCES sched/*.c)
+endif()
+
+# System calls
+set(SYS_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sys")
+    file(GLOB_RECURSE SYS_SOURCES sys/*.c)
+endif()
+
+# Time subsystem
+set(TIME_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/time")
+    file(GLOB_RECURSE TIME_SOURCES time/*.c)
+endif()
+
+# Capability subsystem
+set(CAP_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/capability")
+    file(GLOB_RECURSE CAP_SOURCES capability/*.c)
+endif()
+
+# Core subsystem
+set(CORE_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/core")
+    file(GLOB_RECURSE CORE_SOURCES core/*.c)
+endif()
+
 # Combine all kernel sources
-set(ALL_KERNEL_SOURCES 
+set(ALL_KERNEL_SOURCES
     ${KERNEL_CORE_SOURCES}
     ${KERNEL_ASM_SOURCES}
     ${HYPERVISOR_SOURCES}
+    ${SYNC_SOURCES}
+    ${DRIVER_SOURCES}
+    ${FS_SOURCES}
+    ${MEM_SOURCES}
+    ${IPC_SOURCES}
+    ${SCHED_SOURCES}
+    ${SYS_SOURCES}
+    ${TIME_SOURCES}
+    ${CAP_SOURCES}
+    ${CORE_SOURCES}
 )
 
 # Remove any sources that shouldn't be in the main kernel
