@@ -31,3 +31,7 @@ test-build/
 .cache/
 openposixtestsuite/
 test_isolation/
+
+# QSpinlock test binaries
+kernel/sync/test_qspinlock
+kernel/sync/bench_qspinlock
