@@ -528,7 +528,7 @@ void exo_lock_init_qspin(struct exo_lock *lock, const char *name, uint32_t dag_l
     lock->dag.dependency_bitmap = 0;
     lock->dag.name = name;
 
-    qspin_init(&lock->qspin);
+    qspin_init(&lock->qspin, name, dag_level);
 
     // Initialize statistics
     lock->stats.acquire_count = 0;

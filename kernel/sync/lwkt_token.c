@@ -102,7 +102,8 @@ static void cpu_token_add(uint32_t cpu, struct lwkt_token *token) {
     struct cpu_token_list *list = &cpu_tokens[cpu];
 
     if (unlikely(list->count >= MAX_TOKENS_PER_CPU)) {
-        panic("cpu_token_add: too many tokens (max %d)", MAX_TOKENS_PER_CPU);
+        cprintf("cpu_token_add: too many tokens (max %d)\n", MAX_TOKENS_PER_CPU);
+        panic("cpu_token_add: too many tokens");
     }
 
     list->tokens[list->count++] = token;
@@ -312,8 +313,9 @@ void token_release(struct lwkt_token *token) {
     uint32_t owner = atomic_load_explicit(&token->owner_cpu, memory_order_relaxed);
 
     if (unlikely(owner != my_cpu)) {
-        panic("token_release: not owner (owner=%u, my_cpu=%u, token=%s)",
-              owner, my_cpu, token->name);
+        cprintf("token_release: not owner (owner=%u, my_cpu=%u, token=%s)\n",
+                owner, my_cpu, token->name);
+        panic("token_release: not owner");
     }
 
     // Calculate hold time
@@ -407,8 +409,9 @@ int token_holding(struct lwkt_token *token) {
 void token_assert_held(struct lwkt_token *token) {
     if (!token_holding(token)) {
         uint32_t owner = atomic_load_explicit(&token->owner_cpu, memory_order_relaxed);
-        panic("token_assert_held: token '%s' not held (owner=%u)",
-              token->name, owner);
+        cprintf("token_assert_held: token '%s' not held (owner=%u)\n",
+                token->name, owner);
+        panic("token_assert_held: token not held");
     }
 }
 

@@ -59,7 +59,7 @@ initlog(int dev)
     panic("initlog: too big logheader");
 
   struct superblock sb;
-  adaptive_mutex_init(&fs_log.lock, "log", LOCK_LEVEL_FILESYSTEM);
+  adaptive_mutex_init(&fs_log.lock, "log", LOCK_LEVEL_FILESYSTEM, 0);  /* flags=0 */
   readsb(dev, &sb);
   fs_log.start = sb.logstart;
   fs_log.size = sb.nlog;
@@ -130,10 +130,10 @@ begin_op(void)
   adaptive_mutex_lock(&fs_log.lock);
   while(1){
     if(fs_log.committing){
-      ksleep(&log, &fs_log.lock);
+      ksleep(&fs_log, &fs_log.lock);
     } else if(fs_log.lh.n + (fs_log.outstanding+1)*MAXOPBLOCKS > LOGSIZE){
       // this op might exhaust log space; wait for commit.
-      ksleep(&log, &fs_log.lock);
+      ksleep(&fs_log, &fs_log.lock);
     } else {
       fs_log.outstanding += 1;
       adaptive_mutex_unlock(&fs_log.lock);
@@ -160,7 +160,7 @@ end_op(void)
     // begin_op() may be waiting for log space,
     // and decrementing fs_log.outstanding has decreased
     // the amount of reserved space.
-    wakeup(&log);
+    wakeup(&fs_log);
   }
   adaptive_mutex_unlock(&fs_log.lock);
 
@@ -170,7 +170,7 @@ end_op(void)
     commit();
     adaptive_mutex_lock(&fs_log.lock);
     fs_log.committing = 0;
-    wakeup(&log);
+    wakeup(&fs_log);
     adaptive_mutex_unlock(&fs_log.lock);
   }
 }

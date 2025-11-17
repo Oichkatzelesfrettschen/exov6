@@ -63,6 +63,7 @@ extern struct spinlock sched_lock;
 void binit(void);
 struct buf *bread(uint32_t dev, uint32_t blockno);
 void brelse(struct buf *);
+void bwrite(struct buf *);  /* Write buffer to disk */
 
 // console.c
 void consoleinit(void);
@@ -164,6 +165,7 @@ _Noreturn void scheduler(void);
 void sched(void);
 void setproc(struct proc *);
 void sleep(void *chan, struct spinlock *);
+void ksleep(void *chan, struct spinlock *);  /* Kernel sleep (atomically release lock and sleep) */
 void userinit(void);
 int wait(void);
 void wakeup(void *chan);
