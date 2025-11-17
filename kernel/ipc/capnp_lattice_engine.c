@@ -1,10 +1,20 @@
 /**
  * @file capnp_lattice_engine.c
  * @brief Integrated Cap'n Proto + Lattice IPC Engine
- * 
+ *
  * Pure C17 implementation synthesizing zero-copy serialization with
  * post-quantum cryptography and exokernel capabilities.
  */
+
+/* Define kernel mode before any includes to prevent userspace API conflicts */
+#ifndef EXO_KERNEL
+#define EXO_KERNEL 1
+#endif
+
+/* Set exo_lock guard to use modern lock subsystem */
+#ifndef __EXOLOCK_H_INCLUDED
+#define __EXOLOCK_H_INCLUDED
+#endif
 
 #include "capnp_helpers.h"
 #include "lattice_ipc.h"
@@ -17,11 +27,6 @@
 #include <errno.h>   /* For EPERM, EINVAL */
 #include "defs.h"    /* For myproc() - instead of getpid() */
 
-/* Stub receive functions for now */
-static inline int exo_kernel_receive_message(void *arena, void *msg) { (void)arena; (void)msg; return -EINVAL; }
-static inline int exo_libos_receive_message(void *arena, void *msg) { (void)arena; (void)msg; return -EINVAL; }
-static inline int exo_userspace_receive_message(void *arena, void *msg) { (void)arena; (void)msg; return -EINVAL; }
-
 // Arena allocation with capability integration
 typedef struct exo_capnp_arena {
     exo_cap memory_cap;
@@ -32,6 +37,11 @@ typedef struct exo_capnp_arena {
     lattice_channel_t *secure_chan;
     octonion_t arena_identity;
 } exo_capnp_arena_t;
+
+// Forward declarations for zone message handlers
+int exo_kernel_receive_message(exo_capnp_arena_t *arena, const capnp_pointer_t *msg);
+int exo_libos_receive_message(exo_capnp_arena_t *arena, const capnp_pointer_t *msg);
+int exo_userspace_receive_message(exo_capnp_arena_t *arena, const capnp_pointer_t *msg);
 
 // Global arena registry
 static exo_capnp_arena_t g_arenas[256];
