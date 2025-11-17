@@ -1,7 +1,7 @@
 #include <types.h>
 #include "defs.h"
 #include "spinlock.h"
-#include "qspinlock.h"
+#include "exo_lock.h"  /* Modern qspinlock */
 #include "exo_stream.h"
 #include "exo_cpu.h"
 #include "q16_fixed.h"  /* Use Q16.16 fixed-point instead of math_core.h */

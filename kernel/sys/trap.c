@@ -4,7 +4,7 @@
 #include "param.h"
 #include "proc.h"
 #include "spinlock.h"
-#include "qspinlock.h"
+#include "exo_lock.h"  /* Modern qspinlock */
 #include "../traps.h"
 #include <types.h>
 #include "arch.h"

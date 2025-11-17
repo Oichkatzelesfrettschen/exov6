@@ -5,7 +5,7 @@
 
 #include <types.h>
 #include "spinlock.h"    /* struct spinlock, initlock, acquire, release */
-#include "qspinlock.h"   /* struct qspinlock, qspin_init, qspin_lock, qspin_unlock */
+#include "exo_lock.h"  /* Modern qspinlock */   /* struct qspinlock, qspin_init, qspin_lock, qspin_unlock */
 #include "dag.h"         /* struct dag_node, struct dag_node_list */
 /* Forward declarations for lattice IPC */
 extern int lattice_yield_to(int pid);
