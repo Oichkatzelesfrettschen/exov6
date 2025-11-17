@@ -3,6 +3,9 @@
 #include "exo_cpu.h"
 #include "exokernel.h"
 
+/* Userspace capability library - kernel uses cap.h instead */
+#ifndef EXO_KERNEL
+
 exo_cap cap_alloc_page(void);
 EXO_NODISCARD int cap_unbind_page(exo_cap cap);
 EXO_NODISCARD int cap_alloc_block(uint32_t dev, uint32_t rights,
@@ -34,3 +37,5 @@ EXO_NODISCARD int cap_dec(uint16_t id);
  * @return 0 on success, or a negative error code.
  */
 EXO_NODISCARD int cap_revoke(uint16_t id);
+
+#endif /* !EXO_KERNEL */

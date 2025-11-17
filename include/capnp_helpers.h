@@ -36,24 +36,29 @@ typedef union {
     struct {
         uint32_t type : 2;
         uint32_t offset : 30;
+    } common;
+
+    struct {
+        uint32_t type : 2;
+        uint32_t offset : 30;
         uint16_t data_words;
         uint16_t ptr_words;
     } struct_ptr;
-    
+
     struct {
         uint32_t type : 2;
         uint32_t offset : 30;
         uint32_t element_type : 3;
         uint32_t element_count : 29;
     } list_ptr;
-    
+
     struct {
         uint32_t type : 2;
         uint32_t landing_pad : 1;
         uint32_t offset : 29;
         uint32_t segment_id;
     } far_ptr;
-    
+
     uint64_t raw;
 } capnp_pointer_t;
 
@@ -71,14 +76,29 @@ typedef struct {
     uint64_t id;
     uint16_t data_word_count;
     uint16_t pointer_count;
+    uint16_t data_words;
+    uint16_t ptr_words;
     const char *name;
 } capnp_struct_schema_t;
 
 typedef struct {
     uint16_t slot;
     uint8_t type;
+    uint8_t is_pointer;
+    uint16_t offset;
+    uint64_t default_value;
     const char *name;
 } capnp_field_t;
+
+// Cap'n Proto wire format structures
+typedef struct {
+    uint32_t segment_count;  // Actually stored as (count - 1)
+    uint32_t reserved;       // Padding for alignment
+} capnp_message_header_t;
+
+typedef struct {
+    uint32_t size_words;
+} capnp_segment_entry_t;
 
 // Cap'n Proto message builder
 #define CAPNP_MAX_SEGMENTS 16
@@ -89,6 +109,15 @@ typedef struct {
     uint32_t segment_count;
     uint32_t current_segment;
 } capnp_builder_t;
+
+// Cap'n Proto message reader
+typedef struct {
+    const uint8_t *segments[CAPNP_MAX_SEGMENTS];
+    size_t segment_sizes[CAPNP_MAX_SEGMENTS];
+    uint32_t segment_count;
+    uint64_t traversal_limit;
+    uint64_t traversal_used;
+} capnp_reader_t;
 
 // Message descriptor
 typedef struct {

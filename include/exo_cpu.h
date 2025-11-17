@@ -23,8 +23,12 @@ typedef struct context64 context_t;
 #endif /* EXO_CONTEXT_T */
 
 void swtch(context_t **old, context_t *new);
+
+/* Only define cap_yield in userspace - kernel has its own in kernel/exo_cpu.h */
+#ifndef EXO_KERNEL
 static inline void cap_yield(context_t **old, context_t *target) {
   swtch(old, target);
 }
+#endif
 
 int exo_yield_to(exo_cap target);

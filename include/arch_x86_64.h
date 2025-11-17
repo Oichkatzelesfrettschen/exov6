@@ -257,18 +257,27 @@ static inline void wrmsr(uint32_t msr, uint64_t val) {
   __asm__ volatile("wrmsr" : : "a"(low), "d"(high), "c"(msr));
 }
 
-// GDT/IDT operations
+// GDT/IDT operations - only define if not already defined by arch.h
+#ifndef ARCH_LGDT_DEFINED
+#define ARCH_LGDT_DEFINED
 static inline void lgdt(void *p) {
   __asm__ volatile("lgdt (%0)" : : "r"(p) : "memory");
 }
+#endif
 
+#ifndef ARCH_LIDT_DEFINED
+#define ARCH_LIDT_DEFINED
 static inline void lidt(void *p) {
   __asm__ volatile("lidt (%0)" : : "r"(p) : "memory");
 }
+#endif
 
+#ifndef ARCH_LTR_DEFINED
+#define ARCH_LTR_DEFINED
 static inline void ltr(uint16_t sel) {
   __asm__ volatile("ltr %w0" : : "r"(sel) : "memory");
 }
+#endif
 
 // Fast system call support
 static inline void swapgs(void) {

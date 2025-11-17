@@ -1,5 +1,10 @@
 #pragma once
 
+/* Kernel build marker - prevents userspace API conflicts */
+#ifndef EXO_KERNEL
+#define EXO_KERNEL 1
+#endif
+
 #include <stdint.h>
 #include <stddef.h>
 #include "kernel_compat.h"
@@ -111,6 +116,14 @@ void iderw(struct buf *);
 void ioapicenable(int irq, int cpu);
 extern uint8_t ioapicid;
 void ioapicinit(void);
+struct ioapic_info {
+    uint32_t id;
+    uint32_t version;
+    uint32_t max_entries;
+    uint64_t base_addr;
+    uint32_t gsi_base;
+};
+void ioapicinfo(int apic_id, struct ioapic_info *info);
 
 // kalloc.c
 char *kalloc(void);

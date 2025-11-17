@@ -116,30 +116,38 @@ static inline void invlpg(void *va) {
 }
 
 // Load GDT - needs both pointer and size
+// Guard to prevent conflict with arch_x86_64.h which has a 1-parameter version
+#ifndef ARCH_LGDT_DEFINED
+#define ARCH_LGDT_DEFINED
 static inline void lgdt(void *p, int size) {
     struct {
         uint16_t limit;
         uintptr_t base;
     } __attribute__((packed)) gdtr;
-    
+
     gdtr.limit = size - 1;
     gdtr.base = (uintptr_t)p;
-    
+
     __asm__ volatile("lgdt %0" : : "m"(gdtr) : "memory");
 }
+#endif
 
 // Load IDT - needs both pointer and size
+// Guard to prevent conflict with arch_x86_64.h which has a 1-parameter version
+#ifndef ARCH_LIDT_DEFINED
+#define ARCH_LIDT_DEFINED
 static inline void lidt(void *p, int size) {
     struct {
         uint16_t limit;
         uintptr_t base;
     } __attribute__((packed)) idtr;
-    
+
     idtr.limit = size - 1;
     idtr.base = (uintptr_t)p;
-    
+
     __asm__ volatile("lidt %0" : : "m"(idtr) : "memory");
 }
+#endif
 
 // Load CR3 (page directory base)
 #ifdef __x86_64__
@@ -153,9 +161,13 @@ static inline void lcr3(uint32_t val) {
 #endif
 
 // Load task register
+// Guard to prevent conflict with arch_x86_64.h
+#ifndef ARCH_LTR_DEFINED
+#define ARCH_LTR_DEFINED
 static inline void ltr(uint16_t sel) {
     __asm__ volatile("ltr %0" : : "r"(sel));
 }
+#endif
 
 // Bulk data transfer
 static inline void insl(int port, void *addr, int cnt) {

@@ -18,7 +18,7 @@
   struct buf b;
   uint64_t tot = 0;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exodisk", LOCK_LEVEL_FILESYSTEM);
+  initsleeplock(&b.lock, "exodisk");  /* Uses default LOCK_LEVEL_VFS */
 
   while (tot < n) {
     uint64_t cur = off + tot;
@@ -50,7 +50,7 @@
   struct buf b;
   uint64_t tot = 0;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exodisk", LOCK_LEVEL_FILESYSTEM);
+  initsleeplock(&b.lock, "exodisk");  /* Uses default LOCK_LEVEL_VFS */
 
   while (tot < n) {
     uint64_t cur = off + tot;

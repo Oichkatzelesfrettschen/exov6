@@ -1,6 +1,6 @@
 #pragma once
 
-#include "exokernel.h"  // For exo_blockcap
+#include "exo.h"        // For exo_blockcap (kernel API, not userspace exokernel.h)
 #include "sleeplock.h"  // For struct sleeplock
 
 /* Filesystem constants */

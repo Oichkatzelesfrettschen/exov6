@@ -28,12 +28,24 @@ seginit(void)
   // Cannot share a CODE descriptor for both kernel and user
   // because it would have to have DPL_USR, but the CPU forbids
   // an interrupt from CPL=0 to DPL=3.
-  c = &cpus[cpuid()];
+  c = mycpu();
   c->gdt[SEG_KCODE] = SEG(STA_X|STA_R, 0, 0xffffffff, 0);
   c->gdt[SEG_KDATA] = SEG(STA_W, 0, 0xffffffff, 0);
   c->gdt[SEG_UCODE] = SEG(STA_X|STA_R, 0, 0xffffffff, DPL_USER);
   c->gdt[SEG_UDATA] = SEG(STA_W, 0, 0xffffffff, DPL_USER);
+#ifdef ARCH_LGDT_DEFINED
+  // If arch_x86_64.h defined lgdt with 1 param, need to pass descriptor manually
+  struct {
+    uint16_t limit;
+    uint32_t base;
+  } __attribute__((packed)) gdtr;
+  gdtr.limit = sizeof(c->gdt) - 1;
+  gdtr.base = (uint32_t)c->gdt;
+  lgdt(&gdtr);
+#else
+  // arch.h version takes 2 parameters
   lgdt(c->gdt, sizeof(c->gdt));
+#endif
 }
 
 // Return the address of the PTE in page table pgdir
@@ -202,7 +214,7 @@ switchuvm(struct proc *p)
 // Load the initcode into address 0 of pgdir.
 // sz must be less than a page.
 void
-inituvm(pde_t *pgdir, char *init, uint sz)
+inituvm(pde_t *pgdir, const char *init, uint32_t sz)
 {
   char *mem;
 
@@ -217,15 +229,15 @@ inituvm(pde_t *pgdir, char *init, uint sz)
 // Load a program segment into pgdir.  addr must be page-aligned
 // and the pages from addr to addr+sz must already be mapped.
 int
-loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
+loaduvm(pde_t *pgdir, const char *src, struct inode *ip, uint32_t offset, uint32_t sz)
 {
   uint i, pa, n;
   pte_t *pte;
 
-  if((uintptr_t) addr % PGSIZE != 0)
-    panic("loaduvm: addr must be page aligned");
+  if((uintptr_t) src % PGSIZE != 0)
+    panic("loaduvm: src must be page aligned");
   for(i = 0; i < sz; i += PGSIZE){
-    if((pte = walkpgdir(pgdir, addr+i, 0)) == 0)
+    if((pte = walkpgdir(pgdir, src+i, 0)) == 0)
       panic("loaduvm: address should exist");
     pa = PTE_ADDR(*pte);
     if(sz - i < PGSIZE)
@@ -414,9 +426,9 @@ uva2ka(pde_t *pgdir, char *uva)
 // uva2ka ensures this only works for PTE_U pages.
 int
 #if defined(__x86_64__) || defined(__aarch64__)
-copyout(pde_t *pgdir, uint64 va, void *p, uint len)
+copyout(pde_t *pgdir, uint64_t va, const void *p, uint32_t len)
 #else
-copyout(pde_t *pgdir, uint va, void *p, uint len)
+copyout(pde_t *pgdir, uint32_t va, const void *p, uint32_t len)
 #endif
 {
   char *buf, *pa0;
