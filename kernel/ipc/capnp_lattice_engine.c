@@ -9,9 +9,18 @@
 #include "capnp_helpers.h"
 #include "lattice_ipc.h"
 #include "exo.h"
+#include "exokernel.h"  /* For EXO_RIGHT_CTL */
 #include "octonion.h"
 #include <stdatomic.h>
 #include <string.h>
+#include <stdlib.h>  /* For malloc, free */
+#include <errno.h>   /* For EPERM, EINVAL */
+#include "defs.h"    /* For myproc() - instead of getpid() */
+
+/* Stub receive functions for now */
+static inline int exo_kernel_receive_message(void *arena, void *msg) { (void)arena; (void)msg; return -EINVAL; }
+static inline int exo_libos_receive_message(void *arena, void *msg) { (void)arena; (void)msg; return -EINVAL; }
+static inline int exo_userspace_receive_message(void *arena, void *msg) { (void)arena; (void)msg; return -EINVAL; }
 
 // Arena allocation with capability integration
 typedef struct exo_capnp_arena {
@@ -202,7 +211,8 @@ int exo_ipc_send_capnp_message(uint32_t dest_zone,
                               const capnp_pointer_t *msg) {
     
     // Validate zone capability
-    exo_cap zone_cap = cap_new(dest_zone, EXO_RIGHT_EXEC | EXO_RIGHT_CTL, getpid());
+    struct proc *p = myproc();
+    exo_cap zone_cap = cap_new(dest_zone, EXO_RIGHT_EXEC | EXO_RIGHT_CTL, p ? p->pid : 0);
     if (!cap_verify(zone_cap)) {
         return -EPERM;
     }
