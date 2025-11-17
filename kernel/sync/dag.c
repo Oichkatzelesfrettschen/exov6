@@ -162,7 +162,7 @@ int dag_validate_acquisition(void *lock_addr, const char *name,
         return 1;  // No tracking available (e.g., early boot)
     }
 
-    __sync_fetch_and_add(&global_dag_stats.dag_checks, 1);
+    atomic_fetch_add_explicit(&global_dag_stats.dag_checks, 1, memory_order_relaxed);
 
     // Check if already holding this lock (reacquisition)
     for (uint32_t i = 0; i < tracker->depth; i++) {
@@ -193,10 +193,10 @@ int dag_validate_acquisition(void *lock_addr, const char *name,
     for (uint32_t i = 0; i < tracker->depth; i++) {
         if (dag_level <= tracker->stack[i].dag_level) {
             // DAG VIOLATION!
-            __sync_fetch_and_add(&global_dag_stats.violations_detected, 1);
+            atomic_fetch_add_explicit(&global_dag_stats.violations_detected, 1, memory_order_relaxed);
 
             if (dag_level < LOCK_LEVEL_MAX) {
-                __sync_fetch_and_add(&global_dag_stats.violations_by_level[dag_level], 1);
+                atomic_fetch_add_explicit(&global_dag_stats.violations_by_level[dag_level], 1, memory_order_relaxed);
             }
 
             dag_report_violation(tracker, lock_addr, name, dag_level,
@@ -236,7 +236,8 @@ void dag_lock_acquired(void *lock_addr, const char *name,
 
     // Check for stack overflow
     if (tracker->depth >= MAX_HELD_LOCKS) {
-        panic("dag_lock_acquired: lock stack overflow (max %d)", MAX_HELD_LOCKS);
+        cprintf("dag_lock_acquired: lock stack overflow (max %d)\n", MAX_HELD_LOCKS);
+        panic("dag_lock_acquired: lock stack overflow");
     }
 
     // Record acquisition
@@ -256,13 +257,15 @@ void dag_lock_acquired(void *lock_addr, const char *name,
         tracker->max_depth = tracker->depth;
 
         // Update global max chain length
-        uint64_t old_max = global_dag_stats.max_chain_length;
+        uint64_t old_max = atomic_load_explicit(&global_dag_stats.max_chain_length, memory_order_relaxed);
         while (tracker->depth > old_max) {
-            if (__sync_bool_compare_and_swap(&global_dag_stats.max_chain_length,
-                                             old_max, tracker->depth)) {
+            uint64_t expected = old_max;
+            if (atomic_compare_exchange_weak_explicit(&global_dag_stats.max_chain_length,
+                                                      &expected, tracker->depth,
+                                                      memory_order_relaxed, memory_order_relaxed)) {
                 break;
             }
-            old_max = global_dag_stats.max_chain_length;
+            old_max = expected;
         }
     }
 
@@ -270,7 +273,7 @@ void dag_lock_acquired(void *lock_addr, const char *name,
         tracker->highest_level = dag_level;
     }
 
-    __sync_fetch_and_add(&global_dag_stats.total_acquisitions, 1);
+    atomic_fetch_add_explicit(&global_dag_stats.total_acquisitions, 1, memory_order_relaxed);
 #endif
 }
 

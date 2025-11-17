@@ -25,6 +25,11 @@
 #include "types.h"
 #include "config.h"
 
+/* Need NCPU for MCS node arrays */
+#ifndef NCPU
+#include "param.h"
+#endif
+
 /* Forward declarations */
 struct cpu;
 struct proc;

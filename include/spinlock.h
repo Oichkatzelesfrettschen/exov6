@@ -6,6 +6,11 @@
 #include "kernel_compat.h"
 #include "config.h"
 
+/* Include modern lock subsystem FIRST to set guards */
+#ifndef __EXOLOCK_H_INCLUDED
+#include "exo_lock.h"
+#endif
+
 /* Forward declarations */
 struct cpu;
 

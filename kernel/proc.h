@@ -3,13 +3,10 @@
 #include "param.h"
 #include "mmu.h"
 #include <arch_x86_64.h>
+#include "exo_lock.h"  /* Modern lock subsystem - include BEFORE spinlock.h */
 #include "spinlock.h"
 #include "ipc.h"
 #include "exo.h"
-
-#ifdef USE_DAG_CHECKING
-#include "exo_lock.h"  // For struct thread_lock_tracker (Phase 4-6)
-#endif
 
 // Context used for kernel context switches.
 #ifndef CONTEXT_T_DEFINED
