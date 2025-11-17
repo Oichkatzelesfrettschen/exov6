@@ -182,7 +182,7 @@ int sys_exo_bind_block(void) {
 
   cap = *ucap;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoblk");
+  initsleeplock(&b.lock, "exoblk", LOCK_LEVEL_FILESYSTEM);
   acquiresleep(&b.lock);
   if (write)
     memmove(b.data, data, BSIZE);
@@ -203,7 +203,7 @@ int sys_exo_flush_block(void) {
 
   cap = *ucap;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoflush");
+  initsleeplock(&b.lock, "exoflush", LOCK_LEVEL_FILESYSTEM);
   acquiresleep(&b.lock);
   memmove(b.data, data, BSIZE);
   /* TODO: Implement exo_bind_block */
