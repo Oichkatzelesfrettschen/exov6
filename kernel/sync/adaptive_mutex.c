@@ -18,6 +18,7 @@
  */
 
 #include <types.h>
+#include <string.h>
 #include "defs.h"
 #include "param.h"
 #include "arch.h"
@@ -42,16 +43,22 @@ static inline uint64_t rdtsc(void) {
 /**
  * Memory fence (full barrier)
  */
+#ifndef __EXOV6_MFENCE_DEFINED
+#define __EXOV6_MFENCE_DEFINED
 static inline void mfence(void) {
     __asm__ __volatile__("mfence" ::: "memory");
 }
+#endif
 
 /**
  * CPU pause hint (for spin loops)
  */
+#ifndef __EXOV6_PAUSE_DEFINED
+#define __EXOV6_PAUSE_DEFINED
 static inline void pause(void) {
     __asm__ __volatile__("pause" ::: "memory");
 }
+#endif
 
 /* ========================================================================
  * Helper Functions

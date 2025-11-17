@@ -21,6 +21,7 @@
  */
 
 #include <types.h>
+#include <string.h>
 #include "defs.h"
 #include "param.h"
 #include "arch.h"
@@ -45,9 +46,12 @@ static inline uint64_t rdtsc(void) {
 /**
  * CPU pause hint
  */
+#ifndef __EXOV6_PAUSE_DEFINED
+#define __EXOV6_PAUSE_DEFINED
 static inline void pause(void) {
     __asm__ __volatile__("pause" ::: "memory");
 }
+#endif
 
 /**
  * Compiler barrier

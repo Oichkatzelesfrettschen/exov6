@@ -18,6 +18,7 @@
  */
 
 #include <types.h>
+#include <string.h>
 #include "defs.h"
 #include "param.h"
 #include "arch.h"

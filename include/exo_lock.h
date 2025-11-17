@@ -49,13 +49,12 @@ typedef enum {
  * Stores position in lock wait queue
  * Supports hierarchical NUMA-aware queuing
  *
- * Note: next/local_next are accessed atomically via atomic_store_explicit/atomic_load_explicit
- * but declared as regular pointers to avoid incomplete type errors. The atomic operations
- * provide the necessary memory ordering guarantees.
+ * Note: Using C23 _Atomic keyword properly with clang's builtin stdatomic.h
+ * The _Atomic qualifier is necessary for atomic_store_explicit/atomic_load_explicit
  */
 struct mcs_node {
-    struct mcs_node *next;                  /**< Next waiter in global queue (accessed atomically) */
-    struct mcs_node *local_next;            /**< Next waiter in local NUMA queue (accessed atomically) */
+    _Atomic(struct mcs_node *) next;        /**< Next waiter in global queue */
+    _Atomic(struct mcs_node *) local_next;  /**< Next waiter in local NUMA queue */
     _Atomic uint32_t locked;                /**< 1 = waiting, 0 = acquired */
     uint32_t numa_node;                     /**< NUMA node of this CPU */
     uint8_t is_local;                       /**< 1 if same NUMA as predecessor */
