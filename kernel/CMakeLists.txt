@@ -97,6 +97,10 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/lwkt_token.c")
     list(APPEND SYNC_SOURCES sync/lwkt_token.c)
 endif()
+# DAG lock ordering - deadlock prevention via hierarchical ordering
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/dag.c")
+    list(APPEND SYNC_SOURCES sync/dag.c)
+endif()
 
 # Device drivers
 set(DRIVER_SOURCES)
@@ -228,6 +232,23 @@ if(USE_EXOLOCK)
     message(STATUS "  - ExoLock subsystem: ENABLED")
 else()
     message(STATUS "  - ExoLock subsystem: DISABLED (use -DUSE_EXOLOCK=ON to enable)")
+endif()
+
+# DAG lock ordering for deadlock prevention
+option(USE_DAG_CHECKING "Enable DAG lock ordering validation (runtime deadlock prevention)" OFF)
+if(USE_DAG_CHECKING)
+    target_compile_definitions(kernel PRIVATE USE_DAG_CHECKING)
+    message(STATUS "  - DAG lock ordering: ENABLED")
+
+    option(DAG_PANIC_ON_VIOLATION "Panic on DAG violations (vs warning)" ON)
+    if(DAG_PANIC_ON_VIOLATION)
+        target_compile_definitions(kernel PRIVATE DAG_PANIC_ON_VIOLATION)
+        message(STATUS "    - Panic on violation: YES")
+    else()
+        message(STATUS "    - Panic on violation: NO (warning only)")
+    endif()
+else()
+    message(STATUS "  - DAG lock ordering: DISABLED (use -DUSE_DAG_CHECKING=ON to enable)")
 endif()
 
 # Apply additional CPU flags if specified

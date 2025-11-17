@@ -147,8 +147,9 @@ static void cpu_token_remove(uint32_t cpu, struct lwkt_token *token) {
  */
 void token_pool_init(void) {
     // Initialize all pool tokens
+    // Pool tokens typically protect capability tables (level 60)
     for (int i = 0; i < TOKEN_POOL_SIZE; i++) {
-        token_init(&token_pool[i], "pool_token");
+        token_init(&token_pool[i], "pool_token", LOCK_LEVEL_CAPABILITY);
         token_pool[i].hash = i;
     }
 
@@ -191,13 +192,14 @@ struct lwkt_token *token_pool_get(void *resource) {
  * @param token Token to initialize
  * @param name Debug name
  */
-void token_init(struct lwkt_token *token, const char *name) {
+void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level) {
     // Set to free (no owner)
     atomic_store_explicit(&token->owner_cpu, TOKEN_FREE_MARKER, memory_order_relaxed);
 
     // Metadata
     token->hash = hash_ptr(token);
     token->name = name;
+    token->dag_level = dag_level;
     token->acquire_tsc = 0;
 
     // Zero statistics
@@ -220,9 +222,23 @@ void token_acquire(struct lwkt_token *token) {
 
     if (likely(owner == my_cpu)) {
         // We already own it - just increment reacquire count
+        // No DAG check needed for reacquisition
         __sync_fetch_and_add(&token->stats.reacquire_count, 1);
         return;
     }
+
+#ifdef USE_DAG_CHECKING
+    // Validate DAG ordering before first acquisition
+    // (not needed for reacquisition above)
+    if (!dag_validate_acquisition(token, token->name, token->dag_level,
+                                  LOCK_TYPE_TOKEN, __FILE__, __LINE__)) {
+#ifdef DAG_PANIC_ON_VIOLATION
+        panic("token_acquire: DAG violation");
+#else
+        return;  // Skip acquisition on violation (warning mode)
+#endif
+    }
+#endif
 
     /* ===== SLOW PATH: Acquire from free or other CPU ===== */
     uint64_t spin_start = rdtsc();
@@ -251,6 +267,12 @@ void token_acquire(struct lwkt_token *token) {
 
             // Add to CPU's token list
             cpu_token_add(my_cpu, token);
+
+#ifdef USE_DAG_CHECKING
+            // Record acquisition in DAG tracker
+            dag_lock_acquired(token, token->name, token->dag_level,
+                             LOCK_TYPE_TOKEN, __FILE__, __LINE__);
+#endif
 
             return;
         }
@@ -283,6 +305,11 @@ void token_acquire(struct lwkt_token *token) {
  * @param token Token to release
  */
 void token_release(struct lwkt_token *token) {
+#ifdef USE_DAG_CHECKING
+    // Track lock release in DAG
+    dag_lock_released(token);
+#endif
+
     uint32_t my_cpu = mycpu() - cpus;
 
     // Verify we own it

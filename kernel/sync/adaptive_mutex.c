@@ -217,11 +217,28 @@ int adaptive_mutex_trylock(struct adaptive_mutex *mutex) {
  * 3. Block: Wait on turnstile if owner is not running
  */
 void adaptive_mutex_lock(struct adaptive_mutex *mutex) {
+#ifdef USE_DAG_CHECKING
+    // Validate DAG ordering before attempting acquisition
+    if (!dag_validate_acquisition(mutex, mutex->name, mutex->dag_level,
+                                  LOCK_TYPE_ADAPTIVE, __FILE__, __LINE__)) {
+#ifdef DAG_PANIC_ON_VIOLATION
+        panic("adaptive_mutex_lock: DAG violation");
+#else
+        return;  // Skip acquisition on violation (warning mode)
+#endif
+    }
+#endif
+
     uint64_t start_tsc = rdtsc();
 
     /* ===== FAST PATH ===== */
     // Try immediate acquisition (common case: no contention)
     if (likely(adaptive_mutex_trylock(mutex))) {
+#ifdef USE_DAG_CHECKING
+        // Record acquisition in DAG tracker
+        dag_lock_acquired(mutex, mutex->name, mutex->dag_level,
+                         LOCK_TYPE_ADAPTIVE, __FILE__, __LINE__);
+#endif
         return;  // Got it immediately!
     }
 
@@ -263,6 +280,12 @@ void adaptive_mutex_lock(struct adaptive_mutex *mutex) {
                     }
                 }
 
+#ifdef USE_DAG_CHECKING
+                // Record acquisition in DAG tracker
+                dag_lock_acquired(mutex, mutex->name, mutex->dag_level,
+                                 LOCK_TYPE_ADAPTIVE, __FILE__, __LINE__);
+#endif
+
                 return;
             }
 
@@ -301,6 +324,12 @@ void adaptive_mutex_lock(struct adaptive_mutex *mutex) {
     // When we wake up, we have the lock
     // Owner is already set by turnstile_wake_one()
 
+#ifdef USE_DAG_CHECKING
+    // Record acquisition in DAG tracker
+    dag_lock_acquired(mutex, mutex->name, mutex->dag_level,
+                     LOCK_TYPE_ADAPTIVE, __FILE__, __LINE__);
+#endif
+
     // Decrement waiter count
     atomic_fetch_sub_explicit(&mutex->waiters, 1, memory_order_relaxed);
 
@@ -327,6 +356,11 @@ void adaptive_mutex_lock(struct adaptive_mutex *mutex) {
  * Release adaptive mutex
  */
 void adaptive_mutex_unlock(struct adaptive_mutex *mutex) {
+#ifdef USE_DAG_CHECKING
+    // Track lock release in DAG
+    dag_lock_released(mutex);
+#endif
+
     // Verify we're the owner (debug builds)
     if (unlikely(!is_owner(mutex))) {
         panic("adaptive_mutex_unlock: not owner");

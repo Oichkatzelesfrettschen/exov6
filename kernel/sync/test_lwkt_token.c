@@ -140,6 +140,7 @@ struct lwkt_token {
     _Atomic uint32_t owner_cpu;
     uint32_t hash;
     const char *name;
+    uint32_t dag_level;
     uint64_t acquire_tsc;
     struct lwkt_token_stats stats;
 } __attribute__((aligned(256)));
@@ -150,7 +151,7 @@ extern struct cpu_token_list cpu_tokens[NCPU];
 
 /* Token API */
 void token_pool_init(void);
-void token_init(struct lwkt_token *token, const char *name);
+void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level);
 void token_acquire(struct lwkt_token *token);
 void token_release(struct lwkt_token *token);
 void token_release_all(void);
@@ -218,7 +219,7 @@ static void cpu_token_remove(uint32_t cpu, struct lwkt_token *token) {
 /* Token pool initialization */
 void token_pool_init(void) {
     for (int i = 0; i < TOKEN_POOL_SIZE; i++) {
-        token_init(&token_pool[i], "pool_token");
+        token_init(&token_pool[i], "pool_token", 0);
         token_pool[i].hash = i;
     }
 
@@ -240,11 +241,12 @@ struct lwkt_token *token_pool_get(void *resource) {
 }
 
 /* Token operations */
-void token_init(struct lwkt_token *token, const char *name) {
+void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level) {
     atomic_store_explicit(&token->owner_cpu, TOKEN_FREE_MARKER, memory_order_relaxed);
     token->hash = hash_ptr(token);
     token->name = name;
     token->acquire_tsc = 0;
+    token->dag_level = dag_level;
     memset(&token->stats, 0, sizeof(token->stats));
 }
 
@@ -462,7 +464,7 @@ TEST(pool_initialization) {
  */
 TEST(single_acquire_release) {
     struct lwkt_token token;
-    token_init(&token, "test_token");
+    token_init(&token, "test_token", 0);
 
     uint32_t my_cpu = mycpu() - cpus;
 
@@ -488,7 +490,7 @@ TEST(single_acquire_release) {
  */
 TEST(reacquisition) {
     struct lwkt_token token;
-    token_init(&token, "test_reacq");
+    token_init(&token, "test_reacq", 0);
 
     // First acquisition
     token_acquire(&token);
@@ -514,7 +516,7 @@ TEST(reacquisition) {
  */
 TEST(per_cpu_tracking) {
     struct lwkt_token token;
-    token_init(&token, "test_percpu");
+    token_init(&token, "test_percpu", 0);
 
     uint32_t my_cpu = mycpu() - cpus;
     struct cpu_token_list *list = &cpu_tokens[my_cpu];
@@ -545,7 +547,7 @@ TEST(multiple_tokens) {
     for (int i = 0; i < 4; i++) {
         char name[32];
         snprintf(name, sizeof(name), "token_%d", i);
-        token_init(&tokens[i], name);
+        token_init(&tokens[i], name, 0);
     }
 
     uint32_t my_cpu = mycpu() - cpus;
@@ -612,7 +614,7 @@ TEST(release_all) {
     for (int i = 0; i < 5; i++) {
         char name[32];
         snprintf(name, sizeof(name), "token_%d", i);
-        token_init(&tokens[i], name);
+        token_init(&tokens[i], name, 0);
         token_acquire(&tokens[i]);
     }
 
@@ -637,7 +639,7 @@ TEST(release_all) {
  */
 TEST(statistics_tracking) {
     struct lwkt_token token;
-    token_init(&token, "test_stats");
+    token_init(&token, "test_stats", 0);
 
     uint32_t my_cpu = mycpu() - cpus;
 
@@ -675,7 +677,7 @@ TEST(statistics_tracking) {
  */
 TEST(hold_time_tracking) {
     struct lwkt_token token;
-    token_init(&token, "test_holdtime");
+    token_init(&token, "test_holdtime", 0);
 
     token_acquire(&token);
 
@@ -735,7 +737,7 @@ static void *stress_worker(void *arg) {
 }
 
 TEST(concurrent_stress) {
-    token_init(&stress_token, "stress_token");
+    token_init(&stress_token, "stress_token", 0);
     stress_counter = 0;
 
     const int NUM_THREADS = 4;

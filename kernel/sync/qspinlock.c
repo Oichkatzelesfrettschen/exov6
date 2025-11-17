@@ -242,8 +242,12 @@ uint32_t lock_get_cpu_numa_node(uint32_t cpu_id) {
 /**
  * Initialize qspinlock
  */
-void qspin_init(struct qspinlock *lock) {
+void qspin_init(struct qspinlock *lock, const char *name, uint32_t dag_level) {
     atomic_store_explicit(&lock->val, 0, memory_order_relaxed);
+
+    // Initialize metadata
+    lock->name = name;
+    lock->dag_level = dag_level;
 
     // Initialize statistics
     lock->stats.fast_path_count = 0;
@@ -304,10 +308,27 @@ static EXO_ALWAYS_INLINE int qspin_trylock_fast(struct qspinlock *lock) {
  * Acquire lock (full implementation with MCS queue)
  */
 void qspin_lock(struct qspinlock *lock) {
+#ifdef USE_DAG_CHECKING
+    // Validate DAG ordering before attempting acquisition
+    if (!dag_validate_acquisition(lock, lock->name, lock->dag_level,
+                                  LOCK_TYPE_QSPIN, __FILE__, __LINE__)) {
+#ifdef DAG_PANIC_ON_VIOLATION
+        panic("qspin_lock: DAG violation");
+#else
+        return;  // Skip acquisition on violation (warning mode)
+#endif
+    }
+#endif
+
     uint64_t start_tsc = rdtsc();
 
     // Fast path: try to acquire immediately (LIKELY: most locks are uncontended)
     if (likely(qspin_trylock_fast(lock))) {
+#ifdef USE_DAG_CHECKING
+        // Record acquisition in DAG tracker
+        dag_lock_acquired(lock, lock->name, lock->dag_level,
+                         LOCK_TYPE_QSPIN, __FILE__, __LINE__);
+#endif
         return;
     }
 
@@ -347,6 +368,10 @@ void qspin_lock(struct qspinlock *lock) {
 
     if (unlikely(old_val == 0)) {
         // We got the lock immediately (unlikely since fast path failed)
+#ifdef USE_DAG_CHECKING
+        dag_lock_acquired(lock, lock->name, lock->dag_level,
+                         LOCK_TYPE_QSPIN, __FILE__, __LINE__);
+#endif
         return;
     }
 
@@ -409,6 +434,12 @@ void qspin_lock(struct qspinlock *lock) {
     lock->last_acquire_tsc = rdtsc();
     lock->last_owner_numa = my_numa;
 
+#ifdef USE_DAG_CHECKING
+    // Record acquisition in DAG tracker
+    dag_lock_acquired(lock, lock->name, lock->dag_level,
+                     LOCK_TYPE_QSPIN, __FILE__, __LINE__);
+#endif
+
     mfence();  // Memory barrier
 }
 
@@ -424,6 +455,11 @@ int qspin_trylock(struct qspinlock *lock) {
  * Release lock
  */
 void qspin_unlock(struct qspinlock *lock) {
+#ifdef USE_DAG_CHECKING
+    // Track lock release in DAG
+    dag_lock_released(lock);
+#endif
+
     // Track hold time
     uint64_t hold_cycles = rdtsc() - lock->last_acquire_tsc;
     __sync_fetch_and_add(&lock->stats.total_hold_cycles, hold_cycles);

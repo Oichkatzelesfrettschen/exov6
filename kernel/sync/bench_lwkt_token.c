@@ -114,6 +114,7 @@ struct lwkt_token {
     _Atomic uint32_t owner_cpu;
     uint32_t hash;
     const char *name;
+    uint32_t dag_level;
     uint64_t acquire_tsc;
     struct lwkt_token_stats stats;
 } __attribute__((aligned(256)));
@@ -124,7 +125,7 @@ struct cpu_token_list cpu_tokens[NCPU];
 
 /* Token API declarations */
 void token_pool_init(void);
-void token_init(struct lwkt_token *token, const char *name);
+void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level);
 void token_acquire(struct lwkt_token *token);
 void token_release(struct lwkt_token *token);
 void token_release_all(void);
@@ -175,7 +176,7 @@ static void cpu_token_remove(uint32_t cpu, struct lwkt_token *token) {
 
 void token_pool_init(void) {
     for (int i = 0; i < TOKEN_POOL_SIZE; i++) {
-        token_init(&token_pool[i], "pool_token");
+        token_init(&token_pool[i], "pool_token", 0);
         token_pool[i].hash = i;
     }
     for (int i = 0; i < NCPU; i++) {
@@ -192,10 +193,12 @@ struct lwkt_token *token_pool_get(void *resource) {
     return &token_pool[hash];
 }
 
-void token_init(struct lwkt_token *token, const char *name) {
+void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level) {
     atomic_store_explicit(&token->owner_cpu, TOKEN_FREE_MARKER, memory_order_relaxed);
     token->hash = hash_ptr(token);
     token->name = name;
+    token->dag_level = dag_level;
+    token->dag_level = dag_level;
     token->acquire_tsc = 0;
     memset(&token->stats, 0, sizeof(token->stats));
 }
@@ -333,7 +336,7 @@ static void bench_uncontended_latency(void) {
     print_benchmark_header("Benchmark 1: Uncontended Latency");
 
     struct lwkt_token token;
-    token_init(&token, "bench_token");
+    token_init(&token, "bench_token", 0);
 
     // Warmup
     for (int i = 0; i < 1000; i++) {
@@ -365,7 +368,7 @@ static void bench_reacquisition(void) {
     print_benchmark_header("Benchmark 2: Reacquisition Performance");
 
     struct lwkt_token token;
-    token_init(&token, "bench_reacq");
+    token_init(&token, "bench_reacq", 0);
 
     // First acquisition (slow path)
     uint64_t start = rdtsc();
@@ -457,7 +460,7 @@ static void *contention_worker_2(void *arg) {
 static void bench_2cpu_contention(void) {
     print_benchmark_header("Benchmark 4: 2-CPU Contention");
 
-    token_init(&contention_token, "contention_2");
+    token_init(&contention_token, "contention_2", 0);
     contention_ready = 0;
     contention_done = 0;
 
@@ -522,7 +525,7 @@ static void *contention_worker_4(void *arg) {
 static void bench_4cpu_contention(void) {
     print_benchmark_header("Benchmark 5: 4-CPU Contention");
 
-    token_init(&contention_token, "contention_4");
+    token_init(&contention_token, "contention_4", 0);
     contention_ready = 0;
 
     const int NUM_THREADS = 4;
@@ -568,7 +571,7 @@ static void bench_release_all(void) {
         for (int i = 0; i < batch_size; i++) {
             char name[32];
             snprintf(name, sizeof(name), "token_%d", i);
-            token_init(&tokens[i], name);
+            token_init(&tokens[i], name, 0);
         }
 
         // Warmup
