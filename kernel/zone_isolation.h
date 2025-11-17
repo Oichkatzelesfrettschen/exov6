@@ -100,11 +100,11 @@ zone_check_result_t zone_check_access(zone_id_t from, zone_id_t to,
 /* Perform zone transition with capability check */
 int zone_transition(zone_id_t target, cap_id_t cap, zone_transition_t *ctx);
 
-/* Lock a zone (prevent modifications) */
-int zone_lock(zone_id_t id);
+/* Lock a zone (prevent modifications) - renamed to avoid conflict with spinlock */
+int lock_zone(zone_id_t id);
 
-/* Unlock a zone */
-int zone_unlock(zone_id_t id);
+/* Unlock a zone - renamed for consistency */
+int unlock_zone(zone_id_t id);
 
 /* Get zone descriptor */
 zone_desc_t *zone_get_desc(zone_id_t id);

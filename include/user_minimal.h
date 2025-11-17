@@ -78,8 +78,9 @@ void *malloc(size_t);
 void free(void *);
 int atoi(const char *);
 
-// I/O functions  
-void printf(int fd, const char *, ...);  // Custom printf with file descriptor
+// I/O functions
+/* Use attribute to avoid builtin printf conflict - our printf takes fd as first arg */
+void printf(int fd, const char *, ...) __attribute__((format(printf, 2, 3)));
 char *gets(char *, int max);
 
 // Special file descriptor numbers

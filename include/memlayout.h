@@ -50,11 +50,13 @@
 #define KERNLINK KERNLINK_64
 #define PHYSTOP PHYSTOP_64
 #define DEVSPACE DEVSPACE_64
+#define KERNSIZE (PHYSTOP_64 - EXTMEM)  // Kernel size
 #else
 #define KERNBASE KERNBASE_32
 #define KERNLINK KERNLINK_32
 #define PHYSTOP PHYSTOP_32
 #define DEVSPACE DEVSPACE_32
+#define KERNSIZE (PHYSTOP_32 - EXTMEM)  // Kernel size
 #endif
 
 // Virtual to Physical and Physical to Virtual conversions

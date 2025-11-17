@@ -1575,13 +1575,26 @@ void
 validateint(int *p)
 {
   int res;
-  __asm__("mov %%esp, %%ebx\n\t"
+  /* Architecture-specific inline assembly for stack pointer manipulation */
+#if defined(__x86_64__) || defined(__amd64__)
+  __asm__ volatile("mov %%rsp, %%rbx\n\t"
+      "mov %3, %%rsp\n\t"
+      "int %2\n\t"
+      "mov %%rbx, %%rsp" :
+      "=a" (res) :
+      "a" (SYS_sleep), "n" (T_SYSCALL), "c" (p) :
+      "rbx");
+#elif defined(__i386__) || defined(__i686__)
+  __asm__ volatile("mov %%esp, %%ebx\n\t"
       "mov %3, %%esp\n\t"
       "int %2\n\t"
       "mov %%ebx, %%esp" :
       "=a" (res) :
       "a" (SYS_sleep), "n" (T_SYSCALL), "c" (p) :
       "ebx");
+#else
+  #error "Unsupported architecture for validateint"
+#endif
 }
 
 void

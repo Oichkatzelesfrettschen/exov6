@@ -628,9 +628,7 @@ void sleep(void *chan, struct spinlock *lk) {
     ksleep(chan, lk);
 }
 
-/* Console printf implementation */
-void cprintf(const char *fmt, ...) {
-    /* This would normally be implemented with full printf support */
-    /* For now, just output characters directly to console */
-    cprintf("%s", fmt);
-}
+/* Console printf implementation - removed stub to avoid infinite recursion
+ * The real cprintf is implemented in console.c
+ * This stub was causing infinite recursion by calling itself
+ */

@@ -276,14 +276,15 @@ int zone_transition(zone_id_t target, cap_id_t cap, zone_transition_t *ctx) {
 
 /*
  * Lock a zone (prevent modifications)
+ * Renamed from zone_lock to lock_zone to avoid conflict with zone_lock spinlock variable
  */
-int zone_lock(zone_id_t id) {
+int lock_zone(zone_id_t id) {
     if (id == ZONE_KERNEL) {
         return 0;  /* Kernel zone is always locked */
     }
-    
+
     acquire(&zone_lock);
-    
+
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             zone_table[i].flags.locked = 1;
@@ -291,21 +292,22 @@ int zone_lock(zone_id_t id) {
             return 0;
         }
     }
-    
+
     release(&zone_lock);
     return -1;  /* Zone not found */
 }
 
 /*
  * Unlock a zone
+ * Renamed from zone_unlock to unlock_zone for consistency with lock_zone
  */
-int zone_unlock(zone_id_t id) {
+int unlock_zone(zone_id_t id) {
     if (id == ZONE_KERNEL) {
         return -1;  /* Cannot unlock kernel zone */
     }
-    
+
     acquire(&zone_lock);
-    
+
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             zone_table[i].flags.locked = 0;
@@ -313,7 +315,7 @@ int zone_unlock(zone_id_t id) {
             return 0;
         }
     }
-    
+
     release(&zone_lock);
     return -1;  /* Zone not found */
 }
