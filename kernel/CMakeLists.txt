@@ -83,6 +83,16 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/qspinlock.c")
     list(APPEND SYNC_SOURCES sync/qspinlock.c)
 endif()
+# Adaptive mutex - spin/block hybrid for medium-length critical sections
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/adaptive_mutex.c")
+    list(APPEND SYNC_SOURCES sync/adaptive_mutex.c)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/turnstile.c")
+    list(APPEND SYNC_SOURCES sync/turnstile.c)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sync/priority.c")
+    list(APPEND SYNC_SOURCES sync/priority.c)
+endif()
 
 # Device drivers
 set(DRIVER_SOURCES)
