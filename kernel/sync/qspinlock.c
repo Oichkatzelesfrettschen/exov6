@@ -276,9 +276,12 @@ void qspin_lock(struct qspinlock *lock) {
     }
 
     struct mcs_node *node = &mcs_nodes[cpu_id][node_idx];
-    node->numa_node = get_numa_node(cpu_id);
+    uint32_t my_numa = get_numa_node(cpu_id);
+    node->numa_node = my_numa;
     atomic_store_explicit(&node->next, NULL, memory_order_relaxed);
+    atomic_store_explicit(&node->local_next, NULL, memory_order_relaxed);
     atomic_store_explicit(&node->locked, 1, memory_order_relaxed);
+    node->is_local = 0;
 
     uint16_t my_tail = encode_tail(cpu_id, node_idx);
 
@@ -298,8 +301,14 @@ void qspin_lock(struct qspinlock *lock) {
         decode_tail(old_tail, &pred_cpu, &pred_idx);
         struct mcs_node *pred = &mcs_nodes[pred_cpu][pred_idx];
 
-        // Set predecessor's next pointer to us
+        // Set predecessor's global next pointer to us
         atomic_store_explicit(&pred->next, node, memory_order_release);
+
+        // HIERARCHICAL QUEUE: Link into local queue if same NUMA node
+        if (pred->numa_node == my_numa) {
+            node->is_local = 1;
+            atomic_store_explicit(&pred->local_next, node, memory_order_release);
+        }
     }
 
     // Spin on our locked flag with exponential backoff
@@ -357,17 +366,26 @@ void qspin_unlock(struct qspinlock *lock) {
         decode_tail(tail, &cpu_id, &node_idx);
         struct mcs_node *node = &mcs_nodes[cpu_id][node_idx];
 
-        // Wait for next pointer to be set (may race with qspin_lock)
-        struct mcs_node *next;
-        while ((next = atomic_load_explicit(&node->next, memory_order_acquire)) == NULL) {
+        // Wait for global next pointer to be set (may race with qspin_lock)
+        struct mcs_node *next_global;
+        while ((next_global = atomic_load_explicit(&node->next, memory_order_acquire)) == NULL) {
             pause();
         }
 
-        // NUMA optimization: prefer local socket waiters
-        // TODO: Implement hierarchical queue (local vs remote)
+        // HIERARCHICAL QUEUE: Check for local waiter first
+        struct mcs_node *next_local = atomic_load_explicit(&node->local_next, memory_order_acquire);
+        struct mcs_node *next_to_wake;
 
-        // Wake next waiter
-        atomic_store_explicit(&next->locked, 0, memory_order_release);
+        if (next_local != NULL) {
+            // Local waiter available - prefer it (NUMA optimization)
+            next_to_wake = next_local;
+        } else {
+            // No local waiter - wake remote waiter
+            next_to_wake = next_global;
+        }
+
+        // Wake the chosen waiter
+        atomic_store_explicit(&next_to_wake->locked, 0, memory_order_release);
 
         // Free our MCS node
         atomic_store_explicit(&node->locked, 0, memory_order_release);

@@ -43,12 +43,19 @@ typedef enum {
 /**
  * MCS queue node - per-CPU allocation
  * Stores position in lock wait queue
+ * Supports hierarchical NUMA-aware queuing
  */
 struct mcs_node {
-    _Atomic(struct mcs_node *) next;  /**< Next waiter in queue */
-    _Atomic uint32_t locked;          /**< 1 = waiting, 0 = acquired */
-    uint32_t numa_node;               /**< NUMA node of this CPU */
+    _Atomic(struct mcs_node *) next;        /**< Next waiter in global queue */
+    _Atomic(struct mcs_node *) local_next;  /**< Next waiter in local NUMA queue */
+    _Atomic uint32_t locked;                /**< 1 = waiting, 0 = acquired */
+    uint32_t numa_node;                     /**< NUMA node of this CPU */
+    uint8_t is_local;                       /**< 1 if same NUMA as predecessor */
+    uint8_t _pad[3];                        /**< Padding to maintain alignment */
 } __attribute__((aligned(64)));  /* Cache line alignment */
+
+/* Compile-time assertion to ensure mcs_node fits in cache line */
+_Static_assert(sizeof(struct mcs_node) <= 64, "mcs_node exceeds cache line size");
 
 /* Per-CPU MCS node array (4 slots for nested locks) */
 #define MCS_NODES_PER_CPU 4
