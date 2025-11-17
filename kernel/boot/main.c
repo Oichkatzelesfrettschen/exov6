@@ -10,6 +10,7 @@
 #include <string.h>
 #include "exo_stream.h"
 #include "exo_ipc.h"
+#include "exo_lock.h"  // Modern lock subsystem & DAG lock ordering
 
 static void startothers(void);
 static _Noreturn void mpmain(void);
@@ -33,6 +34,7 @@ int main(void) {
   ioapicinit();                      // another interrupt controller
   consoleinit();                     // console hardware
   uartinit();                        // serial port
+  dag_init();                        // DAG lock ordering subsystem (must be early!)
   cap_crypto_init();                 // initialize per-boot crypto keys
   cap_table_init();                  // initialize capability table
   rcuinit();                         // rcu subsystem
