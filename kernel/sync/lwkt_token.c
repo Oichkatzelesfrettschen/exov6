@@ -43,15 +43,7 @@ static inline uint64_t rdtsc(void) {
     return ((uint64_t)hi << 32) | lo;
 }
 
-/**
- * CPU pause hint
- */
-#ifndef __EXOV6_PAUSE_DEFINED
-#define __EXOV6_PAUSE_DEFINED
-static inline void pause(void) {
-    __asm__ __volatile__("pause" ::: "memory");
-}
-#endif
+/* Note: pause() is defined in include/arch_x86_64.h */
 
 /**
  * Compiler barrier

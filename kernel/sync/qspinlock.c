@@ -37,25 +37,7 @@ static inline uint64_t rdtsc(void) {
     return ((uint64_t)hi << 32) | lo;
 }
 
-/**
- * Memory fence (full barrier)
- */
-#ifndef __EXOV6_MFENCE_DEFINED
-#define __EXOV6_MFENCE_DEFINED
-static inline void mfence(void) {
-    __asm__ __volatile__("mfence" ::: "memory");
-}
-#endif
-
-/**
- * CPU pause hint (for spin loops)
- */
-#ifndef __EXOV6_PAUSE_DEFINED
-#define __EXOV6_PAUSE_DEFINED
-static inline void pause(void) {
-    __asm__ __volatile__("pause" ::: "memory");
-}
-#endif
+/* Note: mfence() and pause() are defined in include/arch_x86_64.h */
 
 /* ========================================================================
  * Per-CPU MCS Node Arrays
