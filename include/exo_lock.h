@@ -449,6 +449,7 @@ int dag_verify_order(struct lock_dag_node *new_lock);
 #define LOCK_LEVEL_PROCESS      20  /**< Process table, thread management */
 #define LOCK_LEVEL_MEMORY       30  /**< Page tables, allocators */
 #define LOCK_LEVEL_VFS          40  /**< File system metadata */
+#define LOCK_LEVEL_FILESYSTEM   40  /**< Alias for LOCK_LEVEL_VFS */
 #define LOCK_LEVEL_IPC          50  /**< IPC queues, pipes */
 #define LOCK_LEVEL_CAPABILITY   60  /**< Capability tables */
 #define LOCK_LEVEL_DEVICE       70  /**< Device drivers */

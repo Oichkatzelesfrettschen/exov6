@@ -22,7 +22,7 @@
 #include "defs.h"
 #include "param.h"
 #include "spinlock.h"
-#include "qspinlock.h"
+#include "exo_lock.h"  /* Modern qspinlock - replaces deprecated qspinlock.h */
 #include "sleeplock.h"
 #include "fs.h"
 #include "buf.h"
