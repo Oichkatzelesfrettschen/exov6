@@ -1,0 +1,69 @@
+# Makefile for DAG Lock Ordering Tests and Benchmarks
+# Usage:
+#   make -f Makefile.dag_tests test    # Build and run unit tests
+#   make -f Makefile.dag_tests bench   # Build and run benchmarks
+#   make -f Makefile.dag_tests all     # Build both
+#   make -f Makefile.dag_tests clean   # Clean build artifacts
+
+CC := gcc
+CFLAGS := -Wall -Wextra -O2 -g -std=c11
+LDFLAGS := -lpthread -lm
+
+# Targets
+TEST_BIN := test_dag
+BENCH_BIN := bench_dag
+
+# Source files
+TEST_SRC := test_dag.c
+BENCH_SRC := bench_dag.c
+
+.PHONY: all test bench clean run-test run-bench
+
+all: $(TEST_BIN) $(BENCH_BIN)
+
+# Build test executable
+$(TEST_BIN): $(TEST_SRC)
+	@echo "Building DAG unit tests..."
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
+	@echo "✓ Test binary built: $(TEST_BIN)"
+
+# Build benchmark executable
+$(BENCH_BIN): $(BENCH_SRC)
+	@echo "Building DAG benchmarks..."
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
+	@echo "✓ Benchmark binary built: $(BENCH_BIN)"
+
+# Run tests
+test: $(TEST_BIN)
+	@echo ""
+	@echo "Running DAG unit tests..."
+	@echo "========================================"
+	@./$(TEST_BIN)
+
+# Run benchmarks
+bench: $(BENCH_BIN)
+	@echo ""
+	@echo "Running DAG performance benchmarks..."
+	@echo "========================================"
+	@./$(BENCH_BIN)
+
+# Run both
+run-all: test bench
+
+# Clean
+clean:
+	@echo "Cleaning build artifacts..."
+	rm -f $(TEST_BIN) $(BENCH_BIN)
+	@echo "✓ Clean complete"
+
+# Help
+help:
+	@echo "DAG Test and Benchmark Makefile"
+	@echo ""
+	@echo "Targets:"
+	@echo "  make -f Makefile.dag_tests all        # Build tests and benchmarks"
+	@echo "  make -f Makefile.dag_tests test       # Build and run unit tests"
+	@echo "  make -f Makefile.dag_tests bench      # Build and run benchmarks"
+	@echo "  make -f Makefile.dag_tests run-all    # Run both tests and benchmarks"
+	@echo "  make -f Makefile.dag_tests clean      # Remove build artifacts"
+	@echo "  make -f Makefile.dag_tests help       # Show this message"
