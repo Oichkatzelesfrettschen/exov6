@@ -30,12 +30,7 @@ static inline void get_cpuid(uint32_t info, uint32_t *eaxp, uint32_t *ebxp, uint
     if (edxp) *edxp = edx;
 }
 
-/* Read RFLAGS register */
-static inline uint64_t read_rflags(void) {
-    uint64_t rflags;
-    __asm__ volatile("pushfq; popq %0" : "=r"(rflags));
-    return rflags;
-}
+/* read_rflags is already defined in arch_x86_64.h - removed duplicate */
 
 /* CPU pause for spinlocks */
 extern void pause(void);
@@ -88,12 +83,12 @@ void acquire(struct spinlock *lk) {
   if (holding(lk))
     panic("acquire: already holding");
   
-  // Get our ticket number
-  uint16_t my_ticket = __sync_fetch_and_add(&lk->ticket.tail, 1);
-  
+  // Get our ticket number (cast to uint32_t* for atomic compatibility)
+  uint32_t my_ticket = __sync_fetch_and_add((uint32_t*)&lk->ticket.tail, 1);
+
   // Wait until it's our turn
   int backoff = BACKOFF_MIN;
-  while (__sync_add_and_fetch(&lk->ticket.head, 0) != my_ticket) {
+  while (__sync_add_and_fetch((uint32_t*)&lk->ticket.head, 0) != my_ticket) {
     // Exponential backoff with PAUSE instruction
     for (int i = 0; i < backoff; i++) {
       pause(); // Hint to CPU that we're spinning
@@ -127,9 +122,9 @@ void release(struct spinlock *lk) {
   
   // Memory barrier before release
   mfence();
-  
-  // Release the lock by incrementing head
-  __sync_add_and_fetch(&lk->ticket.head, 1);
+
+  // Release the lock by incrementing head (cast for atomic compatibility)
+  __sync_add_and_fetch((uint32_t*)&lk->ticket.head, 1);
   
   popcli(); // Re-enable interrupts if appropriate
 }
@@ -146,11 +141,11 @@ int trylock(struct spinlock *lk) {
     return 0;
   }
   
-  // Atomic compare-and-swap: only succeed if head == tail
-  uint16_t expected = lk->ticket.head;
-  uint16_t new_tail = expected + 1;
-  
-  if (__sync_bool_compare_and_swap(&lk->ticket.tail, expected, new_tail)) {
+  // Atomic compare-and-swap: only succeed if head == tail (cast for atomic compatibility)
+  uint32_t expected = *(uint32_t*)&lk->ticket.head;
+  uint32_t new_tail = expected + 1;
+
+  if (__sync_bool_compare_and_swap((uint32_t*)&lk->ticket.tail, expected, new_tail)) {
     // Success - we got the lock
     lk->cpu = mycpu();
     getcallerpcs(&lk, lk->pcs);
