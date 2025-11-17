@@ -429,6 +429,18 @@ void lock_subsystem_init(void);
 void lock_detect_numa_topology(void);
 
 /**
+ * Get number of NUMA nodes detected
+ */
+uint32_t lock_get_numa_node_count(void);
+
+/**
+ * Get NUMA node for specific CPU
+ * @param cpu_id CPU ID (0-based)
+ * @return NUMA node ID
+ */
+uint32_t lock_get_cpu_numa_node(uint32_t cpu_id);
+
+/**
  * Start resurrection server monitoring thread
  */
 void lock_start_resurrection_server(void);

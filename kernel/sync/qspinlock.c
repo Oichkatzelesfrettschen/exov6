@@ -53,24 +53,138 @@ static uint32_t numa_node_count = 1;
 static uint32_t cpu_to_numa[NCPU];
 
 /**
- * Detect NUMA topology via CPUID
- * For QEMU: use -numa option to configure
+ * CPUID wrapper for topology detection
  */
-void lock_detect_numa_topology(void) {
+static inline void cpuid_topology(uint32_t leaf, uint32_t subleaf,
+                                  uint32_t *eax, uint32_t *ebx,
+                                  uint32_t *ecx, uint32_t *edx) {
 #ifdef __x86_64__
-    // CPUID leaf 0x1F (V2 Extended Topology)
-    // For now, assume single NUMA node
-    // TODO: Parse ACPI SRAT table for real NUMA info
-    numa_node_count = 1;
-    for (int i = 0; i < NCPU; i++) {
-        cpu_to_numa[i] = i / 8;  // Assume 8 CPUs per socket
-    }
+    __asm__ volatile("cpuid"
+                     : "=a"(*eax), "=b"(*ebx), "=c"(*ecx), "=d"(*edx)
+                     : "a"(leaf), "c"(subleaf));
 #else
-    numa_node_count = 1;
-    for (int i = 0; i < NCPU; i++) {
-        cpu_to_numa[i] = 0;
+    *eax = *ebx = *ecx = *edx = 0;
+#endif
+}
+
+/**
+ * Detect NUMA topology via CPUID Extended Topology
+ * Uses CPUID leaf 0x1F (V2 Extended Topology) or 0x0B (Extended Topology)
+ */
+static int detect_numa_via_cpuid(void) {
+#ifdef __x86_64__
+    uint32_t eax, ebx, ecx, edx;
+
+    // Check if extended topology is supported
+    cpuid_topology(0, 0, &eax, &ebx, &ecx, &edx);
+    if (eax < 0x0B) {
+        return -1;  // Extended topology not supported
+    }
+
+    // Try CPUID leaf 0x1F first (V2 Extended Topology)
+    uint32_t leaf = 0x1F;
+    cpuid_topology(leaf, 0, &eax, &ebx, &ecx, &edx);
+
+    // If 0x1F not supported, fall back to 0x0B
+    if (ebx == 0) {
+        leaf = 0x0B;
+    }
+
+    // Enumerate topology levels
+    int socket_shift = 0;
+    for (uint32_t subleaf = 0; subleaf < 8; subleaf++) {
+        cpuid_topology(leaf, subleaf, &eax, &ebx, &ecx, &edx);
+
+        if (ebx == 0) {
+            break;  // No more levels
+        }
+
+        uint32_t level_type = (ecx >> 8) & 0xFF;
+        uint32_t shift = eax & 0x1F;
+
+        // Level types: 1 = SMT, 2 = Core, 3 = Module, 5 = Die (socket)
+        if (level_type == 2) {
+            // Core level - use this for NUMA if no socket level
+            socket_shift = shift;
+        } else if (level_type == 5) {
+            // Socket/Die level - best indicator of NUMA
+            socket_shift = shift;
+            break;
+        }
+    }
+
+    if (socket_shift > 0) {
+        // Map CPUs to NUMA nodes based on socket shift
+        uint32_t socket_mask = (1U << socket_shift) - 1;
+
+        for (int i = 0; i < NCPU; i++) {
+            // APIC ID >> socket_shift = socket ID = NUMA node
+            // For now, assume APIC ID == CPU ID
+            cpu_to_numa[i] = i >> socket_shift;
+        }
+
+        // Count unique NUMA nodes
+        numa_node_count = (NCPU + socket_mask) >> socket_shift;
+        if (numa_node_count > 64) numa_node_count = 1;  // Sanity check
+
+        return 0;  // Success
     }
 #endif
+
+    return -1;  // Failed to detect
+}
+
+/**
+ * Heuristic NUMA detection for QEMU
+ * Assumes 8 CPUs per socket (common QEMU configuration)
+ */
+static void detect_numa_heuristic(void) {
+    // QEMU default: 8 CPUs per socket
+    // This works for: -smp 16,sockets=2,cores=4,threads=2
+    const int cpus_per_socket = 8;
+
+    for (int i = 0; i < NCPU; i++) {
+        cpu_to_numa[i] = i / cpus_per_socket;
+    }
+
+    numa_node_count = (NCPU + cpus_per_socket - 1) / cpus_per_socket;
+    if (numa_node_count == 0) numa_node_count = 1;
+}
+
+/**
+ * Parse ACPI SRAT (System Resource Affinity Table) for NUMA info
+ * TODO: Implement full ACPI table parsing
+ */
+static int detect_numa_via_acpi_srat(void) {
+    // Placeholder for future ACPI SRAT parsing
+    // Would read from ACPI tables at physical address
+    // and extract processor affinity and memory affinity structures
+    return -1;  // Not implemented yet
+}
+
+/**
+ * Detect NUMA topology with fallbacks
+ * Tries: 1) ACPI SRAT, 2) CPUID, 3) Heuristic
+ */
+void lock_detect_numa_topology(void) {
+    // Try ACPI SRAT first (most accurate)
+    if (detect_numa_via_acpi_srat() == 0) {
+        cprintf("qspinlock: NUMA topology via ACPI SRAT: %d nodes\n",
+                numa_node_count);
+        return;
+    }
+
+    // Try CPUID Extended Topology
+    if (detect_numa_via_cpuid() == 0) {
+        cprintf("qspinlock: NUMA topology via CPUID: %d nodes\n",
+                numa_node_count);
+        return;
+    }
+
+    // Fallback: heuristic (assume 8 CPUs per socket)
+    detect_numa_heuristic();
+    cprintf("qspinlock: NUMA topology via heuristic: %d nodes (8 CPUs/socket)\n",
+            numa_node_count);
 }
 
 /**
@@ -79,6 +193,17 @@ void lock_detect_numa_topology(void) {
 static inline uint32_t get_numa_node(uint32_t cpu_id) {
     if (cpu_id >= NCPU) return 0;
     return cpu_to_numa[cpu_id];
+}
+
+/**
+ * Export NUMA info for other subsystems
+ */
+uint32_t lock_get_numa_node_count(void) {
+    return numa_node_count;
+}
+
+uint32_t lock_get_cpu_numa_node(uint32_t cpu_id) {
+    return get_numa_node(cpu_id);
 }
 
 /* ========================================================================
