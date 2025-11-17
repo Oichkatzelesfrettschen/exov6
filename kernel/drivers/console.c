@@ -7,6 +7,7 @@
 #include "param.h"
 #include "../traps.h"
 #include "spinlock.h"
+#include "exo_lock.h"  // Modern lock subsystem (Phase 5.5)
 #include "sleeplock.h"
 #include "fs.h"
 #include "file.h"
@@ -23,7 +24,7 @@ static void consputc(int);
 static int panicked = 0;
 
 static struct {
-  struct spinlock lock;
+  struct qspinlock lock;  // Modern qspinlock (Phase 5.5)
   int locking;
 } cons;
 
@@ -63,7 +64,7 @@ cprintf(const char *fmt, ...)
 
   locking = cons.locking;
   if(locking)
-    acquire(&cons.lock);
+    qspin_lock(&cons.lock);
 
   if (fmt == 0)
     panic("null fmt");
@@ -103,7 +104,7 @@ cprintf(const char *fmt, ...)
   }
 
   if(locking)
-    release(&cons.lock);
+    qspin_unlock(&cons.lock);
 }
 
 void
@@ -187,7 +188,7 @@ consoleintr(int (*getc)(void))
 {
   int c, doprocdump = 0;
 
-  acquire(&cons.lock);
+  qspin_lock(&cons.lock);
   while((c = getc()) >= 0){
     if(c == C('P')){  // Process listing.
       doprocdump = 1;
@@ -201,7 +202,7 @@ consoleintr(int (*getc)(void))
       }
     }
   }
-  release(&cons.lock);
+  qspin_unlock(&cons.lock);
   if(doprocdump)
     procdump();  // now call procdump() wo. cons.lock held
 }
@@ -218,10 +219,10 @@ consolewrite(struct inode *ip, char *buf, size_t n)
   size_t i;
 
   iunlock(ip);
-  acquire(&cons.lock);
+  qspin_lock(&cons.lock);
   for(i = 0; i < n; i++)
     ttypecho(buf[i] & 0xff, consputc);
-  release(&cons.lock);
+  qspin_unlock(&cons.lock);
   ilock(ip);
 
   return n;
@@ -230,7 +231,8 @@ consolewrite(struct inode *ip, char *buf, size_t n)
 void
 consoleinit(void)
 {
-  initlock(&cons.lock, "console");
+  // Initialize console qspinlock at device level (Phase 5.5)
+  qspin_init(&cons.lock, "console", LOCK_LEVEL_DEVICE);
 
   ttyinit();
 

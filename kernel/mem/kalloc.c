@@ -8,6 +8,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "spinlock.h"
+#include "exo_lock.h"  // Modern lock subsystem (Phase 5.4)
 #include "proc.h"
 #include "exo.h"
 #include <string.h>
@@ -24,7 +25,7 @@ struct run {
 static inline int node_of(uintptr_t pa) { return (pa / PGSIZE) % NNODES; }
 
 struct {
-  struct spinlock lock[NNODES];
+  struct qspinlock lock[NNODES];  // NUMA-aware qspinlock array (Phase 5.4)
   int use_lock;
   struct run *freelist[NNODES];
 } kmem;
@@ -38,8 +39,12 @@ extern int cap_table_ready;
 // 2. main() calls kinit2() with the rest of the physical pages
 // after installing a full page table that maps them on all cores.
 void kinit1(void *vstart, void *vend) {
-  for (int i = 0; i < NNODES; i++)
-    initlock(&kmem.lock[i], "kmem");
+  // Initialize per-NUMA-node qspinlocks (Phase 5.4)
+  for (int i = 0; i < NNODES; i++) {
+    static char names[NNODES][16];  // Static storage for lock names
+    snprintf(names[i], sizeof(names[i]), "kmem_node%d", i);
+    qspin_init(&kmem.lock[i], names[i], LOCK_LEVEL_MEMORY);
+  }
   kmem.use_lock = 0;
   freerange(vstart, vend);
 }
@@ -71,7 +76,7 @@ void kfree(char *v) {
 
   int node = node_of(V2P(v));
   if (kmem.use_lock)
-    acquire(&kmem.lock[node]);
+    qspin_lock(&kmem.lock[node]);
   r = (struct run *)v;
   int idx = V2P(v) / PGSIZE;
   r->cap = page_caps[idx];
@@ -84,7 +89,7 @@ void kfree(char *v) {
   r->next = kmem.freelist[node];
   kmem.freelist[node] = r;
   if (kmem.use_lock)
-    release(&kmem.lock[node]);
+    qspin_unlock(&kmem.lock[node]);
 }
 
 // Allocate one 4096-byte page of physical memory.
@@ -99,12 +104,12 @@ char *kalloc(void) {
   for (int i = 0; i < NNODES; i++) {
     int node = (start + i) % NNODES;
     if (kmem.use_lock)
-      acquire(&kmem.lock[node]);
+      qspin_lock(&kmem.lock[node]);
     r = kmem.freelist[node];
     if (r) {
       kmem.freelist[node] = r->next;
       if (kmem.use_lock)
-        release(&kmem.lock[node]);
+        qspin_unlock(&kmem.lock[node]);
       int idx = V2P(r) / PGSIZE;
       if (cap_table_ready && page_caps[idx].id == 0) {
         cap_id_t id = cap_table_alloc(CAP_TYPE_PAGE, V2P(r), 0, 0);
@@ -114,7 +119,7 @@ char *kalloc(void) {
       break;
     }
     if (kmem.use_lock)
-      release(&kmem.lock[node]);
+      qspin_unlock(&kmem.lock[node]);
   }
   return (char *)r;
 }
