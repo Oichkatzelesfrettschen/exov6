@@ -8,6 +8,7 @@
 #include "cap.h"
 #include "exo.h"
 #include "elf.h"
+#include <string.h>  /* For memset, memmove */
 
 extern char data[];  // defined by kernel.ld
 #if defined(__x86_64__) || defined(__aarch64__)

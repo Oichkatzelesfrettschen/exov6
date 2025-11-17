@@ -45,9 +45,9 @@ _Static_assert(sizeof(void*) == 8, "Pointer size must be 8 bytes for 64-bit arch
 /* Thread-local storage for per-CPU data (C17) */
 _Thread_local uint32_t current_cpu_id = 0;
 
-/* Atomic global counters (C17) - using standard atomic types */
-static atomic_uint64_t global_cpu_ticks = 0;
-static atomic_uint32_t active_cpu_count = 0;
+/* Atomic global counters (C17) - using _Atomic qualifier */
+static _Atomic uint64_t global_cpu_ticks = 0;
+static _Atomic uint32_t active_cpu_count = 0;
 
 /**
  * @brief Get current CPU number using modern C17 approach

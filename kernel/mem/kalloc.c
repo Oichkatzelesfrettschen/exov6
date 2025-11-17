@@ -12,6 +12,7 @@
 #include "proc.h"
 #include "exo.h"
 #include <string.h>
+#include <stdio.h>  /* For snprintf */
 
 void freerange(void *vstart, void *vend);
 extern char end[]; // first address after kernel loaded from ELF file

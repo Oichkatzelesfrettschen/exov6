@@ -2,7 +2,7 @@
 #include "defs.h"
 #include "param.h"
 #include "spinlock.h"
-#include "adaptive_mutex.h"
+#include "exo_lock.h"  /* Modern lock subsystem (includes adaptive_mutex) */
 #include "sleeplock.h"
 #include "fs.h"
 #include "buf.h"
