@@ -22,38 +22,51 @@ typedef enum {
     memory_order_seq_cst = __ATOMIC_SEQ_CST
 } memory_order;
 
-/* Generic atomic type */
-#define _Atomic(T) __attribute__((aligned(sizeof(T)))) T
+/* Generic atomic type
+ * Use compiler builtin _Atomic support if available (C11+)
+ * The _Atomic qualifier is NOT a macro - it's a C11/C23 keyword
+ * DO NOT redefine it as it breaks atomic operations!
+ */
+#ifndef __cplusplus
+/* _Atomic is a language keyword in C11/C17/C23 - don't redefine it! */
+/* If your compiler doesn't support _Atomic, upgrade to C11 or later */
+#else
+/* C++ doesn't have _Atomic keyword, but has std::atomic */
+#define _Atomic(T) std::atomic<T>
+#endif
 
-/* Standard atomic types */
-typedef _Atomic(_Bool)              atomic_bool;
-typedef _Atomic(char)               atomic_char;
-typedef _Atomic(signed char)        atomic_schar;
-typedef _Atomic(unsigned char)      atomic_uchar;
-typedef _Atomic(short)              atomic_short;
-typedef _Atomic(unsigned short)     atomic_ushort;
-typedef _Atomic(int)                atomic_int;
-typedef _Atomic(unsigned int)       atomic_uint;
-typedef _Atomic(long)               atomic_long;
-typedef _Atomic(unsigned long)      atomic_ulong;
-typedef _Atomic(long long)          atomic_llong;
-typedef _Atomic(unsigned long long) atomic_ullong;
+/* Standard atomic types
+ * NOTE: Use unwrapped _Atomic syntax for C23 compatibility
+ * C23 requires: _Atomic T (not _Atomic(T))
+ */
+typedef _Atomic _Bool              atomic_bool;
+typedef _Atomic char               atomic_char;
+typedef _Atomic signed char        atomic_schar;
+typedef _Atomic unsigned char      atomic_uchar;
+typedef _Atomic short              atomic_short;
+typedef _Atomic unsigned short     atomic_ushort;
+typedef _Atomic int                atomic_int;
+typedef _Atomic unsigned int       atomic_uint;
+typedef _Atomic long               atomic_long;
+typedef _Atomic unsigned long      atomic_ulong;
+typedef _Atomic long long          atomic_llong;
+typedef _Atomic unsigned long long atomic_ullong;
 
 /* Fixed-width atomic types */
-typedef _Atomic(int8_t)    atomic_int8_t;
-typedef _Atomic(uint8_t)   atomic_uint8_t;
-typedef _Atomic(int16_t)   atomic_int16_t;
-typedef _Atomic(uint16_t)  atomic_uint16_t;
-typedef _Atomic(int32_t)   atomic_int32_t;
-typedef _Atomic(uint32_t)  atomic_uint32_t;
-typedef _Atomic(int64_t)   atomic_int64_t;
-typedef _Atomic(uint64_t)  atomic_uint64_t;
+typedef _Atomic int8_t    atomic_int8_t;
+typedef _Atomic uint8_t   atomic_uint8_t;
+typedef _Atomic int16_t   atomic_int16_t;
+typedef _Atomic uint16_t  atomic_uint16_t;
+typedef _Atomic int32_t   atomic_int32_t;
+typedef _Atomic uint32_t  atomic_uint32_t;
+typedef _Atomic int64_t   atomic_int64_t;
+typedef _Atomic uint64_t  atomic_uint64_t;
 
 /* Pointer types */
-typedef _Atomic(intptr_t)  atomic_intptr_t;
-typedef _Atomic(uintptr_t) atomic_uintptr_t;
-typedef _Atomic(size_t)    atomic_size_t;
-typedef _Atomic(ptrdiff_t) atomic_ptrdiff_t;
+typedef _Atomic intptr_t  atomic_intptr_t;
+typedef _Atomic uintptr_t atomic_uintptr_t;
+typedef _Atomic size_t    atomic_size_t;
+typedef _Atomic ptrdiff_t atomic_ptrdiff_t;
 
 /* Atomic flag */
 typedef struct {
