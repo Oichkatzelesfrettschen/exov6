@@ -5,6 +5,7 @@
 #include "../kernel/mmu.h"
 #include <arch.h>
 #include "spinlock.h"
+#include "exo_lock.h"  // Modern lock subsystem (Phase 5)
 #include "ipc.h"
 #include "exo.h"
 #include <sys/types.h>  // For uid_t, gid_t
@@ -176,6 +177,6 @@ struct proc {
 //   expandable heap
 
 struct ptable {
-  struct spinlock lock;
+  struct qspinlock lock;  // Modern NUMA-aware qspinlock (Phase 5.3)
   struct proc proc[NPROC];
 };
