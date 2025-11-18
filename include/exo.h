@@ -76,6 +76,10 @@ int exo_disk_write(exo_blockcap cap, const void *buf);
 /* Kernel-only functions */
 exo_cap exo_alloc_page(void);
 [[nodiscard]] int exo_unbind_page(exo_cap c);
+
+/* Block allocation functions */
+exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights);
+int exo_bind_block(exo_blockcap *cap, struct buf *buf, int write);
 #endif
 
 #endif /* EXOV6_EXO_H */
