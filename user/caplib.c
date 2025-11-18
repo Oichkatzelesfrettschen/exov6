@@ -16,11 +16,15 @@ EXO_NODISCARD int cap_bind_block(exo_blockcap *cap, void *data, int write) {
 }
 
 void cap_flush_block(exo_blockcap *cap, void *data) {
-  exo_flush_block(cap, data);
+  /* TODO: Implement syscall wrapper for exo_flush_block */
+  (void)cap; /* Suppress unused parameter warning */
+  (void)data; /* Suppress unused parameter warning */
 }
 
 EXO_NODISCARD int cap_set_timer(void (*handler)(void)) {
-  return set_timer_upcall(handler);
+  /* TODO: Implement syscall wrapper for set_timer_upcall */
+  (void)handler; /* Suppress unused parameter warning */
+  return -1; /* Not implemented */
 }
 EXO_NODISCARD int cap_set_gas(uint64_t amount) { return set_gas(amount); }
 EXO_NODISCARD int cap_get_gas(void) { return get_gas(); }
@@ -44,8 +48,8 @@ EXO_NODISCARD int cap_write_disk(exo_blockcap cap, const void *src,
   return exo_write_disk(cap, src, off, n);
 }
 
-extern int cap_revoke_syscall(uint16_t id);
-int cap_revoke(uint16_t id) { return cap_revoke_syscall(id); }
+extern int cap_revoke_syscall(void);
+int cap_revoke(void) { return cap_revoke_syscall(); }
 
 EXO_NODISCARD int cap_send(exo_cap dest, const void *buf, uint64_t len) {
   return exo_send(dest, buf, len);
@@ -57,10 +61,7 @@ EXO_NODISCARD int cap_recv(exo_cap src, void *buf, uint64_t len) {
 
 EXO_NODISCARD int cap_recv_timed(exo_cap src, void *buf, uint64_t len,
                                  unsigned timeout) {
-  // Note: This would need the actual system call implementation
-  // For now, fall back to regular recv (timeout functionality not implemented)
-  (void)timeout; // Suppress unused parameter warning
-  return exo_recv(src, buf, len);
+  return exo_recv_timed(src, buf, len, timeout);
 }
 
 EXO_NODISCARD int cap_ipc_echo_demo(void) {

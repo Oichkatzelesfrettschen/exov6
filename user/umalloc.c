@@ -1,7 +1,13 @@
 #include "types.h"
-#include "sys/stat.h"
+#include "stat.h"
 #include "user.h"
 #include "param.h"
+#include <unistd.h>
+
+/* Forward declaration for sbrk if not available in unistd.h */
+#ifndef _POSIX_C_SOURCE
+void *sbrk(intptr_t increment);
+#endif
 
 // Memory allocator by Kernighan and Ritchie,
 // The C programming Language, 2nd ed.  Section 8.7.
