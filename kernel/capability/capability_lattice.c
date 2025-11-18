@@ -20,8 +20,8 @@
 #include <stdalign.h>
 
 #include "types.h"
-#include "capability.h"
-#include "crypto.h"
+#include "cap.h"
+#include "libos/crypto.h"
 
 /* ============================================================================
  * Capability Lattice Constants

@@ -22,7 +22,7 @@
  * ============================================================================ */
 
 /* Array of registered clock sources */
-static clock_source_t *clock_sources[CLOCK_MAX];
+clock_source_t *clock_sources[CLOCK_MAX];
 
 /* Primary system clock source */
 static clock_source_t *primary_clock;
@@ -124,7 +124,7 @@ static void calculate_mult_shift(uint32_t *mult, uint32_t *shift,
  * ============================================================================ */
 
 static clock_source_t tsc_clock = {
-    .sequence = ATOMIC_VAR_INIT(0),
+    .sequence = 0,
     .id = CLOCK_MONOTONIC_RAW,
     .name = "tsc",
     .flags = CLOCK_SOURCE_VALID | CLOCK_SOURCE_CONTINUOUS | CLOCK_SOURCE_HIGH_RES,
