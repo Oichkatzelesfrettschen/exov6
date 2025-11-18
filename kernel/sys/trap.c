@@ -12,7 +12,6 @@
 
 /* Forward declarations */
 extern int cpunum(void);
-extern uint64_t rcr2(void);
 extern void exit(int);
 
 #define GAS_PER_TRAP 1 // Define gas consumed per trap/interrupt
@@ -38,7 +37,12 @@ void tvinit(void) {
   qspin_init(&tickslock, "time", LOCK_LEVEL_DEVICE);
 }
 
-void idtinit(void) { lidt(idt, sizeof(idt)); }
+void idtinit(void) { 
+  struct { uint16_t limit; uint64_t base; } __attribute__((packed)) idtr;
+  idtr.limit = sizeof(idt) - 1;
+  idtr.base = (uint64_t)idt;
+  lidt(&idtr); 
+}
 
 // PAGEBREAK: 41
 void trap(struct trapframe *tf) {

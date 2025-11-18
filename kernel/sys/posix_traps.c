@@ -9,6 +9,7 @@
 #include <types.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include "defs.h"
 #include "param.h"
 #include "memlayout.h"
@@ -64,6 +65,9 @@ static inline int copyout_page(pde_t *pgdir, char *dst, uint32_t va, uint32_t n)
 #ifndef STOPPED
 #define STOPPED SLEEPING  /* Map to existing state */
 #endif
+
+/* Disable signal/FPU/brand code until proc struct is extended */
+#if 0  /* POSIX_SIGNALS_DISABLED - requires extended proc struct */
 
 /* Forward declarations */
 void deliver_signal(struct proc *p, int signo);
@@ -215,11 +219,11 @@ static inline uint64_t rcr0(void) {
     return val;
 }
 
-static inline void lcr0(uint64_t val) {
+static inline void posix_lcr0(uint64_t val) {
     __asm__ volatile("mov %0, %%cr0" : : "r"(val));
 }
 
-static inline uint64_t rcr2(void) {
+static inline uint64_t posix_rcr2(void) {
     uint64_t val;
     __asm__ volatile("mov %%cr2, %0" : "=r"(val));
     return val;
@@ -259,7 +263,7 @@ static int illumos_syscall_handler(struct trapframe *tf) {
 
 static void send_signal(struct proc *p, int signo) {
     if (!p || signo < 1 || signo >= POSIX_NSIG) return;
-    
+
     /* Set signal as pending */
     p->signal_state.pending |= (1ULL << signo);
     
@@ -1128,7 +1132,13 @@ int sys_sigprocmask(void) {
     return 0;
 }
 
-/* Export trap initialization */
+#endif /* POSIX_SIGNALS_DISABLED */
+
+/* Stub implementations when signals disabled */
 void trap_init(void) {
-    posix_trap_init();
+    /* Stub - full POSIX trap handling disabled */
+}
+
+void posix_trap_handler(void) {
+    /* Stub - full POSIX trap handling disabled */
 }

@@ -7,8 +7,7 @@
 #include "spinlock.h"    /* struct spinlock, initlock, acquire, release */
 #include "exo_lock.h"  /* Modern qspinlock */   /* struct qspinlock, qspin_init, qspin_lock, qspin_unlock */
 #include "dag.h"         /* struct dag_node, struct dag_node_list */
-/* Forward declarations for lattice IPC */
-extern int lattice_yield_to(int pid);
+#include "lattice_ipc.h" /* lattice_channel_t, lattice_yield_to */
 
 /* Kernel memory allocation */
 extern void *kalloc(void);

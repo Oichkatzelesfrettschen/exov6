@@ -1,5 +1,6 @@
 // clang-format off
 #include <types.h>
+#include <string.h>
 #include "date.h"
 #include "defs.h"
 #include "exo.h"
@@ -19,7 +20,6 @@
 extern exo_cap exo_bind_irq(uint32_t irq);
 extern exo_cap exo_alloc_dma(uint32_t channel);
 extern exo_cap exo_alloc_ioport(uint32_t port);
-extern int exo_bind_block(void *cap, void *buf, int write);
 extern struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t blockno);
 extern void sleep(void *chan, struct spinlock *lk);
 
@@ -31,18 +31,18 @@ int sys_exit(void) {
   int status;
   if (argint(0, &status) < 0)
     status = 0;  // Default to 0 if no status provided
-  kexit(status);
+  exit(status);
   return 0; // not reached
 }
 
-int sys_wait(void) { return kwait(); }
+int sys_wait(void) { return wait(); }
 
 int sys_kill(void) {
   int pid;
 
   if (argint(0, &pid) < 0)
     return -1;
-  return kkill(pid);
+  return kill(pid);
 }
 
 int sys_getpid(void) { return myproc()->pid; }
@@ -182,7 +182,7 @@ int sys_exo_bind_block(void) {
 
   cap = *ucap;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoblk", LOCK_LEVEL_FILESYSTEM);
+  initsleeplock(&b.lock, "exoblk");
   acquiresleep(&b.lock);
   if (write)
     memmove(b.data, data, BSIZE);
@@ -203,7 +203,7 @@ int sys_exo_flush_block(void) {
 
   cap = *ucap;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoflush", LOCK_LEVEL_FILESYSTEM);
+  initsleeplock(&b.lock, "exoflush");
   acquiresleep(&b.lock);
   memmove(b.data, data, BSIZE);
   /* TODO: Implement exo_bind_block */

@@ -77,7 +77,7 @@ void pipeclose(struct pipe *p, int writable) {
 }
 
 // PAGEBREAK: 40
-int pipewrite(struct pipe *p, struct file *f, char *addr, size_t n) {
+int pipewrite(struct pipe *p, struct file *f, const char *addr, size_t n) {
   size_t i;
 
   acquire(&p->lock);

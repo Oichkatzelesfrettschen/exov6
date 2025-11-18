@@ -307,7 +307,7 @@ void beatty_sched_init(void);
 struct exo_sched_ops *dag_sched_ops(void);
 struct exo_sched_ops *beatty_sched_ops(void);
 void beatty_dag_stream_init(void);
-void beatty_sched_set_tasks(const exo_cap *, const double *, int);
+void beatty_sched_set_tasks(exo_cap a, exo_cap b);
 void streams_sched_init(void);
 void streams_stop(void);
 void streams_yield(void);

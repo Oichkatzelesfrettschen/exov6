@@ -11,10 +11,6 @@
 #include <string.h>
 #include "trapframe.h"
 
-// Forward declare CPU flag functions
-uint64_t read_flags(void);
-void write_flags(uint64_t flags);
-
 // Forward declare service function (defined in service.c)
 void service_notify_exit(struct proc *p);
 
@@ -96,7 +92,7 @@ struct proc *pctr_lookup(uint32_t cap) {
 static void wakeup1(void *chan);
 
 void pinit(void) {
-  qspin_init(&ptable.lock, "ptable", LOCK_LEVEL_PROCESS);  // Phase 5.3
+  initlock_compat(&ptable.lock, "ptable");  // Phase 5.3
 }
 
 // Must be called with interrupts disabled
@@ -145,13 +141,13 @@ struct proc *allocproc(void) {
   struct proc *p;
   char *sp;
 
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     if (p->state == UNUSED)
       goto found;
 
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
   return 0;
 
 found:
@@ -166,7 +162,7 @@ found:
 
   pctr_insert(p);
 
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
 
   // Allocate kernel stack.
   if ((p->kstack = kalloc()) == 0) {
@@ -247,11 +243,11 @@ void userinit(void) {
   // run this process. the acquire forces the above
   // writes to be visible, and the lock is also needed
   // because the assignment might not be atomic.
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
 
   p->state = RUNNABLE;
 
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
 }
 
 // Grow current process's memory by n bytes.
@@ -315,11 +311,11 @@ int fork(void) {
 
   pid = np->pid;
 
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
 
   np->state = RUNNABLE;
 
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
 
   return pid;
 }
@@ -348,7 +344,7 @@ _Noreturn void kexit(int status) {
   end_op();
   curproc->cwd = 0;
 
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
 
   pctr_remove(curproc->pctr_cap);
 
@@ -379,7 +375,7 @@ int kwait(void) {
   int havekids, pid;
   struct proc *curproc = myproc();
 
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
   for (;;) {
     // Scan through table looking for exited children.
     havekids = 0;
@@ -402,14 +398,14 @@ int kwait(void) {
         p->name[0] = 0;
         p->killed = 0;
         p->state = UNUSED;
-        qspin_unlock(&ptable.lock);
+        release_compat(&ptable.lock);
         return pid;
       }
     }
 
     // No point waiting if we don't have any children.
     if (!havekids || curproc->killed) {
-      qspin_unlock(&ptable.lock);
+      release_compat(&ptable.lock);
       return -1;
     }
 
@@ -437,7 +433,7 @@ void scheduler(void) {
     sti();
 
     // Loop over process table looking for process to run.
-    qspin_lock(&ptable.lock);
+    acquire_compat(&ptable.lock);
     found = 0;
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
       if (p->state != RUNNABLE || p->out_of_gas)
@@ -472,7 +468,7 @@ void scheduler(void) {
       // It should have changed its p->state before coming back.
       c->proc = 0;
     }
-    qspin_unlock(&ptable.lock);
+    release_compat(&ptable.lock);
     if (!found)
       exo_stream_halt();
   }
@@ -489,7 +485,7 @@ void sched(void) {
   int intena;
   struct proc *p = myproc();
 
-  if (!qspin_holding(&ptable.lock))
+  if (!holding_compat(&ptable.lock))
     panic("sched ptable.lock");
   if (mycpu()->ncli != 1)
     panic("sched locks");
@@ -510,7 +506,7 @@ void sched(void) {
 #define GAS_PER_YIELD 5 // Define gas consumed per yield operation
 
 void yield(void) {
-  qspin_lock(&ptable.lock); // DOC: yieldlock
+  acquire_compat(&ptable.lock); // DOC: yieldlock
   struct proc *p = myproc();
   if (p->gas_remaining <= GAS_PER_YIELD) {
       p->gas_remaining = 0;
@@ -521,7 +517,7 @@ void yield(void) {
   exo_stream_yield();
   p->state = RUNNABLE;
   sched();
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
 }
 
 // A fork child's very first scheduling by scheduler()
@@ -529,7 +525,7 @@ void yield(void) {
 void forkret(void) {
   static int first = 1;
   // Still holding ptable.lock from scheduler.
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
 
   if (first) {
     // Some initialization functions must be run in the context
@@ -561,7 +557,7 @@ void ksleep(void *chan, struct spinlock *lk) {
   // (wakeup runs with ptable.lock locked),
   // so it's okay to release lk.
   if (lk != &ptable.lock) { // DOC: sleeplock0
-    qspin_lock(&ptable.lock);  // DOC: sleeplock1
+    acquire_compat(&ptable.lock);  // DOC: sleeplock1
     release(lk);
   }
   // Go to sleep.
@@ -575,7 +571,7 @@ void ksleep(void *chan, struct spinlock *lk) {
 
   // Reacquire original lock.
   if (lk != &ptable.lock) { // DOC: sleeplock2
-    qspin_unlock(&ptable.lock);
+    release_compat(&ptable.lock);
     acquire(lk);
   }
 }
@@ -593,9 +589,9 @@ static void wakeup1(void *chan) {
 
 // Wake up all processes sleeping on chan.
 void wakeup(void *chan) {
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
   wakeup1(chan);
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
 }
 
 // Kill the process with the given pid.
@@ -604,34 +600,34 @@ void wakeup(void *chan) {
 int kkill(int pid) {
   struct proc *p;
 
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
     if (p->pid == pid) {
       p->killed = 1;
       // Wake process from sleep if necessary.
       if (p->state == SLEEPING)
         p->state = RUNNABLE;
-      qspin_unlock(&ptable.lock);
+      release_compat(&ptable.lock);
       return 0;
     }
   }
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
   return -1;
 }
 
 int sigsend(int pid, int sig) {
   struct proc *p;
-  qspin_lock(&ptable.lock);
+  acquire_compat(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
     if (p->pid == pid) {
       p->pending_signal |= (1 << sig);
       if (p->state == SLEEPING)
         p->state = RUNNABLE;
-      qspin_unlock(&ptable.lock);
+      release_compat(&ptable.lock);
       return 0;
     }
   }
-  qspin_unlock(&ptable.lock);
+  release_compat(&ptable.lock);
   return -1;
 }
 

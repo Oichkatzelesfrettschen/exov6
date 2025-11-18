@@ -10,7 +10,7 @@
 #include "../string.h"
 
 int
-exec(char *path, char **argv)
+exec(const char *path, char *const argv[])
 {
   char *s, *last;
   int i, off;
