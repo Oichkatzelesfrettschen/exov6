@@ -186,7 +186,7 @@ exo_cap exo_alloc_dma(uint32_t channel) {
 }
 
 /* Block device binding for direct disk access */
-int exo_bind_block(struct exo_blockcap *bcap, struct buf *buf, int write) {
+int exo_bind_block(exo_blockcap *bcap, struct buf *buf, int write) {
     struct buf *b = buf;
     
     if (!bcap || !b) {

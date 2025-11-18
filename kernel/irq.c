@@ -9,8 +9,8 @@
 #define ENOSPC 28
 #endif
 
-#define EXO_KERNEL
-#include "exokernel.h"
+/* Note: exo.h (kernel API) is already included via defs.h -> proc.h -> exo.h */
+/* Do NOT include exokernel.h in kernel code - it's for userspace only */
 
 #define IRQ_BUFSZ 32
 

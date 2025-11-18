@@ -18,11 +18,17 @@
 #define EXO_RIGHT_W 0x2
 #define EXO_RIGHT_X 0x4
 #endif
+#ifndef EXO_RIGHT_CTL
 #define EXO_RIGHT_CTL 0x8
+#endif
 
+/* cap_has_rights is defined in exo.h for both kernel and userspace */
+#ifndef cap_has_rights_DEFINED
+#define cap_has_rights_DEFINED
 static inline int cap_has_rights(uint32_t rights, uint32_t need) {
   return (rights & need) == need;
 }
+#endif
 
 typedef struct {
   exo_cap cap;

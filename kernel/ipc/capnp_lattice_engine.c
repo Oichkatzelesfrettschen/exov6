@@ -14,7 +14,7 @@
 #include "capnp_helpers.h"
 #include "lattice_ipc.h"
 #include "exo.h"
-#include "exokernel.h"  /* For EXO_RIGHT_CTL */
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 #include "octonion.h"
 #include <stdatomic.h>
 #include <string.h>

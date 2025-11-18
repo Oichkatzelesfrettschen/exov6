@@ -22,7 +22,7 @@
 #include <string.h>
 #include <errno.h>
 #define EXO_KERNEL
-#include "../../include/exokernel.h"
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 #include "buf.h"
 #include "file.h"
 #include "exo.h"

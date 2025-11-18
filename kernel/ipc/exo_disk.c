@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <string.h>
 #define EXO_KERNEL
-#include "../../include/exokernel.h"
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 
 
 [[nodiscard]] int exo_read_disk(struct exo_blockcap cap, void *dst,
