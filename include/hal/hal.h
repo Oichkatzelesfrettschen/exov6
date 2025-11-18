@@ -308,17 +308,17 @@ static inline void hal_write_barrier(void) {
  * ============================================================================ */
 
 #ifdef HAL_ARCH_X86_64
-    #include "hal/x86_64/cpu.h"
-    #include "hal/x86_64/memory.h"
-    #include "hal/x86_64/io.h"
-    #include "hal/x86_64/timer.h"
+    #include "hal/cpu.h"
+    #include "hal/memory.h"
+    #include "hal/io.h"
+    #include "hal/timer.h"
 #endif
 
 #ifdef HAL_ARCH_AARCH64
-    #include "hal/aarch64/cpu.h"
-    #include "hal/aarch64/memory.h"
-    #include "hal/aarch64/io.h"
-    #include "hal/aarch64/timer.h"
+    #include "hal/cpu.h"
+    #include "hal/memory.h"
+    #include "hal/io.h"
+    #include "hal/timer.h"
 #endif
 
 /* ============================================================================

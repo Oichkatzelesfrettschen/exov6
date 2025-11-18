@@ -11,11 +11,6 @@
 #define EXO_KERNEL 1
 #endif
 
-/* Set exo_lock guard to use modern lock subsystem */
-#ifndef __EXOLOCK_H_INCLUDED
-#define __EXOLOCK_H_INCLUDED
-#endif
-
 #include "capnp_helpers.h"
 #include "lattice_ipc.h"
 #include "exo.h"

@@ -16,7 +16,7 @@ const quaternion_t QSPIN_NO_OWNER_POS = {0.0, 0.0, 0.0, 0.0};
 // Pre-defined fairness rotation quaternion.
 const quaternion_t DEFAULT_FAIRNESS_ROTATION = {0.996194698, 0.087155742, 0.0, 0.0}; // cos(5 deg), sin(5 deg), 0, 0
 
-void qspin_lock_init(qspin_lock_t* lock, const char* name) {
+void quat_lock_init(qspin_lock_t* lock, const char* name) {
     lock->name = name;
     atomic_store(&lock->locked_flag, 0); // 0 means unlocked
     lock->current_owner_pos = QSPIN_NO_OWNER_POS;
@@ -29,9 +29,9 @@ void qspin_lock_init(qspin_lock_t* lock, const char* name) {
     }
 }
 
-void qspin_lock(qspin_lock_t* lock, int cpu_id) {
+void quat_lock(qspin_lock_t* lock, int cpu_id) {
     // Consider pushcli(); here if disabling interrupts is desired.
-    // if (qspin_holding(lock)) {
+    // if (quat_holding(lock)) {
     //     // Handle re-entrancy if necessary, or panic
     //     // For now, assume non-reentrant or panic in a higher level function if needed
     // }
@@ -57,8 +57,8 @@ void qspin_lock(qspin_lock_t* lock, int cpu_id) {
     // Consider __sync_synchronize(); memory barrier here.
 }
 
-void qspin_unlock(qspin_lock_t* lock) {
-    // if (!qspin_holding(lock)) {
+void quat_unlock(qspin_lock_t* lock) {
+    // if (!quat_holding(lock)) {
     //     // Panic or handle error: trying to unlock a lock not held by this CPU
     // }
 
@@ -77,7 +77,7 @@ void qspin_unlock(qspin_lock_t* lock) {
     // Consider popcli(); if interrupts were disabled.
 }
 
-int qspin_holding(qspin_lock_t* lock) {
+int quat_holding(qspin_lock_t* lock) {
     // This check assumes that reading lock->locked_flag and lock->cpu
     // while potentially being modified by another CPU is acceptable for a 'holding' check.
     // For a robust check, especially if mycpu() itself could be complex or if

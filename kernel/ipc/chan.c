@@ -1,3 +1,8 @@
+/* Define kernel mode before any includes to prevent userspace API conflicts */
+#ifndef EXO_KERNEL
+#define EXO_KERNEL 1
+#endif
+
 #include "chan.h"
 #include "exo_ipc.h"
 #include "ipc.h"

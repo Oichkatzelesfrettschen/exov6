@@ -7,7 +7,7 @@
 #include "caplib.h"
 #include "libos/crypto.h"
 #include "octonion.h"
-#include "quaternion_spinlock.h"  /* Fixed path - include/ already in search path */
+/* Note: quaternion_spinlock.h already included via lattice_ipc.h */
 #include "dag.h"
 
 #include <stdatomic.h>

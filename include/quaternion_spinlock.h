@@ -22,20 +22,10 @@ typedef struct {
 /* Alias for compatibility */
 typedef qspin_lock_t quaternion_spinlock_t;
 
-/* Guard quaternion qspin functions to avoid conflicts with exo_lock.h */
-#ifndef __EXOLOCK_H_INCLUDED
-void qspin_lock_init(qspin_lock_t* lock, const char* name); // New init function
-void qspin_lock(qspin_lock_t* lock, int cpu_id); // Matches framework, cpu_id for fairness
-void qspin_unlock(qspin_lock_t* lock);
-int qspin_holding(qspin_lock_t* lock);
-// int qspin_trylock(qspin_lock_t* lock, int cpu_id); // Optional: if we want a trylock
-#else
-/* Use exo_lock.h versions - provide wrappers if needed */
-#define qspin_lock_init(lock, name) qspin_init((struct qspinlock*)(lock), (name), 0)
-static inline void qspin_lock_compat(qspin_lock_t* lock, int cpu_id) { (void)cpu_id; qspin_lock((struct qspinlock*)lock); }
-static inline void qspin_unlock_compat(qspin_lock_t* lock) { qspin_unlock((struct qspinlock*)lock); }
-#define qspin_lock(lock, cpu_id) qspin_lock_compat((lock), (cpu_id))
-#define qspin_unlock(lock) qspin_unlock_compat(lock)
-#endif
+/* Quaternion-based spinlock functions (renamed to avoid exo_lock.h qspin_* conflicts) */
+void quat_lock_init(qspin_lock_t* lock, const char* name);
+void quat_lock(qspin_lock_t* lock, int cpu_id);
+void quat_unlock(qspin_lock_t* lock);
+int quat_holding(qspin_lock_t* lock);
 
 #endif // QUATERNION_SPINLOCK_H

@@ -11,6 +11,11 @@
 #include "../../include/exokernel.h"
 #include "ipc_queue.h"
 
+/* Fallback for ETIMEDOUT if not defined in errno.h */
+#ifndef ETIMEDOUT
+#define ETIMEDOUT 110
+#endif
+
 struct mailbox ipcs;
 
 static void ipc_init(struct mailbox *mb) {
