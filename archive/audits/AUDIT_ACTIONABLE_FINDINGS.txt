@@ -1,0 +1,258 @@
+================================================================================
+EXOV6 AUDIT - ACTIONABLE FINDINGS WITH ABSOLUTE PATHS
+================================================================================
+
+CRITICAL: ROOT DIRECTORY CLEANUP (76 files to organize)
+================================================================================
+
+Move These Scripts to scripts/:
+  /home/user/exov6/build.sh
+  /home/user/exov6/build_all.sh
+  /home/user/exov6/COMPLETE_BUILD_AND_TEST.sh
+  /home/user/exov6/test_everything.sh
+  /home/user/exov6/test_ci_pipeline.sh
+  /home/user/exov6/setup.sh
+  /home/user/exov6/run_posix_tests.sh
+  /home/user/exov6/qemu-aarch64.sh
+  /home/user/exov6/git_push_posix.sh
+
+Move These Markdown Files to docs/:
+  /home/user/exov6/BUILD_STATUS_x86_64.md
+  /home/user/exov6/BUILD_PROGRESS_SESSION3.md
+  /home/user/exov6/MODERNIZATION_ROADMAP.md
+  /home/user/exov6/SESSION_SUCCESS_SUMMARY.md
+  /home/user/exov6/MATHEMATICAL_ABSTRACTIONS_AUDIT.md
+  /home/user/exov6/PDAC_UNIFIED_FRAMEWORK.md
+  /home/user/exov6/EXOV6_MODERN_OS_SYNTHESIS.md
+  /home/user/exov6/PDAC_PHASE2_PLAN.md
+  /home/user/exov6/EXOV6_C17_QUALITY_IMPROVEMENTS.md
+
+Delete (Duplicate/Superseded):
+  /home/user/exov6/README_old_backup.md
+
+Move Build Artifacts:
+  /home/user/exov6/boot.bin → build/
+  /home/user/exov6/bootable.img → build/
+  /home/user/exov6/console.o → build/
+  /home/user/exov6/fs.o → build/
+  /home/user/exov6/kernel_stub.o → build/
+  /home/user/exov6/kmath.o → build/
+  /home/user/exov6/memutil.o → build/
+  /home/user/exov6/proc.o → build/
+  /home/user/exov6/uart.o → build/
+
+Move Configuration Files:
+  /home/user/exov6/kernel.ld → kernel/
+  /home/user/exov6/dot-bochsrc → config/ (or archive)
+  /home/user/exov6/pytest.ini → tests/ (if applicable)
+
+Keep at Root (< 10 files):
+  /home/user/exov6/README.md
+  /home/user/exov6/CMakeLists.txt
+  /home/user/exov6/LICENSE
+  /home/user/exov6/.gitignore
+  /home/user/exov6/.clang-format
+  /home/user/exov6/CONTRIBUTING.md (create if not exists)
+
+================================================================================
+HIGH: CMakeLists.txt CONSOLIDATION
+================================================================================
+
+Current Variants (decide on each):
+  /home/user/exov6/CMakeLists.txt (244 lines) - KEEP
+  /home/user/exov6/CMakeLists_modern.txt (392 lines) - ARCHIVE or DELETE?
+  /home/user/exov6/CMakeLists_test.txt (392 lines) - ARCHIVE or DELETE?
+  /home/user/exov6/CMakeLists_reorganized.txt (447 lines) - ARCHIVE or DELETE?
+  /home/user/exov6/CMakeLists.txt.backup - DELETE
+
+Action: Document purpose of each variant, then archive or delete unused ones.
+
+================================================================================
+HIGH: BACKUP FILE REMOVAL (28+ files)
+================================================================================
+
+Kernel Backup Files to Remove:
+  /home/user/exov6/kernel/bootmain.c.bak
+  /home/user/exov6/kernel/caplib.h.bak
+  /home/user/exov6/kernel/console.c.bak
+  /home/user/exov6/kernel/ddekit.h.bak
+  /home/user/exov6/kernel/exec.c.bak
+  /home/user/exov6/kernel/exo.c.bak
+  /home/user/exov6/kernel/exokernel.h.bak
+  /home/user/exov6/kernel/ide.c.bak
+  /home/user/exov6/kernel/kbd.c.bak
+  /home/user/exov6/kernel/lapic.c.bak
+  /home/user/exov6/kernel/libbaremetal.c.bak
+  /home/user/exov6/kernel/main.c.bak
+  /home/user/exov6/kernel/memide.c.bak
+  /home/user/exov6/kernel/mp.c.bak
+  /home/user/exov6/kernel/picirq.c.bak
+  /home/user/exov6/kernel/proc.c.bak
+  /home/user/exov6/kernel/sleeplock.c.bak
+  /home/user/exov6/kernel/spinlock.c.bak
+  /home/user/exov6/kernel/sync/legacy/spinlock_old.c.bak
+  /home/user/exov6/kernel/syscall.c.bak
+  /home/user/exov6/kernel/sysproc.c.bak
+  /home/user/exov6/kernel/trap.c.bak
+  /home/user/exov6/kernel/uart.c.bak
+  /home/user/exov6/kernel/vm.c.bak
+
+Script Backup Files:
+  /home/user/exov6/setup.sh.bak
+  /home/user/exov6/setup.sh.before_awk_heredoc_fix_1749720125
+  /home/user/exov6/setup.sh.before_debug_fix_1749717237
+  /home/user/exov6/setup.sh.before_pip_awk_file_fix_1749720263
+  /home/user/exov6/setup.sh.before_while_fix_1749717303
+
+Command: git rm kernel/**/*.bak kernel/sync/legacy/*.bak setup.sh.bak setup.sh.before_*
+
+================================================================================
+HIGH: TODO/FIXME RESOLUTION
+================================================================================
+
+File: /home/user/exov6/kernel/resurrection/reincarnation_server.c
+  Line ~: Process termination via exokernel (TODO)
+  Line ~: Capability snapshotting (TODO)
+  Line ~: Capability restoration (TODO)
+  Line ~: Proper time source (TODO)
+  Line ~: Process execution via exokernel (TODO)
+  PRIORITY: HIGH (process resurrection is critical)
+
+File: /home/user/exov6/kernel/exo_impl.c
+  Line ~: IOAPIC configuration (TODO)
+  PRIORITY: MEDIUM
+
+File: /home/user/exov6/kernel/ipc/lattice_ipc.c (8 TODOs)
+  Line ~: Post-quantum crypto library replacement
+  Line ~: Robust error handling for exo_send/exo_recv
+  Line ~: Memory allocation failure handling
+  Line ~: Timeout and retry mechanisms
+  PRIORITY: CRITICAL (security-related)
+
+File: /home/user/exov6/kernel/ipc/exo_disk.c
+  Line ~: Implement proper exo_bind_block (2x)
+  PRIORITY: MEDIUM
+
+File: /home/user/exov6/kernel/sync/qspinlock.c
+  Line ~: Full ACPI table parsing
+  Line ~: Resurrection server triggering
+  PRIORITY: MEDIUM
+
+File: /home/user/exov6/kernel/sync/ultimate_lock_integration.c
+  Line ~: Fallback implementation
+  PRIORITY: LOW
+
+File: /home/user/exov6/kernel/sync/unified_lock.c (4 TODOs)
+  Line ~: HAL timer interface
+  Line ~: Capability checking
+  Line ~: Adaptive lock upgrade
+  Line ~: Safe lock type transition
+  PRIORITY: MEDIUM
+
+File: /home/user/exov6/kernel/sched/dag_sched.c
+  Line ~: Channel to PID conversion for lattice_yield_to
+  PRIORITY: LOW
+
+File: /home/user/exov6/kernel/lambda_cap.c (2 TODOs)
+  Line ~: S-expression destruction and evaluation
+  PRIORITY: LOW
+
+File: /home/user/exov6/kernel/lib9p.c
+  Line ~: π-calculus network channel setup
+  PRIORITY: LOW
+
+ACTION: Create GitHub issues for each, tag with labels:
+  - critical (security-related)
+  - high (core functionality)
+  - medium (important features)
+  - low (nice-to-have)
+
+================================================================================
+MEDIUM: EMPTY HEADER FILES
+================================================================================
+
+Files to Populate or Remove:
+  /home/user/exov6/kernel/uart.h (0 bytes) - UART interface
+  /home/user/exov6/kernel/picirq.h (0 bytes) - PIC interrupt
+  /home/user/exov6/kernel/trap.h (0 bytes) - Trap handling
+  /home/user/exov6/kernel/mmu64.h (0 bytes) - MMU interface
+  /home/user/exov6/kernel/lapic.h (0 bytes) - LAPIC interface
+  /home/user/exov6/kernel/console.h (0 bytes) - Console interface
+  /home/user/exov6/kernel/ioapic.h (0 bytes) - IOAPIC interface
+
+ACTION: Check if implementations exist elsewhere, then either:
+  - Add stub function declarations
+  - Add documentation comments
+  - Remove if truly unused
+
+================================================================================
+MEDIUM: DOCUMENTATION CONSOLIDATION
+================================================================================
+
+Duplicate Documentation to Deduplicate:
+  /home/user/exov6/doc/IPC.md
+  /home/user/exov6/archive/legacy_documentation/IPC.md
+  → Keep ONE, remove other
+
+Files in /doc/ to Review:
+  /home/user/exov6/doc/architecture_detection.md
+  /home/user/exov6/doc/arbitration.md
+  /home/user/exov6/doc/QEMU_INTEGRATION.md
+  /home/user/exov6/doc/QEMU_DOCKER_I386.md
+  /home/user/exov6/doc/Notes.md
+  /home/user/exov6/doc/FeuerBird_Summary.md
+  → Move to docs/architecture/ and consolidate
+
+Files in /doc/standards/ to Compress:
+  /home/user/exov6/doc/ben-books/ (large standards archive)
+  /home/user/exov6/doc/standards/susv5-html/ (88M of HTML)
+  → Store as .zip, link to official sources instead
+
+Files in /archive/ to Archive:
+  /home/user/exov6/archive/legacy_documentation/ (41 files)
+  /home/user/exov6/archive/documentation_consolidated/ (17 files)
+  → Move to docs/archive/old/ for historical reference
+
+ACTION: Create docs/ hierarchy:
+  docs/README.md
+  docs/architecture/
+  docs/api/
+  docs/tutorials/
+  docs/posix-compliance/
+  docs/performance/
+  docs/archive/old/ (historical)
+  docs/archive/standards.zip (compressed)
+
+================================================================================
+LOW: MISSING MODULE DOCUMENTATION
+================================================================================
+
+Create These README Files:
+  /home/user/exov6/kernel/README.md
+    → Describe kernel architecture, core components
+  /home/user/exov6/kernel/ipc/README.md
+    → IPC implementation details
+  /home/user/exov6/kernel/mem/README.md
+    → Memory management (VM, MMU, allocation)
+  /home/user/exov6/kernel/sched/README.md
+    → Scheduler architecture (DAG, Beatty sequences)
+  /home/user/exov6/libos/README.md
+    → LibOS layer design and components
+  /home/user/exov6/scripts/README.md
+    → Description of each utility script
+
+================================================================================
+SUMMARY OF ABSOLUTE FILE PATHS
+================================================================================
+
+Files to Move:    23 items
+Files to Delete:  6 items
+Files to Remove:  28+ backup files
+Dirs to Create:   3-4 subdirs in docs/
+Dirs to Merge:    doc/ + docs/
+
+Root Directory After Cleanup: < 10 files
+Total Repository Size Reduction: ~5-10MB (standards compression)
+Estimated Effort: 13 hours
+
+================================================================================
