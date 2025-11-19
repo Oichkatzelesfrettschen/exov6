@@ -431,20 +431,355 @@ struct cap_table_meta {
 extern struct cap_table_meta cap_table_v2_meta;
 
 /* ============================================================================
+ * ERROR CODES
+ * ============================================================================ */
+
+/**
+ * Capability Error Codes
+ *
+ * Standard error codes for capability operations.
+ * Following UNIX errno conventions (negative values).
+ */
+#define CAPV2_OK                 0   /* Success */
+#define CAPV2_ERR_INVALID_SLOT  -1   /* Slot index out of range */
+#define CAPV2_ERR_NO_PERMISSION -2   /* Caller lacks required rights */
+#define CAPV2_ERR_TABLE_FULL    -3   /* Capability table exhausted */
+#define CAPV2_ERR_REFCOUNT_OVERFLOW -4  /* Too many references */
+#define CAPV2_ERR_INVALID_TYPE  -5   /* Capability type mismatch */
+#define CAPV2_ERR_QUOTA_EXCEEDED -6  /* Resource quota exceeded */
+#define CAPV2_ERR_RATE_LIMITED  -7   /* Token bucket empty */
+#define CAPV2_ERR_GENERATION_MISMATCH -8  /* Stale capability reference */
+#define CAPV2_ERR_INVALID_DERIVE -9  /* Invalid derivation (quota too large) */
+#define CAPV2_ERR_NOT_FOUND     -10  /* Capability not found */
+
+/* ============================================================================
+ * CAPABILITY TABLE API
+ * ============================================================================ */
+
+/**
+ * Initialize capability table
+ *
+ * Must be called once during kernel boot.
+ * Sets up free list and initializes all slots to CAP_TYPE_NULL.
+ */
+void capv2_table_init(void);
+
+/**
+ * Get table statistics
+ *
+ * Useful for monitoring and debugging.
+ *
+ * @param[out] num_free Number of free slots
+ * @param[out] num_allocated Number of allocated slots
+ */
+void capv2_table_stats(uint32_t *num_free, uint32_t *num_allocated);
+
+/**
+ * Print capability table statistics
+ *
+ * Debug helper. Prints:
+ * - Free/allocated counts
+ * - Per-type counts
+ * - Refcount histogram
+ */
+void capv2_print_table_stats(void);
+
+/* ============================================================================
+ * CORE CAPABILITY OPERATIONS
+ * ============================================================================ */
+
+/**
+ * Allocate new capability
+ *
+ * Creates a new capability granting access to the specified resource.
+ * Automatically initializes:
+ * - Owner to current process
+ * - Refcount to 1
+ * - Generation counter
+ * - Creation timestamp
+ * - Default quota (if applicable)
+ *
+ * @param resource_id Physical resource identifier
+ * @param cap_type Type of capability
+ * @param initial_rights Initial rights bitmask
+ * @param quota Resource quota (8D vector), or RESOURCE_VEC_ZERO for unlimited
+ *
+ * @return Capability slot number (0-4095) on success
+ * @return CAPV2_ERR_TABLE_FULL if no free slots
+ *
+ * EXAMPLE:
+ * ```c
+ * // Allocate memory page capability
+ * resource_vector_t quota = RESOURCE_VEC(0, 4, 0, 0, 0, 0, 0, 0);  // 4MB memory
+ * int cap_slot = capv2_alloc(page_frame_number, CAP_TYPE_MEMORY_PAGE,
+ *                            CAP_RIGHTS_RW, quota);
+ * if (cap_slot < 0) {
+ *     panic("Out of capabilities!");
+ * }
+ * ```
+ */
+int capv2_alloc(
+    uint64_t resource_id,
+    cap_type_t cap_type,
+    uint32_t initial_rights,
+    resource_vector_t quota
+);
+
+/**
+ * Free capability
+ *
+ * Releases capability back to free list.
+ * Only succeeds if:
+ * - Refcount == 0 (no outstanding references)
+ * - Caller is owner OR has REVOKE right
+ *
+ * Also releases underlying resource (type-specific cleanup).
+ *
+ * @param cap_slot Capability slot to free
+ *
+ * @return CAPV2_OK on success
+ * @return CAPV2_ERR_INVALID_SLOT if slot invalid
+ * @return CAPV2_ERR_NO_PERMISSION if caller not authorized
+ * @return CAPV2_ERR_REFCOUNT_OVERFLOW if refcount > 0
+ *
+ * EXAMPLE:
+ * ```c
+ * if (capv2_free(cap_slot) < 0) {
+ *     cprintf("Warning: Failed to free capability %d\n", cap_slot);
+ * }
+ * ```
+ */
+int capv2_free(int cap_slot);
+
+/**
+ * Grant capability to another process
+ *
+ * Creates a new capability reference for the recipient.
+ * Increments refcount and creates new slot for recipient.
+ *
+ * Caller must have GRANT right.
+ * Rights can be attenuated (reduced) but never escalated.
+ *
+ * @param cap_slot Capability slot to grant
+ * @param recipient_pid Process ID of recipient
+ * @param attenuated_rights Rights for recipient (must be subset of caller's rights)
+ *
+ * @return New capability slot in recipient's table
+ * @return CAPV2_ERR_INVALID_SLOT if slot invalid
+ * @return CAPV2_ERR_NO_PERMISSION if caller lacks GRANT right
+ * @return CAPV2_ERR_TABLE_FULL if recipient's table full
+ * @return CAPV2_ERR_REFCOUNT_OVERFLOW if refcount would overflow
+ *
+ * EXAMPLE:
+ * ```c
+ * // Grant read-only access to another process
+ * int recipient_cap = capv2_grant(my_cap, child_pid, CAP_RIGHTS_RO);
+ * if (recipient_cap < 0) {
+ *     cprintf("Failed to grant capability: %d\n", recipient_cap);
+ * }
+ * ```
+ */
+int capv2_grant(
+    int cap_slot,
+    uint32_t recipient_pid,
+    uint32_t attenuated_rights
+);
+
+/**
+ * Revoke capability
+ *
+ * Decrements refcount. If refcount reaches 0, frees the capability.
+ * Caller must have REVOKE right or be owner.
+ *
+ * @param cap_slot Capability slot to revoke
+ *
+ * @return CAPV2_OK on success
+ * @return CAPV2_ERR_INVALID_SLOT if slot invalid
+ * @return CAPV2_ERR_NO_PERMISSION if caller not authorized
+ *
+ * EXAMPLE:
+ * ```c
+ * // Revoke capability (may or may not free, depending on refcount)
+ * capv2_revoke(cap_slot);
+ * ```
+ */
+int capv2_revoke(int cap_slot);
+
+/**
+ * Derive new capability with reduced quota
+ *
+ * Creates a child capability with:
+ * - Same resource and type as parent
+ * - Reduced quota (must be <= parent quota)
+ * - Possibly reduced rights
+ * - Parent pointer (for revocation tree)
+ *
+ * Caller must have DERIVE right.
+ * Useful for delegating limited access to sub-resources.
+ *
+ * @param parent_slot Parent capability
+ * @param child_quota Resource quota for child (must fit within parent)
+ * @param child_rights Rights for child (must be subset of parent)
+ *
+ * @return New capability slot for child
+ * @return CAPV2_ERR_INVALID_SLOT if parent invalid
+ * @return CAPV2_ERR_NO_PERMISSION if caller lacks DERIVE right
+ * @return CAPV2_ERR_INVALID_DERIVE if child quota > parent quota
+ * @return CAPV2_ERR_TABLE_FULL if table full
+ *
+ * EXAMPLE:
+ * ```c
+ * // Derive capability with half the quota
+ * resource_vector_t parent_quota = cap_table_v2[parent_slot].quota;
+ * resource_vector_t child_quota = resource_vector_scale(parent_quota, q16_from_int(1) / 2);
+ *
+ * int child_slot = capv2_derive(parent_slot, child_quota, CAP_RIGHTS_RO);
+ * if (child_slot < 0) {
+ *     cprintf("Derivation failed: %d\n", child_slot);
+ * }
+ * ```
+ */
+int capv2_derive(
+    int parent_slot,
+    resource_vector_t child_quota,
+    uint32_t child_rights
+);
+
+/**
+ * Check if caller has required rights
+ *
+ * Evaluates dynamic rights formula and checks against requested rights.
+ * Also enforces:
+ * - Token bucket rate limiting
+ * - Resource quota limits
+ * - Generation counter validity
+ *
+ * This is the PRIMARY access control check for all capability operations.
+ *
+ * @param cap_slot Capability slot to check
+ * @param requested_rights Rights needed for operation
+ *
+ * @return 1 if caller has requested rights
+ * @return 0 if caller lacks rights OR rate limited OR quota exceeded
+ * @return negative error code on failure
+ *
+ * EXAMPLE:
+ * ```c
+ * if (capv2_check_rights(cap_slot, CAP_RIGHT_WRITE)) {
+ *     // Proceed with write operation
+ *     perform_write(cap_table_v2[cap_slot].resource_id, data);
+ * } else {
+ *     return -EPERM;  // Permission denied
+ * }
+ * ```
+ */
+int capv2_check_rights(int cap_slot, uint32_t requested_rights);
+
+/**
+ * Update capability formula
+ *
+ * Changes the lambda formula used for dynamic rights computation.
+ * Caller must have DERIVE right.
+ *
+ * @param cap_slot Capability slot to update
+ * @param new_formula New rights formula function
+ * @param formula_data Opaque data for formula
+ *
+ * @return CAPV2_OK on success
+ * @return CAPV2_ERR_INVALID_SLOT if slot invalid
+ * @return CAPV2_ERR_NO_PERMISSION if caller lacks DERIVE right
+ *
+ * EXAMPLE:
+ * ```c
+ * // Set time-decay formula
+ * capv2_set_formula(cap_slot, cap_formula_time_decay, &decay_rate);
+ * ```
+ */
+int capv2_set_formula(
+    int cap_slot,
+    cap_formula_t new_formula,
+    void *formula_data
+);
+
+/* ============================================================================
+ * CAPABILITY LOOKUP AND INTROSPECTION
+ * ============================================================================ */
+
+/**
+ * Lookup capability by resource ID
+ *
+ * Finds first capability granting access to specified resource.
+ * Useful for checking if process already has access to resource.
+ *
+ * @param resource_id Resource to search for
+ * @param owner_pid Process ID to search within (or -1 for all processes)
+ *
+ * @return Capability slot if found
+ * @return CAPV2_ERR_NOT_FOUND if no matching capability
+ *
+ * EXAMPLE:
+ * ```c
+ * int cap = capv2_find(page_frame_number, current_pid);
+ * if (cap >= 0) {
+ *     cprintf("Process already has access to page %llu\n", page_frame_number);
+ * }
+ * ```
+ */
+int capv2_find(uint64_t resource_id, int32_t owner_pid);
+
+/**
+ * Get capability information
+ *
+ * Copies capability structure to user buffer.
+ * Useful for introspection and debugging.
+ *
+ * @param cap_slot Capability slot
+ * @param[out] cap_out Buffer to receive capability (if not NULL)
+ *
+ * @return CAPV2_OK on success
+ * @return CAPV2_ERR_INVALID_SLOT if slot invalid
+ *
+ * EXAMPLE:
+ * ```c
+ * struct capability_v2 cap;
+ * if (capv2_get_info(cap_slot, &cap) == CAPV2_OK) {
+ *     cprintf("Capability type: %d, refcount: %d\n", cap.cap_type, cap.refcount);
+ * }
+ * ```
+ */
+int capv2_get_info(int cap_slot, struct capability_v2 *cap_out);
+
+/**
+ * Print capability details
+ *
+ * Debug helper. Prints:
+ * - Resource ID and type
+ * - Owner and refcount
+ * - Rights (static + dynamic)
+ * - Quota and consumed resources
+ * - Token bucket status
+ * - Parent capability (if derived)
+ *
+ * @param cap_slot Capability slot to print
+ */
+void capv2_print(int cap_slot);
+
+/* ============================================================================
  * SUCCESS
  * ============================================================================ */
 
 /**
- * Task 2.1.1 Complete!
+ * Tasks 2.1.1, 2.1.2, 2.1.3 Complete!
  *
- * Defined capability_v2 core structure with:
- * - seL4-style core fields (resource_id, owner, refcount, type)
- * - PDAC extensions (8D resource vectors, lambda formulas)
- * - Cap'n Proto metadata (schema_id, buffer)
- * - Token bucket rate limiting
- * - Comprehensive documentation
+ * Defined:
+ * - Capability V2 core structure (640 bytes)
+ * - Capability table (4096 slots, 2.5 MB)
+ * - Capability types and rights
+ * - Complete API (15 functions)
+ * - Error codes
+ * - Comprehensive documentation with examples
  *
- * Next: Task 2.1.2 - Define capability table and access API
+ * Next: Task 2.2.1 - Implement capability table initialization
  */
 
 #endif /* CAPABILITY_V2_H */
