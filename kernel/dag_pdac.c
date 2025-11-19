@@ -170,7 +170,7 @@ resource_vector_t pdac_dag_compose_path(
  *
  * Returns: 1 if results differ, 0 if same
  */
-int pdac_pdac_dag_demonstrate_nonassociativity(
+int pdac_dag_demonstrate_nonassociativity(
     dag_pdac_t *dag,
     uint16_t task_a,
     uint16_t task_b,
@@ -480,19 +480,19 @@ void pdac_example_dag_path_dependence(void) {
     /* Create DAG with system quota */
     dag_pdac_t dag;
     resource_vector_t quota = RESOURCE_VEC(10000, 16384, 1000, 10000, 0, 1000, 1000, 100);
-    pdac_dag_init(dag_init(&dag, quota)dag, quota);
+    pdac_dag_init(&dag, quota);
 
     /* Add three tasks with different resource profiles */
-    int task_a = pdac_dag_add_task(dag_add_task(&dag,dag, "WebServer",
+    int task_a = pdac_dag_add_task(&dag, "WebServer",
                               RESOURCE_VEC(100, 512, 50, 1000, 0, 100, 50, 10));
-    int task_b = pdac_dag_add_task(dag_add_task(&dag,dag, "Database",
+    int task_b = pdac_dag_add_task(&dag, "Database",
                               RESOURCE_VEC(200, 4096, 200, 500, 0, 500, 100, 5));
-    int task_c = pdac_dag_add_task(dag_add_task(&dag,dag, "Analytics",
+    int task_c = pdac_dag_add_task(&dag, "Analytics",
                               RESOURCE_VEC(500, 2048, 100, 200, 0, 200, 50, 3));
 
-    pdac_dag_print_task(dag_print_task(&dag,dag, task_a);
-    pdac_dag_print_task(dag_print_task(&dag,dag, task_b);
-    pdac_dag_print_task(dag_print_task(&dag,dag, task_c);
+    pdac_dag_print_task(&dag, task_a);
+    pdac_dag_print_task(&dag, task_b);
+    pdac_dag_print_task(&dag, task_c);
 
     /* Demonstrate non-associativity */
     resource_vector_t left_assoc, right_assoc;
@@ -542,29 +542,29 @@ void pdac_example_dag_deadlock_detection(void) {
     /* Create DAG */
     dag_pdac_t dag;
     resource_vector_t quota = RESOURCE_VEC(10000, 16384, 1000, 10000, 0, 1000, 1000, 100);
-    pdac_dag_init(dag_init(&dag, quota)dag, quota);
+    pdac_dag_init(&dag, quota);
 
     /* Task A: CPU-intensive (high CPU, zero memory) */
-    int task_a = pdac_dag_add_task(dag_add_task(&dag,dag, "CPUBound",
+    int task_a = pdac_dag_add_task(&dag, "CPUBound",
                               RESOURCE_VEC(5000, 10, 0, 0, 0, 0, 0, 0));
 
     /* Task B: Memory-intensive (zero CPU, high memory) */
-    int task_b = pdac_dag_add_task(dag_add_task(&dag,dag, "MemBound",
+    int task_b = pdac_dag_add_task(&dag, "MemBound",
                               RESOURCE_VEC(10, 8192, 0, 0, 0, 0, 0, 0));
 
     /* Task C: Balanced workload */
-    int task_c = pdac_dag_add_task(dag_add_task(&dag,dag, "Balanced",
+    int task_c = pdac_dag_add_task(&dag, "Balanced",
                               RESOURCE_VEC_BALANCED);
 
     cprintf("\nTasks:\n");
-    pdac_dag_print_task(dag_print_task(&dag,dag, task_a);
-    pdac_dag_print_task(dag_print_task(&dag,dag, task_b);
-    pdac_dag_print_task(dag_print_task(&dag,dag, task_c);
+    pdac_dag_print_task(&dag, task_a);
+    pdac_dag_print_task(&dag, task_b);
+    pdac_dag_print_task(&dag, task_c);
 
     /* Check for deadlocks */
     cprintf("\nDeadlock Analysis:\n");
 
-    if (pdac_dag_check_task_orthogonality(dag_check_task_orthogonality(&dag,dag, task_a, task_b)) {
+    if (pdac_dag_check_task_orthogonality(&dag, task_a, task_b)) {
         cprintf("  ⚠️  WARNING: CPUBound and MemBound are ORTHOGONAL\n");
         cprintf("     Composition ≈ 0 (zero divisor)\n");
         cprintf("     Potential DEADLOCK if both acquire exclusive resources!\n");
@@ -573,20 +573,20 @@ void pdac_example_dag_deadlock_detection(void) {
         cprintf("  ✓ CPUBound and MemBound can coexist\n");
     }
 
-    if (pdac_dag_check_task_orthogonality(dag_check_task_orthogonality(&dag,dag, task_a, task_c)) {
+    if (pdac_dag_check_task_orthogonality(&dag, task_a, task_c)) {
         cprintf("  ⚠️  WARNING: CPUBound and Balanced are ORTHOGONAL\n");
     } else {
         cprintf("  ✓ CPUBound and Balanced can coexist\n");
     }
 
-    if (pdac_dag_check_task_orthogonality(dag_check_task_orthogonality(&dag,dag, task_b, task_c)) {
+    if (pdac_dag_check_task_orthogonality(&dag, task_b, task_c)) {
         cprintf("  ⚠️  WARNING: MemBound and Balanced are ORTHOGONAL\n");
     } else {
         cprintf("  ✓ MemBound and Balanced can coexist\n");
     }
 
     /* Run full deadlock detection */
-    deadlock_info_t deadlock = pdac_dag_detect_deadlock(dag_detect_deadlock(&dag)dag);
+    deadlock_info_t deadlock = pdac_dag_detect_deadlock(&dag);
     if (deadlock.detected) {
         cprintf("\n❌ DEADLOCK DETECTED:\n");
         cprintf("   %s\n", deadlock.reason);
@@ -606,7 +606,7 @@ void pdac_example_dag_scheduler(void) {
     /* Create DAG with realistic system quota */
     dag_pdac_t dag;
     resource_vector_t quota = RESOURCE_VEC(10000, 16384, 1000, 10000, 0, 1000, 1000, 100);
-    pdac_dag_init(dag_init(&dag, quota)dag, quota);
+    pdac_dag_init(&dag, quota);
 
     /* Build task dependency graph:
      *
@@ -619,26 +619,26 @@ void pdac_example_dag_scheduler(void) {
      * Execution order: D → B,C (parallel) → A
      */
 
-    int task_a = pdac_dag_add_task(dag_add_task(&dag,dag, "WebFrontend",
+    int task_a = pdac_dag_add_task(&dag, "WebFrontend",
                               RESOURCE_VEC(200, 1024, 100, 2000, 0, 100, 100, 5));
-    int task_b = pdac_dag_add_task(dag_add_task(&dag,dag, "APIServer",
+    int task_b = pdac_dag_add_task(&dag, "APIServer",
                               RESOURCE_VEC(500, 2048, 200, 1000, 0, 200, 50, 10));
-    int task_c = pdac_dag_add_task(dag_add_task(&dag,dag, "AuthService",
+    int task_c = pdac_dag_add_task(&dag, "AuthService",
                               RESOURCE_VEC(300, 1024, 50, 500, 0, 50, 50, 8));
-    int task_d = pdac_dag_add_task(dag_add_task(&dag,dag, "CacheLayer",
+    int task_d = pdac_dag_add_task(&dag, "CacheLayer",
                               RESOURCE_VEC(100, 4096, 500, 200, 0, 500, 20, 3));
 
     /* Add dependencies */
-    pdac_dag_add_dependency(dag_add_dependency(&dag,dag, task_a, task_b);  /* A depends on B */
-    pdac_dag_add_dependency(dag_add_dependency(&dag,dag, task_a, task_c);  /* A depends on C */
-    pdac_dag_add_dependency(dag_add_dependency(&dag,dag, task_b, task_d);  /* B depends on D */
-    pdac_dag_add_dependency(dag_add_dependency(&dag,dag, task_c, task_d);  /* C depends on D */
+    pdac_dag_add_dependency(&dag, task_a, task_b);  /* A depends on B */
+    pdac_dag_add_dependency(&dag, task_a, task_c);  /* A depends on C */
+    pdac_dag_add_dependency(&dag, task_b, task_d);  /* B depends on D */
+    pdac_dag_add_dependency(&dag, task_c, task_d);  /* C depends on D */
 
     cprintf("\nInitial DAG:\n");
-    pdac_dag_print(dag_print(&dag,dag, NULL);
+    pdac_dag_print(&dag, NULL);
 
     /* Check for deadlocks before execution */
-    deadlock_info_t deadlock = pdac_dag_detect_deadlock(dag_detect_deadlock(&dag)dag);
+    deadlock_info_t deadlock = pdac_dag_detect_deadlock(&dag);
     if (deadlock.detected) {
         cprintf("\n❌ DEADLOCK DETECTED - aborting execution\n");
         cprintf("   %s\n", deadlock.reason);
@@ -649,11 +649,11 @@ void pdac_example_dag_scheduler(void) {
     cprintf("\n=== Simulating DAG Execution ===\n");
     int step = 0;
 
-    while (!pdac_dag_is_complete(dag_is_complete(&dag)dag)) {
+    while (!pdac_dag_is_complete(&dag)) {
         cprintf("\n--- Step %d ---\n", ++step);
 
         /* Get next ready task */
-        int next_task = pdac_dag_get_next_ready_task(dag_get_next_ready_task(&dag)dag);
+        int next_task = pdac_dag_get_next_ready_task(&dag);
 
         if (next_task == -1) {
             cprintf("No task ready (waiting for resources or dependencies)\n");
@@ -662,7 +662,7 @@ void pdac_example_dag_scheduler(void) {
 
         /* Start task */
         cprintf("Starting task: %s\n", dag.tasks[next_task].name);
-        if (pdac_dag_start_task(dag_start_task(&dag,dag, next_task) < 0) {
+        if (pdac_dag_start_task(&dag, next_task) < 0) {
             cprintf("ERROR: Failed to start task (insufficient resources)\n");
             break;
         }
@@ -670,13 +670,13 @@ void pdac_example_dag_scheduler(void) {
         resource_vector_print(dag.available, "Available Resources");
 
         /* Simulate task completion immediately (for demo) */
-        pdac_dag_complete_task(dag_complete_task(&dag,dag, next_task);
+        pdac_dag_complete_task(&dag, next_task);
         cprintf("Completed task: %s\n", dag.tasks[next_task].name);
 
         resource_vector_print(dag.available, "Available Resources");
     }
 
-    if (pdac_dag_is_complete(dag_is_complete(&dag)dag)) {
+    if (pdac_dag_is_complete(&dag)) {
         cprintf("\n✓ DAG EXECUTION COMPLETE\n");
         cprintf("  All %d tasks finished successfully\n", dag.num_tasks);
     } else {
