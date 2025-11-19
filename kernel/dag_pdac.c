@@ -24,7 +24,7 @@ void pdac_dag_init(dag_pdac_t *dag, resource_vector_t system_quota) {
     /* Clear all task slots */
     for (int i = 0; i < DAG_MAX_TASKS; i++) {
         dag->tasks[i].id = 0;
-        dag->tasks[i].state = TASK_STATE_PENDING;
+        atomic_store(&dag->tasks[i].state, TASK_STATE_PENDING);
         dag->tasks[i].num_deps = 0;
     }
 }
@@ -51,7 +51,7 @@ int pdac_dag_add_task(
     safestrcpy(task->name, name, sizeof(task->name));
     task->resources = resources;
     task->num_deps = 0;
-    task->state = TASK_STATE_PENDING;
+    atomic_store(&task->state, TASK_STATE_PENDING);
     task->priority = resource_vector_norm(resources);
     task->start_time = 0;
     task->end_time = 0;
@@ -243,14 +243,16 @@ deadlock_info_t pdac_dag_detect_deadlock(dag_pdac_t *dag) {
 
     /* Check all pairs of non-completed tasks */
     for (uint16_t i = 0; i < dag->num_tasks; i++) {
-        if (dag->tasks[i].state == TASK_STATE_COMPLETED ||
-            dag->tasks[i].state == TASK_STATE_FAILED) {
+        task_state_t state_i = atomic_load(&dag->tasks[i].state);
+        if (state_i == TASK_STATE_COMPLETED ||
+            state_i == TASK_STATE_FAILED) {
             continue;
         }
 
         for (uint16_t j = i + 1; j < dag->num_tasks; j++) {
-            if (dag->tasks[j].state == TASK_STATE_COMPLETED ||
-                dag->tasks[j].state == TASK_STATE_FAILED) {
+            task_state_t state_j = atomic_load(&dag->tasks[j].state);
+            if (state_j == TASK_STATE_COMPLETED ||
+                state_j == TASK_STATE_FAILED) {
                 continue;
             }
 
@@ -289,7 +291,8 @@ static int pdac_dag_deps_satisfied(dag_pdac_t *dag, uint16_t task_id) {
 
     for (uint8_t i = 0; i < task->num_deps; i++) {
         uint16_t dep_id = task->deps[i];
-        if (dag->tasks[dep_id].state != TASK_STATE_COMPLETED) {
+        task_state_t dep_state = atomic_load(&dag->tasks[dep_id].state);
+        if (dep_state != TASK_STATE_COMPLETED) {
             return 0;  /* Dependency not satisfied */
         }
     }
@@ -372,7 +375,7 @@ void pdac_dag_complete_task(dag_pdac_t *dag, uint16_t task_id) {
     /* Release resources */
     resource_vector_release(&dag->available, task->resources);
 
-    task->state = TASK_STATE_COMPLETED;
+    atomic_store(&task->state, TASK_STATE_COMPLETED);
     /* In real kernel, would set task->end_time = timer_ticks() */
 }
 
@@ -381,7 +384,8 @@ void pdac_dag_complete_task(dag_pdac_t *dag, uint16_t task_id) {
  */
 int pdac_dag_is_complete(dag_pdac_t *dag) {
     for (uint16_t i = 0; i < dag->num_tasks; i++) {
-        if (dag->tasks[i].state != TASK_STATE_COMPLETED) {
+        task_state_t state = atomic_load(&dag->tasks[i].state);
+        if (state != TASK_STATE_COMPLETED) {
             return 0;
         }
     }

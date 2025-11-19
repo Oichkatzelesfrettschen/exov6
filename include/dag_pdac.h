@@ -32,6 +32,7 @@
 
 #include "types.h"
 #include "resource_vector.h"
+#include <stdatomic.h>
 
 /* ============================================================================
  * DAG NODE AND EDGE STRUCTURES
@@ -48,7 +49,7 @@
 #define DAG_MAX_DEPS 8
 
 /**
- * Task state
+ * Task state (atomic for concurrent access)
  */
 typedef enum {
     TASK_STATE_PENDING,       /* Not yet runnable (dependencies unsatisfied) */
@@ -78,8 +79,8 @@ typedef struct dag_task {
     uint16_t deps[DAG_MAX_DEPS];           /* Task IDs this task depends on */
     uint8_t num_deps;                      /* Number of dependencies */
 
-    /* State */
-    task_state_t state;                    /* Current execution state */
+    /* State (atomic for concurrent access via RCU) */
+    _Atomic task_state_t state;            /* Current execution state */
 
     /* Scheduling metadata */
     q16_t priority;                        /* Priority (computed from norm) */

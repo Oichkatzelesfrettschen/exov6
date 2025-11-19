@@ -55,6 +55,7 @@
 #include "sched_admission.h"
 #include "sched_telemetry.h"
 #include "task_exec.h"
+#include "rcu_pdac.h"
 
 /*******************************************************************************
  * DAG EXECUTOR STATE
@@ -95,6 +96,7 @@ typedef struct dag_executor {
     admission_control_t admission;          /* Admission control */
     sched_telemetry_t telemetry;            /* Performance monitoring */
     lcg_state_t rng;                        /* Random number generator */
+    rcu_state_t rcu;                        /* RCU for concurrent DAG access */
 
     /* Execution state */
     bool running;                           /* True if executing */
