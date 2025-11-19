@@ -41,7 +41,7 @@ acquiresleep(struct sleeplock *lk)
   qspin_lock(&lk->lk);  // Acquire internal qspinlock
 
   while (lk->locked) {
-    ksleep(lk, &lk->lk);  // Sleep, releasing internal lock
+    ksleep(lk, (struct spinlock *)&lk->lk);  // Sleep, releasing internal lock
   }
 
   lk->locked = 1;

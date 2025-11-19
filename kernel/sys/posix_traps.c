@@ -53,7 +53,7 @@ extern int (*syscalls[])(void);
 extern char* walkaddr(pde_t *pgdir, uint32_t va);
 
 /* Helper for page copy */
-static inline int copyout_page(pde_t *pgdir, char *dst, uint32_t va, uint32_t n) {
+__attribute__((unused)) static inline int copyout_page(pde_t *pgdir, char *dst, uint32_t va, uint32_t n) {
     /* Copy page from process address space */
     char *src = (char*)walkaddr(pgdir, va);
     if (!src) return -1;

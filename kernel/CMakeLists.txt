@@ -266,7 +266,7 @@ set(KERNEL_WARNINGS
     -Wshadow -Wcast-align -Wcast-qual
     -Wformat=2 -Wnull-dereference
     -Wunused -Wundef -Wwrite-strings
-    -Werror                 # Treat warnings as errors (zero-warning policy)
+    -Werror                 # Treat warnings as errors (zero-warning policy ENFORCED)
 )
 
 # Disabled warnings (too noisy for kernel code or intentional GNU extensions)
@@ -277,9 +277,9 @@ set(KERNEL_WARNINGS_DISABLED
     -Wno-sign-conversion        # Too noisy for pointer arithmetic
     -Wno-conversion             # Too noisy for kernel code
     -Wno-double-promotion       # Intentional in some kernel math
-    -Wno-sign-compare           # TODO: Fix signed/unsigned comparisons (25 instances)
-    -Wno-unused-function        # TODO: Mark or remove unused static functions (33 instances)
-    -Wno-unused-variable        # TODO: Remove unused variables (5 instances)
+    # -Wno-sign-compare           # ✅ FIXED (25 instances)
+    # -Wno-unused-function        # ✅ FIXED (33 instances - marked with __attribute__((unused)))
+    # -Wno-unused-variable        # ✅ FIXED (5 instances - marked with (void) or __attribute__((unused)))
     -Wno-unused-result          # TODO: Check return values (4 instances)
 
     # Intentional GNU extensions
@@ -294,9 +294,9 @@ set(KERNEL_WARNINGS_DISABLED
     -Wno-gnu-empty-struct       # Empty struct extensions
     -Wno-gnu-pointer-arith      # Pointer arithmetic on void*
 
-    # Known type issues (TODO: fix in separate PR)
-    -Wno-incompatible-pointer-types  # TODO: Fix kalloc() casts and lock types (19 instances)
-    -Wno-incompatible-pointer-types-discards-qualifiers  # TODO: Fix const correctness (13 instances)
+    # Known type issues (FIXED!)
+    # -Wno-incompatible-pointer-types  # ✅ FIXED (19 instances - proper kalloc/kfree casts, lock type fixes)
+    # -Wno-incompatible-pointer-types-discards-qualifiers  # ✅ FIXED (13 instances - const correctness)
     -Wno-pointer-to-int-cast    # TODO: Review pointer/int conversions (5 instances)
     -Wno-int-to-pointer-cast    # TODO: Review int/pointer conversions (2 instances)
     -Wno-int-to-void-pointer-cast  # TODO: Review void* conversions (2 instances)

@@ -41,8 +41,8 @@ void tlb_flush_page(void *va) {
 
 // Atomic compare-and-swap for pointers.
 void *atomic_cas_ptr(volatile void **target, void *cmp, void *newval) {
-  void *expected = cmp;
+  volatile void *expected = cmp;
   __atomic_compare_exchange_n(target, &expected, newval, 0, __ATOMIC_SEQ_CST,
                               __ATOMIC_SEQ_CST);
-  return expected;
+  return (void *)expected;
 }

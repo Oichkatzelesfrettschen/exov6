@@ -636,12 +636,12 @@ int sigsend(int pid, int sig) {
 //  Runs when user types ^P on console.
 //  No lock to avoid wedging a stuck machine further.
 void procdump(void) {
-  static char *states[] = {
+  static const char *states[] = {
       [UNUSED] "unused",   [EMBRYO] "embryo",  [SLEEPING] "sleep ",
       [RUNNABLE] "runble", [RUNNING] "run   ", [ZOMBIE] "zombie"};
   int i;
   struct proc *p;
-  char *state;
+  const char *state;
   uint32_t pc[10];
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {

@@ -60,7 +60,7 @@ cprintf(const char *fmt, ...)
 {
   int i, c, locking;
   uintptr_t *argp;
-  char *s;
+  const char *s;
 
   locking = cons.locking;
   if(locking)
@@ -87,7 +87,7 @@ cprintf(const char *fmt, ...)
       printint(*argp++, 16, 0);
       break;
     case 's':
-      if((s = (char*)*argp++) == 0)
+      if((s = (const char*)*argp++) == 0)
         s = "(null)";
       for(; *s; s++)
         ttypecho(*s, consputc);
@@ -214,7 +214,7 @@ consoleread(struct inode *ip, char *dst, size_t n)
 }
 
 int
-consolewrite(struct inode *ip, char *buf, size_t n)
+consolewrite(struct inode *ip, const char *buf, size_t n)
 {
   size_t i;
 

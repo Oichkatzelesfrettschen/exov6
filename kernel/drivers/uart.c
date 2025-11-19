@@ -20,7 +20,7 @@ static int uart;    // is there a uart?
 void
 uartinit(void)
 {
-  char *p;
+  const char *p;
 
   // Turn off the FIFO
   outb(COM1+2, 0);

@@ -85,5 +85,5 @@ sys_ipc(void)
 /* Host compilation: provide minimal argint implementation when not linking kernel. */
 #ifndef EXO_KERNEL
 static int argint(int n, int *ip) { (void)n; (void)ip; return -1; }
-static int argptr(int n, char **pp, size_t size) { (void)n; (void)pp; (void)size; return -1; }
+static __attribute__((unused)) int argptr(int n, char **pp, size_t size) { (void)n; (void)pp; (void)size; return -1; }
 #endif

@@ -244,7 +244,7 @@ loaduvm(pde_t *pgdir, const char *src, struct inode *ip, uint32_t offset, uint32
       n = sz - i;
     else
       n = PGSIZE;
-    if(readi(ip, P2V(pa), offset+i, n) != n)
+    if(readi(ip, P2V(pa), offset+i, n) != (int)n)
       return -1;
   }
   return 0;
@@ -489,7 +489,7 @@ exo_unbind_page(exo_cap cap)
   if (cap_table_lookup(cap.id, &e) < 0)
     return -1;
   struct proc *p = myproc();
-  if(e.owner != p->pid || e.type != CAP_TYPE_PAGE)
+  if(e.owner != (uint32_t)p->pid || e.type != CAP_TYPE_PAGE)
     return -1;
   pde_t *pgdir = p->pgdir;
   pte_t *pte;

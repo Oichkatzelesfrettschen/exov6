@@ -60,9 +60,9 @@ static uint balloc(uint dev) {
   struct buf *bp;
 
   bp = 0;
-  for (b = 0; b < sb.size; b += BPB) {
+  for (b = 0; (uint32_t)b < sb.size; b += BPB) {
     bp = bread(dev, BBLOCK(b, sb));
-    for (bi = 0; bi < BPB && b + bi < sb.size; bi++) {
+    for (bi = 0; bi < BPB && (uint32_t)(b + bi) < sb.size; bi++) {
       m = 1 << (bi % 8);
       if ((bp->data[bi / 8] & m) == 0) { // Is block free?
         bp->data[bi / 8] |= m;           // Mark block in use.
@@ -83,9 +83,9 @@ struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights) {
   int b, bi, m;
   struct buf *bp = 0;
 
-  for (b = 0; b < sb.size; b += BPB) {
+  for (b = 0; (uint32_t)b < sb.size; b += BPB) {
     bp = bread(dev, BBLOCK(b, sb));
-    for (bi = 0; bi < BPB && b + bi < sb.size; bi++) {
+    for (bi = 0; bi < BPB && (uint32_t)(b + bi) < sb.size; bi++) {
       m = 1 << (bi % 8);
       if ((bp->data[bi / 8] & m) == 0) {
         bp->data[bi / 8] |= m;
@@ -108,7 +108,7 @@ struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights) {
 
 // Perform direct I/O on the given buffer using a capability.
 int exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write) {
-  if (cap->owner != myproc()->pid)
+  if (cap->owner != (uint32_t)myproc()->pid)
     return -EPERM;
   uint need = write ? EXO_RIGHT_W : EXO_RIGHT_R;
   if (!cap_has_rights(cap->rights, need))
@@ -123,7 +123,7 @@ int exo_bind_block(struct exo_blockcap *cap, struct buf *buf, int write) {
 }
 
 void exo_flush_block(struct exo_blockcap *cap, void *data) {
-  if (cap->owner != myproc()->pid)
+  if (cap->owner != (uint32_t)myproc()->pid)
     return;
   struct buf b;
   memset(&b, 0, sizeof(b));
@@ -249,7 +249,7 @@ struct inode *ialloc(uint dev, short type) {
   struct buf *bp;
   struct dinode *dip;
 
-  for (inum = 1; inum < sb.ninodes; inum++) {
+  for (inum = 1; (uint32_t)inum < sb.ninodes; inum++) {
     bp = bread(dev, IBLOCK(inum, sb));
     dip = (struct dinode *)bp->data + inum % IPB;
     if (dip->type == 0) { // a free inode
@@ -454,7 +454,7 @@ static void itrunc(struct inode *ip) {
   if (ip->addrs[NDIRECT]) {
     bp = bread(ip->dev, ip->addrs[NDIRECT]);
     a = (uint *)bp->data;
-    for (j = 0; j < NINDIRECT; j++) {
+    for (j = 0; (size_t)j < NINDIRECT; j++) {
       if (a[j])
         bfree(ip->dev, a[j]);
     }
@@ -581,7 +581,7 @@ int dirlink(struct inode *dp, const char *name, uint inum) {
   }
 
   // Look for an empty dirent.
-  for (off = 0; off < dp->size; off += sizeof(de)) {
+  for (off = 0; (size_t)off < dp->size; off += sizeof(de)) {
     if (readi(dp, (char *)&de, off, sizeof(de)) != sizeof(de))
       panic("dirlink read");
     if (de.inum == 0)
@@ -611,8 +611,8 @@ int dirlink(struct inode *dp, const char *name, uint inum) {
 //   skipelem("a", name) = "", setting name = "a"
 //   skipelem("", name) = skipelem("////", name) = 0
 //
-static char *skipelem(char *path, char *name) {
-  char *s;
+static const char *skipelem(const char *path, char *name) {
+  const char *s;
   int len;
 
   while (*path == '/')

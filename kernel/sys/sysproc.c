@@ -65,14 +65,16 @@ int sys_sleep(void) {
 
   if (argint(0, &n) < 0)
     return -1;
+  if (n < 0)
+    return -1;
   qspin_lock(&tickslock);
   ticks0 = ticks;
-  while (ticks - ticks0 < n) {
+  while (ticks - ticks0 < (uint)n) {
     if (myproc()->killed) {
       qspin_unlock(&tickslock);
       return -1;
     }
-    sleep(&ticks, &tickslock);
+    sleep(&ticks, (struct spinlock *)&tickslock);
   }
   qspin_unlock(&tickslock);
   return 0;

@@ -38,6 +38,7 @@ static uint32_t local_strlen(const char *s) {
 }
 
 /* Simple sqrt implementation for kernel use */
+__attribute__((unused))
 static double sqrt(double x) {
     if (x < 0.0) return 0.0;
     if (x == 0.0 || x == 1.0) return x;
@@ -179,9 +180,9 @@ int lambda_cap_use(struct lambda_cap *lc, int fuel) {
         release(&lc->lock);
         return -4;  /* Insufficient Superforce energy */
     }
-    
+
     /* Traditional fuel check */
-    if (fuel > lc->fuel) {
+    if ((uint32_t)fuel > lc->fuel) {
         release(&lc->lock);
         return -5;  /* Not enough execution fuel */
     }
@@ -1248,10 +1249,12 @@ octonion_t octonion_conjugate(octonion_t a) {
 
 typedef int64_t fixed_point_t;
 
+__attribute__((unused))
 static inline fixed_point_t double_to_fixed(double d) {
     return (fixed_point_t)(d * FIXED_POINT_SCALE);
 }
 
+__attribute__((unused))
 static inline double fixed_to_double(fixed_point_t f) {
     return (double)f / FIXED_POINT_SCALE;
 }
@@ -1262,6 +1265,7 @@ static inline double fixed_to_double(fixed_point_t f) {
  * These functions should not be called in kernel context
  */
 /* Define inline assembly stubs that return via integer registers */
+__attribute__((unused))
 static inline int64_t kernel_norm_squared_stub(void) {
     return 0x3FF0000000000000LL; /* IEEE 754 representation of 1.0 */
 }

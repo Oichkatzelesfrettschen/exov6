@@ -108,7 +108,7 @@ isdirempty(struct inode *dp)
   int off;
   struct dirent de;
 
-  for(off=2*sizeof(de); off<dp->size; off+=sizeof(de)){
+  for(off=2*sizeof(de); (size_t)off<dp->size; off+=sizeof(de)){
     if(readi(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
       panic("isdirempty: readi");
     if(de.inum != 0)

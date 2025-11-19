@@ -128,7 +128,7 @@ capnp_pointer_t exo_capnp_make_secure_pointer(uint32_t offset, uint16_t data_wor
     if (arena->secure_chan) {
         // Generate lattice signature for pointer integrity
         lattice_sig_t sig;
-        if (lattice_sign(&arena->secure_chan->priv, &ptr.raw, sizeof(uint64_t), &sig) == 0) {
+        if (lattice_sign(arena->secure_chan, &ptr.raw, sizeof(uint64_t), &sig) == 0) {
             // Signature successful - pointer is now cryptographically protected
         }
     }

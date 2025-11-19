@@ -198,7 +198,8 @@ ioapicinit(void)
     int i, id, maxintr;
     uint32_t ver;
     struct ioapic_state *apic;
-    
+    (void)maxintr;  /* Variable declared but not used; kept for future expansion */
+
     /* Initialize primary IOAPIC for legacy compatibility */
     ioapic = (volatile struct ioapic*)IOAPIC_DEFAULT_BASE;
     
@@ -227,7 +228,7 @@ ioapicinit(void)
             apic->version, apic->max_entries, apic->id, apic->base);
     
     /* Initialize all redirection table entries */
-    for(i = 0; i < apic->max_entries; i++) {
+    for(i = 0; (uint32_t)i < apic->max_entries; i++) {
         /* Configure each interrupt as:
          * - Masked (disabled)
          * - Edge triggered

@@ -219,6 +219,7 @@ void adaptive_mutex_lock(struct adaptive_mutex *mutex) {
 #endif
 
     uint64_t start_tsc = rdtsc();
+    (void)start_tsc;  /* May be used in future optimizations */
 
     /* ===== FAST PATH ===== */
     // Try immediate acquisition (common case: no contention)
@@ -236,7 +237,7 @@ void adaptive_mutex_lock(struct adaptive_mutex *mutex) {
     int spins = 0;
     int backoff = ADAPTIVE_SPIN_MIN_BACKOFF;
 
-    while (spins < mutex->spin_limit) {
+    while ((uint32_t)spins < mutex->spin_limit) {
         // Check if owner is running
         if (likely(owner_is_running(mutex))) {
             // Owner is running - spin with backoff

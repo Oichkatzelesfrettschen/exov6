@@ -43,7 +43,7 @@ static int check_irq_cap(exo_cap cap, uint32_t need) {
   struct cap_entry e;
   if (cap_table_lookup(cap.id, &e) < 0)
     return 0;
-  if (e.type != CAP_TYPE_IRQ || e.owner != myproc()->pid)
+  if (e.type != CAP_TYPE_IRQ || e.owner != (uint32_t)myproc()->pid)
     return 0;
   if (!cap_has_rights(e.rights, need))
     return 0;

@@ -54,7 +54,7 @@ struct mcs_node mcs_nodes[NCPU][MCS_NODES_PER_CPU] __attribute__((aligned(64)));
  * @param idx Node index (0-3 for nesting level)
  * @return Pointer to MCS node
  */
-static EXO_ALWAYS_INLINE struct mcs_node *get_mcs_node(int idx) {
+static __attribute__((unused)) EXO_ALWAYS_INLINE struct mcs_node *get_mcs_node(int idx) {
     struct cpu *c = mycpu();
     if (unlikely(idx >= MCS_NODES_PER_CPU)) {
         panic("qspinlock: MCS node index out of range");
