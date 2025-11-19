@@ -49,12 +49,14 @@ TESTS := \
 	$(BUILD_DIR)/test_executor \
 	$(BUILD_DIR)/test_lockfree \
 	$(BUILD_DIR)/test_rcu \
-	$(BUILD_DIR)/test_work_stealing
+	$(BUILD_DIR)/test_work_stealing \
+	$(BUILD_DIR)/test_integration_phase5
 
 # Examples
 EXAMPLES := \
 	$(BUILD_DIR)/example_phase3 \
-	$(BUILD_DIR)/example_phase4
+	$(BUILD_DIR)/example_phase4 \
+	$(BUILD_DIR)/example_phase5_advanced
 
 # Default target
 .PHONY: all
@@ -107,12 +109,20 @@ $(BUILD_DIR)/test_work_stealing: $(KERNEL_DIR)/test_work_stealing.c $(BUILD_DIR)
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
+$(BUILD_DIR)/test_integration_phase5: $(KERNEL_DIR)/test_integration_phase5.c $(BUILD_DIR)/work_stealing.o $(BUILD_DIR)/rcu_pdac.o $(BUILD_DIR)/lockfree.o
+	@echo "LINK $@"
+	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
 # Example build rules
 $(BUILD_DIR)/example_phase3: $(KERNEL_DIR)/example_phase3.c $(CORE_OBJS)
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/example_phase4: $(KERNEL_DIR)/example_phase4.c $(CORE_OBJS)
+	@echo "LINK $@"
+	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+$(BUILD_DIR)/example_phase5_advanced: $(KERNEL_DIR)/example_phase5_advanced.c $(LOCKFREE_OBJS)
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
@@ -161,8 +171,15 @@ test-work-stealing: $(BUILD_DIR)/test_work_stealing
 	@echo "========================================="
 	@./$(BUILD_DIR)/test_work_stealing
 
+.PHONY: test-integration
+test-integration: $(BUILD_DIR)/test_integration_phase5
+	@echo "========================================="
+	@echo "Running Phase 5 Integration Tests"
+	@echo "========================================="
+	@./$(BUILD_DIR)/test_integration_phase5
+
 .PHONY: test-phase5
-test-phase5: test-lockfree test-rcu test-work-stealing
+test-phase5: test-lockfree test-rcu test-work-stealing test-integration
 
 # Run examples
 .PHONY: examples
@@ -172,6 +189,9 @@ examples: $(EXAMPLES)
 	@echo ""
 	@echo "Running Phase 4 examples..."
 	@./$(BUILD_DIR)/example_phase4
+	@echo ""
+	@echo "Running Phase 5 advanced examples..."
+	@./$(BUILD_DIR)/example_phase5_advanced
 
 # Clean
 .PHONY: clean
