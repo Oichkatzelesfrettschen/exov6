@@ -198,13 +198,15 @@ int exo_capnp_send_message(exo_capnp_arena_t *src_arena,
 int exo_capnp_lattice_init(void) {
     // Initialize global state
     atomic_store(&g_arena_count, 0);
-    
+
     // Zero out arena registry
     memset(g_arenas, 0, sizeof(g_arenas));
-    
+
     // Initialize lattice cryptography
-    lattice_crypto_init();
-    
+    if (lattice_crypto_init() != 0) {
+        return -1;
+    }
+
     return 0;
 }
 

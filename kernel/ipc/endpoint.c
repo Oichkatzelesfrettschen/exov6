@@ -79,7 +79,8 @@ int sys_endpoint_recv(void) {
   zipc_msg_t m;
   if (argptr(0, (void *)&udst, sizeof(*udst)) < 0)
     return -1;
-  endpoint_recv(&global_ep, &m);
+  if (endpoint_recv(&global_ep, &m) < 0)
+    return -1;
   memcpy(udst, &m, sizeof(m));
   return 0;
 }

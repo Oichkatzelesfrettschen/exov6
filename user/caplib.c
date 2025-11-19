@@ -1,3 +1,4 @@
+#define EXO_USER_EXO_IPC_DECLS
 #include "caplib.h"
 #include "types.h"
 #include "user.h"
@@ -48,8 +49,8 @@ EXO_NODISCARD int cap_write_disk(exo_blockcap cap, const void *src,
   return exo_write_disk(cap, src, off, n);
 }
 
-extern int cap_revoke_syscall(void);
-int cap_revoke(void) { return cap_revoke_syscall(); }
+extern int cap_revoke_syscall(uint16_t id);
+int cap_revoke(uint16_t id) { return cap_revoke_syscall(id); }
 
 EXO_NODISCARD int cap_send(exo_cap dest, const void *buf, uint64_t len) {
   return exo_send(dest, buf, len);

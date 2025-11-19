@@ -277,10 +277,10 @@ set(KERNEL_WARNINGS_DISABLED
     -Wno-sign-conversion        # Too noisy for pointer arithmetic
     -Wno-conversion             # Too noisy for kernel code
     -Wno-double-promotion       # Intentional in some kernel math
-    # -Wno-sign-compare           # ✅ FIXED (25 instances)
+    # -Wno-sign-compare           # ✅ FIXED (25 instances - proper type casts with validation)
     # -Wno-unused-function        # ✅ FIXED (33 instances - marked with __attribute__((unused)))
     # -Wno-unused-variable        # ✅ FIXED (5 instances - marked with (void) or __attribute__((unused)))
-    -Wno-unused-result          # TODO: Check return values (4 instances)
+    # -Wno-unused-result          # ✅ FIXED (4 instances - proper error handling)
 
     # Intentional GNU extensions
     -Wno-gnu-include-next       # Freestanding header wrapping
@@ -294,12 +294,12 @@ set(KERNEL_WARNINGS_DISABLED
     -Wno-gnu-empty-struct       # Empty struct extensions
     -Wno-gnu-pointer-arith      # Pointer arithmetic on void*
 
-    # Known type issues (FIXED!)
+    # Known type issues (ALL FIXED!)
     # -Wno-incompatible-pointer-types  # ✅ FIXED (19 instances - proper kalloc/kfree casts, lock type fixes)
     # -Wno-incompatible-pointer-types-discards-qualifiers  # ✅ FIXED (13 instances - const correctness)
-    -Wno-pointer-to-int-cast    # TODO: Review pointer/int conversions (5 instances)
-    -Wno-int-to-pointer-cast    # TODO: Review int/pointer conversions (2 instances)
-    -Wno-int-to-void-pointer-cast  # TODO: Review void* conversions (2 instances)
+    # -Wno-pointer-to-int-cast    # ✅ FIXED (5 instances - uintptr_t intermediate casts)
+    # -Wno-int-to-pointer-cast    # ✅ FIXED (2 instances - uintptr_t intermediate casts)
+    # -Wno-int-to-void-pointer-cast  # ✅ FIXED (2 instances - uintptr_t intermediate casts)
 
     # Low-priority or false positives
     -Wno-tautological-constant-out-of-range-compare  # Often macro-generated

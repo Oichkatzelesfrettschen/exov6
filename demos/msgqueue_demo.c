@@ -17,6 +17,6 @@ main(void)
     exo_cap wcap = { .id = 0, .rights = EXO_RIGHT_W };
     const char *msg = "hello";
     libos_msgq_send(wcap, msg, 5);
-    libos_waitpid(pid);
+    libos_waitpid(pid, 0, 0);
     return 0;
 }
