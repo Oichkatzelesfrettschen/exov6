@@ -32,7 +32,8 @@ CORE_OBJS := \
 
 # Phase 5: Lock-Free Objects
 LOCKFREE_OBJS := \
-	$(BUILD_DIR)/lockfree.o
+	$(BUILD_DIR)/lockfree.o \
+	$(BUILD_DIR)/rcu_pdac.o
 
 # All objects
 ALL_OBJS := $(CORE_OBJS) $(LOCKFREE_OBJS)
@@ -45,7 +46,8 @@ TESTS := \
 	$(BUILD_DIR)/test_dag_pdac \
 	$(BUILD_DIR)/test_scheduler \
 	$(BUILD_DIR)/test_executor \
-	$(BUILD_DIR)/test_lockfree
+	$(BUILD_DIR)/test_lockfree \
+	$(BUILD_DIR)/test_rcu
 
 # Examples
 EXAMPLES := \
@@ -95,6 +97,10 @@ $(BUILD_DIR)/test_lockfree: $(KERNEL_DIR)/test_lockfree.c $(BUILD_DIR)/lockfree.
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
+$(BUILD_DIR)/test_rcu: $(KERNEL_DIR)/test_rcu.c $(BUILD_DIR)/rcu_pdac.o $(BUILD_DIR)/lockfree.o
+	@echo "LINK $@"
+	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
 # Example build rules
 $(BUILD_DIR)/example_phase3: $(KERNEL_DIR)/example_phase3.c $(CORE_OBJS)
 	@echo "LINK $@"
@@ -135,8 +141,15 @@ test-phase3: $(BUILD_DIR)/test_scheduler
 test-phase4: $(BUILD_DIR)/test_executor
 	@./$(BUILD_DIR)/test_executor
 
+.PHONY: test-rcu
+test-rcu: $(BUILD_DIR)/test_rcu
+	@echo "========================================="
+	@echo "Running RCU Tests"
+	@echo "========================================="
+	@./$(BUILD_DIR)/test_rcu
+
 .PHONY: test-phase5
-test-phase5: test-lockfree
+test-phase5: test-lockfree test-rcu
 
 # Run examples
 .PHONY: examples
