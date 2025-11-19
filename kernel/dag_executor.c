@@ -27,7 +27,7 @@ dag_executor_config_t dag_executor_default_config(uint8_t num_cpus)
         .enable_admission_control = true,
         .enable_telemetry = true,
         .enable_work_stealing = true,        /* Enable work-stealing by default */
-        .victim_strategy = VICTIM_RANDOM,     /* Random victim selection */
+        .victim_strategy = WS_VICTIM_RANDOM,  /* Random victim selection */
         .max_runtime_us = 0  /* Unlimited */
     };
 

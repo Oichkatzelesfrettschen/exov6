@@ -80,7 +80,7 @@ typedef struct dag_executor_config {
     bool enable_work_stealing;              /* Enable work-stealing scheduler */
 
     /* Work-stealing settings */
-    victim_selection_t victim_strategy;     /* Victim selection strategy */
+    ws_victim_strategy_t victim_strategy;   /* Victim selection strategy */
 
     /* Timing */
     uint64_t max_runtime_us;                /* Maximum execution time (0 = unlimited) */
