@@ -19,8 +19,10 @@
  * Simplified snprintf for kernel use
  * TODO: Replace with full implementation
  */
-int snprintf(char *str, size_t size, const char *format, ...) {
-    if (!str || size == 0) return 0;
+int snprintf(char *str, size_t size, const char *format, ...)
+{
+    if (!str || size == 0)
+        return 0;
 
     va_list args;
     va_start(args, format);
@@ -41,23 +43,25 @@ int snprintf(char *str, size_t size, const char *format, ...) {
  * Kernel malloc - uses kalloc for now
  * TODO: Implement proper malloc/free with size tracking
  */
-void *malloc(size_t size) {
+void *malloc(size_t size)
+{
     /* Use kalloc for page-aligned allocations */
     if (size <= PGSIZE) {
         return kalloc();
     }
     /* For larger allocations, allocate multiple pages */
     /* TODO: Implement proper malloc */
-    return (void*)0;
+    return (void *)0;
 }
 
 /**
  * Kernel free - uses kfree for now
  * TODO: Implement proper malloc/free with size tracking
  */
-void free(void *ptr) {
+void free(void *ptr)
+{
     if (ptr) {
-        kfree((char*)ptr);
+        kfree((char *)ptr);
     }
 }
 
@@ -72,24 +76,27 @@ struct stat;
  * Allocate a file descriptor
  * TODO: Implement when file table is ready
  */
-struct file *filealloc(void) {
-    return (struct file*)0;
+struct file *filealloc(void)
+{
+    return (struct file *)0;
 }
 
 /**
  * Duplicate a file descriptor
  * TODO: Implement when file table is ready
  */
-struct file *filedup(struct file *f) {
+struct file *filedup(struct file *f)
+{
     (void)f;
-    return (struct file*)0;
+    return (struct file *)0;
 }
 
 /**
  * Close a file descriptor
  * TODO: Implement when file table is ready
  */
-void fileclose(struct file *f) {
+void fileclose(struct file *f)
+{
     (void)f;
 }
 
@@ -97,7 +104,8 @@ void fileclose(struct file *f) {
  * Get file status
  * TODO: Implement when file table is ready
  */
-int filestat(struct file *f, struct stat *st) {
+int filestat(struct file *f, struct stat *st)
+{
     (void)f;
     (void)st;
     return -1;
@@ -111,7 +119,8 @@ int filestat(struct file *f, struct stat *st) {
  * Spawn a new process
  * TODO: Implement when process management is ready
  */
-int proc_spawn(void (*fn)(void)) {
+int proc_spawn(void (*fn)(void))
+{
     (void)fn;
     return -1;
 }
@@ -120,7 +129,8 @@ int proc_spawn(void (*fn)(void)) {
  * Wait for process
  * TODO: Implement when process management is ready
  */
-int proc_wait(void) {
+int proc_wait(void)
+{
     return -1;
 }
 
@@ -128,17 +138,20 @@ int proc_wait(void) {
  * Exit current process
  * TODO: Implement when process management is ready
  */
-void proc_exit(int status) {
+void proc_exit(int status)
+{
     (void)status;
     /* Infinite loop for now */
-    for(;;);
+    for (;;)
+        ;
 }
 
 /**
  * Wait for child process
  * TODO: Implement when process management is ready
  */
-int wait(void) {
+int wait(void)
+{
     return -1;
 }
 
@@ -146,7 +159,8 @@ int wait(void) {
  * Send signal to process
  * TODO: Implement when signal handling is ready
  */
-int kill(int pid) {
+int kill(int pid)
+{
     (void)pid;
     return -1;
 }
@@ -159,7 +173,8 @@ int kill(int pid) {
  * TTY echo
  * TODO: Implement when TTY is ready
  */
-void ttypecho(int c) {
+void ttypecho(int c)
+{
     (void)c;
 }
 
@@ -172,7 +187,7 @@ struct devsw {
     int (*write)(void);
 };
 
-struct devsw devsw[10];  /* Placeholder */
+struct devsw devsw[10]; /* Placeholder */
 
 /* ========================================================================
  * Kernel Printf (stub)
@@ -182,7 +197,8 @@ struct devsw devsw[10];  /* Placeholder */
  * Kernel printf
  * TODO: Implement proper kernel printf
  */
-int kprintf(const char *fmt, ...) {
+int kprintf(const char *fmt, ...)
+{
     (void)fmt;
     return 0;
 }
@@ -195,7 +211,8 @@ int kprintf(const char *fmt, ...) {
  * Sign lattice message
  * TODO: Implement when lattice IPC is ready
  */
-int lattice_sign(void *msg, size_t len, void *sig) {
+int lattice_sign(void *msg, size_t len, void *sig)
+{
     (void)msg;
     (void)len;
     (void)sig;
@@ -206,7 +223,8 @@ int lattice_sign(void *msg, size_t len, void *sig) {
  * Send lattice channel message
  * TODO: Implement when lattice IPC is ready
  */
-int lattice_channel_send(void *chan, void *msg, size_t len) {
+int lattice_channel_send(void *chan, void *msg, size_t len)
+{
     (void)chan;
     (void)msg;
     (void)len;
@@ -217,7 +235,8 @@ int lattice_channel_send(void *chan, void *msg, size_t len) {
  * Initialize lattice crypto
  * TODO: Implement when lattice crypto is ready
  */
-void lattice_crypto_init(void) {
+void lattice_crypto_init(void)
+{
     /* Nothing for now */
 }
 
@@ -225,7 +244,8 @@ void lattice_crypto_init(void) {
  * Initialize lattice channel
  * TODO: Implement when lattice IPC is ready
  */
-int lattice_channel_init(void *chan) {
+int lattice_channel_init(void *chan)
+{
     (void)chan;
     return 0;
 }
@@ -253,11 +273,13 @@ static struct exo_sched_ops dag_ops = {
     .schedule = 0,
 };
 
-struct exo_sched_ops *beatty_sched_ops(void) {
+struct exo_sched_ops *beatty_sched_ops(void)
+{
     return &beatty_ops;
 }
 
-struct exo_sched_ops *dag_sched_ops(void) {
+struct exo_sched_ops *dag_sched_ops(void)
+{
     return &dag_ops;
 }
 
@@ -269,7 +291,8 @@ struct exo_sched_ops *dag_sched_ops(void) {
  * Timed receive system call
  * TODO: Implement when IPC is ready
  */
-int sys_exo_recv_timed(void) {
+int sys_exo_recv_timed(void)
+{
     return -1;
 }
 
@@ -283,10 +306,11 @@ int sys_exo_recv_timed(void) {
  * Unified capability validation
  * TODO: Implement properly in capability system
  */
-cap_validation_result_t cap_validate_unified(cap_id_t id, struct cap_entry *out_entry_if_valid) {
+cap_validation_result_t cap_validate_unified(cap_id_t id, struct cap_entry *out_entry_if_valid)
+{
     (void)id;
     (void)out_entry_if_valid;
-    return VALIDATION_INVALID_ID;  /* Defined in cap.h */
+    return VALIDATION_INVALID_ID; /* Defined in cap.h */
 }
 
 /* ========================================================================
@@ -303,7 +327,8 @@ struct exo_lock;
  * Initialize exo_lock
  * TODO: Implement actual lock initialization
  */
-void exo_lock_init(struct exo_lock *lock, exo_lock_type_t type, const char *name, uint32_t level) {
+void exo_lock_init(struct exo_lock *lock, exo_lock_type_t type, const char *name, uint32_t level)
+{
     (void)lock;
     (void)type;
     (void)name;
@@ -314,7 +339,8 @@ void exo_lock_init(struct exo_lock *lock, exo_lock_type_t type, const char *name
  * Acquire exo_lock
  * TODO: Implement actual lock acquisition
  */
-void exo_lock_acquire(struct exo_lock *lock) {
+void exo_lock_acquire(struct exo_lock *lock)
+{
     (void)lock;
 }
 
@@ -322,7 +348,8 @@ void exo_lock_acquire(struct exo_lock *lock) {
  * Release exo_lock
  * TODO: Implement actual lock release
  */
-void exo_lock_release(struct exo_lock *lock) {
+void exo_lock_release(struct exo_lock *lock)
+{
     (void)lock;
 }
 
@@ -330,7 +357,8 @@ void exo_lock_release(struct exo_lock *lock) {
  * Check if holding exo_lock
  * TODO: Implement actual lock check
  */
-int exo_lock_holding(struct exo_lock *lock) {
+int exo_lock_holding(struct exo_lock *lock)
+{
     (void)lock;
     return 0;
 }

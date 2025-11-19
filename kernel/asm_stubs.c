@@ -49,7 +49,9 @@ void (*vectors[256])(void) = {0};
  * Trap return address
  * TODO: Provide proper assembly implementation
  */
-void trapret(void) {
+void trapret(void)
+{
     /* Stub - should be in assembly */
-    for(;;);
+    for (;;)
+        ;
 }

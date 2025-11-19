@@ -1,4 +1,18 @@
+# ExoV6 Clang-Format Configuration
+# Based on Linux kernel style with C17 enhancements
+---
+Language: Cpp
+Standard: c++17
 BasedOnStyle: LLVM
-IndentWidth: 2
-ColumnLimit: 80
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+PointerAlignment: Right
+BreakBeforeBraces: Linux
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
 SortIncludes: false
+ReflowComments: true

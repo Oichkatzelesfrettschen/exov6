@@ -17,7 +17,8 @@
  * @param n Number of bytes to copy
  * @return Pointer to dst
  */
-void *memcpy(void *dst, const void *src, size_t n) {
+void *memcpy(void *dst, const void *src, size_t n)
+{
     const uint8_t *s = src;
     uint8_t *d = dst;
 
@@ -35,7 +36,8 @@ void *memcpy(void *dst, const void *src, size_t n) {
  * @param n Number of bytes to set
  * @return Pointer to s
  */
-void *memset(void *s, int c, size_t n) {
+void *memset(void *s, int c, size_t n)
+{
     uint8_t *p = s;
     uint8_t val = (uint8_t)c;
 
@@ -53,7 +55,8 @@ void *memset(void *s, int c, size_t n) {
  * @param n Number of bytes to move
  * @return Pointer to dst
  */
-void *memmove(void *dst, const void *src, size_t n) {
+void *memmove(void *dst, const void *src, size_t n)
+{
     const uint8_t *s = src;
     uint8_t *d = dst;
 
@@ -82,7 +85,8 @@ void *memmove(void *dst, const void *src, size_t n) {
  * @param n Number of bytes to compare
  * @return 0 if equal, <0 if s1 < s2, >0 if s1 > s2
  */
-int memcmp(const void *s1, const void *s2, size_t n) {
+int memcmp(const void *s1, const void *s2, size_t n)
+{
     const uint8_t *p1 = s1;
     const uint8_t *p2 = s2;
 
@@ -103,7 +107,8 @@ int memcmp(const void *s1, const void *s2, size_t n) {
  * @param s2 Second string
  * @return 0 if equal, <0 if s1 < s2, >0 if s1 > s2
  */
-int strcmp(const char *s1, const char *s2) {
+int strcmp(const char *s1, const char *s2)
+{
     while (*s1 && (*s1 == *s2)) {
         s1++;
         s2++;
@@ -118,7 +123,8 @@ int strcmp(const char *s1, const char *s2) {
  * @param n Maximum number of characters to compare
  * @return 0 if equal, <0 if s1 < s2, >0 if s1 > s2
  */
-int strncmp(const char *s1, const char *s2, size_t n) {
+int strncmp(const char *s1, const char *s2, size_t n)
+{
     while (n && *s1 && (*s1 == *s2)) {
         ++s1;
         ++s2;
@@ -135,7 +141,8 @@ int strncmp(const char *s1, const char *s2, size_t n) {
  * @param s String
  * @return Length (not including null terminator)
  */
-size_t strlen(const char *s) {
+size_t strlen(const char *s)
+{
     size_t n = 0;
     while (*s++) {
         n++;
@@ -149,7 +156,8 @@ size_t strlen(const char *s) {
  * @param src Source string
  * @return Pointer to dst
  */
-char *strcpy(char *dst, const char *src) {
+char *strcpy(char *dst, const char *src)
+{
     char *d = dst;
     while ((*d++ = *src++)) {
         /* Empty body */
@@ -164,7 +172,8 @@ char *strcpy(char *dst, const char *src) {
  * @param n Maximum number of characters to copy
  * @return Pointer to dst
  */
-char *strncpy(char *dst, const char *src, size_t n) {
+char *strncpy(char *dst, const char *src, size_t n)
+{
     char *d = dst;
     while (n > 0 && *src) {
         *d++ = *src++;

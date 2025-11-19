@@ -17,7 +17,7 @@ struct hal_context {
 /* Global HAL context - one per CPU in final implementation */
 struct hal_context hal_context_storage = {
     .cpu_id = 0,
-    .current_process = (void*)0,
+    .current_process = (void *)0,
     .ticks = 0,
 };
 
@@ -31,6 +31,7 @@ struct hal_context *hal = &hal_context_storage;
  * Get current HAL context
  * TODO: Replace with architecture-specific implementation
  */
-struct hal_context *hal_get_current(void) {
+struct hal_context *hal_get_current(void)
+{
     return &hal_context_storage;
 }
