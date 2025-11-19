@@ -33,7 +33,8 @@ CORE_OBJS := \
 # Phase 5: Lock-Free Objects
 LOCKFREE_OBJS := \
 	$(BUILD_DIR)/lockfree.o \
-	$(BUILD_DIR)/rcu_pdac.o
+	$(BUILD_DIR)/rcu_pdac.o \
+	$(BUILD_DIR)/work_stealing.o
 
 # All objects
 ALL_OBJS := $(CORE_OBJS) $(LOCKFREE_OBJS)
@@ -47,7 +48,8 @@ TESTS := \
 	$(BUILD_DIR)/test_scheduler \
 	$(BUILD_DIR)/test_executor \
 	$(BUILD_DIR)/test_lockfree \
-	$(BUILD_DIR)/test_rcu
+	$(BUILD_DIR)/test_rcu \
+	$(BUILD_DIR)/test_work_stealing
 
 # Examples
 EXAMPLES := \
@@ -101,6 +103,10 @@ $(BUILD_DIR)/test_rcu: $(KERNEL_DIR)/test_rcu.c $(BUILD_DIR)/rcu_pdac.o $(BUILD_
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
+$(BUILD_DIR)/test_work_stealing: $(KERNEL_DIR)/test_work_stealing.c $(BUILD_DIR)/work_stealing.o $(BUILD_DIR)/rcu_pdac.o $(BUILD_DIR)/lockfree.o
+	@echo "LINK $@"
+	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
 # Example build rules
 $(BUILD_DIR)/example_phase3: $(KERNEL_DIR)/example_phase3.c $(CORE_OBJS)
 	@echo "LINK $@"
@@ -148,8 +154,15 @@ test-rcu: $(BUILD_DIR)/test_rcu
 	@echo "========================================="
 	@./$(BUILD_DIR)/test_rcu
 
+.PHONY: test-work-stealing
+test-work-stealing: $(BUILD_DIR)/test_work_stealing
+	@echo "========================================="
+	@echo "Running Work-Stealing Tests"
+	@echo "========================================="
+	@./$(BUILD_DIR)/test_work_stealing
+
 .PHONY: test-phase5
-test-phase5: test-lockfree test-rcu
+test-phase5: test-lockfree test-rcu test-work-stealing
 
 # Run examples
 .PHONY: examples
