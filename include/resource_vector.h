@@ -69,7 +69,7 @@ typedef enum {
  * Create resource component from integer
  * (Converts to Q16.16 fixed-point)
  */
-#define RESOURCE_COMPONENT(x) Q16_FROM_INT(x)
+#define RESOURCE_COMPONENT(x) q16_from_int(x)
 
 /**
  * Create resource vector with all 8 dimensions

@@ -216,6 +216,7 @@ void initsleeplock(struct sleeplock *, const char *name);
 
 // string.c
 char *safestrcpy(char *dst, const char *src, size_t n);
+int snprintf(char *str, size_t size, const char *format, ...);
 
 // syscall.c
 int argint(int n, int *ip);
