@@ -127,7 +127,7 @@ void exo_flush_block(struct exo_blockcap *cap, void *data) {
     return;
   struct buf b;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoflush");  /* Uses default LOCK_LEVEL_VFS */
+  initsleeplock(&b.lock, "exoflush", LOCK_LEVEL_VFS + 1);
   acquiresleep(&b.lock);
   memmove(b.data, data, BSIZE);
   exo_bind_block(cap, &b, 1);
@@ -228,7 +228,7 @@ void iinit(int dev) {
 
   qspin_init(&icache.lock, "icache", LOCK_LEVEL_FILESYSTEM);
   for (i = 0; i < NINODE; i++) {
-    initsleeplock(&icache.inode[i].lock, "inode");  /* Uses default LOCK_LEVEL_VFS */
+    initsleeplock(&icache.inode[i].lock, "inode", LOCK_LEVEL_FILESYSTEM + 1);
   }
 
   readsb(dev, &sb);

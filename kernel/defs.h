@@ -212,7 +212,7 @@ int qspin_trylock(struct spinlock *);
 void acquiresleep(struct sleeplock *);
 void releasesleep(struct sleeplock *);
 int holdingsleep(struct sleeplock *);
-void initsleeplock(struct sleeplock *, const char *name);
+void initsleeplock(struct sleeplock *, const char *name, uint32_t dag_level);
 
 // string.c
 char *safestrcpy(char *dst, const char *src, size_t n);
