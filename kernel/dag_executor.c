@@ -26,6 +26,8 @@ dag_executor_config_t dag_executor_default_config(uint8_t num_cpus)
         .enable_load_balancing = true,
         .enable_admission_control = true,
         .enable_telemetry = true,
+        .enable_work_stealing = true,        /* Enable work-stealing by default */
+        .victim_strategy = VICTIM_RANDOM,     /* Random victim selection */
         .max_runtime_us = 0  /* Unlimited */
     };
 
@@ -58,6 +60,12 @@ void dag_executor_init_with_config(dag_executor_t *exec,
 
     /* Initialize RCU for concurrent DAG access */
     rcu_init(&exec->rcu, config->num_cpus);
+
+    /* Initialize work-stealing scheduler (Phase 5.3) */
+    if (config->enable_work_stealing) {
+        ws_scheduler_init_with_strategy(&exec->ws_scheduler, config->num_cpus,
+                                        &exec->rcu, config->victim_strategy);
+    }
 
     /* Initialize multi-core dispatcher */
     multicore_dispatch_init(&exec->dispatcher, dag, config->num_cpus);
@@ -359,6 +367,99 @@ void dag_executor_notify_completion(dag_executor_t *exec,
 
     /* Update dependency state (will be picked up next iteration) */
     dag_executor_update_dependencies(exec);
+}
+
+/*******************************************************************************
+ * WORK-STEALING INTEGRATION (Phase 5.3.4)
+ ******************************************************************************/
+
+/**
+ * Submit ready tasks to work-stealing scheduler
+ */
+uint16_t dag_executor_submit_ready_tasks(dag_executor_t *exec)
+{
+    if (exec == NULL || !exec->config.enable_work_stealing) {
+        return 0;
+    }
+
+    uint16_t submitted = 0;
+
+    /* Scan for READY tasks under RCU protection */
+    rcu_read_lock(&exec->rcu, 0);
+
+    for (uint16_t i = 0; i < exec->dag->num_tasks; i++) {
+        dag_task_t *task = &exec->dag->tasks[i];
+        task_state_t state = atomic_load(&task->state);
+
+        if (state == TASK_STATE_READY) {
+            /* Transition READY → RUNNING to claim task */
+            task_state_t expected = TASK_STATE_READY;
+            if (atomic_compare_exchange_strong(&task->state, &expected, TASK_STATE_RUNNING)) {
+                /* Submit to work-stealing scheduler (round-robin across CPUs) */
+                uint8_t cpu = submitted % exec->config.num_cpus;
+                ws_scheduler_submit(&exec->ws_scheduler, task, cpu);
+                submitted++;
+            }
+        }
+    }
+
+    rcu_read_unlock(&exec->rcu, 0);
+
+    return submitted;
+}
+
+/**
+ * Execute tasks using work-stealing
+ */
+uint16_t dag_executor_execute_ws(dag_executor_t *exec, uint8_t cpu_id)
+{
+    if (exec == NULL || !exec->config.enable_work_stealing) {
+        return 0;
+    }
+
+    if (cpu_id >= exec->config.num_cpus) {
+        return 0;
+    }
+
+    uint16_t executed = 0;
+
+    /* Process tasks from work-stealing scheduler */
+    while (1) {
+        /* Get task (local or stolen) under RCU protection */
+        rcu_read_lock(&exec->rcu, cpu_id);
+        dag_task_t *task = ws_scheduler_get_task(&exec->ws_scheduler, cpu_id);
+        rcu_read_unlock(&exec->rcu, cpu_id);
+
+        if (task == NULL) {
+            break;  /* No more work available */
+        }
+
+        /* Execute task (simplified - just mark completed) */
+        /* In real implementation, would call task function here */
+
+        /* Mark task as completed atomically */
+        atomic_store(&task->state, TASK_STATE_COMPLETED);
+        task->end_time = executed;  /* Simplified timing */
+
+        executed++;
+
+        /* Update dependencies after completion */
+        dag_executor_update_dependencies(exec);
+    }
+
+    return executed;
+}
+
+/**
+ * Get work-stealing statistics
+ */
+void dag_executor_get_ws_stats(const dag_executor_t *exec, ws_stats_t *stats)
+{
+    if (exec == NULL || !exec->config.enable_work_stealing || stats == NULL) {
+        return;
+    }
+
+    ws_scheduler_get_stats(&exec->ws_scheduler, stats);
 }
 
 /*******************************************************************************

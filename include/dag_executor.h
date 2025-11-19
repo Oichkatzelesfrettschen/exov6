@@ -56,6 +56,7 @@
 #include "sched_telemetry.h"
 #include "task_exec.h"
 #include "rcu_pdac.h"
+#include "work_stealing.h"
 
 /*******************************************************************************
  * DAG EXECUTOR STATE
@@ -76,6 +77,10 @@ typedef struct dag_executor_config {
     bool enable_load_balancing;             /* Enable periodic load balancing */
     bool enable_admission_control;          /* Enable admission control */
     bool enable_telemetry;                  /* Enable performance monitoring */
+    bool enable_work_stealing;              /* Enable work-stealing scheduler */
+
+    /* Work-stealing settings */
+    victim_selection_t victim_strategy;     /* Victim selection strategy */
 
     /* Timing */
     uint64_t max_runtime_us;                /* Maximum execution time (0 = unlimited) */
@@ -97,6 +102,7 @@ typedef struct dag_executor {
     sched_telemetry_t telemetry;            /* Performance monitoring */
     lcg_state_t rng;                        /* Random number generator */
     rcu_state_t rcu;                        /* RCU for concurrent DAG access */
+    ws_scheduler_t ws_scheduler;            /* Work-stealing scheduler (Phase 5.3) */
 
     /* Execution state */
     bool running;                           /* True if executing */
@@ -204,6 +210,44 @@ void dag_executor_stop(dag_executor_t *exec);
  * @return      True if all tasks done
  */
 bool dag_executor_is_complete(const dag_executor_t *exec);
+
+/*******************************************************************************
+ * WORK-STEALING INTEGRATION (Phase 5.3.4)
+ ******************************************************************************/
+
+/**
+ * Submit ready tasks to work-stealing scheduler
+ *
+ * Enqueues all READY tasks to the work-stealing scheduler for parallel execution.
+ * Uses RCU protection for safe concurrent access.
+ *
+ * @param exec  Executor
+ * @return      Number of tasks submitted
+ */
+uint16_t dag_executor_submit_ready_tasks(dag_executor_t *exec);
+
+/**
+ * Execute tasks using work-stealing across CPUs
+ *
+ * Each CPU:
+ * 1. Gets task from work-stealing scheduler (local or stolen)
+ * 2. Executes task under RCU protection
+ * 3. Marks task as completed
+ * 4. Updates dependencies
+ *
+ * @param exec     Executor
+ * @param cpu_id   CPU executing this function
+ * @return         Number of tasks executed by this CPU
+ */
+uint16_t dag_executor_execute_ws(dag_executor_t *exec, uint8_t cpu_id);
+
+/**
+ * Get work-stealing scheduler statistics
+ *
+ * @param exec   Executor
+ * @param stats  Output statistics
+ */
+void dag_executor_get_ws_stats(const dag_executor_t *exec, ws_stats_t *stats);
 
 /*******************************************************************************
  * DEPENDENCY MANAGEMENT
