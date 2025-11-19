@@ -43,6 +43,11 @@ list(REMOVE_ITEM KERNEL_CORE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/mkfs_standalone.c"
 )
 
+# Ensure string.c is included (critical for memcpy, memset, etc.)
+if(NOT "${CMAKE_CURRENT_SOURCE_DIR}/string.c" IN_LIST KERNEL_CORE_SOURCES)
+    list(APPEND KERNEL_CORE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/string.c")
+endif()
+
 # Assembly sources - architecture-specific
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_C_COMPILER_TARGET MATCHES "x86_64" OR NOT CMAKE_SYSTEM_PROCESSOR MATCHES "i[3-6]86")
     # x86_64 build - use only compatible assembly
@@ -387,6 +392,8 @@ endif()
 target_link_options(kernel PRIVATE
     -nostdlib
     -static
+    "LINKER:--allow-multiple-definition"  # TEMP: Allow duplicate symbols during prototyping
+    "LINKER:-z,noexecstack"               # Security: non-executable stack
 )
 
 # ═════════════════════════════════════════════════════════════════════
