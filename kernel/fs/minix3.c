@@ -6,6 +6,7 @@
 #include "minix3_fs.h"
 #include "vfs_icache.h"
 #include "vfs_dcache.h"
+#include "buffer_cache.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -400,9 +401,52 @@ ssize_t minix3_file_read(minix3_sb_t *sb, minix3_inode_t *inode,
         count = inode->di.size - offset;
     }
 
-    /* TODO: Read data from blocks */
+    /* Get global buffer cache */
+    buffer_cache_t *cache = bcache_get_global();
+    if (!cache) {
+        return -1;
+    }
 
-    return count;
+    size_t bytes_read = 0;
+    uint8_t *dst = (uint8_t *)buf;
+
+    while (bytes_read < count) {
+        /* Calculate block number and offset within block */
+        uint64_t file_block = (offset + bytes_read) / BSIZE;
+        uint32_t block_offset = (offset + bytes_read) % BSIZE;
+        uint32_t bytes_in_block = BSIZE - block_offset;
+
+        if (bytes_in_block > count - bytes_read) {
+            bytes_in_block = count - bytes_read;
+        }
+
+        /* Map file block to disk block */
+        uint32_t disk_block = minix3_bmap(sb, inode, file_block, false);
+        if (disk_block == 0) {
+            /* Sparse file - return zeros */
+            memset(dst + bytes_read, 0, bytes_in_block);
+        } else {
+            /* Read block through buffer cache with prefetch */
+            bcache_entry_t *entry = bcache_read_with_prefetch(cache, sb->dev,
+                                                               disk_block, NULL);
+            if (!entry) {
+                /* Read failed */
+                break;
+            }
+
+            /* Copy data from cache to user buffer */
+            memcpy(dst + bytes_read,
+                   (uint8_t *)entry->data + block_offset,
+                   bytes_in_block);
+
+            /* Release cache entry */
+            bcache_release(cache, entry);
+        }
+
+        bytes_read += bytes_in_block;
+    }
+
+    return bytes_read;
 }
 
 ssize_t minix3_file_write(minix3_sb_t *sb, minix3_inode_t *inode,
@@ -412,11 +456,65 @@ ssize_t minix3_file_write(minix3_sb_t *sb, minix3_inode_t *inode,
         return -1;
     }
 
-    /* TODO: Write data to blocks */
-    /* TODO: Update file size */
-    /* TODO: Mark inode dirty */
+    /* Get global buffer cache */
+    buffer_cache_t *cache = bcache_get_global();
+    if (!cache) {
+        return -1;
+    }
 
-    return count;
+    size_t bytes_written = 0;
+    const uint8_t *src = (const uint8_t *)buf;
+
+    while (bytes_written < count) {
+        /* Calculate block number and offset within block */
+        uint64_t file_block = (offset + bytes_written) / BSIZE;
+        uint32_t block_offset = (offset + bytes_written) % BSIZE;
+        uint32_t bytes_in_block = BSIZE - block_offset;
+
+        if (bytes_in_block > count - bytes_written) {
+            bytes_in_block = count - bytes_written;
+        }
+
+        /* Map file block to disk block (allocate if needed) */
+        uint32_t disk_block = minix3_bmap(sb, inode, file_block, true);
+        if (disk_block == 0) {
+            /* Allocation failed */
+            break;
+        }
+
+        /* Get or read block through buffer cache */
+        bcache_entry_t *entry = bcache_get_or_read(cache, sb->dev, disk_block, NULL);
+        if (!entry) {
+            /* Cache operation failed */
+            break;
+        }
+
+        /* Copy data from user buffer to cache */
+        memcpy((uint8_t *)entry->data + block_offset,
+               src + bytes_written,
+               bytes_in_block);
+
+        /* Mark block dirty */
+        atomic_fetch_or(&entry->flags, BCACHE_DIRTY);
+
+        /* Release cache entry */
+        bcache_release(cache, entry);
+
+        bytes_written += bytes_in_block;
+    }
+
+    /* Update file size if we extended it */
+    if (offset + bytes_written > inode->di.size) {
+        inode->di.size = offset + bytes_written;
+        atomic_store(&inode->dirty, 1);
+    }
+
+    /* Mark inode dirty if we wrote anything */
+    if (bytes_written > 0) {
+        atomic_store(&inode->dirty, 1);
+    }
+
+    return bytes_written;
 }
 
 int minix3_file_truncate(minix3_sb_t *sb, minix3_inode_t *inode, uint64_t length)

@@ -10,6 +10,7 @@
  */
 
 #include "buffer_cache.h"
+#include "bcache_io.h"
 #include "fs.h"
 #include <stdio.h>
 #include <string.h>
@@ -334,9 +335,10 @@ int bcache_write_block(buffer_cache_t *cache, bcache_entry_t *entry)
         return 0;  /* Not dirty */
     }
 
-    /* TODO: Write to disk */
-    /* For now, just clear dirty flag */
-    atomic_fetch_and(&entry->flags, ~BCACHE_DIRTY);
+    /* Write to disk via I/O layer */
+    if (bcache_io_write(cache, entry) < 0) {
+        return -1;  /* Write failed */
+    }
 
     atomic_fetch_add(&cache->writes, 1);
     return 0;
@@ -544,11 +546,8 @@ static int bcache_read_from_disk(buffer_cache_t *cache, bcache_entry_t *entry)
 {
     if (!cache || !entry || !entry->data) return -1;
 
-    /* TODO: Read from actual disk device */
-    /* For now, just zero the buffer */
-    memset(entry->data, 0, BSIZE);
-
-    return 0;
+    /* Read from disk via I/O layer */
+    return bcache_io_read(cache, entry);
 }
 
 /*******************************************************************************
@@ -571,10 +570,10 @@ int bcache_prefetch_async(buffer_cache_t *cache, uint32_t dev, uint64_t blockno)
     /* Mark as read-ahead */
     atomic_fetch_or(&entry->flags, BCACHE_READAHEAD);
 
-    /* Start async read */
-    /* TODO: Queue async read */
-    /* For now, read synchronously */
-    bcache_read_from_disk(cache, entry);
+    /* Start async read (currently synchronous, will be async in Phase 5.4) */
+    if (bcache_io_read_async(cache, entry) < 0) {
+        return -1;  /* Async read failed */
+    }
     atomic_fetch_or(&entry->flags, BCACHE_VALID);
 
     return 0;
