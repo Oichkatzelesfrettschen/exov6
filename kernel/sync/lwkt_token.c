@@ -48,7 +48,7 @@ static inline uint64_t rdtsc(void) {
 /**
  * Compiler barrier
  */
-static inline void barrier(void) {
+static inline __attribute__((unused)) void barrier(void) {
     __asm__ __volatile__("" ::: "memory");
 }
 
@@ -239,6 +239,7 @@ void token_acquire(struct lwkt_token *token) {
 
     /* ===== SLOW PATH: Acquire from free or other CPU ===== */
     uint64_t spin_start = rdtsc();
+    (void)spin_start;  /* May be used in future timing optimizations */
     int backoff = 10;
     bool contended = false;
 

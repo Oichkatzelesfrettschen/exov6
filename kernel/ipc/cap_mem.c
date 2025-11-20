@@ -16,5 +16,6 @@ void *cap_kalloc(exo_cap *out)
 
 void cap_kfree(exo_cap cap)
 {
-    exo_unbind_page(cap);
+    /* In cleanup context, unbind errors are not critical and cannot be propagated */
+    (void)exo_unbind_page(cap);
 }

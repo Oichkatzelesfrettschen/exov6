@@ -40,7 +40,7 @@ seginit(void)
     uint32_t base;
   } __attribute__((packed)) gdtr;
   gdtr.limit = sizeof(c->gdt) - 1;
-  gdtr.base = (uint32_t)c->gdt;
+  gdtr.base = (uint32_t)(uintptr_t)c->gdt;
   lgdt(&gdtr);
 #else
   // arch.h version takes 2 parameters
@@ -244,7 +244,7 @@ loaduvm(pde_t *pgdir, const char *src, struct inode *ip, uint32_t offset, uint32
       n = sz - i;
     else
       n = PGSIZE;
-    if(readi(ip, P2V(pa), offset+i, n) != n)
+    if(readi(ip, P2V(pa), offset+i, n) != (int)n)
       return -1;
   }
   return 0;
@@ -272,7 +272,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
       return 0;
     }
     memset(mem, 0, PGSIZE);
-    if(mappages(pgdir, (char*)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
+    if(mappages(pgdir, (char*)(uintptr_t)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
       cprintf("allocuvm out of memory (2)\n");
       deallocuvm(pgdir, newsz, oldsz);
       kfree(mem);
@@ -297,7 +297,7 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 
   a = PGROUNDUP(newsz);
   for(; a  < oldsz; a += PGSIZE){
-    pte = walkpgdir(pgdir, (char*)a, 0);
+    pte = walkpgdir(pgdir, (char*)(uintptr_t)a, 0);
     if(!pte)
 #ifdef __x86_64__
       a = PGADDR(0, 0, PDX(a) + 1, 0, 0) - PGSIZE;
@@ -489,7 +489,7 @@ exo_unbind_page(exo_cap cap)
   if (cap_table_lookup(cap.id, &e) < 0)
     return -1;
   struct proc *p = myproc();
-  if(e.owner != p->pid || e.type != CAP_TYPE_PAGE)
+  if(e.owner != (uint32_t)p->pid || e.type != CAP_TYPE_PAGE)
     return -1;
   pde_t *pgdir = p->pgdir;
   pte_t *pte;
@@ -497,7 +497,7 @@ exo_unbind_page(exo_cap cap)
   uint pa = e.resource;
 
   for(a = 0; a < p->sz; a += PGSIZE){
-    if((pte = walkpgdir(pgdir, (void*)a, 0)) != 0 && (*pte & PTE_P)){
+    if((pte = walkpgdir(pgdir, (void*)(uintptr_t)a, 0)) != 0 && (*pte & PTE_P)){
       if(PTE_ADDR(*pte) == pa){
         *pte = 0;
         kfree(P2V(pa));

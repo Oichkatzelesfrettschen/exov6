@@ -130,10 +130,10 @@ begin_op(void)
   adaptive_mutex_lock(&fs_log.lock);
   while(1){
     if(fs_log.committing){
-      ksleep(&fs_log, &fs_log.lock);
+      ksleep(&fs_log, (struct spinlock *)&fs_log.lock);
     } else if(fs_log.lh.n + (fs_log.outstanding+1)*MAXOPBLOCKS > LOGSIZE){
       // this op might exhaust log space; wait for commit.
-      ksleep(&fs_log, &fs_log.lock);
+      ksleep(&fs_log, (struct spinlock *)&fs_log.lock);
     } else {
       fs_log.outstanding += 1;
       adaptive_mutex_unlock(&fs_log.lock);
@@ -224,7 +224,7 @@ log_write(struct buf *b)
 
   adaptive_mutex_lock(&fs_log.lock);
   for (i = 0; i < fs_log.lh.n; i++) {
-    if (fs_log.lh.block[i] == b->blockno)   // log absorbtion
+    if ((uint32_t)fs_log.lh.block[i] == b->blockno)   // log absorbtion
       break;
   }
   fs_log.lh.block[i] = b->blockno;

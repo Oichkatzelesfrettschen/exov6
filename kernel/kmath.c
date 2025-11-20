@@ -11,10 +11,12 @@
 #include <stdbool.h>
 
 // Absolute value implementations
+__attribute__((unused))
 static inline int32_t kabs32(int32_t x) {
     return (x < 0) ? -x : x;
 }
 
+__attribute__((unused))
 static inline int64_t kabs64(int64_t x) {
     return (x < 0) ? -x : x;
 }
@@ -189,18 +191,22 @@ uint32_t klcm(uint32_t a, uint32_t b) {
 /**
  * Min/max functions
  */
+__attribute__((unused))
 static inline uint32_t kmin32(uint32_t a, uint32_t b) {
     return (a < b) ? a : b;
 }
 
+__attribute__((unused))
 static inline uint32_t kmax32(uint32_t a, uint32_t b) {
     return (a > b) ? a : b;
 }
 
+__attribute__((unused))
 static inline int32_t kimin32(int32_t a, int32_t b) {
     return (a < b) ? a : b;
 }
 
+__attribute__((unused))
 static inline int32_t kimax32(int32_t a, int32_t b) {
     return (a > b) ? a : b;
 }
@@ -208,6 +214,7 @@ static inline int32_t kimax32(int32_t a, int32_t b) {
 /**
  * Clamp value between min and max
  */
+__attribute__((unused))
 static inline uint32_t kclamp32(uint32_t val, uint32_t min, uint32_t max) {
     if (val < min) return min;
     if (val > max) return max;
@@ -217,6 +224,7 @@ static inline uint32_t kclamp32(uint32_t val, uint32_t min, uint32_t max) {
 /**
  * Check if power of 2
  */
+__attribute__((unused))
 static inline bool kis_pow2(uint32_t x) {
     return x && !(x & (x - 1));
 }
@@ -241,6 +249,7 @@ uint32_t kround_up_pow2(uint32_t x) {
 /**
  * Align value up to alignment boundary
  */
+__attribute__((unused))
 static inline uint64_t kalign_up(uint64_t val, uint64_t align) {
     return (val + align - 1) & ~(align - 1);
 }
@@ -248,6 +257,7 @@ static inline uint64_t kalign_up(uint64_t val, uint64_t align) {
 /**
  * Align value down to alignment boundary
  */
+__attribute__((unused))
 static inline uint64_t kalign_down(uint64_t val, uint64_t align) {
     return val & ~(align - 1);
 }
@@ -255,6 +265,7 @@ static inline uint64_t kalign_down(uint64_t val, uint64_t align) {
 /**
  * Rotate left
  */
+__attribute__((unused))
 static inline uint32_t krotl32(uint32_t x, uint32_t n) {
     n &= 31;
     return (x << n) | (x >> (32 - n));
@@ -263,6 +274,7 @@ static inline uint32_t krotl32(uint32_t x, uint32_t n) {
 /**
  * Rotate right
  */
+__attribute__((unused))
 static inline uint32_t krotr32(uint32_t x, uint32_t n) {
     n &= 31;
     return (x >> n) | (x << (32 - n));

@@ -12,13 +12,13 @@
 #include "sleeplock.h"
 
 void
-initsleeplock(struct sleeplock *lk, const char *name)
+initsleeplock(struct sleeplock *lk, const char *name, uint32_t dag_level)
 {
-  // Modern API: Use automatic lock hierarchy (sleeplocks are typically LOCK_LEVEL_VFS)
-  // Internal qspinlock for the sleeplock's own state
-  qspin_init(&lk->lk, "sleeplock_internal", LOCK_LEVEL_VFS - 1);
+  // Modern API: Internal qspinlock must be at lower level than sleeplock itself
+  uint32_t internal_level = (dag_level > 0) ? (dag_level - 1) : 0;
+  qspin_init(&lk->lk, "sleeplock_internal", internal_level);
   lk->name = name;
-  lk->dag_level = LOCK_LEVEL_VFS;  /* Filesystem level by default */
+  lk->dag_level = dag_level;
   lk->locked = 0;
   lk->pid = 0;
 }
@@ -41,7 +41,7 @@ acquiresleep(struct sleeplock *lk)
   qspin_lock(&lk->lk);  // Acquire internal qspinlock
 
   while (lk->locked) {
-    ksleep(lk, &lk->lk);  // Sleep, releasing internal lock
+    ksleep(lk, (struct spinlock *)&lk->lk);  // Sleep, releasing internal lock
   }
 
   lk->locked = 1;

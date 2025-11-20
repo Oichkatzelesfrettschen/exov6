@@ -121,7 +121,7 @@ typedef struct clock_source {
     /* Hardware clock parameters */
     struct {
         uint64_t frequency_hz;       /* Clock frequency */
-        uint64_t mult;              /* Multiplication factor for cycles->ns */
+        uint32_t mult;              /* Multiplication factor for cycles->ns */
         uint32_t shift;             /* Right shift for cycles->ns */
         uint32_t precision_ns;      /* Clock precision in nanoseconds */
     } hw;

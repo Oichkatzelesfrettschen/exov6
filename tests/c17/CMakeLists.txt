@@ -8,7 +8,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 # Compiler flags for tests
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra -Wno-unused-parameter")
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -fsanitize=address,undefined")
 set(CMAKE_C_FLAGS_RELEASE "-O2")
 

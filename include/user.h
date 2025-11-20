@@ -184,7 +184,7 @@ int pipe(int fd[2]);
  * @param pid Target process identifier.
  * @return 0 on success, or -1 on error.
  */
-int kill(int pid);
+int kill(int pid, int sig);
 
 /**
  * @brief Remove a directory entry.

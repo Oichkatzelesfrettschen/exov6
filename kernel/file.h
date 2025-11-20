@@ -49,7 +49,7 @@ _Static_assert(sizeof(struct inode) == 156, "struct inode size incorrect");
 // device functions
 struct devsw {
   int (*read)(struct inode*, char*, size_t);
-  int (*write)(struct inode*, char*, size_t);
+  int (*write)(struct inode*, const char*, size_t);
 };
 
 extern struct devsw devsw[];

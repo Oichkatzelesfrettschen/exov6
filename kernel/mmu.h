@@ -62,8 +62,8 @@ _Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
                    (uint32_t)(base) >> 24}
 #define SEG16(type, base, lim, dpl)                                            \
   (struct segdesc){(lim) & 0xffff,                                             \
-                   (uint32_t)(base) & 0xffff,                                      \
-                   ((uint32_t)(base) >> 16) & 0xff,                                \
+                   (uint32_t)(uintptr_t)(base) & 0xffff,                           \
+                   ((uint32_t)(uintptr_t)(base) >> 16) & 0xff,                     \
                    type,                                                       \
                    1,                                                          \
                    dpl,                                                        \
@@ -73,7 +73,7 @@ _Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
                    0,                                                          \
                    1,                                                          \
                    0,                                                          \
-                   (uint32_t)(base) >> 24}
+                   (uint32_t)(uintptr_t)(base) >> 24}
 #endif
 
 #define DPL_USER 0x3 // User DPL

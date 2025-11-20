@@ -62,7 +62,7 @@ static inline int32_t q16_to_int(q16_t x) {
  * Convert Q16.16 to integer (round)
  * Cost: 3 cycles (add + shift)
  */
-static inline int32_t q16_to_int_round(q16_t x) {
+static inline __attribute__((unused)) int32_t q16_to_int_round(q16_t x) {
     return (x + Q16_HALF) >> Q16_SHIFT;
 }
 
@@ -106,7 +106,7 @@ static inline q16_t q16_div(q16_t a, q16_t b) {
  * Negate Q16.16 number
  * Cost: 1 cycle
  */
-static inline q16_t q16_neg(q16_t x) {
+static inline __attribute__((unused)) q16_t q16_neg(q16_t x) {
     return -x;
 }
 
@@ -114,7 +114,7 @@ static inline q16_t q16_neg(q16_t x) {
  * Absolute value
  * Cost: 2-3 cycles (branch-free)
  */
-static inline q16_t q16_abs(q16_t x) {
+static inline __attribute__((unused)) q16_t q16_abs(q16_t x) {
     int32_t mask = x >> 31;  /* Sign extend */
     return (x + mask) ^ mask;
 }

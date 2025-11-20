@@ -33,7 +33,7 @@
 /**
  * Read Time-Stamp Counter
  */
-static inline uint64_t rdtsc(void) {
+static inline __attribute__((unused)) uint64_t rdtsc(void) {
     uint32_t lo, hi;
     __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi));
     return ((uint64_t)hi << 32) | lo;
@@ -101,7 +101,7 @@ static const char *lock_type_name(uint32_t lock_type) {
  * @param file Source file of acquisition
  * @param line Source line of acquisition
  */
-static void dag_report_violation(struct thread_lock_tracker *tracker,
+static __attribute__((unused)) void dag_report_violation(struct thread_lock_tracker *tracker,
                                 void *new_lock, const char *new_name,
                                 uint32_t new_level, uint32_t new_type,
                                 const char *file, int line) {

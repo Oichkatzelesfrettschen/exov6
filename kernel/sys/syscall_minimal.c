@@ -148,7 +148,7 @@ void syscall(void) {
     
     kprintf("syscall %d from process %d\n", num, curproc->pid);
     
-    if (num > 0 && num < sizeof(syscalls)/sizeof(syscalls[0]) && syscalls[num]) {
+    if (num > 0 && (size_t)num < sizeof(syscalls)/sizeof(syscalls[0]) && syscalls[num]) {
         // Call the syscall function
         int result = syscalls[num]();
         kprintf("syscall %d returned %d\n", num, result);

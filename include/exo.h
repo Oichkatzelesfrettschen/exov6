@@ -46,6 +46,15 @@ typedef struct exo_cap {
 #define EXO_RIGHT_W        EXO_CAP_WRITE
 #define EXO_RIGHT_X        EXO_CAP_EXECUTE
 #define EXO_RIGHT_EXEC     EXO_CAP_EXECUTE  /* Alternative name */
+#define EXO_RIGHT_CTL      0x8               /* Control/management rights */
+
+/* Capability rights checking utility (also in exokernel.h for userspace) */
+#ifndef cap_has_rights_DEFINED
+#define cap_has_rights_DEFINED
+static inline int cap_has_rights(uint32_t rights, uint32_t need) {
+    return (rights & need) == need;
+}
+#endif
 
 /* Block device capability */
 typedef struct exo_blockcap {
@@ -73,6 +82,9 @@ int exo_disk_read(exo_blockcap cap, void *buf);
 int exo_disk_write(exo_blockcap cap, const void *buf);
 
 #ifdef EXO_KERNEL
+/* Forward declarations for kernel types */
+struct buf;
+
 /* Kernel-only functions */
 exo_cap exo_alloc_page(void);
 [[nodiscard]] int exo_unbind_page(exo_cap c);

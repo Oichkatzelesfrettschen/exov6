@@ -489,10 +489,10 @@ void q16_octonion_scale_simd_x4(q16_octonion_t *result, const q16_octonion_t *a,
  * Create new COW octonion container with reference count of 1.
  */
 q16_octonion_cow_t* q16_octonion_cow_create(const q16_octonion_t *initial) {
-    q16_octonion_cow_t *cow = kalloc();  /* Use kernel allocator */
+    q16_octonion_cow_t *cow = (q16_octonion_cow_t *)kalloc();  /* Use kernel allocator */
     if (!cow) return NULL;
-    
-    cow->data = kalloc();
+
+    cow->data = (q16_octonion_t *)kalloc();
     if (!cow->data) {
         kfree((char*)cow);
         return NULL;
@@ -531,7 +531,7 @@ q16_octonion_t* q16_octonion_cow_get_mut(q16_octonion_cow_t *cow) {
     }
     
     /* Need to create private copy */
-    q16_octonion_t *new_data = kalloc();
+    q16_octonion_t *new_data = (q16_octonion_t *)kalloc();
     if (!new_data) return NULL;
     
     q16_octonion_copy(new_data, cow->data);

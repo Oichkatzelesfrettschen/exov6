@@ -1,10 +1,10 @@
 #pragma once
 #include "exo.h"
 #include "exo_cpu.h"
-#include "exokernel.h"
 
 /* Userspace capability library - kernel uses cap.h instead */
 #ifndef EXO_KERNEL
+#include "exokernel.h"  /* Userspace API - must be inside #ifndef EXO_KERNEL */
 
 exo_cap cap_alloc_page(void);
 EXO_NODISCARD int cap_unbind_page(exo_cap cap);

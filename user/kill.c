@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sys/stat.h"
 #include "user.h"
+#include "signal.h"
 
 int
 main(int argc, char **argv)
@@ -12,6 +13,6 @@ main(int argc, char **argv)
     exit(0);
   }
   for(i=1; i<argc; i++)
-    kill(atoi(argv[i]));
+    kill(atoi(argv[i]), SIGTERM);
   exit(0);
 }

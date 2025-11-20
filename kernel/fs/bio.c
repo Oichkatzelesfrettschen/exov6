@@ -53,7 +53,7 @@ binit(void)
   for(b = bcache.buf; b < bcache.buf+NBUF; b++){
     b->next = bcache.head.next;
     b->prev = &bcache.head;
-    initsleeplock(&b->lock, "buffer");  /* DAG level removed - use lock hierarchy */
+    initsleeplock(&b->lock, "buffer", LOCK_LEVEL_FILESYSTEM + 1);
     b->rcref = 0;
     bcache.head.next->prev = b;
     bcache.head.next = b;

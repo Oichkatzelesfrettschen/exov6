@@ -629,7 +629,7 @@ int streams_write(uint64_t endpoint_id, struct strbuf *ctrl,
     /* Process through module stack */
     for (int i = ep->data.proto.stream.module_count - 1; i >= 0; i--) {
         void *module = ep->data.proto.stream.stream_modules[i];
-        /* Module processing would go here */
+        (void)module;  /* Module processing would go here */
     }
     
     /* Write to stream head */
@@ -775,7 +775,7 @@ int ipc_send(uint64_t endpoint_id, ipc_message_t *msg, uint32_t flags) {
     /* Route based on IPC type */
     switch (ep->data.type) {
     case IPC_TYPE_FASTIPC:
-        return fastipc_send_message(ep, msg);
+        return fastipc_send_message(ep, (const uint64_t *)msg);
         
     case IPC_TYPE_CHANNEL:
         return channel_send(endpoint_id, msg->payload, 
@@ -817,7 +817,7 @@ ssize_t ipc_receive(uint64_t endpoint_id, ipc_message_t *msg, uint32_t flags) {
     /* Route based on IPC type */
     switch (ep->data.type) {
     case IPC_TYPE_FASTIPC:
-        return fastipc_receive_message(ep, msg);
+        return fastipc_receive_message(ep, (uint64_t *)msg);
         
     case IPC_TYPE_CHANNEL:
         return channel_receive(ep, msg->payload,

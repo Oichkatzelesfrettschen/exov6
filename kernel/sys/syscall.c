@@ -236,7 +236,7 @@ void syscall(void) {
 #endif
     return;
   }
-  if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+  if (num > 0 && (size_t)num < NELEM(syscalls) && syscalls[num]) {
 #ifndef __x86_64__
     curproc->tf->eax = syscalls[num]();
 #else

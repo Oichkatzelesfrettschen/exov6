@@ -8,7 +8,7 @@
 #include <string.h>
 #include "ipc_debug.h"
 #define EXO_KERNEL
-#include "../../include/exokernel.h"
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 #include "ipc_queue.h"
 
 /* Fallback for ETIMEDOUT if not defined in errno.h */

@@ -328,9 +328,9 @@ uint64_t exo_bind_resource(uint64_t libos_id, resource_type_t type,
                          memory_order_relaxed);
     atomic_store_explicit(&binding->data.revoked, false,
                          memory_order_relaxed);
-    
+
     /* Generate authentication token */
-    exo_generate_auth_token(binding);
+    exo_generate_auth_token(binding->data.auth_token);
     
     /* Update resource tracking */
     atomic_store_explicit(&global_resources.data.owner_map[resource_id],
@@ -376,9 +376,9 @@ int exo_access_resource(uint64_t binding_id, uint32_t operation, void *data) {
     if (atomic_load_explicit(&binding->data.revoked, memory_order_acquire)) {
         return -EREVOKED;
     }
-    
+
     /* Verify authentication */
-    if (!exo_verify_auth_token(binding)) {
+    if (!exo_verify_auth_token(binding->data.auth_token)) {
         return -EAUTH;
     }
     

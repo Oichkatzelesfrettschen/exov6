@@ -212,10 +212,11 @@ int qspin_trylock(struct spinlock *);
 void acquiresleep(struct sleeplock *);
 void releasesleep(struct sleeplock *);
 int holdingsleep(struct sleeplock *);
-void initsleeplock(struct sleeplock *, const char *name);
+void initsleeplock(struct sleeplock *, const char *name, uint32_t dag_level);
 
 // string.c
 char *safestrcpy(char *dst, const char *src, size_t n);
+int snprintf(char *str, size_t size, const char *format, ...);
 
 // syscall.c
 int argint(int n, int *ip);
@@ -268,14 +269,8 @@ int insert_pte(pde_t *, void *va, uint64_t perm, int flags);
 int insert_pte(pde_t *, void *va, uint32_t perm, int flags);
 #endif
 
-// Exokernel extensions
-exo_cap exo_alloc_page(void);
-int exo_unbind_page(exo_cap);
-exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner);
-int cap_verify(exo_cap);
-struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights);
-int exo_bind_block(struct exo_blockcap *, struct buf *, int);
-void exo_flush_block(struct exo_blockcap *, void *);
+// Exokernel extensions (detailed declarations in include/exo.h)
+// Note: kernel code should use include/exo.h, NOT include/exokernel.h
 exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
 int exo_irq_wait(exo_cap cap, uint32_t *irqp);
 int exo_irq_ack(exo_cap cap);

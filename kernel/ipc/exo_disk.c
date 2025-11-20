@@ -8,17 +8,17 @@
 #include <errno.h>
 #include <string.h>
 #define EXO_KERNEL
-#include "../../include/exokernel.h"
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 
 
 [[nodiscard]] int exo_read_disk(struct exo_blockcap cap, void *dst,
                                 uint64_t off, uint64_t n) {
-  if (cap.owner != myproc()->pid || !cap_has_rights(cap.rights, EXO_RIGHT_R))
+  if (cap.owner != (uint32_t)myproc()->pid || !cap_has_rights(cap.rights, EXO_RIGHT_R))
     return -EPERM;
   struct buf b;
   uint64_t tot = 0;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exodisk");  /* Uses default LOCK_LEVEL_VFS */
+  initsleeplock(&b.lock, "exodisk", LOCK_LEVEL_VFS + 1);
 
   while (tot < n) {
     uint64_t cur = off + tot;
@@ -45,12 +45,12 @@
 
 [[nodiscard]] int exo_write_disk(struct exo_blockcap cap, const void *src,
                                  uint64_t off, uint64_t n) {
-  if (cap.owner != myproc()->pid || !cap_has_rights(cap.rights, EXO_RIGHT_W))
+  if (cap.owner != (uint32_t)myproc()->pid || !cap_has_rights(cap.rights, EXO_RIGHT_W))
     return -EPERM;
   struct buf b;
   uint64_t tot = 0;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exodisk");  /* Uses default LOCK_LEVEL_VFS */
+  initsleeplock(&b.lock, "exodisk", LOCK_LEVEL_VFS + 1);
 
   while (tot < n) {
     uint64_t cur = off + tot;

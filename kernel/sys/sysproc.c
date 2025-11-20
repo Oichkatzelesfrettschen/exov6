@@ -65,14 +65,16 @@ int sys_sleep(void) {
 
   if (argint(0, &n) < 0)
     return -1;
+  if (n < 0)
+    return -1;
   qspin_lock(&tickslock);
   ticks0 = ticks;
-  while (ticks - ticks0 < n) {
+  while (ticks - ticks0 < (uint)n) {
     if (myproc()->killed) {
       qspin_unlock(&tickslock);
       return -1;
     }
-    sleep(&ticks, &tickslock);
+    sleep(&ticks, (struct spinlock *)&tickslock);
   }
   qspin_unlock(&tickslock);
   return 0;
@@ -94,7 +96,7 @@ int sys_mappte(void) {
 
   if (argint(0, &va) < 0 || argint(1, &pa) < 0 || argint(2, &perm) < 0)
     return -1;
-  return insert_pte(myproc()->pgdir, (void *)va, pa, perm);
+  return insert_pte(myproc()->pgdir, (void *)(uintptr_t)va, pa, perm);
 }
 
 int sys_set_timer_upcall(void) {
@@ -182,7 +184,7 @@ int sys_exo_bind_block(void) {
 
   cap = *ucap;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoblk");
+  initsleeplock(&b.lock, "exoblk", LOCK_LEVEL_VFS + 1);
   acquiresleep(&b.lock);
   if (write)
     memmove(b.data, data, BSIZE);
@@ -203,7 +205,7 @@ int sys_exo_flush_block(void) {
 
   cap = *ucap;
   memset(&b, 0, sizeof(b));
-  initsleeplock(&b.lock, "exoflush");
+  initsleeplock(&b.lock, "exoflush", LOCK_LEVEL_VFS + 1);
   acquiresleep(&b.lock);
   memmove(b.data, data, BSIZE);
   /* TODO: Implement exo_bind_block */

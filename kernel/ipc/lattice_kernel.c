@@ -119,7 +119,7 @@ struct lattice_global {
  * Simplified polynomial multiplication in ring
  * Real Kyber uses NTT for efficiency, we use simple modular arithmetic
  */
-static void poly_multiply(uint32_t *result, const uint32_t *a, const uint32_t *b, uint32_t mod) {
+static __attribute__((unused)) void poly_multiply(uint32_t *result, const uint32_t *a, const uint32_t *b, uint32_t mod) {
     // Simplified polynomial multiplication mod x^8 + 1
     uint32_t temp[16] = {0};
     
@@ -160,7 +160,7 @@ static void kyber_keygen(lattice_node_t *node) {
 /**
  * Derive shared secret using Kyber-style key exchange (simplified)
  */
-static void kyber_derive_secret(lattice_node_t *node1, lattice_node_t *node2) {
+static __attribute__((unused)) void kyber_derive_secret(lattice_node_t *node1, lattice_node_t *node2) {
     const uint32_t q = 3329;
     
     // Simplified key exchange: just XOR and modular operations
@@ -212,7 +212,7 @@ static lattice_node_t *lattice_join(lattice_node_t *node1, lattice_node_t *node2
 /**
  * Find greatest lower bound (meet) of two nodes
  */
-static lattice_node_t *lattice_meet(lattice_node_t *node1, lattice_node_t *node2) {
+static __attribute__((unused)) lattice_node_t *lattice_meet(lattice_node_t *node1, lattice_node_t *node2) {
     if (!node1 || !node2) return NULL;
     
     // Create new node with intersection of permissions

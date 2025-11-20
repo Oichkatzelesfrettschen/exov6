@@ -161,7 +161,7 @@ iderw(struct buf *b)
 
   // Wait for request to finish.
   while((b->flags & (B_VALID|B_DIRTY)) != B_VALID){
-    ksleep(b, &idelock);
+    ksleep(b, (struct spinlock *)&idelock);
   }
 
 

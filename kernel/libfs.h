@@ -1,7 +1,7 @@
 #pragma once
 #include "file.h"
 #include "fs.h"
-#include "include/exokernel.h"
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 
 int fs_read_block(struct exo_blockcap cap, void *dst);
 int fs_write_block(struct exo_blockcap cap, const void *src);

@@ -9,6 +9,7 @@
 #include <types.h>
 #include <stdint.h>
 #include <stdatomic.h>
+#include <limits.h>
 #include "param.h"
 #include "defs.h"
 #include "proc.h"
@@ -186,7 +187,7 @@ exo_cap exo_alloc_dma(uint32_t channel) {
 }
 
 /* Block device binding for direct disk access */
-int exo_bind_block(struct exo_blockcap *bcap, struct buf *buf, int write) {
+int exo_bind_block(exo_blockcap *bcap, struct buf *buf, int write) {
     struct buf *b = buf;
     
     if (!bcap || !b) {
@@ -227,11 +228,13 @@ int exo_bind_block(struct exo_blockcap *bcap, struct buf *buf, int write) {
 }
 
 /* Scheduler operations for Beatty scheduler */
+__attribute__((unused))
 static void beatty_init(void) {
     /* Initialize Beatty scheduler state */
     /* Golden ratio scheduling parameters */
 }
 
+__attribute__((unused))
 static void beatty_schedule(void) {
     /* Beatty sequence scheduling logic */
     struct proc *p;
@@ -553,16 +556,21 @@ int sys_ipc_fast(void) {
     uint64_t target_pid = p->tf->rdi;
     uint64_t msg_ptr = p->tf->rsi;
     uint64_t msg_len = p->tf->rdx;
-    
+
     if (msg_len > PGSIZE) {
         return -1;  /* Message too large */
     }
-    
+
+    /* Validate PID is within int range */
+    if (target_pid > INT_MAX) {
+        return -1;  /* Invalid PID */
+    }
+
     /* Find target process */
     struct proc *target = NULL;
     acquire(&ptable.lock);
     for (struct proc *tp = ptable.proc; tp < &ptable.proc[NPROC]; tp++) {
-        if (tp->pid == target_pid && tp->state != UNUSED) {
+        if (tp->pid == (int)target_pid && tp->state != UNUSED) {
             target = tp;
             break;
         }

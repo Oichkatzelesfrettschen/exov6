@@ -23,7 +23,7 @@ void
 ideinit(void)
 {
   memdisk = _binary_fs_img_start;
-  disksize = (uint32_t)_binary_fs_img_size/BSIZE;
+  disksize = (uint32_t)(uintptr_t)_binary_fs_img_size/BSIZE;
 }
 
 // Interrupt handler.
@@ -47,7 +47,7 @@ iderw(struct buf *b)
     panic("iderw: nothing to do");
   if(b->dev != 1)
     panic("iderw: request not for disk 1");
-  if(b->blockno >= disksize)
+  if(b->blockno >= (uint32_t)disksize)
     panic("iderw: block out of range");
 
   p = memdisk + b->blockno*BSIZE;

@@ -6,31 +6,32 @@ Phase 7.1: Automated Lock Analysis
 EXECUTIVE SUMMARY
 --------------------------------------------------------------------------------
 
-Total Locks Found:        54
-Legacy Locks (to migrate): 39
-Modern Locks (migrated):   15
-Migration Progress:        15/54 (27%)
+Total Locks Found:        61
+Legacy Locks (to migrate): 35
+Modern Locks (migrated):   26
+Migration Progress:        26/61 (42%)
 
 Lock Type Breakdown:
-  spinlock            :  37
-  sleeplock           :   2
-  qspinlock           :   6
+  spinlock            :  28
+  sleeplock           :   7
+  qspinlock           :  16
+  adaptive_mutex      :   1
   lwkt_token          :   9
 
 MIGRATION PRIORITY MATRIX
 --------------------------------------------------------------------------------
 
-P0-Critical: 3 locks
-  sched          :  3 locks (COMPLETED in Phase 5)
+P0-Critical: 1 locks
+  sched          :  1 locks (COMPLETED in Phase 5)
 
-P1-High: 7 locks
-  filesystem     :  7 locks (PLANNED for Phase 7)
+P1-High: 1 locks
+  filesystem     :  1 locks (PLANNED for Phase 7)
 
 P2-Medium: 8 locks
   ipc            :  8 locks
 
-P3-Low: 17 locks
-  other          : 17 locks
+P3-Low: 16 locks
+  other          : 16 locks
 
 P3-Infrastructure: 2 locks
   sync           :  2 locks
@@ -48,16 +49,16 @@ Lock: lock
   File:          drivers/console.c:27
   Priority:      P1-High
   Recommended:   qspinlock (already modern)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 
 ================================================================================
@@ -65,107 +66,107 @@ Subsystem: FILESYSTEM (8 locks)
 ================================================================================
 
 Lock: idelock
-  Type:          spinlock
-  File:          fs/ide.c:31
+  Type:          qspinlock
+  File:          fs/ide.c:32
   Priority:      P1-High
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
+  Recommended:   qspinlock (already modern)
   Init sites:    1
-    - fs/ide.c:55 (initlock)
+    - fs/ide.c:56 (qspin_init)
   Usage sites:   5
-    - fs/ide.c:109 (acquire)
-    - fs/ide.c:149 (acquire)
-    - fs/ide.c:112 (release)
+    - fs/ide.c:110 (qspin_lock)
+    - fs/ide.c:150 (qspin_lock)
+    - fs/ide.c:113 (qspin_unlock)
     ... and 2 more
 
 Lock: lock
-  Type:          spinlock
-  File:          fs/fs.c:221
+  Type:          qspinlock
+  File:          fs/fs.c:222
   Priority:      P1-High
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Recommended:   qspinlock (already modern)
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
-  Type:          spinlock
-  File:          fs/bio.c:30
+  Type:          qspinlock
+  File:          fs/bio.c:31
   Priority:      P1-High
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Recommended:   qspinlock (already modern)
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
-  Type:          spinlock
-  File:          fs/log.c:41
+  Type:          adaptive_mutex
+  File:          fs/log.c:42
   Priority:      P1-High
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Recommended:   adaptive_mutex (already modern)
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          sleeplock
   File:          file.h:30
   Priority:      P1-High
   Recommended:   sleeplock (modernized in Phase 6)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: rlock
-  Type:          spinlock
-  File:          fs/bio.c:33
+  Type:          qspinlock
+  File:          fs/bio.c:34
   Priority:      P1-High
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
+  Recommended:   qspinlock (already modern)
   Init sites:    1
-    - fs/bio.c:46 (initlock)
+    - fs/bio.c:47 (qspin_init)
 
 Lock: sched_lock
   Type:          spinlock
-  File:          defs.h:57
+  File:          defs.h:65
   Priority:      P1-High
   Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
 
 Lock: tickslock
-  Type:          spinlock
-  File:          defs.h:210
+  Type:          qspinlock
+  File:          defs.h:236
   Priority:      P1-High
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
+  Recommended:   qspinlock (already modern)
   Init sites:    1
-    - sys/trap.c:37 (initlock)
+    - sys/trap.c:37 (qspin_init)
   Usage sites:   7
-    - sys/trap.c:67 (acquire)
-    - sys/trap.c:70 (release)
-    - sys/sysproc.c:68 (acquire)
+    - sys/sysproc.c:70 (qspin_lock)
+    - sys/sysproc.c:88 (qspin_lock)
+    - sys/sysproc.c:74 (qspin_unlock)
     ... and 4 more
 
 
@@ -202,80 +203,80 @@ Lock: lock
   File:          sys/pipe.c:15
   Priority:      P2-Medium
   Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          ipc/sys_ipc.c:31
   Priority:      P2-Medium
   Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
-
-Lock: lock
-  Type:          spinlock
-  File:          ipc/lattice_kernel.c:67
-  Priority:      P2-Medium
-  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          ipc/fastipc.c:16
   Priority:      P2-Medium
   Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          ipc/capnp_kernel.c:67
   Priority:      P2-Medium
   Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
+
+Lock: lock
+  Type:          spinlock
+  File:          ipc/lattice_kernel.c:67
+  Priority:      P2-Medium
+  Recommended:   qspinlock (cache/metadata) or sleeplock (I/O)
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: streamlock
   Type:          spinlock
@@ -297,23 +298,23 @@ Subsystem: MEMORY (1 locks)
 
 Lock: lock
   Type:          qspinlock
-  File:          mem/kalloc.c:28
+  File:          mem/kalloc.c:29
   Priority:      P0-Critical
   Recommended:   qspinlock (already modern)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 
 ================================================================================
-Subsystem: OTHER (27 locks)
+Subsystem: OTHER (28 locks)
 ================================================================================
 
 Lock: contention_token
@@ -327,245 +328,251 @@ Lock: contention_token
     - sync/bench_lwkt_token.c:518 (acquire)
     ... and 3 more
 
+Lock: g_table_lock
+  Type:          qspinlock
+  File:          capability_v2.c:68
+  Priority:      P3-Low
+  Recommended:   qspinlock (already modern)
+
+Lock: lock
+  Type:          spinlock
+  File:          lambda_cap.c:411
+  Priority:      P3-Low
+  Recommended:   qspinlock
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
+
 Lock: lock
   Type:          spinlock
   File:          service.c:25
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          irq.c:18
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
-
-Lock: lock
-  Type:          spinlock
-  File:          lib9p.c:78
-  Priority:      P3-Low
-  Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          tty.c:12
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
-  File:          exo_impl.c:87
+  File:          exo_impl.c:88
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
-  File:          lambda_cap.c:410
+  File:          lib9p.c:78
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
-
-Lock: lock
-  Type:          spinlock
-  File:          sync/rcu.c:7
-  Priority:      P3-Low
-  Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          drivers/ioapic.c:107
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
-
-Lock: lock
-  Type:          sleeplock
-  File:          buf.h:7
-  Priority:      P3-Low
-  Recommended:   sleeplock (modernized in Phase 6)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
-  File:          endpoint.h:6
+  File:          sync/rcu.c:7
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
-
-Lock: lock
-  Type:          spinlock
-  File:          modern_locks.h:45
-  Priority:      P3-Low
-  Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
-
-Lock: lock
-  Type:          spinlock
-  File:          zone.h:28
-  Priority:      P3-Low
-  Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          lambda_cap.h:34
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
+
+Lock: lock
+  Type:          spinlock
+  File:          modern_locks.h:45
+  Priority:      P3-Low
+  Recommended:   qspinlock
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
+
+Lock: lock
+  Type:          spinlock
+  File:          endpoint.h:6
+  Priority:      P3-Low
+  Recommended:   qspinlock
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
+
+Lock: lock
+  Type:          spinlock
+  File:          zone.h:28
+  Priority:      P3-Low
+  Recommended:   qspinlock
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
+
+Lock: lock
+  Type:          sleeplock
+  File:          buf.h:7
+  Priority:      P3-Low
+  Recommended:   sleeplock (modernized in Phase 6)
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          arbitrate.h:20
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          spinlock
   File:          resurrection/reincarnation_server.h:114
   Priority:      P3-Low
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: streams_lock
   Type:          spinlock
@@ -590,28 +597,17 @@ Lock: stress_token
     - sync/test_lwkt_token.c:733 (release)
 
 Lock: tickslock
-  Type:          spinlock
+  Type:          qspinlock
   File:          sys/trap.c:22
   Priority:      P3-Low
-  Recommended:   qspinlock
+  Recommended:   qspinlock (already modern)
   Init sites:    1
-    - sys/trap.c:37 (initlock)
+    - sys/trap.c:37 (qspin_init)
   Usage sites:   7
-    - sys/trap.c:67 (acquire)
-    - sys/trap.c:70 (release)
-    - sys/sysproc.c:68 (acquire)
+    - sys/sysproc.c:70 (qspin_lock)
+    - sys/sysproc.c:88 (qspin_lock)
+    - sys/sysproc.c:74 (qspin_unlock)
     ... and 4 more
-
-Lock: token
-  Type:          lwkt_token
-  File:          sync/bench_lwkt_token.c:338
-  Priority:      P3-Low
-  Recommended:   lwkt_token (already modern)
-  Usage sites:   40
-    - sync/bench_lwkt_token.c:343 (acquire)
-    - sync/bench_lwkt_token.c:352 (acquire)
-    - sync/bench_lwkt_token.c:375 (acquire)
-    ... and 37 more
 
 Lock: token
   Type:          lwkt_token
@@ -619,20 +615,25 @@ Lock: token
   Priority:      P3-Low
   Recommended:   lwkt_token (already modern)
   Usage sites:   40
-    - sync/bench_lwkt_token.c:343 (acquire)
-    - sync/bench_lwkt_token.c:352 (acquire)
-    - sync/bench_lwkt_token.c:375 (acquire)
+    - sync/test_lwkt_token.c:472 (acquire)
+    - sync/test_lwkt_token.c:496 (acquire)
+    - sync/test_lwkt_token.c:501 (acquire)
+    ... and 37 more
+
+Lock: token
+  Type:          lwkt_token
+  File:          sync/bench_lwkt_token.c:338
+  Priority:      P3-Low
+  Recommended:   lwkt_token (already modern)
+  Usage sites:   40
+    - sync/test_lwkt_token.c:472 (acquire)
+    - sync/test_lwkt_token.c:496 (acquire)
+    - sync/test_lwkt_token.c:501 (acquire)
     ... and 37 more
 
 Lock: token_pool
   Type:          lwkt_token
-  File:          sync/lwkt_token.c:66
-  Priority:      P3-Low
-  Recommended:   lwkt_token (already modern)
-
-Lock: token_pool
-  Type:          lwkt_token
-  File:          sync/bench_lwkt_token.c:123
+  File:          sync/lwkt_token.c:62
   Priority:      P3-Low
   Recommended:   lwkt_token (already modern)
 
@@ -642,16 +643,11 @@ Lock: token_pool
   Priority:      P3-Low
   Recommended:   lwkt_token (already modern)
 
-Lock: tokens
+Lock: token_pool
   Type:          lwkt_token
-  File:          sync/bench_lwkt_token.c:569
+  File:          sync/bench_lwkt_token.c:123
   Priority:      P3-Low
   Recommended:   lwkt_token (already modern)
-  Usage sites:   5
-    - sync/bench_lwkt_token.c:580 (acquire)
-    - sync/bench_lwkt_token.c:592 (acquire)
-    - sync/test_lwkt_token.c:558 (acquire)
-    ... and 2 more
 
 Lock: tokens
   Type:          lwkt_token
@@ -659,9 +655,20 @@ Lock: tokens
   Priority:      P3-Low
   Recommended:   lwkt_token (already modern)
   Usage sites:   5
-    - sync/bench_lwkt_token.c:580 (acquire)
-    - sync/bench_lwkt_token.c:592 (acquire)
     - sync/test_lwkt_token.c:558 (acquire)
+    - sync/test_lwkt_token.c:618 (acquire)
+    - sync/test_lwkt_token.c:568 (release)
+    ... and 2 more
+
+Lock: tokens
+  Type:          lwkt_token
+  File:          sync/bench_lwkt_token.c:569
+  Priority:      P3-Low
+  Recommended:   lwkt_token (already modern)
+  Usage sites:   5
+    - sync/test_lwkt_token.c:558 (acquire)
+    - sync/test_lwkt_token.c:618 (acquire)
+    - sync/test_lwkt_token.c:568 (release)
     ... and 2 more
 
 Lock: zone_lock
@@ -683,29 +690,29 @@ Subsystem: SCHED (3 locks)
 ================================================================================
 
 Lock: beatty_lock
-  Type:          spinlock
-  File:          sched/beatty_sched.c:9
+  Type:          qspinlock
+  File:          sched/beatty_sched.c:10
   Priority:      P0-Critical
-  Recommended:   qspinlock
+  Recommended:   qspinlock (already modern)
   Init sites:    1
-    - sched/beatty_sched.c:74 (initlock)
+    - sched/beatty_sched.c:76 (qspin_init)
   Usage sites:   7
-    - sched/beatty_sched.c:42 (acquire)
-    - sched/beatty_sched.c:53 (acquire)
-    - sched/beatty_sched.c:130 (acquire)
+    - sched/beatty_sched.c:43 (qspin_lock)
+    - sched/beatty_sched.c:54 (qspin_lock)
+    - sched/beatty_sched.c:132 (qspin_lock)
     ... and 4 more
 
 Lock: dag_lock
-  Type:          spinlock
+  Type:          qspinlock
   File:          sched/dag_sched.c:28
   Priority:      P0-Critical
-  Recommended:   qspinlock
+  Recommended:   qspinlock (already modern)
   Init sites:    1
-    - sched/dag_sched.c:222 (initlock)
+    - sched/dag_sched.c:222 (qspin_init)
   Usage sites:   20
-    - sched/dag_sched.c:92 (acquire)
-    - sched/dag_sched.c:128 (acquire)
-    - sched/dag_sched.c:143 (acquire)
+    - sched/dag_sched.c:92 (qspin_lock)
+    - sched/dag_sched.c:128 (qspin_lock)
+    - sched/dag_sched.c:143 (qspin_lock)
     ... and 17 more
 
 Lock: lock
@@ -713,32 +720,32 @@ Lock: lock
   File:          proc.h:93
   Priority:      P0-Critical
   Recommended:   qspinlock
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 
 ================================================================================
-Subsystem: SYNC (6 locks)
+Subsystem: SYNC (12 locks)
 ================================================================================
 
 Lock: lk
-  Type:          spinlock
-  File:          rspinlock.h:5
+  Type:          sleeplock
+  File:          test_sleeplock.c:29
   Priority:      P3-Infrastructure
-  Recommended:   qspinlock
-  Init sites:    4
-    - sync/sleeplock.c:19 (qspin_init)
-    - sync/legacy/rspinlock.c:22 (initlock)
-    - test_spinlock.h:30 (initlock)
-    ... and 1 more
+  Recommended:   sleeplock (modernized in Phase 6)
+  Init sites:    11
+    - test_sleeplock.c:30 (initsleeplock)
+    - test_sleeplock.c:46 (initsleeplock)
+    - test_sleeplock.c:47 (initsleeplock)
+    ... and 8 more
   Usage sites:   10
     - sync/sleeplock.c:41 (qspin_lock)
     - sync/sleeplock.c:62 (qspin_lock)
@@ -746,15 +753,15 @@ Lock: lk
     ... and 7 more
 
 Lock: lk
-  Type:          qspinlock
-  File:          sleeplock.h:6
+  Type:          spinlock
+  File:          rspinlock.h:5
   Priority:      P3-Infrastructure
-  Recommended:   qspinlock (already modern)
-  Init sites:    4
-    - sync/sleeplock.c:19 (qspin_init)
-    - sync/legacy/rspinlock.c:22 (initlock)
-    - test_spinlock.h:30 (initlock)
-    ... and 1 more
+  Recommended:   qspinlock
+  Init sites:    11
+    - test_sleeplock.c:30 (initsleeplock)
+    - test_sleeplock.c:46 (initsleeplock)
+    - test_sleeplock.c:47 (initsleeplock)
+    ... and 8 more
   Usage sites:   10
     - sync/sleeplock.c:41 (qspin_lock)
     - sync/sleeplock.c:62 (qspin_lock)
@@ -766,48 +773,88 @@ Lock: lk
   File:          test_spinlock.h:28
   Priority:      P3-Infrastructure
   Recommended:   qspinlock
-  Init sites:    4
-    - sync/sleeplock.c:19 (qspin_init)
-    - sync/legacy/rspinlock.c:22 (initlock)
-    - test_spinlock.h:30 (initlock)
-    ... and 1 more
+  Init sites:    11
+    - test_sleeplock.c:30 (initsleeplock)
+    - test_sleeplock.c:46 (initsleeplock)
+    - test_sleeplock.c:47 (initsleeplock)
+    ... and 8 more
   Usage sites:   10
     - sync/sleeplock.c:41 (qspin_lock)
     - sync/sleeplock.c:62 (qspin_lock)
     - sync/sleeplock.c:81 (qspin_lock)
     ... and 7 more
 
+Lock: lk
+  Type:          qspinlock
+  File:          sleeplock.h:9
+  Priority:      P3-Infrastructure
+  Recommended:   qspinlock (already modern)
+  Init sites:    11
+    - test_sleeplock.c:30 (initsleeplock)
+    - test_sleeplock.c:46 (initsleeplock)
+    - test_sleeplock.c:47 (initsleeplock)
+    ... and 8 more
+  Usage sites:   10
+    - sync/sleeplock.c:41 (qspin_lock)
+    - sync/sleeplock.c:62 (qspin_lock)
+    - sync/sleeplock.c:81 (qspin_lock)
+    ... and 7 more
+
+Lock: lk1
+  Type:          sleeplock
+  File:          test_sleeplock.c:44
+  Priority:      P3-Infrastructure
+  Recommended:   sleeplock (modernized in Phase 6)
+  Init sites:    1
+    - test_sleeplock.c:46 (initsleeplock)
+
+Lock: lk_max
+  Type:          sleeplock
+  File:          test_sleeplock.c:73
+  Priority:      P3-Infrastructure
+  Recommended:   sleeplock (modernized in Phase 6)
+  Init sites:    1
+    - test_sleeplock.c:74 (initsleeplock)
+
+Lock: lk_zero
+  Type:          sleeplock
+  File:          test_sleeplock.c:67
+  Priority:      P3-Infrastructure
+  Recommended:   sleeplock (modernized in Phase 6)
+  Init sites:    1
+    - test_sleeplock.c:68 (initsleeplock)
+
 Lock: lock
   Type:          qspinlock
   File:          sync/bench_qspinlock.c:361
   Priority:      P3-Infrastructure
   Recommended:   qspinlock (already modern)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock
   Type:          qspinlock
   File:          sync/test_qspinlock.c:370
   Priority:      P3-Infrastructure
   Recommended:   qspinlock (already modern)
-  Init sites:    53
-    - arbitrate.c:96 (initlock)
-    - service.c:30 (initlock)
-    - irq.c:27 (initlock)
-    ... and 50 more
-  Usage sites:   467
-    - arbitrate.c:116 (acquire)
-    - arbitrate.c:134 (release)
-    - arbitrate.c:142 (release)
-    ... and 464 more
+  Init sites:    58
+    - lambda_cap.c:74 (initlock)
+    - lambda_cap.c:421 (initlock)
+    - lambda_cap.c:1116 (initlock)
+    ... and 55 more
+  Usage sites:   445
+    - lambda_cap.c:122 (acquire)
+    - lambda_cap.c:162 (acquire)
+    - lambda_cap.c:221 (acquire)
+    ... and 442 more
 
 Lock: lock1
   Type:          qspinlock
@@ -820,6 +867,23 @@ Lock: lock1
     - sync/test_qspinlock.c:532 (qspin_lock)
     - sync/test_qspinlock.c:545 (qspin_unlock)
 
+Lock: locks
+  Type:          sleeplock
+  File:          test_sleeplock.c:84
+  Priority:      P3-Infrastructure
+  Recommended:   sleeplock (modernized in Phase 6)
+  Init sites:    6
+    - test_sleeplock.c:96 (initsleeplock)
+    - test_sleeplock.c:147 (initsleeplock)
+    - test_sleeplock.c:176 (initsleeplock)
+    ... and 3 more
+
+Lock: qspinlock_t
+  Type:          qspinlock
+  File:          sync/qspinlock.h:29
+  Priority:      P3-Infrastructure
+  Recommended:   qspinlock (already modern)
+
 ================================================================================
 MIGRATION RECOMMENDATIONS
 ================================================================================
@@ -827,37 +891,7 @@ MIGRATION RECOMMENDATIONS
 Phase 7.2 - P1 Filesystem Locks (Immediate Priority):
 --------------------------------------------------------------------------------
 
-idelock (fs/ide.c):
-  Current:      spinlock
-  Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
-  Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM
-
-lock (fs/fs.c):
-  Current:      spinlock
-  Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
-  Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM
-
-lock (fs/bio.c):
-  Current:      spinlock
-  Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
-  Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM
-
-rlock (fs/bio.c):
-  Current:      spinlock
-  Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
-  Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM
-
-lock (fs/log.c):
-  Current:      spinlock
-  Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
-  Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM
-
 sched_lock (defs.h):
-  Current:      spinlock
-  Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
-  Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM
-
-tickslock (defs.h):
   Current:      spinlock
   Recommended:  qspinlock (cache/metadata) or sleeplock (I/O)
   Migration:    qspinlock at LOCK_LEVEL_FILESYSTEM

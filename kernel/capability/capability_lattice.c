@@ -182,10 +182,10 @@ static uint8_t cap_hmac_key[32];
  * lattice_join - Compute least upper bound (supremum)
  * @a: First capability rights
  * @b: Second capability rights
- * 
+ *
  * Returns: Union of rights (lattice join)
  */
-static inline cap_rights_t lattice_join(cap_rights_t a, cap_rights_t b) {
+__attribute__((unused)) static inline cap_rights_t lattice_join(cap_rights_t a, cap_rights_t b) {
     return a | b;
 }
 
@@ -193,10 +193,10 @@ static inline cap_rights_t lattice_join(cap_rights_t a, cap_rights_t b) {
  * lattice_meet - Compute greatest lower bound (infimum)
  * @a: First capability rights
  * @b: Second capability rights
- * 
+ *
  * Returns: Intersection of rights (lattice meet)
  */
-static inline cap_rights_t lattice_meet(cap_rights_t a, cap_rights_t b) {
+__attribute__((unused)) static inline cap_rights_t lattice_meet(cap_rights_t a, cap_rights_t b) {
     return a & b;
 }
 
@@ -204,7 +204,7 @@ static inline cap_rights_t lattice_meet(cap_rights_t a, cap_rights_t b) {
  * lattice_dominates - Check if a dominates b in partial order
  * @a: First capability rights
  * @b: Second capability rights
- * 
+ *
  * Returns: true if a ≥ b in the lattice
  */
 static inline bool lattice_dominates(cap_rights_t a, cap_rights_t b) {
@@ -215,10 +215,10 @@ static inline bool lattice_dominates(cap_rights_t a, cap_rights_t b) {
  * lattice_comparable - Check if two elements are comparable
  * @a: First capability rights
  * @b: Second capability rights
- * 
+ *
  * Returns: true if a and b are comparable in the partial order
  */
-static inline bool lattice_comparable(cap_rights_t a, cap_rights_t b) {
+__attribute__((unused)) static inline bool lattice_comparable(cap_rights_t a, cap_rights_t b) {
     return lattice_dominates(a, b) || lattice_dominates(b, a);
 }
 
@@ -744,13 +744,13 @@ void lattice_remove_capability(uint64_t cap_id) {
                                                            memory_order_relaxed);
             atomic_store_explicit(prev, next, memory_order_release);
             lattice_node_free(node);
-            
-            atomic_fetch_sub_explicit(&capability_lattice.data.total_nodes, 1, 
+
+            atomic_fetch_sub_explicit(&capability_lattice.data.total_nodes, 1,
                                      memory_order_relaxed);
             break;
         }
-        
-        prev = (cap_lattice_node_t**)&node->data.next;
+
+        prev = (_Atomic(cap_lattice_node_t *) *)&node->data.next;
         node = atomic_load_explicit(&node->data.next, memory_order_acquire);
     }
 }

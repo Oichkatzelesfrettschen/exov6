@@ -7,7 +7,7 @@
 #include "defs.h"
 #include "cap.h"
 #define EXO_KERNEL
-#include "exokernel.h"
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 #include <errno.h>
 
 /** Allocate a Hypervisor capability (stub). */

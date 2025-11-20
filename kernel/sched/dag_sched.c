@@ -278,7 +278,7 @@ static bool path_exists(struct dag_node *src, struct dag_node *dst) {
 }
 
 static bool creates_cycle(const struct dag_node *n) {
-  for (size_t i = 0; i < n->ndeps; ++i) {
+  for (size_t i = 0; i < (size_t)n->ndeps; ++i) {
     if (path_exists(n->deps[i], (struct dag_node *)n)) {
       return true;
     }

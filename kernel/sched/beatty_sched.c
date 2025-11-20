@@ -68,7 +68,8 @@ static void beatty_yield(void) {
   qspin_unlock(&beatty_lock);
 
   if (next.pa)
-    exo_yield_to(next);
+    /* Yield operation in scheduler context; errors are not critical */
+    (void)exo_yield_to(next);
 }
 
 void beatty_sched_init(void) {

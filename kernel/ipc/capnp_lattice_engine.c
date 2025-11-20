@@ -14,7 +14,7 @@
 #include "capnp_helpers.h"
 #include "lattice_ipc.h"
 #include "exo.h"
-#include "exokernel.h"  /* For EXO_RIGHT_CTL */
+/* exo.h included via defs.h/proc.h (kernel API, not userspace exokernel.h) */
 #include "octonion.h"
 #include <stdatomic.h>
 #include <string.h>
@@ -128,7 +128,7 @@ capnp_pointer_t exo_capnp_make_secure_pointer(uint32_t offset, uint16_t data_wor
     if (arena->secure_chan) {
         // Generate lattice signature for pointer integrity
         lattice_sig_t sig;
-        if (lattice_sign(&arena->secure_chan->priv, &ptr.raw, sizeof(uint64_t), &sig) == 0) {
+        if (lattice_sign(arena->secure_chan, &ptr.raw, sizeof(uint64_t), &sig) == 0) {
             // Signature successful - pointer is now cryptographically protected
         }
     }
@@ -198,13 +198,15 @@ int exo_capnp_send_message(exo_capnp_arena_t *src_arena,
 int exo_capnp_lattice_init(void) {
     // Initialize global state
     atomic_store(&g_arena_count, 0);
-    
+
     // Zero out arena registry
     memset(g_arenas, 0, sizeof(g_arenas));
-    
+
     // Initialize lattice cryptography
-    lattice_crypto_init();
-    
+    if (lattice_crypto_init() != 0) {
+        return -1;
+    }
+
     return 0;
 }
 

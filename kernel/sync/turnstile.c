@@ -32,7 +32,7 @@
  * Avoids memory allocation in critical path
  */
 static struct turnstile turnstile_pool[TURNSTILE_POOL_SIZE];
-static _Atomic uint32_t turnstile_pool_bitmap = 0;  // Bitmap of free slots
+static _Atomic uint32_t turnstile_pool_bitmap __attribute__((unused)) = 0;  // Bitmap of free slots
 
 /**
  * Turnstile memory pool initialization
@@ -79,7 +79,7 @@ void thread_queue_init(struct thread_queue *q) {
 void thread_queue_push(struct thread_queue *q, struct thread *thread, uint32_t priority) {
     // Allocate queue node
     // Note: In production, this should come from a pre-allocated pool
-    struct thread_queue_node *node = kalloc();  // Simplified - should be from pool
+    struct thread_queue_node *node = (struct thread_queue_node *)kalloc();  // Simplified - should be from pool
     if (!node) {
         panic("thread_queue_push: out of memory");
     }
@@ -131,7 +131,7 @@ struct thread *thread_queue_pop(struct thread_queue *q) {
     q->count--;
 
     // Free node
-    kfree(node);  // Simplified - should return to pool
+    kfree((char *)node);  // Simplified - should return to pool
 
     // Recalculate max priority if needed
     if (q->count == 0) {
@@ -188,7 +188,7 @@ struct turnstile *turnstile_alloc(struct adaptive_mutex *mutex) {
     // Pool exhausted - allocate dynamically (fallback)
     cprintf("WARNING: turnstile pool exhausted, allocating dynamically\n");
 
-    struct turnstile *ts = kalloc();
+    struct turnstile *ts = (struct turnstile *)kalloc();
     if (!ts) {
         panic("turnstile_alloc: out of memory");
     }
@@ -222,7 +222,7 @@ void turnstile_free(struct turnstile *ts) {
         atomic_store_explicit(&ts->count, 0, memory_order_relaxed);
     } else {
         // Dynamically allocated - free it
-        kfree(ts);
+        kfree((char *)ts);
     }
 }
 
