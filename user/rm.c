@@ -23,8 +23,8 @@ void rm(char *path, int recursive) {
 
         DIR *dir = opendir(path);
         if (!dir) {
-             printf(2, "rm: cannot open directory %s\n", path);
-             return;
+            printf(2, "rm: cannot open directory %s\n", path);
+            return;
         }
         struct dirent *entry;
         char buf[512];
