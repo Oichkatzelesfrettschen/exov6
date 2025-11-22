@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-printf.a "CMakeFiles/phoenix-printf.dir/printf.c.o"
-/usr/bin/ranlib libphoenix-printf.a

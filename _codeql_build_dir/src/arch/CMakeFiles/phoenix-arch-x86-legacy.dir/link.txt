@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-arch-x86-legacy.a "CMakeFiles/phoenix-arch-x86-legacy.dir/x86/legacy/simd_mmx_cap.c.o"
-/usr/bin/ranlib libphoenix-arch-x86-legacy.a

@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-msg-router.a "CMakeFiles/phoenix-libos-msg-router.dir/msg_router.c.o"
-/usr/bin/ranlib libphoenix-libos-msg-router.a
