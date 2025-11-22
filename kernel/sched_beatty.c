@@ -178,6 +178,7 @@ dag_task_t *beatty_select(
     /* Update statistics */
     sched->selections[selected->original_index]++;
     sched->total_selections++;
+    selected->task->schedule_count++;
 
     return selected->task;
 }
@@ -256,18 +257,19 @@ void beatty_print_stats(
     }
 
     printf("\n=== Beatty Scheduler Statistics ===\n");
-    printf("Total selections: %llu\n", sched->total_selections);
-    printf("Current counter: %llu\n", sched->counter);
+    printf("Total selections: %llu\n", (unsigned long long)sched->total_selections);
+    printf("Current counter: %llu\n", (unsigned long long)sched->counter);
     printf("Alpha (multiplier): %.3f\n\n", (double)sched->alpha / 65536.0);
 
-    printf("%-4s %-20s %-12s %-12s %-10s\n",
-           "ID", "Name", "Priority", "Selections", "Percentage");
-    printf("----------------------------------------------------------------\n");
+    printf("%-4s %-20s %-10s %-10s %-8s %-10s %-10s\n",
+           "ID", "Name", "Priority", "Selects", "%", "RunTime", "AvgLat");
+    printf("--------------------------------------------------------------------------------\n");
 
     for (uint16_t i = 0; i < dag->num_tasks; i++) {
         uint64_t selections = sched->selections[i];
+        const dag_task_t *t = &dag->tasks[i];
 
-        if (sched->priorities[i] == 0 && selections == 0) {
+        if (sched->priorities[i] == 0 && selections == 0 && t->run_time_ticks == 0) {
             continue; /* Skip tasks with no activity */
         }
 
@@ -276,12 +278,19 @@ void beatty_print_stats(
             percentage = (selections * 100.0) / sched->total_selections;
         }
 
-        printf("%-4u %-20s %-12.2f %-12llu %.2f%%\n",
+        uint64_t avg_latency = 0;
+        if (t->schedule_count > 0) {
+            avg_latency = t->total_latency_ticks / t->schedule_count;
+        }
+
+        printf("%-4u %-20s %-10.2f %-10llu %-7.2f %-10llu %-10llu\n",
                i,
-               dag->tasks[i].name,
+               t->name,
                (double)sched->priorities[i] / 65536.0,
-               selections,
-               percentage);
+               (unsigned long long)selections,
+               percentage,
+               (unsigned long long)t->run_time_ticks,
+               (unsigned long long)avg_latency);
     }
 
     printf("\n");

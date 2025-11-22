@@ -26,7 +26,7 @@ The system enforces three primary security boundaries:
 1.  **Kernel ↔ LibOS (Ring 0/3 Boundary)**
     * **Mechanism:** System Calls (`syscall`) with strict capability validation.
     * **Enforcement:** All syscalls validate capability rights before execution. Capabilities include type information to prevent "confused deputy" attacks.
-    
+
 2.  **Process ↔ Process**
     * **Mechanism:** Hardware memory protection (paging) and Capability access control.
     * **Enforcement:** Processes cannot access each other's memory or handles unless explicitly shared via authenticated IPC.

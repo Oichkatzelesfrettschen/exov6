@@ -116,6 +116,7 @@ q16_t q16_dot_vec4(const q16_t *a, const q16_t *b);
 
 /* Convert from float (compile-time only) */
 #define Q16_FROM_FLOAT(f)   ((q16_t)((f) * Q16_ONE))
+#define Q16(f)              Q16_FROM_FLOAT(f)
 
 /* Convert to float (for debugging only - avoid in kernel) */
 #define Q16_TO_FLOAT(x)     ((float)(x) / Q16_ONE)

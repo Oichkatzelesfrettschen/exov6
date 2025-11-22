@@ -396,6 +396,63 @@ static int test_beatty_determinism(void)
     return 0;
 }
 
+/**
+ * Stress Test: Beatty Long Run
+ */
+static int test_beatty_stress(void)
+{
+    printf("\n[STRESS] Beatty Scheduler Long Run (100,000 cycles)\n");
+
+    beatty_scheduler_t sched;
+    beatty_init(&sched, BEATTY_GOLDEN_RATIO);
+
+    dag_pdac_t dag;
+    resource_vector_t quota = {.e0 = Q16(100.0), .e1 = Q16(1024.0)};
+    pdac_dag_init(&dag, quota);
+
+    /* Create 10 tasks */
+    resource_vector_t res = {.e0 = Q16(1.0), .e1 = Q16(10.0)};
+    for(int i=0; i<10; i++) {
+        char name[32];
+        snprintf(name, sizeof(name), "StressTask %d", i);
+        int id = pdac_dag_add_task(&dag, name, res);
+        dag.tasks[id].state = TASK_STATE_READY;
+    }
+
+    beatty_recompute_all_priorities(&sched, &dag);
+
+    /* Run 100,000 iterations */
+    for(int i=0; i<100000; i++) {
+        dag_task_t *task = beatty_select(&sched, &dag);
+        if (task) {
+             /* Mock run time update (since we added the field) */
+             task->run_time_ticks++;
+        }
+    }
+
+    /* Check distribution */
+    uint64_t min_sel = 1000000, max_sel = 0;
+    for(int i=0; i<10; i++) {
+        uint64_t sel = sched.selections[i];
+        if (sel < min_sel) min_sel = sel;
+        if (sel > max_sel) max_sel = sel;
+    }
+
+    printf("  Min selections: %llu\n", min_sel);
+    printf("  Max selections: %llu\n", max_sel);
+    printf("  Spread: %llu (%.2f%%)\n", max_sel - min_sel,
+           (double)(max_sel - min_sel) * 100.0 / (100000.0/10.0));
+
+    /* With Beatty, spread should be small */
+    TEST_ASSERT(min_sel > 9500, "No starvation (expected ~10000)");
+    TEST_ASSERT(max_sel < 10500, "No dominance (expected ~10000)");
+
+    /* Print stats using the new telemetry-aware function */
+    beatty_print_stats(&sched, &dag);
+
+    return 0;
+}
+
 /*******************************************************************************
  * HYBRID SCHEDULER TESTS
  ******************************************************************************/
@@ -750,6 +807,7 @@ void run_all_scheduler_tests(void)
     RUN_TEST(test_beatty_sequence);
     RUN_TEST(test_beatty_select);
     RUN_TEST(test_beatty_determinism);
+    RUN_TEST(test_beatty_stress);
 
     printf("\n=== HYBRID SCHEDULER TESTS ===\n");
     RUN_TEST(test_hybrid_init);
