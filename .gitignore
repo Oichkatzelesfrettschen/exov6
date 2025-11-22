@@ -1,48 +1,121 @@
-src-headers/fs 3.h
+# ------------------------------------------------------------------------------
+# Specific Project Headers (Generated)
+# ------------------------------------------------------------------------------
+src-headers/fs
 engine/kernel/user.h
+
+# ------------------------------------------------------------------------------
+# OS & Environment
+# ------------------------------------------------------------------------------
 .DS_Store
-# Build artifacts
+Thumbs.db
+.directory
+
+# ------------------------------------------------------------------------------
+# Editors & IDEs
+# ------------------------------------------------------------------------------
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+
+# Vim / Emacs
+*.swp
+*.swo
+*~
+\#*\#
+
+# ------------------------------------------------------------------------------
+# Build Artifacts (C/C++/Assembly)
+# ------------------------------------------------------------------------------
 build/
-*.o
-*.a
-*.so
-
-# Python caches
-__pycache__/
-*.pyc
-
-# Node packages
-node_modules/
-
-# Documentation builds
-/docs/sphinx/build/
-/docs/build/
-
-# Build directories
 build*/
 builddir/
 _build/
-_build-cmake/
-_build-test/
-_build-audit/
-_codeql_build_dir/
+_build-*/
 test-build/
+
+# Objects and Libraries
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.lib
+
+# Linker & Dependency info
+*.d
+*.map
+*.elf
+*.bin
+*.hex
+
+# Clang tooling
+compile_commands.json
+.cache/
+
+# ------------------------------------------------------------------------------
+# Languages (Python / Node)
+# ------------------------------------------------------------------------------
+__pycache__/
+*.pyc
+node_modules/
+
+# ------------------------------------------------------------------------------
+# Documentation
+# ------------------------------------------------------------------------------
+/docs/sphinx/build/
+/docs/build/
+html/
+latex/
+
+# ------------------------------------------------------------------------------
+# CodeQL (Security Analysis)
+# ------------------------------------------------------------------------------
+# Resolved conflict: Using wildcard to catch all codeql variations
+_codeql*
+.codeql/
+codeql-database/
+*.sarif
+
+# Specific CodeQL directories (redundant due to wildcard, but kept for reference)
 _codeql_build_dir/
 _codeql_detected_source_root
 
-# Local caches
-.cache/
+# ------------------------------------------------------------------------------
+# Testing & Isolation
+# ------------------------------------------------------------------------------
 openposixtestsuite/
 test_isolation/
 
-# CodeQL artifacts
-_codeql*/
+# ------------------------------------------------------------------------------
+# Kernel Subsystem Binaries & Benchmarks
+# ------------------------------------------------------------------------------
+# Pattern match all tests/benchmarks in sync/ instead of listing individually
+kernel/sync/test_*
+kernel/sync/bench_*
 
-# Lock subsystem test binaries
+# Specific binaries (kept for backward compatibility)
 kernel/sync/test_qspinlock
 kernel/sync/bench_qspinlock
 kernel/sync/test_lwkt_token
 kernel/sync/bench_lwkt_token
 kernel/sync/test_dag
 kernel/sync/bench_dag
-_codeql_build_dir/
+
+# ------------------------------------------------------------------------------
+# Debugging
+# ------------------------------------------------------------------------------
+*.gdb
+.gdb_history
+core
+core.*
+vgcore.*

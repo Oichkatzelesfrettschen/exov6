@@ -117,12 +117,11 @@ void arch_barrier_write(void) {
 // ----------------------------------------------------------------------------
 
 uint32_t arch_cpu_id(void) {
-    uint32_t ebx;
-    uint32_t unused;
+    uint32_t eax_out, ebx, ecx_out, edx_out;
     // CPUID leaf 1 returns APIC ID in EBX[31:24]
     __asm__ volatile (
         "cpuid"
-        : "=a"(unused), "=b"(ebx), "=c"(unused), "=d"(unused)
+        : "=a"(eax_out), "=b"(ebx), "=c"(ecx_out), "=d"(edx_out)
         : "a"(1)
         : "memory"
     );
