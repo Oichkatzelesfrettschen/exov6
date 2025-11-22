@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-nn.a "CMakeFiles/phoenix-libos-nn.dir/aether_nn.c.o"
+/usr/bin/ranlib libphoenix-libos-nn.a
