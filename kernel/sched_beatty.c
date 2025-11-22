@@ -30,7 +30,10 @@ typedef struct ready_task {
 
 /**
  * Compare function for qsort (sort by priority descending)
+ * Note: Currently unused as we use insertion sort for kernel compatibility,
+ * but kept for potential userspace qsort usage.
  */
+__attribute__((unused))
 static int compare_priorities(const void *a, const void *b)
 {
     const ready_task_t *ta = (const ready_task_t *)a;

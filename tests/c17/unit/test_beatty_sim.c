@@ -5,6 +5,7 @@
 
 /* Include kernel source to test static functions and internals */
 /* We need to ensure include paths are set correctly in CMake */
+#include "../../../kernel/dag_pdac.c"
 #include "../../../kernel/sched_beatty.c"
 
 /* Simple test framework */
@@ -55,8 +56,8 @@ int test_beatty_fairness_sim(void) {
     /* 2. Simulate Run Loop */
     int total_ticks = 10000;
 
-    /* Current time tracking if needed, though we just increment ticks */
-    // uint64_t current_time = 0;
+    /* Current time tracking */
+    uint64_t current_time = 0;
 
     for (int tick = 0; tick < total_ticks; tick++) {
         dag_task_t *selected = beatty_select(&sched, &dag);
@@ -65,17 +66,15 @@ int test_beatty_fairness_sim(void) {
         /* Simulate execution */
         selected->run_time_ticks++;
 
-        /* Update Latency for ALL ready tasks */
-        for(int i=0; i<5; i++) {
-            dag_task_t *t = &dag.tasks[i];
-            if (t->state == TASK_STATE_READY) {
-                if (t != selected) {
-                    /* Task was ready but not selected -> Latency increases */
-                     t->total_latency_ticks++;
-                }
-            }
-        }
-        // current_time++;
+        /* Compute latency: time from when task became ready until selected */
+        uint64_t latency = current_time - selected->last_runnable_time;
+        selected->total_latency_ticks += latency;
+        
+        /* Task completes execution and becomes ready again immediately */
+        /* Set last_runnable_time to current time + 1 (when it becomes ready for next cycle) */
+        selected->last_runnable_time = current_time + 1;
+        
+        current_time++;
     }
 
     /* 3. Analyze Results */
