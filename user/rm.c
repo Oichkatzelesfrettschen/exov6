@@ -75,6 +75,12 @@ int main(int argc, char *argv[]) {
     int recursive = 0;
     int start_arg = 1;
 
+    // Check if we have any arguments at all
+    if (argc < 2) {
+        printf(2, "Usage: rm [-r] files...\n");
+        exit(0);
+    }
+
     // Check for -r flag
     for (i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {

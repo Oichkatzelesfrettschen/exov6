@@ -129,6 +129,7 @@ static int
 move_file(const char *src, const char *dst)
 {
   struct stat src_st, dst_st;
+  int dst_exists;
   
   // Check if source exists
   if(stat(src, &src_st) < 0) {
@@ -136,8 +137,18 @@ move_file(const char *src, const char *dst)
     return -1;
   }
   
-  // Check if destination exists
-  if(stat(dst, &dst_st) >= 0) {
+  // Check if destination exists and get its stat
+  dst_exists = (stat(dst, &dst_st) >= 0);
+  
+  // Check if source and destination refer to the same path
+  // This prevents the file from being deleted when doing "mv foo foo"
+  if(dst_exists && src_st.dev == dst_st.dev && src_st.ino == dst_st.ino) {
+    // Same file, nothing to do
+    return 0;
+  }
+  
+  // If destination exists, handle it
+  if(dst_exists) {
     // If destination is a directory, move source into it
     if(dst_st.type == T_DIR) {
       char new_dst[512];
