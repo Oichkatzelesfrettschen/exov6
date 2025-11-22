@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-service.a "CMakeFiles/phoenix-libos-service.dir/service.c.o"
+/usr/bin/ranlib libphoenix-libos-service.a

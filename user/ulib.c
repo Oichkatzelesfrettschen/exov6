@@ -81,3 +81,17 @@ int atoi(const char *s) {
 void *memmove(void *vdst, const void *vsrc, size_t n) {
   return __builtin_memmove(vdst, vsrc, n);
 }
+
+char *strcat(char *dest, const char *src) {
+    char *p = dest + strlen(dest);
+    while ((*p++ = *src++));
+    return dest;
+}
+
+char *strrchr(const char *s, int c) {
+    const char *res = 0;
+    do {
+        if (*s == c) res = s;
+    } while (*s++);
+    return (char *)res;
+}

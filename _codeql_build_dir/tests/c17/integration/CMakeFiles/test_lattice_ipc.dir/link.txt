@@ -1,0 +1,1 @@
+/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang  -Wall -Werror -Wextra -Wno-unused-parameter -O2 -Xlinker --dependency-file=CMakeFiles/test_lattice_ipc.dir/link.d CMakeFiles/test_lattice_ipc.dir/test_lattice_ipc.c.o -o test_lattice_ipc  ../libtest_framework.a -lpthread -lm
