@@ -22,6 +22,11 @@
 #define S_IFREG 0100000
 #endif
 
+// File type definitions
+#ifndef T_FILE
+#define T_FILE 2   // Regular file
+#endif
+
 // Stub file structure for minimal functionality
 static struct file dummy_files[32];
 static int next_file_idx = 0;
@@ -69,13 +74,12 @@ int filestat(struct file* f, struct stat* st) {
     (void)f;
     if (!st) return -1;
     
-    // Fill with dummy values
+    // Fill with dummy values - use custom struct stat fields
     st->dev = 1;
     st->ino = 1;
-    st->type = 1; // S_IFREG?
+    st->type = T_FILE;  // Regular file type
     st->nlink = 1;
     st->size = 0;
-    st->st_size = 0;
     
     return 0;
 }
