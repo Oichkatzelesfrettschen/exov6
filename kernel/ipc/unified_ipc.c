@@ -470,11 +470,11 @@ int fastipc_call(uint64_t endpoint_id, uint64_t regs[8], uint64_t result[8]) {
                 memory_order_acquire,
                 memory_order_relaxed)) {
         if (expected != 0) {
-             expected = 0;
-             hal_cpu_pause();
-             if (hal_read_timestamp() > timeout) {
-                 return -ETIMEDOUT;
-             }
+            expected = 0;
+            hal_cpu_pause();
+            if (hal_read_timestamp() > timeout) {
+                return -ETIMEDOUT;
+            }
         }
     }
 
