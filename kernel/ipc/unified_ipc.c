@@ -472,9 +472,9 @@ int fastipc_call(uint64_t endpoint_id, uint64_t regs[8], uint64_t result[8]) {
         if (expected != 0) {
             expected = 0;
             hal_cpu_pause();
-            if (hal_read_timestamp() > timeout) {
-                return -ETIMEDOUT;
-            }
+        }
+        if (hal_read_timestamp() > timeout) {
+            return -ETIMEDOUT;
         }
     }
 
