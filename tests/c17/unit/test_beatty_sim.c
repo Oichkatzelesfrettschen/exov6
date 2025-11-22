@@ -62,7 +62,11 @@ int test_beatty_fairness_sim(void) {
         TEST_ASSERT_MSG(selected != NULL, "Should select a task");
 
         /* Calculate latency: time from when task became READY until selected */
-        uint64_t latency = tick - selected->last_runnable_time;
+        /* Guard against underflow (should not happen in this simulation) */
+        uint64_t latency = 0;
+        if ((uint64_t)tick >= selected->last_runnable_time) {
+            latency = (uint64_t)tick - selected->last_runnable_time;
+        }
         selected->total_latency_ticks += latency;
 
         /* Simulate execution */
