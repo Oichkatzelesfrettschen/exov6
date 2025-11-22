@@ -85,7 +85,7 @@ void arch_tlb_flush_page(void* addr) {
 
 uint64_t arch_get_cycles(void) {
     uint32_t lo, hi;
-    __asm__ volatile ("rdtsc" : "=a"(lo), "=d"(hi));
+    __asm__ volatile ("rdtsc" : "=a"(lo), "=d"(hi) : : "memory");
     return ((uint64_t)hi << 32) | lo;
 }
 
