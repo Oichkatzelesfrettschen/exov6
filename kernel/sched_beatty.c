@@ -162,6 +162,23 @@ dag_task_t *beatty_select(
         return NULL;
     }
 
+    /* Step 1.5: Check for Real-Time tasks (Preemption) */
+    ready_task_t *best_rt = NULL;
+    for (int i = 0; i < num_ready; i++) {
+        if (ready_tasks[i].task->policy > 0) {
+            if (!best_rt || ready_tasks[i].priority > best_rt->priority) {
+                best_rt = &ready_tasks[i];
+            }
+        }
+    }
+
+    if (best_rt) {
+        sched->selections[best_rt->original_index]++;
+        sched->total_selections++;
+        best_rt->task->stats.schedule_count++;
+        return best_rt->task;
+    }
+
     /* Step 2: Sort by priority (descending) */
     sort_ready_tasks(ready_tasks, num_ready);
 

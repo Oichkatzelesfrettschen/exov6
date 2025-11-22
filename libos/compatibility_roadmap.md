@@ -1,59 +1,80 @@
-# LibOS Compatibility Roadmap: POSIX, BSD, and SVR4
+# LibOS Compatibility Roadmap: Linux, BSD, Containers, GPU, and RT
 
-This document outlines the long-term roadmap for achieving comprehensive compatibility with POSIX, BSD, and SVR4 operating system personalities within the FeuerBird LibOS.
+This document outlines the granular roadmap for achieving comprehensive compatibility with Linux binaries, BSD sockets, containerization, GPU offload, and Real-Time extensions within the Phoenix Exokernel LibOS.
 
-## 1. Introduction
+## 1. Linux Binary Compatibility Layer
 
-FeuerBird's exokernel design delegates most operating system functionalities to user-space Library Operating Systems (LibOSes). This roadmap details the phased approach to building a robust and feature-complete LibOS that can host applications designed for traditional Unix-like environments.
+**Goal**: Enable unmodified Linux ELF binaries to run on Phoenix LibOS.
 
-## 2. Scope and Challenges
+**Strategy**:
+*   **Syscall Translation**: Implement a userspace syscall dispatcher that intercepts x86_64 `syscall` instructions (via kernel upcall or binary rewriting) and maps Linux syscall numbers (RAX) to LibOS internal functions.
+*   **VDSO**: Provide a Virtual Dynamic Shared Object (VDSO) to accelerate `gettimeofday`, `clock_gettime`, and `getcpu`.
+*   **Procfs/Sysfs**: Emulate `/proc` and `/sys` file systems using a synthetic in-memory file system.
 
-Achieving full compatibility involves implementing a vast array of system calls, library functions, and environmental behaviors. Key challenges include:
+**Granular Tasks**:
+1.  [ ] Define Linux syscall numbers in `include/linux_compat.h`.
+2.  [ ] Implement `linux_syscall_dispatch` in `libos/posix/linux_abi.c`.
+3.  [ ] Implement `brk` and `mmap` with Linux flags compatibility.
+4.  [ ] Implement `arch_prctl` (FS/GS base setting) support.
+5.  [ ] Validate with statically linked "Hello World" Linux binary.
 
-- **System Call Emulation:** Translating POSIX/BSD/SVR4 system calls into sequences of exokernel primitives (capabilities, IPC, direct hardware access).
-- **Resource Management:** Implementing user-space file systems, process management (fork/exec), memory management (mmap, sbrk), and inter-process communication (pipes, sockets) on top of exokernel capabilities.
-- **Signal Handling:** Replicating complex signal semantics in user space, including signal delivery, masking, and handlers.
-- **Device Abstraction:** Providing generic device interfaces (e.g., character devices, block devices, network interfaces) that map to exokernel-exposed hardware resources.
-- **Concurrency and Synchronization:** Implementing user-space threading models and synchronization primitives.
-- **Locale and Internationalization:** Providing comprehensive locale support.
-- **Performance:** Ensuring that the user-space implementations do not introduce unacceptable overhead compared to monolithic kernel approaches.
+## 2. BSD Socket Implementation Completion
 
-## 3. High-Level Plan
+**Goal**: Full BSD Sockets API (socket, bind, connect, accept, listen, send, recv, poll/select).
 
-### Phase 1: Core POSIX (Current Focus)
+**Strategy**:
+*   **Unified IPC Backend**: Map socket operations to the kernel's "Unified IPC" (FastIPC/Shared Memory).
+*   **Userspace TCP/IP**: Integrate a lightweight userspace TCP/IP stack (e.g., lwIP or a custom Rust-based stack) running as a "Network Service" process.
+*   **Zero-Copy**: Use buffer passing capability for high-performance I/O.
 
-- **File System:** Implement a robust user-space file system (e.g., UFS-like) using exokernel disk block capabilities.
-- **Process Management:** Basic fork/exec, process lifecycle management, and PID mapping.
-- **Basic IPC:** Pipes and simple message queues built on exokernel IPC primitives.
-- **Memory Management:** Basic mmap/munmap and sbrk using page capabilities.
+**Granular Tasks**:
+1.  [ ] Create `libos/net/socket.c` to replace host wrappers.
+2.  [ ] Define `struct socket` and `struct sock` file descriptors.
+3.  [ ] Implement `AF_UNIX` using `exo_ipc` channels.
+4.  [ ] Implement `AF_INET` hooking into a virtual network interface.
+5.  [ ] Implement `epoll` simulation for event notification.
 
-### Phase 2: Advanced POSIX and BSD
+## 3. Container and Virtualization Support
 
-- **Advanced File System Features:** Permissions, extended attributes, journaling.
-- **Networking:** Full socket API implementation, including TCP/IP stack in user space.
-- **Signals:** Comprehensive signal handling, including signal sets, handlers, and inter-process signaling.
-- **Threading:** POSIX threads (pthreads) implementation.
-- **BSD Specifics:** Implementing BSD-specific system calls and library functions.
+**Goal**: Native support for Namespaces (PID, NET, MNT, IPC, UTS, USER) and Cgroups.
 
-### Phase 3: SVR4 and Full Feature Parity
+**Strategy**:
+*   **Namespaces**: Add `struct nsproxy` to the process Control Block (PCB) in LibOS.
+*   **Isolation**: Modify ID generation (getpid) and resource lookups (sockets, mounts) to be namespace-aware.
+*   **Cgroups**: Implement resource accounting (CPU time, Memory usage) in `sched_beatty.c` and memory allocators.
 
-- **SVR4 Specifics:** Implementing SVR4-specific system calls and behaviors.
-- **Advanced Device Drivers:** Implementing more complex user-space drivers for various hardware (e.g., advanced network cards, specialized peripherals).
-- **Performance Tuning:** Extensive profiling and optimization of all LibOS components to achieve near-native performance.
-- **Certification:** Pursuing formal POSIX/BSD/SVR4 certification if applicable.
+**Granular Tasks**:
+1.  [ ] Add `struct namespace` to `struct process` in `libos/process.h`.
+2.  [ ] Implement `unshare()` and `setns()` syscalls.
+3.  [ ] Virtualize `getpid()` to return namespace-relative PIDs.
+4.  [ ] Implement `chroot` and `pivot_root` equivalents.
 
-## 4. Directory Structure for LibOS Components
+## 4. GPU Computing Offload Framework
 
-To maintain modularity and clarity, the `libos/` directory will be organized as follows:
+**Goal**: A standardized API for submitting compute kernels to accelerators (Simulated or Passthrough).
 
-- `libos/posix/`: POSIX-specific syscall wrappers and library functions.
-- `libos/bsd/`: BSD-specific syscall wrappers and library functions.
-- `libos/svr4/`: SVR4-specific syscall wrappers and library functions.
-- `libos/fs/`: User-space file system implementation.
-- `libos/net/`: User-space networking stack.
-- `libos/proc/`: User-space process and thread management.
-- `libos/drivers/`: User-space device driver implementations.
-- `libos/crypto/`: Cryptographic libraries (e.g., for Lattice IPC).
-- `libos/util/`: Common utility functions.
+**Strategy**:
+*   **Command Queues**: Implement a ring-buffer based command submission interface (`ioctl` style).
+*   **Memory Sharing**: Use `exo_bind_page` to share buffers between CPU and GPU contexts.
+*   **Virtual GPU**: Create a software-simulated GPU device for testing.
 
-This structured approach will facilitate parallel development and clear separation of concerns.
+**Granular Tasks**:
+1.  [ ] Define `vgpu_cmd_t` structure in `include/gpu/vgpu.h`.
+2.  [ ] Implement `/dev/vgpu0` device driver in LibOS.
+3.  [ ] Create a library `libvgpu` for userspace context creation and command submission.
+4.  [ ] Implement a basic Compute Shader IR processor (mock).
+
+## 5. Real-time Extensions
+
+**Goal**: Deterministic scheduling and low-latency response (PREEMPT_RT like).
+
+**Strategy**:
+*   **Scheduler Classes**: Augment `sched_beatty` to support `SCHED_FIFO` and `SCHED_RR` with strict priority.
+*   **Preemption**: Add explicit preemption points in long-running kernel/LibOS paths.
+*   **Priority Inheritance**: Implement PI mutexes to avoid priority inversion.
+
+**Granular Tasks**:
+1.  [ ] Add `uint32_t priority` and `uint32_t policy` to `dag_task_t`.
+2.  [ ] Modify `beatty_pick_next` to check RT queues first.
+3.  [ ] Implement `sched_setscheduler` and `sched_getparam`.
+4.  [ ] Add high-resolution timers for wakeups.

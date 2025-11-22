@@ -134,10 +134,17 @@ typedef enum {
     PROC_STOPPED
 } proc_state_t;
 
+struct namespace {
+    _Atomic int ref;
+    unsigned int pid_ns; // Simplified PID namespace ID
+    unsigned int net_ns; // Simplified Network namespace ID
+};
+
 // Process structure with modern features
 typedef struct process {
     // Basic info
     pid_t pid;
+    struct namespace *ns;          // Namespace reference
     pid_t ppid;
     pid_t pgid;                    // Process group ID
     pid_t sid;                     // Session ID
@@ -974,4 +981,49 @@ calculate_priority(int nice)
     // Convert nice value to priority
     // Lower nice = higher priority
     return 120 - nice;
+}
+int libos_unshare(int flags) {
+    if (!current_proc) return -1;
+
+    struct namespace *new_ns = malloc(sizeof(struct namespace));
+    if (!new_ns) {
+        errno = ENOMEM;
+        return -1;
+    }
+    atomic_init(&new_ns->ref, 1);
+
+    // Default to inheriting
+    if (current_proc->ns) {
+        new_ns->pid_ns = current_proc->ns->pid_ns;
+        new_ns->net_ns = current_proc->ns->net_ns;
+    } else {
+        new_ns->pid_ns = 0;
+        new_ns->net_ns = 0;
+    }
+
+    // CLONE_NEWPID = 0x20000000
+    if (flags & 0x20000000) {
+        new_ns->pid_ns = (unsigned int)current_proc->pid;
+    }
+    // CLONE_NEWNET = 0x40000000
+    if (flags & 0x40000000) {
+        new_ns->net_ns = (unsigned int)current_proc->pid;
+    }
+
+    // Atomic swap (simplified, no locking for now as per granular plan)
+    struct namespace *old_ns = current_proc->ns;
+    current_proc->ns = new_ns;
+
+    if (old_ns) {
+         int r = atomic_fetch_sub(&old_ns->ref, 1);
+         if (r == 1) free(old_ns);
+    }
+
+    return 0;
+}
+
+int libos_setns(int fd, int nstype) {
+    (void)fd; (void)nstype;
+    errno = EINVAL;
+    return -1;
 }
