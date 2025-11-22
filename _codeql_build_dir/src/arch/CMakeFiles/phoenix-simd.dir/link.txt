@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-simd.a "CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o" "CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o" "CMakeFiles/phoenix-simd.dir/x86/simd_mmx.c.o" "CMakeFiles/phoenix-simd.dir/x86/simd_sse2.c.o" "CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o" "CMakeFiles/phoenix-simd.dir/x86/legacy/simd_mmx_cap.c.o" "CMakeFiles/phoenix-simd.dir/x86/modern/simd_avx2_cap.c.o"
-/usr/bin/ranlib libphoenix-simd.a
