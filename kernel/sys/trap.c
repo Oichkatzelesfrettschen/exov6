@@ -63,7 +63,7 @@ void trap(struct trapframe *tf) {
            // Verify we are in the correct address space
            uint64_t current_cr3 = rcr3();
            // Note: Mask out flags (lower 12 bits)
-           if ((current_cr3 & ~0xFFF) != (uint64_t)V2P(p->pgdir)) {
+           if ((current_cr3 & ~0xFFF) != ((uint64_t)V2P(p->pgdir) & ~0xFFF)) {
                // In a panic, we might want to print more info, but keep it simple for now
                panic("trap: cr3 mismatch");
            }
