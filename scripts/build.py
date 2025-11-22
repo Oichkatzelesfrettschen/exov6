@@ -31,8 +31,8 @@ def run_cmake(build_dir: pathlib.Path, build_type: str) -> None:
         "-DCMAKE_C_STANDARD=23",
         "-DCMAKE_CXX_STANDARD=23",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-        "-DCMAKE_C_FLAGS=-Wall -Werror",
-        "-DCMAKE_CXX_FLAGS=-Wall -Werror",
+        "-DCMAKE_C_FLAGS=-Wall -Werror -std=c23",
+        "-DCMAKE_CXX_FLAGS=-Wall -Werror -std=c++23",
     ]
     if build_type == "performance":
         cmake_args.append("-DCMAKE_C_FLAGS_RELEASE=-O3")
