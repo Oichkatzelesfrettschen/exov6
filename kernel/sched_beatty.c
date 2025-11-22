@@ -70,8 +70,9 @@ void beatty_recompute_all_priorities(
  * beatty_select: Selects the next task using the Golden Ratio sequence.
  *
  * Invariants:
- * 1. sched->counter increments monotonically.
- * 2. sched->alpha is Q16(1.61803...)
+ * 1. The DAG task list is sorted by resource norm priority.
+ * 2. sched->counter increments monotonically.
+ * 3. sched->alpha is Q16(1.61803...)
  */
 dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     if (sched == NULL || dag == NULL) {
@@ -94,6 +95,22 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     }
 
     /*
+     * 1.5. Sort Ready Indices by Priority (Descending)
+     * Required because DAG tasks are not sorted by priority.
+     * We use a simple insertion sort which is efficient for small N (DAG_MAX_TASKS=64).
+     */
+    for (uint32_t i = 1; i < num_ready; i++) {
+        uint32_t key = ready_indices[i];
+        q16_t key_prio = sched->priorities[key];
+        int j = i - 1;
+        while (j >= 0 && sched->priorities[ready_indices[j]] < key_prio) {
+            ready_indices[j + 1] = ready_indices[j];
+            j--;
+        }
+        ready_indices[j + 1] = key;
+    }
+
+    /*
      * 2. Compute Beatty Number (Fixed Point Q16.16)
      * Formula: B = floor(counter * phi)
      * We use a 64-bit intermediate to prevent overflow before shifting.
@@ -109,7 +126,7 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     uint32_t selected_index = beatty_val % num_ready;
     uint32_t task_id = ready_indices[selected_index];
 
-    /* 4. Update State */
+    // 4. Update State
     sched->counter++;
     sched->selections[task_id]++;
     sched->total_selections++;
