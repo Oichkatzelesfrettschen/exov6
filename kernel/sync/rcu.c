@@ -41,9 +41,12 @@ rcu_read_unlock(void)
 void
 rcu_synchronize(void)
 {
-  if (!rcu_state.ready)
+  acquire(&rcu_state.lock);
+  if (!rcu_state.ready) {
+    release(&rcu_state.lock);
     panic("rcu_synchronize: used before init");
-
+  }
+  release(&rcu_state.lock);
   for(;;){
     acquire(&rcu_state.lock);
     if(rcu_state.readers == 0){
