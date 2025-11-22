@@ -1,0 +1,4 @@
+libos/CMakeFiles/phoenix-libos-service.dir/service.c.o: \
+  /home/runner/work/exov6/exov6/libos/service.c \
+  /home/runner/work/exov6/exov6/include/service.h \
+  /home/runner/work/exov6/exov6/include/kernel_compat.h

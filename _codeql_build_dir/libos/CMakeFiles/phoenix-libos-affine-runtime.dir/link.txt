@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-affine-runtime.a "CMakeFiles/phoenix-libos-affine-runtime.dir/affine_runtime.c.o"
+/usr/bin/ranlib libphoenix-libos-affine-runtime.a
