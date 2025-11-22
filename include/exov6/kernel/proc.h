@@ -1,5 +1,9 @@
 #pragma once
 
+#if !defined(__KERNEL__) && !defined(EXO_KERNEL)
+#error "Kernel headers should not be included in userspace!"
+#endif
+
 #include "param.h"
 #include "arch_x86_64.h"  // For pde_t and architecture types
 #include "../kernel/mmu.h"
