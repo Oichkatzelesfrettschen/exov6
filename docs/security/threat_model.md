@@ -8,7 +8,7 @@ This document defines the threat model for the Phoenix Exokernel, specifically f
 
 ### 2.1 Trusted Computing Base (TCB)
 The TCB consists strictly of:
-*   ** The Kernel (`/kernel`)**: Running in Ring 0. Responsible for multiplexing resources securely via capabilities.
+*   **The Kernel (`/kernel`)**: Running in Ring 0. Responsible for multiplexing resources securely via capabilities.
 *   **Bootloader**: Responsible for loading the kernel integrity-checked.
 *   **Hardware Platform**: CPU, Memory, and IOMMU (where applicable).
 
