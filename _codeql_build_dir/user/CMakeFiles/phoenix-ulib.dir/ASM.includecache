@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/runner/work/exov6/exov6/user/syscall_asm.h
+
+/home/runner/work/exov6/exov6/user/traps.h
+
+/home/runner/work/exov6/exov6/user/usys.S
+syscall_asm.h
+/home/runner/work/exov6/exov6/user/syscall_asm.h
+traps.h
+/home/runner/work/exov6/exov6/user/traps.h
+

@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-kernel-security.a "CMakeFiles/phoenix-kernel-security.dir/cap_security.c.o"
+/usr/bin/ranlib libphoenix-kernel-security.a

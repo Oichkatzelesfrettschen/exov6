@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-ulib.a "CMakeFiles/phoenix-ulib.dir/ulib.c.o" "CMakeFiles/phoenix-ulib.dir/usys.S.o"
+/usr/bin/ranlib libphoenix-ulib.a
