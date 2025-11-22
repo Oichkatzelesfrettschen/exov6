@@ -103,6 +103,22 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/x86/modern")
     endif()
 endif()
 
+# x86_64 Support
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/x86_64")
+    file(GLOB X86_64_SOURCES x86_64/*.c)
+    file(GLOB X86_64_ASM x86_64/*.S)
+    if(X86_64_SOURCES OR X86_64_ASM)
+        phoenix_add_library(phoenix-arch-x86-64
+            STATIC
+            SOURCES ${X86_64_SOURCES} ${X86_64_ASM}
+            INCLUDES
+                ${CMAKE_CURRENT_SOURCE_DIR}/x86_64
+                ${CMAKE_SOURCE_DIR}/include
+            DEPENDENCIES phoenix-simd
+        )
+    endif()
+endif()
+
 # ARM Support
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
     file(GLOB ARM_SOURCES arm/*.c)
@@ -194,6 +210,9 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|i.86")
     endif()
     if(TARGET phoenix-arch-x86-modern)
         list(APPEND ARCH_DEPENDENCIES phoenix-arch-x86-modern)
+    endif()
+    if(TARGET phoenix-arch-x86-64)
+        list(APPEND ARCH_DEPENDENCIES phoenix-arch-x86-64)
     endif()
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
     if(TARGET phoenix-arch-aarch64)

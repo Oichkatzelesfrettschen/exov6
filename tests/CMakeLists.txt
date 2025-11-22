@@ -23,6 +23,11 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/c17")
     set(C17_TESTS_AVAILABLE TRUE)
 endif()
 
+# Add Architecture Memory tests
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arch_mem" AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64")
+    add_subdirectory(arch_mem)
+endif()
+
 # ═════════════════════════════════════════════════════════════════════
 # TEST HOST STUBS
 # ═════════════════════════════════════════════════════════════════════
