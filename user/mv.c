@@ -22,9 +22,9 @@ int rename(const char *oldpath, const char *newpath) {
         return -1;
     }
     if (unlink(oldpath) < 0) {
-        // Should probably remove newpath if unlink fails?
-        // But safely we have a copy now.
-        return 0;
+        // Unlink failed: remove newpath to avoid duplicate, and return error
+        unlink(newpath); // Clean up newpath to avoid leaving duplicate
+        return -1;
     }
     return 0;
 }
