@@ -46,12 +46,16 @@ struct dirent *readdir(DIR *dirp) {
         if (k_de.inum == 0) continue;
 
         user_de.d_ino = k_de.inum;
-        // Copy name safely
-        int i;
-        for (i = 0; i < 14 && k_de.name[i]; i++) {
+        
+        // Copy name with explicit bounds checking
+        // raw_dirent.name is exactly 14 bytes (matching kernel's DIRSIZ)
+        // user_de.d_name is NAME_MAX+1 (256 bytes), so we have ample space
+        // Copy up to 14 chars or until null terminator, whichever comes first
+        size_t i;
+        for (i = 0; i < sizeof(k_de.name) && k_de.name[i]; i++) {
             user_de.d_name[i] = k_de.name[i];
         }
-        user_de.d_name[i] = 0; // Ensure null termination
+        user_de.d_name[i] = '\0'; // Ensure null termination
 
         return &user_de;
     }
