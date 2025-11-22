@@ -4,6 +4,7 @@
 
 #include <hal/arch_ops.h>
 #include <stdatomic.h>
+#include <stdint.h>
 
 // Structure definition matching arch_switch.S
 struct arch_context {
