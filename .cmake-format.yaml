@@ -1,0 +1,62 @@
+# CMake Format Configuration - Modern Best Practices
+# https://cmake-format.readthedocs.io/
+
+# General formatting options
+format:
+  # Indentation and line length following CMake 3.25+ conventions
+  tab_size: 2
+  use_tabchars: false
+  line_width: 100
+  max_subgroups_hwrap: 2
+  max_pargs_hwrap: 6
+  
+  # Line endings
+  line_ending: unix
+  
+  # Command casing (lowercase is modern standard)
+  command_case: lower
+  keyword_case: upper
+  
+  # Function and macro formatting
+  dangle_parens: true
+  dangle_align: prefix
+  
+  # Control flow formatting
+  separate_ctrl_name_with_space: false
+  separate_fn_name_with_space: false
+  
+  # List formatting
+  max_rows_cmdline: 2
+  min_prefix_chars: 4
+  
+# Parsing options
+parse:
+  # Additional CMake commands to recognize
+  additional_commands:
+    phoenix_add_executable:
+      pargs: 1
+      kwargs:
+        SOURCES: '+'
+        INCLUDES: '+'
+        DEPENDENCIES: '+'
+        LINK_OPTIONS: '+'
+    
+    phoenix_add_library:
+      pargs: 1
+      kwargs:
+        SOURCES: '+'
+        INCLUDES: '+'
+        DEPENDENCIES: '+'
+        TYPE: 1
+
+# Markup options for comments
+markup:
+  enable_markup: true
+  first_comment_is_literal: true
+  literal_comment_pattern: '#<'
+  
+# Encoding
+encode:
+  emit_byteorder_mark: false
+  input_encoding: utf-8
+  output_encoding: utf-8

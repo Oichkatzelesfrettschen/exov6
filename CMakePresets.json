@@ -1,0 +1,111 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Default Configuration",
+      "description": "Default build configuration with Clang",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "BUILD_TESTS": "ON",
+        "BUILD_DEMOS": "ON",
+        "BUILD_TOOLS": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release Configuration",
+      "description": "Optimized release build",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "USE_LTO": "ON"
+      }
+    },
+    {
+      "name": "debug",
+      "displayName": "Debug Configuration",
+      "description": "Debug build with sanitizers",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "ENABLE_ASAN": "ON",
+        "ENABLE_UBSAN": "ON"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "Development Configuration",
+      "description": "Quick iteration development build",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "BUILD_TESTS": "OFF",
+        "BUILD_DEMOS": "OFF"
+      }
+    },
+    {
+      "name": "ci",
+      "displayName": "CI Configuration",
+      "description": "Continuous integration build with all checks",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ENABLE_ASAN": "ON",
+        "ENABLE_UBSAN": "ON",
+        "ENABLE_STACK_PROTECTOR": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default",
+      "displayName": "Default Build",
+      "description": "Build with default configuration"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "displayName": "Release Build",
+      "description": "Optimized release build"
+    },
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "displayName": "Debug Build",
+      "description": "Debug build with sanitizers"
+    },
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "displayName": "Dev Build",
+      "description": "Quick development build"
+    },
+    {
+      "name": "ci",
+      "configurePreset": "ci",
+      "displayName": "CI Build",
+      "description": "CI build with all checks"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default",
+      "displayName": "Default Tests",
+      "description": "Run all tests with default configuration",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}
