@@ -133,4 +133,4 @@ kernel/sync/bench_dag
 .gdb_history
 core
 core.*
-vgcore.*
+vgcore.*test_minix3
