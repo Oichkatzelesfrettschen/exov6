@@ -43,7 +43,7 @@ int test_beatty_fairness_sim(void) {
 
     /* Make all ready */
     for(int i=0; i<5; i++) {
-        dag.tasks[i].state = TASK_STATE_READY;
+        atomic_store(&dag.tasks[i].state, TASK_STATE_READY);
         dag.tasks[i].last_runnable_time = 0; /* Simulation start */
         dag.tasks[i].schedule_count = 0;
         dag.tasks[i].run_time_ticks = 0;
