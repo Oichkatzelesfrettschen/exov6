@@ -3,10 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Include kernel source to test static functions and internals */
-/* We need to ensure include paths are set correctly in CMake */
-#include "../../../kernel/sched_beatty.c"
-
+/* Include kernel header to access scheduler API */
+#include "../../../kernel/sched_beatty.h"
 /* Simple test framework */
 #define TEST_PASS(msg) printf("PASS: %s\n", msg)
 #define TEST_FAIL(msg) do { printf("FAIL: %s\n", msg); return 1; } while(0)
