@@ -15,10 +15,10 @@ _Static_assert(sizeof(void*) == 8, "64-bit platform required");
 _Static_assert(alignof(max_align_t) >= 8, "8-byte alignment required");
 
 /**
- * memcpy - Copy memory area
- * @dest: Destination buffer (must not overlap with src)
- * @src: Source buffer (must not overlap with dest)
- * @n: Number of bytes to copy
+ * @brief Copy memory area.
+ * @param dest Destination buffer (must not overlap with src)
+ * @param src Source buffer (must not overlap with dest)
+ * @param n Number of bytes to copy
  *
  * Returns: Pointer to dest
  *
@@ -56,10 +56,10 @@ void *memcpy(void * restrict dest, const void * restrict src, size_t n)
 }
 
 /**
- * memcpy_aligned - Optimized memcpy for aligned buffers
- * @dest: 64-byte aligned destination
- * @src: 64-byte aligned source
- * @n: Size in bytes (should be multiple of 64 for best performance)
+ * @brief Optimized memcpy for aligned buffers.
+ * @param dest 64-byte aligned destination
+ * @param src 64-byte aligned source
+ * @param n Size in bytes (should be multiple of 64 for best performance)
  *
  * C17 Feature: Uses _Alignas for cache-line optimization
  */

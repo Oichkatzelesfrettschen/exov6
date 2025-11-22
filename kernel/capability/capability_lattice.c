@@ -180,8 +180,8 @@ static uint8_t cap_hmac_key[32];
 
 /**
  * lattice_join - Compute least upper bound (supremum)
- * @a: First capability rights
- * @b: Second capability rights
+ * @param a First capability rights
+ * @param b Second capability rights
  *
  * Returns: Union of rights (lattice join)
  */
@@ -191,8 +191,8 @@ __attribute__((unused)) static inline cap_rights_t lattice_join(cap_rights_t a, 
 
 /**
  * lattice_meet - Compute greatest lower bound (infimum)
- * @a: First capability rights
- * @b: Second capability rights
+ * @param a First capability rights
+ * @param b Second capability rights
  *
  * Returns: Intersection of rights (lattice meet)
  */
@@ -202,8 +202,8 @@ __attribute__((unused)) static inline cap_rights_t lattice_meet(cap_rights_t a, 
 
 /**
  * lattice_dominates - Check if a dominates b in partial order
- * @a: First capability rights
- * @b: Second capability rights
+ * @param a First capability rights
+ * @param b Second capability rights
  *
  * Returns: true if a ≥ b in the lattice
  */
@@ -213,8 +213,8 @@ static inline bool lattice_dominates(cap_rights_t a, cap_rights_t b) {
 
 /**
  * lattice_comparable - Check if two elements are comparable
- * @a: First capability rights
- * @b: Second capability rights
+ * @param a First capability rights
+ * @param b Second capability rights
  *
  * Returns: true if a and b are comparable in the partial order
  */
@@ -228,12 +228,12 @@ __attribute__((unused)) static inline bool lattice_comparable(cap_rights_t a, ca
 
 /**
  * capability_create - Create a new capability
- * @type: Type of capability
- * @object: Object to reference
- * @offset: Offset within object
- * @length: Length of access
- * @rights: Initial rights
- * @domain: Security domain
+ * @param type Type of capability
+ * @param object Object to reference
+ * @param offset Offset within object
+ * @param length Length of access
+ * @param rights Initial rights
+ * @param domain Security domain
  * 
  * Returns: Capability ID on success, 0 on failure
  */
@@ -301,10 +301,10 @@ uint64_t capability_create(cap_type_t type, void *object,
 
 /**
  * capability_derive - Derive a new capability from existing one
- * @parent_id: Parent capability ID
- * @new_rights: Rights for derived capability (must be subset)
- * @new_offset: New offset (must be within parent range)
- * @new_length: New length (must be within parent range)
+ * @param parent_id Parent capability ID
+ * @param new_rights Rights for derived capability (must be subset)
+ * @param new_offset New offset (must be within parent range)
+ * @param new_length New length (must be within parent range)
  * 
  * Returns: New capability ID on success, 0 on failure
  */
@@ -382,7 +382,7 @@ uint64_t capability_derive(uint64_t parent_id, cap_rights_t new_rights,
 
 /**
  * capability_lookup - Look up capability by ID
- * @cap_id: Capability ID
+ * @param cap_id Capability ID
  * 
  * Returns: Pointer to capability or NULL
  */
@@ -415,8 +415,8 @@ capability_t* capability_lookup(uint64_t cap_id) {
 
 /**
  * capability_check - Check if operation is allowed
- * @cap_id: Capability ID
- * @required_rights: Rights needed for operation
+ * @param cap_id Capability ID
+ * @param required_rights Rights needed for operation
  * 
  * Returns: true if operation allowed, false otherwise
  */
@@ -451,7 +451,7 @@ bool capability_check(uint64_t cap_id, cap_rights_t required_rights) {
 
 /**
  * capability_revoke - Revoke a capability and all descendants
- * @cap_id: Capability ID to revoke
+ * @param cap_id Capability ID to revoke
  * 
  * Returns: Number of capabilities revoked
  */
@@ -491,9 +491,9 @@ uint32_t capability_revoke(uint64_t cap_id) {
 
 /**
  * capability_transfer - Transfer capability between domains
- * @cap_id: Capability ID to transfer
- * @from_domain: Source domain
- * @to_domain: Target domain
+ * @param cap_id Capability ID to transfer
+ * @param from_domain Source domain
+ * @param to_domain Target domain
  * 
  * Returns: true on success, false on failure
  */
@@ -536,7 +536,7 @@ bool capability_transfer(uint64_t cap_id, uint32_t from_domain,
 
 /**
  * capability_compute_hmac - Compute HMAC-SHA256 for capability
- * @cap: Capability to compute HMAC for
+ * @param cap Capability to compute HMAC for
  */
 void capability_compute_hmac(capability_t *cap) {
     /* This would use a real HMAC-SHA256 implementation */
@@ -555,7 +555,7 @@ void capability_compute_hmac(capability_t *cap) {
 
 /**
  * capability_verify_hmac - Verify HMAC-SHA256 for capability
- * @cap: Capability to verify
+ * @param cap Capability to verify
  * 
  * Returns: true if HMAC valid, false otherwise
  */
@@ -633,7 +633,7 @@ static cap_lattice_node_t* lattice_node_alloc(void) {
 
 /**
  * lattice_node_free - Return a lattice node to the pool
- * @node: Node to free
+ * @param node Node to free
  */
 static void lattice_node_free(cap_lattice_node_t *node) {
     if (!node) return;
@@ -697,9 +697,9 @@ void lattice_init(void) {
 
 /**
  * lattice_add_capability - Add capability to lattice
- * @cap_id: Capability ID
- * @rights: Capability rights
- * @domain: Security domain
+ * @param cap_id Capability ID
+ * @param rights Capability rights
+ * @param domain Security domain
  */
 void lattice_add_capability(uint64_t cap_id, cap_rights_t rights, 
                            uint32_t domain) {
@@ -729,7 +729,7 @@ void lattice_add_capability(uint64_t cap_id, cap_rights_t rights,
 
 /**
  * lattice_remove_capability - Remove capability from lattice
- * @cap_id: Capability ID to remove
+ * @param cap_id Capability ID to remove
  */
 void lattice_remove_capability(uint64_t cap_id) {
     uint32_t hash = cap_id % 4096;

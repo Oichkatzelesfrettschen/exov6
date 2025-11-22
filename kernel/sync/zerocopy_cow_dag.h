@@ -395,5 +395,3 @@ zcow_lock_t *zcow_from_unified(exo_spinlock_t *lock);
 _Static_assert(sizeof(lock_dag_node_t) <= 512, "DAG node too large");
 _Static_assert(sizeof(zcow_lock_t) <= 8192, "Lock structure too large");
 _Static_assert(_Alignof(zcow_lock_t) >= 64, "Lock must be cache-aligned");
-
-#endif /* ZEROCOPY_COW_DAG_H */

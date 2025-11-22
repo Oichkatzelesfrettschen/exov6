@@ -24,22 +24,22 @@ strlen(const char *s)
 }
 
 int
-strncmp(const char *p, const char *q, size_t n)
+strncmp(const char *s1, const char *s2, size_t n)
 {
-  while (n > 0 && *p && *p == *q)
-    n--, p++, q++;
+  while (n > 0 && *s1 && *s1 == *s2)
+    n--, s1++, s2++;
   if (n == 0)
     return 0;
-  return (uint8_t)*p - (uint8_t)*q;
+  return (uint8_t)*s1 - (uint8_t)*s2;
 }
 
 char *
-strncpy(char *s, const char *t, size_t n)
+strncpy(char *dst, const char *src, size_t n)
 {
-  char *os = s;
-  while (n-- > 0 && (*s++ = *t++) != 0)
+  char *os = dst;
+  while (n-- > 0 && (*dst++ = *src++) != 0)
     ;
   while (n-- > 0)
-    *s++ = 0;
+    *dst++ = 0;
   return os;
 }

@@ -49,5 +49,3 @@ typedef struct qspinlock qspinlock_t;
  * void qspin_dump_stats(struct qspinlock *lock, const char *name);
  * void qspin_reset_stats(struct qspinlock *lock);
  */
-
-#endif /* QSPINLOCK_H */

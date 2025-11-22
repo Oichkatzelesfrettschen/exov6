@@ -380,9 +380,9 @@ void popcli(void) {
 }
 
 /**
- * getcallerpcs - Get call stack for debugging
- * @v: Starting point (usually current function)
- * @pcs: Array to store program counters
+ * @brief Get call stack for debugging.
+ * @param v Starting point (usually current function)
+ * @param pcs Array to store program counters
  *
  * C17 implementation with minimal assembly
  */

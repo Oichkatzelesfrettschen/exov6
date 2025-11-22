@@ -801,13 +801,6 @@ int genetic_deploy_algorithm(genetic_evolution_engine_t *engine,
     return 0;
 }
 
-/**
- * @brief Execute genetically evolved lock acquisition
- * @param chromosome Evolved algorithm chromosome
- * @param lock Target ultimate lock
- * @param timeout_ns Maximum wait time
- * @return 0 on success, negative errno on failure
- */
 int genetic_execute_evolved_acquire(lock_chromosome_t *chromosome, 
                                    ultimate_lock_t *lock, 
                                    uint64_t timeout_ns) {
@@ -894,12 +887,6 @@ int genetic_execute_evolved_acquire(lock_chromosome_t *chromosome,
     return -EBUSY;
 }
 
-/**
- * @brief Execute genetically evolved lock release
- * @param chromosome Evolved algorithm chromosome
- * @param lock Target ultimate lock
- * @return 0 on success, negative errno on failure
- */
 int genetic_execute_evolved_release(lock_chromosome_t *chromosome, 
                                    ultimate_lock_t *lock) {
     if (!chromosome || !lock) {

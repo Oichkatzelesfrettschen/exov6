@@ -21,10 +21,12 @@ typedef struct service_entry {
   bool auto_restart;                    /**< Restart on failure. */
 } service_entry_t;
 
-static struct {
+typedef struct service_table_state {
   struct spinlock lock;                  /**< Protects the table. */
   service_entry_t entries[MAX_SERVICES]; /**< Stored services. */
-} service_table = {0};
+} service_table_state_t;
+
+static service_table_state_t service_table = {0};
 
 __attribute__((constructor)) static void service_init(void) {
   initlock(&service_table.lock, "services");

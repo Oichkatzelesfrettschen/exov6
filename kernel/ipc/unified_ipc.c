@@ -440,9 +440,9 @@ static inline void printk(const char *fmt, ...) {
 
 /**
  * fastipc_call - Ultra-fast synchronous IPC call
- * @endpoint_id: Target endpoint
- * @regs: Register values to pass
- * @result: Register values returned
+ * @param endpoint_id Target endpoint
+ * @param regs Register values to pass
+ * @param result Register values returned
  * 
  * Returns: 0 on success, error code on failure
  * 
@@ -521,9 +521,9 @@ int fastipc_call(uint64_t endpoint_id, uint64_t regs[8], uint64_t result[8]) {
 
 /**
  * channel_create - Create a bidirectional channel
- * @ep1: First endpoint ID (output)
- * @ep2: Second endpoint ID (output)
- * @cap_id: Capability for channel
+ * @param ep1 First endpoint ID (output)
+ * @param ep2 Second endpoint ID (output)
+ * @param cap_id Capability for channel
  * 
  * Returns: 0 on success, error code on failure
  */
@@ -573,10 +573,10 @@ int channel_create(uint64_t *ep1, uint64_t *ep2, uint64_t cap_id) {
 
 /**
  * channel_send - Send message through channel (zero-copy)
- * @endpoint_id: Source endpoint
- * @data: Data to send
- * @length: Data length
- * @flags: Send flags
+ * @param endpoint_id Source endpoint
+ * @param data Data to send
+ * @param length Data length
+ * @param flags Send flags
  * 
  * Returns: Bytes sent or negative error
  */
@@ -631,8 +631,8 @@ ssize_t channel_send(uint64_t endpoint_id, const void *data,
 
 /**
  * streams_create - Create a STREAMS endpoint
- * @endpoint_id: Endpoint ID (output)
- * @cap_id: Capability
+ * @param endpoint_id Endpoint ID (output)
+ * @param cap_id Capability
  * 
  * Returns: 0 on success, error code on failure
  */
@@ -657,8 +657,8 @@ int streams_create(uint64_t *endpoint_id, uint64_t cap_id) {
 
 /**
  * streams_push_module - Push a module onto STREAM
- * @endpoint_id: STREAM endpoint
- * @module: Module to push
+ * @param endpoint_id STREAM endpoint
+ * @param module Module to push
  * 
  * Returns: 0 on success, error code on failure
  */
@@ -680,10 +680,10 @@ int streams_push_module(uint64_t endpoint_id, void *module) {
 
 /**
  * streams_write - Write to STREAM
- * @endpoint_id: STREAM endpoint
- * @ctrl: Control message
- * @data: Data message
- * @flags: Write flags
+ * @param endpoint_id STREAM endpoint
+ * @param ctrl Control message
+ * @param data Data message
+ * @param flags Write flags
  * 
  * Returns: 0 on success, error code on failure
  */
@@ -719,10 +719,10 @@ int streams_write(uint64_t endpoint_id, struct strbuf *ctrl,
 
 /**
  * socket_create - Create BSD-compatible socket
- * @domain: Address family (AF_INET, AF_UNIX, etc.)
- * @type: Socket type (SOCK_STREAM, SOCK_DGRAM, etc.)
- * @protocol: Protocol number
- * @cap_id: Capability
+ * @param domain Address family (AF_INET, AF_UNIX, etc.)
+ * @param type Socket type (SOCK_STREAM, SOCK_DGRAM, etc.)
+ * @param protocol Protocol number
+ * @param cap_id Capability
  * 
  * Returns: Socket endpoint ID or negative error
  */
@@ -755,9 +755,9 @@ int socket_create(int domain, int type, int protocol, uint64_t cap_id) {
 
 /**
  * socket_connect - Connect socket to remote endpoint
- * @socket_id: Socket endpoint ID
- * @addr: Address to connect to
- * @addrlen: Address length
+ * @param socket_id Socket endpoint ID
+ * @param addr Address to connect to
+ * @param addrlen Address length
  * 
  * Returns: 0 on success, error code on failure
  */
@@ -780,10 +780,10 @@ int socket_connect(uint64_t socket_id, const struct sockaddr *addr,
 
 /**
  * ipc_zerocopy_map - Map pages for zero-copy transfer
- * @src_ep: Source endpoint
- * @dst_ep: Destination endpoint
- * @pages: Page frame numbers
- * @count: Number of pages
+ * @param src_ep Source endpoint
+ * @param dst_ep Destination endpoint
+ * @param pages Page frame numbers
+ * @param count Number of pages
  * 
  * Returns: Virtual address in destination or NULL
  */
@@ -813,8 +813,8 @@ void* ipc_zerocopy_map(ipc_endpoint_t *src_ep, ipc_endpoint_t *dst_ep,
 
 /**
  * ipc_zerocopy_unmap - Unmap zero-copy pages
- * @vaddr: Virtual address
- * @count: Number of pages
+ * @param vaddr Virtual address
+ * @param count Number of pages
  */
 void ipc_zerocopy_unmap(void *vaddr, uint32_t count) {
     if (hal_current && hal_current->memory) {
@@ -828,9 +828,9 @@ void ipc_zerocopy_unmap(void *vaddr, uint32_t count) {
 
 /**
  * ipc_send - Unified send interface
- * @endpoint_id: Source endpoint
- * @msg: Message to send
- * @flags: Send flags
+ * @param endpoint_id Source endpoint
+ * @param msg Message to send
+ * @param flags Send flags
  * 
  * Returns: 0 on success, error code on failure
  */
@@ -870,9 +870,9 @@ int ipc_send(uint64_t endpoint_id, ipc_message_t *msg, uint32_t flags) {
 
 /**
  * ipc_receive - Unified receive interface
- * @endpoint_id: Destination endpoint
- * @msg: Message buffer
- * @flags: Receive flags
+ * @param endpoint_id Destination endpoint
+ * @param msg Message buffer
+ * @param flags Receive flags
  * 
  * Returns: Message length or negative error
  */

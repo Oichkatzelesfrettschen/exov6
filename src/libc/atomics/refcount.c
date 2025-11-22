@@ -21,9 +21,9 @@ _Static_assert(sizeof(refcount_t) == 64, "refcount must be cache-line sized");
 _Static_assert(alignof(refcount_t) == 64, "refcount must be cache-line aligned");
 
 /**
- * refcount_init - Initialize a reference counter
- * @ref: Pointer to reference counter
- * @initial: Initial reference count (typically 1)
+ * @brief Initialize a reference counter.
+ * @param ref Pointer to reference counter
+ * @param initial Initial reference count (typically 1)
  *
  * C17 Features: atomic_init for initialization
  */
@@ -33,8 +33,8 @@ static inline void refcount_init(refcount_t *ref, uint32_t initial)
 }
 
 /**
- * refcount_inc - Increment reference count
- * @ref: Pointer to reference counter
+ * @brief Increment reference count.
+ * @param ref Pointer to reference counter
  *
  * Returns: New reference count
  * 
@@ -46,8 +46,8 @@ static inline uint32_t refcount_inc(refcount_t *ref)
 }
 
 /**
- * refcount_dec - Decrement reference count
- * @ref: Pointer to reference counter
+ * @brief Decrement reference count.
+ * @param ref Pointer to reference counter
  *
  * Returns: true if this was the last reference (count reached 0)
  *
@@ -67,8 +67,8 @@ static inline bool refcount_dec(refcount_t *ref)
 }
 
 /**
- * refcount_get - Get current reference count
- * @ref: Pointer to reference counter
+ * @brief Get current reference count.
+ * @param ref Pointer to reference counter
  *
  * Returns: Current reference count
  *
@@ -80,8 +80,8 @@ static inline uint32_t refcount_get(refcount_t *ref)
 }
 
 /**
- * refcount_inc_not_zero - Increment unless zero
- * @ref: Pointer to reference counter
+ * @brief Increment reference count unless zero.
+ * @param ref Pointer to reference counter
  *
  * Returns: true if increment succeeded, false if count was zero
  *
@@ -105,9 +105,9 @@ static inline bool refcount_inc_not_zero(refcount_t *ref)
 }
 
 /**
- * refcount_add - Add to reference count
- * @ref: Pointer to reference counter
- * @delta: Amount to add
+ * @brief Add to reference count.
+ * @param ref Pointer to reference counter
+ * @param delta Amount to add
  *
  * Returns: New reference count
  *
@@ -119,9 +119,9 @@ static inline uint32_t refcount_add(refcount_t *ref, uint32_t delta)
 }
 
 /**
- * refcount_sub_and_test - Subtract and test for zero
- * @ref: Pointer to reference counter
- * @delta: Amount to subtract
+ * @brief Subtract from reference count and test for zero.
+ * @param ref Pointer to reference counter
+ * @param delta Amount to subtract
  *
  * Returns: true if count reached zero
  *

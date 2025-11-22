@@ -491,5 +491,3 @@ void ultimate_lock_export_perf_data(const char *filename);
 _Static_assert(sizeof(ultimate_lock_t) <= 16384, "Ultimate lock too large");
 _Static_assert(_Alignof(ultimate_lock_t) >= 64, "Must be cache-aligned");
 _Static_assert(META_LOCK_TYPE_MAX < 32, "Too many lock types for bitfield");
-
-#endif /* ULTIMATE_LOCK_SYNTHESIS_H */

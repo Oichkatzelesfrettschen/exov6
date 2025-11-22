@@ -188,6 +188,7 @@ struct lwkt_token *token_pool_get(void *resource) {
  *
  * @param token Token to initialize
  * @param name Debug name
+ * @param dag_level DAG hierarchy level for lock ordering
  */
 void token_init(struct lwkt_token *token, const char *name, uint32_t dag_level) {
     // Set to free (no owner)
