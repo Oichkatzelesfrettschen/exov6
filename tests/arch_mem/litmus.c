@@ -59,6 +59,7 @@ void* mp_thread1(void* arg) {
         // Reset mp_data to signal completion before clearing flag
         mp_data = 0;
         arch_barrier_write();
+        arch_barrier_write();
         __atomic_store_n(&mp_flag, 0, __ATOMIC_RELAXED);
     }
     return NULL;
