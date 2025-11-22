@@ -4,6 +4,10 @@
 // On-disk file system format.
 // Both the kernel and user programs use this header file.
 
+// File types
+#define T_DIR  1   // Directory
+#define T_FILE 2   // File
+#define T_DEV  3   // Device
 
 #define ROOTINO 1  // root i-number
 #define BSIZE 512  // block size
