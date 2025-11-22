@@ -301,6 +301,22 @@ void *memset(void *dst, int c, size_t n);
 char *strchr(const char *s, int c);
 
 /**
+ * @brief Locate last occurrence of character in string.
+ * @param s String to scan.
+ * @param c Character to search for.
+ * @return Pointer to the last occurrence or NULL if absent.
+ */
+char *strrchr(const char *s, int c);
+
+/**
+ * @brief Concatenate two strings.
+ * @param dest Destination buffer.
+ * @param src Source string.
+ * @return Pointer to @p dest.
+ */
+char *strcat(char *dest, const char *src);
+
+/**
  * @brief Read a line from standard input.
  *
  * Reads at most @p max-1 bytes from file descriptor zero and terminates
