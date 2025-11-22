@@ -41,7 +41,7 @@ The system enforces three primary security boundaries:
 
 The system implements a three-layer security architecture using post-quantum primitives to secure the TCB.
 
-### 3.1 Capability System Security (`kernel/cap.c`, `kernel/cap_security.c`)
+### 3.1 Capability System Security (`kernel/ipc/cap.c`, `kernel/cap_security.c`)
 
 **Problem:** Previous implementations relied on hardcoded secrets or simple XOR, vulnerable to source code leaks or timing attacks.
 
@@ -59,7 +59,7 @@ int cap_verify(exo_cap c) {
 }
 ````
 
-### 3.2 Post-Quantum Lattice IPC (`kernel/lattice_ipc.c`)
+### 3.2 Post-Quantum Lattice IPC (`kernel/ipc/lattice_ipc.c`)
 
 **Problem:** Unauthenticated IPC is vulnerable to tampering and replay attacks.
 
@@ -131,7 +131,7 @@ We consider the following attacker classes and the specific mitigations implemen
 
 ## 5\. Security Validation
 
-The security improvements are validated by an automated test suite (`test_security_audit.py`).
+The security improvements are validated by an automated test suite (`scripts/test_security_audit.py`).
 
 ## 6\. Out of Scope & Future Work
 
