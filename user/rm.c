@@ -94,13 +94,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // If -r was anywhere, we just assume it applies.
-    // Better parsing needed but for now:
-    if (strcmp(argv[1], "-r") == 0) {
-        start_arg = 2;
-        recursive = 1;
-    }
-
     if (argc < start_arg + 1) {
         printf(2, "Usage: rm [-r] files...\n");
         exit(0);
