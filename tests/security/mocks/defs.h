@@ -2,4 +2,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define cprintf printf
-void panic(const char *s) { printf("PANIC: %s\n", s); exit(1); }
+static inline void panic(const char *s) { printf("PANIC: %s\n", s); exit(1); }
