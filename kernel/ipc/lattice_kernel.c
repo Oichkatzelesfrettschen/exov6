@@ -115,6 +115,25 @@ struct lattice_global {
 // Kyber-Inspired Post-Quantum Cryptography (Simplified)
 // ============================================================================
 
+/*
+ * SECURITY NOTE:
+ * This implementation is a simplified version of CRYSTALS-Kyber for educational
+ * and prototype purposes within the Exokernel.
+ *
+ * LIMITATIONS:
+ * 1. Constant-Time: The current implementation of polynomial multiplication
+ *    uses data-independent loop bounds but does NOT guarantee constant-time
+ *    execution on all microarchitectures (e.g., modular reduction branches).
+ *    It is NOT resistant to advanced timing side-channels.
+ *
+ * 2. Key Rotation: Keys are generated at node initialization. Dynamic key
+ *    rotation requires tearing down the lattice node and establishing a new one.
+ *
+ * 3. Output Sizes: All KEM outputs (public keys, shared secrets) use fixed-size
+ *    buffers (uint32_t arrays) to prevent variable-length side channels in the
+ *    ABI/System Call interface.
+ */
+
 /**
  * Simplified polynomial multiplication in ring
  * Real Kyber uses NTT for efficiency, we use simple modular arithmetic

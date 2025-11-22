@@ -8,6 +8,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+extern void *minix3_read_super(uint32_t dev);
+
 /*******************************************************************************
  * GLOBAL STATE
  ******************************************************************************/
@@ -143,8 +145,31 @@ int vfs_mount(const char *dev, const char *mountpoint,
     mount->sb = sb;
 
     /* Read superblock from device - filesystem-specific */
-    /* This would call the filesystem's read_super operation */
-    /* For now, this is a stub */
+    if (fs_type == FS_TYPE_MINIX3) {
+        // Parse device ID (simple implementation)
+        uint32_t dev_id = 0;
+        if (dev && dev[0] >= '0' && dev[0] <= '9') {
+            dev_id = atoi(dev);
+        }
+
+        sb->fs_private = minix3_read_super(dev_id);
+        if (!sb->fs_private) {
+            printf("VFS: Failed to read superblock\n");
+            free(sb);
+            free(mount);
+            return -1;
+        }
+
+        // Read root inode (ROOTINO = 1)
+        sb->root_inode = sb->s_op->read_inode(sb, 1);
+        if (!sb->root_inode) {
+            printf("VFS: Failed to read root inode\n");
+            // TODO: Free fs_private
+            free(sb);
+            free(mount);
+            return -1;
+        }
+    }
 
     /* Add to mount list */
     mount->next = g_mounts;

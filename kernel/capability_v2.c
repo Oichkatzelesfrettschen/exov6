@@ -166,8 +166,14 @@ static int capv2_slot_free(int32_t slot_idx)
         panic("capv2_slot_free: double free");
     }
 
+    /* Preserve generation counter to avoid ABA problem */
+    uint32_t gen = slot->generation;
+
     /* Zero out slot contents (security) */
     memset(slot, 0, sizeof(struct capability_v2));
+
+    /* Restore generation counter */
+    slot->generation = gen;
 
     /* Push to free list (store next pointer in resource_id) */
     slot->resource_id = (uint64_t)g_free_list_head;

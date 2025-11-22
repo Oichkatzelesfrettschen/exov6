@@ -1,5 +1,9 @@
 #pragma once
 
+#define S_IFMT  0170000
+#define S_IFDIR 0040000
+#define S_IFREG 0100000
+
 struct stat {
   int dev;
   unsigned int ino;
@@ -13,5 +17,3 @@ struct stat {
 int mkdir(const char *path, int mode);
 int stat(const char *path, struct stat *buf);
 int fstat(int fd, struct stat *buf);
-
-// Testing etc.
