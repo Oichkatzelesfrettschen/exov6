@@ -5,11 +5,11 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 SRC_FILES = [
-    ROOT / "user/posix_file_test.c",
-    ROOT / "user/posix_signal_test.c",
-    ROOT / "user/posix_pipe_test.c",
-    ROOT / "user/posix_rename_unlink_test.c",
-    ROOT / "user/posix_ftruncate_test.c",
+    ROOT / "tests/posix/posix_file_test.c",
+    ROOT / "tests/posix/posix_signal_test.c",
+    ROOT / "tests/posix/posix_pipe_test.c",
+    ROOT / "tests/posix/posix_rename_unlink_test.c",
+    ROOT / "tests/posix/posix_ftruncate_test.c",
     ROOT / "demos/posix_misc_test.c",
     ROOT / "demos/posix_socket_test.c",
     ROOT / "demos/posix_cwd_test.c",

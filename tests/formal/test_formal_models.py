@@ -4,7 +4,7 @@ import subprocess
 import random
 import pytest
 
-ROOT = os.path.dirname(os.path.dirname(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # simple python model mirroring formal specs
 
