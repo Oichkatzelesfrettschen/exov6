@@ -40,7 +40,7 @@ int libos_my_op(int handle, void *data) {
 
 ### 3. Capability Integration
 
-Ensure your module respects the capability system. Do not bypass checks. Use `kernel/cap.c` primitives if running in kernel mode (for hybrid modules) or `syscall` if running in user mode.
+Ensure your module respects the capability system. Do not bypass checks. Use `kernel/ipc/cap.c` primitives if running in kernel mode (for hybrid modules) or `syscall` if running in user mode.
 
 ### 4. Build System Registration
 
