@@ -175,8 +175,8 @@ void *sender_thread(void *arg) {
         } else if (ret == -ETIMEDOUT) {
             /* Timeout is acceptable under load */
         } else {
-             fprintf(stderr, "Sender %ld: Call failed: %d\n", id, ret);
-             atomic_fetch_add(&total_errors, 1);
+            fprintf(stderr, "Sender %ld: Call failed: %d\n", id, ret);
+            atomic_fetch_add(&total_errors, 1);
         }
 
         /* Random yield to increase race probability */
