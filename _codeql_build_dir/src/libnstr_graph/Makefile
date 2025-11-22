@@ -198,27 +198,12 @@ phoenix-nstr-graph/fast:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build
 .PHONY : phoenix-nstr-graph/fast
 
-# Convenience name for target.
-src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/rule
-.PHONY : src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/rule
-
-# Convenience name for target.
-phoenix-nstr-graph-shared: src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/rule
-.PHONY : phoenix-nstr-graph-shared
-
-# fast build rule for target.
-phoenix-nstr-graph-shared/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build
-.PHONY : phoenix-nstr-graph-shared/fast
-
 nstr_graph.o: nstr_graph.c.o
 .PHONY : nstr_graph.o
 
 # target to build an object file
 nstr_graph.c.o:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/nstr_graph.c.o
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/nstr_graph.c.o
 .PHONY : nstr_graph.c.o
 
 nstr_graph.i: nstr_graph.c.i
@@ -227,7 +212,6 @@ nstr_graph.i: nstr_graph.c.i
 # target to preprocess a source file
 nstr_graph.c.i:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/nstr_graph.c.i
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/nstr_graph.c.i
 .PHONY : nstr_graph.c.i
 
 nstr_graph.s: nstr_graph.c.s
@@ -236,7 +220,6 @@ nstr_graph.s: nstr_graph.c.s
 # target to generate assembly for a file
 nstr_graph.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/nstr_graph.c.s
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/nstr_graph.c.s
 .PHONY : nstr_graph.c.s
 
 # Help Target
@@ -254,7 +237,6 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... phoenix-nstr-graph"
-	@echo "... phoenix-nstr-graph-shared"
 	@echo "... nstr_graph.o"
 	@echo "... nstr_graph.i"
 	@echo "... nstr_graph.s"
