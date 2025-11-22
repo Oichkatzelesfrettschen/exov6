@@ -26,6 +26,10 @@ void pdac_dag_init(dag_pdac_t *dag, resource_vector_t system_quota) {
         dag->tasks[i].id = 0;
         atomic_store(&dag->tasks[i].state, TASK_STATE_PENDING);
         dag->tasks[i].num_deps = 0;
+        dag->tasks[i].schedule_count = 0;
+        dag->tasks[i].run_time_ticks = 0;
+        dag->tasks[i].last_runnable_time = 0;
+        dag->tasks[i].total_latency_ticks = 0;
     }
 }
 
@@ -55,6 +59,10 @@ int pdac_dag_add_task(
     task->priority = resource_vector_norm(resources);
     task->start_time = 0;
     task->end_time = 0;
+    task->schedule_count = 0;
+    task->run_time_ticks = 0;
+    task->last_runnable_time = 0;
+    task->total_latency_ticks = 0;
 
     dag->num_tasks++;
     return task_id;
