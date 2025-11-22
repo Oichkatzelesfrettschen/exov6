@@ -35,6 +35,9 @@ _codeql_detected_source_root
 openposixtestsuite/
 test_isolation/
 
+# CodeQL artifacts
+_codeql*/
+
 # Lock subsystem test binaries
 kernel/sync/test_qspinlock
 kernel/sync/bench_qspinlock
