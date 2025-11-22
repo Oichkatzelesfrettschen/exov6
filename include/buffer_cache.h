@@ -125,7 +125,7 @@ typedef struct {
  * - SIMD operation integration
  * - Capability denial tracking
  */
-typedef struct {
+typedef struct buffer_cache {
     /* Hash table */
     bcache_entry_t *buckets[BCACHE_BUCKETS];
 
