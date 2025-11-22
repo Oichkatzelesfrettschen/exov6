@@ -1,6 +1,10 @@
 
 #pragma once
 
+#if !defined(__KERNEL__) && !defined(EXO_KERNEL)
+#error "Kernel headers should not be included in userspace!"
+#endif
+
 #include "types.h"
 #include "param.h"
 #include "spinlock.h"
