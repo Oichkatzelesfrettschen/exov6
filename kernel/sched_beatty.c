@@ -12,58 +12,6 @@
 #include <string.h>
 
 /*******************************************************************************
- * HELPER STRUCTURES
- ******************************************************************************/
-
-/**
- * Ready task entry (for sorting)
- */
-typedef struct ready_task {
-    dag_task_t *task;                         /* Pointer to task */
-    q16_t priority;                           /* Task priority */
-    uint16_t original_index;                  /* Original index in DAG */
-} ready_task_t;
-
-/*******************************************************************************
- * HELPER FUNCTIONS
- ******************************************************************************/
-
-/**
- * Compare function for qsort (sort by priority descending)
- */
-static int compare_priorities(const void *a, const void *b)
-{
-    const ready_task_t *ta = (const ready_task_t *)a;
-    const ready_task_t *tb = (const ready_task_t *)b;
-
-    /* Sort descending (higher priority first) */
-    if (ta->priority > tb->priority) return -1;
-    if (ta->priority < tb->priority) return 1;
-    return 0;
-}
-
-/**
- * Simple insertion sort for small arrays (no qsort in kernel)
- *
- * Sorts ready_tasks array by priority (descending).
- */
-static void sort_ready_tasks(ready_task_t *tasks, uint16_t count)
-{
-    for (uint16_t i = 1; i < count; i++) {
-        ready_task_t key = tasks[i];
-        int j = i - 1;
-
-        /* Move elements greater than key to the right */
-        while (j >= 0 && tasks[j].priority < key.priority) {
-            tasks[j + 1] = tasks[j];
-            j--;
-        }
-
-        tasks[j + 1] = key;
-    }
-}
-
-/*******************************************************************************
  * CORE API IMPLEMENTATION
  ******************************************************************************/
 
@@ -118,86 +66,57 @@ void beatty_recompute_all_priorities(
     }
 }
 
-/**
- * Select next task to run using Beatty sequence
+/*
+ * beatty_select: Selects the next task using the Golden Ratio sequence.
  *
- * ALGORITHM WALKTHROUGH:
- * ======================
- * Example: 5 ready tasks with priorities [10.0, 8.0, 6.0, 4.0, 2.0]
- *   counter = 7
- *
- * 1. Collect ready tasks: [T0, T1, T2, T3, T4]
- * 2. Sort by priority: [T0(10.0), T1(8.0), T2(6.0), T3(4.0), T4(2.0)]
- * 3. Compute Beatty: B_φ(7) = floor(7 * 1.618) = floor(11.326) = 11
- * 4. Select task: 11 mod 5 = 1 → T1 (second highest priority)
- * 5. Increment counter: 7 → 8
- *
- * Next iteration (counter = 8):
- * 3. B_φ(8) = floor(8 * 1.618) = floor(12.944) = 12
- * 4. 12 mod 5 = 2 → T2
+ * Invariants:
+ * 1. The DAG task list is sorted by resource norm priority.
+ * 2. sched->counter increments monotonically.
+ * 3. sched->alpha is Q16(1.61803...)
  */
-dag_task_t *beatty_select(
-    beatty_scheduler_t *sched,
-    dag_pdac_t *dag)
-{
+dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     if (sched == NULL || dag == NULL) {
         return NULL;
     }
 
-    /* Step 1: Collect all READY tasks */
-    ready_task_t ready_tasks[DAG_MAX_TASKS];
-    uint16_t num_ready = 0;
+    uint32_t num_ready = 0;
+    uint32_t ready_indices[DAG_MAX_TASKS];
 
-    for (uint16_t i = 0; i < dag->num_tasks; i++) {
-        if (dag->tasks[i].state == TASK_STATE_READY) {
-            ready_tasks[num_ready].task = &dag->tasks[i];
-            ready_tasks[num_ready].priority = sched->priorities[i];
-            ready_tasks[num_ready].original_index = i;
-            num_ready++;
+    // 1. Filter for READY state (O(N))
+    // Note: In optimized paths, this list is maintained incrementally.
+    for (int i = 0; i < dag->num_tasks; i++) {
+        if (atomic_load(&dag->tasks[i].state) == TASK_STATE_READY) {
+            ready_indices[num_ready++] = i;
         }
     }
 
-    /* No ready tasks? */
     if (num_ready == 0) {
         return NULL;
     }
 
-    /* Step 1.5: Check for Real-Time tasks (Preemption) */
-    ready_task_t *best_rt = NULL;
-    for (int i = 0; i < num_ready; i++) {
-        if (ready_tasks[i].task->policy > 0) {
-            if (!best_rt || ready_tasks[i].priority > best_rt->priority) {
-                best_rt = &ready_tasks[i];
-            }
-        }
-    }
+    /*
+     * 2. Compute Beatty Number (Fixed Point Q16.16)
+     * Formula: B = floor(counter * phi)
+     * We use a 64-bit intermediate to prevent overflow before shifting.
+     */
+    uint64_t product = (uint64_t)sched->counter * (uint64_t)sched->alpha;
+    uint32_t beatty_val = (uint32_t)(product >> 16); // Floor by shifting
 
-    if (best_rt) {
-        sched->selections[best_rt->original_index]++;
-        sched->total_selections++;
-        best_rt->task->stats.schedule_count++;
-        return best_rt->task;
-    }
+    /*
+     * 3. Map to Index
+     * The Beatty sequence is infinite; we map it to the current finite
+     * set of ready tasks using modulo arithmetic.
+     */
+    uint32_t selected_index = beatty_val % num_ready;
+    uint32_t task_id = ready_indices[selected_index];
 
-    /* Step 2: Sort by priority (descending) */
-    sort_ready_tasks(ready_tasks, num_ready);
-
-    /* Step 3: Compute Beatty number B_α(counter) */
-    uint64_t beatty_num = ((uint64_t)sched->counter * sched->alpha) >> 16;
-
-    /* Step 4: Select task at position (beatty_num mod num_ready) */
-    uint16_t selected_idx = beatty_num % num_ready;
-    ready_task_t *selected = &ready_tasks[selected_idx];
-
-    /* Step 5: Increment counter */
+    // 4. Update State
     sched->counter++;
-
-    /* Update statistics */
-    sched->selections[selected->original_index]++;
+    sched->selections[task_id]++;
     sched->total_selections++;
-    selected->task->stats.schedule_count++;
+    dag->tasks[task_id].stats.schedule_count++;
 
-    return selected->task;
+    return &dag->tasks[task_id];
 }
 
 /**
