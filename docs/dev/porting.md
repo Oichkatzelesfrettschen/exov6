@@ -40,7 +40,7 @@ Implement the Hardware Abstraction Layer defined in `include/hal/arch_ops.h`:
 *   **Trap Handling**: Interrupt vector table and trap dispatcher.
 *   **Memory Management**: Page table manipulation specific to the MMU (e.g., Sv39/Sv48 for RISC-V).
 
-### 4. LibOS ABI (`libos/arch/<new_arch>/`)
+### 4. LibOS ABI (`libos/arch/riscv64/`)
 
 *   **Syscall Entry**: Implement `syscall_entry.S`.
 *   **Signal Handling**: Stack frame setup for signal delivery.
