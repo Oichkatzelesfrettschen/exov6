@@ -336,6 +336,30 @@ buffer_cache.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/buffer_cache.c.s
 .PHONY : buffer_cache.c.s
 
+cap_check.o: cap_check.c.o
+.PHONY : cap_check.o
+
+# target to build an object file
+cap_check.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/cap_check.c.o
+.PHONY : cap_check.c.o
+
+cap_check.i: cap_check.c.i
+.PHONY : cap_check.i
+
+# target to preprocess a source file
+cap_check.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/cap_check.c.i
+.PHONY : cap_check.c.i
+
+cap_check.s: cap_check.c.s
+.PHONY : cap_check.s
+
+# target to generate assembly for a file
+cap_check.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/cap_check.c.s
+.PHONY : cap_check.c.s
+
 cap_formula.o: cap_formula.c.o
 .PHONY : cap_formula.o
 
@@ -3367,6 +3391,9 @@ help:
 	@echo "... buffer_cache.o"
 	@echo "... buffer_cache.i"
 	@echo "... buffer_cache.s"
+	@echo "... cap_check.o"
+	@echo "... cap_check.i"
+	@echo "... cap_check.s"
 	@echo "... cap_formula.o"
 	@echo "... cap_formula.i"
 	@echo "... cap_formula.s"
