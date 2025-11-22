@@ -1,5 +1,5 @@
 /**
- * @file capability_v2.c
+ * @file test_wrapper_capability_v2.c
  * @brief PDAC Capability System V2 - Core Implementation
  *
  * This file implements the PDAC (Probabilistic DAG Algebra with Capabilities)
