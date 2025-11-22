@@ -1,0 +1,14 @@
+breathe
+myst-parser
+python-frontmatter
+mdformat
+mdformat-gfm
+mdformat-frontmatter
+scikit-learn
+simhash
+rapidfuzz
+pandas
+networkx
+tqdm
+sphinx
+sphinx-rtd-theme

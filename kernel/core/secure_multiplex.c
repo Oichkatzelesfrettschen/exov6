@@ -260,16 +260,14 @@ static _Atomic(uint64_t) next_libos_id = 1;
  * ============================================================================ */
 
 /**
- * exo_bind_resource - Create secure binding between resource and application
- * @libos_id: LibOS requesting the binding
- * @type: Type of resource
- * @resource_id: Specific resource identifier
- * @capability_id: Capability authorizing access
- * 
- * Returns: Binding ID on success, 0 on failure
- * 
- * This is the fundamental exokernel operation - directly binding
- * hardware resources to applications without abstraction.
+ * @brief Create a secure binding between a LibOS and a hardware resource.
+ * @param libos_id LibOS requesting the binding.
+ * @param type Resource type to bind.
+ * @param resource_id Specific resource identifier.
+ * @param capability_id Capability authorizing access.
+ * @return Binding ID on success, 0 on failure.
+ * @details Core exokernel operation that directly hands hardware resources to
+ *          applications without introducing abstractions.
  */
 uint64_t exo_bind_resource(uint64_t libos_id, resource_type_t type,
                            uint64_t resource_id, uint64_t capability_id) {
@@ -356,15 +354,13 @@ uint64_t exo_bind_resource(uint64_t libos_id, resource_type_t type,
  * ============================================================================ */
 
 /**
- * exo_access_resource - Access bound resource directly
- * @binding_id: Secure binding ID
- * @operation: Operation to perform
- * @data: Operation-specific data
- * 
- * Returns: 0 on success, error code on failure
- * 
- * Allows direct hardware access without kernel intervention
- * after initial binding establishment.
+ * @brief Access a bound resource directly.
+ * @param binding_id Secure binding identifier.
+ * @param operation Operation selector.
+ * @param data Operation-specific payload.
+ * @return 0 on success or a negative errno-style code.
+ * @details Permits LibOSes to interact with hardware without repeated kernel
+ *          mediation after a binding is established.
  */
 int exo_access_resource(uint64_t binding_id, uint32_t operation, void *data) {
     secure_binding_t *binding = exo_lookup_binding(binding_id);
@@ -419,13 +415,12 @@ int exo_access_resource(uint64_t binding_id, uint32_t operation, void *data) {
  * ============================================================================ */
 
 /**
- * exo_revoke_resource - Revoke resource binding
- * @binding_id: Binding to revoke
- * @force: Force immediate revocation
- * 
- * Returns: 0 on success, error code on failure
- * 
- * Implements the abort protocol for resource revocation.
+ * @brief Revoke a resource binding.
+ * @param binding_id Binding to revoke.
+ * @param force If true, bypass the abort protocol and revoke immediately.
+ * @return 0 on success or a negative errno-style code.
+ * @details Implements the abort protocol used when the kernel must reclaim a
+ *          resource previously granted to a LibOS.
  */
 int exo_revoke_resource(uint64_t binding_id, bool force) {
     secure_binding_t *binding = exo_lookup_binding(binding_id);
@@ -493,16 +488,14 @@ int exo_revoke_resource(uint64_t binding_id, bool force) {
  * ============================================================================ */
 
 /**
- * exo_download_code - Download code for direct execution
- * @libos_id: LibOS downloading code
- * @code: Code to download
- * @size: Code size
- * @capability_id: Capability authorizing download
- * 
- * Returns: Download slot on success, -1 on failure
- * 
- * Allows LibOS to download code for optimization, implementing
- * the exokernel principle of application-specific optimization.
+ * @brief Download LibOS-provided code for direct execution.
+ * @param libos_id LibOS initiating the download.
+ * @param code Pointer to executable bytes.
+ * @param size Size of the provided code in bytes.
+ * @param capability_id Capability authorizing the download.
+ * @return Slot index (0-15) on success, negative errno-style code on failure.
+ * @details Enables application-specific optimization by letting LibOS code run
+ *          close to the hardware with exokernel safety checks.
  */
 int exo_download_code(uint64_t libos_id, const void *code, size_t size,
                      uint64_t capability_id) {
@@ -560,14 +553,11 @@ int exo_download_code(uint64_t libos_id, const void *code, size_t size,
 }
 
 /**
- * exo_execute_downloaded - Execute downloaded code
- * @libos_id: LibOS owner
- * @slot: Downloaded code slot
- * @args: Arguments to pass
- * 
- * Returns: Result from executed code
- * 
- * Executes downloaded code with minimal overhead.
+ * @brief Execute a previously downloaded code slot.
+ * @param libos_id Owning LibOS identifier.
+ * @param slot Download slot index.
+ * @param args Argument passed to the downloaded function.
+ * @return Result returned by the downloaded code or a negative errno.
  */
 int64_t exo_execute_downloaded(uint64_t libos_id, int slot, void *args) {
     libos_environment_t *libos = exo_get_libos(libos_id);
@@ -601,14 +591,11 @@ int64_t exo_execute_downloaded(uint64_t libos_id, int slot, void *args) {
  * ============================================================================ */
 
 /**
- * exo_get_resource_vector - Get visible resource allocation state
- * @type: Resource type to query
- * @vector: Output buffer for allocation vector
- * @size: Size of output buffer
- * 
- * Returns: 0 on success, error code on failure
- * 
- * Makes resource allocation visible to applications for optimization.
+ * @brief Obtain a snapshot of the resource allocation bitmap.
+ * @param type Resource type to query.
+ * @param vector Destination buffer for the allocation bits.
+ * @param size Size of the destination buffer in bytes.
+ * @return 0 on success or -EINVAL if the request is invalid.
  */
 int exo_get_resource_vector(resource_type_t type, uint64_t *vector,
                            size_t size) {
@@ -630,14 +617,11 @@ int exo_get_resource_vector(resource_type_t type, uint64_t *vector,
 }
 
 /**
- * exo_predict_availability - Predict resource availability
- * @type: Resource type
- * @count: Number of resources needed
- * @deadline_ns: When resources are needed
- * 
- * Returns: Probability of availability (0-100)
- * 
- * Allows applications to predict resource availability for planning.
+ * @brief Predict future availability for a resource type.
+ * @param type Resource type.
+ * @param count Number of resources required.
+ * @param deadline_ns Time horizon for the prediction.
+ * @return Probability (0-100) that the resources will be available.
  */
 int exo_predict_availability(resource_type_t type, uint32_t count,
                             uint64_t deadline_ns) {
@@ -678,13 +662,10 @@ int exo_predict_availability(resource_type_t type, uint32_t count,
  * ============================================================================ */
 
 /**
- * exo_create_libos - Create new LibOS environment
- * @name: Name of LibOS
- * @capability_id: Root capability for LibOS
- * 
- * Returns: LibOS ID on success, 0 on failure
- * 
- * Allows multiple OS personalities to coexist.
+ * @brief Create a new LibOS environment.
+ * @param name Descriptive name of the LibOS.
+ * @param capability_id Capability granting creation rights.
+ * @return Newly assigned LibOS identifier on success, 0 on failure.
  */
 uint64_t exo_create_libos(const char *name, uint64_t capability_id) {
     if (!capability_check(capability_id, CAP_RIGHT_CREATE_LIBOS)) {
@@ -727,7 +708,7 @@ uint64_t exo_create_libos(const char *name, uint64_t capability_id) {
  * ============================================================================ */
 
 /**
- * exo_init - Initialize exokernel resource management
+ * @brief Initialize exokernel resource management structures.
  */
 void exo_init(void) {
     /* Initialize resource vectors */

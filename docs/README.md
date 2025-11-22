@@ -1,114 +1,89 @@
-# FeuerBird Documentation Index
+# exov6 Documentation Hub
 
-**This directory contains organized technical documentation for the FeuerBird Exokernel project.**
+This directory now hosts the canonical documentation feed for the project.  
+Every Markdown file in the repository (including legacy archives) is analyzed,
+tagged, and fused into the topic-oriented files under `docs/unified/`.
 
-## 📖 Primary Documentation
+## Structure
 
-**Start here:** [**README.md**](../README.md) - **Canonical project documentation** containing comprehensive information about architecture, build system, development workflow, and all essential project details.
+| Path | Description |
+| --- | --- |
+| `docs/unified/INDEX.md` | Manifest of the unified topics and the original file counts |
+| `docs/unified/roadmaps_and_plans.md` | Execution plans, roadmaps, scope docs, and progress reports |
+| `docs/unified/architecture_and_implementation.md` | Kernel/libOS design notes, subsystem specs, and lock work |
+| `docs/unified/standards_and_compliance.md` | POSIX/SUSv5 notes, compliance matrices, and standards analysis |
+| `docs/unified/temporal_sessions.md` | Time-ordered meeting notes, weeklies, and execution logs |
+| `docs/unified/analyses_and_audits.md` | Postmortems, audits, research studies, and synthesis deep dives |
+| `docs/unified/legacy_archive.md` | Materials imported from `archive/` and `archive/documentation_consolidated/` |
+| `docs/unified/general_and_misc.md` | Supporting references that do not fall cleanly into the sets above |
+| `docs/unified/chronological.md` | Reverse-chronological digest across every document |
+| `docs/unified/topic_overlaps.md` | Clusters of sections that appear in multiple sources |
+| `docs/unified/canonical_topics.md` | Canonical narratives synthesizing overlapping sections |
+| `docs/unified/insights.md` | Topic stats, tag leaders, and temporal coverage summaries |
+| `docs/.build/docs_metadata.json` | Machine-readable metadata for every Markdown source |
+| `docs/.build/docs_report.md` | Coverage report plus duplicate detection summary |
+| `docs/.build/section_clusters.json` | Raw section overlap data (used by `topic_overlaps.md`) |
 
-## 📂 Documentation Organization
+The generated topic files keep paragraph-level provenance (`Source:` metadata)
+and automatically de-duplicate repeated text blocks, so legacy content is
+preserved without repeating the same walls of text.
 
-### Core Architecture
-- **[architecture/](architecture/)** - System design and architectural principles
-  - [exokernel_design.md](architecture/exokernel_design.md) - Core exokernel principles
-  - [three_zone_model.md](architecture/three_zone_model.md) - Zone architecture details
-  - [capability_model.md](architecture/capability_model.md) - Security model specification
-  - [multi_architecture.md](architecture/multi_architecture.md) - Platform abstraction
+## Documentation Pipeline
 
-### API Documentation  
-- **[api/](api/)** - Interface documentation and specifications
-  - [kernel_api.md](api/kernel_api.md) - Kernel interface specifications
-  - [libos_api.md](api/libos_api.md) - LibOS API documentation
-  - [ipc_api.md](api/ipc_api.md) - IPC system interfaces
-  - [capability_api.md](api/capability_api.md) - Capability system API
+All orchestration scripts live in `tools/run_docs_pipeline.py`.  
+Commands assume the local virtual environment (`.venv`) is active.
 
-### Standards Compliance
-- **[standards/](standards/)** - Standards implementation and compliance
-  - [posix_compliance.md](standards/posix_compliance.md) - POSIX-2024 implementation
-  - [c17_standards.md](standards/c17_standards.md) - C17 language compliance
-  - [POSIX_UTILITIES_LIST.md](standards/POSIX_UTILITIES_LIST.md) - Utility implementation status
+```bash
+# 1. (one-time) create the environment and install tooling
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r docs/requirements-docs.txt  # optional helper file
 
-### Development Guides
-- **[development/](development/)** - Developer guides and procedures
-  - [build_system.md](development/build_system.md) - Build configuration and options
-  - [debugging.md](development/debugging.md) - Debugging tools and techniques
-  - [performance.md](development/performance.md) - Performance optimization guide
-  - [testing.md](development/testing.md) - Testing procedures and frameworks
+# 2. Capture metadata for every Markdown file
+python tools/run_docs_pipeline.py inventory
 
-### Formal Specifications
-- **[formal/](../formal/)** - Mathematical models and formal specifications
-  - [specs/](../formal/specs/) - TLA+ specifications
-  - [coq/](../formal/coq/) - Coq proofs and verification
+# 3. Generate coverage + duplicate report
+python tools/run_docs_pipeline.py report
 
-## 🎯 Documentation by Topic
+# 4. Build the unified topic files (writes docs/unified/*.md plus timeline/overlap views)
+python tools/run_docs_pipeline.py merge
 
-### Getting Started
-1. **[README.md](../README.md)** - Start here for complete project overview
-2. **[CONTRIBUTING.md](../CONTRIBUTING.md)** - Development setup and contribution guidelines  
-3. **[development/build_system.md](development/build_system.md)** - Detailed build instructions
+# 5. Sanity check that every source is represented
+python tools/run_docs_pipeline.py validate
+```
 
-### Understanding the Architecture
-1. **[architecture/exokernel_design.md](architecture/exokernel_design.md)** - Core design principles
-2. **[architecture/three_zone_model.md](architecture/three_zone_model.md)** - Zone separation model
-3. **[architecture/capability_model.md](architecture/capability_model.md)** - Security architecture
+The pipeline can be rerun at any time; it overwrites the generated files so
+the output always reflects the current repository state.
 
-### Development and Implementation
-1. **[api/](api/)** - Interface specifications for all system components
-2. **[development/](development/)** - Developer guides and best practices
-3. **[standards/posix_compliance.md](standards/posix_compliance.md)** - POSIX implementation details
+> Outputs under `docs/unified/` are committed to capture the canonical view,
+> while `docs/.build/` contains transient metadata/cluster JSON and is gitignored.
 
-### Advanced Topics
-1. **[formal/](../formal/)** - Mathematical specifications and proofs
-2. **[development/performance.md](development/performance.md)** - Performance optimization
-3. **Research papers and synthesis documents** (archived in [archive/](../archive/))
+## Publishing Workflow
 
-## 🔗 External References
+1. **Authoring:** write or edit documentation anywhere in the repo.
+2. **Normalization:** run the pipeline (previous section) to update metadata and topic files.
+3. **Validation:** run `make -C docs` to refresh Doxygen + Sphinx content.
+4. **Reviews:** diff the changes in `docs/unified/*.md` to ensure the merge looks sane.
 
-### Academic Resources
-- [POSIX.1-2024 (SUSv5) Specification](https://pubs.opengroup.org/onlinepubs/9699919799/) - Standards reference
-- [Exokernel Research Papers](https://pdos.csail.mit.edu/exo/) - MIT PDOS research
-- [Capability-Based Systems](https://cap-lore.com/) - Academic papers on capabilities
+> The legacy scripts in `scripts/validate_documentation_links.sh` and
+> `scripts/simple_link_check.sh` still run, but the unified docs serve as the
+> main user-facing entry point.
 
-### Development Tools
-- [CMake Documentation](https://cmake.org/documentation/) - Build system reference
-- [QEMU Documentation](https://qemu.readthedocs.io/) - Emulation platform
-- [C17 Reference](https://en.cppreference.com/w/c/17) - Language standard
+## Curating Additional Views
 
-## 📋 Documentation Status
+The metadata JSON captures titles, inferred dates, headings, hashes, topics,
+and section hashes for every source file. Use it to:
 
-### ✅ Current (Synchronized with README.md)
-- Architecture overview and design principles
-- Build system and development workflow  
-- POSIX compliance implementation
-- Performance targets and benchmarks
-- Repository structure and organization
+- generate dashboards (e.g., pandas + matplotlib)
+- export filtered bundles (per phase, per subsystem, etc.)
+- feed automation or MCP agents with targeted slices of the knowledge base
+- mine `docs/.build/section_clusters.json` for hotspots of duplicate or
+  contradictory text
 
-### 🔧 In Progress
-- Detailed API documentation for all interfaces
-- Comprehensive developer guides and tutorials
-- Formal specification documentation
-- Advanced topic deep-dives
+## Best Practices
 
-### 📋 Planned
-- Complete API reference with examples
-- Step-by-step development tutorials
-- Performance optimization cookbook
-- Security model implementation guide
-
-## 🔄 Maintenance
-
-### Keeping Documentation Current
-- **Primary updates** happen in [README.md](../README.md) - the canonical source
-- **Specialized documentation** in this directory provides detailed technical content
-- **Cross-references** are validated regularly to ensure consistency
-- **Archive directory** preserves legacy documentation for historical reference
-
-### Contributing to Documentation
-1. **Major changes** - Update [README.md](../README.md) first
-2. **Technical details** - Add to appropriate subdirectory
-3. **New topics** - Follow existing organization structure
-4. **Validate links** - Ensure all cross-references work correctly
-
----
-
-**For complete project information, see [README.md](../README.md) - the definitive project documentation.**
+- Keep long-form notes in Markdown so the pipeline can ingest them automatically.
+- Reference primary locations (e.g., `docs/unified/roadmaps_and_plans.md`) from
+  issue trackers or release notes instead of deep archival paths.
+- If you add a new topic that deserves its own unified view, extend
+  `tools/run_docs_pipeline.py` and rerun the merge step.
