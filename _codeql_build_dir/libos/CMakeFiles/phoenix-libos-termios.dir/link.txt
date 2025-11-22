@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-termios.a "CMakeFiles/phoenix-libos-termios.dir/termios.c.o"
-/usr/bin/ranlib libphoenix-libos-termios.a
