@@ -169,13 +169,7 @@ int minix3_sync(minix3_sb_t *sb)
 
 minix3_inode_t* minix3_read_inode(minix3_sb_t *sb, uint32_t inum)
 {
-    if (!sb || inum == 0) return NULL;
-
-    // Validate inode number is within bounds
-    if (inum >= sb->sb.ninodes) {
-        printf("MINIX3: Invalid inode number %u (max %u)\n", inum, sb->sb.ninodes - 1);
-        return NULL;
-    }
+    if (!sb || inum == 0 || inum >= sb->sb.ninodes) return NULL;
 
     buffer_cache_t *cache = bcache_get_global();
     if (!cache) return NULL;
@@ -206,13 +200,7 @@ minix3_inode_t* minix3_read_inode(minix3_sb_t *sb, uint32_t inum)
 
 int minix3_write_inode(minix3_sb_t *sb, minix3_inode_t *inode)
 {
-    if (!sb || !inode) return -1;
-
-    // Validate inode number is within bounds
-    if (inode->inum == 0 || inode->inum >= sb->sb.ninodes) {
-        printf("MINIX3: Invalid inode number %u (max %u)\n", inode->inum, sb->sb.ninodes - 1);
-        return -1;
-    }
+    if (!sb || !inode || inode->inum == 0 || inode->inum >= sb->sb.ninodes) return -1;
 
     buffer_cache_t *cache = bcache_get_global();
     if (!cache) return -1;
