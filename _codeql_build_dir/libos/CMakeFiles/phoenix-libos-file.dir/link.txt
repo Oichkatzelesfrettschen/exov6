@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-file.a "CMakeFiles/phoenix-libos-file.dir/fs/file.c.o"
-/usr/bin/ranlib libphoenix-libos-file.a
