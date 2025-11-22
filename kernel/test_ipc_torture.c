@@ -239,7 +239,7 @@ int main(void) {
     printf("Rate: %.0f msgs/sec\n", rate);
 
     if (rate < 1000) {
-        printf("WARN: Performance seems low (expected >10k/sec)\n");
+        printf("WARN: Performance seems low (expected >1k/sec)\n");
     }
 
     printf("PASS\n");
