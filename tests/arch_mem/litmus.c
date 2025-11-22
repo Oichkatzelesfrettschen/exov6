@@ -28,9 +28,14 @@ void* mp_thread0(void* arg) {
         arch_barrier_write(); // sfence
         __atomic_store_n(&mp_flag, 1, __ATOMIC_RELAXED);
 
-        // Reset for next iter (sync needed)
+        // Wait for thread 1 to reset both flag and data
         while (__atomic_load_n(&mp_flag, __ATOMIC_RELAXED) != 0) {
              // spin
+             arch_cpu_relax();
+        }
+        // Ensure mp_data has been reset by thread 1
+        arch_barrier_read();
+        while (mp_data != 0) {
              arch_cpu_relax();
         }
     }
@@ -51,6 +56,10 @@ void* mp_thread1(void* arg) {
             printf("MP Violation detected at iter %d! data=%d\n", i, d);
         }
 
+        // Reset mp_data to signal completion before clearing flag
+        mp_data = 0;
+        arch_barrier_write();
+        arch_barrier_write();
         __atomic_store_n(&mp_flag, 0, __ATOMIC_RELAXED);
     }
     return NULL;
@@ -115,18 +124,59 @@ void* dekker_thread1(void* arg) {
 
 int main() {
     pthread_t t1, t2;
+    int ret;
 
     printf("Running MP test (%d iterations)...\n", ITERATIONS);
-    pthread_create(&t1, NULL, mp_thread0, NULL);
-    pthread_create(&t2, NULL, mp_thread1, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
+    ret = pthread_create(&t1, NULL, mp_thread0, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(mp_thread0) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_create(&t2, NULL, mp_thread1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(mp_thread1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t2, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t2) failed (code %d)\n", ret);
+        return 2;
+    }
+
+    // Reset all global variables between tests
+    mp_data = 0;
+    mp_flag = 0;
+    dekker_flag0 = 0;
+    dekker_flag1 = 0;
+    critical_count = 0;
+    violations = 0;
 
     printf("Running Dekker test (%d iterations)...\n", ITERATIONS);
-    pthread_create(&t1, NULL, dekker_thread0, NULL);
-    pthread_create(&t2, NULL, dekker_thread1, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
+    ret = pthread_create(&t1, NULL, dekker_thread0, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(dekker_thread0) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_create(&t2, NULL, dekker_thread1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(dekker_thread1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t2, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t2) failed (code %d)\n", ret);
+        return 2;
+    }
 
     if (violations > 0) {
         printf("Dekker Violations detected: %d\n", violations);

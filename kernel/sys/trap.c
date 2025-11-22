@@ -46,6 +46,31 @@ void idtinit(void) {
 
 // PAGEBREAK: 41
 void trap(struct trapframe *tf) {
+#ifdef __x86_64__
+  /*
+   * Invariant Check: Verify Kernel/User boundaries and GS base validity.
+   * We must be on a valid CPU.
+   */
+  struct cpu *c = mycpu();
+  if (!c) {
+      panic("trap: invalid gs base / cpu");
+  }
+
+  /* Check CR3 / Address space consistency if we are from user space */
+  if ((tf->cs & 3) == DPL_USER) {
+      struct proc *p = myproc();
+      if (p) {
+           // Verify we are in the correct address space
+           uint64_t current_cr3 = rcr3();
+           // Note: Mask out flags (lower 12 bits)
+           if ((current_cr3 & ~0xFFF) != ((uint64_t)V2P(p->pgdir) & ~0xFFF)) {
+               // In a panic, we might want to print more info, but keep it simple for now
+               panic("trap: cr3 mismatch");
+           }
+      }
+  }
+#endif
+
   struct proc *curproc = myproc();
   if (curproc) { // Only deduct gas if there's a current process
       if (curproc->gas_remaining <= GAS_PER_TRAP) {
@@ -57,6 +82,7 @@ void trap(struct trapframe *tf) {
   }
 
   if (tf->trapno == T_SYSCALL) {
+    // ABI Enforcement: Only T_SYSCALL is allowed for system calls via interrupt.
     if (myproc()->killed)
       exit(1);
     myproc()->tf = tf;

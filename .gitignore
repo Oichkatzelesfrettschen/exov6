@@ -1,42 +1,129 @@
-src-headers/fs 3.h
+# ------------------------------------------------------------------------------
+# Specific Project Headers (Generated)
+# ------------------------------------------------------------------------------
+src-headers/fs
 engine/kernel/user.h
+
+# ------------------------------------------------------------------------------
+# OS & Environment
+# ------------------------------------------------------------------------------
 .DS_Store
-# Build artifacts
+Thumbs.db
+.directory
+
+# ------------------------------------------------------------------------------
+# Editors & IDEs
+# ------------------------------------------------------------------------------
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+
+# Vim / Emacs
+*.swp
+*.swo
+*~
+\#*\#
+
+# ------------------------------------------------------------------------------
+# Build Artifacts (C/C++/Assembly)
+# ------------------------------------------------------------------------------
+# Standard Build Directories
 build/
-*.o
-*.a
-*.so
-
-# Python caches
-__pycache__/
-*.pyc
-
-# Node packages
-node_modules/
-
-# Documentation builds
-/docs/sphinx/build/
-/docs/build/
-
-# Build directories
 build*/
 builddir/
+test-build/
+
+# Underscore prefixed build variations
 _build/
+_build-*/
 _build-cmake/
 _build-test/
 _build-audit/
-test-build/
-_codeql*/
 
-# Local caches
+# Objects and Libraries
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.lib
+
+# Linker & Dependency info
+*.d
+*.map
+*.elf
+*.bin
+*.hex
+
+# Clang tooling
+compile_commands.json
 .cache/
+
+# ------------------------------------------------------------------------------
+# Security & Analysis (CodeQL)
+# ------------------------------------------------------------------------------
+# Wildcard to catch all generic CodeQL generation folders
+_codeql*
+
+# Specific CodeQL tooling files
+.codeql/
+codeql-database/
+*.sarif
+
+# Redundant but explicit (covered by _codeql*, kept for reference)
+_codeql_build_dir/
+_codeql_detected_source_root
+
+# ------------------------------------------------------------------------------
+# Languages (Python / Node)
+# ------------------------------------------------------------------------------
+__pycache__/
+*.pyc
+node_modules/
+
+# ------------------------------------------------------------------------------
+# Documentation
+# ------------------------------------------------------------------------------
+/docs/sphinx/build/
+/docs/build/
+html/
+latex/
+
+# ------------------------------------------------------------------------------
+# Testing & Isolation
+# ------------------------------------------------------------------------------
 openposixtestsuite/
 test_isolation/
 
-# Lock subsystem test binaries
+# ------------------------------------------------------------------------------
+# Kernel Subsystem Binaries & Benchmarks
+# ------------------------------------------------------------------------------
+# Pattern match all tests/benchmarks in sync/ instead of listing individually
+kernel/sync/test_*
+kernel/sync/bench_*
+
+# Specific binaries (Explicitly listed for legacy compatibility)
 kernel/sync/test_qspinlock
 kernel/sync/bench_qspinlock
 kernel/sync/test_lwkt_token
 kernel/sync/bench_lwkt_token
 kernel/sync/test_dag
 kernel/sync/bench_dag
+
+# ------------------------------------------------------------------------------
+# Debugging
+# ------------------------------------------------------------------------------
+*.gdb
+.gdb_history
+core
+core.*
+vgcore.*
