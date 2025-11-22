@@ -283,7 +283,7 @@ void beatty_print_stats(
             avg_latency = t->total_latency_ticks / t->schedule_count;
         }
 
-        printf("%-4u %-20s %-10.2f %-10llu %-7.2f %-10llu %-10llu\n",
+        printf("%-4u %-20s %-10.2f %-10llu %-8.2f %-10llu %-10llu\n",
                i,
                t->name,
                (double)sched->priorities[i] / 65536.0,

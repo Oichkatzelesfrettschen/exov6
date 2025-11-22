@@ -66,7 +66,7 @@ function beatty_select(ready_queue):
 ### Complexity
 
 *   **Selection**: $O(1)$ arithmetic operations.
-*   **Maintenance**: $O(N \log N)$ if sorting every time. To achieve $O(1)$ selection overhead, the ready queue must be maintained as a sorted structure (e.g., valid/invalid bitmasks over a fixed priority set, or incrementally sorted). The current implementation performs a sort on selection, which is $O(N^2)$ worst case for insertion sort or $O(N \log N)$ for quicksort.
+*   **Maintenance**: Sorting the ready queue on each selection is $O(N^2)$ in the worst case and $O(N)$ in the best case for insertion sort (as used in the current implementation; see `kernel/sched_beatty.c`). To achieve $O(1)$ selection overhead, the ready queue should be maintained as a sorted structure (e.g., valid/invalid bitmasks over a fixed priority set, or incrementally sorted). Note: quicksort ($O(N \log N)$) is not used in the kernel due to constraints (see code comment "no qsort in kernel").
 
 ## Interactions and Risks
 
@@ -106,7 +106,7 @@ function beatty_select(ready_queue):
 *   The ready queue can be protected by RCU for read-side access during selection.
 *   Updates (insert/remove) happen under a lock, but the selection logic (reading the list) can be lock-free if the list structure supports it.
 
-## Telemetry and Telemetry
+## Telemetry and Validation
 
 To validate the scheduler's properties, the following metrics are exposed per task:
 
