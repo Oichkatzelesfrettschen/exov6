@@ -106,7 +106,7 @@ function beatty_select(ready_queue):
 *   The ready queue can be protected by RCU for read-side access during selection.
 *   Updates (insert/remove) happen under a lock, but the selection logic (reading the list) can be lock-free if the list structure supports it.
 
-## Telemetry and Telemetry
+## Telemetry and Validation
 
 To validate the scheduler's properties, the following metrics are exposed per task:
 
