@@ -183,6 +183,9 @@ void *sender_thread(void *arg) {
         if (rand() % 100 == 0) sched_yield();
     }
 
+    /* Free the allocated endpoint */
+    ipc_endpoint_free(ep);
+
     return NULL;
 }
 
