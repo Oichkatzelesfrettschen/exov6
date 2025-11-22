@@ -1,1 +1,0 @@
-/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang -O3 -DNDEBUG -Xlinker --dependency-file=CMakeFiles/user-ps.dir/link.d "CMakeFiles/user-ps.dir/ps.c.o" -o ps  libphoenix-ulib.a libphoenix-umalloc.a libphoenix-printf.a libphoenix-caplib.a libphoenix-ulib.a

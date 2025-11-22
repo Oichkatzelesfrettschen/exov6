@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-kernel-streams.a "CMakeFiles/phoenix-kernel-streams.dir/streams.c.o"
-/usr/bin/ranlib libphoenix-kernel-streams.a

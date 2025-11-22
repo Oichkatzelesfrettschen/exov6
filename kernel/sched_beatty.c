@@ -31,6 +31,7 @@ typedef struct ready_task {
 /**
  * Compare function for qsort (sort by priority descending)
  */
+__attribute__((unused))
 static int compare_priorities(const void *a, const void *b)
 {
     const ready_task_t *ta = (const ready_task_t *)a;

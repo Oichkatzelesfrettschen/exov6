@@ -1,1 +1,0 @@
-/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang -O3 -DNDEBUG -Xlinker --dependency-file=CMakeFiles/phoenix-metrics.dir/link.d "CMakeFiles/phoenix-metrics.dir/phoenix_metrics.c.o" -o phoenix-metrics
