@@ -1,5 +1,5 @@
 # Cross-compilation toolchain file for x86_64 target from ARM64 host
-# Usage: cmake -DCMAKE_TOOLCHAIN_FILE=toolchain-x86_64.cmake ..
+# Usage: cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-x86_64.cmake ..
 
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)

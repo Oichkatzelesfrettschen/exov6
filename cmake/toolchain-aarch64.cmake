@@ -1,5 +1,5 @@
 # Cross-compilation toolchain file for AArch64 target 
-# Usage: cmake -DCMAKE_TOOLCHAIN_FILE=toolchain-aarch64.cmake ..
+# Usage: cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-aarch64.cmake ..
 
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR aarch64)
