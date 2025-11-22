@@ -88,10 +88,12 @@ typedef struct dag_task {
     uint64_t end_time;                     /* End time (ticks) */
 
     /* Telemetry */
-    uint64_t schedule_count;               /* Number of times scheduled */
-    uint64_t run_time_ticks;               /* Total CPU time consumed */
-    uint64_t last_runnable_time;           /* Timestamp when became READY */
-    uint64_t total_latency_ticks;          /* Cumulative scheduling latency */
+    struct {
+        uint64_t schedule_count;               /* Number of times scheduled */
+        uint64_t run_time_ticks;               /* Total CPU time consumed */
+        uint64_t last_runnable_time;           /* Timestamp when became READY */
+        uint64_t total_latency_ticks;          /* Cumulative scheduling latency */
+    } stats;
 } dag_task_t;
 
 /**

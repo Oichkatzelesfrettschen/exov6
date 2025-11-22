@@ -44,10 +44,10 @@ int test_beatty_fairness_sim(void) {
     /* Make all ready */
     for(int i=0; i<dag.num_tasks; i++) {
         dag.tasks[i].state = TASK_STATE_READY;
-        dag.tasks[i].last_runnable_time = 0; /* Simulation start */
-        dag.tasks[i].schedule_count = 0;
-        dag.tasks[i].run_time_ticks = 0;
-        dag.tasks[i].total_latency_ticks = 0;
+        dag.tasks[i].stats.last_runnable_time = 0; /* Simulation start */
+        dag.tasks[i].stats.schedule_count = 0;
+        dag.tasks[i].stats.run_time_ticks = 0;
+        dag.tasks[i].stats.total_latency_ticks = 0;
     }
 
     beatty_recompute_all_priorities(&sched, &dag);
@@ -63,7 +63,7 @@ int test_beatty_fairness_sim(void) {
         TEST_ASSERT_MSG(selected != NULL, "Should select a task");
 
         /* Simulate execution */
-        selected->run_time_ticks++;
+        selected->stats.run_time_ticks++;
 
         /* Update Latency for ALL ready tasks */
         for(int i=0; i<dag.num_tasks; i++) {
@@ -71,7 +71,7 @@ int test_beatty_fairness_sim(void) {
             if (t->state == TASK_STATE_READY) {
                 if (t != selected) {
                     /* Task was ready but not selected -> Latency increases */
-                     t->total_latency_ticks++;
+                     t->stats.total_latency_ticks++;
                 }
             }
         }
@@ -88,19 +88,19 @@ int test_beatty_fairness_sim(void) {
         q16_t prio = sched.priorities[i];
 
         uint64_t avg_lat = 0;
-        if (t->schedule_count > 0)
-             avg_lat = t->total_latency_ticks / t->schedule_count;
+        if (t->stats.schedule_count > 0)
+             avg_lat = t->stats.total_latency_ticks / t->stats.schedule_count;
 
         printf("%-15s %-10.2f %-10llu %-10llu %-10llu\n",
                t->name, (double)prio/65536.0,
-               (unsigned long long)t->schedule_count,
-               (unsigned long long)t->run_time_ticks,
+               (unsigned long long)t->stats.schedule_count,
+               (unsigned long long)t->stats.run_time_ticks,
                (unsigned long long)avg_lat);
 
-        total_selections += t->schedule_count;
+        total_selections += t->stats.schedule_count;
 
         /* Basic sanity check: Task ran */
-        TEST_ASSERT_MSG(t->schedule_count > 0, "Task should have run");
+        TEST_ASSERT_MSG(t->stats.schedule_count > 0, "Task should have run");
     }
 
     TEST_ASSERT_MSG(total_selections == (uint64_t)total_ticks, "Total selections match ticks");
@@ -108,7 +108,7 @@ int test_beatty_fairness_sim(void) {
     /* Fairness Check */
     double expected_share = 1.0 / (double)dag.num_tasks;
     for(int i=0; i<dag.num_tasks; i++) {
-        double share = (double)dag.tasks[i].schedule_count / total_ticks;
+        double share = (double)dag.tasks[i].stats.schedule_count / total_ticks;
         printf("Task %d Share: %.4f (Expected %.4f)\n", i, share, expected_share);
 
         if (share < 0.18 || share > 0.22) {
@@ -116,7 +116,7 @@ int test_beatty_fairness_sim(void) {
         }
     }
 
-    TEST_ASSERT_MSG(dag.tasks[0].run_time_ticks > 0, "Telemetry: Run time updated");
+    TEST_ASSERT_MSG(dag.tasks[0].stats.run_time_ticks > 0, "Telemetry: Run time updated");
 
     beatty_print_stats(&sched, &dag);
 
