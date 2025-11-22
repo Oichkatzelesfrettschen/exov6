@@ -28,19 +28,11 @@ def run_cmake(build_dir: pathlib.Path, build_type: str) -> None:
         "-DCMAKE_C_COMPILER=clang",
         "-DCMAKE_CXX_COMPILER=clang++",
         f"-DCMAKE_BUILD_TYPE={type_map.get(build_type, 'Debug')}",
-<<<<<<< HEAD
-        "-DCMAKE_C_STANDARD=17",
-        "-DCMAKE_CXX_STANDARD=17",
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
-        "-DCMAKE_C_FLAGS=-Wall -Werror -std=c17 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700",
-        "-DCMAKE_CXX_FLAGS=-Wall -Werror -std=c++17 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700",
-=======
         "-DCMAKE_C_STANDARD=23",
         "-DCMAKE_CXX_STANDARD=23",
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
         "-DCMAKE_C_FLAGS=-Wall -Werror",
         "-DCMAKE_CXX_FLAGS=-Wall -Werror",
->>>>>>> e875b0d46288791972060b75ca2e13af06f63771
     ]
     if build_type == "performance":
         cmake_args.append("-DCMAKE_C_FLAGS_RELEASE=-O3")
