@@ -81,8 +81,8 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     uint32_t num_ready = 0;
     uint32_t ready_indices[DAG_MAX_TASKS];
 
-    // 1. Filter for READY state (O(N))
-    // Note: In optimized paths, this list is maintained incrementally.
+    /* 1. Filter for READY state (O(N)) */
+    /* Note: In optimized paths, this list is maintained incrementally. */
     for (int i = 0; i < dag->num_tasks; i++) {
         if (atomic_load(&dag->tasks[i].state) == TASK_STATE_READY) {
             ready_indices[num_ready++] = i;
@@ -94,22 +94,39 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     }
 
     /*
-     * 2. Compute Beatty Number (Fixed Point Q16.16)
+     * 2. Sort by priority (descending)
+     * Simple insertion sort - suitable for small N (DAG_MAX_TASKS typically < 64)
+     */
+    for (uint32_t i = 1; i < num_ready; i++) {
+        uint32_t key_idx = ready_indices[i];
+        q16_t key_priority = sched->priorities[key_idx];
+        int32_t j = i - 1;
+
+        /* Move elements with lower priority to the right */
+        while (j >= 0 && sched->priorities[ready_indices[j]] < key_priority) {
+            ready_indices[j + 1] = ready_indices[j];
+            j--;
+        }
+        ready_indices[j + 1] = key_idx;
+    }
+
+    /*
+     * 3. Compute Beatty Number (Fixed Point Q16.16)
      * Formula: B = floor(counter * phi)
      * We use a 64-bit intermediate to prevent overflow before shifting.
      */
     uint64_t product = (uint64_t)sched->counter * (uint64_t)sched->alpha;
-    uint32_t beatty_val = (uint32_t)(product >> 16); // Floor by shifting
+    uint32_t beatty_val = (uint32_t)(product >> 16); /* Floor by shifting */
 
     /*
-     * 3. Map to Index
+     * 4. Map to Index
      * The Beatty sequence is infinite; we map it to the current finite
      * set of ready tasks using modulo arithmetic.
      */
     uint32_t selected_index = beatty_val % num_ready;
     uint32_t task_id = ready_indices[selected_index];
 
-    /* 4. Update State */
+    /* 5. Update State */
     sched->counter++;
     sched->selections[task_id]++;
     sched->total_selections++;
