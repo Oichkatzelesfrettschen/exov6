@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-caplib.a "CMakeFiles/phoenix-caplib.dir/caplib.c.o"
-/usr/bin/ranlib libphoenix-caplib.a
