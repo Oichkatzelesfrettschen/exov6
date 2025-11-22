@@ -25,8 +25,7 @@ _build/
 _build-cmake/
 _build-test/
 _build-audit/
-_codeql_build_dir/
-_codeql_detected_source_root
+_codeql*
 test-build/
 
 # Local caches
