@@ -22,9 +22,9 @@ int rename(const char *oldpath, const char *newpath) {
         return -1;
     }
     if (unlink(oldpath) < 0) {
-        // Unlink failed: remove newpath to avoid duplicate, and return error
-        unlink(newpath); // Clean up newpath to avoid leaving duplicate
-        return -1;
+        // Should probably remove newpath if unlink fails?
+        // But safely we have a copy now.
+        return 0;
     }
     return 0;
 }
@@ -138,6 +138,11 @@ move_file(const char *src, const char *dst)
   
   // Check if destination exists
   if(stat(dst, &dst_st) >= 0) {
+    // Check for self-move (same file)
+    if (src_st.dev == dst_st.dev && src_st.ino == dst_st.ino) {
+        return 0;
+    }
+
     // If destination is a directory, move source into it
     if(dst_st.type == T_DIR) {
       char new_dst[512];

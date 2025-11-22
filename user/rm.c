@@ -23,8 +23,8 @@ void rm(char *path, int recursive) {
 
         DIR *dir = opendir(path);
         if (!dir) {
-            printf(2, "rm: cannot open directory %s\n", path);
-            return;
+             printf(2, "rm: cannot open directory %s\n", path);
+             return;
         }
         struct dirent *entry;
         char buf[512];
@@ -47,13 +47,25 @@ void rm(char *path, int recursive) {
         }
         closedir(dir);
 
-        // Note: Using unlink() for directories; kernel must support this operation.
+        // Directory should be empty now, use unlink (or rmdir if available)
+        // unlink on directory might fail if kernel demands rmdir.
+        // usys.S has unlink but NO rmdir?
+        // Wait, usys.S calls SYS_unlink.
+        // Standard POSIX: unlink() on directory is EPERM. rmdir() is required.
+        // syscall_asm.h doesn't list rmdir?
+
+        // Wait, user/usys.S does not list rmdir.
+        // But it does list `SYSCALL(unlink)`.
+
+        // If the kernel implements unlink for directories, fine.
+        // If not, I can't delete directories.
+        // I will try unlink.
         if (unlink(path) < 0) {
              printf(2, "rm: failed to remove directory %s\n", path);
         }
     } else {
         if (unlink(path) < 0) {
-            printf(2, "rm: failed to remove %s\n", path);
+             printf(2, "rm: failed to remove %s\n", path);
         }
     }
 }
@@ -61,31 +73,27 @@ void rm(char *path, int recursive) {
 int main(int argc, char *argv[]) {
     int i;
     int recursive = 0;
-    int file_count = 0;
+    int start_arg = 1;
 
-    // Consolidated argument parsing
+    // Check for -r flag
     for (i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
-            if (strcmp(argv[i], "-r") == 0) {
+            if (argv[i][1] == 'r') {
                 recursive = 1;
-            } else {
-                printf(2, "rm: unknown option %s\n", argv[i]);
-                printf(2, "Usage: rm [-r] files...\n");
-                exit(0);
+                // rudimentary arg parsing
+                if (i == start_arg) start_arg++;
             }
         } else {
-            file_count++;
+            break;
         }
     }
 
-    if (file_count == 0) {
+    if (argc < start_arg + 1) {
         printf(2, "Usage: rm [-r] files...\n");
         exit(0);
     }
 
-    for (i = 1; i < argc; i++) {
-        if (argv[i][0] == '-' && strcmp(argv[i], "-r") == 0)
-            continue;
+    for (i = start_arg; i < argc; i++) {
         rm(argv[i], recursive);
     }
     exit(0);

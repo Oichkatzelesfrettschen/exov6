@@ -26,21 +26,7 @@ int ls(char *path) {
         }
 
         while ((entry = readdir(dir)) != NULL) {
-            char fullpath[512];
-            int len = strlen(path);
-            if (len + 1 + strlen(entry->d_name) + 1 > sizeof(fullpath)) {
-                printf(2, "ls: path too long: %s/%s\n", path, entry->d_name);
-                continue;
-            }
-            strcpy(fullpath, path);
-            if (fullpath[len-1] != '/')
-                fullpath[len++] = '/';
-            strcpy(fullpath + len, entry->d_name);
-            if (stat(fullpath, &st) < 0) {
-                printf(2, "ls: cannot stat %s\n", fullpath);
-                continue;
-            }
-            printf(1, "%s %d %d\n", entry->d_name, st.type, entry->d_ino);
+             printf(1, "%s %d %d\n", entry->d_name, T_FILE, entry->d_ino);
         }
         closedir(dir);
         return 0;
