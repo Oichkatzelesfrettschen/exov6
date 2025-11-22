@@ -161,6 +161,24 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/core")
     file(GLOB_RECURSE CORE_SOURCES core/*.c)
 endif()
 
+# VFS subsystem (modern virtual filesystem layer)
+set(VFS_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vfs")
+    file(GLOB_RECURSE VFS_SOURCES vfs/*.c)
+endif()
+
+# Boot subsystem
+set(BOOT_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/boot")
+    file(GLOB_RECURSE BOOT_SOURCES boot/*.c)
+endif()
+
+# Resurrection/reincarnation server
+set(RESURRECTION_SOURCES)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/resurrection")
+    file(GLOB_RECURSE RESURRECTION_SOURCES resurrection/*.c)
+endif()
+
 # Combine all kernel sources
 set(ALL_KERNEL_SOURCES
     ${KERNEL_CORE_SOURCES}
@@ -169,6 +187,7 @@ set(ALL_KERNEL_SOURCES
     ${SYNC_SOURCES}
     ${DRIVER_SOURCES}
     ${FS_SOURCES}
+    ${VFS_SOURCES}
     ${MEM_SOURCES}
     ${IPC_SOURCES}
     ${SCHED_SOURCES}
@@ -176,6 +195,8 @@ set(ALL_KERNEL_SOURCES
     ${TIME_SOURCES}
     ${CAP_SOURCES}
     ${CORE_SOURCES}
+    ${BOOT_SOURCES}
+    ${RESURRECTION_SOURCES}
 )
 
 # Remove any sources that shouldn't be in the main kernel

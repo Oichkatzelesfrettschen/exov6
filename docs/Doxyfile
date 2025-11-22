@@ -1,6 +1,6 @@
 PROJECT_NAME = exov6
-OUTPUT_DIRECTORY = docs/build
-INPUT = src kernel
+OUTPUT_DIRECTORY = build
+INPUT = ../src ../kernel
 RECURSIVE = YES
 GENERATE_LATEX = NO
 QUIET = YES

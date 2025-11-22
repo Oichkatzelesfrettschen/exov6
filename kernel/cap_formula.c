@@ -163,15 +163,17 @@ uint32_t formula_quota_based(const struct capability_v2 *cap, void *data)
 
     quota_based_formula_data_t *qdata = (quota_based_formula_data_t *)data;
 
-    /* Check if any dimension exceeds quota (8D component-wise check) */
-    if (cap->consumed.cpu > qdata->max_quota.cpu ||
-        cap->consumed.memory > qdata->max_quota.memory ||
-        cap->consumed.io_bandwidth > qdata->max_quota.io_bandwidth ||
-        cap->consumed.network_bandwidth > qdata->max_quota.network_bandwidth ||
-        cap->consumed.gpu_time > qdata->max_quota.gpu_time ||
-        cap->consumed.disk_quota > qdata->max_quota.disk_quota ||
-        cap->consumed.irq_count > qdata->max_quota.irq_count ||
-        cap->consumed.capability_count > qdata->max_quota.capability_count) {
+    /* Check if any dimension exceeds quota (8D component-wise check)
+     * Using octonion components: e0=CPU, e1=memory, e2=IO, e3=network,
+     * e4=GPU, e5=disk, e6=IRQ, e7=capability_count */
+    if (cap->consumed.e0 > qdata->max_quota.e0 ||
+        cap->consumed.e1 > qdata->max_quota.e1 ||
+        cap->consumed.e2 > qdata->max_quota.e2 ||
+        cap->consumed.e3 > qdata->max_quota.e3 ||
+        cap->consumed.e4 > qdata->max_quota.e4 ||
+        cap->consumed.e5 > qdata->max_quota.e5 ||
+        cap->consumed.e6 > qdata->max_quota.e6 ||
+        cap->consumed.e7 > qdata->max_quota.e7) {
         /* Quota exceeded: grant reduced rights */
         return qdata->quota_exceeded_rights;
     } else {

@@ -10,10 +10,12 @@
 
 #include "cap_ipc.h"
 #include "capability_v2.h"
-#include "printf.h"
 #include "string.h"
 #include <stddef.h>
 #include <stdint.h>
+
+/* Stub for kernel debug output - TODO: integrate with actual kernel console */
+#define ipc_debug(fmt, ...) ((void)0)
 
 /*******************************************************************************
  * IPC BUFFER POOL (Simplified Allocator)
@@ -252,7 +254,7 @@ int cap_ipc_send(uint32_t recipient_pid, cap_ipc_buffer_t *buffer)
 
     (void)recipient_pid; /* Unused for now */
 
-    printf("[IPC] Sent message to PID %u\n", recipient_pid);
+    ipc_debug("[IPC] Sent message to PID %u\n", recipient_pid);
     return 0;
 }
 
@@ -272,7 +274,7 @@ int cap_ipc_receive(cap_ipc_buffer_t **buffer_out)
     /* TODO: If empty, block until message arrives */
     /* TODO: Dequeue buffer and return */
 
-    printf("[IPC] Receive not yet implemented\n");
+    ipc_debug("[IPC] Receive not yet implemented\n");
     return -2; /* ENOSYS */
 }
 
@@ -385,7 +387,14 @@ cap_ipc_buffer_t *cap_ipc_create_file_response(int32_t status,
 
 /*******************************************************************************
  * PEDAGOGICAL EXAMPLES
+ *
+ * NOTE: These examples are for documentation/testing only.
+ * Disabled in kernel builds - enable with CAP_IPC_EXAMPLES
  ******************************************************************************/
+
+#ifdef CAP_IPC_EXAMPLES
+
+#include <stdio.h>  /* Standard printf for examples */
 
 /**
  * Example: Simple RPC with capability passing
@@ -601,3 +610,5 @@ void cap_ipc_run_all_examples(void)
 
     printf("All IPC examples completed.\n\n");
 }
+
+#endif /* CAP_IPC_EXAMPLES */

@@ -60,8 +60,11 @@ struct capability_v2; /* Defined in capability_v2.h */
  * - Time-based: Return 0 (no rights) if current_time > expiry_time
  * - Usage-based: Return 0 after N accesses
  * - User-based: Return different rights for different users
+ *
+ * NOTE: cap_formula_t is defined in capability_v2.h as the primary type.
+ * This legacy signature is used for simpler formula implementations.
  */
-typedef uint32_t (*cap_formula_t)(const struct capability_v2 *cap, void *data);
+typedef uint32_t (*cap_formula_legacy_t)(const struct capability_v2 *cap, void *data);
 
 /*******************************************************************************
  * COMBINATOR TYPES
@@ -166,9 +169,9 @@ typedef struct {
  * In lambda calculus: λ(f1, f2, op). λ(cap). op(f1(cap), f2(cap))
  */
 typedef struct {
-    cap_formula_t formula1;           /* First child formula */
+    cap_formula_legacy_t formula1;    /* First child formula */
     void *data1;                      /* Data for first formula */
-    cap_formula_t formula2;           /* Second child formula (NULL for NOT) */
+    cap_formula_legacy_t formula2;    /* Second child formula (NULL for NOT) */
     void *data2;                      /* Data for second formula */
     formula_combinator_t combinator;  /* Combinator type (AND/OR/NOT/XOR) */
 } combinator_formula_data_t;
