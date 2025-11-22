@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-user-sched.a "CMakeFiles/phoenix-user-sched.dir/libos/sched.c.o"
+/usr/bin/ranlib libphoenix-user-sched.a
