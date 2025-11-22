@@ -133,4 +133,23 @@ kernel/sync/bench_dag
 .gdb_history
 core
 core.*
-vgcore.*test_minix3
+vgcore.*
+
+# ------------------------------------------------------------------------------
+# CMake Build System
+# ------------------------------------------------------------------------------
+# CMake build directories (already covered above but explicit for clarity)
+# build/ and _build/ are already listed in Build Artifacts section
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+install_manifest.txt
+compile_commands.json
+.ninja_deps
+.ninja_log
+*.ninja
+
+# CMake user presets (keep versioned presets)
+CMakeUserPresets.json
