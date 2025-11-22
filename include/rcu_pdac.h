@@ -160,6 +160,8 @@ typedef struct rcu_head {
     void (*func)(struct rcu_head *head);
 } rcu_head_t;
 
+_Static_assert(sizeof(struct rcu_head) == 16, "struct rcu_head size mismatch");
+
 /**
  * Per-CPU RCU data
  */
@@ -185,6 +187,8 @@ typedef struct rcu_cpu_data {
     atomic_uint64_t grace_periods;   /* GPs participated in */
     atomic_uint64_t callbacks_invoked; /* Callbacks executed */
 } rcu_cpu_data_t;
+
+_Static_assert(sizeof(struct rcu_cpu_data) == 88, "struct rcu_cpu_data size mismatch");
 
 /*******************************************************************************
  * GLOBAL RCU STATE
@@ -224,6 +228,8 @@ typedef struct rcu_state {
     /* Synchronization for GP advancement */
     atomic_int_t gp_lock;            /* Simple spinlock for GP state machine */
 } rcu_state_t;
+
+_Static_assert(sizeof(struct rcu_state) == 5712, "struct rcu_state size mismatch");
 
 /*******************************************************************************
  * RCU INITIALIZATION

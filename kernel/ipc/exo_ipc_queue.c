@@ -30,6 +30,8 @@ void ipc_timed_init(void) { ipc_init(&ipcs); }
 
 int exo_ipc_queue_send(exo_cap dest, const void *buf, uint64_t len) {
   struct mailbox *mb = myproc()->mailbox;
+  if (!mb)
+    panic("exo_ipc_queue_send: no mailbox");
   ipc_init(mb);
   IPC_LOG("send attempt dest=%u len=%llu", dest.id, (unsigned long long)len);
   if (!cap_has_rights(dest.rights, EXO_RIGHT_W))
@@ -85,6 +87,8 @@ int exo_ipc_queue_recv(exo_cap src, void *buf, uint64_t len) {
     return -EPERM;
   }
   struct mailbox *mb = myproc()->mailbox;
+  if (!mb)
+    panic("exo_ipc_queue_recv: no mailbox");
   ipc_init(mb);
   acquire(&mb->lock);
   while (mb->r == mb->w) {

@@ -151,6 +151,11 @@ struct proc *allocproc(void) {
   return 0;
 
 found:
+  if (p->state != UNUSED)
+    panic("allocproc: not unused");
+  if (p->kstack != 0)
+    panic("allocproc: kstack not 0");
+
   p->state = EMBRYO;
   p->pid = nextpid++;
   p->pctr_cap = nextpctr_cap++;

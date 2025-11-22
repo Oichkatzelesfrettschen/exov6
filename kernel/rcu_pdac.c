@@ -93,6 +93,9 @@ void rcu_cpu_init(rcu_cpu_data_t *cpu_data) {
  * Initialize RCU subsystem
  */
 void rcu_init(rcu_state_t *rcu, uint8_t num_cpus) {
+    assert(rcu != NULL);
+    assert(num_cpus > 0);
+
     /* Initialize global state */
     atomic_store(&rcu->gp_seq, 0);
     atomic_store(&rcu->gp_state, RCU_GP_IDLE);
@@ -391,6 +394,10 @@ void synchronize_rcu(rcu_state_t *rcu) {
  */
 void call_rcu(rcu_state_t *rcu, rcu_head_t *head,
               void (*func)(rcu_head_t *head), uint8_t cpu_id) {
+    assert(rcu != NULL);
+    assert(head != NULL);
+    assert(func != NULL);
+
     rcu_cpu_data_t *cpu = &rcu->cpus[cpu_id];
 
     /* Initialize callback */

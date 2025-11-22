@@ -53,8 +53,8 @@
  * FORWARD DECLARATIONS
  * ============================================================================ */
 
-struct cap_formula_context;
-typedef uint32_t (*cap_formula_t)(struct cap_formula_context *ctx);
+struct capability_v2;
+typedef uint32_t (*cap_formula_t)(struct capability_v2 *cap, void *data);
 
 /* ============================================================================
  * CAPABILITY TYPES
@@ -388,6 +388,9 @@ struct capability_v2 {
      */
     struct qspinlock lock;
 };
+
+_Static_assert(sizeof(struct capability_v2) == 640, "capability_v2 size mismatch");
+_Static_assert(sizeof(struct token_bucket) == 40, "token_bucket size mismatch");
 
 /* ============================================================================
  * CAPABILITY TABLE
