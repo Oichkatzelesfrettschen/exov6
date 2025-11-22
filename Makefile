@@ -1,3 +1,92 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DEPRECATED MAKEFILE - LEGACY BUILD SYSTEM
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# ⚠️  WARNING: This Makefile is DEPRECATED and will be removed in a future release.
+#
+# Please migrate to the modern CMake build system:
+#
+#   Quick Start:
+#     cmake --preset=default    # Configure
+#     cmake --build build       # Build
+#     ctest --preset=default    # Test
+#
+#   Available presets:
+#     - default : Standard debug build
+#     - release : Optimized release build  
+#     - debug   : Debug with sanitizers
+#     - dev     : Quick development iteration
+#     - ci      : CI with all checks
+#
+#   See CMakePresets.json for all configurations.
+#   See README.md for full migration guide.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+.PHONY: help migrate-info
+.DEFAULT_GOAL := help
+
+help:
+	@echo "╔════════════════════════════════════════════════════════════════╗"
+	@echo "║  DEPRECATED BUILD SYSTEM - Please use CMake                    ║"
+	@echo "╚════════════════════════════════════════════════════════════════╝"
+	@echo ""
+	@echo "This Makefile is deprecated. Use CMake instead:"
+	@echo ""
+	@echo "  Configure:  cmake --preset=default"
+	@echo "  Build:      cmake --build build"
+	@echo "  Test:       ctest --preset=default"
+	@echo ""
+	@echo "Run 'make migrate-info' for detailed migration instructions."
+	@echo ""
+
+migrate-info:
+	@echo "╔════════════════════════════════════════════════════════════════╗"
+	@echo "║  MAKEFILE → CMAKE MIGRATION GUIDE                              ║"
+	@echo "╚════════════════════════════════════════════════════════════════╝"
+	@echo ""
+	@echo "OLD (Makefile)              →  NEW (CMake)"
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo "make                        →  cmake --build build"
+	@echo "make clean                  →  cmake --build build --target clean"
+	@echo "make test                   →  ctest --preset=default"
+	@echo "make all                    →  cmake --build build --parallel"
+	@echo "make lockfree               →  cmake --build build --target lockfree"
+	@echo ""
+	@echo "Configuration options:"
+	@echo "  CC=clang make             →  cmake --preset=default (uses Clang by default)"
+	@echo "  CFLAGS=-O3 make           →  cmake --preset=release"
+	@echo "  make DEBUG=1              →  cmake --preset=debug"
+	@echo ""
+	@echo "Benefits of CMake:"
+	@echo "  ✓ Modern dependency management"
+	@echo "  ✓ Better IDE integration"
+	@echo "  ✓ Cross-platform support"
+	@echo "  ✓ Configuration presets"
+	@echo "  ✓ Parallel builds by default"
+	@echo "  ✓ Better error messages"
+	@echo ""
+	@echo "For full documentation, see:"
+	@echo "  • README.md - Build instructions"
+	@echo "  • CMakePresets.json - Available configurations"
+	@echo "  • docs/BUILD.md - Detailed build guide"
+	@echo ""
+
+# Legacy targets that redirect to help
+.PHONY: all clean test lockfree
+all clean test lockfree:
+	@$(MAKE) help
+	@exit 1
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# LEGACY MAKEFILE CONTENT (KEPT FOR REFERENCE, NOT EXECUTED)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# The original Makefile content has been archived below for reference.
+# These targets are NO LONGER FUNCTIONAL.
+#
+# ─────────────────────────────────────────────────────────────────────────────── 
+#
 # Makefile for PDAC (Probabilistic DAG Algebra with Capabilities)
 # Phase 5: Lock-Free Revolution
 
