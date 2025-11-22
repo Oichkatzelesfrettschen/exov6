@@ -11,9 +11,16 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 #include "file.h"
 #include "libfs.h"
 #include "exo.h"
+
+// Mock S_IFREG if missing
+#ifndef S_IFREG
+#define S_IFREG 0100000
+#endif
 
 // Stub file structure for minimal functionality
 static struct file dummy_files[32];
@@ -48,16 +55,14 @@ int libfs_truncate(struct file* f, size_t length) {
     return 0;
 }
 
-int libfs_close(struct file* f) {
+void libfs_close(struct file* f) {
     if (f && f->ref > 0) {
         f->ref--;
-        return 0;
     }
-    return -1;
 }
 
-int fileclose(struct file* f) {
-    return libfs_close(f);
+void fileclose(struct file* f) {
+    libfs_close(f);
 }
 
 int filestat(struct file* f, struct stat* st) {
@@ -65,19 +70,12 @@ int filestat(struct file* f, struct stat* st) {
     if (!st) return -1;
     
     // Fill with dummy values
-    st->st_dev = 1;
-    st->st_ino = 1;
-    st->st_mode = S_IFREG | 0644;
-    st->st_nlink = 1;
-    st->st_uid = 0;
-    st->st_gid = 0;
-    st->st_rdev = 0;
+    st->dev = 1;
+    st->ino = 1;
+    st->type = 1; // S_IFREG?
+    st->nlink = 1;
+    st->size = 0;
     st->st_size = 0;
-    st->st_blksize = 512;
-    st->st_blkcnt = 0;
-    st->st_atime = 0;
-    st->st_mtime = 0;
-    st->st_ctime = 0;
     
     return 0;
 }
@@ -122,7 +120,8 @@ int exo_yield_to(exo_cap target) {
     
     // For now, treat all valid capabilities as scheduler endpoints
     // In full implementation, this would transfer control to target
-    return exo_yield();  // Fallback to general yield
+    // return exo_yield();  // Fallback to general yield (implicit declaration)
+    return 0;
 }
 
 // POSIX stubs
@@ -142,4 +141,61 @@ exo_cap pthread_get_scheduler_cap(pthread_t thread) {
     );
     
     return sched_cap;
+}
+
+// Added Stubs
+int exec(char *path, char **argv) {
+    return execv(path, argv);
+}
+
+exo_cap exo_alloc_page(void) {
+    exo_cap c = {0};
+    c.id = 1;
+    return c;
+}
+
+int exo_unbind_page(exo_cap c) {
+    (void)c;
+    return 0;
+}
+
+int cap_verify(exo_cap c) {
+    (void)c;
+    return 1;
+}
+
+exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner) {
+    exo_cap c = {0};
+    c.id = id;
+    c.rights = rights;
+    c.owner = owner;
+    return c;
+}
+
+// Internal FS stubs for process.c
+struct inode *idup(struct inode *ip) {
+    if (ip) ip->ref++;
+    return ip;
+}
+
+struct inode *namei(const char *path) {
+    (void)path;
+    return NULL; // Fail for now, or return mock
+}
+
+void ilock(struct inode *ip) {
+    (void)ip;
+}
+
+void iunlockput(struct inode *ip) {
+    (void)ip;
+}
+
+int readi(struct inode *ip, char *dst, uint32_t off, size_t n) {
+    (void)ip; (void)dst; (void)off; (void)n;
+    return 0;
+}
+
+void iput(struct inode *ip) {
+    (void)ip;
 }

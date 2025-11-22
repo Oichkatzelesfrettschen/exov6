@@ -45,6 +45,8 @@ int libos_sigismember(const libos_sigset_t *set, int sig);
 
 int libos_getpgrp(void);
 int libos_setpgid(int pid, int pgid);
+int libos_getpid(void); /* Added */
+void libos_exit(int status); /* Added */
 
 struct sockaddr;
 typedef unsigned socklen_t;
