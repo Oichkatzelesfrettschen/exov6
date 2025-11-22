@@ -1,5 +1,0 @@
-digraph StreamsStack {
-    rankdir=LR;
-    node [shape=box];
-    Application -> StreamHead -> Framing -> CRC -> Encrypt -> Driver -> Device;
-}

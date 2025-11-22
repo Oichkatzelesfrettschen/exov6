@@ -119,6 +119,13 @@ kernel/sync/bench_lwkt_token
 kernel/sync/test_dag
 kernel/sync/bench_dag
 
+# Root directory build artifacts
+/bootable.img
+/bootblock
+/hello
+/uprogs_count.tmp
+*.tmp
+
 # ------------------------------------------------------------------------------
 # Debugging
 # ------------------------------------------------------------------------------

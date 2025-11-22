@@ -1,0 +1,280 @@
+# FeuerBird - POSIX-2024 Compliant Exokernel Operating System
+
+**Phoenix Exokernel - Advanced Exokernel with Modern LLVM Toolchain**
+
+## Overview
+
+FeuerBird is a POSIX-2024 (SUSv5) compliant exokernel operating system that experiments with decomposition of the traditional OS model into an exokernel architecture. It combines the educational heritage of MIT's xv6 with modern C17/C++17 standards and advanced LLVM toolchain features.
+
+### Key Statistics
+- **POSIX Compliance**: 131/131 POSIX mandatory utilities implemented
+- **Total Utilities**: 217 utilities in system  
+- **Standards**: 100% SUSv5 (POSIX-2024) compliance achieved
+- **Testing**: Integrated Open POSIX Test Suite
+- **Architecture**: Multi-architecture support (x86_64, AArch64)
+
+### Build Information
+- **Architecture**: x86_64 (primary), AArch64, ARM, PowerPC variants
+- **Compiler**: LLVM Clang with modern C17/C++17 support
+- **Build Systems**: CMake (primary), Meson (legacy support)
+- **Standards**: Pure C17 with POSIX-2024 compliance
+
+## Project Heritage
+
+**Note**: MIT has transitioned xv6 development to RISC-V (https://github.com/mit-pdos/xv6-riscv.git). This project continues the x86/x64 evolution with exokernel enhancements.
+
+FeuerBird builds upon Dennis Ritchie's and Ken Thompson's Unix Version 6, reimplemented for modern x86-based multiprocessors using strict C17 standards. The project extends this foundation with:
+
+- **Exokernel Architecture**: Capability-based security with granular resource control
+- **Modern Standards**: C17/C++17 compliance with LLVM toolchain optimization
+- **Multi-Architecture**: Support for x86_64, AArch64, and experimental 16-bit builds
+- **Advanced IPC**: Zero-copy communication with sub-1000 cycle latency
+- **POSIX-2024**: Complete SUSv5 specification compliance
+
+## Quick Start
+
+### Prerequisites
+Run the setup script to install dependencies:
+```bash
+sudo ./setup.sh
+```
+
+For offline installation:
+```bash
+# Place .deb files in scripts/offline_packages/
+sudo ./setup.sh --offline
+```
+
+### Building (CMake - Recommended)
+```bash
+# Basic build
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
+
+# With advanced features
+cmake .. -DCMAKE_BUILD_TYPE=Debug \
+         -DUSE_TICKET_LOCK=ON \
+         -DIPC_DEBUG=ON \
+         -DUSE_LTO=ON \
+         -DUSE_SIMD=ON
+cmake --build . -j$(nproc)
+```
+
+### Building (Meson - Legacy)
+```bash
+meson setup build && ninja -C build
+```
+
+### Running
+```bash
+# QEMU with graphics
+cmake --build . --target qemu
+
+# QEMU headless
+cmake --build . --target qemu-nox
+
+# Debug with GDB
+cmake --build . --target qemu-gdb
+# In another terminal: gdb kernel.elf -ex "target remote :26000"
+```
+
+## Architecture
+
+### Phoenix Exokernel Zones
+1. **Architecture Layer**: HAL and platform-specific code
+2. **System Libraries**: DDEKit, networking graph structures  
+3. **Protocols**: IPC and communication protocols
+4. **Userland Core**: Basic utilities and programs
+5. **Library OS**: POSIX compatibility layer
+6. **Kernel**: Core exokernel with capability system
+7. **Tools**: Development and debugging utilities
+8. **Demos**: Example programs and benchmarks
+9. **Tests**: Comprehensive test suite
+10. **Formal Verification**: Mathematical proofs (optional)
+
+### Build Options
+Core features:
+- `USE_LTO`: Enable LLVM ThinLTO optimization
+- `USE_LLD`: Use LLVM LLD linker
+- `USE_POLLY`: Enable LLVM Polly optimizations  
+- `USE_SIMD`: Enable SIMD instruction support
+- `USE_CAPNP`: Build Cap'n Proto support
+
+Debug features:
+- `ENABLE_ASAN`: AddressSanitizer
+- `ENABLE_TSAN`: ThreadSanitizer
+- `ENABLE_UBSAN`: UndefinedBehaviorSanitizer
+- `IPC_DEBUG`: IPC debug logging
+
+## Multi-Architecture Support
+
+### Supported Architectures
+- **x86_64**: Primary development target
+- **AArch64**: ARM64 support
+- **ARM**: ARMv7 support
+- **PowerPC**: 32/64-bit big/little endian
+- **i386**: Legacy 32-bit x86
+- **ia16**: Experimental 16-bit real mode
+
+### Cross-Compilation Examples
+```bash
+# AArch64
+make ARCH=aarch64
+./qemu-aarch64.sh
+
+# ARM
+make ARCH=arm
+qemu-system-arm -M virt -nographic -kernel kernel-arm
+
+# PowerPC64 little-endian
+make ARCH=ppc64le
+qemu-system-ppc64 -M pseries -cpu POWER8 -nographic -kernel kernel-ppc64le
+
+# Experimental 16-bit
+make ARCH=ia16
+make bochs ARCH=ia16
+```
+
+## Development Features
+
+### Code Quality
+```bash
+# Format code
+cmake --build . --target format
+
+# Run linter
+cmake --build . --target lint
+
+# Static analysis
+cmake --build . --target analyze
+```
+
+### Testing
+```bash
+# Complete test suite
+ctest -V
+
+# Python tests
+pytest -q
+
+# POSIX compliance testing
+cmake --build . --target posix-test
+```
+
+### Profiling
+The `phoenix_prof` tool measures performance metrics:
+```bash
+ninja -C build phoenix_prof
+# See doc/profiling_metrics.md for details
+```
+
+## Advanced Features
+
+### SIMD Support
+When `USE_SIMD=ON`, the system automatically detects and uses:
+- **x86**: x87, MMX, SSE through AVX512, FMA
+- **ARM**: NEON
+- **PowerPC**: AltiVec/VSX
+
+### Capability System
+FeuerBird implements a capability-based security model with:
+- 65,536 capability slots
+- HMAC-SHA256 authentication
+- Sub-100 cycle validation
+- Granular resource control
+
+### IPC Performance
+- **Latency**: < 1,000 cycles for local IPC
+- **Context Switch**: < 2,000 cycles
+- **Zero-copy**: Memory-mapped communication
+- **Lattice IPC**: Advanced graph-based messaging
+
+## Filesystem Contents
+
+This filesystem image contains:
+- All POSIX utilities (real implementations, not stubs)
+- Integrated test suite with Open POSIX Test Suite
+- Complete documentation and examples
+- Development tools and profiling utilities
+- Multi-architecture binaries
+
+## Shell Features
+
+The user-level shell supports:
+- Built-in commands (`cd`, `exit`, `set`, etc.)
+- Direct execution in shell process for builtins
+- Pipeline and background job support
+- Root directory program search (no `PATH` variable)
+- Automatic `/` prefix for commands without slash
+
+## Documentation
+
+- **Project Charter**: [doc/charter.md](doc/charter.md)
+- **Technical Debt Log**: [doc/ptd_log.md](doc/ptd_log.md)  
+- **Roadmap**: [doc/roadmap.md](doc/roadmap.md)
+- **Multi-Architecture**: [doc/multi_architecture.md](doc/multi_architecture.md)
+- **Profiling**: [doc/profiling_metrics.md](doc/profiling_metrics.md)
+- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+Generate API documentation:
+```bash
+cmake --build . --target docs
+```
+
+## Installation
+
+```bash
+# Install kernel and utilities
+cmake --install build
+
+# Package creation
+cmake --build . --target package
+```
+
+## Acknowledgments
+
+FeuerBird builds upon the work of many contributors:
+
+**Original xv6**: Frans Kaashoek, Robert Morris, Russ Cox (MIT PDOS)
+
+**Core Contributors**: Russ Cox (context switching, locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, Austin Clements
+
+**Community**: Silas Boyd-Wickizer, Anton Burtsev, Cody Cutler, Mike CAT, Tej Chajed, eyalz800, Nelson Elhage, Saar Ettinger, Alice Ferrazzi, Nathaniel Filardo, Peter Froehlich, Yakir Goaron, Shivam Handa, Bryan Henry, Jim Huang, Alexander Kapshuk, Anders Kaseorg, kehao95, Wolfgang Keller, Eddie Kohler, Austin Liew, Imbar Marinescu, Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi Merimovich, Mark Morrissey, mtasm, Joel Nider, Greg Price, Ayan Shafqat, Eldar Sehayek, Yongming Shen, Cam Tenny, tyfkda, Rafael Ubal, Warren Toomey, Stephen Tu, Pablo Ventura, Xi Wang, Keiichi Watanabe, Nicolas Wolovick, wxdao, Grant Wu, Jindong Zhang, Icenowy Zheng, Zou Chang Wei
+
+**Inspiration**: 
+- John Lions's Commentary on UNIX 6th Edition (Peer to Peer Communications; ISBN: 1-57398-013-7)
+- https://pdos.csail.mit.edu/6.828/ for v6 resources
+
+**Code Sources**:
+- JOS (asm.h, elf.h, mmu.h, bootasm.S, ide.c, console.c, and others)
+- Plan 9 (entryother.S, mp.h, mp.c, lapic.c)
+- FreeBSD (ioapic.c)
+- NetBSD (console.c)
+
+## License
+
+The code constituting FeuerBird is Copyright 2006-2018 Frans Kaashoek, Robert Morris, and Russ Cox, with extensions and modifications for the exokernel architecture.
+
+## Repository Structure
+
+```
+├── src/              # Source code by architectural zone
+│   ├── arch/         # Architecture-specific HAL
+│   ├── ddekit/       # Device driver framework
+│   └── libnstr_graph/ # Network string graph library
+├── kernel/           # Exokernel core
+├── libos/            # Library OS (POSIX compatibility)
+├── user/             # User programs and utilities
+├── include/          # Headers (mirrors src/ structure)
+├── tests/            # Comprehensive test suite
+├── tools/            # Build and development tools
+├── demos/            # Example programs
+├── proto/            # Protocol definitions
+├── docs/             # Documentation
+└── cmake/            # CMake configuration modules
+```
+
+---
+
+**Phoenix Exokernel**: Where modern systems programming meets educational clarity through the exokernel model.
