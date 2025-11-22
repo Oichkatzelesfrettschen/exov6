@@ -25,6 +25,7 @@
 #include "arch.h"
 #include "trap.h"
 #include "service.h"
+#include "cap_check.h"
 
 /* Buffer flags for disk I/O */
 #ifndef B_VALID
@@ -194,16 +195,9 @@ int exo_bind_block(exo_blockcap *bcap, struct buf *buf, int write) {
         return -1;
     }
     
-    /* Validate capability */
-    if (bcap->rights != EXO_CAP_BLOCK) {  /* Check capability type */
-        return -1;
-    }
-    
-    /* Check permissions */
-    if (write && !(bcap->rights & EXO_CAP_WRITE)) {
-        return -1;
-    }
-    if (!write && !(bcap->rights & EXO_CAP_READ)) {
+    /* Validate capability using central API */
+    uint32_t required_rights = write ? EXO_CAP_WRITE : EXO_CAP_READ;
+    if (cap_check_block(*bcap, required_rights) < 0) {
         return -1;
     }
     
@@ -556,6 +550,11 @@ int sys_ipc_fast(void) {
     uint64_t target_pid = p->tf->rdi;
     uint64_t msg_ptr = p->tf->rsi;
     uint64_t msg_len = p->tf->rdx;
+
+    /* Invariant: Validate user pointers */
+    if (msg_ptr >= KERNBASE || msg_ptr + msg_len < msg_ptr) {
+        return -1;
+    }
 
     if (msg_len > PGSIZE) {
         return -1;  /* Message too large */
