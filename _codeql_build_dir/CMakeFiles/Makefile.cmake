@@ -27,6 +27,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/runner/work/exov6/exov6/src/ddekit/CMakeLists.txt"
   "/home/runner/work/exov6/exov6/src/libnstr_graph/CMakeLists.txt"
   "/home/runner/work/exov6/exov6/tests/CMakeLists.txt"
+  "/home/runner/work/exov6/exov6/tests/arch_mem/CMakeLists.txt"
   "/home/runner/work/exov6/exov6/tests/c17/CMakeLists.txt"
   "/home/runner/work/exov6/exov6/tests/c17/integration/CMakeLists.txt"
   "/home/runner/work/exov6/exov6/tests/c17/performance/CMakeLists.txt"
@@ -56,7 +57,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeDetermineCompilerSupport.cmake"
-  "/usr/local/share/cmake-3.31/Modules/CMakeDetermineSystem.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeFindBinUtils.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeGenericSystem.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeInitializeConfigs.cmake"
@@ -65,14 +65,12 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.31/Modules/CMakeParseImplicitIncludeInfo.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeParseImplicitLinkInfo.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeParseLibraryArchitecture.cmake"
-  "/usr/local/share/cmake-3.31/Modules/CMakeSystem.cmake.in"
   "/usr/local/share/cmake-3.31/Modules/CMakeSystemSpecificInformation.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeSystemSpecificInitialize.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeTestASMCompiler.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake"
   "/usr/local/share/cmake-3.31/Modules/CMakeTestCompilerCommon.cmake"
-  "/usr/local/share/cmake-3.31/Modules/CMakeUnixFindMake.cmake"
   "/usr/local/share/cmake-3.31/Modules/CPack.cmake"
   "/usr/local/share/cmake-3.31/Modules/CPackComponent.cmake"
   "/usr/local/share/cmake-3.31/Modules/CheckCCompilerFlag.cmake"
@@ -189,7 +187,6 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/3.31.6/CMakeSystem.cmake"
   "CMakeFiles/3.31.6/CMakeCCompiler.cmake"
   "CMakeFiles/3.31.6/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.31.6/CMakeASMCompiler.cmake"
@@ -220,6 +217,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "tests/c17/integration/CMakeFiles/CMakeDirectoryInformation.cmake"
   "tests/c17/posix/CMakeFiles/CMakeDirectoryInformation.cmake"
   "tests/c17/performance/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "tests/arch_mem/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -227,9 +225,9 @@ set(CMAKE_DEPEND_INFO_FILES
   "src/arch/CMakeFiles/phoenix-simd.dir/DependInfo.cmake"
   "src/arch/CMakeFiles/phoenix-arch-x86-legacy.dir/DependInfo.cmake"
   "src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/DependInfo.cmake"
+  "src/arch/CMakeFiles/phoenix-arch-x86-64.dir/DependInfo.cmake"
   "src/ddekit/CMakeFiles/phoenix-ddekit.dir/DependInfo.cmake"
   "src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/DependInfo.cmake"
-  "src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/DependInfo.cmake"
   "user/CMakeFiles/phoenix-ulib.dir/DependInfo.cmake"
   "user/CMakeFiles/phoenix-umalloc.dir/DependInfo.cmake"
   "user/CMakeFiles/phoenix-printf.dir/DependInfo.cmake"
@@ -330,6 +328,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "tests/c17/unit/CMakeFiles/test_aether_nn.dir/DependInfo.cmake"
   "tests/c17/unit/CMakeFiles/test_arbitrate.dir/DependInfo.cmake"
   "tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/DependInfo.cmake"
+  "tests/c17/unit/CMakeFiles/test_beatty_sim.dir/DependInfo.cmake"
   "tests/c17/unit/CMakeFiles/test_build_script.dir/DependInfo.cmake"
   "tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/DependInfo.cmake"
   "tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/DependInfo.cmake"
@@ -371,4 +370,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "tests/c17/posix/CMakeFiles/test_posix_compat.dir/DependInfo.cmake"
   "tests/c17/posix/CMakeFiles/posix_tests.dir/DependInfo.cmake"
   "tests/c17/performance/CMakeFiles/performance_tests.dir/DependInfo.cmake"
+  "tests/arch_mem/CMakeFiles/test-arch-mem.dir/DependInfo.cmake"
   )

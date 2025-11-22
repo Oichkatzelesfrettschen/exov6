@@ -224,6 +224,19 @@ phoenix-arch-x86-modern/fast:
 .PHONY : phoenix-arch-x86-modern/fast
 
 #=============================================================================
+# Target rules for targets named phoenix-arch-x86-64
+
+# Build rule for target.
+phoenix-arch-x86-64: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-arch-x86-64
+.PHONY : phoenix-arch-x86-64
+
+# fast build rule for target.
+phoenix-arch-x86-64/fast:
+	$(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build
+.PHONY : phoenix-arch-x86-64/fast
+
+#=============================================================================
 # Target rules for targets named phoenix-ddekit
 
 # Build rule for target.
@@ -248,19 +261,6 @@ phoenix-nstr-graph: cmake_check_build_system
 phoenix-nstr-graph/fast:
 	$(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir/build
 .PHONY : phoenix-nstr-graph/fast
-
-#=============================================================================
-# Target rules for targets named phoenix-nstr-graph-shared
-
-# Build rule for target.
-phoenix-nstr-graph-shared: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-nstr-graph-shared
-.PHONY : phoenix-nstr-graph-shared
-
-# fast build rule for target.
-phoenix-nstr-graph-shared/fast:
-	$(MAKE) $(MAKESILENT) -f src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build.make src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir/build
-.PHONY : phoenix-nstr-graph-shared/fast
 
 #=============================================================================
 # Target rules for targets named phoenix-ulib
@@ -1563,6 +1563,19 @@ test_beatty_cycle/fast:
 .PHONY : test_beatty_cycle/fast
 
 #=============================================================================
+# Target rules for targets named test_beatty_sim
+
+# Build rule for target.
+test_beatty_sim: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_beatty_sim
+.PHONY : test_beatty_sim
+
+# fast build rule for target.
+test_beatty_sim/fast:
+	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build
+.PHONY : test_beatty_sim/fast
+
+#=============================================================================
 # Target rules for targets named test_build_script
 
 # Build rule for target.
@@ -2095,6 +2108,19 @@ performance_tests/fast:
 	$(MAKE) $(MAKESILENT) -f tests/c17/performance/CMakeFiles/performance_tests.dir/build.make tests/c17/performance/CMakeFiles/performance_tests.dir/build
 .PHONY : performance_tests/fast
 
+#=============================================================================
+# Target rules for targets named test-arch-mem
+
+# Build rule for target.
+test-arch-mem: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-arch-mem
+.PHONY : test-arch-mem
+
+# fast build rule for target.
+test-arch-mem/fast:
+	$(MAKE) $(MAKESILENT) -f tests/arch_mem/CMakeFiles/test-arch-mem.dir/build.make tests/arch_mem/CMakeFiles/test-arch-mem.dir/build
+.PHONY : test-arch-mem/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2152,6 +2178,7 @@ help:
 	@echo "... mkfs"
 	@echo "... msgqueue-demo"
 	@echo "... ncc"
+	@echo "... phoenix-arch-x86-64"
 	@echo "... phoenix-arch-x86-legacy"
 	@echo "... phoenix-arch-x86-modern"
 	@echo "... phoenix-caplib"
@@ -2179,7 +2206,6 @@ help:
 	@echo "... phoenix-math-core"
 	@echo "... phoenix-metrics"
 	@echo "... phoenix-nstr-graph"
-	@echo "... phoenix-nstr-graph-shared"
 	@echo "... phoenix-printf"
 	@echo "... phoenix-simd"
 	@echo "... phoenix-test-host-stubs"
@@ -2190,9 +2216,11 @@ help:
 	@echo "... posix-misc-test"
 	@echo "... posix-socket-test"
 	@echo "... qspin-demo"
+	@echo "... test-arch-mem"
 	@echo "... test_aether_nn"
 	@echo "... test_arbitrate"
 	@echo "... test_beatty_cycle"
+	@echo "... test_beatty_sim"
 	@echo "... test_build_script"
 	@echo "... test_cap_entry_cpp"
 	@echo "... test_cap_newtypes"

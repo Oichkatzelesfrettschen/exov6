@@ -227,6 +227,20 @@ test_beatty_cycle/fast:
 .PHONY : test_beatty_cycle/fast
 
 # Convenience name for target.
+tests/c17/unit/CMakeFiles/test_beatty_sim.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_beatty_sim.dir/rule
+.PHONY : tests/c17/unit/CMakeFiles/test_beatty_sim.dir/rule
+
+# Convenience name for target.
+test_beatty_sim: tests/c17/unit/CMakeFiles/test_beatty_sim.dir/rule
+.PHONY : test_beatty_sim
+
+# fast build rule for target.
+test_beatty_sim/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build
+.PHONY : test_beatty_sim/fast
+
+# Convenience name for target.
 tests/c17/unit/CMakeFiles/test_build_script.dir/rule:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/c17/unit/CMakeFiles/test_build_script.dir/rule
 .PHONY : tests/c17/unit/CMakeFiles/test_build_script.dir/rule
@@ -759,6 +773,30 @@ test_beatty_cycle.s: test_beatty_cycle.c.s
 test_beatty_cycle.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/test_beatty_cycle.c.s
 .PHONY : test_beatty_cycle.c.s
+
+test_beatty_sim.o: test_beatty_sim.c.o
+.PHONY : test_beatty_sim.o
+
+# target to build an object file
+test_beatty_sim.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_sim.dir/test_beatty_sim.c.o
+.PHONY : test_beatty_sim.c.o
+
+test_beatty_sim.i: test_beatty_sim.c.i
+.PHONY : test_beatty_sim.i
+
+# target to preprocess a source file
+test_beatty_sim.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_sim.dir/test_beatty_sim.c.i
+.PHONY : test_beatty_sim.c.i
+
+test_beatty_sim.s: test_beatty_sim.c.s
+.PHONY : test_beatty_sim.s
+
+# target to generate assembly for a file
+test_beatty_sim.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_sim.dir/test_beatty_sim.c.s
+.PHONY : test_beatty_sim.c.s
 
 test_build_script.o: test_build_script.c.o
 .PHONY : test_build_script.o
@@ -1546,6 +1584,7 @@ help:
 	@echo "... test_aether_nn"
 	@echo "... test_arbitrate"
 	@echo "... test_beatty_cycle"
+	@echo "... test_beatty_sim"
 	@echo "... test_build_script"
 	@echo "... test_cap_entry_cpp"
 	@echo "... test_cap_newtypes"
@@ -1587,6 +1626,9 @@ help:
 	@echo "... test_beatty_cycle.o"
 	@echo "... test_beatty_cycle.i"
 	@echo "... test_beatty_cycle.s"
+	@echo "... test_beatty_sim.o"
+	@echo "... test_beatty_sim.i"
+	@echo "... test_beatty_sim.s"
 	@echo "... test_build_script.o"
 	@echo "... test_build_script.i"
 	@echo "... test_build_script.s"
