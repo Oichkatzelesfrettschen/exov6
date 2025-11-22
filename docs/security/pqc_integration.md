@@ -4,7 +4,7 @@ This document details the integration of Post-Quantum Cryptography in the Phoeni
 
 ## Overview
 
-The system uses lattice-based cryptography to secure capabilities and IPC against quantum adversaries. This ensures long-term security for the "PDAC System V2" architecture.
+The system uses lattice-based cryptography to secure capabilities and IPC against quantum adversaries. This ensures long-term security for the Phoenix Distributed Access Control (PDAC) System V2 architecture.
 
 ## Cryptographic Primitives
 
