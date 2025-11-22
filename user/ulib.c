@@ -82,15 +82,9 @@ void *memmove(void *vdst, const void *vsrc, size_t n) {
   return __builtin_memmove(vdst, vsrc, n);
 }
 
-char *strcat(char *dest, const char *src, size_t bufsize) {
-    size_t dest_len = strlen(dest);
-    size_t i = 0;
-    // Ensure there is space for at least one more character (the null terminator)
-    while (src[i] && (dest_len + i + 1 < bufsize)) {
-        dest[dest_len + i] = src[i];
-        i++;
-    }
-    dest[dest_len + i] = '\0';
+char *strcat(char *dest, const char *src) {
+    char *p = dest + strlen(dest);
+    while ((*p++ = *src++));
     return dest;
 }
 
