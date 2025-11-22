@@ -16,6 +16,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdatomic.h>
+#include <sys/types.h>
 #include "fs.h"
 
 #ifdef __cplusplus
