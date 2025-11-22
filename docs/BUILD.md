@@ -2,7 +2,7 @@
 
 ## Overview
 
-Phoenix Exokernel uses a modern CMake build system (CMake 3.25+) following 2025 best practices. The legacy Makefile has been deprecated.
+Phoenix Exokernel uses a modern CMake build system (CMake 3.25+) following current best practices. The legacy Makefile has been deprecated.
 
 ## Quick Start
 
@@ -238,6 +238,6 @@ This build system follows:
 - CMake 3.25+ standards
 - C23 standard (C2x)
 - C++23 standard
-- 2025 CMake best practices
+- Modern CMake best practices
 - Modern generator expressions
 - Proper target-based dependency management

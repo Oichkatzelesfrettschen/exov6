@@ -156,7 +156,7 @@ endforeach()
 # Conformance tests
 phoenix_add_executable(
   user-conformance
-  SOURCES ../tests/posix/conformance.c
+  SOURCES ${CMAKE_SOURCE_DIR}/tests/posix/conformance.c
   INCLUDES ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include
   DEPENDENCIES phoenix-ulib phoenix-umalloc phoenix-printf phoenix-caplib
 )

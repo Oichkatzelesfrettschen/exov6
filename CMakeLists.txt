@@ -1,5 +1,5 @@
 # Phoenix Exokernel - Advanced Exokernel with Granular CMake Architecture
-# CMake 3.25+ Best Practices - 2025 Standards
+# CMake 3.25+ Best Practices - Modern Standards
 cmake_minimum_required(VERSION 3.25...3.28 FATAL_ERROR)
 
 # Policy settings for modern CMake
