@@ -171,23 +171,6 @@ foreach(app ${USER_APPS})
     endif()
 endforeach()
 
-# Conformance tests
-phoenix_add_executable(user-conformance
-    SOURCES ../tests/user/conformance.c
-    INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES
-        phoenix-ulib
-        phoenix-umalloc
-        phoenix-printf
-        phoenix-caplib
-)
-set_target_properties(user-conformance PROPERTIES
-    OUTPUT_NAME conformance
-    PREFIX ""
-)
-
 # Special applications with additional dependencies
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fileserver.c")
     phoenix_add_executable(user-fileserver

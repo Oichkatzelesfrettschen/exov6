@@ -20,6 +20,10 @@ project(PhoenixExokernel
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(UNIKERNEL)
+    add_compile_definitions(EXO_UNIKERNEL)
+endif()
+
 # Include our configuration modules
 include(PhoenixConfig)
 include(FindLLVMTools)
@@ -46,6 +50,7 @@ option(IPC_DEBUG "Enable IPC debug logging" OFF)
 
 # Platform features
 option(MCU "Build for microcontroller target" OFF)
+option(UNIKERNEL "Build as Unikernel (single address space)" OFF)
 option(USE_TICKET_LOCK "Use ticket-based spinlocks" OFF)
 option(ENABLE_AVX2 "Enable AVX2 instructions" OFF)
 option(ENABLE_AVX512 "Enable AVX512 instructions" OFF)

@@ -1,49 +1,41 @@
 # Exokernel Core Invariants
 
-This document outlines the core invariants and architectural principles of the Phoenix Exokernel.
+This document enumerates the core invariants (I) and safety properties (S) of the ExoV6 kernel.
+These invariants are partially mapped to formal specifications in `formal/specs/`.
 
-## 1. Unified Kernel Architecture
+## 1. Capabilities
+*Ref: `formal/specs/Capability.tla`*
 
-*   **Single Source Tree**: All core kernel code resides in the `kernel/` directory.
-*   **Monolithic Compilation**: The kernel is compiled as a single binary (`kernel`), facilitating whole-program optimization.
-*   **No Dynamic Modules**: To ensure stability and security, the kernel does not load dynamic modules at runtime. All drivers and subsystems are statically linked or run in userspace.
+*   **I1**: No kernel API exposes raw kernel pointers to userland. All access is via opaque `cap_t` handles.
+*   **I2**: Each valid `cap_t` is unique per resource instance and generation.
+*   **I3**: Any use of `cap_t` must check rights bits (e.g., `CAP_RIGHT_SEND`) before performing operations.
+*   **I4**: A capability must be valid (exist in the global capability table) to be used.
+*   **I5**: Capability revocation is atomic; once revoked, the handle is invalid immediately.
 
-## 2. Capability-Based Resource Management
+## 2. Channels & IPC
+*Ref: `formal/specs/StreamsLocks.tla`*
 
-The kernel adheres to a strict Exokernel philosophy where the kernel's role is to securely multiplex physical resources, not to abstract them.
+*   **I6**: Channels must satisfy no lost messages and no duplication (reliable delivery).
+*   **I7**: FIFO ordering is guaranteed for messages from a single sender to a single receiver.
+*   **I8**: Lock acquisition order must be consistent (e.g., `spinlock` -> `qspinlock`) to prevent deadlocks.
+*   **I9**: Memory safety for ring buffers is enforced via atomic indices and boundary checks.
 
-*   **Everything is a Capability**: Access to all resources (memory pages, interrupts, I/O ports, DMA channels, block devices) is mediated by capabilities (`exo_cap`).
-*   **All capabilities are 128‑bit opaque values; no other forms of resource IDs exist.**
-*   **Explicit Binding**: Userspace must explicitly bind resources. For example:
-    *   `exo_bind_irq`: Bind an interrupt to a process.
-    *   `exo_bind_block`: Bind a block device range for direct I/O.
-*   **No Implicit Allocation**: The kernel rarely allocates memory implicitly. Userspace provides buffers for operations (e.g., `exo_bind_block` takes a user-provided `struct buf`).
+## 3. Scheduling (Beatty)
+*Ref: `kernel/sched_beatty.c`*
 
-## 3. Concurrency & Synchronization
+*   **I10**: Task selection occurs in O(1) time.
+*   **I11**: Long-run CPU share approximates target weights within bounded deviation (Beatty's Theorem).
+*   **I12**: Ready queue operations are atomic with respect to interrupt handlers.
 
-The kernel employs a unified concurrency model designed for low latency and scalability on multicore systems.
+## 4. Architecture & Concurrency
 
-*   **Spinlocks**: Used for short critical sections. Implemented with `PAUSE` instructions to be hyperthread-friendly.
-    *   **Invariant**: Spinlocks must be held for short durations. Interrupts are often disabled (`pushcli`/`popcli`) while holding a spinlock to prevent deadlocks.
-*   **Sleeplocks**: Used for long-running operations where the thread may need to yield.
-    *   **Invariant**: A thread holding a sleeplock may be preempted or sleep.
-*   **Atomic Operations**: Extensive use of C11-style atomic primitives (`atomic_cas`, `atomic_add`) and memory barriers (`smp_mb`) for lock-free structures.
-*   **All lock‑free structures must only use atomics with explicit memory orders; memory_order_seq_cst is banned except in specific files.**
-*   **RCU (Read-Copy-Update)**: Supported for read-mostly data structures to ensure scalability.
-    *   **Allowed Usage**: RCU is permitted for read-mostly data structures (e.g. scheduler, VFS).
-    *   **Prohibited Contexts**: RCU primitives (`rcu_read_lock`, `rcu_synchronize`) must NOT be used during early boot (before `rcuinit`) or in single-CPU initialization phases.
-    *   **Runtime Assertions**: Debug builds must enforce these invariants by panicking on invalid usage.
+*   **I13**: RCU critical sections must not block, sleep, or yield the CPU.
+*   **I14**: All lock-free structures must use explicit C11 `memory_order` primitives (e.g., `memory_order_acquire/release`).
+*   **I15**: Per-CPU data structures are only accessed by the owning CPU unless explicitly protected by locks.
 
-## 4. Execution Model
+## 5. Security (Lattice)
 
-*   **Explicit Scheduling**: The kernel supports multiple pluggable schedulers (Beatty, DAG, Lottery).
-*   **Direct Control Flow**: System calls like `sys_ipc_fast` perform direct context switches or buffer copies to reduce overhead.
-*   **No Hidden Control Flow**: The kernel does not perform complex background tasks hidden from the user. Services like the `reaper` or `swapper` are explicit kernel threads or userspace services.
-*   **All user pointers must be validated before dereference.**
-
-## 5. Address Space & Isolation
-
-*   **Page Tables**: Hardware page tables (x86_64 `CR3`) enforce isolation.
-*   **Kernel Map**: The kernel is mapped into the higher half of every address space.
-*   **User/Kernel Separation**: Strict separation of privileges (CPL 0 vs CPL 3).
-*   **Capability Guards**: Even with a valid virtual address, operations on resources (like checking an IRQ) require a valid capability token.
+*   **I16**: Information flow must respect lattice dominance:
+    *   Read permitted iff `Label(Subject) >= Label(Object)`.
+    *   Write permitted iff `Label(Subject) <= Label(Object)`.
+*   **I17**: Capabilities carry a `label_t` that is immutable after creation.
