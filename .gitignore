@@ -26,6 +26,7 @@ _build-cmake/
 _build-test/
 _build-audit/
 test-build/
+_codeql_build_dir/
 
 # Local caches
 .cache/
