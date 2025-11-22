@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-arch-x86-modern.a "CMakeFiles/phoenix-arch-x86-modern.dir/x86/modern/simd_avx2_cap.c.o"
+/usr/bin/ranlib libphoenix-arch-x86-modern.a

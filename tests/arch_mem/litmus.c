@@ -115,18 +115,51 @@ void* dekker_thread1(void* arg) {
 
 int main() {
     pthread_t t1, t2;
+    int ret;
 
     printf("Running MP test (%d iterations)...\n", ITERATIONS);
-    pthread_create(&t1, NULL, mp_thread0, NULL);
-    pthread_create(&t2, NULL, mp_thread1, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
+    ret = pthread_create(&t1, NULL, mp_thread0, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(mp_thread0) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_create(&t2, NULL, mp_thread1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(mp_thread1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t2, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t2) failed (code %d)\n", ret);
+        return 2;
+    }
 
     printf("Running Dekker test (%d iterations)...\n", ITERATIONS);
-    pthread_create(&t1, NULL, dekker_thread0, NULL);
-    pthread_create(&t2, NULL, dekker_thread1, NULL);
-    pthread_join(t1, NULL);
-    pthread_join(t2, NULL);
+    ret = pthread_create(&t1, NULL, dekker_thread0, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(dekker_thread0) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_create(&t2, NULL, dekker_thread1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_create(dekker_thread1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t1, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t1) failed (code %d)\n", ret);
+        return 2;
+    }
+    ret = pthread_join(t2, NULL);
+    if (ret != 0) {
+        fprintf(stderr, "Error: pthread_join(t2) failed (code %d)\n", ret);
+        return 2;
+    }
 
     if (violations > 0) {
         printf("Dekker Violations detected: %d\n", violations);

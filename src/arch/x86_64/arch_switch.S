@@ -1,29 +1,38 @@
 /*
  * arch_switch.S - x86_64 Context Switch
+ * POSIX.1-2024 / System V AMD64 ABI compliant implementation
+ * for FeuerBird exokernel.
  */
 
 .global arch_switch_to
 .type arch_switch_to, @function
+
+/*
+ * void arch_switch_to(struct arch_context* prev, struct arch_context* next);
+ *
+ * RDI = prev (pointer to struct to save current state into)
+ * RSI = next (pointer to struct to restore state from)
+ *
+ * struct arch_context layout:
+ * 0:  rbx
+ * 8:  rbp
+ * 16: r12
+ * 24: r13
+ * 32: r14
+ * 40: r15
+ * 48: rsp  (Stack Pointer)
+ * 56: rip  (Instruction Pointer / Return Address)
+ * 64: rflags
+ *
+ * Note: We only save Callee-Saved registers. Caller-saved registers
+ * (rax, rcx, rdx, rsi, rdi, r8-r11) are saved by the compiler on the
+ * stack if needed before this function is called.
+ */
+
 arch_switch_to:
-    /*
-     * void arch_switch_to(struct arch_context* prev, struct arch_context* next);
-     * RDI = prev
-     * RSI = next
-     *
-     * struct arch_context layout:
-     *   0:   rbx
-     *   8:   rbp
-     *   16:  r12
-     *   24:  r13
-     *   32:  r14
-     *   40:  r15
-     *   48:  sp
-     *   56:  pc
-     *   64:  flags
-     *
-     * Only callee-saved registers are preserved. Caller-saved registers
-     * (rax, rcx, rdx, rsi, rdi, r8-r11) are the compiler's responsibility.
-     */
+    .cfi_startproc
+    
+    /* ----------------- SAVE STATE (prev) ----------------- */
 
     /* Save callee-saved registers */
     movq %rbx, 0(%rdi)
@@ -33,26 +42,35 @@ arch_switch_to:
     movq %r14, 32(%rdi)
     movq %r15, 40(%rdi)
 
-    /* Save SP */
-    movq %rsp, 48(%rdi)
-
-    /* Save PC (return address on stack) */
-    movq (%rsp), %rax
-    movq %rax, 56(%rdi)
-
-    /* Save RFLAGS */
+    /* Save CPU Flags (RFLAGS) */
+    /* Essential to preserve Interrupt Flag (IF) state */
     pushfq
     popq %rax
     movq %rax, 64(%rdi)
 
-    /* ----------------- SWITCH ----------------- */
+    /* Save Return Address (RIP) */
+    /* The return address was pushed onto the stack by the 'call' instruction.
+       It is currently at (%rsp). We save it to the struct for debugging/introspection,
+       though the actual switch relies on the stack content. */
+    movq (%rsp), %rax
+    movq %rax, 56(%rdi)
+
+    /* Save Stack Pointer */
+    /* We save the RSP *after* the return address was pushed. 
+       When we restore this RSP, the 'ret' instruction will pop that return address. */
+    movq %rsp, 48(%rdi)
+
+    /* ----------------- SWITCH STACKS ----------------- */
 
     /* Load next SP */
+    /* This is the pivotal point of the context switch. 
+       After this instruction, we are running on the 'next' thread's stack. */
     movq 48(%rsi), %rsp
 
-    /* ----------------- RESTORE ----------------- */
+    /* ----------------- RESTORE STATE (next) ----------------- */
 
     /* Restore RFLAGS */
+    /* We use RAX as a scratch register (allowed by ABI) to move flags */
     movq 64(%rsi), %rax
     pushq %rax
     popfq
@@ -65,5 +83,9 @@ arch_switch_to:
     movq 32(%rsi), %r14
     movq 40(%rsi), %r15
 
-    /* Return to next->pc (which should be on stack) */
+    /* Return to next->pc */
+    /* The 'ret' instruction pops the return address from the top of the 
+       newly restored stack (next->rsp). */
     ret
+
+    .cfi_endproc

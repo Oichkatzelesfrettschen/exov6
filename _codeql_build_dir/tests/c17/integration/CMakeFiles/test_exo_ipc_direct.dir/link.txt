@@ -1,0 +1,1 @@
+/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang  -Wall -Werror -Wextra -Wno-unused-parameter -O2 -Xlinker --dependency-file=CMakeFiles/test_exo_ipc_direct.dir/link.d CMakeFiles/test_exo_ipc_direct.dir/test_exo_ipc_direct.c.o -o test_exo_ipc_direct  ../libtest_framework.a -lpthread -lm

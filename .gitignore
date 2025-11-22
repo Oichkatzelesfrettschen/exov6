@@ -27,6 +27,8 @@ _build-test/
 _build-audit/
 _codeql_build_dir/
 test-build/
+_codeql_build_dir/
+_codeql_detected_source_root
 
 # Local caches
 .cache/
@@ -40,3 +42,4 @@ kernel/sync/test_lwkt_token
 kernel/sync/bench_lwkt_token
 kernel/sync/test_dag
 kernel/sync/bench_dag
+_codeql_build_dir/

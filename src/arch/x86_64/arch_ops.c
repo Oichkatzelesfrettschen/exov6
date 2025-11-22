@@ -4,6 +4,7 @@
 
 #include <hal/arch_ops.h>
 #include <stdatomic.h>
+#include <stdint.h>
 
 // Structure definition matching arch_switch.S
 // Only callee-saved registers are preserved across context switches.
@@ -91,7 +92,7 @@ void arch_tlb_flush_page(void* addr) {
 
 uint64_t arch_get_cycles(void) {
     uint32_t lo, hi;
-    __asm__ volatile ("rdtsc" : "=a"(lo), "=d"(hi));
+    __asm__ volatile ("rdtsc" : "=a"(lo), "=d"(hi) : : "memory");
     return ((uint64_t)hi << 32) | lo;
 }
 
