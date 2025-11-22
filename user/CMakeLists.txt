@@ -7,7 +7,7 @@
 # User library (ulib) - Core user space functionality
 phoenix_add_library(phoenix-ulib
     STATIC
-    SOURCES ulib.c usys.S
+    SOURCES ulib.c usys.S dir.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
@@ -124,6 +124,7 @@ endif()
 # keep it separate and inject it only when the MCU option is active.
 set(USER_APPS
     cat
+    cp
     echo
     grep
     init
@@ -131,8 +132,11 @@ set(USER_APPS
     ln
     ls
     mkdir
+    mv
+    ps
     rm
     sh
+    sleep
     wc
     zombie
 )
@@ -166,6 +170,23 @@ foreach(app ${USER_APPS})
         message(STATUS "Skipping ${app} - source file not found")
     endif()
 endforeach()
+
+# Conformance tests
+phoenix_add_executable(user-conformance
+    SOURCES ../tests/user/conformance.c
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES
+        phoenix-ulib
+        phoenix-umalloc
+        phoenix-printf
+        phoenix-caplib
+)
+set_target_properties(user-conformance PROPERTIES
+    OUTPUT_NAME conformance
+    PREFIX ""
+)
 
 # Special applications with additional dependencies
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fileserver.c")
