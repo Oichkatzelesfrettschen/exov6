@@ -6,11 +6,18 @@
 #include <stdatomic.h>
 
 // Structure definition matching arch_switch.S
+// Only callee-saved registers are preserved across context switches.
+// Caller-saved registers are the compiler's responsibility.
 struct arch_context {
-    uint64_t registers[16]; // 0-127
-    uint64_t sp;            // 128
-    uint64_t pc;            // 136
-    uint64_t flags;         // 144
+    uint64_t rbx;    // 0
+    uint64_t rbp;    // 8
+    uint64_t r12;    // 16
+    uint64_t r13;    // 24
+    uint64_t r14;    // 32
+    uint64_t r15;    // 40
+    uint64_t sp;     // 48
+    uint64_t pc;     // 56
+    uint64_t flags;  // 64
 };
 
 // ----------------------------------------------------------------------------
