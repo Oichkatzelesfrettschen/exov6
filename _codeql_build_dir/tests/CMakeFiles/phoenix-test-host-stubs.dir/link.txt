@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-test-host-stubs.a "CMakeFiles/phoenix-test-host-stubs.dir/libos_host_stubs.c.o"
+/usr/bin/ranlib libphoenix-test-host-stubs.a

@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-door.a "CMakeFiles/phoenix-door.dir/door.c.o"
+/usr/bin/ranlib libphoenix-door.a
