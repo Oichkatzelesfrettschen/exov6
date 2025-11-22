@@ -11,11 +11,23 @@
 #include "vfs.h"
 #include "minix3_fs.h"
 #include "buffer_cache.h"
+#include "sleeplock.h"
 
 // Stubs for kernel symbols
 void panic(const char *s) {
     fprintf(stderr, "PANIC: %s\n", s);
     abort();
+}
+
+// Sleeplock implementation
+void initsleeplock(struct sleeplock *lk, const char *name, int level) {
+    lk->locked = 0;
+}
+void acquiresleep(struct sleeplock *lk) {
+    lk->locked = 1;
+}
+void releasesleep(struct sleeplock *lk) {
+    lk->locked = 0;
 }
 
 // RAM Disk

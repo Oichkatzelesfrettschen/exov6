@@ -19,6 +19,16 @@ typedef struct { int dummy; } rcu_head_t;
 typedef struct { int dummy; } rcu_state_t;
 EOF
 
+# Stub sleeplock.h
+echo "Creating stub kernel/test_stubs/sleeplock.h"
+cat > kernel/test_stubs/sleeplock.h <<EOF
+#pragma once
+struct sleeplock { int locked; };
+void initsleeplock(struct sleeplock *lk, const char *name, int level);
+void acquiresleep(struct sleeplock *lk);
+void releasesleep(struct sleeplock *lk);
+EOF
+
 # Compile test
 # -I kernel/test_stubs first to override include/
 echo "Compiling test_minix3_stress..."

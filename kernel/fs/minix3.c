@@ -7,6 +7,7 @@
 #include "vfs_icache.h"
 #include "vfs_dcache.h"
 #include "buffer_cache.h"
+#include "sleeplock.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -141,8 +142,14 @@ minix3_sb_t* minix3_read_super(uint32_t dev)
     }
 
     atomic_store(&msb->refcount, 1);
-    bcache_release(cache, entry);
 
+    // Init lock for allocator
+    msb->alloc_lock = malloc(sizeof(struct sleeplock));
+    if (msb->alloc_lock) {
+        initsleeplock(msb->alloc_lock, "minix3_alloc", 100);
+    }
+
+    bcache_release(cache, entry);
     return msb;
 }
 
@@ -227,9 +234,13 @@ int minix3_write_inode(minix3_sb_t *sb, minix3_inode_t *inode)
 uint32_t minix3_alloc_block(minix3_sb_t *sb)
 {
     if (!sb) return 0;
+    if (sb->alloc_lock) acquiresleep(sb->alloc_lock);
 
     buffer_cache_t *cache = bcache_get_global();
-    if (!cache) return 0;
+    if (!cache) {
+        if (sb->alloc_lock) releasesleep(sb->alloc_lock);
+        return 0;
+    }
 
     // Scan bitmap blocks
     uint32_t total_blocks = sb->sb.size; // Total fs blocks
@@ -238,7 +249,10 @@ uint32_t minix3_alloc_block(minix3_sb_t *sb)
     // Loop through bitmap blocks
     for (uint32_t b = 0; b < total_blocks; b += BPB) {
         bcache_entry_t *entry = bcache_get_or_read(cache, sb->dev, bmap_block, NULL);
-        if (!entry) return 0;
+        if (!entry) {
+            if (sb->alloc_lock) releasesleep(sb->alloc_lock);
+            return 0;
+        }
 
         uint8_t *bitmap = (uint8_t *)entry->data;
         for (int bi = 0; bi < BPB && b + bi < total_blocks; bi++) {
@@ -248,6 +262,7 @@ uint32_t minix3_alloc_block(minix3_sb_t *sb)
                 bitmap[bi/8] |= m; // Mark used
                 atomic_fetch_or(&entry->flags, BCACHE_DIRTY);
                 bcache_release(cache, entry);
+                if (sb->alloc_lock) releasesleep(sb->alloc_lock);
                 return b + bi;
             }
         }
@@ -255,19 +270,27 @@ uint32_t minix3_alloc_block(minix3_sb_t *sb)
         bmap_block++;
     }
 
+    if (sb->alloc_lock) releasesleep(sb->alloc_lock);
     return 0; // No free blocks
 }
 
 int minix3_free_block(minix3_sb_t *sb, uint32_t block)
 {
     if (!sb || block == 0 || block >= sb->sb.size) return -1;
+    if (sb->alloc_lock) acquiresleep(sb->alloc_lock);
 
     buffer_cache_t *cache = bcache_get_global();
-    if (!cache) return -1;
+    if (!cache) {
+        if (sb->alloc_lock) releasesleep(sb->alloc_lock);
+        return -1;
+    }
 
     uint32_t bmap_block = BBLOCK(block, sb->sb);
     bcache_entry_t *entry = bcache_get_or_read(cache, sb->dev, bmap_block, NULL);
-    if (!entry) return -1;
+    if (!entry) {
+        if (sb->alloc_lock) releasesleep(sb->alloc_lock);
+        return -1;
+    }
 
     uint8_t *bitmap = (uint8_t *)entry->data;
     int bi = block % BPB;
@@ -277,6 +300,7 @@ int minix3_free_block(minix3_sb_t *sb, uint32_t block)
 
     atomic_fetch_or(&entry->flags, BCACHE_DIRTY);
     bcache_release(cache, entry);
+    if (sb->alloc_lock) releasesleep(sb->alloc_lock);
     return 0;
 }
 
@@ -595,6 +619,9 @@ static uint64_t minix3_vfs_lookup(struct vfs_inode *dir, const char *name, uint3
 
 static uint32_t minix3_alloc_inode_internal(minix3_sb_t *sb, short type)
 {
+    if (!sb) return 0;
+    if (sb->alloc_lock) acquiresleep(sb->alloc_lock);
+
     // Linear scan of inodes to find free one
     for (uint32_t i = 1; i < sb->sb.ninodes; i++) {
         minix3_inode_t *node = minix3_read_inode(sb, i);
@@ -607,11 +634,13 @@ static uint32_t minix3_alloc_inode_internal(minix3_sb_t *sb, short type)
                 atomic_store(&node->dirty, 1);
                 minix3_write_inode(sb, node);
                 free(node);
+                if (sb->alloc_lock) releasesleep(sb->alloc_lock);
                 return i;
             }
             free(node);
         }
     }
+    if (sb->alloc_lock) releasesleep(sb->alloc_lock);
     return 0;
 }
 

@@ -58,6 +58,9 @@ typedef struct {
 
     /* Reference counting */
     _Atomic uint32_t refcount;
+
+    /* Synchronization */
+    void *alloc_lock;                  /**< Allocator lock (sleeplock) */
 } minix3_sb_t;
 
 /**
