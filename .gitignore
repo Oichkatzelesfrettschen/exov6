@@ -35,13 +35,18 @@ Thumbs.db
 # ------------------------------------------------------------------------------
 # Build Artifacts (C/C++/Assembly)
 # ------------------------------------------------------------------------------
+# Standard Build Directories
 build/
 build*/
 builddir/
+test-build/
+
+# Underscore prefixed build variations
 _build/
 _build-*/
-test-build/
-_codeql*
+_build-cmake/
+_build-test/
+_build-audit/
 
 # Objects and Libraries
 *.o
@@ -64,6 +69,21 @@ compile_commands.json
 .cache/
 
 # ------------------------------------------------------------------------------
+# Security & Analysis (CodeQL)
+# ------------------------------------------------------------------------------
+# Wildcard to catch all generic CodeQL generation folders
+_codeql*
+
+# Specific CodeQL tooling files
+.codeql/
+codeql-database/
+*.sarif
+
+# Redundant but explicit (covered by _codeql*, kept for reference)
+_codeql_build_dir/
+_codeql_detected_source_root
+
+# ------------------------------------------------------------------------------
 # Languages (Python / Node)
 # ------------------------------------------------------------------------------
 __pycache__/
@@ -79,19 +99,6 @@ html/
 latex/
 
 # ------------------------------------------------------------------------------
-# CodeQL (Security Analysis)
-# ------------------------------------------------------------------------------
-# Resolved conflict: Using wildcard to catch all codeql variations
-_codeql*
-.codeql/
-codeql-database/
-*.sarif
-
-# Specific CodeQL directories (redundant due to wildcard, but kept for reference)
-_codeql_build_dir/
-_codeql_detected_source_root
-
-# ------------------------------------------------------------------------------
 # Testing & Isolation
 # ------------------------------------------------------------------------------
 openposixtestsuite/
@@ -104,7 +111,7 @@ test_isolation/
 kernel/sync/test_*
 kernel/sync/bench_*
 
-# Specific binaries (kept for backward compatibility)
+# Specific binaries (Explicitly listed for legacy compatibility)
 kernel/sync/test_qspinlock
 kernel/sync/bench_qspinlock
 kernel/sync/test_lwkt_token
