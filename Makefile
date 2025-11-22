@@ -15,9 +15,9 @@ $(shell mkdir -p $(BUILD_DIR))
 
 # PDAC Core Objects
 CORE_OBJS := \
-	$(BUILD_DIR)/qmath.o \
-	$(BUILD_DIR)/octonion.o \
-	$(BUILD_DIR)/resource_vec.o \
+	$(BUILD_DIR)/q16_fixed.o \
+	$(BUILD_DIR)/q16_octonion.o \
+	$(BUILD_DIR)/resource_vector.o \
 	$(BUILD_DIR)/capability_v2.o \
 	$(BUILD_DIR)/dag_pdac.o \
 	$(BUILD_DIR)/lcg.o \
@@ -73,23 +73,23 @@ $(BUILD_DIR)/%.o: $(KERNEL_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 # Test build rules
-$(BUILD_DIR)/test_qmath: $(KERNEL_DIR)/test_qmath.c $(BUILD_DIR)/qmath.o
+$(BUILD_DIR)/test_qmath: $(KERNEL_DIR)/test_qmath.c $(BUILD_DIR)/q16_fixed.o
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/test_octonion: $(KERNEL_DIR)/test_octonion.c $(BUILD_DIR)/octonion.o $(BUILD_DIR)/qmath.o
+$(BUILD_DIR)/test_octonion: $(KERNEL_DIR)/test_octonion.c $(BUILD_DIR)/q16_octonion.o $(BUILD_DIR)/q16_fixed.o
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/test_capability_v2: $(KERNEL_DIR)/test_capability_v2.c $(BUILD_DIR)/capability_v2.o $(BUILD_DIR)/octonion.o $(BUILD_DIR)/qmath.o $(BUILD_DIR)/resource_vec.o
+$(BUILD_DIR)/test_capability_v2: $(KERNEL_DIR)/test_capability_v2.c $(BUILD_DIR)/capability_v2.o $(BUILD_DIR)/q16_octonion.o $(BUILD_DIR)/q16_fixed.o $(BUILD_DIR)/resource_vector.o
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/test_dag_pdac: $(KERNEL_DIR)/test_dag_pdac.c $(BUILD_DIR)/dag_pdac.o $(BUILD_DIR)/capability_v2.o $(BUILD_DIR)/resource_vec.o $(BUILD_DIR)/octonion.o $(BUILD_DIR)/qmath.o
+$(BUILD_DIR)/test_dag_pdac: $(KERNEL_DIR)/test_dag_pdac.c $(BUILD_DIR)/dag_pdac.o $(BUILD_DIR)/capability_v2.o $(BUILD_DIR)/resource_vector.o $(BUILD_DIR)/q16_octonion.o $(BUILD_DIR)/q16_fixed.o
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/test_scheduler: $(KERNEL_DIR)/test_scheduler.c $(BUILD_DIR)/sched_lottery.o $(BUILD_DIR)/sched_beatty.o $(BUILD_DIR)/sched_hybrid.o $(BUILD_DIR)/sched_admission.o $(BUILD_DIR)/lcg.o $(BUILD_DIR)/dag_pdac.o $(BUILD_DIR)/capability_v2.o $(BUILD_DIR)/resource_vec.o $(BUILD_DIR)/octonion.o $(BUILD_DIR)/qmath.o
+$(BUILD_DIR)/test_scheduler: $(KERNEL_DIR)/test_scheduler.c $(BUILD_DIR)/sched_lottery.o $(BUILD_DIR)/sched_beatty.o $(BUILD_DIR)/sched_hybrid.o $(BUILD_DIR)/sched_admission.o $(BUILD_DIR)/lcg.o $(BUILD_DIR)/dag_pdac.o $(BUILD_DIR)/capability_v2.o $(BUILD_DIR)/resource_vector.o $(BUILD_DIR)/q16_octonion.o $(BUILD_DIR)/q16_fixed.o
 	@echo "LINK $@"
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 

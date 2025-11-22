@@ -22,8 +22,10 @@
  */
 
 #include "capability_v2.h"
-#include "printf.h"
+#include <stdio.h>
 #include <stdint.h>
+
+#define CAP_TABLE_SIZE CAP_TABLE_V2_SIZE
 
 /*******************************************************************************
  * TEST FRAMEWORK

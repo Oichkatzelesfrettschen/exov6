@@ -63,6 +63,8 @@ struct context {
 _Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
 #if defined(__x86_64__)
+#ifndef CONTEXT64_DEFINED
+#define CONTEXT64_DEFINED
 struct context64 {
   unsigned long r15;
   unsigned long r14;
@@ -72,6 +74,7 @@ struct context64 {
   unsigned long rbp;
   unsigned long rip;
 };
+#endif
 #elif defined(__aarch64__)
 struct context64 {
   unsigned long x19;
@@ -107,6 +110,9 @@ struct mailbox {
   uint32_t w;
   int inited;
 };
+
+_Static_assert(sizeof(struct ipc_entry) == 88, "struct ipc_entry size mismatch");
+_Static_assert(sizeof(struct mailbox) == 5712, "struct mailbox size mismatch");
 
 // Per-process state
 struct proc {
@@ -164,6 +170,8 @@ struct proc {
   struct thread_lock_tracker lock_tracker;
 #endif
 };
+
+_Static_assert(sizeof(struct proc) == 1568, "struct proc size mismatch");
 
 // Size will be recalculated after stabilization
 // Previous size: 424 bytes on 64-bit, 168 on 32-bit

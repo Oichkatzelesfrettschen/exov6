@@ -28,10 +28,15 @@
 
 #include "capability_v2.h"
 #include "exo_lock.h"
-#include "printf.h"
 #include "string.h"
 #include <stddef.h>
 #include <stdint.h>
+#include "defs.h"
+
+#define printf cprintf
+
+#define CAP_TABLE_SIZE CAP_TABLE_V2_SIZE
+#define CAP_SLOT_NULL -1
 
 /*******************************************************************************
  * GLOBAL STATE
@@ -100,11 +105,11 @@ static uint32_t g_total_frees = 0;
  */
 static int32_t capv2_slot_alloc(void)
 {
-    qspinlock_lock(&g_table_lock);
+    qspin_lock(&g_table_lock);
 
     /* Check if table is full */
     if (g_free_list_head == CAP_SLOT_NULL) {
-        qspinlock_unlock(&g_table_lock);
+        qspin_unlock(&g_table_lock);
         return CAP_SLOT_NULL;
     }
 
@@ -122,7 +127,7 @@ static int32_t capv2_slot_alloc(void)
     g_num_allocated++;
     g_total_allocs++;
 
-    qspinlock_unlock(&g_table_lock);
+    qspin_unlock(&g_table_lock);
 
     return slot_idx;
 }
@@ -152,9 +157,14 @@ static int capv2_slot_free(int32_t slot_idx)
         return CAPV2_ERR_INVALID_SLOT;
     }
 
-    qspinlock_lock(&g_table_lock);
+    qspin_lock(&g_table_lock);
 
     struct capability_v2 *slot = &g_cap_table[slot_idx];
+
+    if (slot->cap_type == CAP_TYPE_NULL) {
+        qspin_unlock(&g_table_lock);
+        panic("capv2_slot_free: double free");
+    }
 
     /* Zero out slot contents (security) */
     memset(slot, 0, sizeof(struct capability_v2));
@@ -170,7 +180,7 @@ static int capv2_slot_free(int32_t slot_idx)
     g_num_allocated--;
     g_total_frees++;
 
-    qspinlock_unlock(&g_table_lock);
+    qspin_unlock(&g_table_lock);
 
     return CAPV2_OK;
 }
@@ -225,21 +235,21 @@ static int capv2_validate_slot(int32_t slot_idx)
 void capv2_table_init(void)
 {
     /* Initialize table lock */
-    qspinlock_init(&g_table_lock);
+    qspin_init(&g_table_lock, "cap_table", 0);
 
     /* Build free list: link all slots together */
     for (int32_t i = 0; i < CAP_TABLE_SIZE - 1; i++) {
         g_cap_table[i].cap_type = CAP_TYPE_NULL;
         g_cap_table[i].resource_id = (uint64_t)(i + 1); /* Next free slot */
         g_cap_table[i].generation = 0;
-        qspinlock_init(&g_cap_table[i].lock);
+        qspin_init(&g_cap_table[i].lock, "cap_slot", 0);
     }
 
     /* Last slot points to NULL (end of list) */
     g_cap_table[CAP_TABLE_SIZE - 1].cap_type = CAP_TYPE_NULL;
     g_cap_table[CAP_TABLE_SIZE - 1].resource_id = (uint64_t)CAP_SLOT_NULL;
     g_cap_table[CAP_TABLE_SIZE - 1].generation = 0;
-    qspinlock_init(&g_cap_table[CAP_TABLE_SIZE - 1].lock);
+    qspin_init(&g_cap_table[CAP_TABLE_SIZE - 1].lock, "cap_slot", 0);
 
     /* Free list starts at slot 0 */
     g_free_list_head = 0;
@@ -266,7 +276,7 @@ void capv2_table_init(void)
  */
 void capv2_table_stats(uint32_t *num_free, uint32_t *num_allocated)
 {
-    qspinlock_lock(&g_table_lock);
+    qspin_lock(&g_table_lock);
 
     if (num_allocated) {
         *num_allocated = g_num_allocated;
@@ -276,7 +286,7 @@ void capv2_table_stats(uint32_t *num_free, uint32_t *num_allocated)
         *num_free = CAP_TABLE_SIZE - g_num_allocated;
     }
 
-    qspinlock_unlock(&g_table_lock);
+    qspin_unlock(&g_table_lock);
 }
 
 /**
@@ -308,7 +318,7 @@ void capv2_print_table_stats(void)
     /* Count capabilities by type */
     uint32_t type_counts[16] = {0}; /* Up to 16 types */
 
-    qspinlock_lock(&g_table_lock);
+    qspin_lock(&g_table_lock);
     for (int32_t i = 0; i < CAP_TABLE_SIZE; i++) {
         if (g_cap_table[i].cap_type != CAP_TYPE_NULL) {
             uint8_t type = (uint8_t)g_cap_table[i].cap_type;
@@ -317,7 +327,7 @@ void capv2_print_table_stats(void)
             }
         }
     }
-    qspinlock_unlock(&g_table_lock);
+    qspin_unlock(&g_table_lock);
 
     printf("\n--- Capabilities by Type ---\n");
     const char *type_names[] = {
@@ -342,7 +352,7 @@ void capv2_print_table_stats(void)
     /* Refcount histogram */
     uint32_t refcount_hist[10] = {0}; /* 0, 1, 2-3, 4-7, 8-15, 16-31, 32-63, 64-127, 128-255, 256+ */
 
-    qspinlock_lock(&g_table_lock);
+    qspin_lock(&g_table_lock);
     for (int32_t i = 0; i < CAP_TABLE_SIZE; i++) {
         if (g_cap_table[i].cap_type != CAP_TYPE_NULL) {
             uint32_t rc = g_cap_table[i].refcount;
@@ -358,7 +368,7 @@ void capv2_print_table_stats(void)
             else refcount_hist[9]++;
         }
     }
-    qspinlock_unlock(&g_table_lock);
+    qspin_unlock(&g_table_lock);
 
     printf("\n--- Refcount Distribution ---\n");
     const char *refcount_labels[] = {
@@ -444,9 +454,9 @@ int capv2_alloc(uint64_t resource_id, cap_type_t cap_type,
     struct capability_v2 *cap = &g_cap_table[slot_idx];
 
     /* Initialize per-capability lock */
-    qspinlock_init(&cap->lock);
+    qspin_init(&cap->lock, "cap_slot", 0);
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Initialize seL4-style core fields */
     cap->resource_id = resource_id;
@@ -479,14 +489,14 @@ int capv2_alloc(uint64_t resource_id, cap_type_t cap_type,
     cap->rate_limit.tokens = 0;
     cap->rate_limit.capacity = 0;
     cap->rate_limit.refill_rate = 0;
-    cap->rate_limit.last_refill = 0;
+    cap->rate_limit.last_refill_ms = 0;
 
     /* Metadata */
     cap->creation_time = 0; /* TODO: Get timestamp from timer */
     cap->access_count = 0;
     cap->parent_slot = CAP_SLOT_NULL; /* No parent (root capability) */
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return slot_idx;
 }
@@ -529,11 +539,11 @@ int capv2_free(int cap_slot)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Check refcount - must be 0 to free */
     if (cap->refcount > 0) {
-        qspinlock_unlock(&cap->lock);
+        qspin_unlock(&cap->lock);
         return CAPV2_ERR_REFCOUNT_OVERFLOW;
     }
 
@@ -548,7 +558,7 @@ int capv2_free(int cap_slot)
         cap->formula_data = NULL;
     }
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     /* Return slot to free list */
     return capv2_slot_free(cap_slot);
@@ -599,7 +609,7 @@ int capv2_grant(int cap_slot, uint32_t recipient_pid, uint32_t attenuated_rights
 
     struct capability_v2 *src_cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&src_cap->lock);
+    qspin_lock(&src_cap->lock);
 
     /* Check if source has GRANT right */
     uint32_t effective_rights = src_cap->static_rights;
@@ -608,39 +618,39 @@ int capv2_grant(int cap_slot, uint32_t recipient_pid, uint32_t attenuated_rights
     }
 
     if (!(effective_rights & CAP_RIGHT_GRANT)) {
-        qspinlock_unlock(&src_cap->lock);
+        qspin_unlock(&src_cap->lock);
         return CAPV2_ERR_NO_PERMISSION;
     }
 
     /* Verify rights attenuation: recipient rights must be subset of source rights */
     if ((attenuated_rights & ~effective_rights) != 0) {
-        qspinlock_unlock(&src_cap->lock);
+        qspin_unlock(&src_cap->lock);
         return CAPV2_ERR_NO_PERMISSION;
     }
 
     /* Increment refcount (bounds check) */
     if (src_cap->refcount == UINT32_MAX) {
-        qspinlock_unlock(&src_cap->lock);
+        qspin_unlock(&src_cap->lock);
         return CAPV2_ERR_REFCOUNT_OVERFLOW;
     }
     src_cap->refcount++;
 
-    qspinlock_unlock(&src_cap->lock);
+    qspin_unlock(&src_cap->lock);
 
     /* Allocate new capability for recipient */
     int new_slot = capv2_alloc(src_cap->resource_id, src_cap->cap_type,
                                attenuated_rights, src_cap->quota);
     if (new_slot < 0) {
         /* Rollback refcount increment */
-        qspinlock_lock(&src_cap->lock);
+        qspin_lock(&src_cap->lock);
         src_cap->refcount--;
-        qspinlock_unlock(&src_cap->lock);
+        qspin_unlock(&src_cap->lock);
         return new_slot;
     }
 
     struct capability_v2 *new_cap = &g_cap_table[new_slot];
 
-    qspinlock_lock(&new_cap->lock);
+    qspin_lock(&new_cap->lock);
 
     /* Copy additional fields from source */
     new_cap->owner_pid = recipient_pid;
@@ -651,7 +661,7 @@ int capv2_grant(int cap_slot, uint32_t recipient_pid, uint32_t attenuated_rights
     /* Note: We do NOT copy IPC buffer (recipient gets fresh buffer) */
     /* Note: We do NOT copy formula_data (might contain owner-specific state) */
 
-    qspinlock_unlock(&new_cap->lock);
+    qspin_unlock(&new_cap->lock);
 
     return new_slot;
 }
@@ -696,7 +706,7 @@ int capv2_revoke(int cap_slot)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Check REVOKE right */
     uint32_t effective_rights = cap->static_rights;
@@ -705,11 +715,11 @@ int capv2_revoke(int cap_slot)
     }
 
     if (!(effective_rights & CAP_RIGHT_REVOKE)) {
-        qspinlock_unlock(&cap->lock);
+        qspin_unlock(&cap->lock);
         return CAPV2_ERR_NO_PERMISSION;
     }
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     /* Find and revoke all children (capabilities with parent_slot == cap_slot) */
     for (int32_t i = 0; i < CAP_TABLE_SIZE; i++) {
@@ -721,13 +731,13 @@ int capv2_revoke(int cap_slot)
     }
 
     /* Decrement refcount */
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
     if (cap->refcount > 0) {
         cap->refcount--;
     }
 
     uint32_t final_refcount = cap->refcount;
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     /* If refcount reaches 0, free the capability */
     if (final_refcount == 0) {
@@ -780,7 +790,7 @@ int capv2_derive(int parent_slot, resource_vector_t child_quota, uint32_t child_
 
     struct capability_v2 *parent = &g_cap_table[parent_slot];
 
-    qspinlock_lock(&parent->lock);
+    qspin_lock(&parent->lock);
 
     /* Check DERIVE right */
     uint32_t effective_rights = parent->static_rights;
@@ -789,13 +799,13 @@ int capv2_derive(int parent_slot, resource_vector_t child_quota, uint32_t child_
     }
 
     if (!(effective_rights & CAP_RIGHT_DERIVE)) {
-        qspinlock_unlock(&parent->lock);
+        qspin_unlock(&parent->lock);
         return CAPV2_ERR_NO_PERMISSION;
     }
 
     /* Verify rights attenuation */
     if ((child_rights & ~effective_rights) != 0) {
-        qspinlock_unlock(&parent->lock);
+        qspin_unlock(&parent->lock);
         return CAPV2_ERR_NO_PERMISSION;
     }
 
@@ -808,7 +818,7 @@ int capv2_derive(int parent_slot, resource_vector_t child_quota, uint32_t child_
         child_quota.disk_quota > parent->quota.disk_quota ||
         child_quota.irq_count > parent->quota.irq_count ||
         child_quota.capability_count > parent->quota.capability_count) {
-        qspinlock_unlock(&parent->lock);
+        qspin_unlock(&parent->lock);
         return CAPV2_ERR_QUOTA_EXCEEDED;
     }
 
@@ -834,19 +844,19 @@ int capv2_derive(int parent_slot, resource_vector_t child_quota, uint32_t child_
         parent->quota.irq_count += child_quota.irq_count;
         parent->quota.capability_count += child_quota.capability_count;
 
-        qspinlock_unlock(&parent->lock);
+        qspin_unlock(&parent->lock);
         return CAPV2_ERR_REFCOUNT_OVERFLOW;
     }
     parent->refcount++;
 
-    qspinlock_unlock(&parent->lock);
+    qspin_unlock(&parent->lock);
 
     /* Allocate child capability */
     int child_slot = capv2_alloc(parent->resource_id, parent->cap_type,
                                  child_rights, child_quota);
     if (child_slot < 0) {
         /* Rollback refcount and quota */
-        qspinlock_lock(&parent->lock);
+        qspin_lock(&parent->lock);
         parent->refcount--;
         parent->quota.cpu += child_quota.cpu;
         parent->quota.memory += child_quota.memory;
@@ -856,16 +866,16 @@ int capv2_derive(int parent_slot, resource_vector_t child_quota, uint32_t child_
         parent->quota.disk_quota += child_quota.disk_quota;
         parent->quota.irq_count += child_quota.irq_count;
         parent->quota.capability_count += child_quota.capability_count;
-        qspinlock_unlock(&parent->lock);
+        qspin_unlock(&parent->lock);
         return child_slot;
     }
 
     struct capability_v2 *child = &g_cap_table[child_slot];
 
-    qspinlock_lock(&child->lock);
+    qspin_lock(&child->lock);
     child->parent_slot = parent_slot; /* For revocation tree */
     child->owner_pid = parent->owner_pid; /* Inherit owner */
-    qspinlock_unlock(&child->lock);
+    qspin_unlock(&child->lock);
 
     return child_slot;
 }
@@ -909,7 +919,7 @@ int capv2_check_rights(int cap_slot, uint32_t requested_rights)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Compute effective rights */
     uint32_t effective_rights = cap->static_rights;
@@ -920,7 +930,7 @@ int capv2_check_rights(int cap_slot, uint32_t requested_rights)
     /* Update access counter (for usage-based formulas) */
     cap->access_count++;
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     /* Check if all requested rights are present */
     if ((requested_rights & effective_rights) == requested_rights) {
@@ -963,10 +973,10 @@ int capv2_set_formula(int cap_slot, cap_formula_t new_formula, void *formula_dat
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
     cap->rights_fn = new_formula;
     cap->formula_data = formula_data;
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return CAPV2_OK;
 }
@@ -1034,9 +1044,9 @@ int capv2_get_info(int cap_slot, struct capability_v2 *cap_out)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
     *cap_out = *cap; /* Copy entire structure */
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return CAPV2_OK;
 }
@@ -1057,7 +1067,7 @@ void capv2_print(int cap_slot)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     printf("=== Capability %d ===\n", cap_slot);
     printf("Resource ID:   0x%lx\n", cap->resource_id);
@@ -1094,7 +1104,7 @@ void capv2_print(int cap_slot)
     printf("Parent Slot:   %d\n", cap->parent_slot);
     printf("====================\n");
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 }
 
 /*******************************************************************************
@@ -1128,13 +1138,13 @@ int capv2_enable_rate_limit(int cap_slot, q16_t capacity, q16_t refill_rate)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Initialize token bucket */
     extern void token_bucket_init(struct token_bucket *, q16_t, q16_t);
     token_bucket_init(&cap->rate_limit, capacity, refill_rate);
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return CAPV2_OK;
 }
@@ -1154,14 +1164,14 @@ int capv2_disable_rate_limit(int cap_slot)
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Reset token bucket to zero (effectively disables rate limiting) */
     cap->rate_limit.capacity = 0;
     cap->rate_limit.tokens = 0;
     cap->rate_limit.refill_rate = 0;
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return CAPV2_OK;
 }
@@ -1211,7 +1221,7 @@ int capv2_check_rights_ratelimited(int cap_slot, uint32_t requested_rights, q16_
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     /* Check rights first */
     uint32_t effective_rights = cap->static_rights;
@@ -1220,7 +1230,7 @@ int capv2_check_rights_ratelimited(int cap_slot, uint32_t requested_rights, q16_
     }
 
     if ((requested_rights & effective_rights) != requested_rights) {
-        qspinlock_unlock(&cap->lock);
+        qspin_unlock(&cap->lock);
         return CAPV2_ERR_NO_PERMISSION;
     }
 
@@ -1229,7 +1239,7 @@ int capv2_check_rights_ratelimited(int cap_slot, uint32_t requested_rights, q16_
         /* Rate limiting is enabled */
         extern int token_bucket_consume(struct token_bucket *, q16_t);
         if (!token_bucket_consume(&cap->rate_limit, tokens_needed)) {
-            qspinlock_unlock(&cap->lock);
+            qspin_unlock(&cap->lock);
             return CAPV2_ERR_RATE_LIMITED;
         }
     }
@@ -1237,7 +1247,7 @@ int capv2_check_rights_ratelimited(int cap_slot, uint32_t requested_rights, q16_
     /* Update access counter */
     cap->access_count++;
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return CAPV2_OK;
 }
@@ -1261,7 +1271,7 @@ int capv2_get_rate_limit_status(int cap_slot, q16_t *current_tokens, q16_t *capa
 
     struct capability_v2 *cap = &g_cap_table[cap_slot];
 
-    qspinlock_lock(&cap->lock);
+    qspin_lock(&cap->lock);
 
     if (current_tokens != NULL) {
         /* Refill before reporting */
@@ -1273,7 +1283,7 @@ int capv2_get_rate_limit_status(int cap_slot, q16_t *current_tokens, q16_t *capa
         *capacity = cap->rate_limit.capacity;
     }
 
-    qspinlock_unlock(&cap->lock);
+    qspin_unlock(&cap->lock);
 
     return CAPV2_OK;
 }
