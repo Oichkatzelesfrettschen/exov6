@@ -9,6 +9,7 @@
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/phoenix-simd.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/phoenix-arch-x86-legacy.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/phoenix-arch-x86-modern.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/phoenix-arch-x86-64.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/package.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/package_source.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/arch/CMakeFiles/edit_cache.dir
@@ -27,7 +28,6 @@
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/ddekit/CMakeFiles/install/local.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/ddekit/CMakeFiles/install/strip.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/libnstr_graph/CMakeFiles/phoenix-nstr-graph.dir
-/home/runner/work/exov6/exov6/_codeql_build_dir/src/libnstr_graph/CMakeFiles/phoenix-nstr-graph-shared.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/libnstr_graph/CMakeFiles/package.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/libnstr_graph/CMakeFiles/package_source.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/src/libnstr_graph/CMakeFiles/edit_cache.dir
@@ -200,6 +200,7 @@
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_aether_nn.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_arbitrate.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_beatty_cycle.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_beatty_sim.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_build_script.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/unit/CMakeFiles/test_cap_newtypes.dir
@@ -273,3 +274,12 @@
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/performance/CMakeFiles/install.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/performance/CMakeFiles/install/local.dir
 /home/runner/work/exov6/exov6/_codeql_build_dir/tests/c17/performance/CMakeFiles/install/strip.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/test-arch-mem.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/package.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/package_source.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/edit_cache.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/rebuild_cache.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/list_install_components.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/install.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/install/local.dir
+/home/runner/work/exov6/exov6/_codeql_build_dir/tests/arch_mem/CMakeFiles/install/strip.dir

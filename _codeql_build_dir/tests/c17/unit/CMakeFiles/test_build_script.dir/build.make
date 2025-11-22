@@ -107,6 +107,7 @@ tests/c17/unit/test_build_script: user/libphoenix-door.a
 tests/c17/unit/test_build_script: user/libphoenix-math-core.a
 tests/c17/unit/test_build_script: src/arch/libphoenix-arch-x86-legacy.a
 tests/c17/unit/test_build_script: src/arch/libphoenix-arch-x86-modern.a
+tests/c17/unit/test_build_script: src/arch/libphoenix-arch-x86-64.a
 tests/c17/unit/test_build_script: src/arch/libphoenix-simd.a
 tests/c17/unit/test_build_script: user/libphoenix-user-sched.a
 tests/c17/unit/test_build_script: user/libphoenix-chan.a
