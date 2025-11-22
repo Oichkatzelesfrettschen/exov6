@@ -79,7 +79,7 @@ void *receiver_thread(void *arg) {
             /* Verify integrity: regs[0] should contain sender ID */
             /* We multiply regs[1] by 2 as the result */
 
-            regs[0] = regs[0]; /* Preserve sender ID */
+            /* Preserve sender ID */
             regs[1] = regs[1] * 2;
 
             /* Reply */
