@@ -36,12 +36,12 @@ A capability slot in the global kernel table can be in one of the following stat
     4.  If a slot's refcount drops to zero, it is freed.
 
 ### 3.4 Stale Capabilities & Safety
-*   **Definition**: A "stale" capability is a user-space handle (index) that points to a slot which has been revoked and potentially re-allocated to a different object.
+*   **Definition**: A "stale" capability is a user-space handle (slot index) that points to a slot which has been revoked and potentially re-allocated to a different object.
 *   **Detection**:
-    *   User-space handles are typically tuples: `{index, generation}`.
-    *   On every syscall using a capability, the kernel checks:
+    *   **Current Implementation**: User-space handles are simple slot indices (`int cap_slot`). Generation counters are maintained internally by the kernel and are not exposed to user-space.
+    *   On every syscall using a capability, the kernel checks internally:
         ```c
-        if (slot[index].generation != handle.generation) {
+        if (slot[index].generation != expected_generation) {
             return E_STALE_CAP; // Fail cleanly
         }
         ```
