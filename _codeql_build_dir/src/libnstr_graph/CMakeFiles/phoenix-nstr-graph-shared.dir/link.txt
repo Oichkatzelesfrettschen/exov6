@@ -1,1 +1,0 @@
-/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang -fPIC -O3 -DNDEBUG -Xlinker --dependency-file=CMakeFiles/phoenix-nstr-graph-shared.dir/link.d -shared -Wl,-soname,libphoenix-nstr-graph.so -o libphoenix-nstr-graph.so "CMakeFiles/phoenix-nstr-graph-shared.dir/nstr_graph.c.o"
