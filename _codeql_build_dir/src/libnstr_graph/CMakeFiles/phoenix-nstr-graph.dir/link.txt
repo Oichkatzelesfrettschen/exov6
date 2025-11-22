@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-nstr-graph.a "CMakeFiles/phoenix-nstr-graph.dir/nstr_graph.c.o"
-/usr/bin/ranlib libphoenix-nstr-graph.a

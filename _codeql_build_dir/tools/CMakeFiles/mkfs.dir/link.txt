@@ -1,1 +1,0 @@
-/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang -O3 -DNDEBUG -Xlinker --dependency-file=CMakeFiles/mkfs.dir/link.d CMakeFiles/mkfs.dir/mkfs_standalone.c.o -o mkfs

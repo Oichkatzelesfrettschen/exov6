@@ -1,1 +1,0 @@
-/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang -O3 -DNDEBUG -Xlinker --dependency-file=CMakeFiles/user-grep.dir/link.d "CMakeFiles/user-grep.dir/grep.c.o" -o grep  libphoenix-ulib.a libphoenix-umalloc.a libphoenix-printf.a libphoenix-caplib.a libphoenix-ulib.a

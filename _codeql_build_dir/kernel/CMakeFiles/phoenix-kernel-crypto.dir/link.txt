@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-kernel-crypto.a "CMakeFiles/phoenix-kernel-crypto.dir/crypto.c.o"
-/usr/bin/ranlib libphoenix-kernel-crypto.a

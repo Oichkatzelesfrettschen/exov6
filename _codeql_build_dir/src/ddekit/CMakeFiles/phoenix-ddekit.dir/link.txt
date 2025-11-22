@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-ddekit.a "CMakeFiles/phoenix-ddekit.dir/stub.c.o"
-/usr/bin/ranlib libphoenix-ddekit.a
