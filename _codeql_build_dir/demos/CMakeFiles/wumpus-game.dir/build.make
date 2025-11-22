@@ -122,6 +122,7 @@ demos/wumpus: user/libphoenix-caplib.a
 demos/wumpus: user/libphoenix-ulib.a
 demos/wumpus: src/arch/libphoenix-arch-x86-legacy.a
 demos/wumpus: src/arch/libphoenix-arch-x86-modern.a
+demos/wumpus: src/arch/libphoenix-arch-x86-64.a
 demos/wumpus: src/arch/libphoenix-simd.a
 demos/wumpus: demos/CMakeFiles/wumpus-game.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable wumpus"
