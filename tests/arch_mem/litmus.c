@@ -148,6 +148,14 @@ int main() {
         return 2;
     }
 
+    // Reset all global variables between tests
+    mp_data = 0;
+    mp_flag = 0;
+    dekker_flag0 = 0;
+    dekker_flag1 = 0;
+    critical_count = 0;
+    violations = 0;
+
     printf("Running Dekker test (%d iterations)...\n", ITERATIONS);
     ret = pthread_create(&t1, NULL, dekker_thread0, NULL);
     if (ret != 0) {

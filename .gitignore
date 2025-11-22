@@ -41,6 +41,7 @@ builddir/
 _build/
 _build-*/
 test-build/
+_codeql*
 
 # Objects and Libraries
 *.o
