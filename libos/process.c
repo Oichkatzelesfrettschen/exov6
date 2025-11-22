@@ -5,14 +5,15 @@
  * capability preservation, and exokernel integration.
  */
 
+#include <stdatomic.h> /* Added for atomic operations */
 #include "types.h"
-#include "defs.h"
+/* #include "defs.h" - REMOVED: Kernel dependency */
 #include "param.h"
-#include "memlayout.h"
-#include "mmu.h"
+/* #include "memlayout.h" - REMOVED: Kernel dependency */
+/* #include "mmu.h" - REMOVED: Kernel dependency */
 #include <arch.h>
-#include "proc.h"
-#include "spinlock.h"
+/* #include "proc.h" - REMOVED: Kernel dependency */
+/* #include "spinlock.h" - REMOVED: Kernel dependency */
 #include "libos/posix.h"
 #include "exo.h"
 #include "errno.h"
@@ -23,8 +24,79 @@
 #include <stdlib.h>  /* for malloc */
 #include <string.h>  /* for memcpy */
 #include "file_types.h"  /* for T_FILE */
-#include "elf.h"  /* for struct elfhdr, struct proghdr */
 #include "file.h"  /* for struct inode */
+#include "elf.h" /* Added for ELF structures */
+
+#ifndef PGSIZE
+#define PGSIZE 4096
+#endif
+
+/* Internal FS declarations (stubbed in libfs_stubs.c) */
+struct inode *idup(struct inode *ip);
+struct inode *namei(const char *path);
+void ilock(struct inode *ip);
+void iunlockput(struct inode *ip);
+int readi(struct inode *ip, char *dst, uint32_t off, size_t n);
+void iput(struct inode *ip);
+
+/* POSIX declarations that might be missing */
+int nice(int inc);
+pid_t getpgid(pid_t pid);
+
+/* Local Spinlock Implementation for User Space */
+typedef struct {
+    _Atomic int locked;
+} libos_spinlock_t;
+
+static void libos_initlock(libos_spinlock_t *lk, char *name) {
+    (void)name;
+    atomic_init(&lk->locked, 0);
+}
+
+static void libos_acquire(libos_spinlock_t *lk) {
+    int expected = 0;
+    while (!atomic_compare_exchange_weak(&lk->locked, &expected, 1)) {
+        expected = 0;
+        // TODO: yield to scheduler
+        __builtin_ia32_pause();
+    }
+}
+
+static void libos_release(libos_spinlock_t *lk) {
+    atomic_store(&lk->locked, 0);
+}
+
+static void ksleep(void *chan, libos_spinlock_t *lk) {
+    // TODO: Implement user-space sleep/wait using futex or exokernel yield
+    libos_release(lk);
+    // exo_yield_to(sched_cap);
+    libos_acquire(lk);
+}
+
+static void wakeup1(void *chan) {
+    // TODO: Implement user-space wakeup
+}
+
+static void panic(const char *msg) {
+    // write(2, msg, strlen(msg));
+    abort();
+}
+
+/* Architecture specific structures (should be in arch.h but simplified here) */
+struct context {
+    uint64_t r15;
+    uint64_t r14;
+    uint64_t r13;
+    uint64_t r12;
+    uint64_t rbx;
+    uint64_t rbp;
+    uint64_t rip;
+};
+
+struct trapframe {
+    uint64_t rax;
+    // ... full definition needed for real context switch
+};
 
 // Forward declaration for process type
 typedef struct process process_t;
@@ -42,7 +114,10 @@ static int calculate_priority(int nice);
 static int can_signal(process_t *src, process_t *dest);
 static int kill_pgrp(pid_t pgid, int sig);
 static int kill_all(int sig);
-void wakeup1(void *chan);
+static int begin_exec(void);
+static void abort_exec(void);
+static void sched(void);
+void free_process(process_t *p);
 
 // Process table
 #define MAX_PROCESSES 65536
@@ -117,7 +192,7 @@ typedef struct process {
     struct process *next_hash;
     
     // Synchronization
-    struct spinlock lock;
+    libos_spinlock_t lock;
     void *wait_chan;               // Waiting channel
     
     // Thread support
@@ -133,12 +208,12 @@ typedef struct process {
     // Context for switching
     struct context *context;
     struct trapframe *tf;
-};
+} process_t; // Added typedef name at end
 
 // Global process table
 static process_t proc_table[MAX_PROCESSES];
 static process_t *proc_hash[PROCESS_HASH_SIZE];
-static struct spinlock proc_table_lock;
+static libos_spinlock_t proc_table_lock;
 static pid_t next_pid = 1;
 
 // Current process (per-CPU in SMP)
@@ -148,12 +223,12 @@ __thread process_t *current_proc = NULL;
 void
 libos_process_init(void)
 {
-    initlock(&proc_table_lock, "proctable");
+    libos_initlock(&proc_table_lock, "proctable");
     
     // Initialize process table
     for (int i = 0; i < MAX_PROCESSES; i++) {
         proc_table[i].state = PROC_UNUSED;
-        initlock(&proc_table[i].lock, "proc");
+        libos_initlock(&proc_table[i].lock, "proc");
     }
     
     // Clear hash table
@@ -174,14 +249,14 @@ find_process(pid_t pid)
     uint32_t hash = pid_hash(pid);
     process_t *p;
     
-    acquire(&proc_table_lock);
+    libos_acquire(&proc_table_lock);
     for (p = proc_hash[hash]; p != NULL; p = p->next_hash) {
         if (p->pid == pid) {
-            release(&proc_table_lock);
+            libos_release(&proc_table_lock);
             return p;
         }
     }
-    release(&proc_table_lock);
+    libos_release(&proc_table_lock);
     return NULL;
 }
 
@@ -191,7 +266,7 @@ alloc_process(void)
 {
     process_t *p;
     
-    acquire(&proc_table_lock);
+    libos_acquire(&proc_table_lock);
     
     // Find unused slot
     for (int i = 0; i < MAX_PROCESSES; i++) {
@@ -205,7 +280,7 @@ alloc_process(void)
             p->next_hash = proc_hash[hash];
             proc_hash[hash] = p;
             
-            release(&proc_table_lock);
+            libos_release(&proc_table_lock);
             
             // Initialize process
             p->ppid = current_proc ? current_proc->pid : 0;
@@ -213,9 +288,10 @@ alloc_process(void)
             p->sid = current_proc ? current_proc->sid : p->pid;
             
             // Request capabilities from exokernel
-            p->proc_cap = exo_create_process_cap();
-            p->mem_cap = exo_request_memory(PGSIZE * 16, EXO_PROT_READ | EXO_PROT_WRITE);  // Initial memory
-            p->cpu_cap = exo_request_cpu();
+            // Placeholder: exo_create_process_cap() not yet implemented
+            // p->proc_cap = exo_create_process_cap();
+            // p->mem_cap = exo_request_memory(PGSIZE * 16, EXO_PROT_READ | EXO_PROT_WRITE);  // Initial memory
+            // p->cpu_cap = exo_request_cpu();
             
             // Initialize signals
             sigemptyset(&p->sigmask);
@@ -234,9 +310,31 @@ alloc_process(void)
         }
     }
     
-    release(&proc_table_lock);
+    libos_release(&proc_table_lock);
     return NULL;
 }
+
+/* Stub functions to make it compile without full implementation */
+static int setup_child_context(process_t *child, process_t *parent) { (void)child; (void)parent; return 0; }
+static int clear_user_memory(process_t *p) { (void)p; return 0; }
+static int load_segment(struct inode *ip, uint32_t off, uint32_t vaddr, uint32_t filesz, uint32_t memsz, uint32_t flags) { (void)ip; (void)off; (void)vaddr; (void)filesz; (void)memsz; (void)flags; return 0; }
+static uint32_t setup_stack(char **argv, char **envp, int *argc) { (void)argv; (void)envp; (void)argc; return 0; }
+static int commit_exec(uint32_t entry, uint32_t sp, int argc) { (void)entry; (void)sp; (void)argc; return 0; }
+static int remove_child(process_t *parent, process_t *child) { (void)parent; (void)child; return 0; }
+static int can_signal(process_t *src, process_t *dest) { (void)src; (void)dest; return 1; }
+static int kill_pgrp(pid_t pgid, int sig) { (void)pgid; (void)sig; return 0; }
+static int kill_all(int sig) { (void)sig; return 0; }
+static int begin_exec(void) { return 0; }
+static void abort_exec(void) { }
+static void sched(void) { }
+void free_process(process_t *p) { (void)p; }
+
+// Mock exokernel functions
+void exo_schedule_process(exo_cap p, exo_cap c) { (void)p; (void)c; }
+exo_cap exo_create_cow_mapping(exo_cap m, size_t s) { (void)m; (void)s; exo_cap c = {0}; return c; }
+void exo_mark_cow(exo_cap m, void* a, size_t s) { (void)m; (void)a; (void)s; }
+void exo_release_capability(exo_cap c) { (void)c; }
+void exo_set_scheduling_hint(exo_cap c, int p) { (void)c; (void)p; }
 
 /**
  * fork - Create new process with COW optimization
@@ -248,6 +346,11 @@ libos_fork(void)
 {
     process_t *child;
     
+    if (!current_proc) {
+        // We are in the root process/host environment
+        return fork();
+    }
+
     // Allocate new process
     child = alloc_process();
     if (child == NULL) {
@@ -256,7 +359,7 @@ libos_fork(void)
     }
     
     // Copy process state
-    acquire(&current_proc->lock);
+    libos_acquire(&current_proc->lock);
     
     child->uid = current_proc->uid;
     child->euid = current_proc->euid;
@@ -292,7 +395,7 @@ libos_fork(void)
     }
     child->cwd = idup(current_proc->cwd);
     
-    release(&current_proc->lock);
+    libos_release(&current_proc->lock);
     
     // COW (Copy-on-Write) memory setup
     if (setup_cow_memory(child, current_proc) < 0) {
@@ -309,16 +412,16 @@ libos_fork(void)
     }
     
     // Add to parent's children list
-    acquire(&current_proc->lock);
+    libos_acquire(&current_proc->lock);
     child->parent = current_proc;
     child->sibling = current_proc->children;
     current_proc->children = child;
-    release(&current_proc->lock);
+    libos_release(&current_proc->lock);
     
     // Make child runnable
-    acquire(&child->lock);
+    libos_acquire(&child->lock);
     child->state = PROC_RUNNABLE;
-    release(&child->lock);
+    libos_release(&child->lock);
     
     // Schedule child
     exo_schedule_process(child->proc_cap, child->cpu_cap);
@@ -375,6 +478,12 @@ libos_execve(const char *path, char *const argv[], char *const envp[])
     int i, off;
     uint64_t argc, sp;
     
+    if (!current_proc) {
+        // Host fallback
+        // return execve(path, argv, envp);
+        return -1; // Not implemented in stub
+    }
+
     // Begin execution transaction
     begin_exec();
     
@@ -445,7 +554,7 @@ libos_execve(const char *path, char *const argv[], char *const envp[])
     iunlockput(ip);
     
     // Set up new stack with arguments and environment
-    sp = setup_stack(argv, envp, &argc);
+    sp = setup_stack((char**)argv, (char**)envp, (int*)&argc);
     if (sp == 0) {
         errno = E2BIG;
         abort_exec();
@@ -497,7 +606,9 @@ libos_waitpid(pid_t pid, int *status, int options)
     process_t *p;
     int found_child = 0;
     
-    acquire(&current_proc->lock);
+    if (!current_proc) return waitpid(pid, status, options);
+
+    libos_acquire(&current_proc->lock);
     
     for (;;) {
         // Scan for zombie children
@@ -512,15 +623,15 @@ libos_waitpid(pid_t pid, int *status, int options)
             
             found_child = 1;
             
-            acquire(&p->lock);
+            libos_acquire(&p->lock);
             
             // Check for stopped child (WUNTRACED)
             if ((options & WUNTRACED) && p->state == PROC_STOPPED) {
                 if (status)
                     *status = (p->stop_signal << 8) | 0x7f;
                 pid_t ret = p->pid;
-                release(&p->lock);
-                release(&current_proc->lock);
+                libos_release(&p->lock);
+                libos_release(&current_proc->lock);
                 return ret;
             }
             
@@ -529,8 +640,8 @@ libos_waitpid(pid_t pid, int *status, int options)
                 if (status)
                     *status = 0xffff;  // WIFCONTINUED
                 pid_t ret = p->pid;
-                release(&p->lock);
-                release(&current_proc->lock);
+                libos_release(&p->lock);
+                libos_release(&current_proc->lock);
                 return ret;
             }
             
@@ -547,21 +658,21 @@ libos_waitpid(pid_t pid, int *status, int options)
                 // Remove from children list
                 remove_child(current_proc, p);
                 
-                release(&p->lock);
+                libos_release(&p->lock);
                 
                 // Free process resources
                 free_process(p);
                 
-                release(&current_proc->lock);
+                libos_release(&current_proc->lock);
                 return ret;
             }
             
-            release(&p->lock);
+            libos_release(&p->lock);
         }
         
         // No child found
         if (!found_child || (options & WNOHANG)) {
-            release(&current_proc->lock);
+            libos_release(&current_proc->lock);
             if (!found_child) {
                 errno = ECHILD;
                 return -1;
@@ -584,6 +695,8 @@ libos_exit(int status)
 {
     process_t *p;
     
+    if (!current_proc) exit(status);
+
     // Close all open files
     for (int fd = 0; fd < NOFILE; fd++) {
         if (current_proc->ofile[fd]) {
@@ -598,13 +711,13 @@ libos_exit(int status)
         current_proc->cwd = 0;
     }
     
-    acquire(&current_proc->lock);
+    libos_acquire(&current_proc->lock);
     
     // Set exit status
     current_proc->exit_status = (status & 0xff) << 8;
     
     // Reparent children to init
-    acquire(&proc_table_lock);
+    libos_acquire(&proc_table_lock);
     process_t *init = find_process(1);
     if (init) {
         for (p = current_proc->children; p != NULL; p = p->sibling) {
@@ -620,7 +733,7 @@ libos_exit(int status)
             current_proc->children = NULL;
         }
     }
-    release(&proc_table_lock);
+    libos_release(&proc_table_lock);
     
     // Wake up parent
     if (current_proc->parent)
@@ -645,13 +758,13 @@ libos_exit(int status)
 pid_t
 libos_getpid(void)
 {
-    return current_proc ? current_proc->pid : 0;
+    return current_proc ? current_proc->pid : getpid();
 }
 
 pid_t
 libos_getppid(void)
 {
-    return current_proc ? current_proc->ppid : 0;
+    return current_proc ? current_proc->ppid : getppid();
 }
 
 pid_t
@@ -660,9 +773,11 @@ libos_getpgid(pid_t pid)
     process_t *p;
     
     if (pid == 0) {
-        return current_proc->pgid;
+        return current_proc ? current_proc->pgid : getpgrp();
     }
     
+    if (!current_proc) return getpgid(pid);
+
     p = find_process(pid);
     if (p == NULL) {
         errno = ESRCH;
@@ -677,6 +792,8 @@ libos_setpgid(pid_t pid, pid_t pgid)
 {
     process_t *p;
     
+    if (!current_proc) return setpgid(pid, pgid);
+
     if (pid == 0)
         pid = current_proc->pid;
     if (pgid == 0)
@@ -700,9 +817,9 @@ libos_setpgid(pid_t pid, pid_t pgid)
         return -1;
     }
     
-    acquire(&p->lock);
+    libos_acquire(&p->lock);
     p->pgid = pgid;
-    release(&p->lock);
+    libos_release(&p->lock);
     
     return 0;
 }
@@ -712,6 +829,8 @@ libos_getsid(pid_t pid)
 {
     process_t *p;
     
+    if (!current_proc) return getsid(pid);
+
     if (pid == 0) {
         return current_proc->sid;
     }
@@ -728,16 +847,18 @@ libos_getsid(pid_t pid)
 pid_t
 libos_setsid(void)
 {
+    if (!current_proc) return setsid();
+
     // Check if already a process group leader
     if (current_proc->pid == current_proc->pgid) {
         errno = EPERM;
         return -1;
     }
     
-    acquire(&current_proc->lock);
+    libos_acquire(&current_proc->lock);
     current_proc->sid = current_proc->pid;
     current_proc->pgid = current_proc->pid;
-    release(&current_proc->lock);
+    libos_release(&current_proc->lock);
     
     return current_proc->sid;
 }
@@ -752,6 +873,8 @@ libos_setsid(void)
 int
 libos_nice(int inc)
 {
+    if (!current_proc) return nice(inc);
+
     int old_nice = current_proc->nice;
     int new_nice = old_nice + inc;
     
@@ -767,10 +890,10 @@ libos_nice(int inc)
         return -1;
     }
     
-    acquire(&current_proc->lock);
+    libos_acquire(&current_proc->lock);
     current_proc->nice = new_nice;
     current_proc->priority = calculate_priority(new_nice);
-    release(&current_proc->lock);
+    libos_release(&current_proc->lock);
     
     // Update exokernel scheduling hint
     exo_set_scheduling_hint(current_proc->cpu_cap, current_proc->priority);
@@ -791,6 +914,8 @@ libos_kill(pid_t pid, int sig)
 {
     process_t *p;
     
+    if (!current_proc) return kill(pid, sig);
+
     // Validate signal
     if (sig < 0 || sig >= NSIG) {
         errno = EINVAL;
@@ -828,7 +953,7 @@ send_signal(process_t *p, int sig)
         return -1;
     }
     
-    acquire(&p->lock);
+    libos_acquire(&p->lock);
     
     // Add to pending signals
     sigaddset(&p->sigpending, sig);
@@ -838,7 +963,7 @@ send_signal(process_t *p, int sig)
         p->state = PROC_RUNNABLE;
     }
     
-    release(&p->lock);
+    libos_release(&p->lock);
     
     return 0;
 }

@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <sys/stat.h> // For struct stat
 #include "fs.h"  // For NDIRECT
 #include "exokernel.h"  // For exo_blockcap
 
@@ -56,3 +57,59 @@ struct devsw {
 extern struct devsw devsw[];
 
 #define CONSOLE 1
+
+/**
+ * @brief Initialize the file table.
+ */
+void fileinit(void);
+
+/**
+ * @brief Allocate a new file structure.
+ *
+ * @return Pointer to the allocated file or NULL on failure.
+ */
+struct file *filealloc(void);
+
+/**
+ * @brief Increment the reference count of a file.
+ *
+ * @param f File to duplicate.
+ * @return The same file pointer.
+ */
+struct file *filedup(struct file *f);
+
+/**
+ * @brief Close a file and release its resources.
+ *
+ * @param f File to close.
+ */
+void fileclose(struct file *f);
+
+/**
+ * @brief Retrieve file metadata.
+ *
+ * @param f  File handle.
+ * @param st Destination stat structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int filestat(struct file *f, struct stat *st);
+
+/**
+ * @brief Read data from a file.
+ *
+ * @param f     File handle.
+ * @param addr  Destination buffer.
+ * @param n     Number of bytes to read.
+ * @return Number of bytes read or negative error code.
+ */
+int fileread(struct file *f, char *addr, size_t n);
+
+/**
+ * @brief Write data to a file.
+ *
+ * @param f     File handle.
+ * @param addr  Source buffer.
+ * @param n     Number of bytes to write.
+ * @return Number of bytes written or negative error code.
+ */
+int filewrite(struct file *f, char *addr, size_t n);

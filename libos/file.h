@@ -10,14 +10,18 @@
 
 /**
  * @brief Per-file state for the capability-based file system.
+ *        Enhanced for POSIX compatibility.
  */
 struct file {
-  enum { FD_NONE, FD_CAP } type; /**< File descriptor type. */
+  enum { FD_NONE, FD_PIPE, FD_INODE, FD_CAP } type; /**< File descriptor type. */
   size_t ref;                    /**< Reference count. */
   char readable;                 /**< Read permission flag. */
   char writable;                 /**< Write permission flag. */
-  struct exo_blockcap cap;       /**< Backing storage capability. */
+  struct pipe *pipe;             /**< Pipe structure (if FD_PIPE). */
+  struct inode *ip;              /**< Inode structure (if FD_INODE). */
   size_t off;                    /**< Current file offset. */
+  int flags;                     /**< Open flags (O_APPEND, etc). */
+  struct exo_blockcap cap;       /**< Backing storage capability. */
   size_t *sizep;                 /**< Pointer to shared file length. */
 };
 
@@ -35,6 +39,9 @@ struct inode {
   short major;                 /**< Major device number. */
   short minor;                 /**< Minor device number. */
   short nlink;                 /**< Number of directory links. */
+  uint32_t mode;               /**< File mode/permissions. */
+  uint32_t uid;                /**< Owner UID. */
+  uint32_t gid;                /**< Owner GID. */
   size_t size;                 /**< File size in bytes. */
   uint32_t addrs[NDIRECT + 1]; /**< Data block addresses. */
 };

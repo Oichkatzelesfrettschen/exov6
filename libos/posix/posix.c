@@ -27,39 +27,25 @@
 #include <stddef.h>  /* Use system stddef.h */
 #endif
 
-/* File structure definition to avoid header conflicts */
-struct file {
-  enum { FD_NONE, FD_PIPE, FD_INODE } type;
-  size_t ref; // reference count
-  char readable;
-  char writable;
-  struct pipe *pipe;
-  struct inode *ip;
-  size_t off;
-  int flags;
-};
+/* Include LibOS headers */
+#include "file.h"
+#include "libfs.h"
+
+/* Weak attribute for overriding by native implementations */
+#define WEAK __attribute__((weak))
 
 /* Forward declarations to avoid including problem headers */
 struct pipe;
 struct inode;
 struct sleeplock;
 
-typedef struct exo_cap {
-    uint32_t pa;
-    uint32_t id; 
-    uint32_t rights;
-    uint32_t owner;
-    uint64_t auth_tag[4];
-} exo_cap;
+/* exo_cap defined in exo.h */
 
 /* Function declarations we need */
 int exec(char *path, char **argv);
 int sigsend(int pid, int sig);
 int sigcheck(void);
-void *malloc(size_t size);
-void free(void *ptr);
-void *realloc(void *ptr, size_t size);
-void *calloc(size_t nmemb, size_t size);
+/* malloc/free are in stdlib.h */
 
 /* POSIX function signatures for libOS layer */
 typedef unsigned long libos_sigset_t;
@@ -74,17 +60,8 @@ struct sigaction {
 };
 #endif
 
-/* Phoenix libOS functions - declare directly to avoid header conflicts */
-struct file *libfs_open(const char *path, int flags);
-int libfs_read(struct file *f, void *buf, size_t n);
-int libfs_write(struct file *f, const void *buf, size_t n);
-void libfs_close(struct file *f);
-int libfs_truncate(struct file *f, size_t length);
-int libfs_unlink(const char *path);
-int libfs_rename(const char *oldpath, const char *newpath);
-int filestat(struct file *f, struct stat *st);
-struct file *filedup(struct file *f);
-void fileclose(struct file *f);
+/* Phoenix libOS functions */
+/* libfs functions are in libfs.h */
 
 /* Exokernel capability functions */
 exo_cap exo_alloc_page(void);
@@ -209,7 +186,7 @@ int libos_spawn(const char *path, char *const argv[]) {
   return pid;
 }
 
-int libos_execve(const char *path, char *const argv[], char *const envp[]) {
+int WEAK libos_execve(const char *path, char *const argv[], char *const envp[]) {
   (void)envp;
   return exec((char *)path, (char **)argv);
 }
@@ -252,21 +229,22 @@ int libos_dup(int fd) {
 
 int libos_pipe(int fd[2]) { return pipe(fd); }
 
-int libos_fork(void) { return fork(); }
+int WEAK libos_fork(void) { return fork(); }
 
-int libos_waitpid(int pid, int *status, int flags) {
+int WEAK libos_waitpid(int pid, int *status, int flags) {
   (void)flags;
   int w;
+  int s;
   if (pid == -1) {
-    w = wait(NULL);
+    w = wait(&s);
     if (w >= 0 && status)
-      *status = 0;
+      *status = s;
     return w;
   }
-  while ((w = wait(NULL)) >= 0) {
+  while ((w = wait(&s)) >= 0) {
     if (w == pid) {
       if (status)
-        *status = 0;
+        *status = s;
       return w;
     }
   }
@@ -422,8 +400,9 @@ int libos_sigismember(const libos_sigset_t *set, int sig) {
 }
 
 int libos_getpgrp(void) { return (int)getpgrp(); }
+int WEAK libos_getpid(void) { return (int)getpid(); }
 
-int libos_setpgid(int pid, int pgid) { return setpgid(pid, pgid); }
+int WEAK libos_setpgid(int pid, int pgid) { return setpgid(pid, pgid); }
 
 int libos_socket(int domain, int type, int protocol) {
   return socket(domain, type, protocol);
@@ -454,3 +433,5 @@ long libos_recv(int fd, void *buf, size_t len, int flags) {
 int libos_chdir(const char *path) { return chdir(path); }
 
 char *libos_getcwd(char *buf, size_t size) { return getcwd(buf, size); }
+
+void WEAK libos_exit(int status) { exit(status); }
