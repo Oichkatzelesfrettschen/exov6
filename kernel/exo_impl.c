@@ -552,7 +552,7 @@ int sys_ipc_fast(void) {
     uint64_t msg_len = p->tf->rdx;
 
     /* Invariant: Validate user pointers */
-    if (msg_ptr >= KERNBASE || msg_ptr + msg_len < msg_ptr) {
+    if (msg_ptr >= KERNBASE || msg_len > KERNBASE || msg_ptr + msg_len > KERNBASE) {
         return -1;
     }
 
