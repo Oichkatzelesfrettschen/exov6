@@ -2,6 +2,16 @@
  * @file sched_beatty.c
  * @brief Beatty Sequence Scheduler Implementation
  *
+ * Implements a deterministic, low-discrepancy scheduling algorithm based on
+ * Rayleigh's Theorem and Beatty Sequences.
+ *
+ * Mathematical Basis:
+ * The scheduler generates a sequence indices based on:
+ * $$ \mathcal{B}_\alpha(n) = \lfloor n \cdot \alpha \rfloor $$
+ *
+ * Where $\alpha$ is typically the Golden Ratio ($\phi \approx 1.618...$).
+ * This ensures minimal clustering of task selections (Three-Distance Theorem).
+ *
  * @see include/sched_beatty.h for API documentation
  */
 
@@ -10,13 +20,23 @@
 #include "printf.h"
 #include <stdint.h>
 #include <string.h>
+#include <stdatomic.h>
+
+/*******************************************************************************
+ * CONSTANTS & MACROS
+ ******************************************************************************/
+
+#define Q16_SHIFT 16
 
 /*******************************************************************************
  * CORE API IMPLEMENTATION
  ******************************************************************************/
 
 /**
- * Initialize Beatty scheduler
+ * @brief Initialize the Beatty scheduler state.
+ *
+ * @param sched Pointer to scheduler instance.
+ * @param alpha The irrational multiplier (Q16.16 format).
  */
 void beatty_init(beatty_scheduler_t *sched, q16_t alpha)
 {
@@ -34,7 +54,7 @@ void beatty_init(beatty_scheduler_t *sched, q16_t alpha)
 }
 
 /**
- * Update priority for a single task
+ * @brief Update priority for a single task based on Resource Vector Norm.
  */
 void beatty_update_priority(
     beatty_scheduler_t *sched,
@@ -45,13 +65,13 @@ void beatty_update_priority(
         return;
     }
 
-    /* Priority = octonion norm of resource vector */
+    /* Priority = Octonion/Euclidean norm of resource vector */
     q16_t priority = resource_vector_norm(task->resources);
     sched->priorities[task_id] = priority;
 }
 
 /**
- * Recompute all priorities for tasks in DAG
+ * @brief Recompute all priorities for tasks in the DAG.
  */
 void beatty_recompute_all_priorities(
     beatty_scheduler_t *sched,
@@ -66,12 +86,18 @@ void beatty_recompute_all_priorities(
     }
 }
 
-/*
- * beatty_select: Selects the next task using the Golden Ratio sequence.
+/**
+ * @brief Selects the next task using the Golden Ratio sequence.
  *
- * Invariants:
- * 1. sched->counter increments monotonically.
- * 2. sched->alpha is Q16(1.61803...)
+ * The selection pipeline is:
+ * 1. Filter: Identify all READY tasks.
+ * 2. Sort:   Order tasks by Priority (Norm) Descending.
+ * 3. Sample: Calculate $B_n = \lfloor n \alpha \rfloor$.
+ * 4. Map:    Select index $k = B_n \mod N_{ready}$.
+ *
+ * @param sched Scheduler state.
+ * @param dag   The Process Directed Acyclic Graph.
+ * @return Pointer to the selected task, or NULL if none ready.
  */
 dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     if (sched == NULL || dag == NULL) {
@@ -81,8 +107,9 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     uint32_t num_ready = 0;
     uint32_t ready_indices[DAG_MAX_TASKS];
 
-    /* 1. Filter for READY state (O(N)) */
-    /* Note: In optimized paths, this list is maintained incrementally. */
+    /* * 1. Filter for READY state (O(N)) 
+     * We construct a compact list of indices corresponding to runnable tasks.
+     */
     for (int i = 0; i < dag->num_tasks; i++) {
         if (atomic_load(&dag->tasks[i].state) == TASK_STATE_READY) {
             ready_indices[num_ready++] = i;
@@ -94,8 +121,10 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     }
 
     /*
-     * 2. Sort by priority (descending)
-     * Simple insertion sort - suitable for small N (DAG_MAX_TASKS typically < 64)
+     * 2. Sort by Priority (Descending) - Deterministic Stability
+     * We use Insertion Sort. While O(N^2), for DAG_MAX_TASKS (typically < 64),
+     * the low constant overhead and cache locality make it superior to Quicksort.
+     * This ensures that index '0' always refers to the highest priority task available.
      */
     for (uint32_t i = 1; i < num_ready; i++) {
         uint32_t key_idx = ready_indices[i];
@@ -112,31 +141,34 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
 
     /*
      * 3. Compute Beatty Number (Fixed Point Q16.16)
-     * Formula: B = floor(counter * phi)
+     * Formula: $B = \lfloor counter \times \alpha \rfloor$
      * We use a 64-bit intermediate to prevent overflow before shifting.
      */
     uint64_t product = (uint64_t)sched->counter * (uint64_t)sched->alpha;
-    uint32_t beatty_val = (uint32_t)(product >> 16); /* Floor by shifting */
+    uint32_t beatty_val = (uint32_t)(product >> Q16_SHIFT); 
 
     /*
      * 4. Map to Index
      * The Beatty sequence is infinite; we map it to the current finite
      * set of ready tasks using modulo arithmetic.
+     * * Note: This provides a Low-Discrepancy distribution over the sorted ranks.
      */
-    uint32_t selected_index = beatty_val % num_ready;
-    uint32_t task_id = ready_indices[selected_index];
+    uint32_t selected_rank = beatty_val % num_ready;
+    uint32_t task_id = ready_indices[selected_rank];
 
-    /* 5. Update State */
+    /* 5. Update State & Telemetry */
     sched->counter++;
     sched->selections[task_id]++;
     sched->total_selections++;
+    
+    /* Update task-specific statistics */
     dag->tasks[task_id].stats.schedule_count++;
 
     return &dag->tasks[task_id];
 }
 
 /**
- * Reset Beatty counter
+ * @brief Reset Beatty counter (useful for deterministic replay).
  */
 void beatty_reset_counter(beatty_scheduler_t *sched)
 {
@@ -161,8 +193,8 @@ uint64_t beatty_compute_next(const beatty_scheduler_t *sched)
         return 0;
     }
 
-    /* B_α(counter) = floor(counter * α) */
-    return ((uint64_t)sched->counter * sched->alpha) >> 16;
+    /* $B_\alpha(counter) = \lfloor counter \times \alpha \rfloor$ */
+    return ((uint64_t)sched->counter * sched->alpha) >> Q16_SHIFT;
 }
 
 uint64_t beatty_get_selection_count(
@@ -176,9 +208,9 @@ uint64_t beatty_get_selection_count(
 }
 
 /**
- * Analyze gap distribution
+ * @brief Analyze gap distribution to verify Three-Distance Theorem properties.
  *
- * Gap = B(n+1) - B(n)
+ * Gap = $B(n+1) - B(n)$
  */
 void beatty_analyze_gaps(
     beatty_scheduler_t *sched,
@@ -191,14 +223,15 @@ void beatty_analyze_gaps(
 
     uint64_t prev = 0;
     for (uint32_t i = 0; i < num_steps; i++) {
-        uint64_t curr = ((uint64_t)i * sched->alpha) >> 16;
+        /* Calculate conceptual B(i) without modifying sched state */
+        uint64_t curr = ((uint64_t)i * sched->alpha) >> Q16_SHIFT;
         gaps_out[i] = (uint32_t)(curr - prev);
         prev = curr;
     }
 }
 
 /**
- * Print Beatty scheduler statistics
+ * @brief Print detailed scheduler statistics and fairness metrics.
  */
 void beatty_print_stats(
     const beatty_scheduler_t *sched,
@@ -210,8 +243,10 @@ void beatty_print_stats(
 
     printf("\n=== Beatty Scheduler Statistics ===\n");
     printf("Total selections: %llu\n", (unsigned long long)sched->total_selections);
-    printf("Current counter: %llu\n", (unsigned long long)sched->counter);
-    printf("Alpha (multiplier): %.3f\n\n", (double)sched->alpha / 65536.0);
+    printf("Current counter:  %llu\n", (unsigned long long)sched->counter);
+    printf("Alpha (Q16.16):   0x%08X (%.5f)\n\n", 
+           sched->alpha, 
+           (double)sched->alpha / 65536.0);
 
     printf("%-4s %-20s %-10s %-10s %-8s %-10s %-10s\n",
            "ID", "Name", "Priority", "Selects", "%", "RunTime", "AvgLat");
@@ -221,8 +256,9 @@ void beatty_print_stats(
         uint64_t selections = sched->selections[i];
         const dag_task_t *t = &dag->tasks[i];
 
+        /* Skip completely inactive tasks to reduce noise */
         if (sched->priorities[i] == 0 && selections == 0 && t->stats.run_time_ticks == 0) {
-            continue; /* Skip tasks with no activity */
+            continue; 
         }
 
         double percentage = 0.0;
@@ -253,15 +289,16 @@ void beatty_print_stats(
  ******************************************************************************/
 
 /**
- * Example: Three-distance theorem
+ * @brief Example: Three-Distance Theorem
  *
- * Demonstrates that Beatty sequence gaps have at most 3 distinct values.
+ * Demonstrates that for any $\alpha$, the sequence of differences (gaps)
+ * between consecutive values takes on at most 3 distinct values.
  */
 void example_beatty_three_distance(void)
 {
     printf("\n=== Example: Three-Distance Theorem ===\n");
-    printf("Beatty sequence with φ = 1.618...\n");
-    printf("Gap distribution should have at most 3 distinct values\n\n");
+    printf("Beatty sequence with phi = 1.618...\n");
+    printf("Gap distribution must have <= 3 distinct values (Steinhaus Conjecture).\n\n");
 
     beatty_scheduler_t sched;
     beatty_init(&sched, BEATTY_GOLDEN_RATIO);
@@ -271,7 +308,7 @@ void example_beatty_three_distance(void)
     beatty_analyze_gaps(&sched, 50, gaps);
 
     printf("First 50 gaps: ");
-    uint32_t gap_counts[10] = {0}; /* Count frequency of each gap size */
+    uint32_t gap_counts[10] = {0}; /* Histogram bucket */
 
     for (int i = 0; i < 50; i++) {
         printf("%u ", gaps[i]);
@@ -289,17 +326,17 @@ void example_beatty_three_distance(void)
         }
     }
 
-    printf("\nExpected: 2-3 distinct gap sizes (three-distance theorem)\n");
+    printf("\nObservation: The regularity of gaps implies low scheduling jitter.\n");
     printf("=====================================\n\n");
 }
 
 /**
- * Example: Beatty vs. round-robin spacing
+ * @brief Example: Beatty vs. Round-Robin Spacing
  */
 void example_beatty_vs_roundrobin(void)
 {
     printf("\n=== Example: Beatty vs. Round-Robin ===\n");
-    printf("Comparing task distribution patterns\n\n");
+    printf("Comparing task distribution patterns.\n\n");
 
     /* Setup DAG with 5 tasks */
     dag_pdac_t dag;
@@ -333,17 +370,17 @@ void example_beatty_vs_roundrobin(void)
     }
     printf("\n\n");
 
-    printf("Note: Beatty provides more varied spacing than round-robin\n");
+    printf("Note: Beatty avoids harmonic resonance that can occur in strict RR.\n");
     printf("=====================================\n\n");
 }
 
 /**
- * Example: Deterministic scheduling (reproducibility)
+ * @brief Example: Deterministic scheduling (Reproducibility)
  */
 void example_beatty_determinism(void)
 {
     printf("\n=== Example: Beatty Determinism ===\n");
-    printf("Same DAG state → same schedule (reproducible)\n\n");
+    printf("Same DAG state + Same Seed -> Identical Schedule.\n\n");
 
     /* Setup DAG */
     dag_pdac_t dag;
@@ -382,17 +419,20 @@ void example_beatty_determinism(void)
     }
     printf("\n\n");
 
-    printf("Note: Both runs produce identical schedules (deterministic)\n");
+    printf("Result: Schedule is strictly deterministic.\n");
     printf("=====================================\n\n");
 }
 
 /**
- * Example: Beatty with priority-sorted tasks
+ * @brief Example: Beatty with priority-sorted tasks
+ * * IMPORTANT: This demonstrates Rank Stability. The Beatty scheduler
+ * samples the priority ranks uniformly, ensuring fairness across
+ * the priority spectrum without starvation.
  */
 void example_beatty_priorities(void)
 {
     printf("\n=== Example: Beatty with Priorities ===\n");
-    printf("Tasks with different priorities (resource norms)\n\n");
+    printf("Demonstrating distribution across priority ranks.\n\n");
 
     /* Setup DAG with varied priorities */
     dag_pdac_t dag;
@@ -435,19 +475,20 @@ void example_beatty_priorities(void)
 
     beatty_print_stats(&sched, &dag);
 
-    printf("Note: Higher priority tasks selected more often\n");
-    printf("      But low priority tasks still run (no starvation)\n");
+    printf("Observation: Tasks are sampled with low discrepancy,\n");
+    printf("             preventing starvation of low-priority tasks\n");
+    printf("             while respecting the stability of the sorted rank.\n");
     printf("=====================================\n\n");
 }
 
 /**
- * Run all Beatty examples
+ * @brief Run all Beatty examples
  */
 void beatty_run_all_examples(void)
 {
     printf("\n");
     printf("╔════════════════════════════════════════════════════════════╗\n");
-    printf("║   BEATTY SEQUENCE SCHEDULER - EXAMPLES                     ║\n");
+    printf("║    BEATTY SEQUENCE SCHEDULER - EXAMPLES                    ║\n");
     printf("╚════════════════════════════════════════════════════════════╝\n");
 
     example_beatty_three_distance();
