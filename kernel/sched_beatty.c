@@ -178,7 +178,7 @@ dag_task_t *beatty_select(
     /* Update statistics */
     sched->selections[selected->original_index]++;
     sched->total_selections++;
-    selected->task->schedule_count++;
+    selected->task->stats.schedule_count++;
 
     return selected->task;
 }
@@ -269,7 +269,7 @@ void beatty_print_stats(
         uint64_t selections = sched->selections[i];
         const dag_task_t *t = &dag->tasks[i];
 
-        if (sched->priorities[i] == 0 && selections == 0 && t->run_time_ticks == 0) {
+        if (sched->priorities[i] == 0 && selections == 0 && t->stats.run_time_ticks == 0) {
             continue; /* Skip tasks with no activity */
         }
 
@@ -279,8 +279,8 @@ void beatty_print_stats(
         }
 
         uint64_t avg_latency = 0;
-        if (t->schedule_count > 0) {
-            avg_latency = t->total_latency_ticks / t->schedule_count;
+        if (t->stats.schedule_count > 0) {
+            avg_latency = t->stats.total_latency_ticks / t->stats.schedule_count;
         }
 
         printf("%-4u %-20s %-10.2f %-10llu %-7.2f %-10llu %-10llu\n",
@@ -289,7 +289,7 @@ void beatty_print_stats(
                (double)sched->priorities[i] / 65536.0,
                (unsigned long long)selections,
                percentage,
-               (unsigned long long)t->run_time_ticks,
+               (unsigned long long)t->stats.run_time_ticks,
                (unsigned long long)avg_latency);
     }
 
