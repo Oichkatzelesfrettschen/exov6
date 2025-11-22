@@ -122,6 +122,7 @@ demos/posix-socket-test: user/libphoenix-caplib.a
 demos/posix-socket-test: user/libphoenix-ulib.a
 demos/posix-socket-test: src/arch/libphoenix-arch-x86-legacy.a
 demos/posix-socket-test: src/arch/libphoenix-arch-x86-modern.a
+demos/posix-socket-test: src/arch/libphoenix-arch-x86-64.a
 demos/posix-socket-test: src/arch/libphoenix-simd.a
 demos/posix-socket-test: demos/CMakeFiles/posix-socket-test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable posix-socket-test"
