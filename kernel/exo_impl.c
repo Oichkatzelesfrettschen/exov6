@@ -551,8 +551,8 @@ int sys_ipc_fast(void) {
     uint64_t msg_ptr = p->tf->rsi;
     uint64_t msg_len = p->tf->rdx;
 
-    /* Invariant: Validate user pointers */
-    if (msg_ptr >= KERNBASE || msg_len > KERNBASE || msg_ptr + msg_len > KERNBASE) {
+    /* Invariant: Validate user pointers and check for overflow */
+    if (msg_ptr >= KERNBASE || msg_ptr + msg_len < msg_ptr || msg_ptr + msg_len > KERNBASE) {
         return -1;
     }
 
