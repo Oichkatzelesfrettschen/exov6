@@ -56,6 +56,12 @@ int pdac_dag_add_task(
     task->start_time = 0;
     task->end_time = 0;
 
+    /* Initialize telemetry fields */
+    task->schedule_count = 0;
+    task->run_time_ticks = 0;
+    task->last_runnable_time = 0;
+    task->total_latency_ticks = 0;
+
     dag->num_tasks++;
     return task_id;
 }

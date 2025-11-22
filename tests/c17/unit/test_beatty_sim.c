@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Include kernel header to access scheduler API */
-#include "../../../kernel/sched_beatty.h"
+/* Include kernel source to test static functions and internals */
+/* We need to ensure include paths are set correctly in CMake */
+#include "../../../kernel/sched_beatty.c"
 /* Simple test framework */
 #define TEST_PASS(msg) printf("PASS: %s\n", msg)
 #define TEST_FAIL(msg) do { printf("FAIL: %s\n", msg); return 1; } while(0)
@@ -21,7 +22,10 @@ int test_beatty_fairness_sim(void) {
     resource_vector_t quota = {.e0 = Q16(100.0), .e1 = Q16(1024.0)}; /* e0=CPU, e1=MEM */
     pdac_dag_init(&dag, quota);
 
-    /* Create 5 tasks with different priorities via resource usage */
+    /* Create 5 tasks with different priorities via resource usage.
+     * Note: The Beatty scheduler provides equal selection frequency to all
+     * READY tasks regardless of priority (priority only affects sort order).
+     * This test verifies that each task gets approximately 1/5 of selections. */
     /* Task 0: High Priority (High Resource Norm) */
     resource_vector_t res_high = {.e0 = Q16(10.0), .e1 = Q16(100.0)};
     int t0 = pdac_dag_add_task(&dag, "High Priority", res_high);
@@ -39,10 +43,10 @@ int test_beatty_fairness_sim(void) {
     int t4 = pdac_dag_add_task(&dag, "Low 2", res_low);
     (void)t3; (void)t4;
 
-    /* Make all ready */
+    /* Make all ready and initialize telemetry */
     for(int i=0; i<5; i++) {
-        dag.tasks[i].state = TASK_STATE_READY;
-        dag.tasks[i].last_runnable_time = 0; /* Simulation start */
+        atomic_store(&dag.tasks[i].state, TASK_STATE_READY);
+        dag.tasks[i].last_runnable_time = 0; /* All become ready at time 0 */
         dag.tasks[i].schedule_count = 0;
         dag.tasks[i].run_time_ticks = 0;
         dag.tasks[i].total_latency_ticks = 0;
@@ -53,27 +57,20 @@ int test_beatty_fairness_sim(void) {
     /* 2. Simulate Run Loop */
     int total_ticks = 10000;
 
-    /* Current time tracking if needed, though we just increment ticks */
-    // uint64_t current_time = 0;
-
     for (int tick = 0; tick < total_ticks; tick++) {
         dag_task_t *selected = beatty_select(&sched, &dag);
         TEST_ASSERT_MSG(selected != NULL, "Should select a task");
 
+        /* Calculate latency: time from when task became READY until selected */
+        uint64_t latency = tick - selected->last_runnable_time;
+        selected->total_latency_ticks += latency;
+
         /* Simulate execution */
         selected->run_time_ticks++;
 
-        /* Update Latency for ALL ready tasks */
-        for(int i=0; i<5; i++) {
-            dag_task_t *t = &dag.tasks[i];
-            if (t->state == TASK_STATE_READY) {
-                if (t != selected) {
-                    /* Task was ready but not selected -> Latency increases */
-                     t->total_latency_ticks++;
-                }
-            }
-        }
-        // current_time++;
+        /* Task completes and immediately becomes ready again */
+        /* Update last_runnable_time to when it becomes ready again */
+        selected->last_runnable_time = tick + 1;
     }
 
     /* 3. Analyze Results */
