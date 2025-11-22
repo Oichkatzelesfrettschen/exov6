@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-compiler-utils.a "CMakeFiles/phoenix-compiler-utils.dir/compiler_utils.c.o"
-/usr/bin/ranlib libphoenix-compiler-utils.a
