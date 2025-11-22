@@ -110,7 +110,7 @@ dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     uint32_t selected_index = beatty_val % num_ready;
     uint32_t task_id = ready_indices[selected_index];
 
-    // 4. Update State
+    /* 4. Update State */
     sched->counter++;
     sched->selections[task_id]++;
     sched->total_selections++;
