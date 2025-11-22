@@ -61,34 +61,31 @@ void rm(char *path, int recursive) {
 int main(int argc, char *argv[]) {
     int i;
     int recursive = 0;
-    int start_arg = 1;
+    int file_count = 0;
 
-    // Check for -r flag
+    // Consolidated argument parsing
     for (i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
-            if (argv[i][1] == 'r') {
+            if (strcmp(argv[i], "-r") == 0) {
                 recursive = 1;
-                // rudimentary arg parsing
-                if (i == start_arg) start_arg++;
+            } else {
+                printf(2, "rm: unknown option %s\n", argv[i]);
+                printf(2, "Usage: rm [-r] files...\n");
+                exit(0);
             }
         } else {
-            break;
+            file_count++;
         }
     }
 
-    // If -r was anywhere, we just assume it applies.
-    // Better parsing needed but for now:
-    if (strcmp(argv[1], "-r") == 0) {
-        start_arg = 2;
-        recursive = 1;
-    }
-
-    if (argc < start_arg + 1) {
+    if (file_count == 0) {
         printf(2, "Usage: rm [-r] files...\n");
         exit(0);
     }
 
-    for (i = start_arg; i < argc; i++) {
+    for (i = 1; i < argc; i++) {
+        if (argv[i][0] == '-' && strcmp(argv[i], "-r") == 0)
+            continue;
         rm(argv[i], recursive);
     }
     exit(0);
