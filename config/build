@@ -1,0 +1,11 @@
+# Architecture Build Configuration
+# Reflects the capability matrix in src/ARCHITECTURES.md
+
+# Tier-1: Fully supported
+TIER1_ARCH="x86_64"
+
+# Tier-2: Compile, maybe boot
+TIER2_ARCH="aarch64 arm"
+
+# Tier-3: Concept only
+TIER3_ARCH="ppc mcu"
