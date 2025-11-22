@@ -1,0 +1,1 @@
+/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang -O3 -DNDEBUG -Xlinker --dependency-file=CMakeFiles/test-arch-mem.dir/link.d "CMakeFiles/test-arch-mem.dir/litmus.c.o" "CMakeFiles/test-arch-mem.dir/__/__/src/arch/x86_64/arch_ops.c.o" -o test-arch-mem  -lpthread

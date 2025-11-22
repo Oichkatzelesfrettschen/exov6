@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-cap.a "CMakeFiles/phoenix-libos-cap.dir/cap.c.o"
+/usr/bin/ranlib libphoenix-libos-cap.a
