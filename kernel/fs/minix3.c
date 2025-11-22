@@ -436,10 +436,14 @@ uint32_t minix3_dir_lookup(minix3_sb_t *sb, minix3_inode_t *dir,
 
         // Ensure name is compared correctly (up to DIRSIZ)
         // name from VFS might not be null terminated if it's exactly len
-        if (strlen(name) > DIRSIZ) return 0; // name too long
+        if (len > DIRSIZ) return 0; // name too long
 
-        if (strncmp(name, de.name, DIRSIZ) == 0) {
-             return de.inum;
+        // Compare using provided len, not strlen which can read beyond buffer
+        if (memcmp(name, de.name, len) == 0) {
+            // Ensure exact match: if len < DIRSIZ, de.name[len] must be '\0'
+            if (len == DIRSIZ || de.name[len] == '\0') {
+                return de.inum;
+            }
         }
     }
     return 0;
