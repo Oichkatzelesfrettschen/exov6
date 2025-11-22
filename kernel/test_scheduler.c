@@ -426,7 +426,7 @@ static int test_beatty_stress(void)
         dag_task_t *task = beatty_select(&sched, &dag);
         if (task) {
              /* Mock run time update (since we added the field) */
-             task->run_time_ticks++;
+             task->stats.run_time_ticks++;
         }
     }
 
