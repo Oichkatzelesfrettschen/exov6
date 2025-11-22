@@ -70,9 +70,8 @@ void beatty_recompute_all_priorities(
  * beatty_select: Selects the next task using the Golden Ratio sequence.
  *
  * Invariants:
- * 1. The DAG task list is sorted by resource norm priority.
- * 2. sched->counter increments monotonically.
- * 3. sched->alpha is Q16(1.61803...)
+ * 1. sched->counter increments monotonically.
+ * 2. sched->alpha is Q16(1.61803...)
  */
 dag_task_t *beatty_select(beatty_scheduler_t *sched, dag_pdac_t *dag) {
     if (sched == NULL || dag == NULL) {
