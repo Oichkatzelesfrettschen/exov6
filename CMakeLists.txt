@@ -51,6 +51,23 @@ option(ENABLE_AVX2 "Enable AVX2 instructions" OFF)
 option(ENABLE_AVX512 "Enable AVX512 instructions" OFF)
 option(ENABLE_NEON "Enable ARM NEON instructions" OFF)
 
+# Security features
+option(ENABLE_CET "Enable Intel CET" ON)
+option(ENABLE_PAC "Enable ARM Pointer Authentication" ON)
+option(ENABLE_STACK_PROTECTOR "Enable strong stack protection" ON)
+
+if(ENABLE_STACK_PROTECTOR)
+    add_compile_options(-fstack-protector-strong)
+endif()
+
+if(ENABLE_CET AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+    add_compile_options(-fcf-protection=full)
+endif()
+
+if(ENABLE_PAC AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    add_compile_options(-mbranch-protection=standard)
+endif()
+
 # Build configuration
 option(BUILD_DEMOS "Build demonstration programs" ON)
 option(BUILD_TESTS "Build test suite" ON)

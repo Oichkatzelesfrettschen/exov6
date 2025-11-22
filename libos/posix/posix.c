@@ -153,6 +153,35 @@ int libos_open(const char *path, int flags, int mode) {
   return idx;
 }
 
+int libos_install_file(struct file *f) {
+  ensure_fd_table();
+  for (int i = 0; i < fd_table_cap; i++) {
+    if (!fd_table[i]) {
+      fd_table[i] = f;
+      return i;
+    }
+  }
+  int new_cap = fd_table_cap * 2;
+  struct file **nt = realloc(fd_table, new_cap * sizeof(struct file *));
+  if (!nt) {
+    return -1;
+  }
+  memset(nt + fd_table_cap, 0,
+         (new_cap - fd_table_cap) * sizeof(struct file *));
+  fd_table = nt;
+  int idx = fd_table_cap;
+  fd_table_cap = new_cap;
+  fd_table[idx] = f;
+  return idx;
+}
+
+struct file *libos_get_file(int fd) {
+  ensure_fd_table();
+  if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
+    return NULL;
+  return fd_table[fd];
+}
+
 int libos_read(int fd, void *buf, size_t n) {
   ensure_fd_table();
   if (fd < 0 || fd >= fd_table_cap || !fd_table[fd])
@@ -404,29 +433,29 @@ int WEAK libos_getpid(void) { return (int)getpid(); }
 
 int WEAK libos_setpgid(int pid, int pgid) { return setpgid(pid, pgid); }
 
-int libos_socket(int domain, int type, int protocol) {
+int WEAK libos_socket(int domain, int type, int protocol) {
   return socket(domain, type, protocol);
 }
 
-int libos_bind(int fd, const struct sockaddr *addr, socklen_t len) {
+int WEAK libos_bind(int fd, const struct sockaddr *addr, socklen_t len) {
   return bind(fd, addr, len);
 }
 
-int libos_listen(int fd, int backlog) { return listen(fd, backlog); }
+int WEAK libos_listen(int fd, int backlog) { return listen(fd, backlog); }
 
-int libos_accept(int fd, struct sockaddr *addr, socklen_t *len) {
+int WEAK libos_accept(int fd, struct sockaddr *addr, socklen_t *len) {
   return accept(fd, addr, len);
 }
 
-int libos_connect(int fd, const struct sockaddr *addr, socklen_t len) {
+int WEAK libos_connect(int fd, const struct sockaddr *addr, socklen_t len) {
   return connect(fd, addr, len);
 }
 
-long libos_send(int fd, const void *buf, size_t len, int flags) {
+long WEAK libos_send(int fd, const void *buf, size_t len, int flags) {
   return send(fd, buf, len, flags);
 }
 
-long libos_recv(int fd, void *buf, size_t len, int flags) {
+long WEAK libos_recv(int fd, void *buf, size_t len, int flags) {
   return recv(fd, buf, len, flags);
 }
 

@@ -13,12 +13,13 @@
  *        Enhanced for POSIX compatibility.
  */
 struct file {
-  enum { FD_NONE, FD_PIPE, FD_INODE, FD_CAP } type; /**< File descriptor type. */
+  enum { FD_NONE, FD_PIPE, FD_INODE, FD_CAP, FD_SOCKET } type; /**< File descriptor type. */
   size_t ref;                    /**< Reference count. */
   char readable;                 /**< Read permission flag. */
   char writable;                 /**< Write permission flag. */
   struct pipe *pipe;             /**< Pipe structure (if FD_PIPE). */
   struct inode *ip;              /**< Inode structure (if FD_INODE). */
+  void *socket;                  /**< Socket structure (if FD_SOCKET). */
   size_t off;                    /**< Current file offset. */
   int flags;                     /**< Open flags (O_APPEND, etc). */
   struct exo_blockcap cap;       /**< Backing storage capability. */

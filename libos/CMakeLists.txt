@@ -27,7 +27,7 @@ phoenix_add_library(phoenix-libos-file
 # POSIX compatibility layer
 phoenix_add_library(phoenix-libos-posix
     STATIC
-    SOURCES posix/posix.c
+    SOURCES posix/posix.c posix/linux_abi.c
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
@@ -122,6 +122,26 @@ phoenix_add_library(phoenix-libos-nn
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
     DEPENDENCIES phoenix-userland
+)
+
+# Network Stack
+phoenix_add_library(phoenix-libos-net
+    STATIC
+    SOURCES net/socket.c net/dpdk_shim.c
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-libos-file phoenix-libos-posix
+)
+
+# GPU Driver
+phoenix_add_library(phoenix-libos-gpu
+    STATIC
+    SOURCES gpu/vgpu.c
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-libos-file
 )
 
 # ═════════════════════════════════════════════════════════════════════
@@ -268,6 +288,8 @@ set(LIBOS_CORE_LIBS
     phoenix-libos-resource-account
     phoenix-libos-registration
     phoenix-libos-affine-runtime
+    phoenix-libos-net
+    phoenix-libos-gpu
 )
 
 # Add stub libraries

@@ -83,6 +83,7 @@ typedef struct dag_task {
     _Atomic task_state_t state;            /* Current execution state */
 
     /* Scheduling metadata */
+    uint8_t policy;                        /* Scheduling policy (0=NORMAL, 1=FIFO, 2=RR) */
     q16_t priority;                        /* Priority (computed from norm) */
     uint64_t start_time;                   /* Start time (ticks) */
     uint64_t end_time;                     /* End time (ticks) */

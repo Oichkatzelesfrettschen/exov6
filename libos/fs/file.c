@@ -26,11 +26,17 @@ struct file *filedup(struct file *f) {
   return f;
 }
 
+extern void libos_sock_close(void *s);
+
 void fileclose(struct file *f) {
   if (!f)
     return;
-  if (--f->ref == 0)
+  if (--f->ref == 0) {
+    if (f->type == FD_SOCKET && f->socket) {
+        libos_sock_close(f->socket);
+    }
     free(f);
+  }
 }
 
 int filestat(struct file *f, struct stat *st) {
