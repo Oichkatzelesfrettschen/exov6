@@ -122,6 +122,14 @@ int main() {
     pthread_join(t1, NULL);
     pthread_join(t2, NULL);
 
+    // Reset all global variables between tests
+    mp_data = 0;
+    mp_flag = 0;
+    dekker_flag0 = 0;
+    dekker_flag1 = 0;
+    critical_count = 0;
+    violations = 0;
+
     printf("Running Dekker test (%d iterations)...\n", ITERATIONS);
     pthread_create(&t1, NULL, dekker_thread0, NULL);
     pthread_create(&t2, NULL, dekker_thread1, NULL);
