@@ -1,1 +1,0 @@
-/home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang  -Wall -Werror -Wextra -Wno-unused-parameter -O2 -Xlinker --dependency-file=CMakeFiles/test_posix_apis.dir/link.d CMakeFiles/test_posix_apis.dir/test_posix_apis.c.o -o test_posix_apis  ../libtest_framework.a -lpthread -lm

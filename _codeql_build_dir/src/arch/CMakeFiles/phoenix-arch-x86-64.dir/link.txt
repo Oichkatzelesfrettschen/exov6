@@ -1,2 +1,0 @@
-/usr/bin/llvm-ar-18 qc libphoenix-arch-x86-64.a "CMakeFiles/phoenix-arch-x86-64.dir/x86_64/arch_ops.c.o" "CMakeFiles/phoenix-arch-x86-64.dir/x86_64/arch_switch.S.o"
-/usr/bin/ranlib libphoenix-arch-x86-64.a
