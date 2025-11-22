@@ -47,19 +47,7 @@ void rm(char *path, int recursive) {
         }
         closedir(dir);
 
-        // Directory should be empty now, use unlink (or rmdir if available)
-        // unlink on directory might fail if kernel demands rmdir.
-        // usys.S has unlink but NO rmdir?
-        // Wait, usys.S calls SYS_unlink.
-        // Standard POSIX: unlink() on directory is EPERM. rmdir() is required.
-        // syscall_asm.h doesn't list rmdir?
-
-        // Wait, user/usys.S does not list rmdir.
-        // But it does list `SYSCALL(unlink)`.
-
-        // If the kernel implements unlink for directories, fine.
-        // If not, I can't delete directories.
-        // I will try unlink.
+        // Note: Using unlink() for directories; kernel must support this operation.
         if (unlink(path) < 0) {
              printf(2, "rm: failed to remove directory %s\n", path);
         }
