@@ -356,9 +356,60 @@ static inline ssize_t fastipc_send_message(ipc_endpoint_t *ep, const uint64_t *r
     return 0;  /* Stub */
 }
 
-static inline ssize_t fastipc_receive_message(ipc_endpoint_t *ep, uint64_t *regs) {
-    (void)ep; (void)regs;
-    return 0;  /* Stub */
+/**
+ * fastipc_recv - Wait for and receive a FastIPC message
+ * @ep: Endpoint to receive on
+ * @regs: Output registers
+ *
+ * Returns: 0 on success, error code on failure
+ */
+static inline ssize_t fastipc_recv(ipc_endpoint_t *ep, uint64_t *regs) {
+    /* Wait for request pending (ready == 1) */
+    uint64_t start = hal_read_timestamp();
+    uint64_t timeout = start + 1000000;  /* 1ms timeout */
+
+    while (atomic_load_explicit(&ep->data.proto.fastipc.ready,
+                                memory_order_acquire) != 1) {
+        hal_cpu_pause();
+
+        if (hal_read_timestamp() > timeout) {
+            return -ETIMEDOUT;
+        }
+    }
+
+    /* Copy registers */
+    for (int i = 0; i < 8; i++) {
+        regs[i] = atomic_load_explicit(&ep->data.proto.fastipc.registers[i],
+                                      memory_order_acquire);
+    }
+
+    return 0;
+}
+
+/**
+ * fastipc_reply - Send reply to a FastIPC message
+ * @endpoint_id: Endpoint to reply on
+ * @regs: Result registers
+ *
+ * Returns: 0 on success, error code on failure
+ */
+int fastipc_reply(uint64_t endpoint_id, uint64_t regs[8]) {
+    ipc_endpoint_t *ep = ipc_endpoint_lookup(endpoint_id);
+    if (!ep || ep->data.type != IPC_TYPE_FASTIPC) {
+        return -EINVAL;
+    }
+
+    /* Copy result registers */
+    for (int i = 0; i < 8; i++) {
+        atomic_store_explicit(&ep->data.proto.fastipc.registers[i],
+                             regs[i], memory_order_release);
+    }
+
+    /* Signal response ready (ready = 2) */
+    atomic_store_explicit(&ep->data.proto.fastipc.ready, 2,
+                         memory_order_release);
+
+    return 0;
 }
 
 static inline ssize_t channel_receive(ipc_endpoint_t *ep, void *buf, size_t len) {
@@ -408,19 +459,36 @@ int fastipc_call(uint64_t endpoint_id, uint64_t regs[8], uint64_t result[8]) {
         return -EPERM;
     }
     
+    /* Claim channel (CAS 0 -> 3) */
+    uint32_t expected = 0;
+    uint64_t start = hal_read_timestamp();
+    uint64_t timeout = start + 1000000;  /* 1ms timeout */
+
+    while (!atomic_compare_exchange_weak_explicit(
+                &ep->data.proto.fastipc.ready,
+                &expected, 3,
+                memory_order_acquire,
+                memory_order_relaxed)) {
+        if (expected != 0) {
+             expected = 0;
+             hal_cpu_pause();
+             if (hal_read_timestamp() > timeout) {
+                 return -ETIMEDOUT;
+             }
+        }
+    }
+
     /* Copy registers atomically */
     for (int i = 0; i < 8; i++) {
         atomic_store_explicit(&ep->data.proto.fastipc.registers[i], 
                              regs[i], memory_order_release);
     }
     
-    /* Signal ready */
+    /* Signal ready (3 -> 1) */
     atomic_store_explicit(&ep->data.proto.fastipc.ready, 1, 
                          memory_order_release);
     
-    /* Spin wait for response (with timeout) */
-    uint64_t start = hal_read_timestamp();
-    uint64_t timeout = start + 1000000;  /* 1ms timeout */
+    /* Spin wait for response (reuse timeout) */
     
     while (atomic_load_explicit(&ep->data.proto.fastipc.ready, 
                                 memory_order_acquire) != 2) {
@@ -439,7 +507,7 @@ int fastipc_call(uint64_t endpoint_id, uint64_t regs[8], uint64_t result[8]) {
     
     /* Clear ready flag */
     atomic_store_explicit(&ep->data.proto.fastipc.ready, 0, 
-                         memory_order_relaxed);
+                         memory_order_release);
     
     /* Update statistics */
     atomic_fetch_add_explicit(&ep->data.operations, 1, memory_order_relaxed);
@@ -817,7 +885,7 @@ ssize_t ipc_receive(uint64_t endpoint_id, ipc_message_t *msg, uint32_t flags) {
     /* Route based on IPC type */
     switch (ep->data.type) {
     case IPC_TYPE_FASTIPC:
-        return fastipc_receive_message(ep, (uint64_t *)msg);
+        return fastipc_recv(ep, (uint64_t *)msg);
         
     case IPC_TYPE_CHANNEL:
         return channel_receive(ep, msg->payload,

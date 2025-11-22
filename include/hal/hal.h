@@ -99,7 +99,7 @@ typedef enum {
     HAL_PAGE_DIRTY      = (1 << 6),
     HAL_PAGE_HUGE       = (1 << 7),
     HAL_PAGE_GLOBAL     = (1 << 8),
-    HAL_PAGE_NO_EXECUTE = (1 << 63)
+    HAL_PAGE_NO_EXECUTE = (1ULL << 63)
 } hal_page_flags_t;
 
 typedef struct hal_memory_ops {
