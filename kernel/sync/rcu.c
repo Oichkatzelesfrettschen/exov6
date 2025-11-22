@@ -9,6 +9,11 @@ static struct {
   int ready;
 } rcu_state;
 
+// rcuinit initializes the RCU subsystem.
+// This function is called during single-threaded boot initialization
+// (before other CPUs are started), so the initial assignment of ready=1
+// is safe without lock protection. After boot, all accesses to the
+// ready flag must be protected by rcu_state.lock.
 void
 rcuinit(void)
 {
