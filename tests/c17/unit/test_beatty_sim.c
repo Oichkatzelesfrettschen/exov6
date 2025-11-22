@@ -42,7 +42,7 @@ int test_beatty_fairness_sim(void) {
     (void)t3; (void)t4;
 
     /* Make all ready */
-    for(int i=0; i<5; i++) {
+    for(int i=0; i<dag.num_tasks; i++) {
         dag.tasks[i].state = TASK_STATE_READY;
         dag.tasks[i].last_runnable_time = 0; /* Simulation start */
         dag.tasks[i].schedule_count = 0;
@@ -66,7 +66,7 @@ int test_beatty_fairness_sim(void) {
         selected->run_time_ticks++;
 
         /* Update Latency for ALL ready tasks */
-        for(int i=0; i<5; i++) {
+        for(int i=0; i<dag.num_tasks; i++) {
             dag_task_t *t = &dag.tasks[i];
             if (t->state == TASK_STATE_READY) {
                 if (t != selected) {
@@ -83,7 +83,7 @@ int test_beatty_fairness_sim(void) {
     printf("%-15s %-10s %-10s %-10s %-10s\n", "Name", "Priority", "Count", "RunTime", "AvgLat");
 
     uint64_t total_selections = 0;
-    for(int i=0; i<5; i++) {
+    for(int i=0; i<dag.num_tasks; i++) {
         dag_task_t *t = &dag.tasks[i];
         q16_t prio = sched.priorities[i];
 
@@ -106,8 +106,8 @@ int test_beatty_fairness_sim(void) {
     TEST_ASSERT_MSG(total_selections == (uint64_t)total_ticks, "Total selections match ticks");
 
     /* Fairness Check */
-    double expected_share = 1.0 / 5.0;
-    for(int i=0; i<5; i++) {
+    double expected_share = 1.0 / (double)dag.num_tasks;
+    for(int i=0; i<dag.num_tasks; i++) {
         double share = (double)dag.tasks[i].schedule_count / total_ticks;
         printf("Task %d Share: %.4f (Expected %.4f)\n", i, share, expected_share);
 
