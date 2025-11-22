@@ -122,6 +122,7 @@ demos/irq-lambda-policy-demo: user/libphoenix-caplib.a
 demos/irq-lambda-policy-demo: user/libphoenix-ulib.a
 demos/irq-lambda-policy-demo: src/arch/libphoenix-arch-x86-legacy.a
 demos/irq-lambda-policy-demo: src/arch/libphoenix-arch-x86-modern.a
+demos/irq-lambda-policy-demo: src/arch/libphoenix-arch-x86-64.a
 demos/irq-lambda-policy-demo: src/arch/libphoenix-simd.a
 demos/irq-lambda-policy-demo: demos/CMakeFiles/irq-lambda-policy-demo.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable irq-lambda-policy-demo"

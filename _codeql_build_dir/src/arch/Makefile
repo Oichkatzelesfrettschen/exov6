@@ -226,6 +226,20 @@ phoenix-arch-x86-modern/fast:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/build
 .PHONY : phoenix-arch-x86-modern/fast
 
+# Convenience name for target.
+src/arch/CMakeFiles/phoenix-arch-x86-64.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/arch/CMakeFiles/phoenix-arch-x86-64.dir/rule
+.PHONY : src/arch/CMakeFiles/phoenix-arch-x86-64.dir/rule
+
+# Convenience name for target.
+phoenix-arch-x86-64: src/arch/CMakeFiles/phoenix-arch-x86-64.dir/rule
+.PHONY : phoenix-arch-x86-64
+
+# fast build rule for target.
+phoenix-arch-x86-64/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build
+.PHONY : phoenix-arch-x86-64/fast
+
 simd_dispatch.o: simd_dispatch.c.o
 .PHONY : simd_dispatch.o
 
@@ -400,6 +414,38 @@ x86/simd_x87.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-simd.dir/build.make src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.s
 .PHONY : x86/simd_x87.c.s
 
+x86_64/arch_ops.o: x86_64/arch_ops.c.o
+.PHONY : x86_64/arch_ops.o
+
+# target to build an object file
+x86_64/arch_ops.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-64.dir/x86_64/arch_ops.c.o
+.PHONY : x86_64/arch_ops.c.o
+
+x86_64/arch_ops.i: x86_64/arch_ops.c.i
+.PHONY : x86_64/arch_ops.i
+
+# target to preprocess a source file
+x86_64/arch_ops.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-64.dir/x86_64/arch_ops.c.i
+.PHONY : x86_64/arch_ops.c.i
+
+x86_64/arch_ops.s: x86_64/arch_ops.c.s
+.PHONY : x86_64/arch_ops.s
+
+# target to generate assembly for a file
+x86_64/arch_ops.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-64.dir/x86_64/arch_ops.c.s
+.PHONY : x86_64/arch_ops.c.s
+
+x86_64/arch_switch.o: x86_64/arch_switch.S.o
+.PHONY : x86_64/arch_switch.o
+
+# target to build an object file
+x86_64/arch_switch.S.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f src/arch/CMakeFiles/phoenix-arch-x86-64.dir/build.make src/arch/CMakeFiles/phoenix-arch-x86-64.dir/x86_64/arch_switch.S.o
+.PHONY : x86_64/arch_switch.S.o
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -414,6 +460,7 @@ help:
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
+	@echo "... phoenix-arch-x86-64"
 	@echo "... phoenix-arch-x86-legacy"
 	@echo "... phoenix-arch-x86-modern"
 	@echo "... phoenix-simd"
@@ -438,6 +485,10 @@ help:
 	@echo "... x86/simd_x87.o"
 	@echo "... x86/simd_x87.i"
 	@echo "... x86/simd_x87.s"
+	@echo "... x86_64/arch_ops.o"
+	@echo "... x86_64/arch_ops.i"
+	@echo "... x86_64/arch_ops.s"
+	@echo "... x86_64/arch_switch.o"
 .PHONY : help
 
 
