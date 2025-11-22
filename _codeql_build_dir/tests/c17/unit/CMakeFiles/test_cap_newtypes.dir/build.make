@@ -107,6 +107,7 @@ tests/c17/unit/test_cap_newtypes: user/libphoenix-door.a
 tests/c17/unit/test_cap_newtypes: user/libphoenix-math-core.a
 tests/c17/unit/test_cap_newtypes: src/arch/libphoenix-arch-x86-legacy.a
 tests/c17/unit/test_cap_newtypes: src/arch/libphoenix-arch-x86-modern.a
+tests/c17/unit/test_cap_newtypes: src/arch/libphoenix-arch-x86-64.a
 tests/c17/unit/test_cap_newtypes: src/arch/libphoenix-simd.a
 tests/c17/unit/test_cap_newtypes: user/libphoenix-user-sched.a
 tests/c17/unit/test_cap_newtypes: user/libphoenix-chan.a

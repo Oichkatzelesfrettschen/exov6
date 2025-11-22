@@ -107,6 +107,7 @@ tests/c17/unit/test_chan_endpoint: user/libphoenix-door.a
 tests/c17/unit/test_chan_endpoint: user/libphoenix-math-core.a
 tests/c17/unit/test_chan_endpoint: src/arch/libphoenix-arch-x86-legacy.a
 tests/c17/unit/test_chan_endpoint: src/arch/libphoenix-arch-x86-modern.a
+tests/c17/unit/test_chan_endpoint: src/arch/libphoenix-arch-x86-64.a
 tests/c17/unit/test_chan_endpoint: src/arch/libphoenix-simd.a
 tests/c17/unit/test_chan_endpoint: user/libphoenix-user-sched.a
 tests/c17/unit/test_chan_endpoint: user/libphoenix-chan.a

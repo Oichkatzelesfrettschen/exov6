@@ -72,6 +72,7 @@ include tests/c17/unit/CMakeFiles/unit_tests.dir/progress.make
 tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_aether_nn.c
 tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_arbitrate.c
 tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_beatty_cycle.c
+tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_beatty_sim.c
 tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_build_script.c
 tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_cap_entry_cpp.c
 tests/c17/unit/CMakeFiles/unit_tests: /home/runner/work/exov6/exov6/tests/c17/unit/test_cap_newtypes.c

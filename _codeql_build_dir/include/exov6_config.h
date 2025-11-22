@@ -61,7 +61,7 @@
 /* System parameters */
 #define CPU_COUNT 4
 #define PAGE_SIZE 4096
-#define MEMORY_SIZE_MB 15995
+#define MEMORY_SIZE_MB 15994
 
 /* Phoenix Exokernel version */
 #define PHOENIX_VERSION_MAJOR 1

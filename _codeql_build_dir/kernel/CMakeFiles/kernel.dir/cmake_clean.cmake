@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/kernel.dir/bcache_io.c.o.d"
   "CMakeFiles/kernel.dir/buffer_cache.c.o"
   "CMakeFiles/kernel.dir/buffer_cache.c.o.d"
+  "CMakeFiles/kernel.dir/cap_check.c.o"
+  "CMakeFiles/kernel.dir/cap_check.c.o.d"
   "CMakeFiles/kernel.dir/cap_formula.c.o"
   "CMakeFiles/kernel.dir/cap_formula.c.o.d"
   "CMakeFiles/kernel.dir/cap_ipc.c.o"
