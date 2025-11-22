@@ -33,7 +33,11 @@ void rm(char *path, int recursive) {
             if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
                 continue;
 
-            // Construct path
+            // Construct path - validate path length before any string operations
+            if (strlen(path) >= sizeof(buf)) {
+                printf(2, "rm: path too long\n");
+                continue;
+            }
             if (strlen(path) + 1 + strlen(entry->d_name) + 1 > sizeof(buf)) {
                 printf(2, "rm: path too long\n");
                 continue;

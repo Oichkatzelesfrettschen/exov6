@@ -1,0 +1,2 @@
+/usr/bin/llvm-ar-18 qc libphoenix-libos-baremetal-stubs.a "CMakeFiles/phoenix-libos-baremetal-stubs.dir/stubs/libbaremetal.c.o"
+/usr/bin/ranlib libphoenix-libos-baremetal-stubs.a
