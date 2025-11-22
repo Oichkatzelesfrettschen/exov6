@@ -28,9 +28,13 @@ void* mp_thread0(void* arg) {
         arch_barrier_write(); // sfence
         __atomic_store_n(&mp_flag, 1, __ATOMIC_RELAXED);
 
-        // Reset for next iter (sync needed)
+        // Wait for thread 1 to reset both flag and data
         while (__atomic_load_n(&mp_flag, __ATOMIC_RELAXED) != 0) {
              // spin
+             arch_cpu_relax();
+        }
+        // Ensure mp_data has been reset by thread 1
+        while (mp_data != 0) {
              arch_cpu_relax();
         }
     }
@@ -51,6 +55,8 @@ void* mp_thread1(void* arg) {
             printf("MP Violation detected at iter %d! data=%d\n", i, d);
         }
 
+        // Reset mp_data to signal completion before clearing flag
+        mp_data = 0;
         __atomic_store_n(&mp_flag, 0, __ATOMIC_RELAXED);
     }
     return NULL;
