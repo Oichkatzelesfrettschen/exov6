@@ -65,7 +65,7 @@ void rm(char *path, int recursive) {
         }
     } else {
         if (unlink(path) < 0) {
-             printf(2, "rm: failed to remove %s\n", path);
+            printf(2, "rm: failed to remove %s\n", path);
         }
     }
 }
