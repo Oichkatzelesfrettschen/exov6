@@ -1,0 +1,74 @@
+# ExoV6 Docker Compose Configuration
+# Usage:
+#   docker compose build          - Build all images
+#   docker compose run build      - Build kernel
+#   docker compose run test       - Build and test
+#   docker compose run dev        - Interactive development shell
+#   docker compose run qemu       - Boot kernel in QEMU
+
+services:
+  # Full build and test
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - ./build:/workspace/build
+    command: /workspace/build.sh
+
+  # Run tests after build
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - ./build:/workspace/build
+    command: /bin/bash -c "/workspace/build.sh && /workspace/test.sh"
+    privileged: true  # Required for QEMU
+
+  # Interactive QEMU boot
+  qemu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - ./build:/workspace/build
+    command: /workspace/qemu-boot.sh
+    privileged: true
+    stdin_open: true
+    tty: true
+
+  # Development shell
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - .:/workspace
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
+  # CI/CD build
+  ci:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ci
+    volumes:
+      - ./build:/workspace/build
+    command: /workspace/ci-build.sh
+
+  # Clean build (no cache)
+  clean-build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - ./build:/workspace/build
+    command: /bin/bash -c "rm -rf /workspace/build/* && /workspace/build.sh"

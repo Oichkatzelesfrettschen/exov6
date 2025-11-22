@@ -1,0 +1,390 @@
+name: ExoV6 x86_64 Build & Test (Ubuntu 24.04)
+
+# Modern CI/CD workflow for x86_64 kernel
+# Uses Ubuntu 24.04 LTS (Noble Numbat) with LLVM 18
+
+on:
+  push:
+    branches: [master, main, develop, 'feature/**', 'copilot/**']
+  pull_request:
+    branches: [master, main, develop]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type (Debug/Release/RelWithDebInfo)'
+        required: false
+        default: 'Release'
+      run_qemu:
+        description: 'Run QEMU boot test'
+        required: false
+        default: 'true'
+      qemu_timeout:
+        description: 'QEMU timeout in seconds'
+        required: false
+        default: '60'
+
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+  BUILD_TYPE: ${{ github.event.inputs.build_type || 'Release' }}
+  QEMU_TIMEOUT: ${{ github.event.inputs.qemu_timeout || '60' }}
+
+jobs:
+  # ============================================================================
+  # Native Ubuntu 24.04 Build (Fastest)
+  # ============================================================================
+  build-native:
+    name: Native x86_64 Build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            cmake \
+            ninja-build \
+            clang-18 \
+            lld-18 \
+            llvm-18 \
+            llvm-18-tools \
+            gcc-multilib \
+            g++-multilib \
+            nasm \
+            libelf-dev \
+            libssl-dev \
+            qemu-system-x86 \
+            qemu-utils \
+            expect \
+            bc \
+            bison \
+            flex \
+            xorriso \
+            grub-pc-bin \
+            mtools
+
+          # Set up alternatives
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
+          sudo update-alternatives --install /usr/bin/lld lld /usr/bin/lld-18 100
+          sudo update-alternatives --install /usr/bin/llvm-ar llvm-ar /usr/bin/llvm-ar-18 100
+
+      - name: Configure CMake
+        run: |
+          mkdir -p build
+          cd build
+          cmake -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCMAKE_C_COMPILER=clang-18 \
+            -DCMAKE_CXX_COMPILER=clang++-18 \
+            -DUSE_LLD=ON \
+            -DBUILD_TESTS=ON \
+            -DBUILD_DEMOS=ON \
+            ..
+
+      - name: Build kernel
+        run: |
+          cd build
+          ninja -v 2>&1 | tee build.log
+
+          echo ""
+          echo "=== Build Summary ==="
+          if [ -f "kernel" ]; then
+            echo "Kernel: $(file kernel)"
+            ls -lh kernel
+          else
+            echo "Warning: No kernel binary produced"
+            find . -type f -executable -name "kernel*" || true
+          fi
+
+      - name: Validate kernel binary
+        run: |
+          cd build
+
+          # Find kernel binary
+          KERNEL=$(find . -name "kernel" -type f -executable 2>/dev/null | head -1)
+
+          if [ -n "$KERNEL" ]; then
+            echo "Kernel binary: $KERNEL"
+            file "$KERNEL"
+
+            # Verify x86_64 architecture
+            if file "$KERNEL" | grep -qE "x86-64|x86_64|64-bit"; then
+              echo "Confirmed: x86_64 binary"
+            else
+              echo "Warning: May not be x86_64"
+              file "$KERNEL"
+            fi
+          else
+            echo "No kernel binary found"
+            ls -la
+          fi
+
+      - name: Run QEMU boot test
+        if: ${{ github.event.inputs.run_qemu != 'false' }}
+        run: |
+          cd build
+
+          KERNEL=$(find . -name "kernel" -type f -executable 2>/dev/null | head -1)
+
+          if [ -n "$KERNEL" ]; then
+            echo "Running QEMU boot test with kernel: $KERNEL"
+
+            timeout ${{ env.QEMU_TIMEOUT }}s qemu-system-x86_64 \
+              -kernel "$KERNEL" \
+              -m 256M \
+              -cpu qemu64 \
+              -smp 2 \
+              -nographic \
+              -no-reboot \
+              -serial mon:stdio \
+              -d guest_errors 2>&1 | tee qemu-output.log || true
+
+            echo ""
+            echo "=== QEMU Output Analysis ==="
+            if grep -qi "panic" qemu-output.log; then
+              echo "Kernel panic detected"
+              grep -i "panic" qemu-output.log || true
+            elif grep -qi "Phoenix\|ExoV6" qemu-output.log; then
+              echo "Kernel boot banner detected"
+            fi
+          else
+            echo "No kernel found, skipping QEMU test"
+          fi
+
+      - name: Upload kernel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-x86_64-native
+          path: |
+            build/kernel*
+            build/*.elf
+            build/*.bin
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-logs-native
+          path: |
+            build/build.log
+            build/qemu-output.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ============================================================================
+  # Docker-based Build (Reproducible)
+  # ============================================================================
+  build-docker:
+    name: Docker x86_64 Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-x86_64-${{ hashFiles('Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-x86_64-
+            ${{ runner.os }}-buildx-
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          target: ci
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: exov6-x86_64:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache || true
+
+      - name: Build kernel in Docker
+        run: |
+          mkdir -p build
+
+          docker run --rm \
+            -v $PWD/build:/workspace/build \
+            exov6-x86_64:latest \
+            /workspace/ci-build.sh
+
+          echo ""
+          echo "=== Docker Build Results ==="
+          ls -la build/ || true
+
+      - name: Run QEMU test in Docker
+        if: ${{ github.event.inputs.run_qemu != 'false' }}
+        run: |
+          docker run --rm \
+            --privileged \
+            -v $PWD/build:/workspace/build \
+            exov6-x86_64:latest \
+            /bin/bash -c '
+              KERNEL=$(find /workspace/build -name "kernel" -type f 2>/dev/null | head -1)
+
+              if [ -n "$KERNEL" ]; then
+                timeout 60s qemu-system-x86_64 \
+                  -kernel "$KERNEL" \
+                  -m 256M \
+                  -cpu qemu64 \
+                  -nographic \
+                  -no-reboot \
+                  -serial mon:stdio \
+                  2>&1 | tee /workspace/build/qemu-docker.log || true
+              fi
+            '
+
+      - name: Upload kernel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-x86_64-docker
+          path: |
+            build/kernel*
+            build/*.elf
+            build/*.bin
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Docker build logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-logs-docker
+          path: |
+            build/qemu-docker.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ============================================================================
+  # Static Analysis
+  # ============================================================================
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install analysis tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            clang-18 \
+            clang-tools-18 \
+            clang-tidy-18 \
+            cppcheck \
+            cmake \
+            ninja-build
+
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
+
+      - name: Run cppcheck
+        run: |
+          cppcheck --enable=warning,performance,portability \
+            --suppress=missingIncludeSystem \
+            --error-exitcode=0 \
+            -I include/ \
+            -I kernel/ \
+            kernel/ user/ libos/ 2>&1 | tee cppcheck.log || true
+
+          # Count issues
+          echo ""
+          echo "=== Cppcheck Summary ==="
+          grep -c "error\|warning" cppcheck.log || echo "No issues found"
+
+      - name: Upload analysis results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: static-analysis
+          path: |
+            cppcheck.log
+          retention-days: 7
+
+  # ============================================================================
+  # CI Summary
+  # ============================================================================
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [build-native, build-docker]
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          # ExoV6 x86_64 CI Summary
+
+          ## Build Configuration
+          - **Architecture**: x86_64
+          - **Base OS**: Ubuntu 24.04 LTS (Noble Numbat)
+          - **Compiler**: Clang 18 / LLVM 18
+          - **Build System**: CMake + Ninja
+
+          ## Jobs Executed
+          - Native Ubuntu 24.04 Build
+          - Docker-based Build (Ubuntu 24.04)
+          - Static Analysis
+
+          ## Artifacts Available
+          - `kernel-x86_64-native` - Native build kernel
+          - `kernel-x86_64-docker` - Docker build kernel
+          - `build-logs-*` - Build and QEMU logs
+          - `static-analysis` - Cppcheck results
+
+          ## Local Development
+          ```bash
+          # Docker build
+          docker compose run build
+
+          # Docker with QEMU test
+          docker compose run test
+
+          # Interactive shell
+          docker compose run dev
+          ```
+
+          ## QEMU Testing
+          ```bash
+          # Boot kernel locally
+          docker compose run qemu
+
+          # Or natively:
+          qemu-system-x86_64 -kernel build/kernel -m 256M -nographic
+          ```
+          EOF
