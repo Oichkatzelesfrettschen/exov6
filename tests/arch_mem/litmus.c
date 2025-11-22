@@ -34,6 +34,7 @@ void* mp_thread0(void* arg) {
              arch_cpu_relax();
         }
         // Ensure mp_data has been reset by thread 1
+        arch_barrier_read();
         while (mp_data != 0) {
              arch_cpu_relax();
         }
@@ -57,6 +58,7 @@ void* mp_thread1(void* arg) {
 
         // Reset mp_data to signal completion before clearing flag
         mp_data = 0;
+        arch_barrier_write();
         __atomic_store_n(&mp_flag, 0, __ATOMIC_RELAXED);
     }
     return NULL;
