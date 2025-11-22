@@ -74,12 +74,13 @@ int filestat(struct file* f, struct stat* st) {
     (void)f;
     if (!st) return -1;
     
-    // Fill with dummy values - use custom struct stat fields
+    // Fill with dummy values - use custom struct stat fields + POSIX compat
     st->dev = 1;
     st->ino = 1;
     st->type = T_FILE;  // Regular file type
     st->nlink = 1;
     st->size = 0;
+    st->st_size = 0;    // POSIX compatibility
     
     return 0;
 }
