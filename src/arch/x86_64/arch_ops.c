@@ -8,10 +8,13 @@
 
 // Structure definition matching arch_switch.S
 struct arch_context {
-    uint64_t registers[16]; // 0-127
-    uint64_t sp;            // 128
-    uint64_t pc;            // 136
-    uint64_t flags;         // 144
+    // Register array mapping (offsets 0-127):
+    // [0]=RAX, [1]=RBX, [2]=RCX, [3]=RDX, [4]=RSI, [5]=RDI, [6]=RBP, [7]=RSP,
+    // [8]=R8, [9]=R9, [10]=R10, [11]=R11, [12]=R12, [13]=R13, [14]=R14, [15]=R15
+    uint64_t registers[16];
+    uint64_t sp;            // 128: saved stack pointer for switching
+    uint64_t pc;            // 136: return address
+    uint64_t flags;         // 144: RFLAGS
 };
 
 // ----------------------------------------------------------------------------
