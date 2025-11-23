@@ -220,3 +220,194 @@ sys_env_resume(void)
     // Return will go through usertrapret, which will restore the context
     return 0;
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SYS_env_create: Create a new blank environment (Phase 10)
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// EXOKERNEL PHILOSOPHY:
+//   The kernel creates a BLANK process with:
+//     - Kernel stack (for syscalls/traps)
+//     - Empty page table (kernel mappings only)
+//     - Initial security label (inherited from parent)
+//
+//   The LIBOS is responsible for:
+//     - Allocating user memory (sys_page_alloc)
+//     - Mapping ELF segments (sys_page_map)
+//     - Setting entry point (sys_env_run)
+//
+// This is inspired by:
+//   - MIT Exokernel: env_create() in xok/sys/env.c
+//   - seL4: seL4_Untyped_Retype for TCB creation
+//
+// Returns: New environment's PID on success, -1 on failure
+uint64
+sys_env_create(void)
+{
+    struct proc *parent = myproc();
+    struct proc *child;
+
+    // 1. Allocate process structure (kernel stack, trapframe, context)
+    child = allocproc();
+    if(child == 0)
+        return -1;
+
+    // 2. Create empty page table with kernel mappings
+    child->pgdir = setupkvm();
+    if(child->pgdir == 0){
+        // Clean up on failure
+        kfree(child->kstack);
+        child->kstack = 0;
+        if(child->mailbox){
+            kfree((char*)child->mailbox);
+            child->mailbox = 0;
+        }
+        child->state = UNUSED;
+        return -1;
+    }
+
+    // 3. Inherit security label from parent
+    child->label = parent->label;
+
+    // 4. Set parent relationship
+    child->parent = parent;
+
+    // 5. Initialize user-space fields to blank state
+    child->sz = 0;              // No user memory yet
+    child->upcall_handler = 0;  // No exception handler
+    child->upcall_stack = 0;
+    child->in_upcall = 0;
+
+    // 6. Initialize trapframe to safe defaults
+    memset(child->tf, 0, sizeof(*child->tf));
+#ifdef __x86_64__
+    child->tf->cs = (SEG_UCODE << 3) | DPL_USER;
+    child->tf->ss = (SEG_UDATA << 3) | DPL_USER;
+    child->tf->rflags = FL_IF;  // Enable interrupts in user mode
+    // rip and rsp will be set by sys_env_run()
+#else
+    child->tf->cs = (SEG_UCODE << 3) | DPL_USER;
+    child->tf->ds = (SEG_UDATA << 3) | DPL_USER;
+    child->tf->es = child->tf->ds;
+    child->tf->ss = child->tf->ds;
+    child->tf->eflags = FL_IF;
+#endif
+
+    // 7. Give initial gas budget (can be adjusted later)
+    child->gas_remaining = 0x10000;  // Reasonable default
+    child->out_of_gas = 0;
+
+    // 8. Copy name from parent (can be changed later)
+    safestrcpy(child->name, "child", sizeof(child->name));
+
+    // 9. Inherit current working directory
+    if(parent->cwd)
+        child->cwd = idup(parent->cwd);
+
+    // Child stays in EMBRYO state until sys_env_run() is called
+    // This allows LibOS to set up memory before starting execution
+
+    cprintf("[EXOKERNEL] env_create: PID %d created by PID %d\n",
+            child->pid, parent->pid);
+
+    return child->pid;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SYS_env_run: Start/resume execution of an environment (Phase 10)
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// EXOKERNEL PHILOSOPHY:
+//   This is a "scheduler activation" - the LibOS explicitly yields to
+//   a specific environment rather than relying on kernel scheduling.
+//
+//   The kernel only validates that:
+//     - Target environment exists and is owned by caller (or is self)
+//     - Target has valid entry point and stack
+//
+// Args: (int env_id, uint64 entry_point, uint64 stack_pointer)
+//   env_id = 0 means "run myself with new entry point" (exec-like)
+//   env_id > 0 means "start this child environment"
+//
+// Inspired by:
+//   - MIT Exokernel: yield() with explicit target
+//   - seL4: seL4_TCB_Resume
+//   - L4: ThreadSwitch
+//
+// Returns: Does not return on success (switches to target)
+//          Returns -1 on error
+uint64
+sys_env_run(void)
+{
+    int env_id;
+    uint64 entry_point, stack_ptr;
+
+    if(argint(0, &env_id) < 0)
+        return -1;
+    if(arguint64(1, &entry_point) < 0)
+        return -1;
+    if(arguint64(2, &stack_ptr) < 0)
+        return -1;
+
+    struct proc *caller = myproc();
+    struct proc *target;
+
+    // Find target environment
+    if(env_id == 0 || env_id == caller->pid){
+        // Self-exec: replace current context
+        target = caller;
+    } else {
+        // Start child: must be our child in EMBRYO state
+        target = find_proc(env_id);
+        if(target == 0){
+            cprintf("[EXOKERNEL] env_run: PID %d not found\n", env_id);
+            return -1;
+        }
+
+        // Security check: must be our child
+        if(target->parent != caller){
+            cprintf("[EXOKERNEL] env_run: PID %d not child of PID %d\n",
+                    env_id, caller->pid);
+            return -1;
+        }
+
+        // Must be in EMBRYO state (not yet running)
+        if(target->state != EMBRYO){
+            cprintf("[EXOKERNEL] env_run: PID %d not in EMBRYO state\n", env_id);
+            return -1;
+        }
+    }
+
+    // Validate addresses (must be in user space)
+    if(entry_point >= KERNBASE || stack_ptr >= KERNBASE){
+        cprintf("[EXOKERNEL] env_run: invalid addresses\n");
+        return -1;
+    }
+
+    // Set up target's execution context
+#ifdef __x86_64__
+    target->tf->rip = entry_point;
+    target->tf->rsp = stack_ptr;
+#else
+    target->tf->eip = (uint32)entry_point;
+    target->tf->esp = (uint32)stack_ptr;
+#endif
+
+    cprintf("[EXOKERNEL] env_run: Starting PID %d at 0x%lx, sp=0x%lx\n",
+            target->pid, entry_point, stack_ptr);
+
+    // If starting a child, make it runnable
+    if(target != caller){
+        extern struct ptable ptable;
+        acquire_compat(&ptable.lock);
+        target->state = RUNNABLE;
+        release_compat(&ptable.lock);
+        // Return to caller - child will be scheduled later
+        return 0;
+    }
+
+    // Self-exec case: this never returns
+    // The trapframe has been updated, so when we return to user space
+    // we'll jump to the new entry point
+    return 0;
+}

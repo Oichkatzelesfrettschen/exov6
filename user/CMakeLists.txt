@@ -186,5 +186,41 @@ else()
     )
 endif()
 
+# ═══════════════════════════════════════════════════════════════════════════
+# Hello World - ELF Loading Target (Phase 10)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(hello hello.c)
+target_link_libraries(hello libos)
+target_include_directories(hello PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(hello PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(hello PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(hello PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ELF Loading Test - Process Spawning (Phase 10)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(elf_test elf_test.c)
+target_link_libraries(elf_test libos)
+target_include_directories(elf_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(elf_test PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(elf_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(elf_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
 # Install to bin
-install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test hello elf_test RUNTIME DESTINATION bin)

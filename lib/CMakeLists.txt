@@ -23,3 +23,6 @@ add_subdirectory(virtio)
 
 # File System Library (Phase 8)
 add_subdirectory(fs)
+
+# ELF Loader Library (Phase 10)
+add_subdirectory(elf)

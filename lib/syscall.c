@@ -58,6 +58,52 @@ void sys_yield(void) {
     syscall(SYS_env_run, 0, 0, 0, 0);
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// Phase 10: Environment and Memory Primitives for ELF Loader
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Raw versions for ELF loader (lib/elf/elf_loader.c)
+// These have consistent naming for the pure exokernel interface
+
+/**
+ * Allocate a physical page
+ * @return Physical page address (kernel VA handle), or -1 on error
+ */
+uint64 sys_page_alloc_raw(void) {
+    return syscall(SYS_page_alloc, 0, 0, 0, 0);
+}
+
+/**
+ * Map a physical page into an environment's address space
+ * @param target_env Target environment (0 = self)
+ * @param phys Physical page address
+ * @param virt Virtual address to map at
+ * @param perm Permission bits (PERM_R, PERM_W, PERM_X)
+ * @return 0 on success, -1 on error
+ */
+int sys_page_map_raw(int target_env, uint64 phys, uint64 virt, int perm) {
+    return (int)syscall(SYS_page_map, (uint64)target_env, phys, virt, (uint64)perm);
+}
+
+/**
+ * Create a new blank environment
+ * @return New environment's PID, or -1 on error
+ */
+int sys_env_create_raw(void) {
+    return (int)syscall(SYS_env_create, 0, 0, 0, 0);
+}
+
+/**
+ * Start/resume an environment's execution
+ * @param env_id Target environment (0 = self)
+ * @param entry Entry point address
+ * @param sp Stack pointer
+ * @return 0 on success (for child start), does not return for self-exec
+ */
+int sys_env_run_raw(int env_id, uint64 entry, uint64 sp) {
+    return (int)syscall(SYS_env_run, (uint64)env_id, entry, sp, 0);
+}
+
 // --- Bootstrap Debug ---
 
 void sys_cputs(const char *s, int len) {

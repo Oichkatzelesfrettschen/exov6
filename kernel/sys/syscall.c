@@ -129,9 +129,11 @@ extern int sys_env_resume(void);      // Return from upcall
 extern int sys_ipc_send(void);
 extern int sys_ipc_recv(void);
 
+// Environment syscalls (Phase 10 - implemented in sys_exo.c)
+extern int sys_env_create(void);
+extern int sys_env_run(void);
+
 // Stubs for now (to be implemented)
-int sys_env_create(void) { return -1; }
-int sys_env_run(void) { return -1; }
 int sys_page_unmap(void) { return -1; }
 int sys_page_stat(void) { return -1; }
 int sys_set_label(void) { return -1; }
