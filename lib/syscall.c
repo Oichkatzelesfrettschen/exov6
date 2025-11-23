@@ -78,3 +78,28 @@ int sys_env_set_handler(uint64 handler_va, uint64 stack_va) {
 int sys_env_resume(struct ExoTrapFrame *tf) {
     return (int)syscall(SYS_env_resume, (uint64)tf, 0, 0, 0);
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// IPC (Phase 9 - Inter-Process Communication)
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Send a message to another process
+ * @param target_pid Destination process ID
+ * @param w0, w1, w2 Message data words
+ * @return 0 on success, negative on error
+ */
+int sys_ipc_send(int target_pid, uint64 w0, uint64 w1, uint64 w2) {
+    return (int)syscall(SYS_ipc_send, (uint64)target_pid, w0, w1, w2);
+}
+
+/**
+ * Receive a message (blocking)
+ * @param sender_pid Pointer to store sender's PID
+ * @param w0, w1, w2 Pointers to store message data
+ * @return 0 on success, negative on error
+ */
+int sys_ipc_recv(int *sender_pid, uint64 *w0, uint64 *w1, uint64 *w2) {
+    return (int)syscall(SYS_ipc_recv, (uint64)sender_pid, (uint64)w0,
+                        (uint64)w1, (uint64)w2);
+}

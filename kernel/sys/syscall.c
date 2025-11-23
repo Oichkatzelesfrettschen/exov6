@@ -125,13 +125,15 @@ extern int sys_cputs(void); // Bootstrap debug output
 extern int sys_env_set_handler(void); // Upcall handler registration
 extern int sys_env_resume(void);      // Return from upcall
 
+// IPC syscalls (Phase 9 - implemented in sys_ipc.c)
+extern int sys_ipc_send(void);
+extern int sys_ipc_recv(void);
+
 // Stubs for now (to be implemented)
 int sys_env_create(void) { return -1; }
 int sys_env_run(void) { return -1; }
 int sys_page_unmap(void) { return -1; }
 int sys_page_stat(void) { return -1; }
-int sys_ipc_send(void) { return -1; }
-int sys_ipc_recv(void) { return -1; }
 int sys_set_label(void) { return -1; }
 int sys_disk_io(void) { return -1; }
 

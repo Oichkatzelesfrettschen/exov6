@@ -107,6 +107,24 @@ else()
 endif()
 
 # ═══════════════════════════════════════════════════════════════════════════
+# IPC Test - Inter-Process Communication (Phase 9)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(ipc_test ipc_test.c)
+target_link_libraries(ipc_test libos)
+target_include_directories(ipc_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(ipc_test PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(ipc_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(ipc_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# ═══════════════════════════════════════════════════════════════════════════
 # File System Test - User-Space FS (Phase 8)
 # ═══════════════════════════════════════════════════════════════════════════
 add_executable(fs_test fs_test.c)
@@ -129,4 +147,4 @@ else()
 endif()
 
 # Install to bin
-install(TARGETS init uart_driver sched_test virtio_driver fs_test RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_test RUNTIME DESTINATION bin)
