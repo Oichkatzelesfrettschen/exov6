@@ -99,4 +99,19 @@ int fd_lseek(int fd, int offset, int whence);
  */
 int fd_isatty(int fd);
 
+/**
+ * Create a pipe
+ * @param pipefd Array to receive [read_fd, write_fd]
+ * @return 0 on success, -1 on error
+ *
+ * Example usage for shell pipeline "cmd1 | cmd2":
+ *   int pipefd[2];
+ *   fd_pipe(pipefd);
+ *   // Spawn cmd1 with stdout = pipefd[1]
+ *   // Spawn cmd2 with stdin = pipefd[0]
+ *   fd_close(pipefd[0]);
+ *   fd_close(pipefd[1]);
+ */
+int fd_pipe(int pipefd[2]);
+
 #endif /* FD_H */

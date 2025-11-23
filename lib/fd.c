@@ -67,6 +67,17 @@ extern int lseek(int handle, int offset, int whence);
 /* Debug */
 extern void print(const char *s);
 
+/* Pipe operations (via lib/pipe.c) */
+extern int pipe_create(void);
+extern int pipe_read(int pipe_id, void *buf, int n);
+extern int pipe_write(int pipe_id, const void *buf, int n);
+extern void pipe_close_read(int pipe_id);
+extern void pipe_close_write(int pipe_id);
+
+/* Pipe end flags */
+#define PIPE_READ_END   0x10    /* This fd is the read end */
+#define PIPE_WRITE_END  0x20    /* This fd is the write end */
+
 /* ═══════════════════════════════════════════════════════════════════════════
  * File Descriptor Table
  *
@@ -194,6 +205,16 @@ int fd_close(int fd) {
         close(fd_table[fd].server_handle);
     }
 
+    /* Close pipe end */
+    if (fd_table[fd].type == FD_TYPE_PIPE && fd_table[fd].server_handle >= 0) {
+        if (fd_table[fd].flags & PIPE_READ_END) {
+            pipe_close_read(fd_table[fd].server_handle);
+        }
+        if (fd_table[fd].flags & PIPE_WRITE_END) {
+            pipe_close_write(fd_table[fd].server_handle);
+        }
+    }
+
     /* Free the slot */
     fd_table[fd].type = FD_TYPE_FREE;
     fd_table[fd].server_handle = -1;
@@ -253,6 +274,15 @@ int fd_read(int fd, void *buf, int n) {
         return bytes;
     }
 
+    /* Pipe read */
+    if (fd_table[fd].type == FD_TYPE_PIPE) {
+        if (!(fd_table[fd].flags & PIPE_READ_END)) {
+            return -1;  /* Not the read end */
+        }
+        int pipe_id = fd_table[fd].server_handle;
+        return pipe_read(pipe_id, buf, n);
+    }
+
     return -1;  /* Unknown type */
 }
 
@@ -287,6 +317,15 @@ int fd_write(int fd, const void *buf, int n) {
             fd_table[fd].offset += bytes;
         }
         return bytes;
+    }
+
+    /* Pipe write */
+    if (fd_table[fd].type == FD_TYPE_PIPE) {
+        if (!(fd_table[fd].flags & PIPE_WRITE_END)) {
+            return -1;  /* Not the write end */
+        }
+        int pipe_id = fd_table[fd].server_handle;
+        return pipe_write(pipe_id, buf, n);
     }
 
     return -1;  /* Unknown type */
@@ -409,6 +448,65 @@ int fd_isatty(int fd) {
         return 0;
     }
     return fd_table[fd].type == FD_TYPE_CONSOLE;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * fd_pipe() - Create a Pipe
+ *
+ * LESSON: Returns two file descriptors - one for reading, one for writing.
+ * This is essential for shell pipelines: "ls | grep foo"
+ *
+ * The shell:
+ *   1. Creates pipe with fd_pipe(pipefd)
+ *   2. Spawns left command with stdout → pipefd[1]
+ *   3. Spawns right command with stdin → pipefd[0]
+ *   4. Closes both ends in the parent
+ *   5. Waits for both children
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+int fd_pipe(int pipefd[2]) {
+    fd_init();
+
+    /* Create the underlying pipe */
+    int pipe_id = pipe_create();
+    if (pipe_id < 0) {
+        return -1;
+    }
+
+    /* Allocate read end fd */
+    int read_fd = fd_alloc();
+    if (read_fd < 0) {
+        pipe_close_read(pipe_id);
+        pipe_close_write(pipe_id);
+        return -1;
+    }
+
+    /* Allocate write end fd */
+    int write_fd = fd_alloc();
+    if (write_fd < 0) {
+        fd_table[read_fd].type = FD_TYPE_FREE;
+        pipe_close_read(pipe_id);
+        pipe_close_write(pipe_id);
+        return -1;
+    }
+
+    /* Set up read end */
+    fd_table[read_fd].type = FD_TYPE_PIPE;
+    fd_table[read_fd].server_handle = pipe_id;
+    fd_table[read_fd].offset = 0;
+    fd_table[read_fd].flags = PIPE_READ_END;
+
+    /* Set up write end */
+    fd_table[write_fd].type = FD_TYPE_PIPE;
+    fd_table[write_fd].server_handle = pipe_id;
+    fd_table[write_fd].offset = 0;
+    fd_table[write_fd].flags = PIPE_WRITE_END;
+
+    /* Return fds */
+    pipefd[0] = read_fd;   /* Read end */
+    pipefd[1] = write_fd;  /* Write end */
+
+    return 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

@@ -12,6 +12,8 @@ add_library(libos STATIC
     fs_client.c
     spawn.c
     fd.c
+    pipe.c
+    service.c
 )
 target_include_directories(libos PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
