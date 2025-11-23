@@ -1,4 +1,4 @@
-#include "libos/termios.h"
+#include "termios.h"
 #include <string.h>
 #include <unistd.h>
 

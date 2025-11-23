@@ -9,7 +9,7 @@
  *   int cap_revoke(int cap_id);
  *   int cap_refcount(int cap_id, int *out_count);
  */
-#include "../include/exokernel.h"
+#include "exokernel.h"
 
 #ifdef __cplusplus
 extern "C" {

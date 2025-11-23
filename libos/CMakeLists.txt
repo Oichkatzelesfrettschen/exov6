@@ -4,13 +4,18 @@
 # CORE LIBOS SERVICES
 # ═════════════════════════════════════════════════════════════════════
 
+# Common include directories for all libos targets
+set(LIBOS_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/exov6/libos
+)
+
 # File system service
 phoenix_add_library(phoenix-libos-fs
     STATIC
     SOURCES fs/fs.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-userland phoenix-protocols
 )
 
@@ -18,9 +23,7 @@ phoenix_add_library(phoenix-libos-fs
 phoenix_add_library(phoenix-libos-file
     STATIC
     SOURCES fs/file.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-fs
 )
 
@@ -28,9 +31,7 @@ phoenix_add_library(phoenix-libos-file
 phoenix_add_library(phoenix-libos-posix
     STATIC
     SOURCES posix/posix.c posix/linux_abi.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-userland
 )
 
@@ -38,9 +39,7 @@ phoenix_add_library(phoenix-libos-posix
 phoenix_add_library(phoenix-libos-termios
     STATIC
     SOURCES termios.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-posix
 )
 
@@ -48,9 +47,7 @@ phoenix_add_library(phoenix-libos-termios
 phoenix_add_library(phoenix-libos-ipc
     STATIC
     SOURCES ipc.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-userland phoenix-protocols
 )
 
@@ -58,9 +55,7 @@ phoenix_add_library(phoenix-libos-ipc
 phoenix_add_library(phoenix-libos-service
     STATIC
     SOURCES service.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-ipc
 )
 
@@ -68,9 +63,7 @@ phoenix_add_library(phoenix-libos-service
 phoenix_add_library(phoenix-libos-cap
     STATIC
     SOURCES cap.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-userland
 )
 
@@ -78,9 +71,7 @@ phoenix_add_library(phoenix-libos-cap
 phoenix_add_library(phoenix-libos-msg-router
     STATIC
     SOURCES msg_router.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-ipc
 )
 
@@ -88,9 +79,7 @@ phoenix_add_library(phoenix-libos-msg-router
 phoenix_add_library(phoenix-libos-resource-account
     STATIC
     SOURCES resource_account.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-service
 )
 
@@ -98,9 +87,7 @@ phoenix_add_library(phoenix-libos-resource-account
 phoenix_add_library(phoenix-libos-registration
     STATIC
     SOURCES registration.c
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-service
 )
 
@@ -108,9 +95,7 @@ phoenix_add_library(phoenix-libos-registration
 phoenix_add_library(phoenix-libos-affine-runtime
     STATIC
     SOURCES affine_runtime.c
-    INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-architecture
 )
 
@@ -118,9 +103,7 @@ phoenix_add_library(phoenix-libos-affine-runtime
 phoenix_add_library(phoenix-libos-nn
     STATIC
     SOURCES aether_nn.c
-    INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-userland
 )
 
@@ -128,9 +111,7 @@ phoenix_add_library(phoenix-libos-nn
 phoenix_add_library(phoenix-libos-net
     STATIC
     SOURCES net/socket.c net/dpdk_shim.c
-    INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-file phoenix-libos-posix
 )
 
@@ -143,9 +124,8 @@ phoenix_add_library(phoenix-libos-bsd-sockets
         net/inet_domain.c
         net/unix_domain.c
     INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${LIBOS_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/net
-        ${CMAKE_SOURCE_DIR}/include
     DEPENDENCIES phoenix-libos-file phoenix-libos-posix phoenix-libos-cap
 )
 
@@ -153,9 +133,7 @@ phoenix_add_library(phoenix-libos-bsd-sockets
 phoenix_add_library(phoenix-libos-gpu
     STATIC
     SOURCES gpu/vgpu.c
-    INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+    INCLUDES ${LIBOS_INCLUDE_DIRS}
     DEPENDENCIES phoenix-libos-file
 )
 
@@ -174,9 +152,8 @@ phoenix_add_library(phoenix-libos-linux-abi
         linux/linux_io_uring.c
         linux/linux_net.c
     INCLUDES
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${LIBOS_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/linux
-        ${CMAKE_SOURCE_DIR}/include
     DEPENDENCIES phoenix-libos-posix phoenix-libos-file phoenix-libos-cap phoenix-libos-bsd-sockets
 )
 
@@ -195,10 +172,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/stubs/libposix.c")
     phoenix_add_library(phoenix-libos-posix-stubs
         STATIC
         SOURCES stubs/libposix.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}/stubs
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
+        INCLUDES ${LIBOS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/stubs
         DEPENDENCIES phoenix-libos-posix
     )
 endif()
@@ -208,10 +182,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/stubs/libbaremetal.c")
     phoenix_add_library(phoenix-libos-baremetal-stubs
         STATIC
         SOURCES stubs/libbaremetal.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}/stubs
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
+        INCLUDES ${LIBOS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/stubs
     )
 endif()
 
@@ -220,10 +191,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/stubs/lib9p.c")
     phoenix_add_library(phoenix-libos-9p-stubs
         STATIC
         SOURCES stubs/lib9p.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}/stubs
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
+        INCLUDES ${LIBOS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/stubs
     )
 endif()
 
@@ -237,51 +205,41 @@ if(USE_CAPNP AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/capnp")
         phoenix_add_library(phoenix-libos-capnp-helpers
             STATIC
             SOURCES capnp/capnp_helpers.c
-            INCLUDES 
-                ${CMAKE_CURRENT_SOURCE_DIR}/capnp
-                ${CMAKE_CURRENT_SOURCE_DIR}
-                ${CMAKE_SOURCE_DIR}/include
-                ${CMAKE_SOURCE_DIR}/proto
+            INCLUDES ${LIBOS_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/capnp ${CMAKE_SOURCE_DIR}/proto
             DEPENDENCIES phoenix-protocols
         )
     endif()
-    
+
     # Capability wrapper
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/capwrap.c")
         phoenix_add_library(phoenix-libos-capwrap
             STATIC
             SOURCES capwrap.c
-            INCLUDES 
-                ${CMAKE_CURRENT_SOURCE_DIR}
-                ${CMAKE_SOURCE_DIR}/include
+            INCLUDES ${LIBOS_INCLUDE_DIRS}
             DEPENDENCIES phoenix-libos-cap
         )
-        
+
         if(TARGET phoenix-libos-capnp-helpers)
             target_link_libraries(phoenix-libos-capwrap PUBLIC phoenix-libos-capnp-helpers)
         endif()
     endif()
-    
+
     # Process wrapper
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/procwrap.c")
         phoenix_add_library(phoenix-libos-procwrap
             STATIC
             SOURCES procwrap.c
-            INCLUDES 
-                ${CMAKE_CURRENT_SOURCE_DIR}
-                ${CMAKE_SOURCE_DIR}/include
+            INCLUDES ${LIBOS_INCLUDE_DIRS}
             DEPENDENCIES phoenix-libos-service
         )
     endif()
-    
+
     # IRQ client
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/irq_client.c")
         phoenix_add_library(phoenix-libos-irq-client
             STATIC
             SOURCES irq_client.c
-            INCLUDES 
-                ${CMAKE_CURRENT_SOURCE_DIR}
-                ${CMAKE_SOURCE_DIR}/include
+            INCLUDES ${LIBOS_INCLUDE_DIRS}
             DEPENDENCIES phoenix-libos-service
         )
     endif()
@@ -295,9 +253,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sched.c")
     phoenix_add_library(phoenix-libos-sched
         STATIC
         SOURCES sched.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
+        INCLUDES ${LIBOS_INCLUDE_DIRS}
         DEPENDENCIES phoenix-libos-service
     )
 endif()
@@ -306,9 +262,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sched_helpers.c")
     phoenix_add_library(phoenix-libos-sched-helpers
         STATIC
         SOURCES sched_helpers.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
+        INCLUDES ${LIBOS_INCLUDE_DIRS}
         DEPENDENCIES phoenix-libos-sched
     )
 endif()
@@ -378,18 +332,17 @@ endif()
 # Create the main LibOS library
 phoenix_add_library(phoenix-libos
     INTERFACE
-    DEPENDENCIES 
+    DEPENDENCIES
         ${LIBOS_CORE_LIBS}
         ${LIBOS_STUB_LIBS}
         ${LIBOS_CAPNP_LIBS}
         ${LIBOS_SCHED_LIBS}
         phoenix-userland
         phoenix-architecture
-    INCLUDES 
-        ${CMAKE_CURRENT_SOURCE_DIR}
+    INCLUDES
+        ${LIBOS_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/stubs
         ${CMAKE_CURRENT_SOURCE_DIR}/capnp
-        ${CMAKE_SOURCE_DIR}/include
 )
 
 # ═════════════════════════════════════════════════════════════════════

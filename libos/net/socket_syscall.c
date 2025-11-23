@@ -13,8 +13,22 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* Linux-style socket flags (not always available on BSD/macOS) */
+#ifndef SOCK_NONBLOCK
+#define SOCK_NONBLOCK   0x800
+#endif
+#ifndef SOCK_CLOEXEC
+#define SOCK_CLOEXEC    0x80000
+#endif
+
 /* Maximum number of sockets */
 #define MAX_SOCKETS     1024
+
+/* Forward declarations */
+ssize_t sys_sendto(int fd, const void *buf, size_t len, int flags,
+                   const struct sockaddr *dest_addr, socklen_t addrlen);
+ssize_t sys_recvfrom(int fd, void *buf, size_t len, int flags,
+                     struct sockaddr *src_addr, socklen_t *addrlen);
 
 /* Socket table - maps fd to socket */
 static struct {
@@ -356,7 +370,7 @@ sys_sendto(int fd, const void *buf, size_t len, int flags,
 
     /* Build uio */
     struct iovec iov = { .iov_base = (void *)buf, .iov_len = len };
-    struct uio uio = {
+    uio_t uio = {
         .uio_iov = &iov,
         .uio_iovcnt = 1,
         .uio_resid = len
@@ -387,7 +401,7 @@ sys_sendmsg(int fd, const struct msghdr *msg, int flags)
     for (size_t i = 0; i < msg->msg_iovlen; i++)
         total += msg->msg_iov[i].iov_len;
 
-    struct uio uio = {
+    uio_t uio = {
         .uio_iov = msg->msg_iov,
         .uio_iovcnt = msg->msg_iovlen,
         .uio_resid = total
@@ -431,7 +445,7 @@ sys_recvfrom(int fd, void *buf, size_t len, int flags,
         return -EBADF;
 
     struct iovec iov = { .iov_base = buf, .iov_len = len };
-    struct uio uio = {
+    uio_t uio = {
         .uio_iov = &iov,
         .uio_iovcnt = 1,
         .uio_resid = len
@@ -468,7 +482,7 @@ sys_recvmsg(int fd, struct msghdr *msg, int flags)
     for (size_t i = 0; i < msg->msg_iovlen; i++)
         total += msg->msg_iov[i].iov_len;
 
-    struct uio uio = {
+    uio_t uio = {
         .uio_iov = msg->msg_iov,
         .uio_iovcnt = msg->msg_iovlen,
         .uio_resid = total
@@ -600,17 +614,4 @@ sys_socket_pledge(int fd, uint32_t promises)
     return -sopledge(so, promises);
 }
 
-/* Linux socket type flags */
-#ifndef SOCK_NONBLOCK
-#define SOCK_NONBLOCK   0x800
-#endif
-#ifndef SOCK_CLOEXEC
-#define SOCK_CLOEXEC    0x80000
-#endif
-
-/* uio structure for sosend/soreceive */
-struct uio {
-    struct iovec *uio_iov;
-    int uio_iovcnt;
-    size_t uio_resid;
-};
+/* uio_t and SOCK_NONBLOCK/SOCK_CLOEXEC are defined at the top of this file */

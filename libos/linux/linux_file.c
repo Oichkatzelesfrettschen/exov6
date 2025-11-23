@@ -15,6 +15,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <sys/types.h>  /* for ssize_t, off_t */
 
 /* Forward declarations for exokernel primitives */
 extern int exo_open(const char *path, int flags, int mode);

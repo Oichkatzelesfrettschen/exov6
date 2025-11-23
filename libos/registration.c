@@ -1,4 +1,4 @@
-#include "../include/exokernel.h"
+#include "exokernel.h"
 #include "ipc.h"
 #include "syscall.h"
 #include "user.h"

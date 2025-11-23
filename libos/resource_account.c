@@ -1,4 +1,4 @@
-#include "../include/exokernel.h"
+#include "exokernel.h"
 
 // Missing type definition
 typedef struct {

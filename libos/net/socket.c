@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../../file.h"
+#include "file.h"
 #include "socket_int.h"
 
 extern int libos_install_file(struct file *f);

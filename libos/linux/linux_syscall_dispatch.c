@@ -16,6 +16,7 @@
 #include "linux_syscall.h"
 #include <errno.h>
 #include <stdarg.h>
+#include <sys/types.h>  /* for off_t */
 
 /*
  * Forward declarations for syscall handlers

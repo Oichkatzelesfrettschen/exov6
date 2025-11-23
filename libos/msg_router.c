@@ -1,4 +1,4 @@
-#include "../include/exokernel.h"
+#include "exokernel.h"
 
 #define MAX_ENDPOINTS 16
 static exo_cap endpoints[MAX_ENDPOINTS];

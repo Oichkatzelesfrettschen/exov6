@@ -16,6 +16,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <sys/types.h>  /* for off_t */
 
 /* Forward declarations for exokernel primitives */
 extern void *exo_alloc_pages(size_t count);
