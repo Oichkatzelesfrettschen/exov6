@@ -149,3 +149,33 @@ int sys_ipc_recv(int *sender_pid, uint64 *w0, uint64 *w1, uint64 *w2) {
     return (int)syscall(SYS_ipc_recv, (uint64)sender_pid, (uint64)w0,
                         (uint64)w1, (uint64)w2);
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Interactive I/O (Phase 11b - The Sense and The Patience)
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Get character from console (blocking)
+ *
+ * LIONS' LESSON: This is "The Sense" - the shell's ability to hear.
+ * In a pure exokernel, we'd map keyboard I/O ports directly.
+ * For simplicity, we use the kernel's tty buffer.
+ *
+ * @return Character read (0-255), or -1 on error/interrupt
+ */
+int sys_cgetc(void) {
+    return (int)syscall(SYS_cgetc, 0, 0, 0, 0);
+}
+
+/**
+ * Wait for child environment to exit
+ *
+ * LIONS' LESSON: This is "The Patience" - the parent waits for the child.
+ * Unlike UNIX wait() which waits for any child, this waits for a specific one.
+ *
+ * @param child_pid PID of child to wait for
+ * @return Exit status of child, or -1 on error
+ */
+int sys_env_wait(int child_pid) {
+    return (int)syscall(SYS_env_wait, (uint64)child_pid, 0, 0, 0);
+}

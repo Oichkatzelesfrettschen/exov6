@@ -1,36 +1,30 @@
 /**
  * @file sh.c
- * @brief ExoV6 Shell - "The Voice" (Phase 11)
+ * @brief ExoV6 Shell - "The Voice" (Phase 11b - Interactive)
  *
  * ╔═══════════════════════════════════════════════════════════════════════════╗
  * ║  LIONS' COMMENTARY FOR THE POST-MONOLITHIC AGE                            ║
  * ║                                                                           ║
- * ║  LESSON: The shell is just another user program.                          ║
+ * ║  LESSON: The shell is the COMPLETE demonstration of exokernel design.     ║
  * ║                                                                           ║
- * ║  In UNIX V6, the shell is special only because it's process 1's child.    ║
- * ║  Here, the shell demonstrates the FULL exokernel architecture:            ║
+ * ║  Components working together:                                             ║
+ * ║    - sys_cgetc()   : The Sense (keyboard input)                          ║
+ * ║    - spawn()       : The Hands (process creation)                        ║
+ * ║    - sys_env_wait(): The Patience (synchronization)                      ║
+ * ║    - fs_srv IPC    : The Memory (file access)                            ║
  * ║                                                                           ║
- * ║    Shell ─── spawn() ───► Child Process                                   ║
- * ║      │                         │                                          ║
- * ║      └── IPC to fs_srv ────────┘                                          ║
- * ║                │                                                          ║
- * ║           elf_load_into_child()                                           ║
- * ║                │                                                          ║
- * ║           sys_env_run()                                                   ║
- * ║                                                                          ║
- * ║  The kernel never "executes" programs. It just switches contexts.         ║
+ * ║  The KERNEL provides only:                                                ║
+ * ║    - Page allocation/mapping                                              ║
+ * ║    - Environment create/run/wait                                          ║
+ * ║    - IPC send/receive                                                     ║
+ * ║    - Console character I/O                                                ║
+ * ║                                                                           ║
+ * ║  The LIBOS provides:                                                      ║
+ * ║    - ELF parsing and loading                                              ║
+ * ║    - File abstraction (via fs_srv)                                        ║
+ * ║    - Command line parsing                                                 ║
+ * ║    - Process model (spawn vs fork+exec)                                   ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- *
- * EVOLUTION from UNIX V6:
- *   V6: fork() + exec() - Kernel clones address space, then replaces it
- *   ExoV6: spawn()      - LibOS builds new process from scratch
- *
- * Current limitations (Phase 11.4):
- *   - No console input yet (runs demo sequence)
- *   - No wait() - shell doesn't wait for children
- *   - No pipes or redirection
- *
- * These will be added in subsequent phases.
  */
 
 #include <stdint.h>
@@ -46,15 +40,19 @@ extern void print(const char *s);
 extern void print_hex(uint64 n);
 extern void libos_exception_init(void);
 
-/* spawn() - The star of Phase 11 */
+/* syscalls */
+extern int sys_cgetc(void);
+extern int sys_env_wait(int child_pid);
+
+/* spawn() - Process creation */
 extern int spawn(const char *path, char **argv);
 
 /* ═══════════════════════════════════════════════════════════════════════════
  * Configuration
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-#define MAXARGS 10
-#define MAXLINE 100
+#define MAXLINE 128
+#define MAXARGS 16
 
 /* ═══════════════════════════════════════════════════════════════════════════
  * Helpers
@@ -83,7 +81,6 @@ static void print_int(int n) {
     print(out);
 }
 
-/* Simple string comparison */
 static int strcmp_sh(const char *a, const char *b) {
     while (*a && *b && *a == *b) {
         a++;
@@ -92,7 +89,6 @@ static int strcmp_sh(const char *a, const char *b) {
     return *a - *b;
 }
 
-/* Simple string length */
 static int strlen_sh(const char *s) {
     int len = 0;
     while (*s++) len++;
@@ -100,23 +96,112 @@ static int strlen_sh(const char *s) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * Built-in Commands
+ * Command Line Buffer
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+static char linebuf[MAXLINE];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * readline() - Read a line from the console
  *
- * LESSON: Some commands must be built-in because they affect the shell itself.
- * In UNIX V6, 'cd' changes the shell's current directory - can't be external.
+ * LIONS' LESSON: This is where the shell "hears".
+ * sys_cgetc() blocks until a character is available.
+ * The kernel wakes us when keyboard IRQ fires.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+static void readline(const char *prompt) {
+    print(prompt);
+
+    int i = 0;
+    while (i < MAXLINE - 1) {
+        int c = sys_cgetc();
+
+        if (c < 0) {
+            /* Error or killed */
+            linebuf[0] = '\0';
+            return;
+        }
+
+        if (c == '\r' || c == '\n') {
+            /* End of line */
+            print("\n");
+            linebuf[i] = '\0';
+            return;
+        }
+
+        if (c == 127 || c == '\b' || c == 8) {
+            /* Backspace */
+            if (i > 0) {
+                i--;
+                print("\b \b");  /* Erase character on screen */
+            }
+            continue;
+        }
+
+        if (c == 21) {  /* Ctrl-U: kill line */
+            while (i > 0) {
+                i--;
+                print("\b \b");
+            }
+            continue;
+        }
+
+        if (c >= 32 && c < 127) {
+            /* Printable character */
+            linebuf[i++] = (char)c;
+            /* Echo */
+            char echo[2] = {(char)c, '\0'};
+            print(echo);
+        }
+    }
+
+    linebuf[i] = '\0';
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * parse_args() - Split command line into arguments
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+static int parse_args(char *line, char **argv) {
+    int argc = 0;
+    char *p = line;
+
+    /* Skip leading whitespace */
+    while (*p == ' ' || *p == '\t') p++;
+
+    while (*p && argc < MAXARGS - 1) {
+        argv[argc++] = p;
+
+        /* Find end of argument */
+        while (*p && *p != ' ' && *p != '\t') p++;
+
+        if (*p) {
+            *p++ = '\0';  /* Null-terminate */
+            /* Skip whitespace */
+            while (*p == ' ' || *p == '\t') p++;
+        }
+    }
+
+    argv[argc] = 0;  /* Null-terminate argv array */
+    return argc;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Built-in Commands
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 static void cmd_help(void) {
     print("\n");
-    print("ExoV6 Shell Commands:\n");
+    print("ExoV6 Shell - Built-in Commands:\n");
     print("  help      - Show this help\n");
-    print("  hello     - Run /hello program\n");
     print("  about     - About ExoV6\n");
-    print("  demo      - Run demo sequence\n");
+    print("  exit      - Exit the shell\n");
     print("\n");
-    print("Architecture note:\n");
-    print("  This shell uses spawn() instead of fork()+exec().\n");
-    print("  The kernel provides only raw primitives; LibOS handles policy.\n");
+    print("External Commands:\n");
+    print("  /path     - Run program at path (e.g., /hello)\n");
+    print("\n");
+    print("The shell uses spawn() instead of fork()+exec().\n");
+    print("All file access goes through fs_srv via IPC.\n");
     print("\n");
 }
 
@@ -128,104 +213,91 @@ static void cmd_about(void) {
     print("\n");
     print("  'Lions' Commentary for the Post-Monolithic Age'\n");
     print("\n");
-    print("  An exokernel provides only the minimal primitives to securely\n");
-    print("  export hardware:\n");
-    print("\n");
-    print("    KERNEL (Mechanism):  pages, address spaces, CPU time, IPC\n");
-    print("    LIBOS  (Policy):     files, processes, sockets, memory layout\n");
-    print("\n");
-    print("  Inspired by:\n");
-    print("    - MIT Exokernel (Xok/ExOS)\n");
-    print("    - seL4 Microkernel\n");
-    print("    - xv6 Teaching OS\n");
-    print("    - Lions' Commentary on UNIX V6\n");
+    print("  KERNEL (Mechanism):  pages, address spaces, CPU time, IPC\n");
+    print("  LIBOS  (Policy):     files, processes, sockets, memory layout\n");
     print("\n");
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * Command Execution via spawn()
+ * run_external() - Spawn an external program
  *
- * LIONS' LESSON: This is the key difference from UNIX V6.
+ * LIONS' LESSON: This is where spawn() vs fork()+exec() shines.
  *
- * UNIX V6 shell:
- *   pid = fork();     // Kernel clones entire address space
- *   if (pid == 0)
- *     exec(argv[0]);  // Kernel replaces address space
- *   wait();           // Kernel tracks parent-child
+ * UNIX V6:
+ *   pid = fork();
+ *   if (pid == 0) exec(path, argv);
+ *   wait();
  *
- * ExoV6 shell:
- *   spawn(argv[0]);   // LibOS builds new process from scratch
- *   // Kernel just provides: env_create, page_map, env_run
+ * ExoV6:
+ *   pid = spawn(path, argv);
+ *   sys_env_wait(pid);
  *
- * Benefits:
- *   - No COW overhead from fork
- *   - Cleaner semantics (no zombie processes)
- *   - Kernel is simpler (no exec syscall)
+ * No address space cloning. No zombie complexity. Just pure creation.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-static void run_command(const char *cmd) {
-    print("$ ");
-    print(cmd);
+static void run_external(char *path, char **argv) {
+    print("Spawning: ");
+    print(path);
     print("\n");
 
-    if (strcmp_sh(cmd, "help") == 0) {
-        cmd_help();
-    }
-    else if (strcmp_sh(cmd, "about") == 0) {
-        cmd_about();
-    }
-    else if (strcmp_sh(cmd, "hello") == 0) {
-        char *argv[] = {"hello", NULL};
-        int pid = spawn("/hello", argv);
-        if (pid < 0) {
-            print("sh: spawn failed for /hello\n");
-            print("    (Is fs_srv running? Is /hello in fs.img?)\n");
-        } else {
-            print("sh: spawned /hello with PID ");
-            print_int(pid);
-            print("\n");
-            /* TODO: wait(pid) when wait syscall is implemented */
-        }
-    }
-    else if (strcmp_sh(cmd, "demo") == 0) {
-        /* Run demo sequence */
-        cmd_help();
-        cmd_about();
-    }
-    else {
-        print("sh: unknown command: ");
-        print(cmd);
+    int child_pid = spawn(path, argv);
+
+    if (child_pid < 0) {
+        print("sh: spawn failed for ");
+        print(path);
         print("\n");
-        print("    Type 'help' for available commands\n");
+        print("    (Is fs_srv running? Does the file exist?)\n");
+        return;
     }
+
+    print("sh: child PID ");
+    print_int(child_pid);
+    print("\n");
+
+    /* Wait for child to exit */
+    print("sh: waiting for child...\n");
+    int exit_status = sys_env_wait(child_pid);
+
+    print("sh: child exited with status ");
+    print_int(exit_status);
+    print("\n");
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * Demo Mode
- *
- * Until we have console input (getchar syscall), run predefined sequence.
+ * execute() - Process and execute a command
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-static void run_demo(void) {
-    print("\n");
-    print("┌───────────────────────────────────────────────────────────────────┐\n");
-    print("│  DEMO MODE: Console input not yet implemented                     │\n");
-    print("│  Running predefined command sequence                              │\n");
-    print("└───────────────────────────────────────────────────────────────────┘\n");
-    print("\n");
+static int execute(char *line) {
+    char *argv[MAXARGS];
+    int argc = parse_args(line, argv);
 
-    run_command("help");
-    run_command("about");
+    if (argc == 0) {
+        return 1;  /* Empty line, continue */
+    }
 
-    print("\n");
-    print("Attempting to spawn /hello...\n");
-    print("(Requires fs_srv running and /hello in file system)\n");
-    print("\n");
-    run_command("hello");
+    /* Built-in commands */
+    if (strcmp_sh(argv[0], "help") == 0) {
+        cmd_help();
+        return 1;
+    }
+
+    if (strcmp_sh(argv[0], "about") == 0) {
+        cmd_about();
+        return 1;
+    }
+
+    if (strcmp_sh(argv[0], "exit") == 0) {
+        print("Goodbye.\n");
+        return 0;  /* Exit shell */
+    }
+
+    /* External commands */
+    run_external(argv[0], argv);
+    return 1;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * Main Entry Point
+ * Main Entry Point - The Read-Eval-Print Loop (REPL)
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 int main(void)
@@ -239,24 +311,32 @@ int main(void)
     print("  ███████╗██╔╝ ██╗╚██████╔╝ ╚████╔╝ ╚██████╔╝    ███████║██║  ██║\n");
     print("  ╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═══╝   ╚═════╝     ╚══════╝╚═╝  ╚═╝\n");
     print("═══════════════════════════════════════════════════════════════════\n");
-    print("  The Voice - ExoV6 User Shell (Phase 11)\n");
+    print("  The Voice - ExoV6 Interactive Shell (Phase 11b)\n");
     print("═══════════════════════════════════════════════════════════════════\n");
     print("\n");
 
     /* Initialize exception handling */
     libos_exception_init();
 
-    print("Shell uses spawn() instead of fork()+exec()\n");
-    print("  Kernel provides: env_create, page_map, env_run, IPC\n");
-    print("  LibOS provides: ELF loading, stack setup, file I/O\n");
+    print("Type 'help' for commands, 'exit' to quit.\n");
     print("\n");
 
-    /* Run demo */
-    run_demo();
+    /* The REPL - Read, Eval, Print, Loop */
+    while (1) {
+        readline("$ ");
 
-    /* Idle loop */
-    print("\n");
-    print("Shell entering idle (console input not implemented yet)...\n");
+        if (linebuf[0] == '\0') {
+            continue;  /* Empty line */
+        }
+
+        if (!execute(linebuf)) {
+            break;  /* exit command */
+        }
+    }
+
+    /* Clean exit */
+    print("Shell terminated.\n");
+
     while (1) {
 #if defined(__x86_64__)
         __asm__ volatile("hlt");
@@ -273,32 +353,26 @@ int main(void)
 /* ═══════════════════════════════════════════════════════════════════════════
  * PEDAGOGICAL SUMMARY
  *
- * This shell demonstrates the key differences between UNIX V6 and ExoV6:
+ * This interactive shell demonstrates the COMPLETE exokernel architecture:
  *
- * UNIX V6 Shell (fork+exec):
- *   1. fork() - Kernel clones parent's entire address space
- *   2. Child calls exec() - Kernel parses ELF, replaces address space
- *   3. Parent calls wait() - Kernel tracks process hierarchy
+ * 1. THE SENSE (sys_cgetc):
+ *    Keyboard IRQ → Kernel tty buffer → sleep/wakeup → Shell reads char
  *
- * ExoV6 Shell (spawn):
- *   1. spawn() - LibOS opens ELF via IPC to fs_srv
- *   2. LibOS creates blank env via sys_env_create
- *   3. LibOS parses ELF, maps pages via sys_page_map
- *   4. LibOS sets up stack (argc/argv)
- *   5. LibOS starts child via sys_env_run
+ * 2. THE HANDS (spawn):
+ *    Shell → open() via IPC → fs_srv → VirtIO disk
+ *    Shell → elf_load_into_child() → allocate pages, map segments
+ *    Shell → sys_env_run() → child starts executing
  *
- * The kernel in ExoV6 has NO IDEA:
- *   - What an ELF file is
- *   - What argc/argv mean
- *   - What a "shell" is
- *   - What "executing a program" means
+ * 3. THE PATIENCE (sys_env_wait):
+ *    Parent sleeps → Child runs → Child exits (wakeup) → Parent reaps zombie
  *
- * All of that is POLICY defined by the LibOS.
- * The kernel only provides MECHANISM: pages, address spaces, CPU time.
+ * 4. THE MEMORY (fs_client):
+ *    All file operations are IPC messages to the File Server.
+ *    The kernel never sees file paths or inodes.
  *
- * TODO for full shell:
- *   - SYS_getc: Console input character
- *   - SYS_wait: Wait for child to exit
- *   - Pipes: IPC-based pipe server
- *   - Redirection: FD table manipulation
+ * Compare to UNIX V6:
+ *   - V6 kernel: ~10,000 lines, complex fork/exec/wait/file handling
+ *   - ExoV6 kernel: Raw primitives only, LibOS handles everything else
+ *
+ * "Simplicity is the ultimate sophistication." - Leonardo da Vinci
  * ═══════════════════════════════════════════════════════════════════════════ */

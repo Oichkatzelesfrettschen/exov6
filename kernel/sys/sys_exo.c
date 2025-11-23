@@ -411,3 +411,128 @@ sys_env_run(void)
     // we'll jump to the new entry point
     return 0;
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SYS_cgetc: Get character from console (Phase 11b - "The Sense")
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// LIONS' LESSON: In a pure exokernel, we'd export the keyboard hardware
+// directly to user space. For simplicity, we use the kernel's tty buffer.
+//
+// This blocks until a character is available.
+// In the future, this could be replaced by:
+//   1. MMIO-mapped keyboard port (PS/2)
+//   2. USB keyboard driver in user space
+//   3. IPC to a console server
+//
+// Returns: Character read (0-255), or -1 on error
+
+// External tty structure (from kernel/tty.c)
+extern struct {
+    struct spinlock lock;
+    char buf[128];
+    uint32_t r;  // read index
+    uint32_t w;  // write index
+    uint32_t e;  // edit index
+} tty;
+
+uint64
+sys_cgetc(void)
+{
+    struct proc *p = myproc();
+    int c;
+
+    acquire(&tty.lock);
+
+    // Block until input is available
+    while(tty.r == tty.w) {
+        // Check if we've been killed
+        if(p->killed) {
+            release(&tty.lock);
+            return -1;
+        }
+        // Sleep on tty.r channel (woken by ttyintr when input arrives)
+        sleep(&tty.r, &tty.lock);
+    }
+
+    // Read one character
+    c = tty.buf[tty.r++ % 128];
+
+    release(&tty.lock);
+
+    return (uint64)(unsigned char)c;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SYS_env_wait: Wait for child environment to exit (Phase 11b - "The Patience")
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// LIONS' LESSON: In UNIX V6, wait() is complex because of process groups.
+// Here we have a simpler model: wait for a specific child to exit.
+//
+// Args: (int child_pid)
+// Returns: Exit status of child, or -1 on error
+//
+// The caller blocks until the specified child exits (becomes ZOMBIE).
+// The zombie is then reaped (freed).
+
+uint64
+sys_env_wait(void)
+{
+    int child_pid;
+    struct proc *p = myproc();
+    struct proc *child;
+    int exit_status;
+
+    if(argint(0, &child_pid) < 0)
+        return -1;
+
+    // Find the child process
+    extern struct ptable ptable;
+    acquire_compat(&ptable.lock);
+
+    child = 0;
+    for(struct proc *pp = ptable.proc; pp < &ptable.proc[NPROC]; pp++) {
+        if(pp->pid == child_pid && pp->parent == p) {
+            child = pp;
+            break;
+        }
+    }
+
+    if(child == 0) {
+        release_compat(&ptable.lock);
+        return -1;  // Not our child or doesn't exist
+    }
+
+    // Wait for child to become ZOMBIE
+    while(child->state != ZOMBIE) {
+        if(p->killed) {
+            release_compat(&ptable.lock);
+            return -1;
+        }
+        // Sleep on parent (exit() wakes parent via wakeup(curproc->parent))
+        sleep(p, &ptable.lock);
+    }
+
+    // Reap the zombie
+    exit_status = child->exit_status;
+
+    // Free child's kernel stack and process slot
+    kfree(child->kstack);
+    child->kstack = 0;
+    if(child->pgdir)
+        freevm(child->pgdir);
+    child->pgdir = 0;
+    child->pid = 0;
+    child->parent = 0;
+    child->name[0] = 0;
+    child->killed = 0;
+    child->state = UNUSED;
+
+    release_compat(&ptable.lock);
+
+    cprintf("[EXOKERNEL] env_wait: Child PID %d exited with status %d\n",
+            child_pid, exit_status);
+
+    return exit_status;
+}

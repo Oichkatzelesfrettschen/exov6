@@ -133,6 +133,10 @@ extern int sys_ipc_recv(void);
 extern int sys_env_create(void);
 extern int sys_env_run(void);
 
+// Interactive I/O syscalls (Phase 11b - implemented in sys_exo.c)
+extern int sys_cgetc(void);
+extern int sys_env_wait(void);
+
 // Stubs for now (to be implemented)
 int sys_page_unmap(void) { return -1; }
 int sys_page_stat(void) { return -1; }
@@ -154,6 +158,8 @@ static int (*syscalls[])(void) = {
     [SYS_cputs]          = sys_cputs,
     [SYS_env_set_handler]= sys_env_set_handler,
     [SYS_env_resume]     = sys_env_resume,
+    [SYS_cgetc]          = sys_cgetc,
+    [SYS_env_wait]       = sys_env_wait,
 };
 
 void syscall(void) {

@@ -47,6 +47,10 @@ typedef uint32_t label_t;
 #define SYS_env_set_handler 13  // Set the upcall entry point and exception stack
 #define SYS_env_resume      14  // Return from upcall, restore saved context
 
+// 7. Interactive I/O (Phase 11b)
+#define SYS_cgetc           22  // Get character from console (blocking)
+#define SYS_env_wait        23  // Wait for environment to exit
+
 // --- Trap Cause Codes (x86_64) ---
 #define EXO_TRAP_DIVIDE       0   // Divide error
 #define EXO_TRAP_DEBUG        1   // Debug exception
