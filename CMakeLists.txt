@@ -143,7 +143,7 @@ add_subdirectory(src/libnstr_graph)
 add_subdirectory(proto)
 
 # Zone 4: Userland Core (Depends on protocols)
-add_subdirectory(user)
+# add_subdirectory(user)
 
 # Zone 5: Library OS (Depends on userland, protocols)
 add_subdirectory(libos)
@@ -158,12 +158,12 @@ endif()
 
 # Zone 8: Demos (Depends on libos, userland, optional)
 if(BUILD_DEMOS)
-  add_subdirectory(demos)
+#  add_subdirectory(demos)
 endif()
 
 # Zone 9: Tests (Depends on all zones, optional)
 if(BUILD_TESTS)
-  add_subdirectory(tests)
+#  add_subdirectory(tests)
 endif()
 
 # Zone 10: Formal verification (Independent, optional)

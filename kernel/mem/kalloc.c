@@ -1,126 +1,153 @@
-// Physical memory allocator, intended to allocate
-// memory for user processes, kernel stacks, page table pages,
-// and pipe buffers. Allocates 4096-byte pages.
-
+// kernel/mem/kalloc.c
 #include <types.h>
-#include "defs.h"
-#include "param.h"
-#include "memlayout.h"
-#include "mmu.h"
-#include "spinlock.h"
-#include "exo_lock.h"  // Modern lock subsystem (Phase 5.4)
-#include "proc.h"
-#include "exo.h"
-#include <string.h>
-#include <stdio.h>  /* For snprintf */
-
-void freerange(void *vstart, void *vend);
-extern char end[]; // first address after kernel loaded from ELF file
-                   // defined by the kernel linker script in kernel.ld
-
-struct run {
-  struct run *next;
-  exo_cap cap;
-};
-
-static inline int node_of(uintptr_t pa) { return (pa / PGSIZE) % NNODES; }
+#include <defs.h>
+#include <param.h>
+#include <memlayout.h>
+#include <spinlock.h>
+#include "mm.h"
+#include <string.h> // for memset
 
 struct {
-  struct qspinlock lock[NNODES];  // NUMA-aware qspinlock array (Phase 5.4)
-  int use_lock;
-  struct run *freelist[NNODES];
+  struct spinlock lock;
+  struct PageInfo *freelist; // Points to the first free PageInfo struct
+  uint64 free_pages_count;
 } kmem;
 
-static exo_cap page_caps[PHYSTOP / PGSIZE];
-extern int cap_table_ready;
+// The Global Core Map
+struct PageInfo *pages;
+uint64 npages; // Total physical pages
 
-// Initialization happens in two phases.
-// 1. main() calls kinit1() while still using entrypgdir to place just
-// the pages mapped by entrypgdir on free list.
-// 2. main() calls kinit2() with the rest of the physical pages
-// after installing a full page table that maps them on all cores.
-void kinit1(void *vstart, void *vend) {
-  // Initialize per-NUMA-node qspinlocks (Phase 5.4)
-  for (int i = 0; i < NNODES; i++) {
-    static char names[NNODES][16];  // Static storage for lock names
-    snprintf(names[i], sizeof(names[i]), "kmem_node%d", i);
-    qspin_init(&kmem.lock[i], names[i], LOCK_LEVEL_MEMORY);
+extern char end[]; // defined by kernel.ld
+
+void
+kinit()
+{
+  initlock(&kmem.lock, "kmem");
+
+  // 1. Calculate available RAM
+  // PHYSTOP is usually 128MB in QEMU xv6
+  uint64 mem_size = PHYSTOP - KERNBASE;
+  npages = mem_size / PGSIZE;
+
+  // 2. Place the 'pages' array right after the kernel code (at 'end')
+  // We need to be careful about alignment.
+  pages = (struct PageInfo*) PGROUNDUP((uint64)end);
+
+  // 3. Calculate where free memory ACTUALLY starts
+  // It starts after the kernel code + the size of the pages array
+  uint64 free_mem_start = PGROUNDUP((uint64)pages + (sizeof(struct PageInfo) * npages));
+
+  cprintf("Exov6 Memory Init: %d pages. Core Map at %p.\n", npages, pages);
+
+  // 4. Initialize the free list
+  // We iterate backwards so the free list is in order (optional but nice)
+  acquire(&kmem.lock);
+  for(uint64 pa = free_mem_start; pa < PHYSTOP; pa += PGSIZE){
+      struct PageInfo *pp = PA2PAGE(pa);
+      pp->ref_count = 0;
+      pp->label = LABEL_LOW; // Default label
+      pp->next = kmem.freelist;
+      kmem.freelist = pp;
+      kmem.free_pages_count++;
   }
-  kmem.use_lock = 0;
-  freerange(vstart, vend);
+  release(&kmem.lock);
 }
 
-void kinit2(void *vstart, void *vend) {
-  freerange(vstart, vend);
-  kmem.use_lock = 1;
+// Allocate a physical page.
+// Returns a kernel VIRTUAL address (void*), just like standard xv6.
+// But internally, it updates the PageInfo.
+void*
+kalloc(void)
+{
+  struct PageInfo *pp;
+
+  acquire(&kmem.lock);
+  pp = kmem.freelist;
+  if(pp){
+    kmem.freelist = pp->next;
+    kmem.free_pages_count--;
+
+    // CRITICAL INITIALIZATION
+    pp->next = 0;
+    pp->ref_count = 0; // Caller must increment this!
+    pp->owner_env = 0; // Caller must set this!
+    pp->label = LABEL_LOW; // Caller must set this!
+  }
+  release(&kmem.lock);
+
+  if(pp == 0)
+    return 0;
+
+  // Convert PageInfo back to kernel virtual address to zero it out
+  uint64 pa = PAGE2PA(pp);
+  char *v = (char*)pa; // In xv6, PA == VA for kernel (mostly)
+  memset(v, 0, PGSIZE);
+  return (void*)v;
 }
 
-void freerange(void *vstart, void *vend) {
-  char *p;
-  p = (char *)PGROUNDUP((uintptr_t)vstart);
-  for (; p + PGSIZE <= (char *)vend; p += PGSIZE)
-    kfree(p);
-}
-// PAGEBREAK: 21
-//  Free the page of physical memory pointed at by v,
-//  which normally should have been returned by a
-//  call to kalloc().  (The exception is when
-//  initializing the allocator; see kinit above.)
-void kfree(char *v) {
-  struct run *r;
+// Free a page.
+// DECREMENTS ref_count. Only puts on free list if ref_count == 0.
+void
+kfree(void *pa)
+{
+  struct PageInfo *pp;
 
-  if ((uintptr_t)v % PGSIZE || v < end || V2P(v) >= PHYSTOP)
+  if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
     panic("kfree");
 
-  // Fill with junk to catch dangling refs.
-  memset(v, 1, PGSIZE);
+  pp = PA2PAGE(pa);
 
-  int node = node_of(V2P(v));
-  if (kmem.use_lock)
-    qspin_lock(&kmem.lock[node]);
-  r = (struct run *)v;
-  int idx = V2P(v) / PGSIZE;
-  r->cap = page_caps[idx];
-  if (cap_table_ready && page_caps[idx].id == 0) {
-    cap_id_t id = cap_table_alloc(CAP_TYPE_PAGE, V2P(v), 0, 0);
-    if (id > 0)
-      page_caps[idx] = cap_new(id, 0, 0);
-    r->cap = page_caps[idx];
+  acquire(&kmem.lock);
+
+  if(pp->ref_count > 0) {
+      pp->ref_count--;
   }
-  r->next = kmem.freelist[node];
-  kmem.freelist[node] = r;
-  if (kmem.use_lock)
-    qspin_unlock(&kmem.lock[node]);
+
+  // Only free if no one is using it
+  if (pp->ref_count == 0) {
+      // Fill with junk to catch dangling refs
+      memset(pa, 1, PGSIZE);
+
+      pp->next = kmem.freelist;
+      kmem.freelist = pp;
+      kmem.free_pages_count++;
+  }
+
+  release(&kmem.lock);
 }
 
-// Allocate one 4096-byte page of physical memory.
-// Returns a pointer that the kernel can use.
-// Returns 0 if the memory cannot be allocated.
-char *kalloc(void) {
-  struct run *r = 0;
-  int start = 0;
-  struct proc *p = myproc();
-  if (p)
-    start = p->preferred_node % NNODES;
-  for (int i = 0; i < NNODES; i++) {
-    int node = (start + i) % NNODES;
-    if (kmem.use_lock)
-      qspin_lock(&kmem.lock[node]);
-    r = kmem.freelist[node];
-    if (r) {
-      kmem.freelist[node] = r->next;
-      if (kmem.use_lock)
-        qspin_unlock(&kmem.lock[node]);
-      int idx = V2P(r) / PGSIZE;
-      if (cap_table_ready && page_caps[idx].id == 0) {
-        cap_id_t id = cap_table_alloc(CAP_TYPE_PAGE, V2P(r), 0, 0);
-        if (id > 0)
-          page_caps[idx] = cap_new(id, 0, 0);
-      }
-      break;
-    }
-    if (kmem.use_lock)
-      qspin_unlock(&kmem.lock[node]);
-  }
-  return (char *)r;
+// Increase reference count (used when mapping a page to a new Env)
+void
+page_incref(uint64 pa)
+{
+    acquire(&kmem.lock);
+    struct PageInfo *pp = PA2PAGE(pa);
+    pp->ref_count++;
+    release(&kmem.lock);
+}
+
+// Decrease reference count (wrapper for kfree)
+void
+page_decref(uint64 pa)
+{
+    kfree((void*)pa);
+}
+
+// Get the security label of a physical page
+label_t
+page_get_label(uint64 pa)
+{
+    // No lock needed for read (usually), but safer with lock if labels change
+    struct PageInfo *pp = PA2PAGE(pa);
+    return pp->label;
+}
+
+// Set the security label (Privileged Kernel Only)
+void
+page_set_label(uint64 pa, label_t new_label)
+{
+    acquire(&kmem.lock);
+    struct PageInfo *pp = PA2PAGE(pa);
+    pp->label = new_label;
+    release(&kmem.lock);
 }

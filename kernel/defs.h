@@ -126,10 +126,15 @@ struct ioapic_info {
 void ioapicinfo(int apic_id, struct ioapic_info *info);
 
 // kalloc.c
-char *kalloc(void);
-void kfree(char *);
-void kinit1(void *vstart, void *vend);
-void kinit2(void *vstart, void *vend);
+void*           kalloc(void);
+void            kfree(void *);
+void            kinit(void);
+void            page_incref(uint64_t pa);
+void            page_decref(uint64_t pa);
+uint32_t        page_get_label(uint64_t pa);
+
+// security.c
+int             can_flow(uint32_t src, uint32_t dst);
 
 // kbd.c
 void kbdintr(void);
@@ -185,6 +190,7 @@ void wakeup(void *chan);
 void yield(void);
 struct proc *pctr_lookup(uint32_t);
 struct proc *allocproc(void);
+struct proc *find_proc(int pid);
 
 // swtch.S
 void swtch(context_t **old, context_t *new);
@@ -220,6 +226,7 @@ int snprintf(char *str, size_t size, const char *format, ...);
 
 // syscall.c
 int argint(int n, int *ip);
+int arguint64(int n, uint64_t *ip);
 int argptr(int n, char **pp, size_t size);
 int argstr(int n, char **pp);
 int fetchint(uintptr_t addr, int *ip);

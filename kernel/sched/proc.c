@@ -211,6 +211,19 @@ found:
   return p;
 }
 
+struct proc* find_proc(int pid) {
+  struct proc *p;
+  acquire_compat(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if (p->pid == pid && p->state != UNUSED) {
+      release_compat(&ptable.lock);
+      return p;
+    }
+  }
+  release_compat(&ptable.lock);
+  return 0;
+}
+
 // PAGEBREAK: 32
 //  Set up first user process.
 void userinit(void) {
@@ -218,6 +231,7 @@ void userinit(void) {
   extern char _binary_initcode_start[], _binary_initcode_size[];
 
   p = allocproc();
+  p->label = LABEL_LOW; // The first process is usually trusted/system
 
   initproc = p;
   if ((p->pgdir = setupkvm()) == 0)
@@ -311,6 +325,7 @@ int fork(void) {
   np->cwd = idup(curproc->cwd);
   np->preferred_node = curproc->preferred_node;
   np->out_of_gas = 0;
+  np->label = curproc->label; // Inherit label
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 

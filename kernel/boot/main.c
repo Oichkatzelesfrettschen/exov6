@@ -25,7 +25,7 @@ extern char end[]; // first address after kernel loaded from ELF file
 // Allocate a real stack and switch to it, first
 // doing some setup required for memory allocator to work.
 int main(void) {
-  kinit1(end, P2V(4 * 1024 * 1024)); // phys page allocator
+  kinit();                           // phys page allocator (ExoV6: One-shot init)
   kvmalloc();                        // kernel page table
   mpinit();                          // detect other processors
   lapicinit();                       // interrupt controller
@@ -47,7 +47,7 @@ int main(void) {
   beatty_sched_init();               // initialize Beatty scheduler
   // exo_ipc_register(&exo_ipc_queue_ops); // TODO: fix when ipc is ready
   startothers();                              // start other processors
-  kinit2(P2V(4 * 1024 * 1024), P2V(PHYSTOP)); // must come after startothers()
+  // kinit2 removed in ExoV6
   userinit();                                 // first user process
   mpmain();                                   // finish this processor's setup
 }
