@@ -252,6 +252,7 @@ void uartputc(int);
 void seginit(void);
 void kvmalloc(void);
 pde_t *setupkvm(void);
+int mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm);
 #ifdef __x86_64__
 pml4e_t *setupkvm64(void);
 #endif

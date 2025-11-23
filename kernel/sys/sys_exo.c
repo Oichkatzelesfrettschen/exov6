@@ -63,13 +63,49 @@ sys_page_map(void)
         return -1;
     }
 
-    // 2. Map it
+    // 2. SANITIZE PERMISSIONS
+    // Force user bit for all user mappings. Strip dangerous bits.
+    // Allow only R, W, X from user; insert_pte will add PTE_U.
+    perm &= (PERM_R | PERM_W | PERM_X);
+
+    // 3. Map it
     // insert_pte expects Physical Address (hardware), not Kernel Virtual Address (handle)
     if(insert_pte(target->pgdir, (void*)virt_addr, V2P(phys_addr), perm) < 0)
         return -1;
 
-    // 3. Track Reference
+    // 4. Track Reference
     page_incref(phys_addr);
+
+    return 0;
+}
+
+// SYS_cputs: Debug syscall - print string to console
+// This gives the LibOS "eyes" during bootstrap
+// Args: (const char *buf, int len)
+uint64
+sys_cputs(void)
+{
+    uint64 buf_addr;
+    int len;
+
+    // 1. Fetch arguments (buffer pointer, length)
+    if(arguint64(0, &buf_addr) < 0 || argint(1, &len) < 0)
+        return -1;
+
+    // 2. Bounds check
+    if(len < 0 || len > 4096)  // Max 4KB per call
+        return -1;
+
+    struct proc *p = myproc();
+
+    // 3. Loop and print (using uva2ka for safe access)
+    for(int i = 0; i < len; i++){
+        // Translate user virtual address to kernel address
+        char *ka = uva2ka(p->pgdir, (char*)(buf_addr + i));
+        if(ka == 0)
+            break;  // Invalid address
+        uartputc(*ka);
+    }
 
     return 0;
 }

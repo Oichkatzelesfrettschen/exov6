@@ -64,6 +64,27 @@ else()
     list(FILTER KERNEL_ASM_SOURCES EXCLUDE REGEX "test_")
 endif()
 
+# ═════════════════════════════════════════════════════════════════════
+# INIT BINARY EMBEDDING (Piggyback Loader)
+# ═════════════════════════════════════════════════════════════════════
+
+# Path to init.bin (from user build)
+set(INIT_BIN_INPUT "${CMAKE_BINARY_DIR}/user/init.bin")
+
+# Copy init.bin to kernel build directory for .incbin
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/init.bin
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${INIT_BIN_INPUT} ${CMAKE_CURRENT_BINARY_DIR}/init.bin
+    DEPENDS ${INIT_BIN_INPUT}
+    COMMENT "Copying init.bin to kernel build directory"
+)
+
+# Custom target to ensure init.bin is copied
+add_custom_target(kernel_init_bin DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.bin)
+
+# Add init_bin.S to kernel assembly sources
+list(APPEND KERNEL_ASM_SOURCES init_bin.S)
+
 # Architecture-specific sources from src/arch (already compiled into architecture libs)
 # These are included via library dependencies
 
@@ -228,10 +249,13 @@ if(USE_CAPNP AND TARGET phoenix-capnp)
 endif()
 
 # Set kernel-specific properties
-set_target_properties(kernel PROPERTIES 
+set_target_properties(kernel PROPERTIES
     OUTPUT_NAME "kernel"
     PREFIX ""
 )
+
+# Add dependency on init binary (piggyback loader)
+add_dependencies(kernel kernel_init_bin)
 
 # ═════════════════════════════════════════════════════════════════════
 # KERNEL FEATURE CONFIGURATION

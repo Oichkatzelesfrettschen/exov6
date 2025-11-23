@@ -121,6 +121,7 @@ extern int sys_page_alloc(void);
 extern int sys_page_map(void);
 extern int sys_exit(void); // For SYS_env_destroy
 extern int sys_uptime(void); // Keep for debug
+extern int sys_cputs(void); // Bootstrap debug output
 
 // Stubs for now (to be implemented)
 int sys_env_create(void) { return -1; }
@@ -144,6 +145,7 @@ static int (*syscalls[])(void) = {
     [SYS_ipc_recv]   = sys_ipc_recv,
     [SYS_set_label]  = sys_set_label,
     [SYS_disk_io]    = sys_disk_io,
+    [SYS_cputs]      = sys_cputs,
 };
 
 void syscall(void) {

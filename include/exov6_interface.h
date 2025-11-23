@@ -40,6 +40,9 @@ typedef uint32_t label_t;
 // 4. Hardware IO (Capabilities)
 #define SYS_disk_io     11  // Read/Write raw block (checked against capability)
 
+// 5. Debug/Bootstrap (Temporary)
+#define SYS_cputs       12  // Print string to console (for bootstrapping)
+
 // --- The Trap Frame Contract ---
 // When we upcall into the LibOS, we pass this struct so the LibOS
 // knows why it woke up (e.g., page fault, timer interrupt).

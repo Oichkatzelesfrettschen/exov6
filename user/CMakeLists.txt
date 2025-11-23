@@ -5,5 +5,52 @@ add_executable(init init.c)
 target_link_libraries(init libos)
 target_include_directories(init PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
+# Disable stack protector for freestanding environment
+target_compile_options(init PRIVATE -fno-stack-protector -ffreestanding)
+
+# Link settings for flat binary output
+if(APPLE)
+    # macOS/Darwin linker uses different flags
+    # -e _start sets the entry point
+    # -pagezero_size 0 removes the default pagezero segment
+    # -image_base sets the base address
+    set_target_properties(init PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    # Linux/ELF linker
+    set_target_properties(init PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# Find objcopy (from binutils or llvm)
+find_program(OBJCOPY_EXECUTABLE
+    NAMES llvm-objcopy gobjcopy objcopy
+    PATHS /opt/homebrew/bin /opt/homebrew/opt/binutils/bin /usr/local/bin /usr/bin
+    PATH_SUFFIXES bin
+)
+
+if(NOT OBJCOPY_EXECUTABLE)
+    # Fallback: try Homebrew binutils directly
+    set(OBJCOPY_EXECUTABLE "/opt/homebrew/opt/binutils/bin/objcopy")
+endif()
+
+message(STATUS "Using objcopy: ${OBJCOPY_EXECUTABLE}")
+
+# Convert init ELF to flat binary for kernel embedding
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/init.bin
+    COMMAND ${OBJCOPY_EXECUTABLE} -S -O binary $<TARGET_FILE:init> ${CMAKE_CURRENT_BINARY_DIR}/init.bin
+    DEPENDS init
+    COMMENT "Creating flat binary init.bin for kernel embedding"
+)
+
+# Create a custom target for the binary
+add_custom_target(init_bin ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.bin)
+
+# Export the init.bin path for kernel to use
+set(INIT_BIN_PATH ${CMAKE_CURRENT_BINARY_DIR}/init.bin PARENT_SCOPE)
+
 # Install to bin
 install(TARGETS init RUNTIME DESTINATION bin)

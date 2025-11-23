@@ -32,18 +32,19 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|i.86")
         set_source_files_properties(x86/modern/simd_avx512_cap.c PROPERTIES COMPILE_OPTIONS "-mavx512f")
     endif()
     
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm")
-    # ARM/AArch64 SIMD sources
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|arm")
+    # ARM/AArch64 SIMD sources (NEON is universal on ARM)
     list(APPEND SIMD_SOURCES
         arm/simd_neon.c
         arm/simd_neon_cap.c
     )
-    
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-        # ARM32 needs explicit NEON flags
+
+    # Only ARM32 (not arm64/aarch64) needs explicit -mfpu=neon flag
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm$|armv[67]" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
         set_source_files_properties(arm/simd_neon.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
         set_source_files_properties(arm/simd_neon_cap.c PROPERTIES COMPILE_OPTIONS "-mfpu=neon")
     endif()
+    # ARM64/AArch64 has NEON built-in, no special flags needed
     
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc|ppc")
     # PowerPC AltiVec sources
@@ -119,23 +120,25 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64" AND EXISTS "${CMAKE_CURRENT_SOU
     endif()
 endif()
 
-# ARM Support
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
-    file(GLOB ARM_SOURCES arm/*.c)
-    if(ARM_SOURCES)
-        phoenix_add_library(phoenix-arch-arm
-            STATIC
-            SOURCES ${ARM_SOURCES}
-            INCLUDES
-                ${CMAKE_CURRENT_SOURCE_DIR}/arm
-                ${CMAKE_SOURCE_DIR}/include
-            DEPENDENCIES phoenix-simd
-        )
+# ARM32 Support (explicitly exclude arm64/aarch64)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm$|armv[67]" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/arm")
+        file(GLOB ARM_SOURCES arm/*.c)
+        if(ARM_SOURCES)
+            phoenix_add_library(phoenix-arch-arm
+                STATIC
+                SOURCES ${ARM_SOURCES}
+                INCLUDES
+                    ${CMAKE_CURRENT_SOURCE_DIR}/arm
+                    ${CMAKE_SOURCE_DIR}/include
+                DEPENDENCIES phoenix-simd
+            )
+        endif()
     endif()
 endif()
 
-# AArch64 Support
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/aarch64")
+# AArch64/ARM64 Support (macOS reports arm64, Linux reports aarch64)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/aarch64")
     file(GLOB AARCH64_SOURCES aarch64/*.c)
     if(AARCH64_SOURCES)
         phoenix_add_library(phoenix-arch-aarch64

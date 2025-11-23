@@ -226,37 +226,86 @@ struct proc* find_proc(int pid) {
 
 // PAGEBREAK: 32
 //  Set up first user process.
+//  Phase 3: Load embedded init binary (piggyback loader)
+extern char _binary_init_start[];
+extern char _binary_init_end[];
+
 void userinit(void) {
   struct proc *p;
-  extern char _binary_initcode_start[], _binary_initcode_size[];
 
   p = allocproc();
+
+  // 1. Initialize Security Label
   p->label = LABEL_LOW; // The first process is usually trusted/system
 
   initproc = p;
   if ((p->pgdir = setupkvm()) == 0)
     panic("userinit: out of memory?");
-  inituvm(p->pgdir, _binary_initcode_start, (size_t)_binary_initcode_size);
-  p->sz = PGSIZE;
+
+  // 2. Calculate binary size and allocate pages
+  uint64 binary_size = (uint64)_binary_init_end - (uint64)_binary_init_start;
+  uint64 num_pages = (binary_size + PGSIZE - 1) / PGSIZE;
+
+  // Map enough pages for the binary
+  for(uint64 i = 0; i < num_pages; i++){
+    char *mem = kalloc();
+    if(mem == 0)
+      panic("userinit: out of memory for init binary");
+    memset(mem, 0, PGSIZE);
+
+    // Copy binary data into the page
+    uint64 src_offset = i * PGSIZE;
+    uint64 copy_len = PGSIZE;
+    if (binary_size - src_offset < PGSIZE)
+      copy_len = binary_size - src_offset;
+
+    memmove(mem, _binary_init_start + src_offset, copy_len);
+
+    // Map to Virtual Address starting at 0
+    // On x86: PTE_W=writable, PTE_U=user accessible. Pages are readable by default.
+    if(mappages(p->pgdir, (void*)(i * PGSIZE), PGSIZE, V2P(mem), PTE_W|PTE_U) < 0)
+      panic("userinit: mappages failed");
+  }
+
+  // 3. Allocate stack pages (separate from code)
+  // Stack at high address (e.g., 10 pages above code)
+  uint64 stack_base = num_pages * PGSIZE;
+  uint64 stack_pages = 4;  // 16KB stack
+  for(uint64 i = 0; i < stack_pages; i++){
+    char *mem = kalloc();
+    if(mem == 0)
+      panic("userinit: out of memory for stack");
+    memset(mem, 0, PGSIZE);
+    if(mappages(p->pgdir, (void*)(stack_base + i * PGSIZE), PGSIZE, V2P(mem), PTE_W|PTE_U) < 0)
+      panic("userinit: mappages failed for stack");
+  }
+
+  p->sz = stack_base + stack_pages * PGSIZE;
+
+  // 4. Set up Trap Frame
   memset(p->tf, 0, sizeof(*p->tf));
 #ifdef __x86_64__
   p->tf->cs = (SEG_UCODE << 3) | DPL_USER;
   p->tf->ss = (SEG_UDATA << 3) | DPL_USER;
   p->tf->rflags = FL_IF;
-  p->tf->rsp = PGSIZE;
-  p->tf->rip = 0; // beginning of initcode.S
+  p->tf->rsp = stack_base + stack_pages * PGSIZE;  // Top of stack
+  p->tf->rip = 0; // Entry point at beginning of binary
 #else
   p->tf->cs = (SEG_UCODE << 3) | DPL_USER;
   p->tf->ds = (SEG_UDATA << 3) | DPL_USER;
   p->tf->es = p->tf->ds;
   p->tf->ss = p->tf->ds;
   p->tf->eflags = FL_IF;
-  p->tf->esp = PGSIZE;
-  p->tf->eip = 0; // beginning of initcode.S
+  p->tf->esp = stack_base + stack_pages * PGSIZE;  // Top of stack
+  p->tf->eip = 0; // Entry point at beginning of binary
 #endif
 
-  safestrcpy(p->name, "initcode", sizeof(p->name));
+  safestrcpy(p->name, "init", sizeof(p->name));
   p->cwd = namei("/");
+
+  // Give init process unlimited gas for bootstrap
+  p->gas_remaining = 0xFFFFFFFF;
+  p->out_of_gas = 0;
 
   // this assignment to p->state lets other cores
   // run this process. the acquire forces the above
