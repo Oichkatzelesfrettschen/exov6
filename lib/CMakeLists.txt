@@ -11,6 +11,7 @@ add_library(libos STATIC
     scheduler.c
     fs_client.c
     spawn.c
+    fd.c
 )
 target_include_directories(libos PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
