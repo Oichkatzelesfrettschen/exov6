@@ -70,5 +70,41 @@ else()
     )
 endif()
 
+# ═══════════════════════════════════════════════════════════════════════════
+# Scheduler Test - Preemptive Scheduling Verification (Phase 6b)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(sched_test sched_test.c)
+target_link_libraries(sched_test libos)
+target_include_directories(sched_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(sched_test PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(sched_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(sched_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# ═══════════════════════════════════════════════════════════════════════════
+# VirtIO Block Driver - User-Space Disk Access (Phase 7)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(virtio_driver virtio_driver.c)
+target_link_libraries(virtio_driver libos)
+target_include_directories(virtio_driver PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(virtio_driver PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(virtio_driver PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(virtio_driver PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
 # Install to bin
-install(TARGETS init uart_driver RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver RUNTIME DESTINATION bin)

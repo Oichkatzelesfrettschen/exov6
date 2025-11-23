@@ -101,4 +101,44 @@ struct ExoTrapFrame {
 #define PHYSTOP         0x88000000ULL   // End of RAM (QEMU virt default)
 #define UART0_BASE      0x10000000ULL   // QEMU virt UART0
 
+// --- VirtIO MMIO (Phase 7: User-Space Block Driver) ---
+#define VIRTIO0_BASE    0x10001000ULL   // QEMU virt VirtIO Block Device
+#define VIRTIO0_IRQ     1               // External IRQ for VirtIO0
+
+// VirtIO MMIO Register Offsets (from VirtIO 1.0 spec)
+#define VIRTIO_MMIO_MAGIC_VALUE         0x000   // Must be 0x74726976 ("virt")
+#define VIRTIO_MMIO_VERSION             0x004   // Device version (1 = legacy, 2 = modern)
+#define VIRTIO_MMIO_DEVICE_ID           0x008   // Subsystem device ID (2 = block)
+#define VIRTIO_MMIO_VENDOR_ID           0x00C   // Vendor ID
+#define VIRTIO_MMIO_DEVICE_FEATURES     0x010   // Device feature bits
+#define VIRTIO_MMIO_DRIVER_FEATURES     0x020   // Driver feature bits
+#define VIRTIO_MMIO_GUEST_PAGE_SIZE     0x028   // Guest page size (legacy)
+#define VIRTIO_MMIO_QUEUE_SEL           0x030   // Queue selector
+#define VIRTIO_MMIO_QUEUE_NUM_MAX       0x034   // Max queue size
+#define VIRTIO_MMIO_QUEUE_NUM           0x038   // Queue size
+#define VIRTIO_MMIO_QUEUE_ALIGN         0x03C   // Alignment (legacy)
+#define VIRTIO_MMIO_QUEUE_PFN           0x040   // Queue PFN (legacy)
+#define VIRTIO_MMIO_QUEUE_READY         0x044   // Queue ready
+#define VIRTIO_MMIO_QUEUE_NOTIFY        0x050   // Queue notify
+#define VIRTIO_MMIO_INTERRUPT_STATUS    0x060   // Interrupt status
+#define VIRTIO_MMIO_INTERRUPT_ACK       0x064   // Interrupt acknowledge
+#define VIRTIO_MMIO_STATUS              0x070   // Device status
+
+// VirtIO Device Status bits
+#define VIRTIO_STATUS_ACKNOWLEDGE       0x01
+#define VIRTIO_STATUS_DRIVER            0x02
+#define VIRTIO_STATUS_FEATURES_OK       0x08
+#define VIRTIO_STATUS_DRIVER_OK         0x04
+#define VIRTIO_STATUS_FAILED            0x80
+
+// VirtIO Block Device Features
+#define VIRTIO_BLK_F_SIZE_MAX           (1 << 1)
+#define VIRTIO_BLK_F_SEG_MAX            (1 << 2)
+#define VIRTIO_BLK_F_GEOMETRY           (1 << 4)
+#define VIRTIO_BLK_F_RO                 (1 << 5)
+#define VIRTIO_BLK_F_BLK_SIZE           (1 << 6)
+
+// VirtIO Magic Value ("virt" in little-endian ASCII)
+#define VIRTIO_MAGIC                    0x74726976
+
 #endif // EXOV6_INTERFACE_H

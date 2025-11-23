@@ -199,9 +199,7 @@ void trap(struct trapframe *tf) {
       qspin_unlock(&tickslock);
     }
     if (myproc()) {
-      // This gas consumption is already handled at the top of trap()
-      // if (myproc()->gas_remaining > 0)
-      //   myproc()->gas_remaining--;
+      // Gas accounting
       if (myproc()->gas_remaining == 0) {
         myproc()->out_of_gas = 1;
         lapiceoi();
@@ -211,6 +209,27 @@ void trap(struct trapframe *tf) {
       }
     }
     lapiceoi();
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // EXOKERNEL TIMER UPCALL (Phase 6b - The Heartbeat)
+    // ═══════════════════════════════════════════════════════════════════════
+    // If we're returning to user space and have a registered exception handler,
+    // dispatch the timer interrupt as an upcall for preemptive scheduling.
+    if (myproc() && myproc()->upcall_handler && (tf->cs & 3) == DPL_USER) {
+      // Temporarily set trapno to EXO_IRQ_TIMER so user handler knows it's a timer
+      uint64 saved_trapno = tf->trapno;
+      tf->trapno = EXO_IRQ_TIMER;
+
+      if (exo_upcall_dispatch(myproc(), tf)) {
+        // Successfully dispatched to user-space scheduler
+        break;
+      }
+
+      // Dispatch failed, restore trapno and fall through to legacy behavior
+      tf->trapno = saved_trapno;
+    }
+
+    // Legacy timer upcall (if no modern handler but has legacy callback)
     if (myproc() && myproc()->timer_upcall && (tf->cs & 3) == DPL_USER) {
 #ifndef __x86_64__
       tf->esp -= 4;

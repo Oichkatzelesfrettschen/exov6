@@ -126,6 +126,19 @@ default_pagefault_handler(struct ExoTrapFrame *tf)
 struct ExoTrapFrame*
 libos_exception_handler(struct ExoTrapFrame *tf)
 {
+    // ═══════════════════════════════════════════════════════════════════════
+    // FAST PATH: Timer interrupts (The Heartbeat - Phase 6b)
+    // ═══════════════════════════════════════════════════════════════════════
+    // Check for timer IRQ first - this is the most common case and we
+    // don't want to print anything (too slow, would flood console).
+    if (tf->trapno == EXO_IRQ_TIMER) {
+        if (thread_preempt) {
+            thread_preempt();  // Context switch to next ready thread
+        }
+        return tf;  // Resume (possibly in a different thread context)
+    }
+
+    // Verbose logging for non-timer exceptions
     print("\n═══════════════════════════════════════════════════════\n");
     print("LibOS EXCEPTION HANDLER\n");
     print("═══════════════════════════════════════════════════════\n");
@@ -171,13 +184,7 @@ libos_exception_handler(struct ExoTrapFrame *tf)
         if (tf->trapno >= EXO_IRQ_BASE) {
             uint64 irq = tf->trapno - EXO_IRQ_BASE;
 
-            // Timer IRQ (IRQ 0) - preemptive scheduling
-            if (irq == 0 && thread_preempt) {
-                // Don't print for timer - too noisy
-                thread_preempt();
-                return tf;
-            }
-
+            // Timer is already handled at the top (fast path)
             // Other IRQs - just note and resume
             print("LibOS: IRQ ");
             print_hex(irq);
