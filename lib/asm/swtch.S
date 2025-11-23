@@ -1,12 +1,12 @@
 # For x86_64
-.global thread_switch
-thread_switch:
+.global swtch
+swtch:
     # rdi = old_context_ptr
     # rsi = new_context_ptr
 
     # 1. Save Old Callee-Saved Registers
-    pushq %rbx
     pushq %rbp
+    pushq %rbx
     pushq %r12
     pushq %r13
     pushq %r14
@@ -23,7 +23,7 @@ thread_switch:
     popq %r14
     popq %r13
     popq %r12
-    popq %rbp
     popq %rbx
+    popq %rbp
 
     ret
