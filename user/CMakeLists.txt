@@ -258,5 +258,41 @@ else()
     )
 endif()
 
+# ═══════════════════════════════════════════════════════════════════════════
+# ExoV6 Utilities (Phase 11.7) - Using LibOS fd layer
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Cat - File concatenation
+add_executable(exo_cat exo_cat.c)
+target_link_libraries(exo_cat libos)
+target_include_directories(exo_cat PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(exo_cat PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(exo_cat PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(exo_cat PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# Echo - Print arguments
+add_executable(exo_echo exo_echo.c)
+target_link_libraries(exo_echo libos)
+target_include_directories(exo_echo PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(exo_echo PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(exo_echo PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(exo_echo PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
 # Install to bin
-install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test hello elf_test spawn_test sh RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test hello elf_test spawn_test sh exo_cat exo_echo RUNTIME DESTINATION bin)
