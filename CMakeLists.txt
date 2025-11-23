@@ -143,10 +143,13 @@ add_subdirectory(src/libnstr_graph)
 add_subdirectory(proto)
 
 # Zone 4: Userland Core (Depends on protocols)
-# add_subdirectory(user)
+add_subdirectory(user)
+
+# Zone 4.5: LibOS Reconstruction (Phase 3)
+add_subdirectory(lib)
 
 # Zone 5: Library OS (Depends on userland, protocols)
-add_subdirectory(libos)
+# add_subdirectory(libos)
 
 # Zone 6: Kernel (Depends on arch, syslibs, protocols)
 add_subdirectory(kernel)
