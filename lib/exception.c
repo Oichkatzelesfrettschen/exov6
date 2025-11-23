@@ -29,6 +29,43 @@ extern void scheduler_init(void) __attribute__((weak));
 // Exception handler callback (can be set by application)
 static struct ExoTrapFrame* (*user_exception_handler)(struct ExoTrapFrame *tf) = 0;
 
+// ═══════════════════════════════════════════════════════════════════════════
+// IRQ Handler Registration (Phase 7 - Device Drivers)
+// ═══════════════════════════════════════════════════════════════════════════
+
+#define MAX_IRQ_HANDLERS 16
+
+typedef void (*irq_handler_t)(int irq, void *arg);
+
+static struct {
+    irq_handler_t handler;
+    void *arg;
+} irq_handlers[MAX_IRQ_HANDLERS];
+
+/**
+ * Register an IRQ handler for a specific IRQ number
+ * @param irq IRQ number (0-15, relative to IRQ base)
+ * @param handler Function to call when IRQ fires
+ * @param arg Argument to pass to handler
+ * @return 0 on success, -1 on error
+ */
+int libos_register_irq(int irq, irq_handler_t handler, void *arg) {
+    if (irq < 0 || irq >= MAX_IRQ_HANDLERS) return -1;
+    irq_handlers[irq].handler = handler;
+    irq_handlers[irq].arg = arg;
+    return 0;
+}
+
+/**
+ * Unregister an IRQ handler
+ */
+void libos_unregister_irq(int irq) {
+    if (irq >= 0 && irq < MAX_IRQ_HANDLERS) {
+        irq_handlers[irq].handler = 0;
+        irq_handlers[irq].arg = 0;
+    }
+}
+
 /**
  * Register a custom exception handler
  * @param handler Function pointer to custom handler
@@ -182,10 +219,17 @@ libos_exception_handler(struct ExoTrapFrame *tf)
     default:
         // Check if it's an IRQ we should handle
         if (tf->trapno >= EXO_IRQ_BASE) {
-            uint64 irq = tf->trapno - EXO_IRQ_BASE;
+            int irq = (int)(tf->trapno - EXO_IRQ_BASE);
 
             // Timer is already handled at the top (fast path)
-            // Other IRQs - just note and resume
+            // Check for registered device driver handler
+            if (irq < MAX_IRQ_HANDLERS && irq_handlers[irq].handler) {
+                // Call the registered handler (e.g., VirtIO completion)
+                irq_handlers[irq].handler(irq, irq_handlers[irq].arg);
+                return tf;  // Resume after handling
+            }
+
+            // No handler registered - log and resume
             print("LibOS: IRQ ");
             print_hex(irq);
             print(" - no handler registered\n");

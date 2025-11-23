@@ -23,6 +23,10 @@ extern int sys_map_page(int target_env, uint64 phys, uint64 virt, int perm);
 extern void sys_cputs(const char *s, int len);
 extern void libos_exception_init(void);
 
+// IRQ registration (Phase 7 - IRQ-driven I/O)
+typedef void (*irq_handler_t)(int irq, void *arg);
+extern int libos_register_irq(int irq, irq_handler_t handler, void *arg);
+
 // ═══════════════════════════════════════════════════════════════════════════
 // VirtIO Driver State
 // ═══════════════════════════════════════════════════════════════════════════
@@ -40,6 +44,10 @@ static uint16_t last_used_idx = 0;          // Last processed used index
 
 // Request tracking
 static volatile uint8_t request_status = 0xFF;  // Status byte from device
+
+// IRQ-driven completion (Phase 7 enhancement)
+static volatile int disk_irq_fired = 0;         // Set by IRQ handler
+static int use_irq_completion = 0;              // Enable after IRQ registered
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Helper Functions
@@ -73,6 +81,27 @@ static inline void mb(void) {
 #else
     __asm__ volatile("" ::: "memory");
 #endif
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VirtIO IRQ Handler (Phase 7 - Interrupt-Driven I/O)
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * VirtIO interrupt handler - called from LibOS exception handler
+ * This is invoked when the VirtIO device signals completion via IRQ.
+ */
+static void virtio_irq_handler(int irq, void *arg) {
+    (void)arg;
+    (void)irq;
+
+    // Read and acknowledge interrupt status
+    uint32_t status = virtio_read32(VIRTIO_MMIO_INTERRUPT_STATUS);
+    virtio_write32(VIRTIO_MMIO_INTERRUPT_ACK, status);
+    mb();
+
+    // Signal completion to any waiting request
+    disk_irq_fired = 1;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -333,19 +362,44 @@ int virtio_blk_read(uint64_t sector, void *buf) {
     virtio_write32(VIRTIO_MMIO_QUEUE_NOTIFY, 0);
     mb();
 
-    // Poll for completion (in real driver, we'd use interrupts)
-    print("    Waiting for completion...\n");
-    int timeout = 1000000;
-    while (used_ring->idx == last_used_idx && --timeout > 0) {
-        mb();
-    }
-
-    if (timeout == 0) {
-        print("    ERROR: Timeout waiting for disk!\n");
-        free_desc(desc0);
-        free_desc(desc1);
-        free_desc(desc2);
-        return -1;
+    // Wait for completion
+    if (use_irq_completion) {
+        // IRQ-driven: wait for interrupt handler to signal completion
+        print("    Waiting for IRQ completion...\n");
+        disk_irq_fired = 0;
+        int timeout = 10000000;
+        while (!disk_irq_fired && used_ring->idx == last_used_idx && --timeout > 0) {
+            // Yield CPU while waiting (low-power wait)
+#if defined(__x86_64__)
+            __asm__ volatile("pause" ::: "memory");
+#elif defined(__aarch64__)
+            __asm__ volatile("yield" ::: "memory");
+#else
+            __asm__ volatile("" ::: "memory");
+#endif
+        }
+        if (timeout == 0) {
+            print("    ERROR: Timeout waiting for disk IRQ!\n");
+            free_desc(desc0);
+            free_desc(desc1);
+            free_desc(desc2);
+            return -1;
+        }
+        print("    IRQ received!\n");
+    } else {
+        // Polling fallback (original behavior)
+        print("    Waiting for completion (polling)...\n");
+        int timeout = 1000000;
+        while (used_ring->idx == last_used_idx && --timeout > 0) {
+            mb();
+        }
+        if (timeout == 0) {
+            print("    ERROR: Timeout waiting for disk!\n");
+            free_desc(desc0);
+            free_desc(desc1);
+            free_desc(desc2);
+            return -1;
+        }
     }
 
     // Process used ring
@@ -440,6 +494,23 @@ int main(void)
     // Setup virtqueue
     if (virtqueue_init() < 0) {
         return -1;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // Register VirtIO IRQ handler (Phase 7 - IRQ-driven I/O)
+    // ═══════════════════════════════════════════════════════════════════
+    print("[SETUP] Registering VirtIO IRQ handler...\n");
+    print("    IRQ number: ");
+    print_uint32(VIRTIO0_IRQ);
+    print("\n");
+
+    if (libos_register_irq(VIRTIO0_IRQ, virtio_irq_handler, 0) == 0) {
+        print("    SUCCESS: IRQ handler registered\n");
+        use_irq_completion = 1;
+        print("    Mode: IRQ-driven completion\n\n");
+    } else {
+        print("    WARNING: Failed to register IRQ handler\n");
+        print("    Mode: Polling fallback\n\n");
     }
 
     // ═══════════════════════════════════════════════════════════════════
