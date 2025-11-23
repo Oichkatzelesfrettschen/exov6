@@ -125,6 +125,46 @@ else()
 endif()
 
 # ═══════════════════════════════════════════════════════════════════════════
+# File Server - User-Space FS Server (Phase 9.5)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(fs_srv fs_srv.c)
+target_link_libraries(fs_srv libos fs virtio)
+target_include_directories(fs_srv PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/lib/virtio
+    ${CMAKE_SOURCE_DIR}/lib/fs/include
+)
+target_compile_options(fs_srv PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(fs_srv PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(fs_srv PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# ═══════════════════════════════════════════════════════════════════════════
+# File Server Client Test (Phase 9.5)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(fs_client_test fs_client_test.c)
+target_link_libraries(fs_client_test libos)
+target_include_directories(fs_client_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(fs_client_test PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(fs_client_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(fs_client_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
+# ═══════════════════════════════════════════════════════════════════════════
 # File System Test - User-Space FS (Phase 8)
 # ═══════════════════════════════════════════════════════════════════════════
 add_executable(fs_test fs_test.c)
@@ -147,4 +187,4 @@ else()
 endif()
 
 # Install to bin
-install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_test RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test RUNTIME DESTINATION bin)
