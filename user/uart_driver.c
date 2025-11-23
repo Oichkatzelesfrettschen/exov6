@@ -27,7 +27,7 @@ void uart_putc(volatile uint8_t *uart_base, char c) {
 int main() {
     // ... map hardware ...
     // In a real Exokernel, we would map the UART device here.
-    volatile uint8_t *uart = (uint8_t*)UART_VADDR;
+    volatile uint8_t *uart = (volatile uint8_t*)UART_VADDR;
 
     // "Hello World" directly to hardware
     char *msg = "Exokernel UART Driver is Live!\n";
