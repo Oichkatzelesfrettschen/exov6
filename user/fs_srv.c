@@ -128,13 +128,58 @@ static void handle_ping(int client_pid) {
     sys_ipc_send(client_pid, FS_OK, 0x706F6E67, 0);  // "pong" in hex
 }
 
+/**
+ * handle_open - Open a file by path
+ *
+ * LIONS' LESSON: In UNIX V6, namei() runs in kernel context.
+ * Here it runs in USER SPACE. The kernel never parses paths.
+ *
+ * Protocol:
+ *   w1 = Physical address of client's shared buffer (contains path string)
+ *   w2 = Open flags
+ *
+ * Response:
+ *   w0 = File handle (>= 0) or error (< 0)
+ */
 static void handle_open(int client_pid, uint64 w1, uint64 w2) {
-    // w1 = path pointer (in shared buffer)
-    // w2 = flags
+    /*
+     * w1 contains the PHYSICAL address of the client's shared buffer.
+     * We need to map it into our address space to read the path.
+     *
+     * EXOKERNEL LESSON: Cross-address-space data transfer requires
+     * explicit page sharing. The kernel just manages the mappings.
+     */
+    static uint64 client_buf_mapped_pa = 0;
+    static void *client_buf_va = (void *)0x70000000ULL;
 
-    // For simplicity, path is passed directly (in real impl, use shared mem)
-    // Here we just support opening root directory for now
-    const char *path = "/";  // Simplified: always open root
+    char path[128];
+    const char *src_path;
+
+    if (w1 != 0 && w1 != client_buf_mapped_pa) {
+        /* Map client's shared buffer into our address space */
+        extern int sys_page_map_raw(int, uint64, uint64, int);
+        if (sys_page_map_raw(0, w1, (uint64)client_buf_va, 0x1 | 0x2) < 0) {
+            print("[FS_SRV] ERROR: Cannot map client buffer\n");
+            sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+            return;
+        }
+        client_buf_mapped_pa = w1;
+    }
+
+    /* Read path from client's buffer (or use default) */
+    if (w1 != 0) {
+        src_path = (const char *)client_buf_va;
+        /* Copy to local buffer for safety */
+        int i;
+        for (i = 0; i < 127 && src_path[i]; i++) {
+            path[i] = src_path[i];
+        }
+        path[i] = '\0';
+    } else {
+        /* Fallback: root directory */
+        path[0] = '/';
+        path[1] = '\0';
+    }
 
     print("[FS_SRV] OPEN '");
     print(path);
@@ -200,6 +245,75 @@ static void handle_stat(int client_pid, uint64 w1) {
 
     // Reply: type in w1, size in w2
     sys_ipc_send(client_pid, FS_OK, f->ip->type, f->ip->size);
+}
+
+/**
+ * handle_read - Read data from a file
+ *
+ * LIONS' LESSON: In UNIX V6, readi() copies data from inode to user buffer
+ * via kernel intermediary. Here, we read into shared memory.
+ *
+ * Protocol:
+ *   w1 = File handle
+ *   w2 = (size << 32) | offset
+ *
+ * Response:
+ *   w0 = Bytes read (>= 0) or error (< 0)
+ *   Data is placed in the shared buffer (same PA client used for OPEN)
+ */
+static void handle_read(int client_pid, uint64 w1, uint64 w2) {
+    int fd = (int)w1;
+    uint32_t size = (uint32_t)(w2 >> 32);
+    uint32_t offset_arg = (uint32_t)(w2 & 0xFFFFFFFF);
+
+    struct open_file *f = get_fd(fd, client_pid);
+    if (!f || !f->ip) {
+        sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+        return;
+    }
+
+    /* Check if file (not directory for regular read) */
+    if (f->ip->type == 1) {  /* T_DIR */
+        /* For directories, use READDIR instead */
+        sys_ipc_send(client_pid, FS_ERR_ISDIR, 0, 0);
+        return;
+    }
+
+    /* Limit read size to shared buffer (4KB) */
+    if (size > 4096) size = 4096;
+
+    /* Use offset from file struct (sequential read) or from request */
+    uint32_t off = (offset_arg == 0) ? f->offset : offset_arg;
+
+    /* Check bounds */
+    if (off >= f->ip->size) {
+        /* EOF */
+        sys_ipc_send(client_pid, 0, 0, 0);
+        return;
+    }
+
+    /* Adjust size if near EOF */
+    if (off + size > f->ip->size) {
+        size = f->ip->size - off;
+    }
+
+    /*
+     * Read data into shared buffer.
+     * We use the same VA where we mapped the client's buffer during OPEN.
+     */
+    static void *client_buf_va = (void *)0x70000000ULL;
+
+    int n = readi(f->ip, client_buf_va, off, size);
+    if (n < 0) {
+        sys_ipc_send(client_pid, FS_ERR_IO, 0, 0);
+        return;
+    }
+
+    /* Update file offset for sequential reads */
+    f->offset += n;
+
+    /* Return bytes read */
+    sys_ipc_send(client_pid, n, 0, 0);
 }
 
 static void handle_readdir(int client_pid, uint64 w1, uint64 w2) {
@@ -302,6 +416,7 @@ int main(void)
     print("  FS_REQ_PING    (99) - Test connectivity\n");
     print("  FS_REQ_OPEN    (1)  - Open file/directory\n");
     print("  FS_REQ_CLOSE   (2)  - Close file\n");
+    print("  FS_REQ_READ    (3)  - Read from file\n");
     print("  FS_REQ_STAT    (5)  - Get file status\n");
     print("  FS_REQ_READDIR (6)  - Read directory entry\n");
     print("\n");
@@ -332,6 +447,10 @@ int main(void)
 
         case FS_REQ_CLOSE:
             handle_close(client_pid, w1);
+            break;
+
+        case FS_REQ_READ:
+            handle_read(client_pid, w1, w2);
             break;
 
         case FS_REQ_STAT:

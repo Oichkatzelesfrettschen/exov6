@@ -9,6 +9,7 @@ add_library(libos STATIC
     exception.c
     thread_switch.S
     scheduler.c
+    fs_client.c
 )
 target_include_directories(libos PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
