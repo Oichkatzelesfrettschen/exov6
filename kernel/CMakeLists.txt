@@ -218,7 +218,6 @@ phoenix_add_executable(kernel
         ${CMAKE_SOURCE_DIR}/libos/stubs
     DEPENDENCIES 
         phoenix-architecture
-        phoenix-ddekit
         phoenix-nstr-graph
         phoenix-protocols
 )

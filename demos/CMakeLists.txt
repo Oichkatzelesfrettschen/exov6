@@ -277,7 +277,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ddekit_port_demo.c")
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES phoenix-libos phoenix-ddekit
+        DEPENDENCIES phoenix-libos phoenix-libos-ddekit
     )
     
     set_target_properties(ddekit-port-demo PROPERTIES 

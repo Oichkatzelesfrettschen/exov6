@@ -136,7 +136,6 @@ include_directories("${CMAKE_BINARY_DIR}/include")
 add_subdirectory(src/arch)
 
 # Zone 2: System Libraries (Depends on arch)
-add_subdirectory(src/ddekit)
 add_subdirectory(src/libnstr_graph)
 
 # Zone 3: Protocols (Independent)
@@ -149,7 +148,7 @@ add_subdirectory(user)
 add_subdirectory(lib)
 
 # Zone 5: Library OS (Depends on userland, protocols)
-# add_subdirectory(libos)
+add_subdirectory(libos)
 
 # Zone 6: Kernel (Depends on arch, syslibs, protocols)
 add_subdirectory(kernel)
@@ -161,7 +160,7 @@ endif()
 
 # Zone 8: Demos (Depends on libos, userland, optional)
 if(BUILD_DEMOS)
-#  add_subdirectory(demos)
+  add_subdirectory(demos)
 endif()
 
 # Zone 9: Tests (Depends on all zones, optional)

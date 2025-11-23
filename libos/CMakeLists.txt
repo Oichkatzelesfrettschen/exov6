@@ -181,6 +181,12 @@ phoenix_add_library(phoenix-libos-linux-abi
 )
 
 # ═════════════════════════════════════════════════════════════════════
+# DDEKIT (Device Driver Environment Kit)
+# ═════════════════════════════════════════════════════════════════════
+
+add_subdirectory(ddekit)
+
+# ═════════════════════════════════════════════════════════════════════
 # LIBOS STUBS
 # ═════════════════════════════════════════════════════════════════════
 
@@ -328,6 +334,7 @@ set(LIBOS_CORE_LIBS
     phoenix-libos-bsd-sockets
     phoenix-libos-gpu
     phoenix-libos-linux-abi
+    phoenix-libos-ddekit
 )
 
 # Add stub libraries
@@ -384,9 +391,6 @@ phoenix_add_library(phoenix-libos
         ${CMAKE_CURRENT_SOURCE_DIR}/capnp
         ${CMAKE_SOURCE_DIR}/include
 )
-
-# Legacy alias for backward compatibility
-add_library(libos ALIAS phoenix-libos)
 
 # ═════════════════════════════════════════════════════════════════════
 # EXPORTS
