@@ -10,6 +10,7 @@ add_library(libos STATIC
     thread_switch.S
     scheduler.c
     fs_client.c
+    spawn.c
 )
 target_include_directories(libos PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
