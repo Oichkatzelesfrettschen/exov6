@@ -9,10 +9,108 @@
 #include <types.h>
 #include "arch.h"
 #include "trapframe.h"
+#include <exov6_interface.h>
 
 /* Forward declarations */
 extern int cpunum(void);
 extern void exit(int);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Exokernel Upcall Dispatch (Phase 4)
+// ═══════════════════════════════════════════════════════════════════════════
+// Dispatch a trap to the user-space exception handler.
+// Returns 1 if dispatched, 0 if no handler (caller should kill process).
+static int
+exo_upcall_dispatch(struct proc *p, struct trapframe *tf)
+{
+    // Check if process has a registered handler
+    if (p->upcall_handler == 0 || p->upcall_stack == 0)
+        return 0;
+
+    // Prevent recursive upcalls (double fault protection)
+    if (p->in_upcall) {
+        cprintf("pid %d: recursive upcall, killing\n", p->pid);
+        return 0;
+    }
+
+    // Build ExoTrapFrame on the user exception stack
+    uint64 sp = p->upcall_stack;
+    sp -= sizeof(struct ExoTrapFrame);
+    sp &= ~0xFULL;  // Align to 16 bytes
+
+    struct ExoTrapFrame utf;
+    utf.trapno = tf->trapno;
+    utf.err = tf->err;
+#ifdef __x86_64__
+    utf.addr = rcr2();  // Faulting address for page faults
+    utf.rip = tf->rip;
+    utf.rflags = tf->rflags;
+    utf.rsp = tf->rsp;
+    utf.rax = tf->rax;
+    utf.rbx = tf->rbx;
+    utf.rcx = tf->rcx;
+    utf.rdx = tf->rdx;
+    utf.rsi = tf->rsi;
+    utf.rdi = tf->rdi;
+    utf.rbp = tf->rbp;
+    utf.r8 = tf->r8;
+    utf.r9 = tf->r9;
+    utf.r10 = tf->r10;
+    utf.r11 = tf->r11;
+    utf.r12 = tf->r12;
+    utf.r13 = tf->r13;
+    utf.r14 = tf->r14;
+    utf.r15 = tf->r15;
+    utf.cs = tf->cs;
+    utf.ss = tf->ss;
+    utf.ds = tf->ds;
+    utf.es = tf->es;
+    utf.fs = tf->fs;
+    utf.gs = tf->gs;
+#else
+    utf.addr = rcr2();
+    utf.rip = tf->eip;
+    utf.rflags = tf->eflags;
+    utf.rsp = tf->esp;
+    utf.rax = tf->eax;
+    utf.rbx = tf->ebx;
+    utf.rcx = tf->ecx;
+    utf.rdx = tf->edx;
+    utf.rsi = tf->esi;
+    utf.rdi = tf->edi;
+    utf.rbp = tf->ebp;
+    utf.r8 = utf.r9 = utf.r10 = utf.r11 = 0;
+    utf.r12 = utf.r13 = utf.r14 = utf.r15 = 0;
+    utf.cs = tf->cs;
+    utf.ss = tf->ss;
+    utf.ds = tf->ds;
+    utf.es = tf->es;
+    utf.fs = tf->fs;
+    utf.gs = tf->gs;
+#endif
+
+    // Copy ExoTrapFrame to user exception stack
+    if (copyout(p->pgdir, sp, (char*)&utf, sizeof(utf)) < 0) {
+        cprintf("pid %d: failed to copy trapframe to user stack\n", p->pid);
+        return 0;
+    }
+
+    // Set upcall flag
+    p->in_upcall = 1;
+
+    // Redirect execution to user handler
+#ifdef __x86_64__
+    tf->rsp = sp;
+    tf->rip = p->upcall_handler;
+    tf->rdi = sp;  // First argument: pointer to ExoTrapFrame
+#else
+    tf->esp = sp - 4;
+    *(uint32*)(tf->esp) = sp;  // Push argument on stack
+    tf->eip = p->upcall_handler;
+#endif
+
+    return 1;  // Successfully dispatched
+}
 
 #define GAS_PER_TRAP 1 // Define gas consumed per trap/interrupt
 
@@ -167,7 +265,16 @@ void trap(struct trapframe *tf) {
 #endif
       panic("trap");
     }
-    // In user space, assume process misbehaved.
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // EXOKERNEL UPCALL: Try to dispatch to user-space exception handler
+    // ═══════════════════════════════════════════════════════════════════════
+    if (exo_upcall_dispatch(myproc(), tf)) {
+      // Successfully dispatched to user handler - return and let user handle it
+      break;
+    }
+
+    // No handler registered or dispatch failed - kill process (legacy behavior)
     cprintf("pid %d %s: trap %d err %d on cpu %d "
 #ifdef __x86_64__
             "rip 0x%lx addr 0x%lx--kill proc\n",

@@ -8,6 +8,7 @@
  */
 #include "ddekit.h"
 #include "lock.h"
+#include <compiler_attrs.h>
 
 struct ddekit_thread;
 typedef struct ddekit_thread ddekit_thread_t;

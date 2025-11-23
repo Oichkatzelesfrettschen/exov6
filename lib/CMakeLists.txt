@@ -5,8 +5,15 @@ add_library(libos STATIC
     libmain.c
     fork.c
     print.c
+    exception.S
+    exception.c
+    thread_switch.S
+    scheduler.c
 )
 target_include_directories(libos PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # Disable stack protector for freestanding environment (no libc)
 target_compile_options(libos PRIVATE -fno-stack-protector -ffreestanding)
+
+# DDEKit - Device Driver Environment Kit (LibOS Port)
+add_subdirectory(ddekit)

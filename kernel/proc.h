@@ -108,7 +108,13 @@ struct proc {
   struct proc *parent;           // Parent process
   struct trapframe *tf;          // Trap frame for current syscall
   context_t *context;            // swtch() here to run process
-  void (*timer_upcall)(void);    // user-mode timer interrupt handler
+  void (*timer_upcall)(void);    // user-mode timer interrupt handler (legacy)
+
+  // Exokernel Upcall Mechanism (Phase 4)
+  uint64_t upcall_handler;       // User-space exception handler entry point
+  uint64_t upcall_stack;         // Stack for exception handler (separate from normal stack)
+  int in_upcall;                 // Flag: currently in upcall (prevent recursion)
+
   void *chan;                    // If non-zero, sleeping on chan
   int killed;                    // If non-zero, have been killed
   int pending_signal;            // Simple signal bitmask

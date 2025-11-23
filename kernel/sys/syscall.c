@@ -122,6 +122,8 @@ extern int sys_page_map(void);
 extern int sys_exit(void); // For SYS_env_destroy
 extern int sys_uptime(void); // Keep for debug
 extern int sys_cputs(void); // Bootstrap debug output
+extern int sys_env_set_handler(void); // Upcall handler registration
+extern int sys_env_resume(void);      // Return from upcall
 
 // Stubs for now (to be implemented)
 int sys_env_create(void) { return -1; }
@@ -134,18 +136,20 @@ int sys_set_label(void) { return -1; }
 int sys_disk_io(void) { return -1; }
 
 static int (*syscalls[])(void) = {
-    [SYS_env_create] = sys_env_create,
-    [SYS_env_run]    = sys_env_run,
-    [SYS_env_destroy]= sys_exit,
-    [SYS_page_alloc] = sys_page_alloc,
-    [SYS_page_map]   = sys_page_map,
-    [SYS_page_unmap] = sys_page_unmap,
-    [SYS_page_stat]  = sys_page_stat,
-    [SYS_ipc_send]   = sys_ipc_send,
-    [SYS_ipc_recv]   = sys_ipc_recv,
-    [SYS_set_label]  = sys_set_label,
-    [SYS_disk_io]    = sys_disk_io,
-    [SYS_cputs]      = sys_cputs,
+    [SYS_env_create]     = sys_env_create,
+    [SYS_env_run]        = sys_env_run,
+    [SYS_env_destroy]    = sys_exit,
+    [SYS_page_alloc]     = sys_page_alloc,
+    [SYS_page_map]       = sys_page_map,
+    [SYS_page_unmap]     = sys_page_unmap,
+    [SYS_page_stat]      = sys_page_stat,
+    [SYS_ipc_send]       = sys_ipc_send,
+    [SYS_ipc_recv]       = sys_ipc_recv,
+    [SYS_set_label]      = sys_set_label,
+    [SYS_disk_io]        = sys_disk_io,
+    [SYS_cputs]          = sys_cputs,
+    [SYS_env_set_handler]= sys_env_set_handler,
+    [SYS_env_resume]     = sys_env_resume,
 };
 
 void syscall(void) {

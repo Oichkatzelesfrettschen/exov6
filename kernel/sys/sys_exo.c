@@ -54,6 +54,28 @@ sys_page_map(void)
         if (!target) return -1;
     }
 
+    // Check if this is an MMIO mapping (device memory, not RAM)
+    // MMIO addresses are below KERNBASE or above PHYSTOP
+    int is_mmio = (phys_addr < KERNBASE && phys_addr >= 0x10000000ULL) ||
+                  (phys_addr >= PHYSTOP);
+
+    if (is_mmio) {
+        // MMIO mapping - requires HIGH label (privileged process)
+        if (target->label != LABEL_HIGH) {
+            cprintf("MMIO denied: Process %d lacks LABEL_HIGH\n", target->pid);
+            return -1;
+        }
+        // For MMIO, we map the physical address directly (no V2P conversion)
+        // Sanitize permissions
+        perm &= (PERM_R | PERM_W | PERM_X);
+
+        if(insert_pte(target->pgdir, (void*)virt_addr, phys_addr, perm) < 0)
+            return -1;
+
+        return 0;  // No reference tracking for device memory
+    }
+
+    // Regular RAM mapping
     // PA2PAGE expects Kernel Virtual Address (handle)
     struct PageInfo *pp = PA2PAGE(phys_addr);
 
@@ -107,5 +129,94 @@ sys_cputs(void)
         uartputc(*ka);
     }
 
+    return 0;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SYS_env_set_handler: Register upcall handler for exceptions
+// ═══════════════════════════════════════════════════════════════════════════
+// Args: (uint64 handler_va, uint64 exception_stack_va)
+// The LibOS says: "If I crash or get interrupted, jump to handler_va
+// using exception_stack_va as the stack."
+uint64
+sys_env_set_handler(void)
+{
+    uint64 handler_va, stack_va;
+
+    if(arguint64(0, &handler_va) < 0 || arguint64(1, &stack_va) < 0)
+        return -1;
+
+    // Basic validation: handler must be in user space
+    if(handler_va >= KERNBASE || stack_va >= KERNBASE)
+        return -1;
+
+    struct proc *p = myproc();
+    p->upcall_handler = handler_va;
+    p->upcall_stack = stack_va;
+    p->in_upcall = 0;  // Reset upcall state
+
+    return 0;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SYS_env_resume: Return from upcall, restore saved context
+// ═══════════════════════════════════════════════════════════════════════════
+// Args: (struct ExoTrapFrame *tf)
+// The LibOS exception handler calls this to restore the original context
+// and resume execution at the faulting instruction (or skip it).
+uint64
+sys_env_resume(void)
+{
+    uint64 tf_addr;
+
+    if(arguint64(0, &tf_addr) < 0)
+        return -1;
+
+    struct proc *p = myproc();
+
+    // Copy the ExoTrapFrame from user space
+    struct ExoTrapFrame utf;
+    if(copyin(p->pgdir, (char*)&utf, tf_addr, sizeof(utf)) < 0)
+        return -1;
+
+    // Restore the trapframe from the ExoTrapFrame
+    // Architecture-specific: x86_64
+#ifdef __x86_64__
+    p->tf->rip = utf.rip;
+    p->tf->rflags = utf.rflags;
+    p->tf->rsp = utf.rsp;
+    p->tf->rax = utf.rax;
+    p->tf->rbx = utf.rbx;
+    p->tf->rcx = utf.rcx;
+    p->tf->rdx = utf.rdx;
+    p->tf->rsi = utf.rsi;
+    p->tf->rdi = utf.rdi;
+    p->tf->rbp = utf.rbp;
+    p->tf->r8 = utf.r8;
+    p->tf->r9 = utf.r9;
+    p->tf->r10 = utf.r10;
+    p->tf->r11 = utf.r11;
+    p->tf->r12 = utf.r12;
+    p->tf->r13 = utf.r13;
+    p->tf->r14 = utf.r14;
+    p->tf->r15 = utf.r15;
+#else
+    // 32-bit x86 fallback
+    p->tf->eip = (uint32)utf.rip;
+    p->tf->eflags = (uint32)utf.rflags;
+    p->tf->esp = (uint32)utf.rsp;
+    p->tf->eax = (uint32)utf.rax;
+    p->tf->ebx = (uint32)utf.rbx;
+    p->tf->ecx = (uint32)utf.rcx;
+    p->tf->edx = (uint32)utf.rdx;
+    p->tf->esi = (uint32)utf.rsi;
+    p->tf->edi = (uint32)utf.rdi;
+    p->tf->ebp = (uint32)utf.rbp;
+#endif
+
+    // Clear upcall flag
+    p->in_upcall = 0;
+
+    // Return will go through usertrapret, which will restore the context
     return 0;
 }

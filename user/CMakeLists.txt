@@ -52,5 +52,23 @@ add_custom_target(init_bin ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.bin)
 # Export the init.bin path for kernel to use
 set(INIT_BIN_PATH ${CMAKE_CURRENT_BINARY_DIR}/init.bin PARENT_SCOPE)
 
+# ═══════════════════════════════════════════════════════════════════════════
+# UART Driver - User-Space Hardware Access Test (Phase 5)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(uart_driver uart_driver.c)
+target_link_libraries(uart_driver libos)
+target_include_directories(uart_driver PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(uart_driver PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(uart_driver PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(uart_driver PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
 # Install to bin
-install(TARGETS init RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver RUNTIME DESTINATION bin)

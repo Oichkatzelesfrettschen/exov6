@@ -63,3 +63,18 @@ void sys_yield(void) {
 void sys_cputs(const char *s, int len) {
     syscall(SYS_cputs, (uint64)s, (uint64)len, 0, 0);
 }
+
+// --- Exception/Upcall Handling ---
+
+// Register an exception handler and exception stack
+// handler_va: Address of upcall entry point
+// stack_va: Top of exception stack (grows down)
+int sys_env_set_handler(uint64 handler_va, uint64 stack_va) {
+    return (int)syscall(SYS_env_set_handler, handler_va, stack_va, 0, 0);
+}
+
+// Return from upcall, restoring saved context
+// tf: Pointer to ExoTrapFrame on exception stack
+int sys_env_resume(struct ExoTrapFrame *tf) {
+    return (int)syscall(SYS_env_resume, (uint64)tf, 0, 0, 0);
+}

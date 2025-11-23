@@ -43,13 +43,62 @@ typedef uint32_t label_t;
 // 5. Debug/Bootstrap (Temporary)
 #define SYS_cputs       12  // Print string to console (for bootstrapping)
 
-// --- The Trap Frame Contract ---
-// When we upcall into the LibOS, we pass this struct so the LibOS
-// knows why it woke up (e.g., page fault, timer interrupt).
+// 6. Exception/Upcall Handling
+#define SYS_env_set_handler 13  // Set the upcall entry point and exception stack
+#define SYS_env_resume      14  // Return from upcall, restore saved context
+
+// --- Trap Cause Codes (x86_64) ---
+#define EXO_TRAP_DIVIDE       0   // Divide error
+#define EXO_TRAP_DEBUG        1   // Debug exception
+#define EXO_TRAP_NMI          2   // Non-maskable interrupt
+#define EXO_TRAP_BRKPT        3   // Breakpoint
+#define EXO_TRAP_OFLOW        4   // Overflow
+#define EXO_TRAP_BOUND        5   // Bound range exceeded
+#define EXO_TRAP_ILLOP        6   // Invalid opcode
+#define EXO_TRAP_DEVICE       7   // Device not available
+#define EXO_TRAP_DBLFLT       8   // Double fault
+#define EXO_TRAP_TSS         10   // Invalid TSS
+#define EXO_TRAP_SEGNP       11   // Segment not present
+#define EXO_TRAP_STACK       12   // Stack fault
+#define EXO_TRAP_GPFLT       13   // General protection fault
+#define EXO_TRAP_PGFLT       14   // Page fault
+#define EXO_TRAP_FPERR       16   // Floating point error
+#define EXO_TRAP_ALIGN       17   // Alignment check
+#define EXO_TRAP_MCHK        18   // Machine check
+#define EXO_TRAP_SIMDERR     19   // SIMD floating point error
+
+// IRQ base (x86_64)
+#define EXO_IRQ_BASE         32
+#define EXO_IRQ_TIMER        (EXO_IRQ_BASE + 0)
+#define EXO_IRQ_KBD          (EXO_IRQ_BASE + 1)
+#define EXO_IRQ_COM1         (EXO_IRQ_BASE + 4)
+
+// --- The Trap Frame Contract (x86_64) ---
+// When we upcall into the LibOS, we push this struct onto the user exception
+// stack so the LibOS knows why it woke up and can restore state afterward.
+// This matches the kernel trapframe layout for easy copying.
 struct ExoTrapFrame {
-    uint32_t trap_type;   // Page Fault, Timer, External IRQ
-    uint32_t fault_addr;  // CR2 register equivalent
-    uint32_t registers[8]; // Basic GP registers
+    // Metadata about the trap
+    uint64_t trapno;        // Trap number (cause)
+    uint64_t err;           // Error code (for page faults: contains flags)
+    uint64_t addr;          // Faulting address (CR2 for page faults)
+
+    // Saved program state
+    uint64_t rip;           // Instruction pointer at time of fault
+    uint64_t rflags;        // CPU flags
+    uint64_t rsp;           // Stack pointer (original, before exception)
+
+    // General purpose registers
+    uint64_t rax, rbx, rcx, rdx;
+    uint64_t rsi, rdi, rbp;
+    uint64_t r8, r9, r10, r11, r12, r13, r14, r15;
+
+    // Segment registers (usually not needed but included for completeness)
+    uint64_t cs, ss, ds, es, fs, gs;
 };
+
+// --- MMIO Constants ---
+#define PHYSTOP         0x88000000ULL   // End of RAM (QEMU virt default)
+#define UART0_BASE      0x10000000ULL   // QEMU virt UART0
 
 #endif // EXOV6_INTERFACE_H
