@@ -1,45 +1,51 @@
-#FeuerBird Roadmap
+# Phoenix Exokernel Roadmap & Implementation Guide
 
-This document summarizes the current milestones and open tasks for the FeuerBird exokernel project. It draws from the [project charter](charter.md) and the STREAMS TODO list.
+This document outlines the stepwise engineering and implementation plan for achieving advanced features in the Phoenix Exokernel and LibOS.
 
-## Milestones from the Charter
+## 3.A Full Linux Binary Compatibility Layer
+- [ ] **Analyze Syscall Requirements**: Identify critical syscalls for target workloads (Coreutils, Nginx, Redis).
+- [ ] **Define APIs**: Create `include/linux_compat.h` mapping `SYS_*` constants.
+- [ ] **Stub Implementation**: Create `libos/posix/linux_abi.c` with a central dispatcher.
+- [ ] **Incremental Implementation**: Implement `write`, `read`, `open`, `close`, `mmap`, `brk`.
 
-FeuerBird aims to:
+## 3.B BSD Socket Implementation Completion
+- [ ] **Map BSD Calls**: Direct socket syscalls to internal LibOS networking stack.
+- [ ] **Implement Core Functions**: `socket`, `bind`, `listen`, `accept`, `connect`, `send`, `recv`.
+- [ ] **Backend Integration**: Use Shared Memory Ring Buffers (Unified IPC) for local transport.
 
-- Build a small capability based exokernel that exposes hardware resources directly to user space.
-- Provide a flexible libOS implementing POSIX, BSD and SVR4 personalities without bloating the kernel.
-- Encourage experimentation with scheduling models, typed channels and user space drivers.
-- Keep the code understandable so new contributors can easily get involved.
+## 3.C Container and Virtualization Support
+- [ ] **Namespaces**: Implement `CLONE_NEWPID`, `CLONE_NEWNET`, `CLONE_NEWNS`.
+- [ ] **Isolation**: Virtualize Process IDs and mount points.
+- [ ] **Cgroups**: Integrate resource accounting into the Scheduler and Memory Allocator.
 
-These goals are paired with a lightweight governance model that welcomes contributions from anyone willing to follow the pre-commit hooks and discuss larger features on the mailing list.
+## 3.D GPU Computing Offload Framework
+- [ ] **API Design**: Define `vgpu_submit` and command buffer formats in `include/gpu/vgpu.h`.
+- [ ] **Memory Management**: Implement GART-like aperture management using `exo_bind_block`.
+- [ ] **Driver Wrapper**: Create `libos/gpu/vgpu.c` to interface with the mock kernel driver.
 
-## Open STREAMS Tasks
+## 3.E Real-Time Extensions for Industrial Use
+- [ ] **Scheduler Update**: Add `SCHED_FIFO` and `SCHED_RR` classes to `sched_beatty.c`.
+- [ ] **Preemption**: Implement cooperative preemption points in kernel hotspots.
+- [ ] **Priority Inheritance**: Add PI logic to Mutex primitives.
 
-The prototype STREAMS stack still requires several features:
+## 3.F DPDK Integration for Networking
+- [ ] **DPDK Setup**: Link against `librte_eal` and `librte_ethdev`.
+- [ ] **Hugepages**: Manage hugepage mappings via `exo_alloc_page`.
+- [ ] **Fast Path**: Expose a zero-copy packet API (`libos_packet_rx`/`tx`).
 
-- **Done:** integrate STREAMS callbacks with the kernel scheduler and implement `streams_stop()` / `streams_yield()`.
-- Document the PID based flow control interface under `/proc/streams/fc/` and provide an example using `examples/python/flow_pid.py`.
+## 3.G Multi-Architecture Support
+- [ ] **Toolchain Setup**: Configure CMake for `riscv64` and `aarch64`.
+- [ ] **CI Matrix**: Define build variants in `CMakeLists.txt`.
 
-## Development Goals
+## 3.H Performance Tuning
+- [ ] **Profiling**: Use `perf` and `valgrind` (on host) to analyze LibOS behavior.
+- [ ] **Optimization**: Reduce syscall dispatch overhead and memcpy operations.
 
-### Short Term
+## 3.I Advanced Security Features
+- [ ] **CET**: Enable Intel Control-flow Enforcement Technology (`-fcf-protection`).
+- [ ] **PAC**: Enable ARM Pointer Authentication (`-mbranch-protection`).
+- [ ] **Hardening**: Enable Stack Canaries and ASLR.
 
-- Kernel: solidify capability primitives and complete scheduler hooks for STREAMS.
-- libOS: ensure basic POSIX compatibility and expose simple driver helpers.
-- Scheduler: finish DAG and Beatty integration so user schedulers can chain tasks efficiently.
-- Driver model: run drivers fully in user space with Cap'n Proto RPC and restart via the `rcrs` supervisor.
-
-### Medium Term
-
-- Kernel: support multiple cooperating microkernels and refine interrupt queueing.
-- libOS: flesh out BSD and SVR4 layers while keeping the base lean.
-- Scheduler: provide tooling to visualize DAG execution and tune Beatty weights.
-- Driver model: document capability requirements and publish more example drivers.
-
-### Long Term
-
-- Kernel: mature the capability system and research new security policies (see `doc/security_policy_research.md` for an outline of research areas).
-- libOS: maintain POSIX compliance as features grow, keeping most logic outside the kernel (see `libos/compatibility_roadmap.md` for detailed roadmap).
-- Scheduler: experiment with alternative models and allow hot-swapping of schedulers (e.g., via `exo_stream_hot_swap` for graceful transitions).
-- Driver model: evolve toward a robust user space framework that isolates misbehaving drivers and supports dynamic restarts.
-- Performance: empirically validate analytical performance bounds (see `docs/empirical_performance_validation.md`).
+## 3.J Formal Verification
+- [ ] **Modeling**: Model the Capability security properties in TLA+.
+- [ ] **Verification**: Run model checkers to prove isolation invariants.

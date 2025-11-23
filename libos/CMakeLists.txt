@@ -124,7 +124,7 @@ phoenix_add_library(phoenix-libos-nn
     DEPENDENCIES phoenix-userland
 )
 
-# Network Stack
+# Network Stack (Legacy)
 phoenix_add_library(phoenix-libos-net
     STATIC
     SOURCES net/socket.c net/dpdk_shim.c
@@ -132,6 +132,21 @@ phoenix_add_library(phoenix-libos-net
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
     DEPENDENCIES phoenix-libos-file phoenix-libos-posix
+)
+
+# BSD Socket Stack (Synthesized from 4.4BSD/NetBSD/FreeBSD/OpenBSD/DragonFlyBSD)
+phoenix_add_library(phoenix-libos-bsd-sockets
+    STATIC
+    SOURCES
+        net/bsd_socket.c
+        net/socket_syscall.c
+        net/inet_domain.c
+        net/unix_domain.c
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/net
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-libos-file phoenix-libos-posix phoenix-libos-cap
 )
 
 # GPU Driver
@@ -142,6 +157,27 @@ phoenix_add_library(phoenix-libos-gpu
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
     DEPENDENCIES phoenix-libos-file
+)
+
+# Linux ABI Compatibility Layer (comprehensive x86_64 syscall emulation)
+phoenix_add_library(phoenix-libos-linux-abi
+    STATIC
+    SOURCES
+        linux/linux_syscall_dispatch.c
+        linux/linux_process.c
+        linux/linux_memory.c
+        linux/linux_file.c
+        linux/linux_signal.c
+        linux/linux_epoll.c
+        linux/linux_sysv_ipc.c
+        linux/linux_time.c
+        linux/linux_io_uring.c
+        linux/linux_net.c
+    INCLUDES
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/linux
+        ${CMAKE_SOURCE_DIR}/include
+    DEPENDENCIES phoenix-libos-posix phoenix-libos-file phoenix-libos-cap phoenix-libos-bsd-sockets
 )
 
 # ═════════════════════════════════════════════════════════════════════
@@ -289,7 +325,9 @@ set(LIBOS_CORE_LIBS
     phoenix-libos-registration
     phoenix-libos-affine-runtime
     phoenix-libos-net
+    phoenix-libos-bsd-sockets
     phoenix-libos-gpu
+    phoenix-libos-linux-abi
 )
 
 # Add stub libraries
@@ -368,6 +406,17 @@ message(STATUS "  - Core services: ✓")
 message(STATUS "  - POSIX layer: ✓")
 message(STATUS "  - File system: ✓")
 message(STATUS "  - IPC layer: ✓")
+message(STATUS "  - BSD Sockets: ✓ (4.4BSD/NetBSD/FreeBSD/OpenBSD/DragonFlyBSD synthesis)")
+message(STATUS "  - Linux ABI: ✓ (x86_64 syscall emulation)")
+message(STATUS "    - Process/Thread: clone, fork, futex, wait")
+message(STATUS "    - Memory: mmap, brk, mprotect, mremap")
+message(STATUS "    - File I/O: openat, read, write, dup, fcntl")
+message(STATUS "    - Signals: rt_sigaction, rt_sigprocmask, kill")
+message(STATUS "    - Events: epoll, poll, select")
+message(STATUS "    - IPC: shmget, semget, msgget (System V)")
+message(STATUS "    - Time: clock_gettime, timerfd, POSIX timers")
+message(STATUS "    - Async I/O: io_uring framework")
+message(STATUS "    - Network: socket, bind, connect, send, recv")
 if(LIBOS_STUB_LIBS)
     message(STATUS "  - API stubs: ✓")
 endif()
