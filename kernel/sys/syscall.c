@@ -1,23 +1,14 @@
-
-// clang-format off
 #include <types.h>
-#include "syscall.h"
-#include "defs.h"
-#include "memlayout.h"
-#include "mmu.h"
-#include "param.h"
-#include "proc.h"
-#include "arch.h"
-#include "trapframe.h"
-// clang-format on
-
-#define GAS_PER_SYSCALL 1 // Define gas consumed per syscall
+#include <defs.h>
+#include <memlayout.h>
+#include <mmu.h>
+#include <param.h>
+#include <proc.h>
+#include <exov6_interface.h>
 
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
-// Arguments on the stack, from the user call to the C
-// library system call function. The saved user %esp points
-// to a saved program counter, and then the first argument.
+// Arguments on the stack.
 
 // Fetch the int at addr from the current process.
 int fetchint(uintptr_t addr, int *ip) {
@@ -30,8 +21,6 @@ int fetchint(uintptr_t addr, int *ip) {
 }
 
 // Fetch the nul-terminated string at addr from the current process.
-// Doesn't actually copy the string - just sets *pp to point at it.
-// Returns length of string, not including nul.
 int fetchstr(uintptr_t addr, char **pp) {
   char *s, *ep;
   struct proc *curproc = myproc();
@@ -55,26 +44,35 @@ int argint(int n, int *ip) {
   uint64_t val;
   struct trapframe *tf = myproc()->tf;
   switch (n) {
-  case 0:
-    val = tf->rdi;
-    break;
-  case 1:
-    val = tf->rsi;
-    break;
-  case 2:
-    val = tf->rdx;
-    break;
-  case 3:
-    val = tf->r10;
-    break;
-  case 4:
-    val = tf->r8;
-    break;
-  case 5:
-    val = tf->r9;
-    break;
-  default:
-    return -1;
+  case 0: val = tf->rdi; break;
+  case 1: val = tf->rsi; break;
+  case 2: val = tf->rdx; break;
+  case 3: val = tf->r10; break;
+  case 4: val = tf->r8; break;
+  case 5: val = tf->r9; break;
+  default: return -1;
+  }
+  *ip = val;
+  return 0;
+#endif
+}
+
+// Fetch the nth 64-bit system call argument.
+int arguint64(int n, uint64_t *ip) {
+#ifndef __x86_64__
+  // 32-bit implementation omitted for simplicity in this phase
+  return -1;
+#else
+  uint64_t val;
+  struct trapframe *tf = myproc()->tf;
+  switch (n) {
+  case 0: val = tf->rdi; break;
+  case 1: val = tf->rsi; break;
+  case 2: val = tf->rdx; break;
+  case 3: val = tf->r10; break;
+  case 4: val = tf->r8; break;
+  case 5: val = tf->r9; break;
+  default: return -1;
   }
   *ip = val;
   return 0;
@@ -82,8 +80,6 @@ int argint(int n, int *ip) {
 }
 
 // Fetch the nth word-sized system call argument as a pointer
-// to a block of memory of size bytes.  Check that the pointer
-// lies within the process address space.
 int argptr(int n, char **pp, size_t size) {
   struct proc *curproc = myproc();
 #ifndef __x86_64__
@@ -106,10 +102,6 @@ int argptr(int n, char **pp, size_t size) {
 #endif
 }
 
-// Fetch the nth word-sized system call argument as a string pointer.
-// Check that the pointer is valid and the string is nul-terminated.
-// (There is no shared writable memory, so the string can't change
-// between this check and being used by the kernel.)
 int argstr(int n, char **pp) {
 #ifndef __x86_64__
   int addr;
@@ -124,118 +116,46 @@ int argstr(int n, char **pp) {
 #endif
 }
 
-extern int sys_chdir(void);
-extern int sys_close(void);
-extern int sys_dup(void);
-extern int sys_exec(void);
-extern int sys_exit(void);
-extern int sys_fork(void);
-extern int sys_getpid(void);
-extern int sys_kill(void);
-extern int sys_pipe(void);
-extern int sys_sbrk(void);
-extern int sys_sleep(void);
-extern int sys_wait(void);
-extern int sys_uptime(void);
-extern int sys_mappte(void);
-extern int sys_set_timer_upcall(void);
-extern int sys_exo_alloc_page(void);
-extern int sys_exo_unbind_page(void);
-extern int sys_exo_alloc_block(void);
-extern int sys_exo_bind_block(void);
-extern int sys_exo_yield_to(void);
-extern int sys_exo_read_disk(void);
-extern int sys_exo_write_disk(void);
-extern int sys_exo_send(void);
-extern int sys_exo_recv(void);
-extern int sys_exo_recv_timed(void);
-extern int sys_exo_alloc_ioport(void);
-extern int sys_exo_bind_irq(void);
-extern int sys_exo_alloc_dma(void);
-extern int sys_endpoint_send(void);
-extern int sys_endpoint_recv(void);
-extern int sys_proc_alloc(void);
-extern int sys_set_gas(void);
-extern int sys_get_gas(void);
-extern int sys_set_numa_node(void);
-extern int sys_ipc_fast(void);
-extern int sys_fcntl(void);
-extern int sys_sigsend(void);
-extern int sys_sigcheck(void);
-extern int sys_cap_inc(void);
-extern int sys_cap_dec(void);
-extern int sys_service_register(void);
-extern int sys_service_add_dependency(void);
+// New Exokernel Syscalls
+extern int sys_page_alloc(void);
+extern int sys_page_map(void);
+extern int sys_exit(void); // For SYS_env_destroy
+extern int sys_uptime(void); // Keep for debug
+
+// Stubs for now (to be implemented)
+int sys_env_create(void) { return -1; }
+int sys_env_run(void) { return -1; }
+int sys_page_unmap(void) { return -1; }
+int sys_page_stat(void) { return -1; }
+int sys_ipc_send(void) { return -1; }
+int sys_ipc_recv(void) { return -1; }
+int sys_set_label(void) { return -1; }
+int sys_disk_io(void) { return -1; }
 
 static int (*syscalls[])(void) = {
-    [SYS_fork] = sys_fork,
-    [SYS_exit] = sys_exit,
-    [SYS_wait] = sys_wait,
-    [SYS_pipe] = sys_pipe,
-    [SYS_kill] = sys_kill,
-    [SYS_exec] = sys_exec,
-    [SYS_getpid] = sys_getpid,
-    [SYS_sbrk] = sys_sbrk,
-    [SYS_sleep] = sys_sleep,
-    [SYS_uptime] = sys_uptime,
-    [SYS_mappte] = sys_mappte,
-    [SYS_set_timer_upcall] = sys_set_timer_upcall,
-    [SYS_exo_alloc_page] = sys_exo_alloc_page,
-    [SYS_exo_unbind_page] = sys_exo_unbind_page,
-    [SYS_exo_alloc_block] = sys_exo_alloc_block,
-    [SYS_exo_bind_block] = sys_exo_bind_block,
-    [SYS_exo_yield_to] = sys_exo_yield_to,
-    [SYS_exo_read_disk] = sys_exo_read_disk,
-    [SYS_exo_write_disk] = sys_exo_write_disk,
-    [SYS_exo_alloc_ioport] = sys_exo_alloc_ioport,
-    [SYS_exo_bind_irq] = sys_exo_bind_irq,
-    [SYS_exo_alloc_dma] = sys_exo_alloc_dma,
-    [SYS_exo_send] = sys_exo_send,
-    [SYS_exo_recv] = sys_exo_recv,
-    [SYS_exo_recv_timed] = sys_exo_recv_timed,
-    [SYS_endpoint_send] = sys_endpoint_send,
-    [SYS_endpoint_recv] = sys_endpoint_recv,
-    [SYS_proc_alloc] = sys_proc_alloc,
-    [SYS_set_gas] = sys_set_gas,
-    [SYS_get_gas] = sys_get_gas,
-    [SYS_set_numa_node] = sys_set_numa_node,
-    [SYS_fcntl] = sys_fcntl,
-    [SYS_sigsend] = sys_sigsend,
-    [SYS_sigcheck] = sys_sigcheck,
-    [SYS_cap_inc] = sys_cap_inc,
-    [SYS_cap_dec] = sys_cap_dec,
-    [SYS_ipc] = sys_ipc_fast,
-    [SYS_service_register] = sys_service_register,
-    [SYS_service_add_dependency] = sys_service_add_dependency,
+    [SYS_env_create] = sys_env_create,
+    [SYS_env_run]    = sys_env_run,
+    [SYS_env_destroy]= sys_exit,
+    [SYS_page_alloc] = sys_page_alloc,
+    [SYS_page_map]   = sys_page_map,
+    [SYS_page_unmap] = sys_page_unmap,
+    [SYS_page_stat]  = sys_page_stat,
+    [SYS_ipc_send]   = sys_ipc_send,
+    [SYS_ipc_recv]   = sys_ipc_recv,
+    [SYS_set_label]  = sys_set_label,
+    [SYS_disk_io]    = sys_disk_io,
 };
 
 void syscall(void) {
   int num;
   struct proc *curproc = myproc();
 
-  // Deduct gas for this syscall
-  if (curproc->gas_remaining <= GAS_PER_SYSCALL) {
-      curproc->gas_remaining = 0;
-      curproc->out_of_gas = 1;
-      // Optionally, return an error or kill the process if out of gas
-      // For now, just mark out_of_gas and proceed, scheduler will handle it.
-  } else {
-      curproc->gas_remaining -= GAS_PER_SYSCALL;
-  }
-
 #ifndef __x86_64__
   num = curproc->tf->eax;
 #else
   num = curproc->tf->rax;
 #endif
-  if (num == 0x30) {
-#ifdef __x86_64__
-    curproc->tf->rax = sys_ipc_fast();
-#else
-    curproc->tf->eax = sys_ipc_fast();
-#endif
-    return;
-  }
+
   if (num > 0 && (size_t)num < NELEM(syscalls) && syscalls[num]) {
 #ifndef __x86_64__
     curproc->tf->eax = syscalls[num]();

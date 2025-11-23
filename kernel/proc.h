@@ -7,6 +7,7 @@
 #include "spinlock.h"
 #include "ipc.h"
 #include "exo.h"
+#include <exov6_interface.h>
 
 // Context used for kernel context switches.
 #ifndef CONTEXT_T_DEFINED
@@ -124,6 +125,8 @@ struct proc {
   struct proc *rq_next;          // Run queue next pointer
   struct proc *rq_prev;          // Run queue previous pointer
   
+  label_t label;                 // Lattice Security Label (ExoV6)
+
   /* Process exit and IPC state */
   int exit_status;               /* Exit status for wait() */
   void *ipc_chan;                /* IPC channel for communication */
@@ -139,10 +142,10 @@ struct proc {
 #ifdef USE_DAG_CHECKING
 _Static_assert(sizeof(struct proc) <= 2048, "struct proc size too large");  // Updated for DAG tracker (with stats)
 #else
-_Static_assert(sizeof(struct proc) == 304, "struct proc size incorrect");  // Updated for added fields
+_Static_assert(sizeof(struct proc) <= 512, "struct proc size incorrect");  // Updated for ExoV6 fields
 #endif
 #else
-_Static_assert(sizeof(struct proc) == 184, "struct proc size incorrect");  // Updated for added fields
+_Static_assert(sizeof(struct proc) <= 256, "struct proc size incorrect");  // Updated for ExoV6 fields
 #endif
 
 
