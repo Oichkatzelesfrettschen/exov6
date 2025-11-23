@@ -14,8 +14,11 @@
 void uart_putc(volatile uint8_t *uart_base, char c) {
     // 1. Wait for the hardware to be ready (Spin)
     // Note: In a real Exokernel, if this takes too long, we would Yield().
-    while ((uart_base[UART_LSR] & UART_LSR_THRE) == 0)
+    int timeout = 128;
+    while ((uart_base[UART_LSR] & UART_LSR_THRE) == 0 && --timeout > 0)
         ;
+    if (timeout == 0)
+        return; // or handle error appropriately
 
     // 2. Write the character
     uart_base[0] = c;
