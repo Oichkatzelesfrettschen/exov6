@@ -141,4 +141,87 @@ struct ExoTrapFrame {
 // VirtIO Magic Value ("virt" in little-endian ASCII)
 #define VIRTIO_MAGIC                    0x74726976
 
+// ═══════════════════════════════════════════════════════════════════════════
+// VirtIO Virtqueue Structures (from VirtIO 1.0 spec Section 2.4)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Virtqueue Descriptor (16 bytes)
+// Each descriptor points to a buffer and can be chained
+struct virtq_desc {
+    uint64_t addr;      // Physical address of buffer
+    uint32_t len;       // Length of buffer
+    uint16_t flags;     // VIRTQ_DESC_F_* flags
+    uint16_t next;      // Next descriptor index (if VIRTQ_DESC_F_NEXT)
+};
+
+// Descriptor flags
+#define VIRTQ_DESC_F_NEXT       1   // Buffer continues via 'next' field
+#define VIRTQ_DESC_F_WRITE      2   // Buffer is write-only (device writes)
+#define VIRTQ_DESC_F_INDIRECT   4   // Buffer contains list of descriptors
+
+// Virtqueue Available Ring (driver -> device)
+// Driver adds descriptor chain heads here when buffers are ready
+struct virtq_avail {
+    uint16_t flags;         // VIRTQ_AVAIL_F_* flags
+    uint16_t idx;           // Next ring index to use
+    uint16_t ring[];        // Array of descriptor indices (variable size)
+    // uint16_t used_event; // Only if VIRTIO_F_EVENT_IDX
+};
+
+#define VIRTQ_AVAIL_F_NO_INTERRUPT  1   // Don't interrupt on buffer use
+
+// Virtqueue Used Ring Element (device -> driver)
+struct virtq_used_elem {
+    uint32_t id;            // Descriptor chain head index
+    uint32_t len;           // Bytes written by device
+};
+
+// Virtqueue Used Ring (device -> driver)
+// Device adds entries here when it's done with buffers
+struct virtq_used {
+    uint16_t flags;         // VIRTQ_USED_F_* flags
+    uint16_t idx;           // Next ring index device will use
+    struct virtq_used_elem ring[];  // Array of used elements
+    // uint16_t avail_event; // Only if VIRTIO_F_EVENT_IDX
+};
+
+#define VIRTQ_USED_F_NO_NOTIFY  1   // Don't notify on buffer add
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VirtIO Block Device Structures (from VirtIO 1.0 spec Section 5.2)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Block request types
+#define VIRTIO_BLK_T_IN         0   // Read from device
+#define VIRTIO_BLK_T_OUT        1   // Write to device
+#define VIRTIO_BLK_T_FLUSH      4   // Flush (cache writeback)
+#define VIRTIO_BLK_T_DISCARD    11  // Discard/trim
+#define VIRTIO_BLK_T_WRITE_ZEROES 13 // Write zeroes
+
+// Block request status (returned in status byte)
+#define VIRTIO_BLK_S_OK         0   // Success
+#define VIRTIO_BLK_S_IOERR      1   // Device or driver error
+#define VIRTIO_BLK_S_UNSUPP     2   // Request unsupported
+
+// Block request header (sent to device)
+struct virtio_blk_req_hdr {
+    uint32_t type;          // VIRTIO_BLK_T_* request type
+    uint32_t reserved;      // Reserved (must be 0)
+    uint64_t sector;        // Starting sector (512-byte units)
+};
+
+// Block device configuration (read from device config space at offset 0x100)
+struct virtio_blk_config {
+    uint64_t capacity;      // Device capacity in 512-byte sectors
+    uint32_t size_max;      // Max size of any single segment
+    uint32_t seg_max;       // Max number of segments in a request
+    // ... more fields for geometry, etc.
+};
+
+// Virtqueue size (number of descriptors) - common value
+#define VIRTQ_SIZE              16
+
+// Sector size (VirtIO block uses 512-byte sectors)
+#define VIRTIO_BLK_SECTOR_SIZE  512
+
 #endif // EXOV6_INTERFACE_H
