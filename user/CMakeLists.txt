@@ -106,5 +106,27 @@ else()
     )
 endif()
 
+# ═══════════════════════════════════════════════════════════════════════════
+# File System Test - User-Space FS (Phase 8)
+# ═══════════════════════════════════════════════════════════════════════════
+add_executable(fs_test fs_test.c)
+target_link_libraries(fs_test libos fs virtio)
+target_include_directories(fs_test PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/lib/virtio
+    ${CMAKE_SOURCE_DIR}/lib/fs/include
+)
+target_compile_options(fs_test PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(fs_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(fs_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
 # Install to bin
-install(TARGETS init uart_driver sched_test virtio_driver RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver fs_test RUNTIME DESTINATION bin)

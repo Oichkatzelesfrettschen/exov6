@@ -17,3 +17,9 @@ target_compile_options(libos PRIVATE -fno-stack-protector -ffreestanding)
 
 # DDEKit - Device Driver Environment Kit (LibOS Port)
 add_subdirectory(ddekit)
+
+# VirtIO Block Driver Library (Phase 8)
+add_subdirectory(virtio)
+
+# File System Library (Phase 8)
+add_subdirectory(fs)
