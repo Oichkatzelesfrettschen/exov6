@@ -14,6 +14,7 @@ add_library(libos STATIC
     fd.c
     pipe.c
     service.c
+    mmap.c
 )
 target_include_directories(libos PRIVATE ${CMAKE_SOURCE_DIR}/include)
 

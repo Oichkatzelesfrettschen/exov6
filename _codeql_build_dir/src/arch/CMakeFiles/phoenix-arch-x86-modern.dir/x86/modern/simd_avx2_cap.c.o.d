@@ -12,19 +12,7 @@ src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/x86/modern/simd_avx2_cap.c.o: \
   /usr/lib/llvm-18/lib/clang/18/include/mmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/xmmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/mm_malloc.h \
-  /home/runner/work/exov6/exov6/include/stdlib.h \
-  /home/runner/work/exov6/exov6/include/stddef.h \
-  /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_ptrdiff_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_wchar_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_nullptr_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_unreachable.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_max_align_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_offsetof.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
-  /usr/lib/llvm-18/lib/clang/18/include/stdint.h /usr/include/stdint.h \
+  /usr/include/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h /usr/include/features-time64.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -33,13 +21,14 @@ src/arch/CMakeFiles/phoenix-arch-x86-modern.dir/x86/modern/simd_avx2_cap.c.o: \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
-  /usr/include/x86_64-linux-gnu/bits/types.h \
-  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
-  /usr/include/x86_64-linux-gnu/bits/time64.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
+  /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
+  /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
+  /usr/lib/llvm-18/lib/clang/18/include/__stddef_wchar_t.h \
+  /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/lib/llvm-18/lib/clang/18/include/emmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/pmmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/tmmintrin.h \

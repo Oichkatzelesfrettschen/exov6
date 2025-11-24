@@ -353,6 +353,62 @@ phoenix-libos-nn/fast:
 .PHONY : phoenix-libos-nn/fast
 
 # Convenience name for target.
+libos/CMakeFiles/phoenix-libos-net.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-net.dir/rule
+.PHONY : libos/CMakeFiles/phoenix-libos-net.dir/rule
+
+# Convenience name for target.
+phoenix-libos-net: libos/CMakeFiles/phoenix-libos-net.dir/rule
+.PHONY : phoenix-libos-net
+
+# fast build rule for target.
+phoenix-libos-net/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/build
+.PHONY : phoenix-libos-net/fast
+
+# Convenience name for target.
+libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/rule
+.PHONY : libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/rule
+
+# Convenience name for target.
+phoenix-libos-bsd-sockets: libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/rule
+.PHONY : phoenix-libos-bsd-sockets
+
+# fast build rule for target.
+phoenix-libos-bsd-sockets/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build
+.PHONY : phoenix-libos-bsd-sockets/fast
+
+# Convenience name for target.
+libos/CMakeFiles/phoenix-libos-gpu.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-gpu.dir/rule
+.PHONY : libos/CMakeFiles/phoenix-libos-gpu.dir/rule
+
+# Convenience name for target.
+phoenix-libos-gpu: libos/CMakeFiles/phoenix-libos-gpu.dir/rule
+.PHONY : phoenix-libos-gpu
+
+# fast build rule for target.
+phoenix-libos-gpu/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-gpu.dir/build.make libos/CMakeFiles/phoenix-libos-gpu.dir/build
+.PHONY : phoenix-libos-gpu/fast
+
+# Convenience name for target.
+libos/CMakeFiles/phoenix-libos-linux-abi.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-linux-abi.dir/rule
+.PHONY : libos/CMakeFiles/phoenix-libos-linux-abi.dir/rule
+
+# Convenience name for target.
+phoenix-libos-linux-abi: libos/CMakeFiles/phoenix-libos-linux-abi.dir/rule
+.PHONY : phoenix-libos-linux-abi
+
+# fast build rule for target.
+phoenix-libos-linux-abi/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/build
+.PHONY : phoenix-libos-linux-abi/fast
+
+# Convenience name for target.
 libos/CMakeFiles/phoenix-libos-baremetal-stubs.dir/rule:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos/CMakeFiles/phoenix-libos-baremetal-stubs.dir/rule
 .PHONY : libos/CMakeFiles/phoenix-libos-baremetal-stubs.dir/rule
@@ -500,6 +556,30 @@ fs/fs.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-fs.dir/build.make libos/CMakeFiles/phoenix-libos-fs.dir/fs/fs.c.s
 .PHONY : fs/fs.c.s
 
+gpu/vgpu.o: gpu/vgpu.c.o
+.PHONY : gpu/vgpu.o
+
+# target to build an object file
+gpu/vgpu.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-gpu.dir/build.make libos/CMakeFiles/phoenix-libos-gpu.dir/gpu/vgpu.c.o
+.PHONY : gpu/vgpu.c.o
+
+gpu/vgpu.i: gpu/vgpu.c.i
+.PHONY : gpu/vgpu.i
+
+# target to preprocess a source file
+gpu/vgpu.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-gpu.dir/build.make libos/CMakeFiles/phoenix-libos-gpu.dir/gpu/vgpu.c.i
+.PHONY : gpu/vgpu.c.i
+
+gpu/vgpu.s: gpu/vgpu.c.s
+.PHONY : gpu/vgpu.s
+
+# target to generate assembly for a file
+gpu/vgpu.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-gpu.dir/build.make libos/CMakeFiles/phoenix-libos-gpu.dir/gpu/vgpu.c.s
+.PHONY : gpu/vgpu.c.s
+
 ipc.o: ipc.c.o
 .PHONY : ipc.o
 
@@ -524,6 +604,246 @@ ipc.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-ipc.dir/build.make libos/CMakeFiles/phoenix-libos-ipc.dir/ipc.c.s
 .PHONY : ipc.c.s
 
+linux/linux_epoll.o: linux/linux_epoll.c.o
+.PHONY : linux/linux_epoll.o
+
+# target to build an object file
+linux/linux_epoll.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_epoll.c.o
+.PHONY : linux/linux_epoll.c.o
+
+linux/linux_epoll.i: linux/linux_epoll.c.i
+.PHONY : linux/linux_epoll.i
+
+# target to preprocess a source file
+linux/linux_epoll.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_epoll.c.i
+.PHONY : linux/linux_epoll.c.i
+
+linux/linux_epoll.s: linux/linux_epoll.c.s
+.PHONY : linux/linux_epoll.s
+
+# target to generate assembly for a file
+linux/linux_epoll.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_epoll.c.s
+.PHONY : linux/linux_epoll.c.s
+
+linux/linux_file.o: linux/linux_file.c.o
+.PHONY : linux/linux_file.o
+
+# target to build an object file
+linux/linux_file.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_file.c.o
+.PHONY : linux/linux_file.c.o
+
+linux/linux_file.i: linux/linux_file.c.i
+.PHONY : linux/linux_file.i
+
+# target to preprocess a source file
+linux/linux_file.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_file.c.i
+.PHONY : linux/linux_file.c.i
+
+linux/linux_file.s: linux/linux_file.c.s
+.PHONY : linux/linux_file.s
+
+# target to generate assembly for a file
+linux/linux_file.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_file.c.s
+.PHONY : linux/linux_file.c.s
+
+linux/linux_io_uring.o: linux/linux_io_uring.c.o
+.PHONY : linux/linux_io_uring.o
+
+# target to build an object file
+linux/linux_io_uring.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_io_uring.c.o
+.PHONY : linux/linux_io_uring.c.o
+
+linux/linux_io_uring.i: linux/linux_io_uring.c.i
+.PHONY : linux/linux_io_uring.i
+
+# target to preprocess a source file
+linux/linux_io_uring.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_io_uring.c.i
+.PHONY : linux/linux_io_uring.c.i
+
+linux/linux_io_uring.s: linux/linux_io_uring.c.s
+.PHONY : linux/linux_io_uring.s
+
+# target to generate assembly for a file
+linux/linux_io_uring.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_io_uring.c.s
+.PHONY : linux/linux_io_uring.c.s
+
+linux/linux_memory.o: linux/linux_memory.c.o
+.PHONY : linux/linux_memory.o
+
+# target to build an object file
+linux/linux_memory.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_memory.c.o
+.PHONY : linux/linux_memory.c.o
+
+linux/linux_memory.i: linux/linux_memory.c.i
+.PHONY : linux/linux_memory.i
+
+# target to preprocess a source file
+linux/linux_memory.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_memory.c.i
+.PHONY : linux/linux_memory.c.i
+
+linux/linux_memory.s: linux/linux_memory.c.s
+.PHONY : linux/linux_memory.s
+
+# target to generate assembly for a file
+linux/linux_memory.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_memory.c.s
+.PHONY : linux/linux_memory.c.s
+
+linux/linux_net.o: linux/linux_net.c.o
+.PHONY : linux/linux_net.o
+
+# target to build an object file
+linux/linux_net.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_net.c.o
+.PHONY : linux/linux_net.c.o
+
+linux/linux_net.i: linux/linux_net.c.i
+.PHONY : linux/linux_net.i
+
+# target to preprocess a source file
+linux/linux_net.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_net.c.i
+.PHONY : linux/linux_net.c.i
+
+linux/linux_net.s: linux/linux_net.c.s
+.PHONY : linux/linux_net.s
+
+# target to generate assembly for a file
+linux/linux_net.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_net.c.s
+.PHONY : linux/linux_net.c.s
+
+linux/linux_process.o: linux/linux_process.c.o
+.PHONY : linux/linux_process.o
+
+# target to build an object file
+linux/linux_process.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_process.c.o
+.PHONY : linux/linux_process.c.o
+
+linux/linux_process.i: linux/linux_process.c.i
+.PHONY : linux/linux_process.i
+
+# target to preprocess a source file
+linux/linux_process.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_process.c.i
+.PHONY : linux/linux_process.c.i
+
+linux/linux_process.s: linux/linux_process.c.s
+.PHONY : linux/linux_process.s
+
+# target to generate assembly for a file
+linux/linux_process.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_process.c.s
+.PHONY : linux/linux_process.c.s
+
+linux/linux_signal.o: linux/linux_signal.c.o
+.PHONY : linux/linux_signal.o
+
+# target to build an object file
+linux/linux_signal.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_signal.c.o
+.PHONY : linux/linux_signal.c.o
+
+linux/linux_signal.i: linux/linux_signal.c.i
+.PHONY : linux/linux_signal.i
+
+# target to preprocess a source file
+linux/linux_signal.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_signal.c.i
+.PHONY : linux/linux_signal.c.i
+
+linux/linux_signal.s: linux/linux_signal.c.s
+.PHONY : linux/linux_signal.s
+
+# target to generate assembly for a file
+linux/linux_signal.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_signal.c.s
+.PHONY : linux/linux_signal.c.s
+
+linux/linux_syscall_dispatch.o: linux/linux_syscall_dispatch.c.o
+.PHONY : linux/linux_syscall_dispatch.o
+
+# target to build an object file
+linux/linux_syscall_dispatch.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_syscall_dispatch.c.o
+.PHONY : linux/linux_syscall_dispatch.c.o
+
+linux/linux_syscall_dispatch.i: linux/linux_syscall_dispatch.c.i
+.PHONY : linux/linux_syscall_dispatch.i
+
+# target to preprocess a source file
+linux/linux_syscall_dispatch.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_syscall_dispatch.c.i
+.PHONY : linux/linux_syscall_dispatch.c.i
+
+linux/linux_syscall_dispatch.s: linux/linux_syscall_dispatch.c.s
+.PHONY : linux/linux_syscall_dispatch.s
+
+# target to generate assembly for a file
+linux/linux_syscall_dispatch.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_syscall_dispatch.c.s
+.PHONY : linux/linux_syscall_dispatch.c.s
+
+linux/linux_sysv_ipc.o: linux/linux_sysv_ipc.c.o
+.PHONY : linux/linux_sysv_ipc.o
+
+# target to build an object file
+linux/linux_sysv_ipc.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_sysv_ipc.c.o
+.PHONY : linux/linux_sysv_ipc.c.o
+
+linux/linux_sysv_ipc.i: linux/linux_sysv_ipc.c.i
+.PHONY : linux/linux_sysv_ipc.i
+
+# target to preprocess a source file
+linux/linux_sysv_ipc.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_sysv_ipc.c.i
+.PHONY : linux/linux_sysv_ipc.c.i
+
+linux/linux_sysv_ipc.s: linux/linux_sysv_ipc.c.s
+.PHONY : linux/linux_sysv_ipc.s
+
+# target to generate assembly for a file
+linux/linux_sysv_ipc.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_sysv_ipc.c.s
+.PHONY : linux/linux_sysv_ipc.c.s
+
+linux/linux_time.o: linux/linux_time.c.o
+.PHONY : linux/linux_time.o
+
+# target to build an object file
+linux/linux_time.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_time.c.o
+.PHONY : linux/linux_time.c.o
+
+linux/linux_time.i: linux/linux_time.c.i
+.PHONY : linux/linux_time.i
+
+# target to preprocess a source file
+linux/linux_time.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_time.c.i
+.PHONY : linux/linux_time.c.i
+
+linux/linux_time.s: linux/linux_time.c.s
+.PHONY : linux/linux_time.s
+
+# target to generate assembly for a file
+linux/linux_time.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/linux/linux_time.c.s
+.PHONY : linux/linux_time.c.s
+
 msg_router.o: msg_router.c.o
 .PHONY : msg_router.o
 
@@ -547,6 +867,174 @@ msg_router.s: msg_router.c.s
 msg_router.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-msg-router.dir/build.make libos/CMakeFiles/phoenix-libos-msg-router.dir/msg_router.c.s
 .PHONY : msg_router.c.s
+
+net/bsd_socket.o: net/bsd_socket.c.o
+.PHONY : net/bsd_socket.o
+
+# target to build an object file
+net/bsd_socket.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/bsd_socket.c.o
+.PHONY : net/bsd_socket.c.o
+
+net/bsd_socket.i: net/bsd_socket.c.i
+.PHONY : net/bsd_socket.i
+
+# target to preprocess a source file
+net/bsd_socket.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/bsd_socket.c.i
+.PHONY : net/bsd_socket.c.i
+
+net/bsd_socket.s: net/bsd_socket.c.s
+.PHONY : net/bsd_socket.s
+
+# target to generate assembly for a file
+net/bsd_socket.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/bsd_socket.c.s
+.PHONY : net/bsd_socket.c.s
+
+net/dpdk_shim.o: net/dpdk_shim.c.o
+.PHONY : net/dpdk_shim.o
+
+# target to build an object file
+net/dpdk_shim.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/net/dpdk_shim.c.o
+.PHONY : net/dpdk_shim.c.o
+
+net/dpdk_shim.i: net/dpdk_shim.c.i
+.PHONY : net/dpdk_shim.i
+
+# target to preprocess a source file
+net/dpdk_shim.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/net/dpdk_shim.c.i
+.PHONY : net/dpdk_shim.c.i
+
+net/dpdk_shim.s: net/dpdk_shim.c.s
+.PHONY : net/dpdk_shim.s
+
+# target to generate assembly for a file
+net/dpdk_shim.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/net/dpdk_shim.c.s
+.PHONY : net/dpdk_shim.c.s
+
+net/inet_domain.o: net/inet_domain.c.o
+.PHONY : net/inet_domain.o
+
+# target to build an object file
+net/inet_domain.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/inet_domain.c.o
+.PHONY : net/inet_domain.c.o
+
+net/inet_domain.i: net/inet_domain.c.i
+.PHONY : net/inet_domain.i
+
+# target to preprocess a source file
+net/inet_domain.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/inet_domain.c.i
+.PHONY : net/inet_domain.c.i
+
+net/inet_domain.s: net/inet_domain.c.s
+.PHONY : net/inet_domain.s
+
+# target to generate assembly for a file
+net/inet_domain.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/inet_domain.c.s
+.PHONY : net/inet_domain.c.s
+
+net/socket.o: net/socket.c.o
+.PHONY : net/socket.o
+
+# target to build an object file
+net/socket.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/net/socket.c.o
+.PHONY : net/socket.c.o
+
+net/socket.i: net/socket.c.i
+.PHONY : net/socket.i
+
+# target to preprocess a source file
+net/socket.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/net/socket.c.i
+.PHONY : net/socket.c.i
+
+net/socket.s: net/socket.c.s
+.PHONY : net/socket.s
+
+# target to generate assembly for a file
+net/socket.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/net/socket.c.s
+.PHONY : net/socket.c.s
+
+net/socket_syscall.o: net/socket_syscall.c.o
+.PHONY : net/socket_syscall.o
+
+# target to build an object file
+net/socket_syscall.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/socket_syscall.c.o
+.PHONY : net/socket_syscall.c.o
+
+net/socket_syscall.i: net/socket_syscall.c.i
+.PHONY : net/socket_syscall.i
+
+# target to preprocess a source file
+net/socket_syscall.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/socket_syscall.c.i
+.PHONY : net/socket_syscall.c.i
+
+net/socket_syscall.s: net/socket_syscall.c.s
+.PHONY : net/socket_syscall.s
+
+# target to generate assembly for a file
+net/socket_syscall.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/socket_syscall.c.s
+.PHONY : net/socket_syscall.c.s
+
+net/unix_domain.o: net/unix_domain.c.o
+.PHONY : net/unix_domain.o
+
+# target to build an object file
+net/unix_domain.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/unix_domain.c.o
+.PHONY : net/unix_domain.c.o
+
+net/unix_domain.i: net/unix_domain.c.i
+.PHONY : net/unix_domain.i
+
+# target to preprocess a source file
+net/unix_domain.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/unix_domain.c.i
+.PHONY : net/unix_domain.c.i
+
+net/unix_domain.s: net/unix_domain.c.s
+.PHONY : net/unix_domain.s
+
+# target to generate assembly for a file
+net/unix_domain.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/net/unix_domain.c.s
+.PHONY : net/unix_domain.c.s
+
+posix/linux_abi.o: posix/linux_abi.c.o
+.PHONY : posix/linux_abi.o
+
+# target to build an object file
+posix/linux_abi.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-posix.dir/build.make libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o
+.PHONY : posix/linux_abi.c.o
+
+posix/linux_abi.i: posix/linux_abi.c.i
+.PHONY : posix/linux_abi.i
+
+# target to preprocess a source file
+posix/linux_abi.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-posix.dir/build.make libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.i
+.PHONY : posix/linux_abi.c.i
+
+posix/linux_abi.s: posix/linux_abi.c.s
+.PHONY : posix/linux_abi.s
+
+# target to generate assembly for a file
+posix/linux_abi.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-posix.dir/build.make libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.s
+.PHONY : posix/linux_abi.c.s
 
 posix/posix.o: posix/posix.c.o
 .PHONY : posix/posix.o
@@ -732,11 +1220,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... phoenix-libos-affine-runtime"
 	@echo "... phoenix-libos-baremetal-stubs"
+	@echo "... phoenix-libos-bsd-sockets"
 	@echo "... phoenix-libos-cap"
 	@echo "... phoenix-libos-file"
 	@echo "... phoenix-libos-fs"
+	@echo "... phoenix-libos-gpu"
 	@echo "... phoenix-libos-ipc"
+	@echo "... phoenix-libos-linux-abi"
 	@echo "... phoenix-libos-msg-router"
+	@echo "... phoenix-libos-net"
 	@echo "... phoenix-libos-nn"
 	@echo "... phoenix-libos-posix"
 	@echo "... phoenix-libos-registration"
@@ -759,12 +1251,66 @@ help:
 	@echo "... fs/fs.o"
 	@echo "... fs/fs.i"
 	@echo "... fs/fs.s"
+	@echo "... gpu/vgpu.o"
+	@echo "... gpu/vgpu.i"
+	@echo "... gpu/vgpu.s"
 	@echo "... ipc.o"
 	@echo "... ipc.i"
 	@echo "... ipc.s"
+	@echo "... linux/linux_epoll.o"
+	@echo "... linux/linux_epoll.i"
+	@echo "... linux/linux_epoll.s"
+	@echo "... linux/linux_file.o"
+	@echo "... linux/linux_file.i"
+	@echo "... linux/linux_file.s"
+	@echo "... linux/linux_io_uring.o"
+	@echo "... linux/linux_io_uring.i"
+	@echo "... linux/linux_io_uring.s"
+	@echo "... linux/linux_memory.o"
+	@echo "... linux/linux_memory.i"
+	@echo "... linux/linux_memory.s"
+	@echo "... linux/linux_net.o"
+	@echo "... linux/linux_net.i"
+	@echo "... linux/linux_net.s"
+	@echo "... linux/linux_process.o"
+	@echo "... linux/linux_process.i"
+	@echo "... linux/linux_process.s"
+	@echo "... linux/linux_signal.o"
+	@echo "... linux/linux_signal.i"
+	@echo "... linux/linux_signal.s"
+	@echo "... linux/linux_syscall_dispatch.o"
+	@echo "... linux/linux_syscall_dispatch.i"
+	@echo "... linux/linux_syscall_dispatch.s"
+	@echo "... linux/linux_sysv_ipc.o"
+	@echo "... linux/linux_sysv_ipc.i"
+	@echo "... linux/linux_sysv_ipc.s"
+	@echo "... linux/linux_time.o"
+	@echo "... linux/linux_time.i"
+	@echo "... linux/linux_time.s"
 	@echo "... msg_router.o"
 	@echo "... msg_router.i"
 	@echo "... msg_router.s"
+	@echo "... net/bsd_socket.o"
+	@echo "... net/bsd_socket.i"
+	@echo "... net/bsd_socket.s"
+	@echo "... net/dpdk_shim.o"
+	@echo "... net/dpdk_shim.i"
+	@echo "... net/dpdk_shim.s"
+	@echo "... net/inet_domain.o"
+	@echo "... net/inet_domain.i"
+	@echo "... net/inet_domain.s"
+	@echo "... net/socket.o"
+	@echo "... net/socket.i"
+	@echo "... net/socket.s"
+	@echo "... net/socket_syscall.o"
+	@echo "... net/socket_syscall.i"
+	@echo "... net/socket_syscall.s"
+	@echo "... net/unix_domain.o"
+	@echo "... net/unix_domain.i"
+	@echo "... net/unix_domain.s"
+	@echo "... posix/linux_abi.o"
+	@echo "... posix/linux_abi.i"
+	@echo "... posix/linux_abi.s"
 	@echo "... posix/posix.o"
 	@echo "... posix/posix.i"
 	@echo "... posix/posix.s"

@@ -6,5 +6,5 @@ C_DEFINES = -DPHOENIX_METRICS_MAIN
 
 C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/tools
 
-C_FLAGS = -O3 -DNDEBUG -Wall -Wextra
+C_FLAGS = -O3 -DNDEBUG -std=c23 -fPIE -fcolor-diagnostics -fstack-protector-strong -fcf-protection=full -Wall -Wextra
 

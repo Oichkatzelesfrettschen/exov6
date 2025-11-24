@@ -40,6 +40,7 @@
 #define FS_REQ_READDIR  6   // Read directory entry
 #define FS_REQ_MKDIR    7   // Create directory
 #define FS_REQ_UNLINK   8   // Remove file
+#define FS_REQ_LSEEK    9   // Seek in file
 #define FS_REQ_PING     99  // Test connectivity
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -115,6 +116,31 @@
  * w2: File size
  */
 
+/**
+ * FS_REQ_LSEEK request
+ * w0: FS_REQ_LSEEK
+ * w1: File descriptor
+ * w2: (whence << 32) | offset
+ *
+ * whence values:
+ *   0 = SEEK_SET (absolute offset)
+ *   1 = SEEK_CUR (relative to current)
+ *   2 = SEEK_END (relative to end)
+ *
+ * Response:
+ * w0: New file offset (>= 0) or error (< 0)
+ */
+
+/**
+ * FS_REQ_UNLINK request
+ * w0: FS_REQ_UNLINK
+ * w1: Pointer to path string (in shared memory)
+ * w2: 0
+ *
+ * Response:
+ * w0: 0 on success, < 0 on error
+ */
+
 // ═══════════════════════════════════════════════════════════════════════════
 // Shared Buffer Protocol
 // ═══════════════════════════════════════════════════════════════════════════
@@ -135,6 +161,14 @@
 #define FS_SHARED_BUF_SIZE  4096
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Seek Whence Values (POSIX standard)
+// ═══════════════════════════════════════════════════════════════════════════
+
+#define FS_SEEK_SET     0   // Seek from beginning of file
+#define FS_SEEK_CUR     1   // Seek from current position
+#define FS_SEEK_END     2   // Seek from end of file
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Helper Macros
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -142,5 +176,10 @@
 #define FS_PACK_SIZE_OFF(size, off) (((uint64_t)(size) << 32) | (uint64_t)(off))
 #define FS_UNPACK_SIZE(w2) ((uint32_t)((w2) >> 32))
 #define FS_UNPACK_OFF(w2)  ((uint32_t)((w2) & 0xFFFFFFFF))
+
+// Pack whence and offset for lseek
+#define FS_PACK_WHENCE_OFF(whence, off) (((uint64_t)(whence) << 32) | (uint32_t)(off))
+#define FS_UNPACK_WHENCE(w2) ((int)((w2) >> 32))
+#define FS_UNPACK_LSEEK_OFF(w2) ((int32_t)((w2) & 0xFFFFFFFF))
 
 #endif // FS_PROTOCOL_H

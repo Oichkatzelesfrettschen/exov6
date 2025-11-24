@@ -1,20 +1,9 @@
 # Hashes of file build rules.
-9cdf53bbab95c6fe6760b52622592f68 tests/CMakeFiles/test-c17-all
-83eb1216b81fe944990517ff2b2907b2 tests/CMakeFiles/test-c17-unit
-b2a65e306e94271665653ec8eea64cfe tests/CMakeFiles/test-full
-1cd6c3e76c37d94ca0d642f562ab3769 tests/CMakeFiles/test-integration
-ddf722bc73213aa8a500afb8e1204dbe tests/CMakeFiles/test-memory
-b47a1d22efa51e2fb2a2b50a754b5509 tests/CMakeFiles/test-performance
-c27e5cc299dc72e352b7a17b268c841a tests/CMakeFiles/test-posix
-e8485fdc4879d4b16275316065942a2b tests/CMakeFiles/test-quick
-1353b3e74489c84c0ceb4007ff0e1c72 tests/CMakeFiles/test-report
-73f601b34c73dd4bc6ffd661ffa07324 tests/CMakeFiles/test-security
-70984dd7e91692762c553e0065d96979 tests/c17/CMakeFiles/c17-test-report
-f39dda7078074bfcd086d7d937a3cb22 tests/c17/CMakeFiles/run-c17-tests
-e2ffa55c85090c9c54218d4c851e39bd tests/c17/integration/CMakeFiles/integration_tests
-1b0cec1044170ed5187b65fee274a68d tests/c17/posix/CMakeFiles/posix_tests
-6b4676ac0077f6182be34da91800fc64 tests/c17/unit/CMakeFiles/unit_tests
+bf617caed684a1c3204f692df1283143 kernel/CMakeFiles/kernel_init_bin
+1564ebe238b027629ce65c41534ab5db kernel/init.bin
 962237a7a38d880c69a6a1cdd12c4eaa tools/CMakeFiles/analyze-headers
 6e2a48373b23a6e18194f15682ec1893 tools/CMakeFiles/code-metrics
 c99698d6dbb81e2366e3ce17a4e60fc8 tools/CMakeFiles/count-files
 0a512b9e19ff60a4f976b8b7d92cb67e tools/CMakeFiles/organize-files
+42bbbd1d8c7b159c6eac47360f56bc33 user/CMakeFiles/init_bin
+6bcfd5e51695b51d65dc63ac1b521e59 user/init.bin

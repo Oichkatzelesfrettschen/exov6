@@ -400,8 +400,8 @@ int fd_dup2(int oldfd, int newfd) {
 /* ═══════════════════════════════════════════════════════════════════════════
  * fd_lseek() - Seek in a File
  *
- * LESSON: Offset tracking is in LibOS. For now, we only track locally.
- * A full implementation would tell fs_srv about the seek.
+ * LESSON: For TCC compatibility, we need proper seek support. This now
+ * calls through to the file server which maintains the true file offset.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 #define SEEK_SET 0
@@ -418,20 +418,17 @@ int fd_lseek(int fd, int offset, int whence) {
     }
 
     if (fd_table[fd].type == FD_TYPE_FILE) {
-        switch (whence) {
-        case SEEK_SET:
-            fd_table[fd].offset = offset;
-            break;
-        case SEEK_CUR:
-            fd_table[fd].offset += offset;
-            break;
-        case SEEK_END:
-            /* Would need file size from fs_srv - not implemented */
-            return -1;
-        default:
-            return -1;
+        int handle = fd_table[fd].server_handle;
+        
+        /* Call server's lseek to update the server-side offset */
+        int new_offset = lseek(handle, offset, whence);
+        
+        if (new_offset >= 0) {
+            /* Update local tracking */
+            fd_table[fd].offset = new_offset;
         }
-        return (int)fd_table[fd].offset;
+        
+        return new_offset;
     }
 
     return -1;
@@ -507,6 +504,19 @@ int fd_pipe(int pipefd[2]) {
     pipefd[1] = write_fd;  /* Write end */
 
     return 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * fd_unlink() - Remove a File
+ *
+ * LESSON: This is a path-based operation (not fd-based), so we bypass the
+ * fd_table entirely and call the fs_client directly.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+int fd_unlink(const char *path) {
+    /* Call fs_client unlink() which sends IPC to fs_srv */
+    extern int unlink(const char *path);
+    return unlink(path);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

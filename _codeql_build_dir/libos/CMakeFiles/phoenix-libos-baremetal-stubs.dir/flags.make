@@ -4,7 +4,7 @@
 # compile C with /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang
 C_DEFINES = 
 
-C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include
+C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/include/exov6/libos -I/home/runner/work/exov6/exov6/libos/stubs
 
-C_FLAGS = -O3 -DNDEBUG -std=c23 -Wall -O3 -DNDEBUG -std=c2x
+C_FLAGS = -O3 -DNDEBUG -std=c23 -fcolor-diagnostics -fstack-protector-strong -fcf-protection=full -Wall -O3 -DNDEBUG -std=c2x
 

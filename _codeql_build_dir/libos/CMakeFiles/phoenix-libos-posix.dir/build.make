@@ -89,17 +89,33 @@ libos/CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/libos && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/libos/posix/posix.c -o CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.s
 
+libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o: libos/CMakeFiles/phoenix-libos-posix.dir/flags.make
+libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o: /home/runner/work/exov6/exov6/libos/posix/linux_abi.c
+libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o: libos/CMakeFiles/phoenix-libos-posix.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/libos && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o -MF CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o.d -o CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o -c /home/runner/work/exov6/exov6/libos/posix/linux_abi.c
+
+libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/libos && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/libos/posix/linux_abi.c > CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.i
+
+libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/libos && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/libos/posix/linux_abi.c -o CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.s
+
 # Object files for target phoenix-libos-posix
 phoenix__libos__posix_OBJECTS = \
-"CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o"
+"CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o" \
+"CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o"
 
 # External object files for target phoenix-libos-posix
 phoenix__libos__posix_EXTERNAL_OBJECTS =
 
 libos/libphoenix-libos-posix.a: libos/CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o
+libos/libphoenix-libos-posix.a: libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o
 libos/libphoenix-libos-posix.a: libos/CMakeFiles/phoenix-libos-posix.dir/build.make
 libos/libphoenix-libos-posix.a: libos/CMakeFiles/phoenix-libos-posix.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libphoenix-libos-posix.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C static library libphoenix-libos-posix.a"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/libos && $(CMAKE_COMMAND) -P CMakeFiles/phoenix-libos-posix.dir/cmake_clean_target.cmake
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/libos && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/phoenix-libos-posix.dir/link.txt --verbose=$(VERBOSE)
 

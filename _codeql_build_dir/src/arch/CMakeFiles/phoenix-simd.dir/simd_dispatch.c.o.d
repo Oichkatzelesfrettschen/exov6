@@ -1,7 +1,6 @@
 src/arch/CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o: \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.c \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h /usr/include/features-time64.h \
@@ -19,8 +18,7 @@ src/arch/CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o: \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /home/runner/work/exov6/exov6/tools/../tools/phoenix_metrics.h \
-  /usr/include/stdio.h /home/runner/work/exov6/exov6/include/stddef.h \
-  /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
+  /usr/include/stdio.h /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
   /usr/lib/llvm-18/lib/clang/18/include/stdarg.h \

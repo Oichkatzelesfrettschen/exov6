@@ -817,10 +817,24 @@ kernel/CMakeFiles/kernel.dir/scheduler_lockfree.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/scheduler_lockfree.c.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/scheduler_lockfree.c -o CMakeFiles/kernel.dir/scheduler_lockfree.c.s
 
+kernel/CMakeFiles/kernel.dir/security.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/security.c.o: /home/runner/work/exov6/exov6/kernel/security.c
+kernel/CMakeFiles/kernel.dir/security.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building C object kernel/CMakeFiles/kernel.dir/security.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/security.c.o -MF CMakeFiles/kernel.dir/security.c.o.d -o CMakeFiles/kernel.dir/security.c.o -c /home/runner/work/exov6/exov6/kernel/security.c
+
+kernel/CMakeFiles/kernel.dir/security.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/security.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/security.c > CMakeFiles/kernel.dir/security.c.i
+
+kernel/CMakeFiles/kernel.dir/security.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/security.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/security.c -o CMakeFiles/kernel.dir/security.c.s
+
 kernel/CMakeFiles/kernel.dir/service.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/service.c.o: /home/runner/work/exov6/exov6/kernel/service.c
 kernel/CMakeFiles/kernel.dir/service.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building C object kernel/CMakeFiles/kernel.dir/service.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building C object kernel/CMakeFiles/kernel.dir/service.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/service.c.o -MF CMakeFiles/kernel.dir/service.c.o.d -o CMakeFiles/kernel.dir/service.c.o -c /home/runner/work/exov6/exov6/kernel/service.c
 
 kernel/CMakeFiles/kernel.dir/service.c.i: cmake_force
@@ -834,7 +848,7 @@ kernel/CMakeFiles/kernel.dir/service.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/streams.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/streams.c.o: /home/runner/work/exov6/exov6/kernel/streams.c
 kernel/CMakeFiles/kernel.dir/streams.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building C object kernel/CMakeFiles/kernel.dir/streams.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building C object kernel/CMakeFiles/kernel.dir/streams.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/streams.c.o -MF CMakeFiles/kernel.dir/streams.c.o.d -o CMakeFiles/kernel.dir/streams.c.o -c /home/runner/work/exov6/exov6/kernel/streams.c
 
 kernel/CMakeFiles/kernel.dir/streams.c.i: cmake_force
@@ -848,7 +862,7 @@ kernel/CMakeFiles/kernel.dir/streams.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/string.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/string.c.o: /home/runner/work/exov6/exov6/kernel/string.c
 kernel/CMakeFiles/kernel.dir/string.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building C object kernel/CMakeFiles/kernel.dir/string.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building C object kernel/CMakeFiles/kernel.dir/string.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/string.c.o -MF CMakeFiles/kernel.dir/string.c.o.d -o CMakeFiles/kernel.dir/string.c.o -c /home/runner/work/exov6/exov6/kernel/string.c
 
 kernel/CMakeFiles/kernel.dir/string.c.i: cmake_force
@@ -862,7 +876,7 @@ kernel/CMakeFiles/kernel.dir/string.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/task_exec.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/task_exec.c.o: /home/runner/work/exov6/exov6/kernel/task_exec.c
 kernel/CMakeFiles/kernel.dir/task_exec.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building C object kernel/CMakeFiles/kernel.dir/task_exec.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building C object kernel/CMakeFiles/kernel.dir/task_exec.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/task_exec.c.o -MF CMakeFiles/kernel.dir/task_exec.c.o.d -o CMakeFiles/kernel.dir/task_exec.c.o -c /home/runner/work/exov6/exov6/kernel/task_exec.c
 
 kernel/CMakeFiles/kernel.dir/task_exec.c.i: cmake_force
@@ -876,7 +890,7 @@ kernel/CMakeFiles/kernel.dir/task_exec.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/token_bucket.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/token_bucket.c.o: /home/runner/work/exov6/exov6/kernel/token_bucket.c
 kernel/CMakeFiles/kernel.dir/token_bucket.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building C object kernel/CMakeFiles/kernel.dir/token_bucket.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building C object kernel/CMakeFiles/kernel.dir/token_bucket.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/token_bucket.c.o -MF CMakeFiles/kernel.dir/token_bucket.c.o.d -o CMakeFiles/kernel.dir/token_bucket.c.o -c /home/runner/work/exov6/exov6/kernel/token_bucket.c
 
 kernel/CMakeFiles/kernel.dir/token_bucket.c.i: cmake_force
@@ -890,7 +904,7 @@ kernel/CMakeFiles/kernel.dir/token_bucket.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/tty.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/tty.c.o: /home/runner/work/exov6/exov6/kernel/tty.c
 kernel/CMakeFiles/kernel.dir/tty.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building C object kernel/CMakeFiles/kernel.dir/tty.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building C object kernel/CMakeFiles/kernel.dir/tty.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/tty.c.o -MF CMakeFiles/kernel.dir/tty.c.o.d -o CMakeFiles/kernel.dir/tty.c.o -c /home/runner/work/exov6/exov6/kernel/tty.c
 
 kernel/CMakeFiles/kernel.dir/tty.c.i: cmake_force
@@ -904,7 +918,7 @@ kernel/CMakeFiles/kernel.dir/tty.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/work_stealing.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/work_stealing.c.o: /home/runner/work/exov6/exov6/kernel/work_stealing.c
 kernel/CMakeFiles/kernel.dir/work_stealing.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building C object kernel/CMakeFiles/kernel.dir/work_stealing.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building C object kernel/CMakeFiles/kernel.dir/work_stealing.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/work_stealing.c.o -MF CMakeFiles/kernel.dir/work_stealing.c.o.d -o CMakeFiles/kernel.dir/work_stealing.c.o -c /home/runner/work/exov6/exov6/kernel/work_stealing.c
 
 kernel/CMakeFiles/kernel.dir/work_stealing.c.i: cmake_force
@@ -918,7 +932,7 @@ kernel/CMakeFiles/kernel.dir/work_stealing.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/zone.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/zone.c.o: /home/runner/work/exov6/exov6/kernel/zone.c
 kernel/CMakeFiles/kernel.dir/zone.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building C object kernel/CMakeFiles/kernel.dir/zone.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building C object kernel/CMakeFiles/kernel.dir/zone.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/zone.c.o -MF CMakeFiles/kernel.dir/zone.c.o.d -o CMakeFiles/kernel.dir/zone.c.o -c /home/runner/work/exov6/exov6/kernel/zone.c
 
 kernel/CMakeFiles/kernel.dir/zone.c.i: cmake_force
@@ -932,7 +946,7 @@ kernel/CMakeFiles/kernel.dir/zone.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/zone_isolation.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/zone_isolation.c.o: /home/runner/work/exov6/exov6/kernel/zone_isolation.c
 kernel/CMakeFiles/kernel.dir/zone_isolation.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building C object kernel/CMakeFiles/kernel.dir/zone_isolation.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building C object kernel/CMakeFiles/kernel.dir/zone_isolation.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/zone_isolation.c.o -MF CMakeFiles/kernel.dir/zone_isolation.c.o.d -o CMakeFiles/kernel.dir/zone_isolation.c.o -c /home/runner/work/exov6/exov6/kernel/zone_isolation.c
 
 kernel/CMakeFiles/kernel.dir/zone_isolation.c.i: cmake_force
@@ -945,7 +959,7 @@ kernel/CMakeFiles/kernel.dir/zone_isolation.c.s: cmake_force
 
 kernel/CMakeFiles/kernel.dir/swtch.S.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/swtch.S.o: /home/runner/work/exov6/exov6/kernel/swtch.S
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building ASM object kernel/CMakeFiles/kernel.dir/swtch.S.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building ASM object kernel/CMakeFiles/kernel.dir/swtch.S.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/kernel.dir/swtch.S.o -c /home/runner/work/exov6/exov6/kernel/swtch.S
 
 kernel/CMakeFiles/kernel.dir/swtch.S.i: cmake_force
@@ -958,7 +972,7 @@ kernel/CMakeFiles/kernel.dir/swtch.S.s: cmake_force
 
 kernel/CMakeFiles/kernel.dir/swtch64.S.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/swtch64.S.o: /home/runner/work/exov6/exov6/kernel/swtch64.S
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building ASM object kernel/CMakeFiles/kernel.dir/swtch64.S.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building ASM object kernel/CMakeFiles/kernel.dir/swtch64.S.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/kernel.dir/swtch64.S.o -c /home/runner/work/exov6/exov6/kernel/swtch64.S
 
 kernel/CMakeFiles/kernel.dir/swtch64.S.i: cmake_force
@@ -969,10 +983,23 @@ kernel/CMakeFiles/kernel.dir/swtch64.S.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling ASM source to assembly CMakeFiles/kernel.dir/swtch64.S.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /home/runner/work/exov6/exov6/kernel/swtch64.S -o CMakeFiles/kernel.dir/swtch64.S.s
 
+kernel/CMakeFiles/kernel.dir/init_bin.S.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/init_bin.S.o: /home/runner/work/exov6/exov6/kernel/init_bin.S
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building ASM object kernel/CMakeFiles/kernel.dir/init_bin.S.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/kernel.dir/init_bin.S.o -c /home/runner/work/exov6/exov6/kernel/init_bin.S
+
+kernel/CMakeFiles/kernel.dir/init_bin.S.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing ASM source to CMakeFiles/kernel.dir/init_bin.S.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -E /home/runner/work/exov6/exov6/kernel/init_bin.S > CMakeFiles/kernel.dir/init_bin.S.i
+
+kernel/CMakeFiles/kernel.dir/init_bin.S.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling ASM source to assembly CMakeFiles/kernel.dir/init_bin.S.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /home/runner/work/exov6/exov6/kernel/init_bin.S -o CMakeFiles/kernel.dir/init_bin.S.s
+
 kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o: /home/runner/work/exov6/exov6/kernel/hypervisor/hypervisor.c
 kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building C object kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building C object kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o -MF CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o.d -o CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o -c /home/runner/work/exov6/exov6/kernel/hypervisor/hypervisor.c
 
 kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.i: cmake_force
@@ -986,7 +1013,7 @@ kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o: /home/runner/work/exov6/exov6/kernel/sync/spinlock.c
 kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building C object kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building C object kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o -MF CMakeFiles/kernel.dir/sync/spinlock.c.o.d -o CMakeFiles/kernel.dir/sync/spinlock.c.o -c /home/runner/work/exov6/exov6/kernel/sync/spinlock.c
 
 kernel/CMakeFiles/kernel.dir/sync/spinlock.c.i: cmake_force
@@ -1000,7 +1027,7 @@ kernel/CMakeFiles/kernel.dir/sync/spinlock.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o: /home/runner/work/exov6/exov6/kernel/sync/sleeplock.c
 kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building C object kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building C object kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o -MF CMakeFiles/kernel.dir/sync/sleeplock.c.o.d -o CMakeFiles/kernel.dir/sync/sleeplock.c.o -c /home/runner/work/exov6/exov6/kernel/sync/sleeplock.c
 
 kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.i: cmake_force
@@ -1014,7 +1041,7 @@ kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/rcu.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/rcu.c.o: /home/runner/work/exov6/exov6/kernel/sync/rcu.c
 kernel/CMakeFiles/kernel.dir/sync/rcu.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building C object kernel/CMakeFiles/kernel.dir/sync/rcu.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building C object kernel/CMakeFiles/kernel.dir/sync/rcu.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/rcu.c.o -MF CMakeFiles/kernel.dir/sync/rcu.c.o.d -o CMakeFiles/kernel.dir/sync/rcu.c.o -c /home/runner/work/exov6/exov6/kernel/sync/rcu.c
 
 kernel/CMakeFiles/kernel.dir/sync/rcu.c.i: cmake_force
@@ -1028,7 +1055,7 @@ kernel/CMakeFiles/kernel.dir/sync/rcu.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.o: /home/runner/work/exov6/exov6/kernel/sync/qspinlock.c
 kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building C object kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Building C object kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.o -MF CMakeFiles/kernel.dir/sync/qspinlock.c.o.d -o CMakeFiles/kernel.dir/sync/qspinlock.c.o -c /home/runner/work/exov6/exov6/kernel/sync/qspinlock.c
 
 kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.i: cmake_force
@@ -1042,7 +1069,7 @@ kernel/CMakeFiles/kernel.dir/sync/qspinlock.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o: /home/runner/work/exov6/exov6/kernel/sync/adaptive_mutex.c
 kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building C object kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_72) "Building C object kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o -MF CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o.d -o CMakeFiles/kernel.dir/sync/adaptive_mutex.c.o -c /home/runner/work/exov6/exov6/kernel/sync/adaptive_mutex.c
 
 kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.i: cmake_force
@@ -1056,7 +1083,7 @@ kernel/CMakeFiles/kernel.dir/sync/adaptive_mutex.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/turnstile.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/turnstile.c.o: /home/runner/work/exov6/exov6/kernel/sync/turnstile.c
 kernel/CMakeFiles/kernel.dir/sync/turnstile.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Building C object kernel/CMakeFiles/kernel.dir/sync/turnstile.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_73) "Building C object kernel/CMakeFiles/kernel.dir/sync/turnstile.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/turnstile.c.o -MF CMakeFiles/kernel.dir/sync/turnstile.c.o.d -o CMakeFiles/kernel.dir/sync/turnstile.c.o -c /home/runner/work/exov6/exov6/kernel/sync/turnstile.c
 
 kernel/CMakeFiles/kernel.dir/sync/turnstile.c.i: cmake_force
@@ -1070,7 +1097,7 @@ kernel/CMakeFiles/kernel.dir/sync/turnstile.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/priority.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/priority.c.o: /home/runner/work/exov6/exov6/kernel/sync/priority.c
 kernel/CMakeFiles/kernel.dir/sync/priority.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_72) "Building C object kernel/CMakeFiles/kernel.dir/sync/priority.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_74) "Building C object kernel/CMakeFiles/kernel.dir/sync/priority.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/priority.c.o -MF CMakeFiles/kernel.dir/sync/priority.c.o.d -o CMakeFiles/kernel.dir/sync/priority.c.o -c /home/runner/work/exov6/exov6/kernel/sync/priority.c
 
 kernel/CMakeFiles/kernel.dir/sync/priority.c.i: cmake_force
@@ -1084,7 +1111,7 @@ kernel/CMakeFiles/kernel.dir/sync/priority.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o: /home/runner/work/exov6/exov6/kernel/sync/lwkt_token.c
 kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_73) "Building C object kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_75) "Building C object kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o -MF CMakeFiles/kernel.dir/sync/lwkt_token.c.o.d -o CMakeFiles/kernel.dir/sync/lwkt_token.c.o -c /home/runner/work/exov6/exov6/kernel/sync/lwkt_token.c
 
 kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.i: cmake_force
@@ -1098,7 +1125,7 @@ kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sync/dag.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sync/dag.c.o: /home/runner/work/exov6/exov6/kernel/sync/dag.c
 kernel/CMakeFiles/kernel.dir/sync/dag.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_74) "Building C object kernel/CMakeFiles/kernel.dir/sync/dag.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_76) "Building C object kernel/CMakeFiles/kernel.dir/sync/dag.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sync/dag.c.o -MF CMakeFiles/kernel.dir/sync/dag.c.o.d -o CMakeFiles/kernel.dir/sync/dag.c.o -c /home/runner/work/exov6/exov6/kernel/sync/dag.c
 
 kernel/CMakeFiles/kernel.dir/sync/dag.c.i: cmake_force
@@ -1112,7 +1139,7 @@ kernel/CMakeFiles/kernel.dir/sync/dag.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/console.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/console.c.o: /home/runner/work/exov6/exov6/kernel/drivers/console.c
 kernel/CMakeFiles/kernel.dir/drivers/console.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_75) "Building C object kernel/CMakeFiles/kernel.dir/drivers/console.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_77) "Building C object kernel/CMakeFiles/kernel.dir/drivers/console.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/console.c.o -MF CMakeFiles/kernel.dir/drivers/console.c.o.d -o CMakeFiles/kernel.dir/drivers/console.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/console.c
 
 kernel/CMakeFiles/kernel.dir/drivers/console.c.i: cmake_force
@@ -1123,24 +1150,10 @@ kernel/CMakeFiles/kernel.dir/drivers/console.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/drivers/console.c.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/drivers/console.c -o CMakeFiles/kernel.dir/drivers/console.c.s
 
-kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o: kernel/CMakeFiles/kernel.dir/flags.make
-kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o: /home/runner/work/exov6/exov6/kernel/drivers/ddekit.c
-kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_76) "Building C object kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o"
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o -MF CMakeFiles/kernel.dir/drivers/ddekit.c.o.d -o CMakeFiles/kernel.dir/drivers/ddekit.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/ddekit.c
-
-kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/drivers/ddekit.c.i"
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/drivers/ddekit.c > CMakeFiles/kernel.dir/drivers/ddekit.c.i
-
-kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/drivers/ddekit.c.s"
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/drivers/ddekit.c -o CMakeFiles/kernel.dir/drivers/ddekit.c.s
-
 kernel/CMakeFiles/kernel.dir/drivers/driver.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/driver.c.o: /home/runner/work/exov6/exov6/kernel/drivers/driver.c
 kernel/CMakeFiles/kernel.dir/drivers/driver.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_77) "Building C object kernel/CMakeFiles/kernel.dir/drivers/driver.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_78) "Building C object kernel/CMakeFiles/kernel.dir/drivers/driver.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/driver.c.o -MF CMakeFiles/kernel.dir/drivers/driver.c.o.d -o CMakeFiles/kernel.dir/drivers/driver.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/driver.c
 
 kernel/CMakeFiles/kernel.dir/drivers/driver.c.i: cmake_force
@@ -1154,7 +1167,7 @@ kernel/CMakeFiles/kernel.dir/drivers/driver.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o: /home/runner/work/exov6/exov6/kernel/drivers/ioapic.c
 kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_78) "Building C object kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_79) "Building C object kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o -MF CMakeFiles/kernel.dir/drivers/ioapic.c.o.d -o CMakeFiles/kernel.dir/drivers/ioapic.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/ioapic.c
 
 kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.i: cmake_force
@@ -1168,7 +1181,7 @@ kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o: /home/runner/work/exov6/exov6/kernel/drivers/iommu.c
 kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_79) "Building C object kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_80) "Building C object kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o -MF CMakeFiles/kernel.dir/drivers/iommu.c.o.d -o CMakeFiles/kernel.dir/drivers/iommu.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/iommu.c
 
 kernel/CMakeFiles/kernel.dir/drivers/iommu.c.i: cmake_force
@@ -1182,7 +1195,7 @@ kernel/CMakeFiles/kernel.dir/drivers/iommu.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/kbd.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/kbd.c.o: /home/runner/work/exov6/exov6/kernel/drivers/kbd.c
 kernel/CMakeFiles/kernel.dir/drivers/kbd.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_80) "Building C object kernel/CMakeFiles/kernel.dir/drivers/kbd.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_81) "Building C object kernel/CMakeFiles/kernel.dir/drivers/kbd.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/kbd.c.o -MF CMakeFiles/kernel.dir/drivers/kbd.c.o.d -o CMakeFiles/kernel.dir/drivers/kbd.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/kbd.c
 
 kernel/CMakeFiles/kernel.dir/drivers/kbd.c.i: cmake_force
@@ -1196,7 +1209,7 @@ kernel/CMakeFiles/kernel.dir/drivers/kbd.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/lapic.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/lapic.c.o: /home/runner/work/exov6/exov6/kernel/drivers/lapic.c
 kernel/CMakeFiles/kernel.dir/drivers/lapic.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_81) "Building C object kernel/CMakeFiles/kernel.dir/drivers/lapic.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building C object kernel/CMakeFiles/kernel.dir/drivers/lapic.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/lapic.c.o -MF CMakeFiles/kernel.dir/drivers/lapic.c.o.d -o CMakeFiles/kernel.dir/drivers/lapic.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/lapic.c
 
 kernel/CMakeFiles/kernel.dir/drivers/lapic.c.i: cmake_force
@@ -1210,7 +1223,7 @@ kernel/CMakeFiles/kernel.dir/drivers/lapic.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/memide.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/memide.c.o: /home/runner/work/exov6/exov6/kernel/drivers/memide.c
 kernel/CMakeFiles/kernel.dir/drivers/memide.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building C object kernel/CMakeFiles/kernel.dir/drivers/memide.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building C object kernel/CMakeFiles/kernel.dir/drivers/memide.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/memide.c.o -MF CMakeFiles/kernel.dir/drivers/memide.c.o.d -o CMakeFiles/kernel.dir/drivers/memide.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/memide.c
 
 kernel/CMakeFiles/kernel.dir/drivers/memide.c.i: cmake_force
@@ -1224,7 +1237,7 @@ kernel/CMakeFiles/kernel.dir/drivers/memide.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/mp.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/mp.c.o: /home/runner/work/exov6/exov6/kernel/drivers/mp.c
 kernel/CMakeFiles/kernel.dir/drivers/mp.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building C object kernel/CMakeFiles/kernel.dir/drivers/mp.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Building C object kernel/CMakeFiles/kernel.dir/drivers/mp.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/mp.c.o -MF CMakeFiles/kernel.dir/drivers/mp.c.o.d -o CMakeFiles/kernel.dir/drivers/mp.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/mp.c
 
 kernel/CMakeFiles/kernel.dir/drivers/mp.c.i: cmake_force
@@ -1238,7 +1251,7 @@ kernel/CMakeFiles/kernel.dir/drivers/mp.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/picirq.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/picirq.c.o: /home/runner/work/exov6/exov6/kernel/drivers/picirq.c
 kernel/CMakeFiles/kernel.dir/drivers/picirq.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Building C object kernel/CMakeFiles/kernel.dir/drivers/picirq.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_85) "Building C object kernel/CMakeFiles/kernel.dir/drivers/picirq.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/picirq.c.o -MF CMakeFiles/kernel.dir/drivers/picirq.c.o.d -o CMakeFiles/kernel.dir/drivers/picirq.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/picirq.c
 
 kernel/CMakeFiles/kernel.dir/drivers/picirq.c.i: cmake_force
@@ -1252,7 +1265,7 @@ kernel/CMakeFiles/kernel.dir/drivers/picirq.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/drivers/uart.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/drivers/uart.c.o: /home/runner/work/exov6/exov6/kernel/drivers/uart.c
 kernel/CMakeFiles/kernel.dir/drivers/uart.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_85) "Building C object kernel/CMakeFiles/kernel.dir/drivers/uart.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_86) "Building C object kernel/CMakeFiles/kernel.dir/drivers/uart.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/drivers/uart.c.o -MF CMakeFiles/kernel.dir/drivers/uart.c.o.d -o CMakeFiles/kernel.dir/drivers/uart.c.o -c /home/runner/work/exov6/exov6/kernel/drivers/uart.c
 
 kernel/CMakeFiles/kernel.dir/drivers/uart.c.i: cmake_force
@@ -1266,7 +1279,7 @@ kernel/CMakeFiles/kernel.dir/drivers/uart.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/fs/bio.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/fs/bio.c.o: /home/runner/work/exov6/exov6/kernel/fs/bio.c
 kernel/CMakeFiles/kernel.dir/fs/bio.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_86) "Building C object kernel/CMakeFiles/kernel.dir/fs/bio.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_87) "Building C object kernel/CMakeFiles/kernel.dir/fs/bio.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/fs/bio.c.o -MF CMakeFiles/kernel.dir/fs/bio.c.o.d -o CMakeFiles/kernel.dir/fs/bio.c.o -c /home/runner/work/exov6/exov6/kernel/fs/bio.c
 
 kernel/CMakeFiles/kernel.dir/fs/bio.c.i: cmake_force
@@ -1280,7 +1293,7 @@ kernel/CMakeFiles/kernel.dir/fs/bio.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/fs/fs.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/fs/fs.c.o: /home/runner/work/exov6/exov6/kernel/fs/fs.c
 kernel/CMakeFiles/kernel.dir/fs/fs.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_87) "Building C object kernel/CMakeFiles/kernel.dir/fs/fs.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_88) "Building C object kernel/CMakeFiles/kernel.dir/fs/fs.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/fs/fs.c.o -MF CMakeFiles/kernel.dir/fs/fs.c.o.d -o CMakeFiles/kernel.dir/fs/fs.c.o -c /home/runner/work/exov6/exov6/kernel/fs/fs.c
 
 kernel/CMakeFiles/kernel.dir/fs/fs.c.i: cmake_force
@@ -1294,7 +1307,7 @@ kernel/CMakeFiles/kernel.dir/fs/fs.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/fs/ide.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/fs/ide.c.o: /home/runner/work/exov6/exov6/kernel/fs/ide.c
 kernel/CMakeFiles/kernel.dir/fs/ide.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_88) "Building C object kernel/CMakeFiles/kernel.dir/fs/ide.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_89) "Building C object kernel/CMakeFiles/kernel.dir/fs/ide.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/fs/ide.c.o -MF CMakeFiles/kernel.dir/fs/ide.c.o.d -o CMakeFiles/kernel.dir/fs/ide.c.o -c /home/runner/work/exov6/exov6/kernel/fs/ide.c
 
 kernel/CMakeFiles/kernel.dir/fs/ide.c.i: cmake_force
@@ -1308,7 +1321,7 @@ kernel/CMakeFiles/kernel.dir/fs/ide.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/fs/log.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/fs/log.c.o: /home/runner/work/exov6/exov6/kernel/fs/log.c
 kernel/CMakeFiles/kernel.dir/fs/log.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_89) "Building C object kernel/CMakeFiles/kernel.dir/fs/log.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_90) "Building C object kernel/CMakeFiles/kernel.dir/fs/log.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/fs/log.c.o -MF CMakeFiles/kernel.dir/fs/log.c.o.d -o CMakeFiles/kernel.dir/fs/log.c.o -c /home/runner/work/exov6/exov6/kernel/fs/log.c
 
 kernel/CMakeFiles/kernel.dir/fs/log.c.i: cmake_force
@@ -1322,7 +1335,7 @@ kernel/CMakeFiles/kernel.dir/fs/log.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/fs/minix3.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/fs/minix3.c.o: /home/runner/work/exov6/exov6/kernel/fs/minix3.c
 kernel/CMakeFiles/kernel.dir/fs/minix3.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_90) "Building C object kernel/CMakeFiles/kernel.dir/fs/minix3.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_91) "Building C object kernel/CMakeFiles/kernel.dir/fs/minix3.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/fs/minix3.c.o -MF CMakeFiles/kernel.dir/fs/minix3.c.o.d -o CMakeFiles/kernel.dir/fs/minix3.c.o -c /home/runner/work/exov6/exov6/kernel/fs/minix3.c
 
 kernel/CMakeFiles/kernel.dir/fs/minix3.c.i: cmake_force
@@ -1333,10 +1346,66 @@ kernel/CMakeFiles/kernel.dir/fs/minix3.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/fs/minix3.c.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/fs/minix3.c -o CMakeFiles/kernel.dir/fs/minix3.c.s
 
+kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o: /home/runner/work/exov6/exov6/kernel/vfs/vfs.c
+kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_92) "Building C object kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o -MF CMakeFiles/kernel.dir/vfs/vfs.c.o.d -o CMakeFiles/kernel.dir/vfs/vfs.c.o -c /home/runner/work/exov6/exov6/kernel/vfs/vfs.c
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/vfs/vfs.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/vfs/vfs.c > CMakeFiles/kernel.dir/vfs/vfs.c.i
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/vfs/vfs.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/vfs/vfs.c -o CMakeFiles/kernel.dir/vfs/vfs.c.s
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o: /home/runner/work/exov6/exov6/kernel/vfs/vfs_dcache.c
+kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_93) "Building C object kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o -MF CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o.d -o CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o -c /home/runner/work/exov6/exov6/kernel/vfs/vfs_dcache.c
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/vfs/vfs_dcache.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/vfs/vfs_dcache.c > CMakeFiles/kernel.dir/vfs/vfs_dcache.c.i
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/vfs/vfs_dcache.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/vfs/vfs_dcache.c -o CMakeFiles/kernel.dir/vfs/vfs_dcache.c.s
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o: /home/runner/work/exov6/exov6/kernel/vfs/vfs_file.c
+kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_94) "Building C object kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o -MF CMakeFiles/kernel.dir/vfs/vfs_file.c.o.d -o CMakeFiles/kernel.dir/vfs/vfs_file.c.o -c /home/runner/work/exov6/exov6/kernel/vfs/vfs_file.c
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/vfs/vfs_file.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/vfs/vfs_file.c > CMakeFiles/kernel.dir/vfs/vfs_file.c.i
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/vfs/vfs_file.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/vfs/vfs_file.c -o CMakeFiles/kernel.dir/vfs/vfs_file.c.s
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o: /home/runner/work/exov6/exov6/kernel/vfs/vfs_icache.c
+kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_95) "Building C object kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o -MF CMakeFiles/kernel.dir/vfs/vfs_icache.c.o.d -o CMakeFiles/kernel.dir/vfs/vfs_icache.c.o -c /home/runner/work/exov6/exov6/kernel/vfs/vfs_icache.c
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/vfs/vfs_icache.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/vfs/vfs_icache.c > CMakeFiles/kernel.dir/vfs/vfs_icache.c.i
+
+kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/vfs/vfs_icache.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/vfs/vfs_icache.c -o CMakeFiles/kernel.dir/vfs/vfs_icache.c.s
+
 kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o: /home/runner/work/exov6/exov6/kernel/mem/kalloc.c
 kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_91) "Building C object kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_96) "Building C object kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o -MF CMakeFiles/kernel.dir/mem/kalloc.c.o.d -o CMakeFiles/kernel.dir/mem/kalloc.c.o -c /home/runner/work/exov6/exov6/kernel/mem/kalloc.c
 
 kernel/CMakeFiles/kernel.dir/mem/kalloc.c.i: cmake_force
@@ -1350,7 +1419,7 @@ kernel/CMakeFiles/kernel.dir/mem/kalloc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o: /home/runner/work/exov6/exov6/kernel/mem/libbaremetal.c
 kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_92) "Building C object kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_97) "Building C object kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o -MF CMakeFiles/kernel.dir/mem/libbaremetal.c.o.d -o CMakeFiles/kernel.dir/mem/libbaremetal.c.o -c /home/runner/work/exov6/exov6/kernel/mem/libbaremetal.c
 
 kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.i: cmake_force
@@ -1364,7 +1433,7 @@ kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o: /home/runner/work/exov6/exov6/kernel/mem/mmu64.c
 kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_93) "Building C object kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_98) "Building C object kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o -MF CMakeFiles/kernel.dir/mem/mmu64.c.o.d -o CMakeFiles/kernel.dir/mem/mmu64.c.o -c /home/runner/work/exov6/exov6/kernel/mem/mmu64.c
 
 kernel/CMakeFiles/kernel.dir/mem/mmu64.c.i: cmake_force
@@ -1378,7 +1447,7 @@ kernel/CMakeFiles/kernel.dir/mem/mmu64.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/mem/vm.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/mem/vm.c.o: /home/runner/work/exov6/exov6/kernel/mem/vm.c
 kernel/CMakeFiles/kernel.dir/mem/vm.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_94) "Building C object kernel/CMakeFiles/kernel.dir/mem/vm.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_99) "Building C object kernel/CMakeFiles/kernel.dir/mem/vm.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/mem/vm.c.o -MF CMakeFiles/kernel.dir/mem/vm.c.o.d -o CMakeFiles/kernel.dir/mem/vm.c.o -c /home/runner/work/exov6/exov6/kernel/mem/vm.c
 
 kernel/CMakeFiles/kernel.dir/mem/vm.c.i: cmake_force
@@ -1392,7 +1461,7 @@ kernel/CMakeFiles/kernel.dir/mem/vm.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/cap.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/cap.c.o: /home/runner/work/exov6/exov6/kernel/ipc/cap.c
 kernel/CMakeFiles/kernel.dir/ipc/cap.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_95) "Building C object kernel/CMakeFiles/kernel.dir/ipc/cap.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_100) "Building C object kernel/CMakeFiles/kernel.dir/ipc/cap.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/cap.c.o -MF CMakeFiles/kernel.dir/ipc/cap.c.o.d -o CMakeFiles/kernel.dir/ipc/cap.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/cap.c
 
 kernel/CMakeFiles/kernel.dir/ipc/cap.c.i: cmake_force
@@ -1406,7 +1475,7 @@ kernel/CMakeFiles/kernel.dir/ipc/cap.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.o: /home/runner/work/exov6/exov6/kernel/ipc/cap_mem.c
 kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_96) "Building C object kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building C object kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.o -MF CMakeFiles/kernel.dir/ipc/cap_mem.c.o.d -o CMakeFiles/kernel.dir/ipc/cap_mem.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/cap_mem.c
 
 kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.i: cmake_force
@@ -1420,7 +1489,7 @@ kernel/CMakeFiles/kernel.dir/ipc/cap_mem.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.o: /home/runner/work/exov6/exov6/kernel/ipc/cap_table.c
 kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_97) "Building C object kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Building C object kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.o -MF CMakeFiles/kernel.dir/ipc/cap_table.c.o.d -o CMakeFiles/kernel.dir/ipc/cap_table.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/cap_table.c
 
 kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.i: cmake_force
@@ -1434,7 +1503,7 @@ kernel/CMakeFiles/kernel.dir/ipc/cap_table.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o: /home/runner/work/exov6/exov6/kernel/ipc/capnp_helpers.c
 kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_98) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_103) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o -MF CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o.d -o CMakeFiles/kernel.dir/ipc/capnp_helpers.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/capnp_helpers.c
 
 kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.i: cmake_force
@@ -1448,7 +1517,7 @@ kernel/CMakeFiles/kernel.dir/ipc/capnp_helpers.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o: /home/runner/work/exov6/exov6/kernel/ipc/capnp_kernel.c
 kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_99) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_104) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o -MF CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o.d -o CMakeFiles/kernel.dir/ipc/capnp_kernel.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/capnp_kernel.c
 
 kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.i: cmake_force
@@ -1462,7 +1531,7 @@ kernel/CMakeFiles/kernel.dir/ipc/capnp_kernel.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o: /home/runner/work/exov6/exov6/kernel/ipc/capnp_lattice_engine.c
 kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_100) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_105) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o -MF CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o.d -o CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/capnp_lattice_engine.c
 
 kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.i: cmake_force
@@ -1476,7 +1545,7 @@ kernel/CMakeFiles/kernel.dir/ipc/capnp_lattice_engine.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.o: /home/runner/work/exov6/exov6/kernel/ipc/capwrap.c
 kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_106) "Building C object kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.o -MF CMakeFiles/kernel.dir/ipc/capwrap.c.o.d -o CMakeFiles/kernel.dir/ipc/capwrap.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/capwrap.c
 
 kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.i: cmake_force
@@ -1490,7 +1559,7 @@ kernel/CMakeFiles/kernel.dir/ipc/capwrap.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/chan.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/chan.c.o: /home/runner/work/exov6/exov6/kernel/ipc/chan.c
 kernel/CMakeFiles/kernel.dir/ipc/chan.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Building C object kernel/CMakeFiles/kernel.dir/ipc/chan.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_107) "Building C object kernel/CMakeFiles/kernel.dir/ipc/chan.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/chan.c.o -MF CMakeFiles/kernel.dir/ipc/chan.c.o.d -o CMakeFiles/kernel.dir/ipc/chan.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/chan.c
 
 kernel/CMakeFiles/kernel.dir/ipc/chan.c.i: cmake_force
@@ -1504,7 +1573,7 @@ kernel/CMakeFiles/kernel.dir/ipc/chan.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.o: /home/runner/work/exov6/exov6/kernel/ipc/endpoint.c
 kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_103) "Building C object kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_108) "Building C object kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.o -MF CMakeFiles/kernel.dir/ipc/endpoint.c.o.d -o CMakeFiles/kernel.dir/ipc/endpoint.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/endpoint.c
 
 kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.i: cmake_force
@@ -1518,7 +1587,7 @@ kernel/CMakeFiles/kernel.dir/ipc/endpoint.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/exo.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/exo.c.o: /home/runner/work/exov6/exov6/kernel/ipc/exo.c
 kernel/CMakeFiles/kernel.dir/ipc/exo.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_104) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_109) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/exo.c.o -MF CMakeFiles/kernel.dir/ipc/exo.c.o.d -o CMakeFiles/kernel.dir/ipc/exo.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/exo.c
 
 kernel/CMakeFiles/kernel.dir/ipc/exo.c.i: cmake_force
@@ -1532,7 +1601,7 @@ kernel/CMakeFiles/kernel.dir/ipc/exo.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.o: /home/runner/work/exov6/exov6/kernel/ipc/exo_cpu.c
 kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_105) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_110) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.o -MF CMakeFiles/kernel.dir/ipc/exo_cpu.c.o.d -o CMakeFiles/kernel.dir/ipc/exo_cpu.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/exo_cpu.c
 
 kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.i: cmake_force
@@ -1546,7 +1615,7 @@ kernel/CMakeFiles/kernel.dir/ipc/exo_cpu.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.o: /home/runner/work/exov6/exov6/kernel/ipc/exo_disk.c
 kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_106) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_111) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.o -MF CMakeFiles/kernel.dir/ipc/exo_disk.c.o.d -o CMakeFiles/kernel.dir/ipc/exo_disk.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/exo_disk.c
 
 kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.i: cmake_force
@@ -1560,7 +1629,7 @@ kernel/CMakeFiles/kernel.dir/ipc/exo_disk.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.o: /home/runner/work/exov6/exov6/kernel/ipc/exo_ipc.c
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_107) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_112) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.o -MF CMakeFiles/kernel.dir/ipc/exo_ipc.c.o.d -o CMakeFiles/kernel.dir/ipc/exo_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/exo_ipc.c
 
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.i: cmake_force
@@ -1574,7 +1643,7 @@ kernel/CMakeFiles/kernel.dir/ipc/exo_ipc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o: /home/runner/work/exov6/exov6/kernel/ipc/exo_ipc_queue.c
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_108) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_113) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o -MF CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o.d -o CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/exo_ipc_queue.c
 
 kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.i: cmake_force
@@ -1588,7 +1657,7 @@ kernel/CMakeFiles/kernel.dir/ipc/exo_ipc_queue.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.o: /home/runner/work/exov6/exov6/kernel/ipc/exo_stream.c
 kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_109) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_114) "Building C object kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.o -MF CMakeFiles/kernel.dir/ipc/exo_stream.c.o.d -o CMakeFiles/kernel.dir/ipc/exo_stream.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/exo_stream.c
 
 kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.i: cmake_force
@@ -1602,7 +1671,7 @@ kernel/CMakeFiles/kernel.dir/ipc/exo_stream.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.o: /home/runner/work/exov6/exov6/kernel/ipc/fastipc.c
 kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_110) "Building C object kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_115) "Building C object kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.o -MF CMakeFiles/kernel.dir/ipc/fastipc.c.o.d -o CMakeFiles/kernel.dir/ipc/fastipc.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/fastipc.c
 
 kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.i: cmake_force
@@ -1616,7 +1685,7 @@ kernel/CMakeFiles/kernel.dir/ipc/fastipc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o: /home/runner/work/exov6/exov6/kernel/ipc/lattice_ipc.c
 kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_111) "Building C object kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_116) "Building C object kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o -MF CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o.d -o CMakeFiles/kernel.dir/ipc/lattice_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/lattice_ipc.c
 
 kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.i: cmake_force
@@ -1630,7 +1699,7 @@ kernel/CMakeFiles/kernel.dir/ipc/lattice_ipc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o: /home/runner/work/exov6/exov6/kernel/ipc/lattice_kernel.c
 kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_112) "Building C object kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_117) "Building C object kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o -MF CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o.d -o CMakeFiles/kernel.dir/ipc/lattice_kernel.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/lattice_kernel.c
 
 kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.i: cmake_force
@@ -1644,7 +1713,7 @@ kernel/CMakeFiles/kernel.dir/ipc/lattice_kernel.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.o: /home/runner/work/exov6/exov6/kernel/ipc/sys_ipc.c
 kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_113) "Building C object kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_118) "Building C object kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.o -MF CMakeFiles/kernel.dir/ipc/sys_ipc.c.o.d -o CMakeFiles/kernel.dir/ipc/sys_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/sys_ipc.c
 
 kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.i: cmake_force
@@ -1658,7 +1727,7 @@ kernel/CMakeFiles/kernel.dir/ipc/sys_ipc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.o: /home/runner/work/exov6/exov6/kernel/ipc/unified_ipc.c
 kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_114) "Building C object kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_119) "Building C object kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.o -MF CMakeFiles/kernel.dir/ipc/unified_ipc.c.o.d -o CMakeFiles/kernel.dir/ipc/unified_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/ipc/unified_ipc.c
 
 kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.i: cmake_force
@@ -1672,7 +1741,7 @@ kernel/CMakeFiles/kernel.dir/ipc/unified_ipc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o: /home/runner/work/exov6/exov6/kernel/sched/beatty_dag_stream.c
 kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_115) "Building C object kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_120) "Building C object kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o -MF CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o.d -o CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.o -c /home/runner/work/exov6/exov6/kernel/sched/beatty_dag_stream.c
 
 kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.i: cmake_force
@@ -1686,7 +1755,7 @@ kernel/CMakeFiles/kernel.dir/sched/beatty_dag_stream.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.o: /home/runner/work/exov6/exov6/kernel/sched/beatty_sched.c
 kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_116) "Building C object kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_121) "Building C object kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.o -MF CMakeFiles/kernel.dir/sched/beatty_sched.c.o.d -o CMakeFiles/kernel.dir/sched/beatty_sched.c.o -c /home/runner/work/exov6/exov6/kernel/sched/beatty_sched.c
 
 kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.i: cmake_force
@@ -1700,7 +1769,7 @@ kernel/CMakeFiles/kernel.dir/sched/beatty_sched.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sched/context_switch.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sched/context_switch.c.o: /home/runner/work/exov6/exov6/kernel/sched/context_switch.c
 kernel/CMakeFiles/kernel.dir/sched/context_switch.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_117) "Building C object kernel/CMakeFiles/kernel.dir/sched/context_switch.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_122) "Building C object kernel/CMakeFiles/kernel.dir/sched/context_switch.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sched/context_switch.c.o -MF CMakeFiles/kernel.dir/sched/context_switch.c.o.d -o CMakeFiles/kernel.dir/sched/context_switch.c.o -c /home/runner/work/exov6/exov6/kernel/sched/context_switch.c
 
 kernel/CMakeFiles/kernel.dir/sched/context_switch.c.i: cmake_force
@@ -1714,7 +1783,7 @@ kernel/CMakeFiles/kernel.dir/sched/context_switch.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.o: /home/runner/work/exov6/exov6/kernel/sched/dag_sched.c
 kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_118) "Building C object kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_123) "Building C object kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.o -MF CMakeFiles/kernel.dir/sched/dag_sched.c.o.d -o CMakeFiles/kernel.dir/sched/dag_sched.c.o -c /home/runner/work/exov6/exov6/kernel/sched/dag_sched.c
 
 kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.i: cmake_force
@@ -1728,7 +1797,7 @@ kernel/CMakeFiles/kernel.dir/sched/dag_sched.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sched/proc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sched/proc.c.o: /home/runner/work/exov6/exov6/kernel/sched/proc.c
 kernel/CMakeFiles/kernel.dir/sched/proc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_119) "Building C object kernel/CMakeFiles/kernel.dir/sched/proc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_124) "Building C object kernel/CMakeFiles/kernel.dir/sched/proc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sched/proc.c.o -MF CMakeFiles/kernel.dir/sched/proc.c.o.d -o CMakeFiles/kernel.dir/sched/proc.c.o -c /home/runner/work/exov6/exov6/kernel/sched/proc.c
 
 kernel/CMakeFiles/kernel.dir/sched/proc.c.i: cmake_force
@@ -1742,7 +1811,7 @@ kernel/CMakeFiles/kernel.dir/sched/proc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/exec.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/exec.c.o: /home/runner/work/exov6/exov6/kernel/sys/exec.c
 kernel/CMakeFiles/kernel.dir/sys/exec.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_120) "Building C object kernel/CMakeFiles/kernel.dir/sys/exec.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_125) "Building C object kernel/CMakeFiles/kernel.dir/sys/exec.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/exec.c.o -MF CMakeFiles/kernel.dir/sys/exec.c.o.d -o CMakeFiles/kernel.dir/sys/exec.c.o -c /home/runner/work/exov6/exov6/kernel/sys/exec.c
 
 kernel/CMakeFiles/kernel.dir/sys/exec.c.i: cmake_force
@@ -1756,7 +1825,7 @@ kernel/CMakeFiles/kernel.dir/sys/exec.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/pipe.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/pipe.c.o: /home/runner/work/exov6/exov6/kernel/sys/pipe.c
 kernel/CMakeFiles/kernel.dir/sys/pipe.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_121) "Building C object kernel/CMakeFiles/kernel.dir/sys/pipe.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_126) "Building C object kernel/CMakeFiles/kernel.dir/sys/pipe.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/pipe.c.o -MF CMakeFiles/kernel.dir/sys/pipe.c.o.d -o CMakeFiles/kernel.dir/sys/pipe.c.o -c /home/runner/work/exov6/exov6/kernel/sys/pipe.c
 
 kernel/CMakeFiles/kernel.dir/sys/pipe.c.i: cmake_force
@@ -1770,7 +1839,7 @@ kernel/CMakeFiles/kernel.dir/sys/pipe.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o: /home/runner/work/exov6/exov6/kernel/sys/posix_traps.c
 kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_122) "Building C object kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_127) "Building C object kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o -MF CMakeFiles/kernel.dir/sys/posix_traps.c.o.d -o CMakeFiles/kernel.dir/sys/posix_traps.c.o -c /home/runner/work/exov6/exov6/kernel/sys/posix_traps.c
 
 kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.i: cmake_force
@@ -1784,7 +1853,7 @@ kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/string.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/string.c.o: /home/runner/work/exov6/exov6/kernel/sys/string.c
 kernel/CMakeFiles/kernel.dir/sys/string.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_123) "Building C object kernel/CMakeFiles/kernel.dir/sys/string.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_128) "Building C object kernel/CMakeFiles/kernel.dir/sys/string.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/string.c.o -MF CMakeFiles/kernel.dir/sys/string.c.o.d -o CMakeFiles/kernel.dir/sys/string.c.o -c /home/runner/work/exov6/exov6/kernel/sys/string.c
 
 kernel/CMakeFiles/kernel.dir/sys/string.c.i: cmake_force
@@ -1795,10 +1864,38 @@ kernel/CMakeFiles/kernel.dir/sys/string.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/sys/string.c.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/sys/string.c -o CMakeFiles/kernel.dir/sys/string.c.s
 
+kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o: /home/runner/work/exov6/exov6/kernel/sys/sys_exo.c
+kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_129) "Building C object kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o -MF CMakeFiles/kernel.dir/sys/sys_exo.c.o.d -o CMakeFiles/kernel.dir/sys/sys_exo.c.o -c /home/runner/work/exov6/exov6/kernel/sys/sys_exo.c
+
+kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/sys/sys_exo.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/sys/sys_exo.c > CMakeFiles/kernel.dir/sys/sys_exo.c.i
+
+kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/sys/sys_exo.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/sys/sys_exo.c -o CMakeFiles/kernel.dir/sys/sys_exo.c.s
+
+kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o: /home/runner/work/exov6/exov6/kernel/sys/sys_ipc.c
+kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_130) "Building C object kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o -MF CMakeFiles/kernel.dir/sys/sys_ipc.c.o.d -o CMakeFiles/kernel.dir/sys/sys_ipc.c.o -c /home/runner/work/exov6/exov6/kernel/sys/sys_ipc.c
+
+kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/sys/sys_ipc.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/sys/sys_ipc.c > CMakeFiles/kernel.dir/sys/sys_ipc.c.i
+
+kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/sys/sys_ipc.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/sys/sys_ipc.c -o CMakeFiles/kernel.dir/sys/sys_ipc.c.s
+
 kernel/CMakeFiles/kernel.dir/sys/syscall.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/syscall.c.o: /home/runner/work/exov6/exov6/kernel/sys/syscall.c
 kernel/CMakeFiles/kernel.dir/sys/syscall.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_124) "Building C object kernel/CMakeFiles/kernel.dir/sys/syscall.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_131) "Building C object kernel/CMakeFiles/kernel.dir/sys/syscall.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/syscall.c.o -MF CMakeFiles/kernel.dir/sys/syscall.c.o.d -o CMakeFiles/kernel.dir/sys/syscall.c.o -c /home/runner/work/exov6/exov6/kernel/sys/syscall.c
 
 kernel/CMakeFiles/kernel.dir/sys/syscall.c.i: cmake_force
@@ -1812,7 +1909,7 @@ kernel/CMakeFiles/kernel.dir/sys/syscall.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o: /home/runner/work/exov6/exov6/kernel/sys/syscall_minimal.c
 kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_125) "Building C object kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_132) "Building C object kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o -MF CMakeFiles/kernel.dir/sys/syscall_minimal.c.o.d -o CMakeFiles/kernel.dir/sys/syscall_minimal.c.o -c /home/runner/work/exov6/exov6/kernel/sys/syscall_minimal.c
 
 kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.i: cmake_force
@@ -1826,7 +1923,7 @@ kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o: /home/runner/work/exov6/exov6/kernel/sys/sysfile.c
 kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_126) "Building C object kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_133) "Building C object kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o -MF CMakeFiles/kernel.dir/sys/sysfile.c.o.d -o CMakeFiles/kernel.dir/sys/sysfile.c.o -c /home/runner/work/exov6/exov6/kernel/sys/sysfile.c
 
 kernel/CMakeFiles/kernel.dir/sys/sysfile.c.i: cmake_force
@@ -1840,7 +1937,7 @@ kernel/CMakeFiles/kernel.dir/sys/sysfile.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/sysproc.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/sysproc.c.o: /home/runner/work/exov6/exov6/kernel/sys/sysproc.c
 kernel/CMakeFiles/kernel.dir/sys/sysproc.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_127) "Building C object kernel/CMakeFiles/kernel.dir/sys/sysproc.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_134) "Building C object kernel/CMakeFiles/kernel.dir/sys/sysproc.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/sysproc.c.o -MF CMakeFiles/kernel.dir/sys/sysproc.c.o.d -o CMakeFiles/kernel.dir/sys/sysproc.c.o -c /home/runner/work/exov6/exov6/kernel/sys/sysproc.c
 
 kernel/CMakeFiles/kernel.dir/sys/sysproc.c.i: cmake_force
@@ -1854,7 +1951,7 @@ kernel/CMakeFiles/kernel.dir/sys/sysproc.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/sys/trap.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/sys/trap.c.o: /home/runner/work/exov6/exov6/kernel/sys/trap.c
 kernel/CMakeFiles/kernel.dir/sys/trap.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_128) "Building C object kernel/CMakeFiles/kernel.dir/sys/trap.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_135) "Building C object kernel/CMakeFiles/kernel.dir/sys/trap.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/sys/trap.c.o -MF CMakeFiles/kernel.dir/sys/trap.c.o.d -o CMakeFiles/kernel.dir/sys/trap.c.o -c /home/runner/work/exov6/exov6/kernel/sys/trap.c
 
 kernel/CMakeFiles/kernel.dir/sys/trap.c.i: cmake_force
@@ -1868,7 +1965,7 @@ kernel/CMakeFiles/kernel.dir/sys/trap.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o: /home/runner/work/exov6/exov6/kernel/time/posix_clock.c
 kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_129) "Building C object kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_136) "Building C object kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o -MF CMakeFiles/kernel.dir/time/posix_clock.c.o.d -o CMakeFiles/kernel.dir/time/posix_clock.c.o -c /home/runner/work/exov6/exov6/kernel/time/posix_clock.c
 
 kernel/CMakeFiles/kernel.dir/time/posix_clock.c.i: cmake_force
@@ -1882,7 +1979,7 @@ kernel/CMakeFiles/kernel.dir/time/posix_clock.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o: /home/runner/work/exov6/exov6/kernel/capability/capability_lattice.c
 kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_130) "Building C object kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_137) "Building C object kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o -MF CMakeFiles/kernel.dir/capability/capability_lattice.c.o.d -o CMakeFiles/kernel.dir/capability/capability_lattice.c.o -c /home/runner/work/exov6/exov6/kernel/capability/capability_lattice.c
 
 kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.i: cmake_force
@@ -1896,7 +1993,7 @@ kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.s: cmake_force
 kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o: kernel/CMakeFiles/kernel.dir/flags.make
 kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o: /home/runner/work/exov6/exov6/kernel/core/secure_multiplex.c
 kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_131) "Building C object kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_138) "Building C object kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o -MF CMakeFiles/kernel.dir/core/secure_multiplex.c.o.d -o CMakeFiles/kernel.dir/core/secure_multiplex.c.o -c /home/runner/work/exov6/exov6/kernel/core/secure_multiplex.c
 
 kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.i: cmake_force
@@ -1906,6 +2003,76 @@ kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.i: cmake_force
 kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/core/secure_multiplex.c.s"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/core/secure_multiplex.c -o CMakeFiles/kernel.dir/core/secure_multiplex.c.s
+
+kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o: /home/runner/work/exov6/exov6/kernel/boot/bootmain.c
+kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_139) "Building C object kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o -MF CMakeFiles/kernel.dir/boot/bootmain.c.o.d -o CMakeFiles/kernel.dir/boot/bootmain.c.o -c /home/runner/work/exov6/exov6/kernel/boot/bootmain.c
+
+kernel/CMakeFiles/kernel.dir/boot/bootmain.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/boot/bootmain.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/boot/bootmain.c > CMakeFiles/kernel.dir/boot/bootmain.c.i
+
+kernel/CMakeFiles/kernel.dir/boot/bootmain.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/boot/bootmain.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/boot/bootmain.c -o CMakeFiles/kernel.dir/boot/bootmain.c.s
+
+kernel/CMakeFiles/kernel.dir/boot/main.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/boot/main.c.o: /home/runner/work/exov6/exov6/kernel/boot/main.c
+kernel/CMakeFiles/kernel.dir/boot/main.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_140) "Building C object kernel/CMakeFiles/kernel.dir/boot/main.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/boot/main.c.o -MF CMakeFiles/kernel.dir/boot/main.c.o.d -o CMakeFiles/kernel.dir/boot/main.c.o -c /home/runner/work/exov6/exov6/kernel/boot/main.c
+
+kernel/CMakeFiles/kernel.dir/boot/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/boot/main.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/boot/main.c > CMakeFiles/kernel.dir/boot/main.c.i
+
+kernel/CMakeFiles/kernel.dir/boot/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/boot/main.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/boot/main.c -o CMakeFiles/kernel.dir/boot/main.c.s
+
+kernel/CMakeFiles/kernel.dir/boot/main64.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/boot/main64.c.o: /home/runner/work/exov6/exov6/kernel/boot/main64.c
+kernel/CMakeFiles/kernel.dir/boot/main64.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_141) "Building C object kernel/CMakeFiles/kernel.dir/boot/main64.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/boot/main64.c.o -MF CMakeFiles/kernel.dir/boot/main64.c.o.d -o CMakeFiles/kernel.dir/boot/main64.c.o -c /home/runner/work/exov6/exov6/kernel/boot/main64.c
+
+kernel/CMakeFiles/kernel.dir/boot/main64.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/boot/main64.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/boot/main64.c > CMakeFiles/kernel.dir/boot/main64.c.i
+
+kernel/CMakeFiles/kernel.dir/boot/main64.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/boot/main64.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/boot/main64.c -o CMakeFiles/kernel.dir/boot/main64.c.s
+
+kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o: /home/runner/work/exov6/exov6/kernel/boot/main_minimal.c
+kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_142) "Building C object kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o -MF CMakeFiles/kernel.dir/boot/main_minimal.c.o.d -o CMakeFiles/kernel.dir/boot/main_minimal.c.o -c /home/runner/work/exov6/exov6/kernel/boot/main_minimal.c
+
+kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/boot/main_minimal.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/boot/main_minimal.c > CMakeFiles/kernel.dir/boot/main_minimal.c.i
+
+kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/boot/main_minimal.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/boot/main_minimal.c -o CMakeFiles/kernel.dir/boot/main_minimal.c.s
+
+kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o: kernel/CMakeFiles/kernel.dir/flags.make
+kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o: /home/runner/work/exov6/exov6/kernel/resurrection/reincarnation_server.c
+kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_143) "Building C object kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o -MF CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o.d -o CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o -c /home/runner/work/exov6/exov6/kernel/resurrection/reincarnation_server.c
+
+kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.i"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/runner/work/exov6/exov6/kernel/resurrection/reincarnation_server.c > CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.i
+
+kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.s"
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/runner/work/exov6/exov6/kernel/resurrection/reincarnation_server.c -o CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.s
 
 # Object files for target kernel
 kernel_OBJECTS = \
@@ -1962,6 +2129,7 @@ kernel_OBJECTS = \
 "CMakeFiles/kernel.dir/sched_telemetry.c.o" \
 "CMakeFiles/kernel.dir/scheduler_adaptive.c.o" \
 "CMakeFiles/kernel.dir/scheduler_lockfree.c.o" \
+"CMakeFiles/kernel.dir/security.c.o" \
 "CMakeFiles/kernel.dir/service.c.o" \
 "CMakeFiles/kernel.dir/streams.c.o" \
 "CMakeFiles/kernel.dir/string.c.o" \
@@ -1973,6 +2141,7 @@ kernel_OBJECTS = \
 "CMakeFiles/kernel.dir/zone_isolation.c.o" \
 "CMakeFiles/kernel.dir/swtch.S.o" \
 "CMakeFiles/kernel.dir/swtch64.S.o" \
+"CMakeFiles/kernel.dir/init_bin.S.o" \
 "CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o" \
 "CMakeFiles/kernel.dir/sync/spinlock.c.o" \
 "CMakeFiles/kernel.dir/sync/sleeplock.c.o" \
@@ -1984,7 +2153,6 @@ kernel_OBJECTS = \
 "CMakeFiles/kernel.dir/sync/lwkt_token.c.o" \
 "CMakeFiles/kernel.dir/sync/dag.c.o" \
 "CMakeFiles/kernel.dir/drivers/console.c.o" \
-"CMakeFiles/kernel.dir/drivers/ddekit.c.o" \
 "CMakeFiles/kernel.dir/drivers/driver.c.o" \
 "CMakeFiles/kernel.dir/drivers/ioapic.c.o" \
 "CMakeFiles/kernel.dir/drivers/iommu.c.o" \
@@ -1999,6 +2167,10 @@ kernel_OBJECTS = \
 "CMakeFiles/kernel.dir/fs/ide.c.o" \
 "CMakeFiles/kernel.dir/fs/log.c.o" \
 "CMakeFiles/kernel.dir/fs/minix3.c.o" \
+"CMakeFiles/kernel.dir/vfs/vfs.c.o" \
+"CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o" \
+"CMakeFiles/kernel.dir/vfs/vfs_file.c.o" \
+"CMakeFiles/kernel.dir/vfs/vfs_icache.c.o" \
 "CMakeFiles/kernel.dir/mem/kalloc.c.o" \
 "CMakeFiles/kernel.dir/mem/libbaremetal.c.o" \
 "CMakeFiles/kernel.dir/mem/mmu64.c.o" \
@@ -2032,6 +2204,8 @@ kernel_OBJECTS = \
 "CMakeFiles/kernel.dir/sys/pipe.c.o" \
 "CMakeFiles/kernel.dir/sys/posix_traps.c.o" \
 "CMakeFiles/kernel.dir/sys/string.c.o" \
+"CMakeFiles/kernel.dir/sys/sys_exo.c.o" \
+"CMakeFiles/kernel.dir/sys/sys_ipc.c.o" \
 "CMakeFiles/kernel.dir/sys/syscall.c.o" \
 "CMakeFiles/kernel.dir/sys/syscall_minimal.c.o" \
 "CMakeFiles/kernel.dir/sys/sysfile.c.o" \
@@ -2039,7 +2213,12 @@ kernel_OBJECTS = \
 "CMakeFiles/kernel.dir/sys/trap.c.o" \
 "CMakeFiles/kernel.dir/time/posix_clock.c.o" \
 "CMakeFiles/kernel.dir/capability/capability_lattice.c.o" \
-"CMakeFiles/kernel.dir/core/secure_multiplex.c.o"
+"CMakeFiles/kernel.dir/core/secure_multiplex.c.o" \
+"CMakeFiles/kernel.dir/boot/bootmain.c.o" \
+"CMakeFiles/kernel.dir/boot/main.c.o" \
+"CMakeFiles/kernel.dir/boot/main64.c.o" \
+"CMakeFiles/kernel.dir/boot/main_minimal.c.o" \
+"CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o"
 
 # External object files for target kernel
 kernel_EXTERNAL_OBJECTS =
@@ -2097,6 +2276,7 @@ kernel/kernel: kernel/CMakeFiles/kernel.dir/sched_lottery.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sched_telemetry.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/scheduler_adaptive.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/scheduler_lockfree.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/security.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/service.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/streams.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/string.c.o
@@ -2108,6 +2288,7 @@ kernel/kernel: kernel/CMakeFiles/kernel.dir/zone.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/zone_isolation.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/swtch.S.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/swtch64.S.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/init_bin.S.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sync/spinlock.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sync/sleeplock.c.o
@@ -2119,7 +2300,6 @@ kernel/kernel: kernel/CMakeFiles/kernel.dir/sync/priority.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sync/lwkt_token.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sync/dag.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/drivers/console.c.o
-kernel/kernel: kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/drivers/driver.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/drivers/ioapic.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/drivers/iommu.c.o
@@ -2134,6 +2314,10 @@ kernel/kernel: kernel/CMakeFiles/kernel.dir/fs/fs.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/fs/ide.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/fs/log.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/fs/minix3.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/mem/kalloc.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/mem/libbaremetal.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/mem/mmu64.c.o
@@ -2167,6 +2351,8 @@ kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/exec.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/pipe.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/posix_traps.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/string.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/syscall.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/syscall_minimal.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/sysfile.c.o
@@ -2175,9 +2361,13 @@ kernel/kernel: kernel/CMakeFiles/kernel.dir/sys/trap.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/time/posix_clock.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/capability/capability_lattice.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/core/secure_multiplex.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/boot/main.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/boot/main64.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o
+kernel/kernel: kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o
 kernel/kernel: kernel/CMakeFiles/kernel.dir/build.make
 kernel/kernel: kernel/CMakeFiles/kernel.dir/compiler_depend.ts
-kernel/kernel: src/ddekit/libphoenix-ddekit.a
 kernel/kernel: src/libnstr_graph/libphoenix-nstr-graph.a
 kernel/kernel: kernel/libphoenix-kernel-security.a
 kernel/kernel: kernel/libphoenix-kernel-streams.a
@@ -2187,7 +2377,7 @@ kernel/kernel: src/arch/libphoenix-arch-x86-modern.a
 kernel/kernel: src/arch/libphoenix-arch-x86-64.a
 kernel/kernel: src/arch/libphoenix-simd.a
 kernel/kernel: kernel/CMakeFiles/kernel.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_132) "Linking C executable kernel"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/work/exov6/exov6/_codeql_build_dir/CMakeFiles --progress-num=$(CMAKE_PROGRESS_144) "Linking C executable kernel"
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir/kernel && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kernel.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

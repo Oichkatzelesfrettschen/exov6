@@ -185,681 +185,403 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-ulib.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-ulib.dir/rule
-.PHONY : user/CMakeFiles/phoenix-ulib.dir/rule
+user/CMakeFiles/init.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/init.dir/rule
+.PHONY : user/CMakeFiles/init.dir/rule
 
 # Convenience name for target.
-phoenix-ulib: user/CMakeFiles/phoenix-ulib.dir/rule
-.PHONY : phoenix-ulib
+init: user/CMakeFiles/init.dir/rule
+.PHONY : init
 
 # fast build rule for target.
-phoenix-ulib/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/build
-.PHONY : phoenix-ulib/fast
+init/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/init.dir/build.make user/CMakeFiles/init.dir/build
+.PHONY : init/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-umalloc.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-umalloc.dir/rule
-.PHONY : user/CMakeFiles/phoenix-umalloc.dir/rule
+user/CMakeFiles/init_bin.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/init_bin.dir/rule
+.PHONY : user/CMakeFiles/init_bin.dir/rule
 
 # Convenience name for target.
-phoenix-umalloc: user/CMakeFiles/phoenix-umalloc.dir/rule
-.PHONY : phoenix-umalloc
+init_bin: user/CMakeFiles/init_bin.dir/rule
+.PHONY : init_bin
 
 # fast build rule for target.
-phoenix-umalloc/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-umalloc.dir/build.make user/CMakeFiles/phoenix-umalloc.dir/build
-.PHONY : phoenix-umalloc/fast
+init_bin/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/init_bin.dir/build.make user/CMakeFiles/init_bin.dir/build
+.PHONY : init_bin/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-printf.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-printf.dir/rule
-.PHONY : user/CMakeFiles/phoenix-printf.dir/rule
+user/CMakeFiles/uart_driver.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/uart_driver.dir/rule
+.PHONY : user/CMakeFiles/uart_driver.dir/rule
 
 # Convenience name for target.
-phoenix-printf: user/CMakeFiles/phoenix-printf.dir/rule
-.PHONY : phoenix-printf
+uart_driver: user/CMakeFiles/uart_driver.dir/rule
+.PHONY : uart_driver
 
 # fast build rule for target.
-phoenix-printf/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-printf.dir/build.make user/CMakeFiles/phoenix-printf.dir/build
-.PHONY : phoenix-printf/fast
+uart_driver/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/uart_driver.dir/build.make user/CMakeFiles/uart_driver.dir/build
+.PHONY : uart_driver/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-caplib.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-caplib.dir/rule
-.PHONY : user/CMakeFiles/phoenix-caplib.dir/rule
+user/CMakeFiles/sched_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/sched_test.dir/rule
+.PHONY : user/CMakeFiles/sched_test.dir/rule
 
 # Convenience name for target.
-phoenix-caplib: user/CMakeFiles/phoenix-caplib.dir/rule
-.PHONY : phoenix-caplib
+sched_test: user/CMakeFiles/sched_test.dir/rule
+.PHONY : sched_test
 
 # fast build rule for target.
-phoenix-caplib/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/build
-.PHONY : phoenix-caplib/fast
+sched_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sched_test.dir/build.make user/CMakeFiles/sched_test.dir/build
+.PHONY : sched_test/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-chan.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-chan.dir/rule
-.PHONY : user/CMakeFiles/phoenix-chan.dir/rule
+user/CMakeFiles/virtio_driver.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/virtio_driver.dir/rule
+.PHONY : user/CMakeFiles/virtio_driver.dir/rule
 
 # Convenience name for target.
-phoenix-chan: user/CMakeFiles/phoenix-chan.dir/rule
-.PHONY : phoenix-chan
+virtio_driver: user/CMakeFiles/virtio_driver.dir/rule
+.PHONY : virtio_driver
 
 # fast build rule for target.
-phoenix-chan/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-chan.dir/build.make user/CMakeFiles/phoenix-chan.dir/build
-.PHONY : phoenix-chan/fast
+virtio_driver/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/virtio_driver.dir/build.make user/CMakeFiles/virtio_driver.dir/build
+.PHONY : virtio_driver/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-door.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-door.dir/rule
-.PHONY : user/CMakeFiles/phoenix-door.dir/rule
+user/CMakeFiles/ipc_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/ipc_test.dir/rule
+.PHONY : user/CMakeFiles/ipc_test.dir/rule
 
 # Convenience name for target.
-phoenix-door: user/CMakeFiles/phoenix-door.dir/rule
-.PHONY : phoenix-door
+ipc_test: user/CMakeFiles/ipc_test.dir/rule
+.PHONY : ipc_test
 
 # fast build rule for target.
-phoenix-door/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-door.dir/build.make user/CMakeFiles/phoenix-door.dir/build
-.PHONY : phoenix-door/fast
+ipc_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/ipc_test.dir/build.make user/CMakeFiles/ipc_test.dir/build
+.PHONY : ipc_test/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-math-core.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-math-core.dir/rule
-.PHONY : user/CMakeFiles/phoenix-math-core.dir/rule
+user/CMakeFiles/fs_srv.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/fs_srv.dir/rule
+.PHONY : user/CMakeFiles/fs_srv.dir/rule
 
 # Convenience name for target.
-phoenix-math-core: user/CMakeFiles/phoenix-math-core.dir/rule
-.PHONY : phoenix-math-core
+fs_srv: user/CMakeFiles/fs_srv.dir/rule
+.PHONY : fs_srv
 
 # fast build rule for target.
-phoenix-math-core/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-math-core.dir/build.make user/CMakeFiles/phoenix-math-core.dir/build
-.PHONY : phoenix-math-core/fast
+fs_srv/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_srv.dir/build.make user/CMakeFiles/fs_srv.dir/build
+.PHONY : fs_srv/fast
 
 # Convenience name for target.
-user/CMakeFiles/phoenix-user-sched.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/phoenix-user-sched.dir/rule
-.PHONY : user/CMakeFiles/phoenix-user-sched.dir/rule
+user/CMakeFiles/fs_client_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/fs_client_test.dir/rule
+.PHONY : user/CMakeFiles/fs_client_test.dir/rule
 
 # Convenience name for target.
-phoenix-user-sched: user/CMakeFiles/phoenix-user-sched.dir/rule
-.PHONY : phoenix-user-sched
+fs_client_test: user/CMakeFiles/fs_client_test.dir/rule
+.PHONY : fs_client_test
 
 # fast build rule for target.
-phoenix-user-sched/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/build
-.PHONY : phoenix-user-sched/fast
+fs_client_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_client_test.dir/build.make user/CMakeFiles/fs_client_test.dir/build
+.PHONY : fs_client_test/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-cat.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-cat.dir/rule
-.PHONY : user/CMakeFiles/user-cat.dir/rule
+user/CMakeFiles/fs_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/fs_test.dir/rule
+.PHONY : user/CMakeFiles/fs_test.dir/rule
 
 # Convenience name for target.
-user-cat: user/CMakeFiles/user-cat.dir/rule
-.PHONY : user-cat
+fs_test: user/CMakeFiles/fs_test.dir/rule
+.PHONY : fs_test
 
 # fast build rule for target.
-user-cat/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cat.dir/build.make user/CMakeFiles/user-cat.dir/build
-.PHONY : user-cat/fast
+fs_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_test.dir/build.make user/CMakeFiles/fs_test.dir/build
+.PHONY : fs_test/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-cp.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-cp.dir/rule
-.PHONY : user/CMakeFiles/user-cp.dir/rule
+user/CMakeFiles/hello.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/hello.dir/rule
+.PHONY : user/CMakeFiles/hello.dir/rule
 
 # Convenience name for target.
-user-cp: user/CMakeFiles/user-cp.dir/rule
-.PHONY : user-cp
+hello: user/CMakeFiles/hello.dir/rule
+.PHONY : hello
 
 # fast build rule for target.
-user-cp/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cp.dir/build.make user/CMakeFiles/user-cp.dir/build
-.PHONY : user-cp/fast
+hello/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/hello.dir/build.make user/CMakeFiles/hello.dir/build
+.PHONY : hello/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-echo.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-echo.dir/rule
-.PHONY : user/CMakeFiles/user-echo.dir/rule
+user/CMakeFiles/elf_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/elf_test.dir/rule
+.PHONY : user/CMakeFiles/elf_test.dir/rule
 
 # Convenience name for target.
-user-echo: user/CMakeFiles/user-echo.dir/rule
-.PHONY : user-echo
+elf_test: user/CMakeFiles/elf_test.dir/rule
+.PHONY : elf_test
 
 # fast build rule for target.
-user-echo/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-echo.dir/build.make user/CMakeFiles/user-echo.dir/build
-.PHONY : user-echo/fast
+elf_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/elf_test.dir/build.make user/CMakeFiles/elf_test.dir/build
+.PHONY : elf_test/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-grep.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-grep.dir/rule
-.PHONY : user/CMakeFiles/user-grep.dir/rule
+user/CMakeFiles/spawn_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/spawn_test.dir/rule
+.PHONY : user/CMakeFiles/spawn_test.dir/rule
 
 # Convenience name for target.
-user-grep: user/CMakeFiles/user-grep.dir/rule
-.PHONY : user-grep
+spawn_test: user/CMakeFiles/spawn_test.dir/rule
+.PHONY : spawn_test
 
 # fast build rule for target.
-user-grep/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-grep.dir/build.make user/CMakeFiles/user-grep.dir/build
-.PHONY : user-grep/fast
+spawn_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/spawn_test.dir/build.make user/CMakeFiles/spawn_test.dir/build
+.PHONY : spawn_test/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-init.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-init.dir/rule
-.PHONY : user/CMakeFiles/user-init.dir/rule
+user/CMakeFiles/sh.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/sh.dir/rule
+.PHONY : user/CMakeFiles/sh.dir/rule
 
 # Convenience name for target.
-user-init: user/CMakeFiles/user-init.dir/rule
-.PHONY : user-init
+sh: user/CMakeFiles/sh.dir/rule
+.PHONY : sh
 
 # fast build rule for target.
-user-init/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-init.dir/build.make user/CMakeFiles/user-init.dir/build
-.PHONY : user-init/fast
+sh/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sh.dir/build.make user/CMakeFiles/sh.dir/build
+.PHONY : sh/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-kill.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-kill.dir/rule
-.PHONY : user/CMakeFiles/user-kill.dir/rule
+user/CMakeFiles/exo_cat.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/exo_cat.dir/rule
+.PHONY : user/CMakeFiles/exo_cat.dir/rule
 
 # Convenience name for target.
-user-kill: user/CMakeFiles/user-kill.dir/rule
-.PHONY : user-kill
+exo_cat: user/CMakeFiles/exo_cat.dir/rule
+.PHONY : exo_cat
 
 # fast build rule for target.
-user-kill/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-kill.dir/build.make user/CMakeFiles/user-kill.dir/build
-.PHONY : user-kill/fast
+exo_cat/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_cat.dir/build.make user/CMakeFiles/exo_cat.dir/build
+.PHONY : exo_cat/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-ln.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-ln.dir/rule
-.PHONY : user/CMakeFiles/user-ln.dir/rule
+user/CMakeFiles/exo_echo.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/exo_echo.dir/rule
+.PHONY : user/CMakeFiles/exo_echo.dir/rule
 
 # Convenience name for target.
-user-ln: user/CMakeFiles/user-ln.dir/rule
-.PHONY : user-ln
+exo_echo: user/CMakeFiles/exo_echo.dir/rule
+.PHONY : exo_echo
 
 # fast build rule for target.
-user-ln/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ln.dir/build.make user/CMakeFiles/user-ln.dir/build
-.PHONY : user-ln/fast
+exo_echo/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_echo.dir/build.make user/CMakeFiles/exo_echo.dir/build
+.PHONY : exo_echo/fast
 
 # Convenience name for target.
-user/CMakeFiles/user-ls.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-ls.dir/rule
-.PHONY : user/CMakeFiles/user-ls.dir/rule
+user/CMakeFiles/pipeline_test.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/pipeline_test.dir/rule
+.PHONY : user/CMakeFiles/pipeline_test.dir/rule
 
 # Convenience name for target.
-user-ls: user/CMakeFiles/user-ls.dir/rule
-.PHONY : user-ls
+pipeline_test: user/CMakeFiles/pipeline_test.dir/rule
+.PHONY : pipeline_test
 
 # fast build rule for target.
-user-ls/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ls.dir/build.make user/CMakeFiles/user-ls.dir/build
-.PHONY : user-ls/fast
+pipeline_test/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/pipeline_test.dir/build.make user/CMakeFiles/pipeline_test.dir/build
+.PHONY : pipeline_test/fast
 
-# Convenience name for target.
-user/CMakeFiles/user-mkdir.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-mkdir.dir/rule
-.PHONY : user/CMakeFiles/user-mkdir.dir/rule
-
-# Convenience name for target.
-user-mkdir: user/CMakeFiles/user-mkdir.dir/rule
-.PHONY : user-mkdir
-
-# fast build rule for target.
-user-mkdir/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mkdir.dir/build.make user/CMakeFiles/user-mkdir.dir/build
-.PHONY : user-mkdir/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-mv.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-mv.dir/rule
-.PHONY : user/CMakeFiles/user-mv.dir/rule
-
-# Convenience name for target.
-user-mv: user/CMakeFiles/user-mv.dir/rule
-.PHONY : user-mv
-
-# fast build rule for target.
-user-mv/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mv.dir/build.make user/CMakeFiles/user-mv.dir/build
-.PHONY : user-mv/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-ps.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-ps.dir/rule
-.PHONY : user/CMakeFiles/user-ps.dir/rule
-
-# Convenience name for target.
-user-ps: user/CMakeFiles/user-ps.dir/rule
-.PHONY : user-ps
-
-# fast build rule for target.
-user-ps/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ps.dir/build.make user/CMakeFiles/user-ps.dir/build
-.PHONY : user-ps/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-rm.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-rm.dir/rule
-.PHONY : user/CMakeFiles/user-rm.dir/rule
-
-# Convenience name for target.
-user-rm: user/CMakeFiles/user-rm.dir/rule
-.PHONY : user-rm
-
-# fast build rule for target.
-user-rm/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-rm.dir/build.make user/CMakeFiles/user-rm.dir/build
-.PHONY : user-rm/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-sh.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-sh.dir/rule
-.PHONY : user/CMakeFiles/user-sh.dir/rule
-
-# Convenience name for target.
-user-sh: user/CMakeFiles/user-sh.dir/rule
-.PHONY : user-sh
-
-# fast build rule for target.
-user-sh/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sh.dir/build.make user/CMakeFiles/user-sh.dir/build
-.PHONY : user-sh/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-sleep.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-sleep.dir/rule
-.PHONY : user/CMakeFiles/user-sleep.dir/rule
-
-# Convenience name for target.
-user-sleep: user/CMakeFiles/user-sleep.dir/rule
-.PHONY : user-sleep
-
-# fast build rule for target.
-user-sleep/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sleep.dir/build.make user/CMakeFiles/user-sleep.dir/build
-.PHONY : user-sleep/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-wc.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-wc.dir/rule
-.PHONY : user/CMakeFiles/user-wc.dir/rule
-
-# Convenience name for target.
-user-wc: user/CMakeFiles/user-wc.dir/rule
-.PHONY : user-wc
-
-# fast build rule for target.
-user-wc/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-wc.dir/build.make user/CMakeFiles/user-wc.dir/build
-.PHONY : user-wc/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-zombie.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-zombie.dir/rule
-.PHONY : user/CMakeFiles/user-zombie.dir/rule
-
-# Convenience name for target.
-user-zombie: user/CMakeFiles/user-zombie.dir/rule
-.PHONY : user-zombie
-
-# fast build rule for target.
-user-zombie/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-zombie.dir/build.make user/CMakeFiles/user-zombie.dir/build
-.PHONY : user-zombie/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-conformance.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-conformance.dir/rule
-.PHONY : user/CMakeFiles/user-conformance.dir/rule
-
-# Convenience name for target.
-user-conformance: user/CMakeFiles/user-conformance.dir/rule
-.PHONY : user-conformance
-
-# fast build rule for target.
-user-conformance/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-conformance.dir/build.make user/CMakeFiles/user-conformance.dir/build
-.PHONY : user-conformance/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-fileserver.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-fileserver.dir/rule
-.PHONY : user/CMakeFiles/user-fileserver.dir/rule
-
-# Convenience name for target.
-user-fileserver: user/CMakeFiles/user-fileserver.dir/rule
-.PHONY : user-fileserver
-
-# fast build rule for target.
-user-fileserver/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-fileserver.dir/build.make user/CMakeFiles/user-fileserver.dir/build
-.PHONY : user-fileserver/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-usertests.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-usertests.dir/rule
-.PHONY : user/CMakeFiles/user-usertests.dir/rule
-
-# Convenience name for target.
-user-usertests: user/CMakeFiles/user-usertests.dir/rule
-.PHONY : user-usertests
-
-# fast build rule for target.
-user-usertests/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-usertests.dir/build.make user/CMakeFiles/user-usertests.dir/build
-.PHONY : user-usertests/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-forktest.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-forktest.dir/rule
-.PHONY : user/CMakeFiles/user-forktest.dir/rule
-
-# Convenience name for target.
-user-forktest: user/CMakeFiles/user-forktest.dir/rule
-.PHONY : user-forktest
-
-# fast build rule for target.
-user-forktest/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-forktest.dir/build.make user/CMakeFiles/user-forktest.dir/build
-.PHONY : user-forktest/fast
-
-# Convenience name for target.
-user/CMakeFiles/user-stressfs.dir/rule:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user/CMakeFiles/user-stressfs.dir/rule
-.PHONY : user/CMakeFiles/user-stressfs.dir/rule
-
-# Convenience name for target.
-user-stressfs: user/CMakeFiles/user-stressfs.dir/rule
-.PHONY : user-stressfs
-
-# fast build rule for target.
-user-stressfs/fast:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-stressfs.dir/build.make user/CMakeFiles/user-stressfs.dir/build
-.PHONY : user-stressfs/fast
-
-__/tests/user/conformance.o: __/tests/user/conformance.c.o
-.PHONY : __/tests/user/conformance.o
+elf_test.o: elf_test.c.o
+.PHONY : elf_test.o
 
 # target to build an object file
-__/tests/user/conformance.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-conformance.dir/build.make user/CMakeFiles/user-conformance.dir/__/tests/user/conformance.c.o
-.PHONY : __/tests/user/conformance.c.o
+elf_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/elf_test.dir/build.make user/CMakeFiles/elf_test.dir/elf_test.c.o
+.PHONY : elf_test.c.o
 
-__/tests/user/conformance.i: __/tests/user/conformance.c.i
-.PHONY : __/tests/user/conformance.i
+elf_test.i: elf_test.c.i
+.PHONY : elf_test.i
 
 # target to preprocess a source file
-__/tests/user/conformance.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-conformance.dir/build.make user/CMakeFiles/user-conformance.dir/__/tests/user/conformance.c.i
-.PHONY : __/tests/user/conformance.c.i
+elf_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/elf_test.dir/build.make user/CMakeFiles/elf_test.dir/elf_test.c.i
+.PHONY : elf_test.c.i
 
-__/tests/user/conformance.s: __/tests/user/conformance.c.s
-.PHONY : __/tests/user/conformance.s
+elf_test.s: elf_test.c.s
+.PHONY : elf_test.s
 
 # target to generate assembly for a file
-__/tests/user/conformance.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-conformance.dir/build.make user/CMakeFiles/user-conformance.dir/__/tests/user/conformance.c.s
-.PHONY : __/tests/user/conformance.c.s
+elf_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/elf_test.dir/build.make user/CMakeFiles/elf_test.dir/elf_test.c.s
+.PHONY : elf_test.c.s
 
-caplib.o: caplib.c.o
-.PHONY : caplib.o
+exo_cat.o: exo_cat.c.o
+.PHONY : exo_cat.o
 
 # target to build an object file
-caplib.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/caplib.c.o
-.PHONY : caplib.c.o
+exo_cat.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_cat.dir/build.make user/CMakeFiles/exo_cat.dir/exo_cat.c.o
+.PHONY : exo_cat.c.o
 
-caplib.i: caplib.c.i
-.PHONY : caplib.i
+exo_cat.i: exo_cat.c.i
+.PHONY : exo_cat.i
 
 # target to preprocess a source file
-caplib.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/caplib.c.i
-.PHONY : caplib.c.i
+exo_cat.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_cat.dir/build.make user/CMakeFiles/exo_cat.dir/exo_cat.c.i
+.PHONY : exo_cat.c.i
 
-caplib.s: caplib.c.s
-.PHONY : caplib.s
+exo_cat.s: exo_cat.c.s
+.PHONY : exo_cat.s
 
 # target to generate assembly for a file
-caplib.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/caplib.c.s
-.PHONY : caplib.c.s
+exo_cat.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_cat.dir/build.make user/CMakeFiles/exo_cat.dir/exo_cat.c.s
+.PHONY : exo_cat.c.s
 
-cat.o: cat.c.o
-.PHONY : cat.o
+exo_echo.o: exo_echo.c.o
+.PHONY : exo_echo.o
 
 # target to build an object file
-cat.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cat.dir/build.make user/CMakeFiles/user-cat.dir/cat.c.o
-.PHONY : cat.c.o
+exo_echo.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_echo.dir/build.make user/CMakeFiles/exo_echo.dir/exo_echo.c.o
+.PHONY : exo_echo.c.o
 
-cat.i: cat.c.i
-.PHONY : cat.i
+exo_echo.i: exo_echo.c.i
+.PHONY : exo_echo.i
 
 # target to preprocess a source file
-cat.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cat.dir/build.make user/CMakeFiles/user-cat.dir/cat.c.i
-.PHONY : cat.c.i
+exo_echo.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_echo.dir/build.make user/CMakeFiles/exo_echo.dir/exo_echo.c.i
+.PHONY : exo_echo.c.i
 
-cat.s: cat.c.s
-.PHONY : cat.s
+exo_echo.s: exo_echo.c.s
+.PHONY : exo_echo.s
 
 # target to generate assembly for a file
-cat.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cat.dir/build.make user/CMakeFiles/user-cat.dir/cat.c.s
-.PHONY : cat.c.s
+exo_echo.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_echo.dir/build.make user/CMakeFiles/exo_echo.dir/exo_echo.c.s
+.PHONY : exo_echo.c.s
 
-chan.o: chan.c.o
-.PHONY : chan.o
+fs_client_test.o: fs_client_test.c.o
+.PHONY : fs_client_test.o
 
 # target to build an object file
-chan.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-chan.dir/build.make user/CMakeFiles/phoenix-chan.dir/chan.c.o
-.PHONY : chan.c.o
+fs_client_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_client_test.dir/build.make user/CMakeFiles/fs_client_test.dir/fs_client_test.c.o
+.PHONY : fs_client_test.c.o
 
-chan.i: chan.c.i
-.PHONY : chan.i
+fs_client_test.i: fs_client_test.c.i
+.PHONY : fs_client_test.i
 
 # target to preprocess a source file
-chan.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-chan.dir/build.make user/CMakeFiles/phoenix-chan.dir/chan.c.i
-.PHONY : chan.c.i
+fs_client_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_client_test.dir/build.make user/CMakeFiles/fs_client_test.dir/fs_client_test.c.i
+.PHONY : fs_client_test.c.i
 
-chan.s: chan.c.s
-.PHONY : chan.s
+fs_client_test.s: fs_client_test.c.s
+.PHONY : fs_client_test.s
 
 # target to generate assembly for a file
-chan.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-chan.dir/build.make user/CMakeFiles/phoenix-chan.dir/chan.c.s
-.PHONY : chan.c.s
+fs_client_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_client_test.dir/build.make user/CMakeFiles/fs_client_test.dir/fs_client_test.c.s
+.PHONY : fs_client_test.c.s
 
-cp.o: cp.c.o
-.PHONY : cp.o
+fs_srv.o: fs_srv.c.o
+.PHONY : fs_srv.o
 
 # target to build an object file
-cp.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cp.dir/build.make user/CMakeFiles/user-cp.dir/cp.c.o
-.PHONY : cp.c.o
+fs_srv.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_srv.dir/build.make user/CMakeFiles/fs_srv.dir/fs_srv.c.o
+.PHONY : fs_srv.c.o
 
-cp.i: cp.c.i
-.PHONY : cp.i
+fs_srv.i: fs_srv.c.i
+.PHONY : fs_srv.i
 
 # target to preprocess a source file
-cp.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cp.dir/build.make user/CMakeFiles/user-cp.dir/cp.c.i
-.PHONY : cp.c.i
+fs_srv.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_srv.dir/build.make user/CMakeFiles/fs_srv.dir/fs_srv.c.i
+.PHONY : fs_srv.c.i
 
-cp.s: cp.c.s
-.PHONY : cp.s
+fs_srv.s: fs_srv.c.s
+.PHONY : fs_srv.s
 
 # target to generate assembly for a file
-cp.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cp.dir/build.make user/CMakeFiles/user-cp.dir/cp.c.s
-.PHONY : cp.c.s
+fs_srv.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_srv.dir/build.make user/CMakeFiles/fs_srv.dir/fs_srv.c.s
+.PHONY : fs_srv.c.s
 
-dir.o: dir.c.o
-.PHONY : dir.o
+fs_test.o: fs_test.c.o
+.PHONY : fs_test.o
 
 # target to build an object file
-dir.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/dir.c.o
-.PHONY : dir.c.o
+fs_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_test.dir/build.make user/CMakeFiles/fs_test.dir/fs_test.c.o
+.PHONY : fs_test.c.o
 
-dir.i: dir.c.i
-.PHONY : dir.i
+fs_test.i: fs_test.c.i
+.PHONY : fs_test.i
 
 # target to preprocess a source file
-dir.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/dir.c.i
-.PHONY : dir.c.i
+fs_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_test.dir/build.make user/CMakeFiles/fs_test.dir/fs_test.c.i
+.PHONY : fs_test.c.i
 
-dir.s: dir.c.s
-.PHONY : dir.s
+fs_test.s: fs_test.c.s
+.PHONY : fs_test.s
 
 # target to generate assembly for a file
-dir.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/dir.c.s
-.PHONY : dir.c.s
+fs_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_test.dir/build.make user/CMakeFiles/fs_test.dir/fs_test.c.s
+.PHONY : fs_test.c.s
 
-door.o: door.c.o
-.PHONY : door.o
+hello.o: hello.c.o
+.PHONY : hello.o
 
 # target to build an object file
-door.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-door.dir/build.make user/CMakeFiles/phoenix-door.dir/door.c.o
-.PHONY : door.c.o
+hello.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/hello.dir/build.make user/CMakeFiles/hello.dir/hello.c.o
+.PHONY : hello.c.o
 
-door.i: door.c.i
-.PHONY : door.i
-
-# target to preprocess a source file
-door.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-door.dir/build.make user/CMakeFiles/phoenix-door.dir/door.c.i
-.PHONY : door.c.i
-
-door.s: door.c.s
-.PHONY : door.s
-
-# target to generate assembly for a file
-door.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-door.dir/build.make user/CMakeFiles/phoenix-door.dir/door.c.s
-.PHONY : door.c.s
-
-echo.o: echo.c.o
-.PHONY : echo.o
-
-# target to build an object file
-echo.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-echo.dir/build.make user/CMakeFiles/user-echo.dir/echo.c.o
-.PHONY : echo.c.o
-
-echo.i: echo.c.i
-.PHONY : echo.i
+hello.i: hello.c.i
+.PHONY : hello.i
 
 # target to preprocess a source file
-echo.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-echo.dir/build.make user/CMakeFiles/user-echo.dir/echo.c.i
-.PHONY : echo.c.i
+hello.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/hello.dir/build.make user/CMakeFiles/hello.dir/hello.c.i
+.PHONY : hello.c.i
 
-echo.s: echo.c.s
-.PHONY : echo.s
-
-# target to generate assembly for a file
-echo.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-echo.dir/build.make user/CMakeFiles/user-echo.dir/echo.c.s
-.PHONY : echo.c.s
-
-fileserver.o: fileserver.c.o
-.PHONY : fileserver.o
-
-# target to build an object file
-fileserver.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-fileserver.dir/build.make user/CMakeFiles/user-fileserver.dir/fileserver.c.o
-.PHONY : fileserver.c.o
-
-fileserver.i: fileserver.c.i
-.PHONY : fileserver.i
-
-# target to preprocess a source file
-fileserver.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-fileserver.dir/build.make user/CMakeFiles/user-fileserver.dir/fileserver.c.i
-.PHONY : fileserver.c.i
-
-fileserver.s: fileserver.c.s
-.PHONY : fileserver.s
+hello.s: hello.c.s
+.PHONY : hello.s
 
 # target to generate assembly for a file
-fileserver.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-fileserver.dir/build.make user/CMakeFiles/user-fileserver.dir/fileserver.c.s
-.PHONY : fileserver.c.s
-
-forktest.o: forktest.c.o
-.PHONY : forktest.o
-
-# target to build an object file
-forktest.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-forktest.dir/build.make user/CMakeFiles/user-forktest.dir/forktest.c.o
-.PHONY : forktest.c.o
-
-forktest.i: forktest.c.i
-.PHONY : forktest.i
-
-# target to preprocess a source file
-forktest.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-forktest.dir/build.make user/CMakeFiles/user-forktest.dir/forktest.c.i
-.PHONY : forktest.c.i
-
-forktest.s: forktest.c.s
-.PHONY : forktest.s
-
-# target to generate assembly for a file
-forktest.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-forktest.dir/build.make user/CMakeFiles/user-forktest.dir/forktest.c.s
-.PHONY : forktest.c.s
-
-grep.o: grep.c.o
-.PHONY : grep.o
-
-# target to build an object file
-grep.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-grep.dir/build.make user/CMakeFiles/user-grep.dir/grep.c.o
-.PHONY : grep.c.o
-
-grep.i: grep.c.i
-.PHONY : grep.i
-
-# target to preprocess a source file
-grep.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-grep.dir/build.make user/CMakeFiles/user-grep.dir/grep.c.i
-.PHONY : grep.c.i
-
-grep.s: grep.c.s
-.PHONY : grep.s
-
-# target to generate assembly for a file
-grep.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-grep.dir/build.make user/CMakeFiles/user-grep.dir/grep.c.s
-.PHONY : grep.c.s
+hello.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/hello.dir/build.make user/CMakeFiles/hello.dir/hello.c.s
+.PHONY : hello.c.s
 
 init.o: init.c.o
 .PHONY : init.o
 
 # target to build an object file
 init.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-init.dir/build.make user/CMakeFiles/user-init.dir/init.c.o
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/init.dir/build.make user/CMakeFiles/init.dir/init.c.o
 .PHONY : init.c.o
 
 init.i: init.c.i
@@ -867,7 +589,7 @@ init.i: init.c.i
 
 # target to preprocess a source file
 init.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-init.dir/build.make user/CMakeFiles/user-init.dir/init.c.i
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/init.dir/build.make user/CMakeFiles/init.dir/init.c.i
 .PHONY : init.c.i
 
 init.s: init.c.s
@@ -875,255 +597,87 @@ init.s: init.c.s
 
 # target to generate assembly for a file
 init.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-init.dir/build.make user/CMakeFiles/user-init.dir/init.c.s
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/init.dir/build.make user/CMakeFiles/init.dir/init.c.s
 .PHONY : init.c.s
 
-kill.o: kill.c.o
-.PHONY : kill.o
+ipc_test.o: ipc_test.c.o
+.PHONY : ipc_test.o
 
 # target to build an object file
-kill.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-kill.dir/build.make user/CMakeFiles/user-kill.dir/kill.c.o
-.PHONY : kill.c.o
+ipc_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/ipc_test.dir/build.make user/CMakeFiles/ipc_test.dir/ipc_test.c.o
+.PHONY : ipc_test.c.o
 
-kill.i: kill.c.i
-.PHONY : kill.i
+ipc_test.i: ipc_test.c.i
+.PHONY : ipc_test.i
 
 # target to preprocess a source file
-kill.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-kill.dir/build.make user/CMakeFiles/user-kill.dir/kill.c.i
-.PHONY : kill.c.i
+ipc_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/ipc_test.dir/build.make user/CMakeFiles/ipc_test.dir/ipc_test.c.i
+.PHONY : ipc_test.c.i
 
-kill.s: kill.c.s
-.PHONY : kill.s
+ipc_test.s: ipc_test.c.s
+.PHONY : ipc_test.s
 
 # target to generate assembly for a file
-kill.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-kill.dir/build.make user/CMakeFiles/user-kill.dir/kill.c.s
-.PHONY : kill.c.s
+ipc_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/ipc_test.dir/build.make user/CMakeFiles/ipc_test.dir/ipc_test.c.s
+.PHONY : ipc_test.c.s
 
-libos/sched.o: libos/sched.c.o
-.PHONY : libos/sched.o
+pipeline_test.o: pipeline_test.c.o
+.PHONY : pipeline_test.o
 
 # target to build an object file
-libos/sched.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/libos/sched.c.o
-.PHONY : libos/sched.c.o
+pipeline_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/pipeline_test.dir/build.make user/CMakeFiles/pipeline_test.dir/pipeline_test.c.o
+.PHONY : pipeline_test.c.o
 
-libos/sched.i: libos/sched.c.i
-.PHONY : libos/sched.i
+pipeline_test.i: pipeline_test.c.i
+.PHONY : pipeline_test.i
 
 # target to preprocess a source file
-libos/sched.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/libos/sched.c.i
-.PHONY : libos/sched.c.i
+pipeline_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/pipeline_test.dir/build.make user/CMakeFiles/pipeline_test.dir/pipeline_test.c.i
+.PHONY : pipeline_test.c.i
 
-libos/sched.s: libos/sched.c.s
-.PHONY : libos/sched.s
+pipeline_test.s: pipeline_test.c.s
+.PHONY : pipeline_test.s
 
 # target to generate assembly for a file
-libos/sched.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/libos/sched.c.s
-.PHONY : libos/sched.c.s
+pipeline_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/pipeline_test.dir/build.make user/CMakeFiles/pipeline_test.dir/pipeline_test.c.s
+.PHONY : pipeline_test.c.s
 
-ln.o: ln.c.o
-.PHONY : ln.o
+sched_test.o: sched_test.c.o
+.PHONY : sched_test.o
 
 # target to build an object file
-ln.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ln.dir/build.make user/CMakeFiles/user-ln.dir/ln.c.o
-.PHONY : ln.c.o
+sched_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sched_test.dir/build.make user/CMakeFiles/sched_test.dir/sched_test.c.o
+.PHONY : sched_test.c.o
 
-ln.i: ln.c.i
-.PHONY : ln.i
-
-# target to preprocess a source file
-ln.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ln.dir/build.make user/CMakeFiles/user-ln.dir/ln.c.i
-.PHONY : ln.c.i
-
-ln.s: ln.c.s
-.PHONY : ln.s
-
-# target to generate assembly for a file
-ln.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ln.dir/build.make user/CMakeFiles/user-ln.dir/ln.c.s
-.PHONY : ln.c.s
-
-ls.o: ls.c.o
-.PHONY : ls.o
-
-# target to build an object file
-ls.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ls.dir/build.make user/CMakeFiles/user-ls.dir/ls.c.o
-.PHONY : ls.c.o
-
-ls.i: ls.c.i
-.PHONY : ls.i
+sched_test.i: sched_test.c.i
+.PHONY : sched_test.i
 
 # target to preprocess a source file
-ls.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ls.dir/build.make user/CMakeFiles/user-ls.dir/ls.c.i
-.PHONY : ls.c.i
+sched_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sched_test.dir/build.make user/CMakeFiles/sched_test.dir/sched_test.c.i
+.PHONY : sched_test.c.i
 
-ls.s: ls.c.s
-.PHONY : ls.s
-
-# target to generate assembly for a file
-ls.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ls.dir/build.make user/CMakeFiles/user-ls.dir/ls.c.s
-.PHONY : ls.c.s
-
-math_core.o: math_core.c.o
-.PHONY : math_core.o
-
-# target to build an object file
-math_core.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-math-core.dir/build.make user/CMakeFiles/phoenix-math-core.dir/math_core.c.o
-.PHONY : math_core.c.o
-
-math_core.i: math_core.c.i
-.PHONY : math_core.i
-
-# target to preprocess a source file
-math_core.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-math-core.dir/build.make user/CMakeFiles/phoenix-math-core.dir/math_core.c.i
-.PHONY : math_core.c.i
-
-math_core.s: math_core.c.s
-.PHONY : math_core.s
+sched_test.s: sched_test.c.s
+.PHONY : sched_test.s
 
 # target to generate assembly for a file
-math_core.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-math-core.dir/build.make user/CMakeFiles/phoenix-math-core.dir/math_core.c.s
-.PHONY : math_core.c.s
-
-mkdir.o: mkdir.c.o
-.PHONY : mkdir.o
-
-# target to build an object file
-mkdir.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mkdir.dir/build.make user/CMakeFiles/user-mkdir.dir/mkdir.c.o
-.PHONY : mkdir.c.o
-
-mkdir.i: mkdir.c.i
-.PHONY : mkdir.i
-
-# target to preprocess a source file
-mkdir.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mkdir.dir/build.make user/CMakeFiles/user-mkdir.dir/mkdir.c.i
-.PHONY : mkdir.c.i
-
-mkdir.s: mkdir.c.s
-.PHONY : mkdir.s
-
-# target to generate assembly for a file
-mkdir.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mkdir.dir/build.make user/CMakeFiles/user-mkdir.dir/mkdir.c.s
-.PHONY : mkdir.c.s
-
-mv.o: mv.c.o
-.PHONY : mv.o
-
-# target to build an object file
-mv.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mv.dir/build.make user/CMakeFiles/user-mv.dir/mv.c.o
-.PHONY : mv.c.o
-
-mv.i: mv.c.i
-.PHONY : mv.i
-
-# target to preprocess a source file
-mv.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mv.dir/build.make user/CMakeFiles/user-mv.dir/mv.c.i
-.PHONY : mv.c.i
-
-mv.s: mv.c.s
-.PHONY : mv.s
-
-# target to generate assembly for a file
-mv.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mv.dir/build.make user/CMakeFiles/user-mv.dir/mv.c.s
-.PHONY : mv.c.s
-
-printf.o: printf.c.o
-.PHONY : printf.o
-
-# target to build an object file
-printf.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-printf.dir/build.make user/CMakeFiles/phoenix-printf.dir/printf.c.o
-.PHONY : printf.c.o
-
-printf.i: printf.c.i
-.PHONY : printf.i
-
-# target to preprocess a source file
-printf.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-printf.dir/build.make user/CMakeFiles/phoenix-printf.dir/printf.c.i
-.PHONY : printf.c.i
-
-printf.s: printf.c.s
-.PHONY : printf.s
-
-# target to generate assembly for a file
-printf.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-printf.dir/build.make user/CMakeFiles/phoenix-printf.dir/printf.c.s
-.PHONY : printf.c.s
-
-ps.o: ps.c.o
-.PHONY : ps.o
-
-# target to build an object file
-ps.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ps.dir/build.make user/CMakeFiles/user-ps.dir/ps.c.o
-.PHONY : ps.c.o
-
-ps.i: ps.c.i
-.PHONY : ps.i
-
-# target to preprocess a source file
-ps.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ps.dir/build.make user/CMakeFiles/user-ps.dir/ps.c.i
-.PHONY : ps.c.i
-
-ps.s: ps.c.s
-.PHONY : ps.s
-
-# target to generate assembly for a file
-ps.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ps.dir/build.make user/CMakeFiles/user-ps.dir/ps.c.s
-.PHONY : ps.c.s
-
-rm.o: rm.c.o
-.PHONY : rm.o
-
-# target to build an object file
-rm.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-rm.dir/build.make user/CMakeFiles/user-rm.dir/rm.c.o
-.PHONY : rm.c.o
-
-rm.i: rm.c.i
-.PHONY : rm.i
-
-# target to preprocess a source file
-rm.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-rm.dir/build.make user/CMakeFiles/user-rm.dir/rm.c.i
-.PHONY : rm.c.i
-
-rm.s: rm.c.s
-.PHONY : rm.s
-
-# target to generate assembly for a file
-rm.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-rm.dir/build.make user/CMakeFiles/user-rm.dir/rm.c.s
-.PHONY : rm.c.s
+sched_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sched_test.dir/build.make user/CMakeFiles/sched_test.dir/sched_test.c.s
+.PHONY : sched_test.c.s
 
 sh.o: sh.c.o
 .PHONY : sh.o
 
 # target to build an object file
 sh.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sh.dir/build.make user/CMakeFiles/user-sh.dir/sh.c.o
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sh.dir/build.make user/CMakeFiles/sh.dir/sh.c.o
 .PHONY : sh.c.o
 
 sh.i: sh.c.i
@@ -1131,7 +685,7 @@ sh.i: sh.c.i
 
 # target to preprocess a source file
 sh.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sh.dir/build.make user/CMakeFiles/user-sh.dir/sh.c.i
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sh.dir/build.make user/CMakeFiles/sh.dir/sh.c.i
 .PHONY : sh.c.i
 
 sh.s: sh.c.s
@@ -1139,184 +693,80 @@ sh.s: sh.c.s
 
 # target to generate assembly for a file
 sh.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sh.dir/build.make user/CMakeFiles/user-sh.dir/sh.c.s
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/sh.dir/build.make user/CMakeFiles/sh.dir/sh.c.s
 .PHONY : sh.c.s
 
-sleep.o: sleep.c.o
-.PHONY : sleep.o
+spawn_test.o: spawn_test.c.o
+.PHONY : spawn_test.o
 
 # target to build an object file
-sleep.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sleep.dir/build.make user/CMakeFiles/user-sleep.dir/sleep.c.o
-.PHONY : sleep.c.o
+spawn_test.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/spawn_test.dir/build.make user/CMakeFiles/spawn_test.dir/spawn_test.c.o
+.PHONY : spawn_test.c.o
 
-sleep.i: sleep.c.i
-.PHONY : sleep.i
+spawn_test.i: spawn_test.c.i
+.PHONY : spawn_test.i
 
 # target to preprocess a source file
-sleep.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sleep.dir/build.make user/CMakeFiles/user-sleep.dir/sleep.c.i
-.PHONY : sleep.c.i
+spawn_test.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/spawn_test.dir/build.make user/CMakeFiles/spawn_test.dir/spawn_test.c.i
+.PHONY : spawn_test.c.i
 
-sleep.s: sleep.c.s
-.PHONY : sleep.s
+spawn_test.s: spawn_test.c.s
+.PHONY : spawn_test.s
 
 # target to generate assembly for a file
-sleep.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sleep.dir/build.make user/CMakeFiles/user-sleep.dir/sleep.c.s
-.PHONY : sleep.c.s
+spawn_test.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/spawn_test.dir/build.make user/CMakeFiles/spawn_test.dir/spawn_test.c.s
+.PHONY : spawn_test.c.s
 
-stressfs.o: stressfs.c.o
-.PHONY : stressfs.o
+uart_driver.o: uart_driver.c.o
+.PHONY : uart_driver.o
 
 # target to build an object file
-stressfs.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-stressfs.dir/build.make user/CMakeFiles/user-stressfs.dir/stressfs.c.o
-.PHONY : stressfs.c.o
+uart_driver.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/uart_driver.dir/build.make user/CMakeFiles/uart_driver.dir/uart_driver.c.o
+.PHONY : uart_driver.c.o
 
-stressfs.i: stressfs.c.i
-.PHONY : stressfs.i
+uart_driver.i: uart_driver.c.i
+.PHONY : uart_driver.i
 
 # target to preprocess a source file
-stressfs.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-stressfs.dir/build.make user/CMakeFiles/user-stressfs.dir/stressfs.c.i
-.PHONY : stressfs.c.i
+uart_driver.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/uart_driver.dir/build.make user/CMakeFiles/uart_driver.dir/uart_driver.c.i
+.PHONY : uart_driver.c.i
 
-stressfs.s: stressfs.c.s
-.PHONY : stressfs.s
+uart_driver.s: uart_driver.c.s
+.PHONY : uart_driver.s
 
 # target to generate assembly for a file
-stressfs.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-stressfs.dir/build.make user/CMakeFiles/user-stressfs.dir/stressfs.c.s
-.PHONY : stressfs.c.s
+uart_driver.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/uart_driver.dir/build.make user/CMakeFiles/uart_driver.dir/uart_driver.c.s
+.PHONY : uart_driver.c.s
 
-ulib.o: ulib.c.o
-.PHONY : ulib.o
+virtio_driver.o: virtio_driver.c.o
+.PHONY : virtio_driver.o
 
 # target to build an object file
-ulib.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/ulib.c.o
-.PHONY : ulib.c.o
+virtio_driver.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/virtio_driver.dir/build.make user/CMakeFiles/virtio_driver.dir/virtio_driver.c.o
+.PHONY : virtio_driver.c.o
 
-ulib.i: ulib.c.i
-.PHONY : ulib.i
+virtio_driver.i: virtio_driver.c.i
+.PHONY : virtio_driver.i
 
 # target to preprocess a source file
-ulib.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/ulib.c.i
-.PHONY : ulib.c.i
+virtio_driver.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/virtio_driver.dir/build.make user/CMakeFiles/virtio_driver.dir/virtio_driver.c.i
+.PHONY : virtio_driver.c.i
 
-ulib.s: ulib.c.s
-.PHONY : ulib.s
-
-# target to generate assembly for a file
-ulib.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/ulib.c.s
-.PHONY : ulib.c.s
-
-umalloc.o: umalloc.c.o
-.PHONY : umalloc.o
-
-# target to build an object file
-umalloc.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-umalloc.dir/build.make user/CMakeFiles/phoenix-umalloc.dir/umalloc.c.o
-.PHONY : umalloc.c.o
-
-umalloc.i: umalloc.c.i
-.PHONY : umalloc.i
-
-# target to preprocess a source file
-umalloc.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-umalloc.dir/build.make user/CMakeFiles/phoenix-umalloc.dir/umalloc.c.i
-.PHONY : umalloc.c.i
-
-umalloc.s: umalloc.c.s
-.PHONY : umalloc.s
+virtio_driver.s: virtio_driver.c.s
+.PHONY : virtio_driver.s
 
 # target to generate assembly for a file
-umalloc.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-umalloc.dir/build.make user/CMakeFiles/phoenix-umalloc.dir/umalloc.c.s
-.PHONY : umalloc.c.s
-
-usertests.o: usertests.c.o
-.PHONY : usertests.o
-
-# target to build an object file
-usertests.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-usertests.dir/build.make user/CMakeFiles/user-usertests.dir/usertests.c.o
-.PHONY : usertests.c.o
-
-usertests.i: usertests.c.i
-.PHONY : usertests.i
-
-# target to preprocess a source file
-usertests.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-usertests.dir/build.make user/CMakeFiles/user-usertests.dir/usertests.c.i
-.PHONY : usertests.c.i
-
-usertests.s: usertests.c.s
-.PHONY : usertests.s
-
-# target to generate assembly for a file
-usertests.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-usertests.dir/build.make user/CMakeFiles/user-usertests.dir/usertests.c.s
-.PHONY : usertests.c.s
-
-usys.o: usys.S.o
-.PHONY : usys.o
-
-# target to build an object file
-usys.S.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/usys.S.o
-.PHONY : usys.S.o
-
-wc.o: wc.c.o
-.PHONY : wc.o
-
-# target to build an object file
-wc.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-wc.dir/build.make user/CMakeFiles/user-wc.dir/wc.c.o
-.PHONY : wc.c.o
-
-wc.i: wc.c.i
-.PHONY : wc.i
-
-# target to preprocess a source file
-wc.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-wc.dir/build.make user/CMakeFiles/user-wc.dir/wc.c.i
-.PHONY : wc.c.i
-
-wc.s: wc.c.s
-.PHONY : wc.s
-
-# target to generate assembly for a file
-wc.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-wc.dir/build.make user/CMakeFiles/user-wc.dir/wc.c.s
-.PHONY : wc.c.s
-
-zombie.o: zombie.c.o
-.PHONY : zombie.o
-
-# target to build an object file
-zombie.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-zombie.dir/build.make user/CMakeFiles/user-zombie.dir/zombie.c.o
-.PHONY : zombie.c.o
-
-zombie.i: zombie.c.i
-.PHONY : zombie.i
-
-# target to preprocess a source file
-zombie.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-zombie.dir/build.make user/CMakeFiles/user-zombie.dir/zombie.c.i
-.PHONY : zombie.c.i
-
-zombie.s: zombie.c.s
-.PHONY : zombie.s
-
-# target to generate assembly for a file
-zombie.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-zombie.dir/build.make user/CMakeFiles/user-zombie.dir/zombie.c.s
-.PHONY : zombie.c.s
+virtio_driver.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f user/CMakeFiles/virtio_driver.dir/build.make user/CMakeFiles/virtio_driver.dir/virtio_driver.c.s
+.PHONY : virtio_driver.c.s
 
 # Help Target
 help:
@@ -1332,126 +782,67 @@ help:
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
-	@echo "... phoenix-caplib"
-	@echo "... phoenix-chan"
-	@echo "... phoenix-door"
-	@echo "... phoenix-math-core"
-	@echo "... phoenix-printf"
-	@echo "... phoenix-ulib"
-	@echo "... phoenix-umalloc"
-	@echo "... phoenix-user-sched"
-	@echo "... user-cat"
-	@echo "... user-conformance"
-	@echo "... user-cp"
-	@echo "... user-echo"
-	@echo "... user-fileserver"
-	@echo "... user-forktest"
-	@echo "... user-grep"
-	@echo "... user-init"
-	@echo "... user-kill"
-	@echo "... user-ln"
-	@echo "... user-ls"
-	@echo "... user-mkdir"
-	@echo "... user-mv"
-	@echo "... user-ps"
-	@echo "... user-rm"
-	@echo "... user-sh"
-	@echo "... user-sleep"
-	@echo "... user-stressfs"
-	@echo "... user-usertests"
-	@echo "... user-wc"
-	@echo "... user-zombie"
-	@echo "... __/tests/user/conformance.o"
-	@echo "... __/tests/user/conformance.i"
-	@echo "... __/tests/user/conformance.s"
-	@echo "... caplib.o"
-	@echo "... caplib.i"
-	@echo "... caplib.s"
-	@echo "... cat.o"
-	@echo "... cat.i"
-	@echo "... cat.s"
-	@echo "... chan.o"
-	@echo "... chan.i"
-	@echo "... chan.s"
-	@echo "... cp.o"
-	@echo "... cp.i"
-	@echo "... cp.s"
-	@echo "... dir.o"
-	@echo "... dir.i"
-	@echo "... dir.s"
-	@echo "... door.o"
-	@echo "... door.i"
-	@echo "... door.s"
-	@echo "... echo.o"
-	@echo "... echo.i"
-	@echo "... echo.s"
-	@echo "... fileserver.o"
-	@echo "... fileserver.i"
-	@echo "... fileserver.s"
-	@echo "... forktest.o"
-	@echo "... forktest.i"
-	@echo "... forktest.s"
-	@echo "... grep.o"
-	@echo "... grep.i"
-	@echo "... grep.s"
+	@echo "... init_bin"
+	@echo "... elf_test"
+	@echo "... exo_cat"
+	@echo "... exo_echo"
+	@echo "... fs_client_test"
+	@echo "... fs_srv"
+	@echo "... fs_test"
+	@echo "... hello"
+	@echo "... init"
+	@echo "... ipc_test"
+	@echo "... pipeline_test"
+	@echo "... sched_test"
+	@echo "... sh"
+	@echo "... spawn_test"
+	@echo "... uart_driver"
+	@echo "... virtio_driver"
+	@echo "... elf_test.o"
+	@echo "... elf_test.i"
+	@echo "... elf_test.s"
+	@echo "... exo_cat.o"
+	@echo "... exo_cat.i"
+	@echo "... exo_cat.s"
+	@echo "... exo_echo.o"
+	@echo "... exo_echo.i"
+	@echo "... exo_echo.s"
+	@echo "... fs_client_test.o"
+	@echo "... fs_client_test.i"
+	@echo "... fs_client_test.s"
+	@echo "... fs_srv.o"
+	@echo "... fs_srv.i"
+	@echo "... fs_srv.s"
+	@echo "... fs_test.o"
+	@echo "... fs_test.i"
+	@echo "... fs_test.s"
+	@echo "... hello.o"
+	@echo "... hello.i"
+	@echo "... hello.s"
 	@echo "... init.o"
 	@echo "... init.i"
 	@echo "... init.s"
-	@echo "... kill.o"
-	@echo "... kill.i"
-	@echo "... kill.s"
-	@echo "... libos/sched.o"
-	@echo "... libos/sched.i"
-	@echo "... libos/sched.s"
-	@echo "... ln.o"
-	@echo "... ln.i"
-	@echo "... ln.s"
-	@echo "... ls.o"
-	@echo "... ls.i"
-	@echo "... ls.s"
-	@echo "... math_core.o"
-	@echo "... math_core.i"
-	@echo "... math_core.s"
-	@echo "... mkdir.o"
-	@echo "... mkdir.i"
-	@echo "... mkdir.s"
-	@echo "... mv.o"
-	@echo "... mv.i"
-	@echo "... mv.s"
-	@echo "... printf.o"
-	@echo "... printf.i"
-	@echo "... printf.s"
-	@echo "... ps.o"
-	@echo "... ps.i"
-	@echo "... ps.s"
-	@echo "... rm.o"
-	@echo "... rm.i"
-	@echo "... rm.s"
+	@echo "... ipc_test.o"
+	@echo "... ipc_test.i"
+	@echo "... ipc_test.s"
+	@echo "... pipeline_test.o"
+	@echo "... pipeline_test.i"
+	@echo "... pipeline_test.s"
+	@echo "... sched_test.o"
+	@echo "... sched_test.i"
+	@echo "... sched_test.s"
 	@echo "... sh.o"
 	@echo "... sh.i"
 	@echo "... sh.s"
-	@echo "... sleep.o"
-	@echo "... sleep.i"
-	@echo "... sleep.s"
-	@echo "... stressfs.o"
-	@echo "... stressfs.i"
-	@echo "... stressfs.s"
-	@echo "... ulib.o"
-	@echo "... ulib.i"
-	@echo "... ulib.s"
-	@echo "... umalloc.o"
-	@echo "... umalloc.i"
-	@echo "... umalloc.s"
-	@echo "... usertests.o"
-	@echo "... usertests.i"
-	@echo "... usertests.s"
-	@echo "... usys.o"
-	@echo "... wc.o"
-	@echo "... wc.i"
-	@echo "... wc.s"
-	@echo "... zombie.o"
-	@echo "... zombie.i"
-	@echo "... zombie.s"
+	@echo "... spawn_test.o"
+	@echo "... spawn_test.i"
+	@echo "... spawn_test.s"
+	@echo "... uart_driver.o"
+	@echo "... uart_driver.i"
+	@echo "... uart_driver.s"
+	@echo "... virtio_driver.o"
+	@echo "... virtio_driver.i"
+	@echo "... virtio_driver.s"
 .PHONY : help
 
 

@@ -6,7 +6,7 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools
 
-C_FLAGS = -O3 -DNDEBUG -std=c23 -Wall -O3 -DNDEBUG -std=c2x
+C_FLAGS = -O3 -DNDEBUG -std=c23 -fcolor-diagnostics -fstack-protector-strong -fcf-protection=full -Wall -O3 -DNDEBUG -std=c2x
 
 # Custom options: src/arch/CMakeFiles/phoenix-arch-x86-legacy.dir/x86/legacy/simd_mmx_cap.c.o_OPTIONS = -mmmx
 

@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/runner/work/exov6/exov6/libos/posix/linux_abi.c" "libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o" "gcc" "libos/CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o.d"
   "/home/runner/work/exov6/exov6/libos/posix/posix.c" "libos/CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o" "gcc" "libos/CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o.d"
   )
 

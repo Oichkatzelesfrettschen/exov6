@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o"
+  "CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o.d"
   "CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o"
   "CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o.d"
   "libphoenix-libos-posix.a"
