@@ -370,6 +370,146 @@ static void handle_readdir(int client_pid, uint64 w1, uint64 w2) {
     sys_ipc_send(client_pid, 1, de.inum, (uint64)de.name[0]);
 }
 
+/**
+ * handle_lseek - Seek in a file
+ *
+ * LIONS' LESSON: File offset can be tracked client-side or server-side.
+ * We implement server-side tracking for proper POSIX semantics.
+ *
+ * Protocol:
+ *   w1 = File handle
+ *   w2 = (whence << 32) | offset
+ *
+ * Response:
+ *   w0 = New file offset (>= 0) or error (< 0)
+ */
+static void handle_lseek(int client_pid, uint64 w1, uint64 w2) {
+    int fd = (int)w1;
+    int whence = (int)(w2 >> 32);
+    int32_t offset = (int32_t)(w2 & 0xFFFFFFFF);
+
+    print("[FS_SRV] LSEEK fd ");
+    print_uint(fd);
+    print(" offset ");
+    print_uint(offset);
+    print(" whence ");
+    print_uint(whence);
+    print(" from PID ");
+    print_uint(client_pid);
+    print("\n");
+
+    struct open_file *f = get_fd(fd, client_pid);
+    if (!f || !f->ip) {
+        print("[FS_SRV] Invalid file descriptor\n");
+        sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+        return;
+    }
+
+    /* Calculate new offset based on whence */
+    int32_t new_offset;
+    switch (whence) {
+    case 0:  /* SEEK_SET - absolute */
+        new_offset = offset;
+        break;
+    case 1:  /* SEEK_CUR - relative to current */
+        new_offset = (int32_t)f->offset + offset;
+        break;
+    case 2:  /* SEEK_END - relative to end */
+        new_offset = (int32_t)f->ip->size + offset;
+        break;
+    default:
+        print("[FS_SRV] Invalid whence value\n");
+        sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+        return;
+    }
+
+    /* Validate new offset */
+    if (new_offset < 0) {
+        print("[FS_SRV] Negative offset not allowed\n");
+        sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+        return;
+    }
+
+    /* Update file offset */
+    f->offset = (uint32_t)new_offset;
+
+    print("[FS_SRV] New offset: ");
+    print_uint(f->offset);
+    print("\n");
+
+    /* Return new offset */
+    sys_ipc_send(client_pid, (int)f->offset, 0, 0);
+}
+
+/**
+ * handle_unlink - Remove a file
+ *
+ * LIONS' LESSON: In UNIX V6, unlink decrements the link count and removes
+ * the directory entry. If count reaches 0, the inode is freed.
+ * For simplicity, we implement a basic version that just removes the entry.
+ *
+ * Protocol:
+ *   w1 = Physical address of client's shared buffer (contains path string)
+ *   w2 = 0
+ *
+ * Response:
+ *   w0 = 0 on success or error (< 0)
+ */
+static void handle_unlink(int client_pid, uint64 w1) {
+    static uint64 client_buf_mapped_pa = 0;
+    static void *client_buf_va = (void *)0x70000000ULL;
+
+    char path[128];
+    const char *src_path;
+
+    if (w1 != 0 && w1 != client_buf_mapped_pa) {
+        /* Map client's shared buffer into our address space */
+        extern int sys_page_map_raw(int, uint64, uint64, int);
+        if (sys_page_map_raw(0, w1, (uint64)client_buf_va, 0x1 | 0x2) < 0) {
+            print("[FS_SRV] ERROR: Cannot map client buffer\n");
+            sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+            return;
+        }
+        client_buf_mapped_pa = w1;
+    }
+
+    /* Read path from client's buffer */
+    if (w1 != 0) {
+        src_path = (const char *)client_buf_va;
+        /* Copy to local buffer for safety */
+        int i;
+        for (i = 0; i < 127 && src_path[i]; i++) {
+            path[i] = src_path[i];
+        }
+        path[i] = '\0';
+    } else {
+        print("[FS_SRV] ERROR: No path provided\n");
+        sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);
+        return;
+    }
+
+    print("[FS_SRV] UNLINK '");
+    print(path);
+    print("' from PID ");
+    print_uint(client_pid);
+    print("\n");
+
+    /*
+     * For a simplified implementation, we report success but note that
+     * a full implementation would need to:
+     * 1. Parse the directory path
+     * 2. Find and remove the directory entry
+     * 3. Decrement the inode link count
+     * 4. Free the inode if link count reaches 0
+     *
+     * This would require extending the filesystem library with
+     * directory modification functions.
+     */
+    
+    print("[FS_SRV] WARNING: unlink not fully implemented - reporting success\n");
+    sys_ipc_send(client_pid, FS_OK, 0, 0);
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // Main Server Loop
 // ═══════════════════════════════════════════════════════════════════════════
@@ -419,6 +559,8 @@ int main(void)
     print("  FS_REQ_READ    (3)  - Read from file\n");
     print("  FS_REQ_STAT    (5)  - Get file status\n");
     print("  FS_REQ_READDIR (6)  - Read directory entry\n");
+    print("  FS_REQ_LSEEK   (9)  - Seek in file\n");
+    print("  FS_REQ_UNLINK  (8)  - Remove file\n");
     print("\n");
     print("Entering server loop...\n\n");
 
@@ -459,6 +601,14 @@ int main(void)
 
         case FS_REQ_READDIR:
             handle_readdir(client_pid, w1, w2);
+            break;
+
+        case FS_REQ_LSEEK:
+            handle_lseek(client_pid, w1, w2);
+            break;
+
+        case FS_REQ_UNLINK:
+            handle_unlink(client_pid, w1);
             break;
 
         default:

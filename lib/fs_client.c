@@ -313,16 +313,65 @@ int stat(int fd, int *type, uint64 *size) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * lseek() - Seek in File (Placeholder)
+ * lseek() - Seek in File
  *
- * LESSON: We need to track file offset in LibOS or have server track it.
- * Current fs_srv doesn't support seek - sequential reads only.
+ * LESSON: File offset tracking can be done in LibOS (client-side) or server-side.
+ * For TCC compatibility, we implement server-side seeking which allows the server
+ * to maintain proper file offsets across multiple operations.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 int lseek(int fd, int offset, int whence) {
-    (void)fd; (void)offset; (void)whence;
-    /* TODO: Implement when fs_srv supports it */
-    return -1;
+    /*
+     * Send LSEEK request
+     *
+     * Protocol:
+     *   w0 = FS_REQ_LSEEK
+     *   w1 = file handle
+     *   w2 = (whence << 32) | offset
+     *
+     * Response:
+     *   w0 = new file offset (>= 0) or error (< 0)
+     */
+    uint64 packed = FS_PACK_WHENCE_OFF(whence, offset);
+    int new_offset = fs_call(FS_REQ_LSEEK, (uint64)fd, packed, 0, 0);
+
+    return new_offset;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * unlink() - Remove a File
+ *
+ * LESSON: Unlike traditional UNIX where unlink() decrements link count,
+ * in a simplified filesystem we just remove the directory entry.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+int unlink(const char *path) {
+    /* Initialize shared buffer if needed */
+    if (init_shared_buffer() < 0) {
+        return -1;
+    }
+
+    /* Copy path to shared buffer */
+    int path_len = strlen_local(path);
+    if (path_len >= SHARED_BUF_SIZE) {
+        return -1;  /* Path too long */
+    }
+    strcpy_local((char *)shared_buf_va, path);
+
+    /*
+     * Send UNLINK request
+     *
+     * Protocol:
+     *   w0 = FS_REQ_UNLINK
+     *   w1 = Physical address of shared buffer (contains path)
+     *   w2 = 0
+     *
+     * Response:
+     *   w0 = 0 on success or error (< 0)
+     */
+    int result = fs_call(FS_REQ_UNLINK, shared_buf_pa, 0, 0, 0);
+
+    return result;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

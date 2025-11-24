@@ -9,11 +9,11 @@ syscall(int num, uint64 a0, uint64 a1, uint64 a2, uint64 a3)
 
 #if defined(__x86_64__)
     // x86_64: syscall instruction with register ABI
-    register uint64 r10 asm("r10") = a3;
-    asm volatile("syscall"
-                 : "=a" (ret)
-                 : "a" (num), "D" (a0), "S" (a1), "d" (a2), "r" (r10)
-                 : "rcx", "r11", "memory");
+    register uint64 r10 __asm__("r10") = a3;
+    __asm__ volatile("syscall"
+                     : "=a" (ret)
+                     : "a" (num), "D" (a0), "S" (a1), "d" (a2), "r" (r10)
+                     : "rcx", "r11", "memory");
 
 #elif defined(__aarch64__)
     // ARM64: svc #0 instruction
