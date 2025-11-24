@@ -473,6 +473,193 @@ int spawnl(const char *path, const char *arg0, ...)
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+ * FD Redirection Support for Pipelines (Phase 11.3)
+ *
+ * LIONS' LESSON: For shell pipelines (cmd1 | cmd2), we need to:
+ *   1. Create a pipe
+ *   2. Spawn cmd1 with stdout (fd 1) → pipe write end
+ *   3. Spawn cmd2 with stdin (fd 0) → pipe read end
+ *
+ * The challenge: The child process has its OWN fd_table[], initialized fresh.
+ * We need to tell the child "your fd 0 should actually read from THIS pipe".
+ *
+ * Solution: Pass pipe physical addresses via a known memory location.
+ * The child's libmain can check this location and set up its fd_table.
+ *
+ * For now, we implement a simpler approach:
+ *   - spawnp() that maps the pipe buffer into child's address space
+ *   - Child inherits the mapping and can access the pipe
+ *   - We pass metadata on the child's stack
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* FD redirection entry */
+struct fd_redir {
+    int child_fd;       /* Target fd in child (0 for stdin, 1 for stdout) */
+    int type;           /* 0 = unused, 1 = pipe read, 2 = pipe write */
+    uint64_t pipe_pa;   /* Physical address of pipe buffer */
+};
+
+#define MAX_REDIR 4
+
+/* Child's fd init structure (placed at known VA in child) */
+#define CHILD_FDINIT_VA     0x6900000000ULL
+
+struct fd_init_block {
+    uint32_t magic;         /* 0xFD1B10C4 */
+    uint32_t count;         /* Number of redirections */
+    struct fd_redir redir[MAX_REDIR];
+};
+
+#define FDINIT_MAGIC    0xFD1B10C4
+
+/* Pipe physical address getter (from lib/pipe.c) */
+extern uint64_t pipe_get_phys(int pipe_id);
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * spawnp() - Spawn with Pipe Redirection
+ *
+ * @param path      Path to executable
+ * @param argv      Argument array
+ * @param stdin_pipe  Pipe ID for stdin (-1 if none)
+ * @param stdout_pipe Pipe ID for stdout (-1 if none)
+ * @return          Child PID or negative error
+ *
+ * Example usage for "echo hello | cat":
+ *   int pipefd[2];
+ *   fd_pipe(pipefd);  // Creates pipe, pipefd[0]=read, pipefd[1]=write
+ *
+ *   // Get pipe ID from the read end fd (stored in fd_table)
+ *   int pipe_id = get_pipe_id(pipefd[0]);
+ *
+ *   spawnp("/echo", argv1, -1, pipe_id);  // echo's stdout → pipe
+ *   spawnp("/cat",  argv2, pipe_id, -1);  // cat's stdin → pipe
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+int spawnp(const char *path, char **argv, int stdin_pipe, int stdout_pipe)
+{
+    print("\n");
+    print("═══════════════════════════════════════════════════════════════════\n");
+    print("  SPAWNP: Creating process with pipe redirection\n");
+    print("═══════════════════════════════════════════════════════════════════\n");
+    print("  Path: ");
+    print(path);
+    print("\n");
+
+    if (stdin_pipe >= 0) {
+        print("  stdin → pipe ");
+        print_hex(stdin_pipe);
+        print("\n");
+    }
+    if (stdout_pipe >= 0) {
+        print("  stdout → pipe ");
+        print_hex(stdout_pipe);
+        print("\n");
+    }
+
+    /* Step 1: Open and read ELF (same as spawn) */
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) {
+        print("[SPAWNP] ERROR: Failed to open ELF\n");
+        return -1;
+    }
+
+    uint64_t elf_size = 0;
+    int n;
+    while ((n = read(fd, elf_buffer + elf_size, 4096)) > 0) {
+        elf_size += n;
+        if (elf_size >= SPAWN_ELF_BUFFER_SIZE) {
+            close(fd);
+            return -1;
+        }
+    }
+    close(fd);
+
+    /* Step 2: Load ELF into child */
+    struct elf_load_result result;
+    int child_pid = elf_load_into_child(elf_buffer, elf_size, &result);
+    if (child_pid < 0) {
+        return child_pid;
+    }
+
+    /* Step 3: Set up FD init block for child */
+    if (stdin_pipe >= 0 || stdout_pipe >= 0) {
+        /* Allocate page for FD init block */
+        uint64_t fdinit_pa = sys_page_alloc_raw();
+        if ((int64_t)fdinit_pa < 0) {
+            print("[SPAWNP] ERROR: Cannot alloc fdinit page\n");
+            return -1;
+        }
+
+        /* Map to child */
+        if (sys_page_map_raw(child_pid, fdinit_pa, CHILD_FDINIT_VA, PERM_R | PERM_W) < 0) {
+            print("[SPAWNP] ERROR: Cannot map fdinit to child\n");
+            return -1;
+        }
+
+        /* Map to self temporarily */
+        uint64_t temp_fdinit = 0x6A00000000ULL;
+        if (sys_page_map_raw(0, fdinit_pa, temp_fdinit, PERM_R | PERM_W) < 0) {
+            return -1;
+        }
+
+        /* Fill in FD init block */
+        struct fd_init_block *fdb = (struct fd_init_block *)temp_fdinit;
+        fdb->magic = FDINIT_MAGIC;
+        fdb->count = 0;
+
+        if (stdin_pipe >= 0) {
+            uint64_t pipe_pa = pipe_get_phys(stdin_pipe);
+            if (pipe_pa) {
+                /* Map pipe buffer into child */
+                uint64_t child_pipe_va = 0x70000000ULL + (stdin_pipe * PAGE_SIZE);
+                sys_page_map_raw(child_pid, pipe_pa, child_pipe_va, PERM_R | PERM_W);
+
+                fdb->redir[fdb->count].child_fd = 0;  /* stdin */
+                fdb->redir[fdb->count].type = 1;      /* pipe read */
+                fdb->redir[fdb->count].pipe_pa = pipe_pa;
+                fdb->count++;
+            }
+        }
+
+        if (stdout_pipe >= 0) {
+            uint64_t pipe_pa = pipe_get_phys(stdout_pipe);
+            if (pipe_pa) {
+                /* Map pipe buffer into child */
+                uint64_t child_pipe_va = 0x70000000ULL + (stdout_pipe * PAGE_SIZE);
+                sys_page_map_raw(child_pid, pipe_pa, child_pipe_va, PERM_R | PERM_W);
+
+                fdb->redir[fdb->count].child_fd = 1;  /* stdout */
+                fdb->redir[fdb->count].type = 2;      /* pipe write */
+                fdb->redir[fdb->count].pipe_pa = pipe_pa;
+                fdb->count++;
+            }
+        }
+
+        print("[SPAWNP] Set up ");
+        print_hex(fdb->count);
+        print(" FD redirections\n");
+    }
+
+    /* Step 4: Set up stack with arguments */
+    uint64_t child_sp = setup_child_stack(child_pid, argv);
+    if (child_sp == 0) {
+        return -1;
+    }
+
+    /* Step 5: Start child */
+    int err = sys_env_run_raw(child_pid, result.entry_point, child_sp);
+    if (err < 0) {
+        return err;
+    }
+
+    print("[SPAWNP] Child PID ");
+    print_hex(child_pid);
+    print(" running with redirected FDs\n");
+
+    return child_pid;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
  * PEDAGOGICAL SUMMARY
  *
  * What we've built here is a COMPLETE USER-SPACE PROCESS LOADER.

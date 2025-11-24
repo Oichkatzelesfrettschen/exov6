@@ -294,5 +294,21 @@ else()
     )
 endif()
 
+# Pipeline Integration Test
+add_executable(pipeline_test pipeline_test.c)
+target_link_libraries(pipeline_test libos)
+target_include_directories(pipeline_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_compile_options(pipeline_test PRIVATE -fno-stack-protector -ffreestanding)
+
+if(APPLE)
+    set_target_properties(pipeline_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-e,_start -Wl,-pagezero_size,0 -Wl,-image_base,0x4000 -fno-stack-protector"
+    )
+else()
+    set_target_properties(pipeline_test PROPERTIES
+        LINK_FLAGS "-nostdlib -static -Wl,-Ttext=0x0 -fno-stack-protector"
+    )
+endif()
+
 # Install to bin
-install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test hello elf_test spawn_test sh exo_cat exo_echo RUNTIME DESTINATION bin)
+install(TARGETS init uart_driver sched_test virtio_driver ipc_test fs_srv fs_client_test fs_test hello elf_test spawn_test sh exo_cat exo_echo pipeline_test RUNTIME DESTINATION bin)

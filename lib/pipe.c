@@ -58,6 +58,34 @@ extern void print_hex(uint64 n);
 #define PERM_W  0x2
 
 /* ═══════════════════════════════════════════════════════════════════════════
+ * Memory Barriers for SMP Safety
+ *
+ * LESSON: On SMP systems, CPU caches and out-of-order execution can cause
+ * data races even with volatile. Memory barriers ensure ordering.
+ *
+ * For a single-producer single-consumer ring buffer:
+ *   - Write barrier after updating data, before updating head
+ *   - Read barrier after reading tail, before reading data
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+#if defined(__x86_64__)
+/* x86_64 has strong memory ordering, but we still need compiler barriers */
+#define memory_barrier()    __asm__ volatile("mfence" ::: "memory")
+#define write_barrier()     __asm__ volatile("sfence" ::: "memory")
+#define read_barrier()      __asm__ volatile("lfence" ::: "memory")
+#elif defined(__aarch64__)
+/* ARM64 needs explicit barriers */
+#define memory_barrier()    __asm__ volatile("dmb ish" ::: "memory")
+#define write_barrier()     __asm__ volatile("dmb ishst" ::: "memory")
+#define read_barrier()      __asm__ volatile("dmb ishld" ::: "memory")
+#else
+/* Compiler barrier only - sufficient for uniprocessor */
+#define memory_barrier()    __asm__ volatile("" ::: "memory")
+#define write_barrier()     __asm__ volatile("" ::: "memory")
+#define read_barrier()      __asm__ volatile("" ::: "memory")
+#endif
+
+/* ═══════════════════════════════════════════════════════════════════════════
  * Pipe Buffer Structure
  *
  * LESSON: This is a lock-free single-producer single-consumer ring buffer.
@@ -241,12 +269,16 @@ int pipe_read(int pipe_id, void *buf, int n) {
             available = n - total;
         }
 
+        /* Read barrier - ensure we see producer's writes */
+        read_barrier();
+
         /* Copy from ring buffer */
         for (uint32_t i = 0; i < available; i++) {
             dst[total++] = data[(tail + i) % hdr->capacity];
         }
 
-        /* Update tail (consumer position) */
+        /* Update tail (consumer position) with barrier */
+        write_barrier();
         hdr->tail = tail + available;
     }
 
@@ -298,6 +330,9 @@ int pipe_write(int pipe_id, const void *buf, int n) {
         for (uint32_t i = 0; i < space; i++) {
             data[(head + i) % hdr->capacity] = src[total++];
         }
+
+        /* Write barrier - ensure data is visible before updating head */
+        write_barrier();
 
         /* Update head (producer position) */
         hdr->head = head + space;

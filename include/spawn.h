@@ -70,4 +70,30 @@ int spawn(const char *path, char **argv);
  */
 int spawnl(const char *path, const char *arg0, ...);
 
+/**
+ * spawnp() - Spawn with pipe redirection
+ *
+ * Creates a child process with stdin/stdout redirected to pipes.
+ * Essential for shell pipelines: "cmd1 | cmd2"
+ *
+ * @param path        Path to ELF executable
+ * @param argv        NULL-terminated argument array
+ * @param stdin_pipe  Pipe ID for stdin (-1 for no redirection)
+ * @param stdout_pipe Pipe ID for stdout (-1 for no redirection)
+ *
+ * @return            Child's PID on success, negative on error
+ *
+ * Example (for "echo hello | cat"):
+ *   int pfd[2];
+ *   fd_pipe(pfd);
+ *   // pfd[0] = read end, pfd[1] = write end
+ *   // Need to get underlying pipe_id from fd layer
+ *   spawnp("/echo", argv1, -1, pipe_id);   // stdout → pipe
+ *   spawnp("/cat",  argv2, pipe_id, -1);   // stdin ← pipe
+ *
+ * The pipe buffer is mapped into child's address space so it can
+ * directly read/write without additional IPC.
+ */
+int spawnp(const char *path, char **argv, int stdin_pipe, int stdout_pipe);
+
 #endif /* SPAWN_H */
