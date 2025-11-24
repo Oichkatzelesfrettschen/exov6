@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/kernel -I/home/runner/work/exov6/exov6/kernel/include -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/arch/x86_64
 
-C_FLAGS = -O3 -DNDEBUG -std=c23 -Wall -O3 -DNDEBUG -std=c2x
+C_FLAGS = -O3 -DNDEBUG -std=c23 -fcolor-diagnostics -fstack-protector-strong -fcf-protection=full -Wall -O3 -DNDEBUG -std=c2x
 

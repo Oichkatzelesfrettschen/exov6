@@ -1,2 +1,2 @@
-/usr/bin/llvm-ar-18 qc libphoenix-libos-posix.a "CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o"
+/usr/bin/llvm-ar-18 qc libphoenix-libos-posix.a "CMakeFiles/phoenix-libos-posix.dir/posix/posix.c.o" "CMakeFiles/phoenix-libos-posix.dir/posix/linux_abi.c.o"
 /usr/bin/ranlib libphoenix-libos-posix.a

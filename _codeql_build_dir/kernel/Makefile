@@ -185,6 +185,20 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+kernel/CMakeFiles/kernel_init_bin.dir/rule:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kernel/CMakeFiles/kernel_init_bin.dir/rule
+.PHONY : kernel/CMakeFiles/kernel_init_bin.dir/rule
+
+# Convenience name for target.
+kernel_init_bin: kernel/CMakeFiles/kernel_init_bin.dir/rule
+.PHONY : kernel_init_bin
+
+# fast build rule for target.
+kernel_init_bin/fast:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel_init_bin.dir/build.make kernel/CMakeFiles/kernel_init_bin.dir/build
+.PHONY : kernel_init_bin/fast
+
+# Convenience name for target.
 kernel/CMakeFiles/kernel.dir/rule:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kernel/CMakeFiles/kernel.dir/rule
 .PHONY : kernel/CMakeFiles/kernel.dir/rule
@@ -311,6 +325,102 @@ bcache_io.s: bcache_io.c.s
 bcache_io.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/bcache_io.c.s
 .PHONY : bcache_io.c.s
+
+boot/bootmain.o: boot/bootmain.c.o
+.PHONY : boot/bootmain.o
+
+# target to build an object file
+boot/bootmain.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/bootmain.c.o
+.PHONY : boot/bootmain.c.o
+
+boot/bootmain.i: boot/bootmain.c.i
+.PHONY : boot/bootmain.i
+
+# target to preprocess a source file
+boot/bootmain.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/bootmain.c.i
+.PHONY : boot/bootmain.c.i
+
+boot/bootmain.s: boot/bootmain.c.s
+.PHONY : boot/bootmain.s
+
+# target to generate assembly for a file
+boot/bootmain.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/bootmain.c.s
+.PHONY : boot/bootmain.c.s
+
+boot/main.o: boot/main.c.o
+.PHONY : boot/main.o
+
+# target to build an object file
+boot/main.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main.c.o
+.PHONY : boot/main.c.o
+
+boot/main.i: boot/main.c.i
+.PHONY : boot/main.i
+
+# target to preprocess a source file
+boot/main.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main.c.i
+.PHONY : boot/main.c.i
+
+boot/main.s: boot/main.c.s
+.PHONY : boot/main.s
+
+# target to generate assembly for a file
+boot/main.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main.c.s
+.PHONY : boot/main.c.s
+
+boot/main64.o: boot/main64.c.o
+.PHONY : boot/main64.o
+
+# target to build an object file
+boot/main64.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main64.c.o
+.PHONY : boot/main64.c.o
+
+boot/main64.i: boot/main64.c.i
+.PHONY : boot/main64.i
+
+# target to preprocess a source file
+boot/main64.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main64.c.i
+.PHONY : boot/main64.c.i
+
+boot/main64.s: boot/main64.c.s
+.PHONY : boot/main64.s
+
+# target to generate assembly for a file
+boot/main64.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main64.c.s
+.PHONY : boot/main64.c.s
+
+boot/main_minimal.o: boot/main_minimal.c.o
+.PHONY : boot/main_minimal.o
+
+# target to build an object file
+boot/main_minimal.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.o
+.PHONY : boot/main_minimal.c.o
+
+boot/main_minimal.i: boot/main_minimal.c.i
+.PHONY : boot/main_minimal.i
+
+# target to preprocess a source file
+boot/main_minimal.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.i
+.PHONY : boot/main_minimal.c.i
+
+boot/main_minimal.s: boot/main_minimal.c.s
+.PHONY : boot/main_minimal.s
+
+# target to generate assembly for a file
+boot/main_minimal.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/boot/main_minimal.c.s
+.PHONY : boot/main_minimal.c.s
 
 buffer_cache.o: buffer_cache.c.o
 .PHONY : buffer_cache.o
@@ -749,30 +859,6 @@ drivers/console.s: drivers/console.c.s
 drivers/console.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/drivers/console.c.s
 .PHONY : drivers/console.c.s
-
-drivers/ddekit.o: drivers/ddekit.c.o
-.PHONY : drivers/ddekit.o
-
-# target to build an object file
-drivers/ddekit.c.o:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.o
-.PHONY : drivers/ddekit.c.o
-
-drivers/ddekit.i: drivers/ddekit.c.i
-.PHONY : drivers/ddekit.i
-
-# target to preprocess a source file
-drivers/ddekit.c.i:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.i
-.PHONY : drivers/ddekit.c.i
-
-drivers/ddekit.s: drivers/ddekit.c.s
-.PHONY : drivers/ddekit.s
-
-# target to generate assembly for a file
-drivers/ddekit.c.s:
-	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/drivers/ddekit.c.s
-.PHONY : drivers/ddekit.c.s
 
 drivers/driver.o: drivers/driver.c.o
 .PHONY : drivers/driver.o
@@ -1277,6 +1363,14 @@ hypervisor/hypervisor.s: hypervisor/hypervisor.c.s
 hypervisor/hypervisor.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/hypervisor/hypervisor.c.s
 .PHONY : hypervisor/hypervisor.c.s
+
+init_bin.o: init_bin.S.o
+.PHONY : init_bin.o
+
+# target to build an object file
+init_bin.S.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/init_bin.S.o
+.PHONY : init_bin.S.o
 
 ipc/cap.o: ipc/cap.c.o
 .PHONY : ipc/cap.o
@@ -2382,6 +2476,30 @@ resource_vector.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/resource_vector.c.s
 .PHONY : resource_vector.c.s
 
+resurrection/reincarnation_server.o: resurrection/reincarnation_server.c.o
+.PHONY : resurrection/reincarnation_server.o
+
+# target to build an object file
+resurrection/reincarnation_server.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.o
+.PHONY : resurrection/reincarnation_server.c.o
+
+resurrection/reincarnation_server.i: resurrection/reincarnation_server.c.i
+.PHONY : resurrection/reincarnation_server.i
+
+# target to preprocess a source file
+resurrection/reincarnation_server.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.i
+.PHONY : resurrection/reincarnation_server.c.i
+
+resurrection/reincarnation_server.s: resurrection/reincarnation_server.c.s
+.PHONY : resurrection/reincarnation_server.s
+
+# target to generate assembly for a file
+resurrection/reincarnation_server.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/resurrection/reincarnation_server.c.s
+.PHONY : resurrection/reincarnation_server.c.s
+
 sched/beatty_dag_stream.o: sched/beatty_dag_stream.c.o
 .PHONY : sched/beatty_dag_stream.o
 
@@ -2669,6 +2787,30 @@ scheduler_lockfree.s: scheduler_lockfree.c.s
 scheduler_lockfree.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/scheduler_lockfree.c.s
 .PHONY : scheduler_lockfree.c.s
+
+security.o: security.c.o
+.PHONY : security.o
+
+# target to build an object file
+security.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/security.c.o
+.PHONY : security.c.o
+
+security.i: security.c.i
+.PHONY : security.i
+
+# target to preprocess a source file
+security.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/security.c.i
+.PHONY : security.c.i
+
+security.s: security.c.s
+.PHONY : security.s
+
+# target to generate assembly for a file
+security.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/security.c.s
+.PHONY : security.c.s
 
 service.o: service.c.o
 .PHONY : service.o
@@ -3073,6 +3215,54 @@ sys/string.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/string.c.s
 .PHONY : sys/string.c.s
 
+sys/sys_exo.o: sys/sys_exo.c.o
+.PHONY : sys/sys_exo.o
+
+# target to build an object file
+sys/sys_exo.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.o
+.PHONY : sys/sys_exo.c.o
+
+sys/sys_exo.i: sys/sys_exo.c.i
+.PHONY : sys/sys_exo.i
+
+# target to preprocess a source file
+sys/sys_exo.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.i
+.PHONY : sys/sys_exo.c.i
+
+sys/sys_exo.s: sys/sys_exo.c.s
+.PHONY : sys/sys_exo.s
+
+# target to generate assembly for a file
+sys/sys_exo.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/sys_exo.c.s
+.PHONY : sys/sys_exo.c.s
+
+sys/sys_ipc.o: sys/sys_ipc.c.o
+.PHONY : sys/sys_ipc.o
+
+# target to build an object file
+sys/sys_ipc.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.o
+.PHONY : sys/sys_ipc.c.o
+
+sys/sys_ipc.i: sys/sys_ipc.c.i
+.PHONY : sys/sys_ipc.i
+
+# target to preprocess a source file
+sys/sys_ipc.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.i
+.PHONY : sys/sys_ipc.c.i
+
+sys/sys_ipc.s: sys/sys_ipc.c.s
+.PHONY : sys/sys_ipc.s
+
+# target to generate assembly for a file
+sys/sys_ipc.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/sys/sys_ipc.c.s
+.PHONY : sys/sys_ipc.c.s
+
 sys/syscall.o: sys/syscall.c.o
 .PHONY : sys/syscall.o
 
@@ -3289,6 +3479,102 @@ tty.c.s:
 	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/tty.c.s
 .PHONY : tty.c.s
 
+vfs/vfs.o: vfs/vfs.c.o
+.PHONY : vfs/vfs.o
+
+# target to build an object file
+vfs/vfs.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs.c.o
+.PHONY : vfs/vfs.c.o
+
+vfs/vfs.i: vfs/vfs.c.i
+.PHONY : vfs/vfs.i
+
+# target to preprocess a source file
+vfs/vfs.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs.c.i
+.PHONY : vfs/vfs.c.i
+
+vfs/vfs.s: vfs/vfs.c.s
+.PHONY : vfs/vfs.s
+
+# target to generate assembly for a file
+vfs/vfs.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs.c.s
+.PHONY : vfs/vfs.c.s
+
+vfs/vfs_dcache.o: vfs/vfs_dcache.c.o
+.PHONY : vfs/vfs_dcache.o
+
+# target to build an object file
+vfs/vfs_dcache.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.o
+.PHONY : vfs/vfs_dcache.c.o
+
+vfs/vfs_dcache.i: vfs/vfs_dcache.c.i
+.PHONY : vfs/vfs_dcache.i
+
+# target to preprocess a source file
+vfs/vfs_dcache.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.i
+.PHONY : vfs/vfs_dcache.c.i
+
+vfs/vfs_dcache.s: vfs/vfs_dcache.c.s
+.PHONY : vfs/vfs_dcache.s
+
+# target to generate assembly for a file
+vfs/vfs_dcache.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_dcache.c.s
+.PHONY : vfs/vfs_dcache.c.s
+
+vfs/vfs_file.o: vfs/vfs_file.c.o
+.PHONY : vfs/vfs_file.o
+
+# target to build an object file
+vfs/vfs_file.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.o
+.PHONY : vfs/vfs_file.c.o
+
+vfs/vfs_file.i: vfs/vfs_file.c.i
+.PHONY : vfs/vfs_file.i
+
+# target to preprocess a source file
+vfs/vfs_file.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.i
+.PHONY : vfs/vfs_file.c.i
+
+vfs/vfs_file.s: vfs/vfs_file.c.s
+.PHONY : vfs/vfs_file.s
+
+# target to generate assembly for a file
+vfs/vfs_file.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_file.c.s
+.PHONY : vfs/vfs_file.c.s
+
+vfs/vfs_icache.o: vfs/vfs_icache.c.o
+.PHONY : vfs/vfs_icache.o
+
+# target to build an object file
+vfs/vfs_icache.c.o:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.o
+.PHONY : vfs/vfs_icache.c.o
+
+vfs/vfs_icache.i: vfs/vfs_icache.c.i
+.PHONY : vfs/vfs_icache.i
+
+# target to preprocess a source file
+vfs/vfs_icache.c.i:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.i
+.PHONY : vfs/vfs_icache.c.i
+
+vfs/vfs_icache.s: vfs/vfs_icache.c.s
+.PHONY : vfs/vfs_icache.s
+
+# target to generate assembly for a file
+vfs/vfs_icache.c.s:
+	cd /home/runner/work/exov6/exov6/_codeql_build_dir && $(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel.dir/build.make kernel/CMakeFiles/kernel.dir/vfs/vfs_icache.c.s
+.PHONY : vfs/vfs_icache.c.s
+
 work_stealing.o: work_stealing.c.o
 .PHONY : work_stealing.o
 
@@ -3375,6 +3661,7 @@ help:
 	@echo "... package"
 	@echo "... package_source"
 	@echo "... rebuild_cache"
+	@echo "... kernel_init_bin"
 	@echo "... kernel"
 	@echo "... phoenix-kernel-crypto"
 	@echo "... phoenix-kernel-security"
@@ -3388,6 +3675,18 @@ help:
 	@echo "... bcache_io.o"
 	@echo "... bcache_io.i"
 	@echo "... bcache_io.s"
+	@echo "... boot/bootmain.o"
+	@echo "... boot/bootmain.i"
+	@echo "... boot/bootmain.s"
+	@echo "... boot/main.o"
+	@echo "... boot/main.i"
+	@echo "... boot/main.s"
+	@echo "... boot/main64.o"
+	@echo "... boot/main64.i"
+	@echo "... boot/main64.s"
+	@echo "... boot/main_minimal.o"
+	@echo "... boot/main_minimal.i"
+	@echo "... boot/main_minimal.s"
 	@echo "... buffer_cache.o"
 	@echo "... buffer_cache.i"
 	@echo "... buffer_cache.s"
@@ -3442,9 +3741,6 @@ help:
 	@echo "... drivers/console.o"
 	@echo "... drivers/console.i"
 	@echo "... drivers/console.s"
-	@echo "... drivers/ddekit.o"
-	@echo "... drivers/ddekit.i"
-	@echo "... drivers/ddekit.s"
 	@echo "... drivers/driver.o"
 	@echo "... drivers/driver.i"
 	@echo "... drivers/driver.s"
@@ -3508,6 +3804,7 @@ help:
 	@echo "... hypervisor/hypervisor.o"
 	@echo "... hypervisor/hypervisor.i"
 	@echo "... hypervisor/hypervisor.s"
+	@echo "... init_bin.o"
 	@echo "... ipc/cap.o"
 	@echo "... ipc/cap.i"
 	@echo "... ipc/cap.s"
@@ -3646,6 +3943,9 @@ help:
 	@echo "... resource_vector.o"
 	@echo "... resource_vector.i"
 	@echo "... resource_vector.s"
+	@echo "... resurrection/reincarnation_server.o"
+	@echo "... resurrection/reincarnation_server.i"
+	@echo "... resurrection/reincarnation_server.s"
 	@echo "... sched/beatty_dag_stream.o"
 	@echo "... sched/beatty_dag_stream.i"
 	@echo "... sched/beatty_dag_stream.s"
@@ -3682,6 +3982,9 @@ help:
 	@echo "... scheduler_lockfree.o"
 	@echo "... scheduler_lockfree.i"
 	@echo "... scheduler_lockfree.s"
+	@echo "... security.o"
+	@echo "... security.i"
+	@echo "... security.s"
 	@echo "... service.o"
 	@echo "... service.i"
 	@echo "... service.s"
@@ -3732,6 +4035,12 @@ help:
 	@echo "... sys/string.o"
 	@echo "... sys/string.i"
 	@echo "... sys/string.s"
+	@echo "... sys/sys_exo.o"
+	@echo "... sys/sys_exo.i"
+	@echo "... sys/sys_exo.s"
+	@echo "... sys/sys_ipc.o"
+	@echo "... sys/sys_ipc.i"
+	@echo "... sys/sys_ipc.s"
 	@echo "... sys/syscall.o"
 	@echo "... sys/syscall.i"
 	@echo "... sys/syscall.s"
@@ -3759,6 +4068,18 @@ help:
 	@echo "... tty.o"
 	@echo "... tty.i"
 	@echo "... tty.s"
+	@echo "... vfs/vfs.o"
+	@echo "... vfs/vfs.i"
+	@echo "... vfs/vfs.s"
+	@echo "... vfs/vfs_dcache.o"
+	@echo "... vfs/vfs_dcache.i"
+	@echo "... vfs/vfs_dcache.s"
+	@echo "... vfs/vfs_file.o"
+	@echo "... vfs/vfs_file.i"
+	@echo "... vfs/vfs_file.s"
+	@echo "... vfs/vfs_icache.o"
+	@echo "... vfs/vfs_icache.i"
+	@echo "... vfs/vfs_icache.s"
 	@echo "... work_stealing.o"
 	@echo "... work_stealing.i"
 	@echo "... work_stealing.s"

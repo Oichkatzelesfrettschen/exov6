@@ -1,7 +1,6 @@
 src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_mmx.c.o: \
   /home/runner/work/exov6/exov6/src/arch/x86/simd_mmx.c \
   /home/runner/work/exov6/exov6/src/arch/x86/../simd_dispatch.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h /usr/include/features-time64.h \

@@ -1,7 +1,6 @@
 src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o: \
   /home/runner/work/exov6/exov6/src/arch/x86/simd_avx.c \
   /home/runner/work/exov6/exov6/src/arch/x86/../simd_dispatch.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h /usr/include/features-time64.h \
@@ -30,17 +29,14 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o: \
   /usr/lib/llvm-18/lib/clang/18/include/mmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/xmmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/mm_malloc.h \
-  /home/runner/work/exov6/exov6/include/stdlib.h \
-  /home/runner/work/exov6/exov6/include/stddef.h \
-  /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_ptrdiff_t.h \
+  /usr/include/stdlib.h /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_wchar_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_nullptr_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_unreachable.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_max_align_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_offsetof.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/lib/llvm-18/lib/clang/18/include/emmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/pmmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/tmmintrin.h \

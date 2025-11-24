@@ -2,7 +2,6 @@ src/arch/CMakeFiles/phoenix-arch-x86-legacy.dir/x86/legacy/simd_mmx_cap.c.o: \
   /home/runner/work/exov6/exov6/src/arch/x86/legacy/simd_mmx_cap.c \
   /usr/lib/llvm-18/lib/clang/18/include/mmintrin.h \
   /home/runner/work/exov6/exov6/src/arch/x86/legacy/../../simd_dispatch.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/features.h /usr/include/features-time64.h \

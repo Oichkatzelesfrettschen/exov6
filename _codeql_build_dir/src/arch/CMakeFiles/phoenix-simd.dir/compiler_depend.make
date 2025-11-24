@@ -3,8 +3,6 @@
 
 src/arch/CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o: /home/runner/work/exov6/exov6/src/arch/simd_dispatch.c \
   /home/runner/work/exov6/exov6/include/elf.h \
-  /home/runner/work/exov6/exov6/include/stddef.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
   /home/runner/work/exov6/exov6/tools/phoenix_metrics.h \
   /usr/include/features-time64.h \
@@ -52,7 +50,6 @@ src/arch/CMakeFiles/phoenix-simd.dir/simd_dispatch.c.o: /home/runner/work/exov6/
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h
 
 src/arch/CMakeFiles/phoenix-simd.dir/x86/legacy/simd_mmx_cap.c.o: /home/runner/work/exov6/exov6/src/arch/x86/legacy/simd_mmx_cap.c \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -76,34 +73,23 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/legacy/simd_mmx_cap.c.o: /home/runner/w
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h
 
 src/arch/CMakeFiles/phoenix-simd.dir/x86/modern/simd_avx2_cap.c.o: /home/runner/work/exov6/exov6/src/arch/x86/modern/simd_avx2_cap.c \
-  /home/runner/work/exov6/exov6/include/stddef.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
-  /home/runner/work/exov6/exov6/include/stdlib.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
   /usr/include/stdc-predef.h \
-  /usr/include/stdint.h \
+  /usr/include/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
-  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/time64.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
-  /usr/include/x86_64-linux-gnu/bits/types.h \
-  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_max_align_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_nullptr_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_offsetof.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_ptrdiff_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_unreachable.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_wchar_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__wmmintrin_aes.h \
   /usr/lib/llvm-18/lib/clang/18/include/__wmmintrin_pclmul.h \
@@ -186,7 +172,6 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/modern/simd_avx2_cap.c.o: /home/runner/
   /usr/lib/llvm-18/lib/clang/18/include/sm4intrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/smmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
-  /usr/lib/llvm-18/lib/clang/18/include/stdint.h \
   /usr/lib/llvm-18/lib/clang/18/include/tmmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/tsxldtrkintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/uintrintrin.h \
@@ -205,19 +190,21 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/modern/simd_avx2_cap.c.o: /home/runner/
   /usr/lib/llvm-18/lib/clang/18/include/xtestintrin.h
 
 src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o: /home/runner/work/exov6/exov6/src/arch/x86/simd_avx.c \
-  /home/runner/work/exov6/exov6/include/stddef.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
-  /home/runner/work/exov6/exov6/include/stdlib.h \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
+  /usr/include/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -227,13 +214,8 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o: /home/runner/work/exov6/e
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_max_align_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_nullptr_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_offsetof.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_ptrdiff_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_unreachable.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_wchar_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__wmmintrin_aes.h \
   /usr/lib/llvm-18/lib/clang/18/include/__wmmintrin_pclmul.h \
@@ -335,7 +317,6 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_avx.c.o: /home/runner/work/exov6/e
   /usr/lib/llvm-18/lib/clang/18/include/xtestintrin.h
 
 src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_mmx.c.o: /home/runner/work/exov6/exov6/src/arch/x86/simd_mmx.c \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -358,19 +339,21 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_mmx.c.o: /home/runner/work/exov6/e
   /usr/lib/llvm-18/lib/clang/18/include/stdint.h
 
 src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_sse2.c.o: /home/runner/work/exov6/exov6/src/arch/x86/simd_sse2.c \
-  /home/runner/work/exov6/exov6/include/stddef.h \
-  /home/runner/work/exov6/exov6/include/stdint.h \
-  /home/runner/work/exov6/exov6/include/stdlib.h \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
+  /usr/include/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -380,13 +363,8 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_sse2.c.o: /home/runner/work/exov6/
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_max_align_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_null.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_nullptr_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_offsetof.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_ptrdiff_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_size_t.h \
-  /usr/lib/llvm-18/lib/clang/18/include/__stddef_unreachable.h \
   /usr/lib/llvm-18/lib/clang/18/include/__stddef_wchar_t.h \
   /usr/lib/llvm-18/lib/clang/18/include/emmintrin.h \
   /usr/lib/llvm-18/lib/clang/18/include/mm_malloc.h \
@@ -396,7 +374,6 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_sse2.c.o: /home/runner/work/exov6/
   /usr/lib/llvm-18/lib/clang/18/include/xmmintrin.h
 
 src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/exov6/src/arch/x86/simd_x87.c \
-  /home/runner/work/exov6/exov6/include/stdint.h \
   /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
@@ -519,7 +496,13 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 
 /usr/lib/llvm-18/lib/clang/18/include/avx512vlcdintrin.h:
 
-/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+/usr/lib/llvm-18/lib/clang/18/include/x86gprintrin.h:
+
+/usr/lib/llvm-18/lib/clang/18/include/raointintrin.h:
+
+/usr/lib/llvm-18/lib/clang/18/include/__stdarg___gnuc_va_list.h:
+
+/usr/lib/llvm-18/lib/clang/18/include/avx512bitalgintrin.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
@@ -563,21 +546,27 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 
 /usr/include/features.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdint-least.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
-
-/usr/lib/llvm-18/lib/clang/18/include/rtmintrin.h:
-
-/usr/include/stdio.h:
-
 /home/runner/work/exov6/exov6/tools/phoenix_metrics.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/wbnoinvdintrin.h:
 
 /home/runner/work/exov6/exov6/src/arch/simd_dispatch.h:
 
-/home/runner/work/exov6/exov6/include/stdint.h:
+/usr/lib/llvm-18/lib/clang/18/include/vpclmulqdqintrin.h:
+
+/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
+
+/usr/lib/llvm-18/lib/clang/18/include/cldemoteintrin.h:
+
+/usr/lib/llvm-18/lib/clang/18/include/avx512vlintrin.h:
+
+/usr/include/features-time64.h:
+
+/usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/include/stdlib.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/__wmmintrin_pclmul.h:
 
@@ -585,13 +574,7 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 
 /usr/lib/llvm-18/lib/clang/18/include/avx512erintrin.h:
 
-/usr/lib/llvm-18/lib/clang/18/include/vpclmulqdqintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
-
 /home/runner/work/exov6/exov6/include/elf.h:
-
-/home/runner/work/exov6/exov6/include/stdlib.h:
 
 /usr/include/x86_64-linux-gnu/bits/wordsize.h:
 
@@ -607,18 +590,6 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 
 /usr/include/x86_64-linux-gnu/bits/hwcap.h:
 
-/usr/lib/llvm-18/lib/clang/18/include/cldemoteintrin.h:
-
-/usr/lib/llvm-18/lib/clang/18/include/avx512vlintrin.h:
-
-/home/runner/work/exov6/exov6/include/stddef.h:
-
-/usr/include/features-time64.h:
-
-/usr/include/x86_64-linux-gnu/bits/floatn-common.h:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
 /usr/include/stdc-predef.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/avx2intrin.h:
@@ -633,17 +604,17 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
+/usr/lib/llvm-18/lib/clang/18/include/rtmintrin.h:
+
+/usr/include/stdio.h:
+
 /usr/lib/llvm-18/lib/clang/18/include/__stddef_offsetof.h:
 
 /usr/include/x86_64-linux-gnu/bits/floatn.h:
 
-/usr/lib/llvm-18/lib/clang/18/include/x86gprintrin.h:
+/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
-/usr/lib/llvm-18/lib/clang/18/include/raointintrin.h:
-
-/usr/lib/llvm-18/lib/clang/18/include/__stdarg___gnuc_va_list.h:
-
-/usr/lib/llvm-18/lib/clang/18/include/avx512bitalgintrin.h:
+/usr/include/x86_64-linux-gnu/bits/stdint-least.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/__stddef_max_align_t.h:
 
@@ -681,6 +652,16 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 
 /usr/lib/llvm-18/lib/clang/18/include/mmintrin.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+
+/usr/include/x86_64-linux-gnu/bits/types.h:
+
+/usr/lib/llvm-18/lib/clang/18/include/avx512vbmiintrin.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/__wmmintrin_aes.h:
@@ -710,10 +691,6 @@ src/arch/CMakeFiles/phoenix-simd.dir/x86/simd_x87.c.o: /home/runner/work/exov6/e
 /usr/lib/llvm-18/lib/clang/18/include/stdint.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/avx512pfintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/types.h:
-
-/usr/lib/llvm-18/lib/clang/18/include/avx512vbmiintrin.h:
 
 /usr/lib/llvm-18/lib/clang/18/include/avx512vbmivlintrin.h:
 

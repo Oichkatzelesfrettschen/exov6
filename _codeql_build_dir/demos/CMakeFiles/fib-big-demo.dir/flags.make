@@ -4,7 +4,7 @@
 # compile C with /home/runner/work/exov6/.codeql-scratch/dbs/cpp/working/autobuild/bin/clang
 C_DEFINES = 
 
-C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/demos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/libos/capnp -I/home/runner/work/exov6/exov6/user -I/home/runner/work/exov6/exov6/_codeql_build_dir/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/arch/x86_64 -I/home/runner/work/exov6/exov6/user/libos -I/home/runner/work/exov6/exov6/src/libnstr_graph
+C_INCLUDES = -I/home/runner/work/exov6/exov6/_codeql_build_dir/include -I/home/runner/work/exov6/exov6/demos -I/home/runner/work/exov6/exov6/include -I/home/runner/work/exov6/exov6/proto -I/home/runner/work/exov6/exov6/libos -I/home/runner/work/exov6/exov6/include/exov6/libos -I/home/runner/work/exov6/exov6/libos/stubs -I/home/runner/work/exov6/exov6/libos/capnp -I/home/runner/work/exov6/exov6/_codeql_build_dir/proto -I/home/runner/work/exov6/exov6/src/arch -I/home/runner/work/exov6/exov6/tools -I/home/runner/work/exov6/exov6/src/arch/x86/legacy -I/home/runner/work/exov6/exov6/src/arch/x86/modern -I/home/runner/work/exov6/exov6/src/arch/x86_64 -I/home/runner/work/exov6/exov6/libos/net -I/home/runner/work/exov6/exov6/libos/linux -I/home/runner/work/exov6/exov6/libos/ddekit -I/home/runner/work/exov6/exov6/src/libnstr_graph
 
-C_FLAGS = -O3 -DNDEBUG -std=c23 -Wall -O3 -DNDEBUG -std=c2x
+C_FLAGS = -O3 -DNDEBUG -std=c23 -fPIE -fcolor-diagnostics -fstack-protector-strong -fcf-protection=full -Wall -O3 -DNDEBUG -std=c2x
 

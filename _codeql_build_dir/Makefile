@@ -237,19 +237,6 @@ phoenix-arch-x86-64/fast:
 .PHONY : phoenix-arch-x86-64/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-ddekit
-
-# Build rule for target.
-phoenix-ddekit: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-ddekit
-.PHONY : phoenix-ddekit
-
-# fast build rule for target.
-phoenix-ddekit/fast:
-	$(MAKE) $(MAKESILENT) -f src/ddekit/CMakeFiles/phoenix-ddekit.dir/build.make src/ddekit/CMakeFiles/phoenix-ddekit.dir/build
-.PHONY : phoenix-ddekit/fast
-
-#=============================================================================
 # Target rules for targets named phoenix-nstr-graph
 
 # Build rule for target.
@@ -263,381 +250,277 @@ phoenix-nstr-graph/fast:
 .PHONY : phoenix-nstr-graph/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-ulib
+# Target rules for targets named libos
 
 # Build rule for target.
-phoenix-ulib: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-ulib
-.PHONY : phoenix-ulib
+libos: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libos
+.PHONY : libos
 
 # fast build rule for target.
-phoenix-ulib/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-ulib.dir/build.make user/CMakeFiles/phoenix-ulib.dir/build
-.PHONY : phoenix-ulib/fast
+libos/fast:
+	$(MAKE) $(MAKESILENT) -f lib/CMakeFiles/libos.dir/build.make lib/CMakeFiles/libos.dir/build
+.PHONY : libos/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-umalloc
+# Target rules for targets named ddekit-exo
 
 # Build rule for target.
-phoenix-umalloc: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-umalloc
-.PHONY : phoenix-umalloc
+ddekit-exo: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ddekit-exo
+.PHONY : ddekit-exo
 
 # fast build rule for target.
-phoenix-umalloc/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-umalloc.dir/build.make user/CMakeFiles/phoenix-umalloc.dir/build
-.PHONY : phoenix-umalloc/fast
+ddekit-exo/fast:
+	$(MAKE) $(MAKESILENT) -f lib/ddekit/CMakeFiles/ddekit-exo.dir/build.make lib/ddekit/CMakeFiles/ddekit-exo.dir/build
+.PHONY : ddekit-exo/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-printf
+# Target rules for targets named virtio
 
 # Build rule for target.
-phoenix-printf: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-printf
-.PHONY : phoenix-printf
+virtio: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 virtio
+.PHONY : virtio
 
 # fast build rule for target.
-phoenix-printf/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-printf.dir/build.make user/CMakeFiles/phoenix-printf.dir/build
-.PHONY : phoenix-printf/fast
+virtio/fast:
+	$(MAKE) $(MAKESILENT) -f lib/virtio/CMakeFiles/virtio.dir/build.make lib/virtio/CMakeFiles/virtio.dir/build
+.PHONY : virtio/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-caplib
+# Target rules for targets named fs
 
 # Build rule for target.
-phoenix-caplib: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-caplib
-.PHONY : phoenix-caplib
+fs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fs
+.PHONY : fs
 
 # fast build rule for target.
-phoenix-caplib/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-caplib.dir/build.make user/CMakeFiles/phoenix-caplib.dir/build
-.PHONY : phoenix-caplib/fast
+fs/fast:
+	$(MAKE) $(MAKESILENT) -f lib/fs/CMakeFiles/fs.dir/build.make lib/fs/CMakeFiles/fs.dir/build
+.PHONY : fs/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-chan
+# Target rules for targets named elf
 
 # Build rule for target.
-phoenix-chan: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-chan
-.PHONY : phoenix-chan
+elf: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 elf
+.PHONY : elf
 
 # fast build rule for target.
-phoenix-chan/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-chan.dir/build.make user/CMakeFiles/phoenix-chan.dir/build
-.PHONY : phoenix-chan/fast
+elf/fast:
+	$(MAKE) $(MAKESILENT) -f lib/elf/CMakeFiles/elf.dir/build.make lib/elf/CMakeFiles/elf.dir/build
+.PHONY : elf/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-door
+# Target rules for targets named init
 
 # Build rule for target.
-phoenix-door: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-door
-.PHONY : phoenix-door
+init: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 init
+.PHONY : init
 
 # fast build rule for target.
-phoenix-door/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-door.dir/build.make user/CMakeFiles/phoenix-door.dir/build
-.PHONY : phoenix-door/fast
+init/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/init.dir/build.make user/CMakeFiles/init.dir/build
+.PHONY : init/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-math-core
+# Target rules for targets named init_bin
 
 # Build rule for target.
-phoenix-math-core: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-math-core
-.PHONY : phoenix-math-core
+init_bin: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 init_bin
+.PHONY : init_bin
 
 # fast build rule for target.
-phoenix-math-core/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-math-core.dir/build.make user/CMakeFiles/phoenix-math-core.dir/build
-.PHONY : phoenix-math-core/fast
+init_bin/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/init_bin.dir/build.make user/CMakeFiles/init_bin.dir/build
+.PHONY : init_bin/fast
 
 #=============================================================================
-# Target rules for targets named phoenix-user-sched
+# Target rules for targets named uart_driver
 
 # Build rule for target.
-phoenix-user-sched: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-user-sched
-.PHONY : phoenix-user-sched
+uart_driver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 uart_driver
+.PHONY : uart_driver
 
 # fast build rule for target.
-phoenix-user-sched/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/phoenix-user-sched.dir/build.make user/CMakeFiles/phoenix-user-sched.dir/build
-.PHONY : phoenix-user-sched/fast
+uart_driver/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/uart_driver.dir/build.make user/CMakeFiles/uart_driver.dir/build
+.PHONY : uart_driver/fast
 
 #=============================================================================
-# Target rules for targets named user-cat
+# Target rules for targets named sched_test
 
 # Build rule for target.
-user-cat: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-cat
-.PHONY : user-cat
+sched_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sched_test
+.PHONY : sched_test
 
 # fast build rule for target.
-user-cat/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cat.dir/build.make user/CMakeFiles/user-cat.dir/build
-.PHONY : user-cat/fast
+sched_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/sched_test.dir/build.make user/CMakeFiles/sched_test.dir/build
+.PHONY : sched_test/fast
 
 #=============================================================================
-# Target rules for targets named user-cp
+# Target rules for targets named virtio_driver
 
 # Build rule for target.
-user-cp: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-cp
-.PHONY : user-cp
+virtio_driver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 virtio_driver
+.PHONY : virtio_driver
 
 # fast build rule for target.
-user-cp/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-cp.dir/build.make user/CMakeFiles/user-cp.dir/build
-.PHONY : user-cp/fast
+virtio_driver/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/virtio_driver.dir/build.make user/CMakeFiles/virtio_driver.dir/build
+.PHONY : virtio_driver/fast
 
 #=============================================================================
-# Target rules for targets named user-echo
+# Target rules for targets named ipc_test
 
 # Build rule for target.
-user-echo: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-echo
-.PHONY : user-echo
+ipc_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ipc_test
+.PHONY : ipc_test
 
 # fast build rule for target.
-user-echo/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-echo.dir/build.make user/CMakeFiles/user-echo.dir/build
-.PHONY : user-echo/fast
+ipc_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/ipc_test.dir/build.make user/CMakeFiles/ipc_test.dir/build
+.PHONY : ipc_test/fast
 
 #=============================================================================
-# Target rules for targets named user-grep
+# Target rules for targets named fs_srv
 
 # Build rule for target.
-user-grep: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-grep
-.PHONY : user-grep
+fs_srv: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fs_srv
+.PHONY : fs_srv
 
 # fast build rule for target.
-user-grep/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-grep.dir/build.make user/CMakeFiles/user-grep.dir/build
-.PHONY : user-grep/fast
+fs_srv/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_srv.dir/build.make user/CMakeFiles/fs_srv.dir/build
+.PHONY : fs_srv/fast
 
 #=============================================================================
-# Target rules for targets named user-init
+# Target rules for targets named fs_client_test
 
 # Build rule for target.
-user-init: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-init
-.PHONY : user-init
+fs_client_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fs_client_test
+.PHONY : fs_client_test
 
 # fast build rule for target.
-user-init/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-init.dir/build.make user/CMakeFiles/user-init.dir/build
-.PHONY : user-init/fast
+fs_client_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_client_test.dir/build.make user/CMakeFiles/fs_client_test.dir/build
+.PHONY : fs_client_test/fast
 
 #=============================================================================
-# Target rules for targets named user-kill
+# Target rules for targets named fs_test
 
 # Build rule for target.
-user-kill: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-kill
-.PHONY : user-kill
+fs_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fs_test
+.PHONY : fs_test
 
 # fast build rule for target.
-user-kill/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-kill.dir/build.make user/CMakeFiles/user-kill.dir/build
-.PHONY : user-kill/fast
+fs_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/fs_test.dir/build.make user/CMakeFiles/fs_test.dir/build
+.PHONY : fs_test/fast
 
 #=============================================================================
-# Target rules for targets named user-ln
+# Target rules for targets named hello
 
 # Build rule for target.
-user-ln: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-ln
-.PHONY : user-ln
+hello: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 hello
+.PHONY : hello
 
 # fast build rule for target.
-user-ln/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ln.dir/build.make user/CMakeFiles/user-ln.dir/build
-.PHONY : user-ln/fast
+hello/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/hello.dir/build.make user/CMakeFiles/hello.dir/build
+.PHONY : hello/fast
 
 #=============================================================================
-# Target rules for targets named user-ls
+# Target rules for targets named elf_test
 
 # Build rule for target.
-user-ls: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-ls
-.PHONY : user-ls
+elf_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 elf_test
+.PHONY : elf_test
 
 # fast build rule for target.
-user-ls/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ls.dir/build.make user/CMakeFiles/user-ls.dir/build
-.PHONY : user-ls/fast
+elf_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/elf_test.dir/build.make user/CMakeFiles/elf_test.dir/build
+.PHONY : elf_test/fast
 
 #=============================================================================
-# Target rules for targets named user-mkdir
+# Target rules for targets named spawn_test
 
 # Build rule for target.
-user-mkdir: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-mkdir
-.PHONY : user-mkdir
+spawn_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 spawn_test
+.PHONY : spawn_test
 
 # fast build rule for target.
-user-mkdir/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mkdir.dir/build.make user/CMakeFiles/user-mkdir.dir/build
-.PHONY : user-mkdir/fast
+spawn_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/spawn_test.dir/build.make user/CMakeFiles/spawn_test.dir/build
+.PHONY : spawn_test/fast
 
 #=============================================================================
-# Target rules for targets named user-mv
+# Target rules for targets named sh
 
 # Build rule for target.
-user-mv: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-mv
-.PHONY : user-mv
+sh: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sh
+.PHONY : sh
 
 # fast build rule for target.
-user-mv/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-mv.dir/build.make user/CMakeFiles/user-mv.dir/build
-.PHONY : user-mv/fast
+sh/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/sh.dir/build.make user/CMakeFiles/sh.dir/build
+.PHONY : sh/fast
 
 #=============================================================================
-# Target rules for targets named user-ps
+# Target rules for targets named exo_cat
 
 # Build rule for target.
-user-ps: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-ps
-.PHONY : user-ps
+exo_cat: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 exo_cat
+.PHONY : exo_cat
 
 # fast build rule for target.
-user-ps/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-ps.dir/build.make user/CMakeFiles/user-ps.dir/build
-.PHONY : user-ps/fast
+exo_cat/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_cat.dir/build.make user/CMakeFiles/exo_cat.dir/build
+.PHONY : exo_cat/fast
 
 #=============================================================================
-# Target rules for targets named user-rm
+# Target rules for targets named exo_echo
 
 # Build rule for target.
-user-rm: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-rm
-.PHONY : user-rm
+exo_echo: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 exo_echo
+.PHONY : exo_echo
 
 # fast build rule for target.
-user-rm/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-rm.dir/build.make user/CMakeFiles/user-rm.dir/build
-.PHONY : user-rm/fast
+exo_echo/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/exo_echo.dir/build.make user/CMakeFiles/exo_echo.dir/build
+.PHONY : exo_echo/fast
 
 #=============================================================================
-# Target rules for targets named user-sh
+# Target rules for targets named pipeline_test
 
 # Build rule for target.
-user-sh: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-sh
-.PHONY : user-sh
+pipeline_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pipeline_test
+.PHONY : pipeline_test
 
 # fast build rule for target.
-user-sh/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sh.dir/build.make user/CMakeFiles/user-sh.dir/build
-.PHONY : user-sh/fast
-
-#=============================================================================
-# Target rules for targets named user-sleep
-
-# Build rule for target.
-user-sleep: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-sleep
-.PHONY : user-sleep
-
-# fast build rule for target.
-user-sleep/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-sleep.dir/build.make user/CMakeFiles/user-sleep.dir/build
-.PHONY : user-sleep/fast
-
-#=============================================================================
-# Target rules for targets named user-wc
-
-# Build rule for target.
-user-wc: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-wc
-.PHONY : user-wc
-
-# fast build rule for target.
-user-wc/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-wc.dir/build.make user/CMakeFiles/user-wc.dir/build
-.PHONY : user-wc/fast
-
-#=============================================================================
-# Target rules for targets named user-zombie
-
-# Build rule for target.
-user-zombie: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-zombie
-.PHONY : user-zombie
-
-# fast build rule for target.
-user-zombie/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-zombie.dir/build.make user/CMakeFiles/user-zombie.dir/build
-.PHONY : user-zombie/fast
-
-#=============================================================================
-# Target rules for targets named user-conformance
-
-# Build rule for target.
-user-conformance: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-conformance
-.PHONY : user-conformance
-
-# fast build rule for target.
-user-conformance/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-conformance.dir/build.make user/CMakeFiles/user-conformance.dir/build
-.PHONY : user-conformance/fast
-
-#=============================================================================
-# Target rules for targets named user-fileserver
-
-# Build rule for target.
-user-fileserver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-fileserver
-.PHONY : user-fileserver
-
-# fast build rule for target.
-user-fileserver/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-fileserver.dir/build.make user/CMakeFiles/user-fileserver.dir/build
-.PHONY : user-fileserver/fast
-
-#=============================================================================
-# Target rules for targets named user-usertests
-
-# Build rule for target.
-user-usertests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-usertests
-.PHONY : user-usertests
-
-# fast build rule for target.
-user-usertests/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-usertests.dir/build.make user/CMakeFiles/user-usertests.dir/build
-.PHONY : user-usertests/fast
-
-#=============================================================================
-# Target rules for targets named user-forktest
-
-# Build rule for target.
-user-forktest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-forktest
-.PHONY : user-forktest
-
-# fast build rule for target.
-user-forktest/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-forktest.dir/build.make user/CMakeFiles/user-forktest.dir/build
-.PHONY : user-forktest/fast
-
-#=============================================================================
-# Target rules for targets named user-stressfs
-
-# Build rule for target.
-user-stressfs: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 user-stressfs
-.PHONY : user-stressfs
-
-# fast build rule for target.
-user-stressfs/fast:
-	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/user-stressfs.dir/build.make user/CMakeFiles/user-stressfs.dir/build
-.PHONY : user-stressfs/fast
+pipeline_test/fast:
+	$(MAKE) $(MAKESILENT) -f user/CMakeFiles/pipeline_test.dir/build.make user/CMakeFiles/pipeline_test.dir/build
+.PHONY : pipeline_test/fast
 
 #=============================================================================
 # Target rules for targets named phoenix-libos-fs
@@ -796,6 +679,58 @@ phoenix-libos-nn/fast:
 .PHONY : phoenix-libos-nn/fast
 
 #=============================================================================
+# Target rules for targets named phoenix-libos-net
+
+# Build rule for target.
+phoenix-libos-net: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-libos-net
+.PHONY : phoenix-libos-net
+
+# fast build rule for target.
+phoenix-libos-net/fast:
+	$(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-net.dir/build.make libos/CMakeFiles/phoenix-libos-net.dir/build
+.PHONY : phoenix-libos-net/fast
+
+#=============================================================================
+# Target rules for targets named phoenix-libos-bsd-sockets
+
+# Build rule for target.
+phoenix-libos-bsd-sockets: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-libos-bsd-sockets
+.PHONY : phoenix-libos-bsd-sockets
+
+# fast build rule for target.
+phoenix-libos-bsd-sockets/fast:
+	$(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build.make libos/CMakeFiles/phoenix-libos-bsd-sockets.dir/build
+.PHONY : phoenix-libos-bsd-sockets/fast
+
+#=============================================================================
+# Target rules for targets named phoenix-libos-gpu
+
+# Build rule for target.
+phoenix-libos-gpu: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-libos-gpu
+.PHONY : phoenix-libos-gpu
+
+# fast build rule for target.
+phoenix-libos-gpu/fast:
+	$(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-gpu.dir/build.make libos/CMakeFiles/phoenix-libos-gpu.dir/build
+.PHONY : phoenix-libos-gpu/fast
+
+#=============================================================================
+# Target rules for targets named phoenix-libos-linux-abi
+
+# Build rule for target.
+phoenix-libos-linux-abi: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-libos-linux-abi
+.PHONY : phoenix-libos-linux-abi
+
+# fast build rule for target.
+phoenix-libos-linux-abi/fast:
+	$(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-linux-abi.dir/build.make libos/CMakeFiles/phoenix-libos-linux-abi.dir/build
+.PHONY : phoenix-libos-linux-abi/fast
+
+#=============================================================================
 # Target rules for targets named phoenix-libos-baremetal-stubs
 
 # Build rule for target.
@@ -820,6 +755,32 @@ phoenix-libos-sched: cmake_check_build_system
 phoenix-libos-sched/fast:
 	$(MAKE) $(MAKESILENT) -f libos/CMakeFiles/phoenix-libos-sched.dir/build.make libos/CMakeFiles/phoenix-libos-sched.dir/build
 .PHONY : phoenix-libos-sched/fast
+
+#=============================================================================
+# Target rules for targets named phoenix-libos-ddekit
+
+# Build rule for target.
+phoenix-libos-ddekit: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-libos-ddekit
+.PHONY : phoenix-libos-ddekit
+
+# fast build rule for target.
+phoenix-libos-ddekit/fast:
+	$(MAKE) $(MAKESILENT) -f libos/ddekit/CMakeFiles/phoenix-libos-ddekit.dir/build.make libos/ddekit/CMakeFiles/phoenix-libos-ddekit.dir/build
+.PHONY : phoenix-libos-ddekit/fast
+
+#=============================================================================
+# Target rules for targets named kernel_init_bin
+
+# Build rule for target.
+kernel_init_bin: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 kernel_init_bin
+.PHONY : kernel_init_bin
+
+# fast build rule for target.
+kernel_init_bin/fast:
+	$(MAKE) $(MAKESILENT) -f kernel/CMakeFiles/kernel_init_bin.dir/build.make kernel/CMakeFiles/kernel_init_bin.dir/build
+.PHONY : kernel_init_bin/fast
 
 #=============================================================================
 # Target rules for targets named kernel
@@ -1289,838 +1250,6 @@ exo-stream-demo/fast:
 	$(MAKE) $(MAKESILENT) -f demos/CMakeFiles/exo-stream-demo.dir/build.make demos/CMakeFiles/exo-stream-demo.dir/build
 .PHONY : exo-stream-demo/fast
 
-#=============================================================================
-# Target rules for targets named phoenix-test-host-stubs
-
-# Build rule for target.
-phoenix-test-host-stubs: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 phoenix-test-host-stubs
-.PHONY : phoenix-test-host-stubs
-
-# fast build rule for target.
-phoenix-test-host-stubs/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/phoenix-test-host-stubs.dir/build.make tests/CMakeFiles/phoenix-test-host-stubs.dir/build
-.PHONY : phoenix-test-host-stubs/fast
-
-#=============================================================================
-# Target rules for targets named microbench-cap_verify_bench
-
-# Build rule for target.
-microbench-cap_verify_bench: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 microbench-cap_verify_bench
-.PHONY : microbench-cap_verify_bench
-
-# fast build rule for target.
-microbench-cap_verify_bench/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-cap_verify_bench.dir/build.make tests/CMakeFiles/microbench-cap_verify_bench.dir/build
-.PHONY : microbench-cap_verify_bench/fast
-
-#=============================================================================
-# Target rules for targets named microbench-exo_yield_to_bench
-
-# Build rule for target.
-microbench-exo_yield_to_bench: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 microbench-exo_yield_to_bench
-.PHONY : microbench-exo_yield_to_bench
-
-# fast build rule for target.
-microbench-exo_yield_to_bench/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-exo_yield_to_bench.dir/build.make tests/CMakeFiles/microbench-exo_yield_to_bench.dir/build
-.PHONY : microbench-exo_yield_to_bench/fast
-
-#=============================================================================
-# Target rules for targets named microbench-lattice_pipe_bench
-
-# Build rule for target.
-microbench-lattice_pipe_bench: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 microbench-lattice_pipe_bench
-.PHONY : microbench-lattice_pipe_bench
-
-# fast build rule for target.
-microbench-lattice_pipe_bench/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-lattice_pipe_bench.dir/build.make tests/CMakeFiles/microbench-lattice_pipe_bench.dir/build
-.PHONY : microbench-lattice_pipe_bench/fast
-
-#=============================================================================
-# Target rules for targets named microbench-proc_cap_test
-
-# Build rule for target.
-microbench-proc_cap_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 microbench-proc_cap_test
-.PHONY : microbench-proc_cap_test
-
-# fast build rule for target.
-microbench-proc_cap_test/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/microbench-proc_cap_test.dir/build.make tests/CMakeFiles/microbench-proc_cap_test.dir/build
-.PHONY : microbench-proc_cap_test/fast
-
-#=============================================================================
-# Target rules for targets named test-quick
-
-# Build rule for target.
-test-quick: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-quick
-.PHONY : test-quick
-
-# fast build rule for target.
-test-quick/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-quick.dir/build.make tests/CMakeFiles/test-quick.dir/build
-.PHONY : test-quick/fast
-
-#=============================================================================
-# Target rules for targets named test-full
-
-# Build rule for target.
-test-full: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-full
-.PHONY : test-full
-
-# fast build rule for target.
-test-full/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-full.dir/build.make tests/CMakeFiles/test-full.dir/build
-.PHONY : test-full/fast
-
-#=============================================================================
-# Target rules for targets named test-performance
-
-# Build rule for target.
-test-performance: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-performance
-.PHONY : test-performance
-
-# fast build rule for target.
-test-performance/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-performance.dir/build.make tests/CMakeFiles/test-performance.dir/build
-.PHONY : test-performance/fast
-
-#=============================================================================
-# Target rules for targets named test-integration
-
-# Build rule for target.
-test-integration: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-integration
-.PHONY : test-integration
-
-# fast build rule for target.
-test-integration/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-integration.dir/build.make tests/CMakeFiles/test-integration.dir/build
-.PHONY : test-integration/fast
-
-#=============================================================================
-# Target rules for targets named test-memory
-
-# Build rule for target.
-test-memory: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-memory
-.PHONY : test-memory
-
-# fast build rule for target.
-test-memory/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-memory.dir/build.make tests/CMakeFiles/test-memory.dir/build
-.PHONY : test-memory/fast
-
-#=============================================================================
-# Target rules for targets named test-security
-
-# Build rule for target.
-test-security: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-security
-.PHONY : test-security
-
-# fast build rule for target.
-test-security/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-security.dir/build.make tests/CMakeFiles/test-security.dir/build
-.PHONY : test-security/fast
-
-#=============================================================================
-# Target rules for targets named test-posix
-
-# Build rule for target.
-test-posix: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-posix
-.PHONY : test-posix
-
-# fast build rule for target.
-test-posix/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-posix.dir/build.make tests/CMakeFiles/test-posix.dir/build
-.PHONY : test-posix/fast
-
-#=============================================================================
-# Target rules for targets named test-c17-unit
-
-# Build rule for target.
-test-c17-unit: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-c17-unit
-.PHONY : test-c17-unit
-
-# fast build rule for target.
-test-c17-unit/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-c17-unit.dir/build.make tests/CMakeFiles/test-c17-unit.dir/build
-.PHONY : test-c17-unit/fast
-
-#=============================================================================
-# Target rules for targets named test-c17-all
-
-# Build rule for target.
-test-c17-all: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-c17-all
-.PHONY : test-c17-all
-
-# fast build rule for target.
-test-c17-all/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-c17-all.dir/build.make tests/CMakeFiles/test-c17-all.dir/build
-.PHONY : test-c17-all/fast
-
-#=============================================================================
-# Target rules for targets named test-report
-
-# Build rule for target.
-test-report: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-report
-.PHONY : test-report
-
-# fast build rule for target.
-test-report/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test-report.dir/build.make tests/CMakeFiles/test-report.dir/build
-.PHONY : test-report/fast
-
-#=============================================================================
-# Target rules for targets named test_framework
-
-# Build rule for target.
-test_framework: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_framework
-.PHONY : test_framework
-
-# fast build rule for target.
-test_framework/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/CMakeFiles/test_framework.dir/build.make tests/c17/CMakeFiles/test_framework.dir/build
-.PHONY : test_framework/fast
-
-#=============================================================================
-# Target rules for targets named run-c17-tests
-
-# Build rule for target.
-run-c17-tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run-c17-tests
-.PHONY : run-c17-tests
-
-# fast build rule for target.
-run-c17-tests/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/CMakeFiles/run-c17-tests.dir/build.make tests/c17/CMakeFiles/run-c17-tests.dir/build
-.PHONY : run-c17-tests/fast
-
-#=============================================================================
-# Target rules for targets named c17-test-report
-
-# Build rule for target.
-c17-test-report: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 c17-test-report
-.PHONY : c17-test-report
-
-# fast build rule for target.
-c17-test-report/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/CMakeFiles/c17-test-report.dir/build.make tests/c17/CMakeFiles/c17-test-report.dir/build
-.PHONY : c17-test-report/fast
-
-#=============================================================================
-# Target rules for targets named test_aether_nn
-
-# Build rule for target.
-test_aether_nn: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_aether_nn
-.PHONY : test_aether_nn
-
-# fast build rule for target.
-test_aether_nn/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_aether_nn.dir/build.make tests/c17/unit/CMakeFiles/test_aether_nn.dir/build
-.PHONY : test_aether_nn/fast
-
-#=============================================================================
-# Target rules for targets named test_arbitrate
-
-# Build rule for target.
-test_arbitrate: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_arbitrate
-.PHONY : test_arbitrate
-
-# fast build rule for target.
-test_arbitrate/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_arbitrate.dir/build.make tests/c17/unit/CMakeFiles/test_arbitrate.dir/build
-.PHONY : test_arbitrate/fast
-
-#=============================================================================
-# Target rules for targets named test_beatty_cycle
-
-# Build rule for target.
-test_beatty_cycle: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_beatty_cycle
-.PHONY : test_beatty_cycle
-
-# fast build rule for target.
-test_beatty_cycle/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_cycle.dir/build
-.PHONY : test_beatty_cycle/fast
-
-#=============================================================================
-# Target rules for targets named test_beatty_sim
-
-# Build rule for target.
-test_beatty_sim: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_beatty_sim
-.PHONY : test_beatty_sim
-
-# fast build rule for target.
-test_beatty_sim/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build.make tests/c17/unit/CMakeFiles/test_beatty_sim.dir/build
-.PHONY : test_beatty_sim/fast
-
-#=============================================================================
-# Target rules for targets named test_build_script
-
-# Build rule for target.
-test_build_script: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_build_script
-.PHONY : test_build_script
-
-# fast build rule for target.
-test_build_script/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_build_script.dir/build.make tests/c17/unit/CMakeFiles/test_build_script.dir/build
-.PHONY : test_build_script/fast
-
-#=============================================================================
-# Target rules for targets named test_cap_entry_cpp
-
-# Build rule for target.
-test_cap_entry_cpp: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_cap_entry_cpp
-.PHONY : test_cap_entry_cpp
-
-# fast build rule for target.
-test_cap_entry_cpp/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/build.make tests/c17/unit/CMakeFiles/test_cap_entry_cpp.dir/build
-.PHONY : test_cap_entry_cpp/fast
-
-#=============================================================================
-# Target rules for targets named test_cap_newtypes
-
-# Build rule for target.
-test_cap_newtypes: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_cap_newtypes
-.PHONY : test_cap_newtypes
-
-# fast build rule for target.
-test_cap_newtypes/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/build.make tests/c17/unit/CMakeFiles/test_cap_newtypes.dir/build
-.PHONY : test_cap_newtypes/fast
-
-#=============================================================================
-# Target rules for targets named test_cap_revoke
-
-# Build rule for target.
-test_cap_revoke: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_cap_revoke
-.PHONY : test_cap_revoke
-
-# fast build rule for target.
-test_cap_revoke/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_revoke.dir/build.make tests/c17/unit/CMakeFiles/test_cap_revoke.dir/build
-.PHONY : test_cap_revoke/fast
-
-#=============================================================================
-# Target rules for targets named test_cap_types
-
-# Build rule for target.
-test_cap_types: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_cap_types
-.PHONY : test_cap_types
-
-# fast build rule for target.
-test_cap_types/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_cap_types.dir/build.make tests/c17/unit/CMakeFiles/test_cap_types.dir/build
-.PHONY : test_cap_types/fast
-
-#=============================================================================
-# Target rules for targets named test_chan_endpoint
-
-# Build rule for target.
-test_chan_endpoint: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_chan_endpoint
-.PHONY : test_chan_endpoint
-
-# fast build rule for target.
-test_chan_endpoint/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/build.make tests/c17/unit/CMakeFiles/test_chan_endpoint.dir/build
-.PHONY : test_chan_endpoint/fast
-
-#=============================================================================
-# Target rules for targets named test_dag_cycle
-
-# Build rule for target.
-test_dag_cycle: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_dag_cycle
-.PHONY : test_dag_cycle
-
-# fast build rule for target.
-test_dag_cycle/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_dag_cycle.dir/build.make tests/c17/unit/CMakeFiles/test_dag_cycle.dir/build
-.PHONY : test_dag_cycle/fast
-
-#=============================================================================
-# Target rules for targets named test_door
-
-# Build rule for target.
-test_door: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_door
-.PHONY : test_door
-
-# fast build rule for target.
-test_door/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_door.dir/build.make tests/c17/unit/CMakeFiles/test_door.dir/build
-.PHONY : test_door/fast
-
-#=============================================================================
-# Target rules for targets named test_encrypt_mod
-
-# Build rule for target.
-test_encrypt_mod: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_encrypt_mod
-.PHONY : test_encrypt_mod
-
-# fast build rule for target.
-test_encrypt_mod/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/build.make tests/c17/unit/CMakeFiles/test_encrypt_mod.dir/build
-.PHONY : test_encrypt_mod/fast
-
-#=============================================================================
-# Target rules for targets named test_exo_recv_timed
-
-# Build rule for target.
-test_exo_recv_timed: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_exo_recv_timed
-.PHONY : test_exo_recv_timed
-
-# fast build rule for target.
-test_exo_recv_timed/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/build.make tests/c17/unit/CMakeFiles/test_exo_recv_timed.dir/build
-.PHONY : test_exo_recv_timed/fast
-
-#=============================================================================
-# Target rules for targets named test_flow_pid
-
-# Build rule for target.
-test_flow_pid: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_flow_pid
-.PHONY : test_flow_pid
-
-# fast build rule for target.
-test_flow_pid/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_flow_pid.dir/build.make tests/c17/unit/CMakeFiles/test_flow_pid.dir/build
-.PHONY : test_flow_pid/fast
-
-#=============================================================================
-# Target rules for targets named test_formal_models
-
-# Build rule for target.
-test_formal_models: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_formal_models
-.PHONY : test_formal_models
-
-# fast build rule for target.
-test_formal_models/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_formal_models.dir/build.make tests/c17/unit/CMakeFiles/test_formal_models.dir/build
-.PHONY : test_formal_models/fast
-
-#=============================================================================
-# Target rules for targets named test_iommu
-
-# Build rule for target.
-test_iommu: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_iommu
-.PHONY : test_iommu
-
-# fast build rule for target.
-test_iommu/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_iommu.dir/build.make tests/c17/unit/CMakeFiles/test_iommu.dir/build
-.PHONY : test_iommu/fast
-
-#=============================================================================
-# Target rules for targets named test_irq
-
-# Build rule for target.
-test_irq: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_irq
-.PHONY : test_irq
-
-# fast build rule for target.
-test_irq/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_irq.dir/build.make tests/c17/unit/CMakeFiles/test_irq.dir/build
-.PHONY : test_irq/fast
-
-#=============================================================================
-# Target rules for targets named test_lattice_channel_dag
-
-# Build rule for target.
-test_lattice_channel_dag: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_lattice_channel_dag
-.PHONY : test_lattice_channel_dag
-
-# fast build rule for target.
-test_lattice_channel_dag/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/build.make tests/c17/unit/CMakeFiles/test_lattice_channel_dag.dir/build
-.PHONY : test_lattice_channel_dag/fast
-
-#=============================================================================
-# Target rules for targets named test_lattice_dag
-
-# Build rule for target.
-test_lattice_dag: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_lattice_dag
-.PHONY : test_lattice_dag
-
-# fast build rule for target.
-test_lattice_dag/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_lattice_dag.dir/build.make tests/c17/unit/CMakeFiles/test_lattice_dag.dir/build
-.PHONY : test_lattice_dag/fast
-
-#=============================================================================
-# Target rules for targets named test_libnstr_graph
-
-# Build rule for target.
-test_libnstr_graph: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_libnstr_graph
-.PHONY : test_libnstr_graph
-
-# fast build rule for target.
-test_libnstr_graph/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/build.make tests/c17/unit/CMakeFiles/test_libnstr_graph.dir/build
-.PHONY : test_libnstr_graph/fast
-
-#=============================================================================
-# Target rules for targets named test_libos_env
-
-# Build rule for target.
-test_libos_env: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_libos_env
-.PHONY : test_libos_env
-
-# fast build rule for target.
-test_libos_env/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_libos_env.dir/build.make tests/c17/unit/CMakeFiles/test_libos_env.dir/build
-.PHONY : test_libos_env/fast
-
-#=============================================================================
-# Target rules for targets named test_locks
-
-# Build rule for target.
-test_locks: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_locks
-.PHONY : test_locks
-
-# fast build rule for target.
-test_locks/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_locks.dir/build.make tests/c17/unit/CMakeFiles/test_locks.dir/build
-.PHONY : test_locks/fast
-
-#=============================================================================
-# Target rules for targets named test_lockstress
-
-# Build rule for target.
-test_lockstress: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_lockstress
-.PHONY : test_lockstress
-
-# fast build rule for target.
-test_lockstress/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_lockstress.dir/build.make tests/c17/unit/CMakeFiles/test_lockstress.dir/build
-.PHONY : test_lockstress/fast
-
-#=============================================================================
-# Target rules for targets named test_mailbox_isolation
-
-# Build rule for target.
-test_mailbox_isolation: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_mailbox_isolation
-.PHONY : test_mailbox_isolation
-
-# fast build rule for target.
-test_mailbox_isolation/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/build.make tests/c17/unit/CMakeFiles/test_mailbox_isolation.dir/build
-.PHONY : test_mailbox_isolation/fast
-
-#=============================================================================
-# Target rules for targets named test_octonion
-
-# Build rule for target.
-test_octonion: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_octonion
-.PHONY : test_octonion
-
-# fast build rule for target.
-test_octonion/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_octonion.dir/build.make tests/c17/unit/CMakeFiles/test_octonion.dir/build
-.PHONY : test_octonion/fast
-
-#=============================================================================
-# Target rules for targets named test_ptrace_concurrent
-
-# Build rule for target.
-test_ptrace_concurrent: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_ptrace_concurrent
-.PHONY : test_ptrace_concurrent
-
-# fast build rule for target.
-test_ptrace_concurrent/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/build.make tests/c17/unit/CMakeFiles/test_ptrace_concurrent.dir/build
-.PHONY : test_ptrace_concurrent/fast
-
-#=============================================================================
-# Target rules for targets named test_simulate
-
-# Build rule for target.
-test_simulate: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_simulate
-.PHONY : test_simulate
-
-# fast build rule for target.
-test_simulate/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_simulate.dir/build.make tests/c17/unit/CMakeFiles/test_simulate.dir/build
-.PHONY : test_simulate/fast
-
-#=============================================================================
-# Target rules for targets named test_spinlock_align
-
-# Build rule for target.
-test_spinlock_align: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_spinlock_align
-.PHONY : test_spinlock_align
-
-# fast build rule for target.
-test_spinlock_align/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_spinlock_align.dir/build.make tests/c17/unit/CMakeFiles/test_spinlock_align.dir/build
-.PHONY : test_spinlock_align/fast
-
-#=============================================================================
-# Target rules for targets named test_stream_module
-
-# Build rule for target.
-test_stream_module: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_stream_module
-.PHONY : test_stream_module
-
-# fast build rule for target.
-test_stream_module/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_stream_module.dir/build.make tests/c17/unit/CMakeFiles/test_stream_module.dir/build
-.PHONY : test_stream_module/fast
-
-#=============================================================================
-# Target rules for targets named test_streams_log
-
-# Build rule for target.
-test_streams_log: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_streams_log
-.PHONY : test_streams_log
-
-# fast build rule for target.
-test_streams_log/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_streams_log.dir/build.make tests/c17/unit/CMakeFiles/test_streams_log.dir/build
-.PHONY : test_streams_log/fast
-
-#=============================================================================
-# Target rules for targets named test_ticket_spinlock_processes
-
-# Build rule for target.
-test_ticket_spinlock_processes: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_ticket_spinlock_processes
-.PHONY : test_ticket_spinlock_processes
-
-# fast build rule for target.
-test_ticket_spinlock_processes/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/build.make tests/c17/unit/CMakeFiles/test_ticket_spinlock_processes.dir/build
-.PHONY : test_ticket_spinlock_processes/fast
-
-#=============================================================================
-# Target rules for targets named test_ticket_spinlock_threads
-
-# Build rule for target.
-test_ticket_spinlock_threads: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_ticket_spinlock_threads
-.PHONY : test_ticket_spinlock_threads
-
-# fast build rule for target.
-test_ticket_spinlock_threads/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/build.make tests/c17/unit/CMakeFiles/test_ticket_spinlock_threads.dir/build
-.PHONY : test_ticket_spinlock_threads/fast
-
-#=============================================================================
-# Target rules for targets named test_uv_spinlock_processes
-
-# Build rule for target.
-test_uv_spinlock_processes: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_uv_spinlock_processes
-.PHONY : test_uv_spinlock_processes
-
-# fast build rule for target.
-test_uv_spinlock_processes/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/build.make tests/c17/unit/CMakeFiles/test_uv_spinlock_processes.dir/build
-.PHONY : test_uv_spinlock_processes/fast
-
-#=============================================================================
-# Target rules for targets named test_uv_spinlock_threads
-
-# Build rule for target.
-test_uv_spinlock_threads: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_uv_spinlock_threads
-.PHONY : test_uv_spinlock_threads
-
-# fast build rule for target.
-test_uv_spinlock_threads/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/build.make tests/c17/unit/CMakeFiles/test_uv_spinlock_threads.dir/build
-.PHONY : test_uv_spinlock_threads/fast
-
-#=============================================================================
-# Target rules for targets named test_zone
-
-# Build rule for target.
-test_zone: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_zone
-.PHONY : test_zone
-
-# fast build rule for target.
-test_zone/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/test_zone.dir/build.make tests/c17/unit/CMakeFiles/test_zone.dir/build
-.PHONY : test_zone/fast
-
-#=============================================================================
-# Target rules for targets named unit_tests
-
-# Build rule for target.
-unit_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests
-.PHONY : unit_tests
-
-# fast build rule for target.
-unit_tests/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/unit/CMakeFiles/unit_tests.dir/build.make tests/c17/unit/CMakeFiles/unit_tests.dir/build
-.PHONY : unit_tests/fast
-
-#=============================================================================
-# Target rules for targets named test_exo_ipc_direct
-
-# Build rule for target.
-test_exo_ipc_direct: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_exo_ipc_direct
-.PHONY : test_exo_ipc_direct
-
-# fast build rule for target.
-test_exo_ipc_direct/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/integration/CMakeFiles/test_exo_ipc_direct.dir/build.make tests/c17/integration/CMakeFiles/test_exo_ipc_direct.dir/build
-.PHONY : test_exo_ipc_direct/fast
-
-#=============================================================================
-# Target rules for targets named test_lattice_ipc
-
-# Build rule for target.
-test_lattice_ipc: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_lattice_ipc
-.PHONY : test_lattice_ipc
-
-# fast build rule for target.
-test_lattice_ipc/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/integration/CMakeFiles/test_lattice_ipc.dir/build.make tests/c17/integration/CMakeFiles/test_lattice_ipc.dir/build
-.PHONY : test_lattice_ipc/fast
-
-#=============================================================================
-# Target rules for targets named test_sys_ipc
-
-# Build rule for target.
-test_sys_ipc: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_sys_ipc
-.PHONY : test_sys_ipc
-
-# fast build rule for target.
-test_sys_ipc/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/integration/CMakeFiles/test_sys_ipc.dir/build.make tests/c17/integration/CMakeFiles/test_sys_ipc.dir/build
-.PHONY : test_sys_ipc/fast
-
-#=============================================================================
-# Target rules for targets named integration_tests
-
-# Build rule for target.
-integration_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 integration_tests
-.PHONY : integration_tests
-
-# fast build rule for target.
-integration_tests/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/integration/CMakeFiles/integration_tests.dir/build.make tests/c17/integration/CMakeFiles/integration_tests.dir/build
-.PHONY : integration_tests/fast
-
-#=============================================================================
-# Target rules for targets named test_posix_apis
-
-# Build rule for target.
-test_posix_apis: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_posix_apis
-.PHONY : test_posix_apis
-
-# fast build rule for target.
-test_posix_apis/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/posix/CMakeFiles/test_posix_apis.dir/build.make tests/c17/posix/CMakeFiles/test_posix_apis.dir/build
-.PHONY : test_posix_apis/fast
-
-#=============================================================================
-# Target rules for targets named test_posix_compat
-
-# Build rule for target.
-test_posix_compat: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_posix_compat
-.PHONY : test_posix_compat
-
-# fast build rule for target.
-test_posix_compat/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/posix/CMakeFiles/test_posix_compat.dir/build.make tests/c17/posix/CMakeFiles/test_posix_compat.dir/build
-.PHONY : test_posix_compat/fast
-
-#=============================================================================
-# Target rules for targets named posix_tests
-
-# Build rule for target.
-posix_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 posix_tests
-.PHONY : posix_tests
-
-# fast build rule for target.
-posix_tests/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/posix/CMakeFiles/posix_tests.dir/build.make tests/c17/posix/CMakeFiles/posix_tests.dir/build
-.PHONY : posix_tests/fast
-
-#=============================================================================
-# Target rules for targets named performance_tests
-
-# Build rule for target.
-performance_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 performance_tests
-.PHONY : performance_tests
-
-# fast build rule for target.
-performance_tests/fast:
-	$(MAKE) $(MAKESILENT) -f tests/c17/performance/CMakeFiles/performance_tests.dir/build.make tests/c17/performance/CMakeFiles/performance_tests.dir/build
-.PHONY : performance_tests/fast
-
-#=============================================================================
-# Target rules for targets named test-arch-mem
-
-# Build rule for target.
-test-arch-mem: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-arch-mem
-.PHONY : test-arch-mem
-
-# fast build rule for target.
-test-arch-mem/fast:
-	$(MAKE) $(MAKESILENT) -f tests/arch_mem/CMakeFiles/test-arch-mem.dir/build.make tests/arch_mem/CMakeFiles/test-arch-mem.dir/build
-.PHONY : test-arch-mem/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2136,44 +1265,39 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... analyze-headers"
-	@echo "... c17-test-report"
 	@echo "... code-metrics"
 	@echo "... count-files"
-	@echo "... integration_tests"
+	@echo "... init_bin"
+	@echo "... kernel_init_bin"
 	@echo "... organize-files"
-	@echo "... performance_tests"
-	@echo "... posix_tests"
-	@echo "... run-c17-tests"
-	@echo "... test-c17-all"
-	@echo "... test-c17-unit"
-	@echo "... test-full"
-	@echo "... test-integration"
-	@echo "... test-memory"
-	@echo "... test-performance"
-	@echo "... test-posix"
-	@echo "... test-quick"
-	@echo "... test-report"
-	@echo "... test-security"
-	@echo "... unit_tests"
 	@echo "... affine-channel-demo"
 	@echo "... beatty-dag-demo"
 	@echo "... beatty-demo"
 	@echo "... chan-beatty-rcrs-demo"
 	@echo "... chan-dag-supervisor-demo"
 	@echo "... dag-demo"
+	@echo "... ddekit-exo"
 	@echo "... ddekit-port-demo"
+	@echo "... elf"
+	@echo "... elf_test"
 	@echo "... exo-stream-demo"
+	@echo "... exo_cat"
+	@echo "... exo_echo"
 	@echo "... fbdev-demo"
 	@echo "... fib-big-demo"
+	@echo "... fs"
+	@echo "... fs_client_test"
+	@echo "... fs_srv"
+	@echo "... fs_test"
+	@echo "... hello"
 	@echo "... hello-channel-demo"
 	@echo "... hv-demo"
+	@echo "... init"
+	@echo "... ipc_test"
 	@echo "... irq-lambda-policy-demo"
 	@echo "... kernel"
+	@echo "... libos"
 	@echo "... libos-posix-extra-test"
-	@echo "... microbench-cap_verify_bench"
-	@echo "... microbench-exo_yield_to_bench"
-	@echo "... microbench-lattice_pipe_bench"
-	@echo "... microbench-proc_cap_test"
 	@echo "... microkernel-rcrs-demo"
 	@echo "... mkfs"
 	@echo "... msgqueue-demo"
@@ -2181,21 +1305,22 @@ help:
 	@echo "... phoenix-arch-x86-64"
 	@echo "... phoenix-arch-x86-legacy"
 	@echo "... phoenix-arch-x86-modern"
-	@echo "... phoenix-caplib"
-	@echo "... phoenix-chan"
 	@echo "... phoenix-compiler-utils"
-	@echo "... phoenix-ddekit"
-	@echo "... phoenix-door"
 	@echo "... phoenix-kernel-crypto"
 	@echo "... phoenix-kernel-security"
 	@echo "... phoenix-kernel-streams"
 	@echo "... phoenix-libos-affine-runtime"
 	@echo "... phoenix-libos-baremetal-stubs"
+	@echo "... phoenix-libos-bsd-sockets"
 	@echo "... phoenix-libos-cap"
+	@echo "... phoenix-libos-ddekit"
 	@echo "... phoenix-libos-file"
 	@echo "... phoenix-libos-fs"
+	@echo "... phoenix-libos-gpu"
 	@echo "... phoenix-libos-ipc"
+	@echo "... phoenix-libos-linux-abi"
 	@echo "... phoenix-libos-msg-router"
+	@echo "... phoenix-libos-net"
 	@echo "... phoenix-libos-nn"
 	@echo "... phoenix-libos-posix"
 	@echo "... phoenix-libos-registration"
@@ -2203,86 +1328,23 @@ help:
 	@echo "... phoenix-libos-sched"
 	@echo "... phoenix-libos-service"
 	@echo "... phoenix-libos-termios"
-	@echo "... phoenix-math-core"
 	@echo "... phoenix-metrics"
 	@echo "... phoenix-nstr-graph"
-	@echo "... phoenix-printf"
 	@echo "... phoenix-simd"
-	@echo "... phoenix-test-host-stubs"
-	@echo "... phoenix-ulib"
-	@echo "... phoenix-umalloc"
-	@echo "... phoenix-user-sched"
+	@echo "... pipeline_test"
 	@echo "... posix-cwd-test"
 	@echo "... posix-misc-test"
 	@echo "... posix-socket-test"
 	@echo "... qspin-demo"
-	@echo "... test-arch-mem"
-	@echo "... test_aether_nn"
-	@echo "... test_arbitrate"
-	@echo "... test_beatty_cycle"
-	@echo "... test_beatty_sim"
-	@echo "... test_build_script"
-	@echo "... test_cap_entry_cpp"
-	@echo "... test_cap_newtypes"
-	@echo "... test_cap_revoke"
-	@echo "... test_cap_types"
-	@echo "... test_chan_endpoint"
-	@echo "... test_dag_cycle"
-	@echo "... test_door"
-	@echo "... test_encrypt_mod"
-	@echo "... test_exo_ipc_direct"
-	@echo "... test_exo_recv_timed"
-	@echo "... test_flow_pid"
-	@echo "... test_formal_models"
-	@echo "... test_framework"
-	@echo "... test_iommu"
-	@echo "... test_irq"
-	@echo "... test_lattice_channel_dag"
-	@echo "... test_lattice_dag"
-	@echo "... test_lattice_ipc"
-	@echo "... test_libnstr_graph"
-	@echo "... test_libos_env"
-	@echo "... test_locks"
-	@echo "... test_lockstress"
-	@echo "... test_mailbox_isolation"
-	@echo "... test_octonion"
-	@echo "... test_posix_apis"
-	@echo "... test_posix_compat"
-	@echo "... test_ptrace_concurrent"
-	@echo "... test_simulate"
-	@echo "... test_spinlock_align"
-	@echo "... test_stream_module"
-	@echo "... test_streams_log"
-	@echo "... test_sys_ipc"
-	@echo "... test_ticket_spinlock_processes"
-	@echo "... test_ticket_spinlock_threads"
-	@echo "... test_uv_spinlock_processes"
-	@echo "... test_uv_spinlock_threads"
-	@echo "... test_zone"
+	@echo "... sched_test"
+	@echo "... sh"
+	@echo "... spawn_test"
 	@echo "... typed-chan-demo"
 	@echo "... typed-chan-recv"
 	@echo "... typed-chan-send"
-	@echo "... user-cat"
-	@echo "... user-conformance"
-	@echo "... user-cp"
-	@echo "... user-echo"
-	@echo "... user-fileserver"
-	@echo "... user-forktest"
-	@echo "... user-grep"
-	@echo "... user-init"
-	@echo "... user-kill"
-	@echo "... user-ln"
-	@echo "... user-ls"
-	@echo "... user-mkdir"
-	@echo "... user-mv"
-	@echo "... user-ps"
-	@echo "... user-rm"
-	@echo "... user-sh"
-	@echo "... user-sleep"
-	@echo "... user-stressfs"
-	@echo "... user-usertests"
-	@echo "... user-wc"
-	@echo "... user-zombie"
+	@echo "... uart_driver"
+	@echo "... virtio"
+	@echo "... virtio_driver"
 	@echo "... wumpus-game"
 .PHONY : help
 
