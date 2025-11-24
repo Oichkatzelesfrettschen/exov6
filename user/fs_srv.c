@@ -495,8 +495,9 @@ static void handle_unlink(int client_pid, uint64 w1) {
     print("\n");
 
     /*
-     * For a simplified implementation, we report success but note that
-     * a full implementation would need to:
+     * For a simplified implementation, we return an error indicating
+     * the operation is not yet fully implemented. A full implementation
+     * would need to:
      * 1. Parse the directory path
      * 2. Find and remove the directory entry
      * 3. Decrement the inode link count
@@ -506,8 +507,8 @@ static void handle_unlink(int client_pid, uint64 w1) {
      * directory modification functions.
      */
     
-    print("[FS_SRV] WARNING: unlink not fully implemented - reporting success\n");
-    sys_ipc_send(client_pid, FS_OK, 0, 0);
+    print("[FS_SRV] unlink not fully implemented - returning ENOSYS\n");
+    sys_ipc_send(client_pid, FS_ERR_INVAL, 0, 0);  /* Return error */
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

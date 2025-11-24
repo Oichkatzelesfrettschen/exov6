@@ -210,6 +210,11 @@ void free(void* ptr) {
  * calloc - Allocate and zero memory
  */
 void* calloc(uint64 nmemb, uint64 size) {
+    /* Check for integer overflow */
+    if (nmemb != 0 && size > (uint64)-1 / nmemb) {
+        return 0;  /* Would overflow */
+    }
+    
     uint64 total = nmemb * size;
     void *ptr = malloc(total);
     
@@ -234,8 +239,18 @@ void* realloc(void* ptr, uint64 size) {
         return 0;
     }
     
+    /* Validate pointer is within heap bounds */
+    if ((uint64)ptr < heap_start + HEADER_SIZE || (uint64)ptr >= heap_end) {
+        return 0;  /* Invalid pointer */
+    }
+    
     /* Get old block header */
     struct block_header *old_block = (struct block_header *)((uint64)ptr - HEADER_SIZE);
+    
+    /* Validate block header is also within bounds */
+    if ((uint64)old_block < heap_start || (uint64)old_block >= heap_end) {
+        return 0;  /* Invalid block header */
+    }
     
     /* If new size fits in old block, just return it */
     if (old_block->size >= size) {

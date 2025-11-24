@@ -99,23 +99,28 @@ void* mmap(void* addr, uint64 length, int prot, int flags, int fd, uint64 offset
 
     /* Allocate virtual address */
     uint64 virt_addr = mmap_next_addr;
-    mmap_next_addr += pages_needed * PAGE_SIZE;
 
     /* Allocate and map physical pages */
+    uint64 pages_allocated = 0;
     for (uint64 i = 0; i < pages_needed; i++) {
         uint64 phys_addr = sys_page_alloc_raw();
         if (phys_addr == 0) {
-            /* OOM - would need to unmap already-mapped pages */
-            /* For simplicity, we leave them mapped (leak) */
+            /* OOM - roll back by not advancing mmap_next_addr */
+            /* Note: We leak the physical pages that were allocated.
+             * A full implementation would need sys_page_free() */
             return MAP_FAILED;
         }
 
         uint64 page_virt = virt_addr + (i * PAGE_SIZE);
         if (sys_page_map_raw(0, phys_addr, page_virt, kernel_perm) < 0) {
-            /* Mapping failed */
+            /* Mapping failed - roll back */
             return MAP_FAILED;
         }
+        pages_allocated++;
     }
+
+    /* Only advance mmap_next_addr if all allocations succeeded */
+    mmap_next_addr += pages_needed * PAGE_SIZE;
 
     /* Zero the memory (POSIX requirement for anonymous mappings) */
     uint8_t *p = (uint8_t *)virt_addr;
@@ -137,20 +142,25 @@ void* mmap(void* addr, uint64 length, int prot, int flags, int fd, uint64 offset
  * LESSON: In a full implementation, we'd need to:
  *   1. Validate the address is in mmap region
  *   2. Unmap the pages from the page table
- *   3. Return physical pages to the kernel
+ *   3. Return physical pages to the kernel (requires sys_page_free)
  *
- * For Phase 13, we provide a stub implementation.
+ * LIMITATION: For Phase 13 (TCC support), we provide a stub that doesn't
+ * actually unmap memory. This is acceptable because:
+ *   - TCC typically doesn't munmap its JIT code
+ *   - Most simple programs don't heavily reuse mmap regions
+ *   - Full implementation requires kernel support for page freeing
+ *
+ * Applications that need true munmap should not use this stub.
  */
 int munmap(void* addr, uint64 length) {
     (void)addr;
     (void)length;
     
     /* 
-     * TODO: Implement actual unmapping
-     * For now, we just leak the memory. This is acceptable for TCC
-     * which typically doesn't munmap its JIT code.
+     * TODO: Implement actual unmapping when kernel provides sys_page_free()
+     * For now, memory is leaked but remains usable until process exit.
      */
-    return 0;
+    return 0;  /* Stub: pretend success but don't unmap */
 }
 
 /**
