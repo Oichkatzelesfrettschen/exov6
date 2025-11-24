@@ -114,4 +114,11 @@ int fd_isatty(int fd);
  */
 int fd_pipe(int pipefd[2]);
 
+/**
+ * Remove a file
+ * @param path Path to file to remove
+ * @return 0 on success, -1 on error
+ */
+int fd_unlink(const char *path);
+
 #endif /* FD_H */
