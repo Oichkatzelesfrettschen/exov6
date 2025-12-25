@@ -34,6 +34,18 @@ phoenix_add_library(phoenix-libos-posix
     DEPENDENCIES phoenix-userland
 )
 
+# POSIX 2024 stdio implementation
+phoenix_add_library(phoenix-libos-posix2024-stdio
+    STATIC
+    SOURCES posix2024/stdio.c
+    INCLUDES 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/posix2024
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/kernel
+    DEPENDENCIES phoenix-libos-posix
+)
+
 # Terminal I/O
 phoenix_add_library(phoenix-libos-termios
     STATIC
@@ -250,6 +262,7 @@ set(LIBOS_CORE_LIBS
     phoenix-libos-fs
     phoenix-libos-file
     phoenix-libos-posix
+    phoenix-libos-posix2024-stdio
     phoenix-libos-termios
     phoenix-libos-ipc
     phoenix-libos-service
@@ -334,6 +347,7 @@ set(EXOV6_LIBOS_TARGETS
 message(STATUS "LibOS zone configured:")
 message(STATUS "  - Core services: ✓")
 message(STATUS "  - POSIX layer: ✓")
+message(STATUS "  - POSIX 2024 stdio: ✓")
 message(STATUS "  - File system: ✓")
 message(STATUS "  - IPC layer: ✓")
 if(LIBOS_STUB_LIBS)

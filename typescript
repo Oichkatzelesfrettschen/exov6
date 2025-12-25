@@ -1,7 +1,0 @@
-Script started on 2025-06-12 08:23:22+00:00 [COMMAND="bash -x ./setup.sh --debug" <not executed on terminal>]
-+ set - euo pipefail
-./setup.sh: line 5: DEBUG_MODE: command not found
-./setup.sh: line 11: syntax error near unexpected token `&'
-./setup.sh: line 11: `  then echo "[DEBUG] $*" > &2 fi'
-
-Script done on 2025-06-12 08:23:22+00:00 [COMMAND_EXIT_CODE="2"]

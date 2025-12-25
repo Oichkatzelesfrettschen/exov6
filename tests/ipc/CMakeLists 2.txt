@@ -1,0 +1,426 @@
+# tests/ipc/CMakeLists.txt - IPC Test Suite
+
+# =============================================================================
+# IPC TEST CONFIGURATION
+# =============================================================================
+
+# Test-specific definitions
+set(IPC_TEST_DEFINITIONS
+    -DENABLE_SERIAL_BENCHMARK=1
+    -DIPC_DEBUG=1
+    -DCONFIG_NUMA=0
+)
+
+# Common include directories for IPC tests
+set(IPC_TEST_INCLUDES
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/ipc
+    ${CMAKE_SOURCE_DIR}/kernel
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+)
+
+# Common source files for IPC tests
+set(IPC_COMMON_SOURCES
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/serialization.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/unified_channel.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/zero_copy.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/capnp_helpers.c
+    ${CMAKE_SOURCE_DIR}/kernel/string.c
+)
+
+# =============================================================================
+# COMPREHENSIVE IPC TEST SUITE
+# =============================================================================
+
+add_executable(test_unified_channel
+    test_unified_channel.c
+    ${IPC_COMMON_SOURCES}
+)
+
+target_include_directories(test_unified_channel PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(test_unified_channel PRIVATE ${IPC_TEST_DEFINITIONS})
+target_compile_options(test_unified_channel PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O2
+    -g
+)
+target_link_libraries(test_unified_channel PRIVATE pthread m)
+
+# Add to test suite
+add_test(NAME IPC_UnifiedChannel COMMAND test_unified_channel)
+set_tests_properties(IPC_UnifiedChannel PROPERTIES
+    TIMEOUT 300
+    LABELS "IPC;Core"
+)
+
+# =============================================================================
+# PERFORMANCE BENCHMARK SUITE
+# =============================================================================
+
+add_executable(benchmark_ipc
+    benchmark_ipc.c
+    ${IPC_COMMON_SOURCES}
+)
+
+target_include_directories(benchmark_ipc PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(benchmark_ipc PRIVATE 
+    ${IPC_TEST_DEFINITIONS}
+    -DENABLE_BENCHMARKS=1
+)
+target_compile_options(benchmark_ipc PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O3  # Maximum optimization for benchmarks
+    -march=native
+    -g
+)
+target_link_libraries(benchmark_ipc PRIVATE pthread m)
+
+# Add benchmark test (longer timeout)
+add_test(NAME IPC_Benchmarks COMMAND benchmark_ipc)
+set_tests_properties(IPC_Benchmarks PROPERTIES
+    TIMEOUT 600
+    LABELS "IPC;Performance;Benchmark"
+)
+
+# =============================================================================
+# SERIALIZATION-SPECIFIC TESTS
+# =============================================================================
+
+add_executable(test_serialization
+    test_serialization.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/serialization.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/capnp_helpers.c
+    ${CMAKE_SOURCE_DIR}/kernel/string.c
+)
+
+target_include_directories(test_serialization PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(test_serialization PRIVATE ${IPC_TEST_DEFINITIONS})
+target_compile_options(test_serialization PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O2
+    -g
+)
+target_link_libraries(test_serialization PRIVATE m)
+
+# Create the test file if it doesn't exist
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_serialization.c")
+    file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/test_serialization.c"
+"#include \"../../include/ipc/serialization.h\"
+#include <stdio.h>
+#include <assert.h>
+
+int main() {
+    init_serialization_system();
+    printf(\"Serialization system initialized successfully\\n\");
+    return 0;
+}
+")
+endif()
+
+add_test(NAME IPC_Serialization COMMAND test_serialization)
+set_tests_properties(IPC_Serialization PROPERTIES
+    TIMEOUT 120
+    LABELS "IPC;Serialization"
+)
+
+# =============================================================================
+# ZERO-COPY TESTS
+# =============================================================================
+
+add_executable(test_zero_copy
+    test_zero_copy.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/zero_copy.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/serialization.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/unified_channel.c
+    ${CMAKE_SOURCE_DIR}/kernel/ipc/capnp_helpers.c
+    ${CMAKE_SOURCE_DIR}/kernel/string.c
+)
+
+target_include_directories(test_zero_copy PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(test_zero_copy PRIVATE ${IPC_TEST_DEFINITIONS})
+target_compile_options(test_zero_copy PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O2
+    -g
+)
+target_link_libraries(test_zero_copy PRIVATE pthread m)
+
+# Create the test file if it doesn't exist
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_zero_copy.c")
+    file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/test_zero_copy.c"
+"#include \"../../kernel/ipc/zero_copy.c\"
+#include <stdio.h>
+#include <assert.h>
+
+int main() {
+    init_zero_copy_system();
+    print_zero_copy_stats();
+    shutdown_zero_copy_system();
+    printf(\"Zero-copy system test completed successfully\\n\");
+    return 0;
+}
+")
+endif()
+
+add_test(NAME IPC_ZeroCopy COMMAND test_zero_copy)
+set_tests_properties(IPC_ZeroCopy PROPERTIES
+    TIMEOUT 120
+    LABELS "IPC;ZeroCopy"
+)
+
+# =============================================================================
+# STRESS TESTS
+# =============================================================================
+
+add_executable(stress_test_ipc
+    stress_test_ipc.c
+    ${IPC_COMMON_SOURCES}
+)
+
+target_include_directories(stress_test_ipc PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(stress_test_ipc PRIVATE 
+    ${IPC_TEST_DEFINITIONS}
+    -DSTRESS_TEST_ITERATIONS=10000
+    -DSTRESS_TEST_THREADS=8
+)
+target_compile_options(stress_test_ipc PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O2
+    -g
+)
+target_link_libraries(stress_test_ipc PRIVATE pthread m)
+
+# Create the stress test file if it doesn't exist
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/stress_test_ipc.c")
+    file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/stress_test_ipc.c"
+"#include \"../../include/ipc/unified_channel.h\"
+#include <stdio.h>
+#include <pthread.h>
+#include <assert.h>
+
+#ifndef STRESS_TEST_ITERATIONS
+#define STRESS_TEST_ITERATIONS 10000
+#endif
+
+#ifndef STRESS_TEST_THREADS  
+#define STRESS_TEST_THREADS 4
+#endif
+
+static unified_channel_t* test_channel;
+static volatile int messages_sent = 0;
+static volatile int messages_received = 0;
+
+void* sender_thread(void* arg) {
+    int thread_id = *(int*)arg;
+    for (int i = 0; i < STRESS_TEST_ITERATIONS; i++) {
+        int data = thread_id * 10000 + i;
+        if (channel_send(test_channel, &data, sizeof(data), test_channel->send_cap) == 0) {
+            __sync_fetch_and_add(&messages_sent, 1);
+        }
+    }
+    return NULL;
+}
+
+void* receiver_thread(void* arg) {
+    (void)arg;
+    while (messages_received < STRESS_TEST_ITERATIONS * STRESS_TEST_THREADS) {
+        int data;
+        size_t size = sizeof(data);
+        if (channel_receive(test_channel, &data, &size, test_channel->recv_cap) == 0) {
+            __sync_fetch_and_add(&messages_received, 1);
+        }
+    }
+    return NULL;
+}
+
+int main() {
+    init_channel_system();
+    
+    channel_config_t config = {
+        .type = CHAN_TYPE_ASYNC,
+        .mode = CHAN_MODE_NONBLOCKING,
+        .buffer_size = sizeof(int) * 1024,
+        .message_size = sizeof(int),
+        .serializer = SERIAL_RAW
+    };
+    
+    test_channel = channel_create(\"stress_test\", &config, 0x1000000000000000ULL);
+    assert(test_channel != NULL);
+    
+    pthread_t senders[STRESS_TEST_THREADS];
+    pthread_t receiver;
+    int thread_ids[STRESS_TEST_THREADS];
+    
+    // Start receiver
+    pthread_create(&receiver, NULL, receiver_thread, NULL);
+    
+    // Start senders
+    for (int i = 0; i < STRESS_TEST_THREADS; i++) {
+        thread_ids[i] = i;
+        pthread_create(&senders[i], NULL, sender_thread, &thread_ids[i]);
+    }
+    
+    // Wait for completion
+    for (int i = 0; i < STRESS_TEST_THREADS; i++) {
+        pthread_join(senders[i], NULL);
+    }
+    pthread_join(receiver, NULL);
+    
+    printf(\"Stress test completed: %d sent, %d received\\n\", 
+           messages_sent, messages_received);
+    
+    channel_destroy(test_channel);
+    shutdown_channel_system();
+    return 0;
+}
+")
+endif()
+
+add_test(NAME IPC_StressTest COMMAND stress_test_ipc)
+set_tests_properties(IPC_StressTest PROPERTIES
+    TIMEOUT 300
+    LABELS "IPC;Stress"
+)
+
+# =============================================================================
+# DEMO EXECUTABLES (Not tests, but built with test suite)
+# =============================================================================
+
+# Producer-Consumer Demo
+add_executable(ipc_producer_consumer
+    ${CMAKE_SOURCE_DIR}/demos/ipc_producer_consumer.c
+    ${IPC_COMMON_SOURCES}
+)
+
+target_include_directories(ipc_producer_consumer PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(ipc_producer_consumer PRIVATE ${IPC_TEST_DEFINITIONS})
+target_compile_options(ipc_producer_consumer PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O2
+    -g
+)
+target_link_libraries(ipc_producer_consumer PRIVATE pthread m)
+
+# Distributed Computing Demo
+add_executable(ipc_distributed_compute
+    ${CMAKE_SOURCE_DIR}/demos/ipc_distributed_compute.c
+    ${IPC_COMMON_SOURCES}
+)
+
+target_include_directories(ipc_distributed_compute PRIVATE ${IPC_TEST_INCLUDES})
+target_compile_definitions(ipc_distributed_compute PRIVATE ${IPC_TEST_DEFINITIONS})
+target_compile_options(ipc_distributed_compute PRIVATE
+    -Wall -Wextra -Werror
+    -std=c17
+    -O2
+    -g
+)
+target_link_libraries(ipc_distributed_compute PRIVATE pthread m)
+
+# =============================================================================
+# CUSTOM TARGETS
+# =============================================================================
+
+# Run all IPC tests
+add_custom_target(test-ipc
+    COMMAND ${CMAKE_CTEST_COMMAND} -L \"IPC\" --output-on-failure
+    DEPENDS test_unified_channel test_serialization test_zero_copy stress_test_ipc
+    COMMENT \"Running all IPC tests\"
+)
+
+# Run only core functionality tests (fast)
+add_custom_target(test-ipc-core
+    COMMAND ${CMAKE_CTEST_COMMAND} -L \"IPC;Core\" --output-on-failure
+    DEPENDS test_unified_channel test_serialization
+    COMMENT \"Running core IPC tests\"
+)
+
+# Run performance benchmarks
+add_custom_target(benchmark-ipc
+    COMMAND ${CMAKE_CTEST_COMMAND} -L \"IPC;Benchmark\" --output-on-failure
+    DEPENDS benchmark_ipc
+    COMMENT \"Running IPC performance benchmarks\"
+)
+
+# Run stress tests
+add_custom_target(stress-ipc
+    COMMAND ${CMAKE_CTEST_COMMAND} -L \"IPC;Stress\" --output-on-failure
+    DEPENDS stress_test_ipc
+    DEPENDS test_unified_channel
+    COMMENT \"Running IPC stress tests\"
+)
+
+# Demo targets
+add_custom_target(demo-producer-consumer
+    COMMAND $<TARGET_FILE:ipc_producer_consumer> -p 4 -c 4 -m 5000 -s lite -v
+    DEPENDS ipc_producer_consumer
+    COMMENT \"Running Producer-Consumer Demo\"
+)
+
+add_custom_target(demo-distributed-compute
+    COMMAND $<TARGET_FILE:ipc_distributed_compute> -w 4 -p 1000 -m 500 -c 200 -s lite -v
+    DEPENDS ipc_distributed_compute
+    COMMENT \"Running Distributed Computing Demo\"
+)
+
+# Run all demos
+add_custom_target(demo-ipc
+    DEPENDS demo-producer-consumer demo-distributed-compute
+    COMMENT \"Running all IPC demos\"
+)
+
+# =============================================================================
+# INSTALLATION (Optional)
+# =============================================================================
+
+# Install test executables to a tests directory
+install(TARGETS
+    test_unified_channel
+    benchmark_ipc
+    test_serialization
+    test_zero_copy
+    stress_test_ipc
+    DESTINATION tests/ipc
+    OPTIONAL
+)
+
+# Install demo executables
+install(TARGETS
+    ipc_producer_consumer
+    ipc_distributed_compute
+    DESTINATION bin
+    OPTIONAL
+)
+
+# =============================================================================
+# TEST PROPERTIES AND LABELS
+# =============================================================================
+
+# Set common properties for all IPC tests
+get_property(ALL_TESTS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY TESTS)
+foreach(test ${ALL_TESTS})
+    if(test MATCHES \"IPC_\")
+        set_tests_properties(${test} PROPERTIES
+            ENVIRONMENT \"LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}\"
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+    endif()
+endforeach()
+
+# Summary message
+message(STATUS \"IPC Test Suite configured:\")
+message(STATUS \"  - Unified Channel Tests: test_unified_channel\")
+message(STATUS \"  - Serialization Tests: test_serialization\") 
+message(STATUS \"  - Zero-Copy Tests: test_zero_copy\")
+message(STATUS \"  - Performance Benchmarks: benchmark_ipc\")
+message(STATUS \"  - Stress Tests: stress_test_ipc\")
+message(STATUS \"  - Producer-Consumer Demo: ipc_producer_consumer\")
+message(STATUS \"  - Distributed Computing Demo: ipc_distributed_compute\")
+message(STATUS \"  - Use 'make test-ipc' to run all tests\")
+message(STATUS \"  - Use 'make demo-ipc' to run all demos\")

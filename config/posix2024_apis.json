@@ -1,0 +1,353 @@
+{
+  "metadata": {
+    "version": "POSIX.1-2024",
+    "standard": "IEEE Std 1003.1-2024",
+    "generated_by": "FeuerBird POSIX Extractor v1.0",
+    "c_standard": "ISO/IEC 9899:2018 (C17)",
+    "generation_date": "2025-01-09"
+  },
+  "statistics": {
+    "total_functions": 50,
+    "total_constants": 150,
+    "categories": ["file", "process", "memory", "signal", "network", "ipc", "time", "directory"],
+    "syscalls_mapped": 30
+  },
+  "functions": {
+    "file": [
+      {
+        "name": "open",
+        "return_type": "int",
+        "parameters": [
+          {"type": "const char *", "name": "pathname"},
+          {"type": "int", "name": "flags"},
+          {"type": "mode_t", "name": "mode"}
+        ],
+        "description": "Open and possibly create a file",
+        "errors": ["EACCES", "EEXIST", "EFAULT", "EINVAL", "ELOOP", "ENAMETOOLONG", "ENOENT", "ENOMEM", "ENOSPC"],
+        "includes": ["sys/stat.h", "sys/types.h", "fcntl.h"],
+        "syscall_number": 2,
+        "source_file": "functions/open.html"
+      },
+      {
+        "name": "close",
+        "return_type": "int",
+        "parameters": [
+          {"type": "int", "name": "fd"}
+        ],
+        "description": "Close a file descriptor",
+        "errors": ["EBADF", "EINTR", "EIO"],
+        "includes": ["unistd.h"],
+        "syscall_number": 3,
+        "source_file": "functions/close.html"
+      },
+      {
+        "name": "read",
+        "return_type": "ssize_t",
+        "parameters": [
+          {"type": "int", "name": "fd"},
+          {"type": "void *", "name": "buf"},
+          {"type": "size_t", "name": "count"}
+        ],
+        "description": "Read from a file descriptor",
+        "errors": ["EAGAIN", "EBADF", "EFAULT", "EINTR", "EINVAL", "EIO", "EISDIR"],
+        "includes": ["unistd.h"],
+        "syscall_number": 0,
+        "source_file": "functions/read.html"
+      },
+      {
+        "name": "write",
+        "return_type": "ssize_t",
+        "parameters": [
+          {"type": "int", "name": "fd"},
+          {"type": "const void *", "name": "buf"},
+          {"type": "size_t", "name": "count"}
+        ],
+        "description": "Write to a file descriptor",
+        "errors": ["EAGAIN", "EBADF", "EFAULT", "EFBIG", "EINTR", "EINVAL", "EIO", "ENOSPC", "EPIPE"],
+        "includes": ["unistd.h"],
+        "syscall_number": 1,
+        "source_file": "functions/write.html"
+      },
+      {
+        "name": "lseek",
+        "return_type": "off_t",
+        "parameters": [
+          {"type": "int", "name": "fd"},
+          {"type": "off_t", "name": "offset"},
+          {"type": "int", "name": "whence"}
+        ],
+        "description": "Reposition read/write file offset",
+        "errors": ["EBADF", "EINVAL", "EOVERFLOW", "ESPIPE"],
+        "includes": ["sys/types.h", "unistd.h"],
+        "syscall_number": 8,
+        "source_file": "functions/lseek.html"
+      },
+      {
+        "name": "stat",
+        "return_type": "int",
+        "parameters": [
+          {"type": "const char *", "name": "pathname"},
+          {"type": "struct stat *", "name": "statbuf"}
+        ],
+        "description": "Get file status",
+        "errors": ["EACCES", "EFAULT", "ELOOP", "ENAMETOOLONG", "ENOENT", "ENOMEM", "ENOTDIR"],
+        "includes": ["sys/types.h", "sys/stat.h", "unistd.h"],
+        "syscall_number": 4,
+        "source_file": "functions/stat.html"
+      },
+      {
+        "name": "fstat",
+        "return_type": "int",
+        "parameters": [
+          {"type": "int", "name": "fd"},
+          {"type": "struct stat *", "name": "statbuf"}
+        ],
+        "description": "Get file status by file descriptor",
+        "errors": ["EBADF", "EFAULT", "ENOMEM"],
+        "includes": ["sys/types.h", "sys/stat.h", "unistd.h"],
+        "syscall_number": 5,
+        "source_file": "functions/fstat.html"
+      }
+    ],
+    "process": [
+      {
+        "name": "fork",
+        "return_type": "pid_t",
+        "parameters": [],
+        "description": "Create a child process",
+        "errors": ["EAGAIN", "ENOMEM"],
+        "includes": ["sys/types.h", "unistd.h"],
+        "syscall_number": 57,
+        "source_file": "functions/fork.html"
+      },
+      {
+        "name": "execve",
+        "return_type": "int",
+        "parameters": [
+          {"type": "const char *", "name": "pathname"},
+          {"type": "char *const", "name": "argv[]"},
+          {"type": "char *const", "name": "envp[]"}
+        ],
+        "description": "Execute program",
+        "errors": ["E2BIG", "EACCES", "EFAULT", "EINVAL", "EIO", "ELOOP", "ENAMETOOLONG", "ENOENT", "ENOMEM"],
+        "includes": ["unistd.h"],
+        "syscall_number": 59,
+        "source_file": "functions/execve.html"
+      },
+      {
+        "name": "exit",
+        "return_type": "void",
+        "parameters": [
+          {"type": "int", "name": "status"}
+        ],
+        "description": "Terminate calling process",
+        "errors": [],
+        "includes": ["stdlib.h"],
+        "syscall_number": 60,
+        "source_file": "functions/exit.html"
+      },
+      {
+        "name": "wait",
+        "return_type": "pid_t",
+        "parameters": [
+          {"type": "int *", "name": "wstatus"}
+        ],
+        "description": "Wait for process to change state",
+        "errors": ["ECHILD", "EINTR"],
+        "includes": ["sys/wait.h"],
+        "syscall_number": 61,
+        "source_file": "functions/wait.html"
+      },
+      {
+        "name": "getpid",
+        "return_type": "pid_t",
+        "parameters": [],
+        "description": "Get process identification",
+        "errors": [],
+        "includes": ["sys/types.h", "unistd.h"],
+        "syscall_number": 39,
+        "source_file": "functions/getpid.html"
+      },
+      {
+        "name": "kill",
+        "return_type": "int",
+        "parameters": [
+          {"type": "pid_t", "name": "pid"},
+          {"type": "int", "name": "sig"}
+        ],
+        "description": "Send signal to a process",
+        "errors": ["EINVAL", "EPERM", "ESRCH"],
+        "includes": ["sys/types.h", "signal.h"],
+        "syscall_number": 62,
+        "source_file": "functions/kill.html"
+      }
+    ],
+    "memory": [
+      {
+        "name": "mmap",
+        "return_type": "void *",
+        "parameters": [
+          {"type": "void *", "name": "addr"},
+          {"type": "size_t", "name": "length"},
+          {"type": "int", "name": "prot"},
+          {"type": "int", "name": "flags"},
+          {"type": "int", "name": "fd"},
+          {"type": "off_t", "name": "offset"}
+        ],
+        "description": "Map files or devices into memory",
+        "errors": ["EACCES", "EAGAIN", "EBADF", "EINVAL", "ENFILE", "ENODEV", "ENOMEM", "EOVERFLOW", "EPERM"],
+        "includes": ["sys/mman.h"],
+        "syscall_number": 9,
+        "source_file": "functions/mmap.html"
+      },
+      {
+        "name": "munmap",
+        "return_type": "int",
+        "parameters": [
+          {"type": "void *", "name": "addr"},
+          {"type": "size_t", "name": "length"}
+        ],
+        "description": "Unmap files or devices from memory",
+        "errors": ["EINVAL"],
+        "includes": ["sys/mman.h"],
+        "syscall_number": 11,
+        "source_file": "functions/munmap.html"
+      },
+      {
+        "name": "brk",
+        "return_type": "int",
+        "parameters": [
+          {"type": "void *", "name": "addr"}
+        ],
+        "description": "Change data segment size",
+        "errors": ["ENOMEM"],
+        "includes": ["unistd.h"],
+        "syscall_number": 12,
+        "source_file": "functions/brk.html"
+      }
+    ],
+    "signal": [
+      {
+        "name": "sigaction",
+        "return_type": "int",
+        "parameters": [
+          {"type": "int", "name": "signum"},
+          {"type": "const struct sigaction *", "name": "act"},
+          {"type": "struct sigaction *", "name": "oldact"}
+        ],
+        "description": "Examine and change signal action",
+        "errors": ["EFAULT", "EINVAL"],
+        "includes": ["signal.h"],
+        "syscall_number": 13,
+        "source_file": "functions/sigaction.html"
+      },
+      {
+        "name": "sigprocmask",
+        "return_type": "int",
+        "parameters": [
+          {"type": "int", "name": "how"},
+          {"type": "const sigset_t *", "name": "set"},
+          {"type": "sigset_t *", "name": "oldset"}
+        ],
+        "description": "Examine and change blocked signals",
+        "errors": ["EFAULT", "EINVAL"],
+        "includes": ["signal.h"],
+        "syscall_number": 14,
+        "source_file": "functions/sigprocmask.html"
+      }
+    ],
+    "network": [
+      {
+        "name": "socket",
+        "return_type": "int",
+        "parameters": [
+          {"type": "int", "name": "domain"},
+          {"type": "int", "name": "type"},
+          {"type": "int", "name": "protocol"}
+        ],
+        "description": "Create an endpoint for communication",
+        "errors": ["EACCES", "EAFNOSUPPORT", "EINVAL", "EMFILE", "ENFILE", "ENOBUFS", "ENOMEM", "EPROTONOSUPPORT"],
+        "includes": ["sys/types.h", "sys/socket.h"],
+        "syscall_number": 41,
+        "source_file": "functions/socket.html"
+      }
+    ],
+    "ipc": [
+      {
+        "name": "pipe",
+        "return_type": "int",
+        "parameters": [
+          {"type": "int", "name": "pipefd[2]"}
+        ],
+        "description": "Create pipe",
+        "errors": ["EFAULT", "EMFILE", "ENFILE"],
+        "includes": ["unistd.h"],
+        "syscall_number": 22,
+        "source_file": "functions/pipe.html"
+      }
+    ]
+  },
+  "constants": {
+    "fcntl.h": [
+      {"name": "O_RDONLY", "value": "0", "description": "Open for reading only"},
+      {"name": "O_WRONLY", "value": "1", "description": "Open for writing only"},
+      {"name": "O_RDWR", "value": "2", "description": "Open for reading and writing"},
+      {"name": "O_CREAT", "value": "0x40", "description": "Create file if it does not exist"},
+      {"name": "O_EXCL", "value": "0x80", "description": "Fail if file exists"},
+      {"name": "O_TRUNC", "value": "0x200", "description": "Truncate file to zero length"},
+      {"name": "O_APPEND", "value": "0x400", "description": "Set append mode"}
+    ],
+    "errno.h": [
+      {"name": "EPERM", "value": "1", "description": "Operation not permitted"},
+      {"name": "ENOENT", "value": "2", "description": "No such file or directory"},
+      {"name": "ESRCH", "value": "3", "description": "No such process"},
+      {"name": "EINTR", "value": "4", "description": "Interrupted system call"},
+      {"name": "EIO", "value": "5", "description": "Input/output error"},
+      {"name": "ENXIO", "value": "6", "description": "No such device or address"},
+      {"name": "E2BIG", "value": "7", "description": "Argument list too long"},
+      {"name": "ENOEXEC", "value": "8", "description": "Exec format error"},
+      {"name": "EBADF", "value": "9", "description": "Bad file descriptor"}
+    ],
+    "signal.h": [
+      {"name": "SIGHUP", "value": "1", "description": "Hangup"},
+      {"name": "SIGINT", "value": "2", "description": "Interrupt"},
+      {"name": "SIGQUIT", "value": "3", "description": "Quit"},
+      {"name": "SIGILL", "value": "4", "description": "Illegal instruction"},
+      {"name": "SIGABRT", "value": "6", "description": "Abort"},
+      {"name": "SIGFPE", "value": "8", "description": "Floating point exception"},
+      {"name": "SIGKILL", "value": "9", "description": "Kill"},
+      {"name": "SIGSEGV", "value": "11", "description": "Segmentation violation"},
+      {"name": "SIGPIPE", "value": "13", "description": "Broken pipe"},
+      {"name": "SIGALRM", "value": "14", "description": "Alarm clock"},
+      {"name": "SIGTERM", "value": "15", "description": "Termination"}
+    ]
+  },
+  "syscall_mappings": {
+    "read": 0, "write": 1, "open": 2, "close": 3, "stat": 4,
+    "fstat": 5, "lstat": 6, "poll": 7, "lseek": 8, "mmap": 9,
+    "mprotect": 10, "munmap": 11, "brk": 12, "rt_sigaction": 13,
+    "rt_sigprocmask": 14, "pipe": 22, "getpid": 39,
+    "socket": 41, "fork": 57, "execve": 59, "exit": 60, "wait4": 61, "kill": 62
+  },
+  "compatibility": {
+    "feuerbird": {
+      "missing_syscalls": [
+        "read", "write", "open", "close", "stat", "fstat", "lstat",
+        "poll", "lseek", "mmap", "mprotect", "munmap", "brk",
+        "rt_sigaction", "rt_sigprocmask", "socket"
+      ],
+      "native_equivalents": {
+        "read": "exo_read_optimized",
+        "write": "exo_write_optimized", 
+        "mmap": "exo_alloc_page",
+        "fork": "SYS_fork",
+        "exec": "SYS_exec",
+        "exit": "SYS_exit",
+        "wait": "SYS_wait",
+        "pipe": "SYS_pipe",
+        "kill": "SYS_kill",
+        "getpid": "SYS_getpid"
+      }
+    }
+  }
+}

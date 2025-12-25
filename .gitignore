@@ -31,3 +31,26 @@ test-build/
 .cache/
 openposixtestsuite/
 test_isolation/
+
+# Build artifacts that should not be tracked
+demo_integrated_mathematical_kernel
+demo-integrated-mathematical-kernel
+test_simple_mathematical
+test-simple-mathematical
+test_advanced_mathematics
+test-advanced-mathematics
+stress_test_ipc
+stress-test-ipc
+advanced_ipc_showcase
+advanced-ipc-showcase
+demo_ipc_showcase
+demo-ipc-showcase
+demo_standalone
+demo-standalone
+hello
+hello.plist
+bootable.img
+boot.bin
+bootblock*
+typescript
+uprogs_count.tmp
