@@ -1,1 +1,0 @@
-/usr/bin/clang -target x86_64-unknown-none-elf -target x86_64-unknown-none-elf -O3 -DNDEBUG CMakeFiles/demo_beatty_demo.dir/demos/beatty_demo.c.obj -o bin/demos/demo_beatty_demo  lib/liblibos.a

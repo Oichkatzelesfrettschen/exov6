@@ -236,9 +236,9 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Use kernel linker script if it exists
-if(EXISTS "${CMAKE_SOURCE_DIR}/kernel.ld")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/kernel.ld")
     target_link_options(kernel PRIVATE 
-        "LINKER:-T,${CMAKE_SOURCE_DIR}/kernel.ld"
+        "LINKER:-T,${CMAKE_CURRENT_SOURCE_DIR}/kernel.ld"
     )
 endif()
 
