@@ -64,7 +64,7 @@ EOF
 backup_codebase() {
     log_info "Creating backup of current codebase..."
     
-    BACKUP_DIR="$PROJECT_ROOT/../exov6_backup_$(date +%Y%m%d_%H%M%S)"
+    BACKUP_DIR="$PROJECT_ROOT/../feuerbird_exokernel_backup_$(date +%Y%m%d_%H%M%S)"
     cp -r "$PROJECT_ROOT" "$BACKUP_DIR"
     
     log_success "Backup created at: $BACKUP_DIR"

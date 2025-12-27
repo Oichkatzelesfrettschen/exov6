@@ -312,7 +312,7 @@ follow_file(int fd, const char *filename)
         }
         
         // Sleep briefly
-        sleep(100);  // 1 second in xv6 ticks
+        sleep(100);  // 1 second in feuerbird ticks
         
         // Check if file has been replaced (for -F)
         if (Fflag) {

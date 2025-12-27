@@ -3,12 +3,12 @@
 
 # Advanced IPC showcase
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/advanced_ipc_showcase.c")
-    phoenix_add_executable(advanced-ipc-showcase
+    feuerbird_add_executable(advanced-ipc-showcase
         SOURCES advanced_ipc_showcase.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES phoenix-libos
+        DEPENDENCIES feuerbird-libos
     )
     
     target_link_libraries(advanced-ipc-showcase PRIVATE m)
@@ -21,12 +21,12 @@ endif()
 
 # IPC showcase demo
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/demo_ipc_showcase.c")
-    phoenix_add_executable(demo-ipc-showcase
+    feuerbird_add_executable(demo-ipc-showcase
         SOURCES demo_ipc_showcase.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES phoenix-libos
+        DEPENDENCIES feuerbird-libos
     )
     
     target_link_libraries(demo-ipc-showcase PRIVATE m)

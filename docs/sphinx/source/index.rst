@@ -1,5 +1,5 @@
-Welcome to exov6's documentation!
-=================================
+Welcome to FeuerBird Exokernel's documentation!
+===============================================
 
 .. toctree::
    :maxdepth: 2

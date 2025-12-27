@@ -1,5 +1,5 @@
 #!/bin/bash
-# Automated header fix script for ExoV6
+# Automated header fix script for FeuerBird Exokernel
 # Implements the reorganization plan
 
 set -e
@@ -7,7 +7,7 @@ set -e
 PROJECT_ROOT="${1:-$(pwd)}"
 cd "$PROJECT_ROOT"
 
-echo "=== ExoV6 Header Reorganization Script ==="
+echo "=== FeuerBird Exokernel Header Reorganization Script ==="
 echo "Project root: $PROJECT_ROOT"
 echo ""
 
@@ -40,8 +40,8 @@ if [ -f "kernel/exo.h" ] && [ -f "include/exo.h" ]; then
     
     # Create merged version
     cat > include/exo_merged.h << 'EOF'
-#ifndef EXOV6_EXO_H
-#define EXOV6_EXO_H
+#ifndef FEUERBIRD_EXOKERNEL_EXO_H
+#define FEUERBIRD_EXOKERNEL_EXO_H
 
 /**
  * @file exo.h
@@ -94,7 +94,7 @@ int exo_recv(exo_cap src, void *msg, size_t len);
 int exo_disk_read(exo_blockcap cap, void *buf);
 int exo_disk_write(exo_blockcap cap, const void *buf);
 
-#endif /* EXOV6_EXO_H */
+#endif /* FEUERBIRD_EXOKERNEL_EXO_H */
 EOF
     
     mv include/exo_merged.h include/exo.h
@@ -108,7 +108,7 @@ fix_header_guard() {
     local file="$1"
     local zone="$2"
     local basename=$(basename "$file" .h)
-    local guard="EXOV6_${zone}_${basename^^}_H"
+    local guard="FEUERBIRD_EXOKERNEL_${zone}_${basename^^}_H"
     
     # Check if file has pragma once
     if grep -q "^#pragma once" "$file"; then
@@ -194,7 +194,7 @@ echo "Step 7: Generating migration report..."
     done
     echo ""
     echo "Headers with fixed guards:"
-    find kernel libos -name "*.h" -exec grep -l "^#ifndef EXOV6_" {} \; | wc -l
+    find kernel libos -name "*.h" -exec grep -l "^#ifndef FEUERBIRD_EXOKERNEL_" {} \; | wc -l
     echo ""
     echo "New directory structure created:"
     find . -type d -name "internal" -o -name "include" | grep -E "(kernel|libos|rump)" | sort

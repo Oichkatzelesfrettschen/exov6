@@ -248,7 +248,7 @@ endfunction()
 function(generate_config_header)
     configure_file(
         "${CMAKE_SOURCE_DIR}/cmake/config.h.in"
-        "${CMAKE_BINARY_DIR}/include/exov6_config.h"
+        "${CMAKE_BINARY_DIR}/include/feuerbird_config.h"
         @ONLY
     )
 endfunction()

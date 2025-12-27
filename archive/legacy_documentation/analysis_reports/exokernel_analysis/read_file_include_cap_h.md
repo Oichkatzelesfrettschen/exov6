@@ -2,7 +2,7 @@
 
 ## Tool Call:
 ```
-default_api.read_file(absolute_path = "/Users/eirikr/Documents/GitHub/exov6/include/cap.h")
+default_api.read_file(absolute_path = "/Users/eirikr/Documents/GitHub/feuerbird_exokernel/include/cap.h")
 ```
 
 ## Output:

@@ -34,5 +34,5 @@ int main(void) {
     libos_spawn("echo", argv);
     wait();
     printf(1, "libos_posix_extra_test done\n");
-    exit();
+    exit(0);
 }

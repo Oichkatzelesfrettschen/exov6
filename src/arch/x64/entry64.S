@@ -2,6 +2,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "param.h"
+#include "traps.h"
 
 # 64-bit segment descriptor helper provided by asm.h
 
@@ -34,8 +35,7 @@ gdt:
 
 gdtdesc:
     .word (gdtdesc - gdt - 1)
-    .long gdt
-    .long 0
+    .quad gdt  # 64-bit base address
 
 # 64-bit system call entry. Saves registers in a trap frame and
 # invokes the common trap handler. This implementation is minimal
@@ -76,10 +76,14 @@ syscallentry:
     movq %rsp, %rdi   # argument: pointer to trap frame
     lfence
     call trap
-    jmp trapret
+    jmp syscall_trapret
 
-.globl trapret
-trapret:
+# Syscall-specific trap return - differs from interrupt trapret:
+# - Restores from SYSCALL instruction's saved state (RCX=RIP, R11=RFLAGS)
+# - Uses swapgs to restore user GS base
+# - Uses IRETQ (not SYSRETQ for safety with non-canonical RIP)
+.globl syscall_trapret
+syscall_trapret:
     addq $7*8, %rsp    # skip ss,rsp,eflags,cs,rip,err,trapno
     addq $8, %rsp      # drop saved rax
     popq %rcx

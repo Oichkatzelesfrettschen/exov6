@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Intelligent file merger for ExoV6 repository reorganization.
+Intelligent file merger for FeuerBird Exokernel repository reorganization.
 This script compares files with the same name and merges their best features.
 """
 

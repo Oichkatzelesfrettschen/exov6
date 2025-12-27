@@ -90,5 +90,5 @@ int main(int argc, char *argv[]) {
     kill(child);
     wait();
     ping_chan_destroy(c);
-    exit();
+    exit(0);
 }

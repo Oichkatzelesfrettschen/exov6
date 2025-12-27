@@ -57,7 +57,7 @@ if(USE_CAPNP)
     
     if(CAPNP_SOURCES)
         # Create Cap'n Proto library
-        phoenix_add_library(phoenix-capnp
+        feuerbird_add_library(feuerbird-capnp
             STATIC
             SOURCES ${CAPNP_SOURCES}
             INCLUDES 
@@ -69,10 +69,10 @@ if(USE_CAPNP)
         
         # Create custom target for generated files
         add_custom_target(capnp_generated DEPENDS ${CAPNP_HEADERS})
-        add_dependencies(phoenix-capnp capnp_generated)
+        add_dependencies(feuerbird-capnp capnp_generated)
         
         # Legacy alias
-        add_library(capnp ALIAS phoenix-capnp)
+        add_library(capnp ALIAS feuerbird-capnp)
     endif()
 endif()
 
@@ -81,7 +81,7 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Create interface library for protocol headers
-phoenix_add_library(phoenix-protocols
+feuerbird_add_library(feuerbird-protocols
     INTERFACE
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -91,29 +91,29 @@ phoenix_add_library(phoenix-protocols
 
 # Add dependencies to protocol implementations
 set(PROTOCOL_DEPS)
-if(TARGET phoenix-capnp)
-    list(APPEND PROTOCOL_DEPS phoenix-capnp)
+if(TARGET feuerbird-capnp)
+    list(APPEND PROTOCOL_DEPS feuerbird-capnp)
 endif()
 
 if(PROTOCOL_DEPS)
-    target_link_libraries(phoenix-protocols INTERFACE ${PROTOCOL_DEPS})
+    target_link_libraries(feuerbird-protocols INTERFACE ${PROTOCOL_DEPS})
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
 # EXPORTS
 # ═════════════════════════════════════════════════════════════════════
 
-set(EXOV6_PROTOCOL_TARGETS
-    phoenix-protocols
+set(FEUERBIRD_EXOKERNEL_PROTOCOL_TARGETS
+    feuerbird-protocols
     PARENT_SCOPE
 )
 
-if(TARGET phoenix-capnp)
-    set(EXOV6_CAPNP_TARGET phoenix-capnp PARENT_SCOPE)
+if(TARGET feuerbird-capnp)
+    set(FEUERBIRD_EXOKERNEL_CAPNP_TARGET feuerbird-capnp PARENT_SCOPE)
 endif()
 
 message(STATUS "Protocols zone configured:")
-if(USE_CAPNP AND TARGET phoenix-capnp)
+if(USE_CAPNP AND TARGET feuerbird-capnp)
     message(STATUS "  - Cap'n Proto: ✓")
 else()
     message(STATUS "  - Cap'n Proto: Disabled")

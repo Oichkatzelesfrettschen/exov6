@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-REPO_ROOT="/Users/eirikr/Documents/GitHub/exov6"
+REPO_ROOT="/Users/eirikr/Documents/GitHub/feuerbird_exokernel"
 TEST_DIR="${REPO_ROOT}/posix_test_suite"
 TEST_URL="https://github.com/linux-test-project/ltp.git"
 POSIX_URL="https://github.com/openposixtestsuite/openposixtestsuite.git"

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Implement Priority 1 POSIX utilities with real functionality per SUSv5
 
-UTILS_DIR="/Users/eirikr/Documents/GitHub/exov6/user"
+UTILS_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel/user"
 
 # Create 'test' utility - POSIX conditional evaluation
 cat > "${UTILS_DIR}/test_real.c" << 'EOF'

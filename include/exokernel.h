@@ -1,9 +1,11 @@
 #pragma once
+#ifndef EXOKERNEL_H_INCLUDED
+#define EXOKERNEL_H_INCLUDED
+
 #include "types.h"
 #include "compiler_attrs.h"
 #include "exo.h"
 #include "syscall.h"
-#include "compiler_attrs.h"
 
 /* Capability access rights. */
 #define EXO_RIGHT_R 0x1
@@ -109,3 +111,5 @@ enum exo_syscall {
   EXO_SYSCALL_SERVICE_ADD_DEP = SYS_service_add_dependency,
 };
 #endif /* EXO_KERNEL */
+
+#endif /* EXOKERNEL_H_INCLUDED */

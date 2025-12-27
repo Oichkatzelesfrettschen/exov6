@@ -9,14 +9,16 @@
 /* Forward declarations */
 struct cpu;
 
-/* Cache line size for alignment optimization */
+/* Cache line size for alignment optimization (kernel only) */
+#ifdef EXO_KERNEL
 extern size_t cache_line_size;
 void detect_cache_line_size(void);
+#endif
 
 /* Ticket-based mutual exclusion lock for fair FIFO ordering */
 struct ticketlock {
-    _Atomic uint16_t head;  /* Next ticket to serve */
-    _Atomic uint16_t tail;  /* Next ticket to issue */
+    _Atomic(uint_least16_t) head;  /* Next ticket to serve */
+    _Atomic(uint_least16_t) tail;  /* Next ticket to issue */
 };
 
 /* Spinlock with debugging support */
@@ -48,18 +50,27 @@ static inline void release(struct spinlock *lk) { (void)lk; }
 static inline int holding(struct spinlock *lk) { (void)lk; return 1; }
 #endif
 
-/* Cache line size detection at startup */
+/* Cache line size detection at startup - kernel only */
+#ifdef EXO_KERNEL
 __attribute__((constructor))
 static void initialize_cache_line_size(void) {
     if (cache_line_size == 0) {
         detect_cache_line_size();
     }
 }
+#endif /* EXO_KERNEL */
 
-/* Alignment helper */
+/* Alignment helper - kernel only */
+#ifdef EXO_KERNEL
 static inline size_t spinlock_align(void) {
     if (!cache_line_size) {
         detect_cache_line_size();
     }
     return cache_line_size;
 }
+#else
+/* User-space defaults to common cache line size */
+static inline size_t spinlock_align(void) {
+    return 64;  /* Default cache line size */
+}
+#endif /* EXO_KERNEL */

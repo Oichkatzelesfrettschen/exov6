@@ -2,7 +2,7 @@
 # Create real implementations for all 41 stub POSIX utilities
 # This script replaces all stubs with working implementations
 
-UTILS_DIR="/Users/eirikr/Documents/GitHub/exov6/user"
+UTILS_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel/user"
 
 echo "=== Creating Real Implementations for All 41 Stubs ==="
 echo

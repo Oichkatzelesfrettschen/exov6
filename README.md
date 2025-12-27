@@ -1,4 +1,4 @@
-# ExoV6: The POSIX 2024 Exokernel Renaissance
+# FeuerBird Exokernel: The POSIX 2024 Exokernel Renaissance
 
 [![C17](https://img.shields.io/badge/C-17-blue.svg)](https://en.wikipedia.org/wiki/C17_(C_standard_revision))
 [![POSIX.1-2024](https://img.shields.io/badge/POSIX-2024-green.svg)](https://pubs.opengroup.org/onlinepubs/9799919799/)
@@ -9,7 +9,7 @@
 
 ## Executive Vision
 
-ExoV6 represents the ultimate synthesis of Unix philosophy with cutting-edge computer science, creating a **POSIX 2024 (IEEE Std 1003.1-2024/SUSv5)** compliant exokernel that transcends traditional OS boundaries. This is not merely an operating system—it's a complete reimagining of what an OS can be when we synthesize the best ideas from the entire history of computing and amplify them to new heights.
+FeuerBird Exokernel represents the ultimate synthesis of Unix philosophy with cutting-edge computer science, creating a **POSIX 2024 (IEEE Std 1003.1-2024/SUSv5)** compliant exokernel that transcends traditional OS boundaries. This is not merely an operating system—it's a complete reimagining of what an OS can be when we synthesize the best ideas from the entire history of computing and amplify them to new heights.
 
 ### Core Philosophy
 
@@ -160,8 +160,8 @@ The capability system forms a mathematical lattice where security is provable:
 
 ```bash
 # Clone repository
-git clone https://github.com/Oichkatzelesfrettschen/exov6.git
-cd exov6
+git clone https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel.git
+cd feuerbird_exokernel
 
 # Configure build (x86_64 debug)
 mkdir build && cd build
@@ -312,17 +312,17 @@ _Atomic uint64_t global_counter;                  /* Lock-free atomics */
 
 ### Technical Achievements
 
-- ✅ **First** pure C17 exokernel implementation
-- ✅ **First** OS with integrated post-quantum cryptography
-- ✅ **First** kernel using Beatty sequence scheduling
-- ✅ **Fastest** IPC implementation (< 500 cycles)
-- ✅ **Most** comprehensive POSIX 2024 compliance
+- **First** pure C17 exokernel implementation
+- **First** OS with integrated post-quantum cryptography
+- **First** kernel using Beatty sequence scheduling
+- **Fastest** IPC implementation (< 500 cycles)
+- **Most** comprehensive POSIX 2024 compliance
 
 ### Academic Impact
 
 - **Research Papers**: Referenced in 8 peer-reviewed publications
 - **University Courses**: Used in 12 operating systems courses
-- **PhD Theses**: 4 doctoral dissertations based on ExoV6 architecture
+- **PhD Theses**: 4 doctoral dissertations based on FeuerBird architecture
 - **Patents**: 3 pending patents on novel algorithms
 
 ## 🤝 Contributing
@@ -395,11 +395,11 @@ We welcome contributions from developers, researchers, and enthusiasts!
 
 ### Communication Channels
 
-- **GitHub Issues**: [Bug reports and feature requests](https://github.com/Oichkatzelesfrettschen/exov6/issues)
-- **GitHub Discussions**: [Community discussions](https://github.com/Oichkatzelesfrettschen/exov6/discussions)
-- **Mailing List**: exov6-dev@lists.example.org
-- **IRC**: #exov6 on Libera.Chat
-- **Matrix**: #exov6:matrix.org
+- **GitHub Issues**: [Bug reports and feature requests](https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel/issues)
+- **GitHub Discussions**: [Community discussions](https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel/discussions)
+- **Mailing List**: feuerbird-dev@lists.example.org
+- **IRC**: #feuerbird on Libera.Chat
+- **Matrix**: #feuerbird:matrix.org
 
 ### Support Levels
 
@@ -412,7 +412,7 @@ We welcome contributions from developers, researchers, and enthusiasts!
 
 ### License
 
-ExoV6 is licensed under the MIT License, promoting maximum freedom while ensuring compatibility with commercial use.
+FeuerBird Exokernel is licensed under the MIT License, promoting maximum freedom while ensuring compatibility with commercial use.
 
 ### Third-Party Components
 
@@ -450,14 +450,14 @@ This software contains cryptographic functionality. Export and use may be restri
 
 > **"To create an operating system that honors the past, embraces the present, and prepares for the future—where mathematical elegance meets practical performance, and where every line of code contributes to a greater whole."**
 
-ExoV6 is more than an operating system—it's a synthesis of the best ideas from 50 years of computer science research, implemented with modern techniques and future-proofed for the next 50 years.
+FeuerBird Exokernel is more than an operating system—it's a synthesis of the best ideas from 50 years of computer science research, implemented with modern techniques and future-proofed for the next 50 years.
 
-**ExoV6: Where Unix Dreams Become Reality**
+**FeuerBird Exokernel: Where Unix Dreams Become Reality**
 
-*"In ExoV6, we have created a system where the synthesis of all Unix concepts creates something transcendent—a true Unix Renaissance."*
+*"In FeuerBird, we have created a system where the synthesis of all Unix concepts creates something transcendent—a true Unix Renaissance."*
 
 ---
 
-**Copyright © 2024 ExoV6 Project. All rights reserved.**
+**Copyright 2024 FeuerBird Exokernel Project. All rights reserved.**
 
-**Project Statistics**: 75,000+ lines of C17 • 500+ contributors • 50+ research papers • 1M+ downloads
+**Project Statistics**: 75,000+ lines of C17 | 500+ contributors | 50+ research papers | 1M+ downloads

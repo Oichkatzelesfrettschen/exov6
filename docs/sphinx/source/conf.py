@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
-project = "exov6"
+project = "FeuerBird Exokernel"
 extensions = ["breathe", "myst_parser"]
 
 # Treat common compiler attributes as id/paren attributes so the
@@ -11,8 +11,8 @@ extensions = ["breathe", "myst_parser"]
 cpp_id_attributes = ["__vector", "__attribute__"]
 cpp_paren_attributes = ["__attribute__"]
 
-breathe_projects = {"exov6": os.path.abspath("../../build/xml")}
-breathe_default_project = "exov6"
+breathe_projects = {"feuerbird_exokernel": os.path.abspath("../../build/xml")}
+breathe_default_project = "feuerbird_exokernel"
 
 html_theme = "sphinx_rtd_theme"
 

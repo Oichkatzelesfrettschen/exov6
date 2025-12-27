@@ -28,9 +28,15 @@ EXO_NODISCARD int cap_inc(uint16_t id);
 EXO_NODISCARD int cap_dec(uint16_t id);
 
 /**
- * @brief Revoke a capability, invalidating it system-wide.
+ * @brief Revoke a capability, invalidating it system-wide (user-space wrapper).
  *
- * @param id Capability identifier.
+ * Note: The kernel uses cap_revoke(cap_id_t) with 64-bit IDs internally.
+ * This user-space version accepts legacy 16-bit IDs for compatibility.
+ *
+ * @param id Capability identifier (16-bit legacy format).
  * @return 0 on success, or a negative error code.
  */
+#ifndef CAP_REVOKE_DECLARED
+#define CAP_REVOKE_DECLARED
 EXO_NODISCARD int cap_revoke(uint16_t id);
+#endif

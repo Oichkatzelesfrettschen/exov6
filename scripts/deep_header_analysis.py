@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Deep Recursive Header Analysis Pipeline for ExoV6 Exokernel
+Deep Recursive Header Analysis Pipeline for FeuerBird Exokernel
 Synthesizes insights from multiple tools to understand the complete header architecture
 """
 
@@ -49,7 +49,7 @@ class ExokernelHeaderAnalyzer:
     
     def run_full_analysis(self):
         """Execute complete analysis pipeline"""
-        print("=== ExoV6 Deep Header Analysis Pipeline ===\n")
+        print("=== FeuerBird Exokernel Deep Header Analysis Pipeline ===\n")
         
         # Phase 1: Discovery
         print("[1/10] Discovering all headers...")
@@ -412,7 +412,7 @@ class ExokernelHeaderAnalyzer:
             edge_labels = nx.get_edge_attributes(zone_graph, 'weight')
             nx.draw_networkx_edge_labels(zone_graph, pos, edge_labels)
             
-            plt.title('ExoV6 Zone Dependencies')
+            plt.title('FeuerBird Exokernel Zone Dependencies')
             plt.savefig(self.output_dir / 'zone_dependencies.png', dpi=150, bbox_inches='tight')
             plt.close()
         
@@ -507,7 +507,7 @@ class ExokernelHeaderAnalyzer:
         
         report = []
         report.append("=" * 80)
-        report.append("EXOV6 DEEP HEADER ANALYSIS REPORT")
+        report.append("FEUERBIRD_EXOKERNEL DEEP HEADER ANALYSIS REPORT")
         report.append("=" * 80)
         report.append("")
         

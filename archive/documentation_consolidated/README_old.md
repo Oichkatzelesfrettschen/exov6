@@ -2,7 +2,7 @@
 
 **A POSIX-2024 (SUSv5) compliant exokernel operating system written in pure C17 that implements separation of mechanism from policy through capability-based security and three-zone architecture.**
 
-[![Build Status](https://github.com/FeuerBird/exov6/actions/workflows/ci.yml/badge.svg)](https://github.com/FeuerBird/exov6/actions)
+[![Build Status](https://github.com/FeuerBird/feuerbird_exokernel/actions/workflows/ci.yml/badge.svg)](https://github.com/FeuerBird/feuerbird_exokernel/actions)
 [![POSIX Compliance](https://img.shields.io/badge/POSIX-2024%20(SUSv5)-green)](https://pubs.opengroup.org/onlinepubs/9699919799/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -10,8 +10,8 @@
 
 ```bash
 # Clone and build
-git clone https://github.com/FeuerBird/exov6.git
-cd exov6
+git clone https://github.com/FeuerBird/feuerbird_exokernel.git
+cd feuerbird_exokernel
 
 # Configure build
 mkdir build && cd build
@@ -210,7 +210,7 @@ cmake --build . --target stress-tests    # Performance stress tests
 ## 📁 Repository Structure
 
 ```
-exov6/                          # Root directory
+feuerbird_exokernel/            # Root directory
 ├── README.md                   # This file (canonical documentation)
 ├── LICENSE                     # MIT license
 ├── CMakeLists.txt              # Primary build configuration
@@ -652,7 +652,7 @@ We welcome contributions from the community! Please see our [Contributing Guidel
 - [Capability-Based Computer Systems](https://cap-lore.com/) (Academic Papers)
 
 ### External Resources
-- [xv6 Educational Operating System](https://pdos.csail.mit.edu/6.828/2023/xv6.html) (Original inspiration)
+- [Educational Operating System](https://pdos.csail.mit.edu/6.828/2023/xv6.html) (Original inspiration)
 - [OSv Unikernel](https://github.com/cloudius-systems/osv) (Similar architecture)
 - [seL4 Microkernel](https://sel4.systems/) (Formal verification approach)
 
@@ -738,4 +738,4 @@ FeuerBird provides native support for AI/ML workloads through:
 **Built with ❤️ by the FeuerBird team**  
 **Advancing the state of operating systems through exokernel innovation**
 
-For questions, suggestions, or contributions, please visit our [GitHub repository](https://github.com/FeuerBird/exov6) or contact the development team.
+For questions, suggestions, or contributions, please visit our [GitHub repository](https://github.com/FeuerBird/feuerbird_exokernel) or contact the development team.

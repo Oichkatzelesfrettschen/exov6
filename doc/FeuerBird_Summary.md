@@ -13,7 +13,7 @@ lists short, medium and long term tasks ranging from scheduler research to
 POSIX compatibility.
 
 ## Kernel Design
-[phoenixkernel.md](phoenixkernel.md) explains the overall architecture:
+[feuerbirdkernel.md](feuerbirdkernel.md) explains the overall architecture:
 capabilities provide fine grained access control, scheduling uses a DAG
 model and user drivers run in separate processes.
 

@@ -22,14 +22,24 @@ typedef struct {
   uint64_t w3;
 } zipc_msg_t;
 
+typedef size_t (*msg_size_fn)(const void *msg);
+typedef size_t (*msg_encode_fn)(const void *msg, unsigned char *buf);
+typedef size_t (*msg_decode_fn)(void *msg, const unsigned char *buf);
+
 typedef struct msg_type_desc {
-  size_t msg_size; // total message size in bytes
+  size_t msg_size;      // maximum message size in bytes
+  msg_size_fn size_cb;  // optional callback to compute encoded size
+  msg_encode_fn encode; // encode `msg` into `buf`, return bytes written
+  msg_decode_fn decode; // decode from `buf` into `msg`, return bytes read
 } msg_type_desc;
 
 static inline size_t msg_desc_size(const struct msg_type_desc *d) {
   return d ? d->msg_size : sizeof(zipc_msg_t);
 }
+
 static inline int zipc_call(zipc_msg_t *m) {
+  // Portable IPC implementation - avoid x86-specific assembly
+#ifdef __x86_64__
   register uint64_t rdi __asm("rdi") = m->badge;
   register uint64_t rsi __asm("rsi") = m->w0;
   register uint64_t rdx __asm("rdx") = m->w1;
@@ -43,5 +53,9 @@ static inline int zipc_call(zipc_msg_t *m) {
   m->w1 = rdx;
   m->w2 = rcx;
   m->w3 = r8;
+#else
+  // ARM64/other architecture stub
+  (void)m;
+#endif
   return 0;
 }

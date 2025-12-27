@@ -1,8 +1,8 @@
 # PHASES 1-3 DETAILED IMPLEMENTATION ROADMAP
-## ExoKernel v6 - Foundation to Working POSIX System
+## FeuerBird Exokernel - Foundation to Working POSIX System
 
 Generated: 2025-09-02
-Target: Bootable ExoKernel with 14 working POSIX utilities
+Target: Bootable FeuerBird Exokernel with 14 working POSIX utilities
 Timeline: 7 weeks total (1 week + 2 weeks + 4 weeks)
 
 ---
@@ -90,7 +90,7 @@ gcc -c -I./include -I./kernel user/cp.c -o /tmp/cp.o
 
 // Minimal kernel main function
 void kmain(void) {
-    cprintf("ExoKernel v6 starting...\n");
+    cprintf("FeuerBird Exokernel starting...\n");
     
     // Initialize core systems
     kinit1();          // Physical memory allocator
@@ -106,7 +106,7 @@ void kmain(void) {
     fileinit();       // File table
     ideinit();        // Disk
     
-    cprintf("ExoKernel v6 initialized\n");
+    cprintf("FeuerBird Exokernel initialized\n");
     
     // Start first process
     userinit();       // First user process
@@ -274,10 +274,10 @@ kernel: $(OBJS) entry.o entryother initcode kernel.ld
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
 
-xv6.img: bootblock kernel fs.img
-	dd if=/dev/zero of=xv6.img count=10000
-	dd if=bootblock of=xv6.img conv=notrunc
-	dd if=kernel of=xv6.img seek=1 conv=notrunc
+feuerbird.img: bootblock kernel fs.img
+	dd if=/dev/zero of=feuerbird.img count=10000
+	dd if=bootblock of=feuerbird.img conv=notrunc
+	dd if=kernel of=feuerbird.img seek=1 conv=notrunc
 ```
 
 #### Week 3, Days 3-5: Basic Memory Management
@@ -345,7 +345,7 @@ char* kalloc(void) {
 
 **Success Criteria for Phase 2:**
 - Kernel compiles and links successfully
-- Creates bootable image (xv6.img)  
+- Creates bootable image (feuerbird.img)  
 - Boots in QEMU and prints initialization messages
 - Basic memory allocation works (doesn't crash)
 - Can load and run simple user program
@@ -812,7 +812,7 @@ int main(int argc, char *argv[]) {
 ### Phase 2 Completion Criteria  
 - [x] `kernel/main.c` created with working kmain()
 - [x] Essential syscalls implemented: `sys_exit`, `sys_fork`, `sys_exec`, `sys_read`, `sys_write`
-- [x] Bootable image created (`xv6.img`)
+- [x] Bootable image created (`feuerbird.img`)
 - [x] Memory management working (`kalloc`, `kfree`)
 - [x] Boots in QEMU and prints messages
 
@@ -829,7 +829,7 @@ int main(int argc, char *argv[]) {
 make clean && make mkfs && echo "Phase 1 PASS" || echo "Phase 1 FAIL"
 
 # Phase 2  
-make clean && make xv6.img && qemu-system-x86_64 -drive file=xv6.img,index=0,media=disk,format=raw -nographic
+make clean && make feuerbird.img && qemu-system-x86_64 -drive file=feuerbird.img,index=0,media=disk,format=raw -nographic
 
 # Phase 3
 # In QEMU:

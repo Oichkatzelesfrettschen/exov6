@@ -1,7 +1,7 @@
 #!/bin/bash
 # Create stub implementations for missing POSIX mandatory utilities
 
-UTILS_DIR="/Users/eirikr/Documents/GitHub/exov6/user"
+UTILS_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel/user"
 
 create_stub() {
     local name=$1

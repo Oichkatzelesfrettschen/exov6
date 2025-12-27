@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build xv6 for multiple x86 CPU feature sets using CMake and Ninja.
+# Build FeuerBird for multiple x86 CPU feature sets using CMake and Ninja.
 
 ARCH=${ARCH:-x86_64}
 
@@ -56,7 +56,7 @@ for variant in "${variants[@]}"; do
   ninja -C "$builddir" >/dev/null
   mkdir -p "$builddir/artifacts"
   cp "$builddir"/kernel* "$builddir/artifacts" 2>/dev/null || true
-  cp "$builddir"/xv6*.img "$builddir/artifacts" 2>/dev/null || true
+  cp "$builddir"/feuerbird*.img "$builddir/artifacts" 2>/dev/null || true
   echo "Built $variant with flags: $flags" > "$builddir/build.info"
 done
 

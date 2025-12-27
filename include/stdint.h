@@ -7,19 +7,19 @@
  * However, when system headers are available, defer to them.
  */
 
-#ifndef PHOENIX_STDINT_H
-#define PHOENIX_STDINT_H
+#ifndef FEUERBIRD_EXOKERNEL_STDINT_H
+#define FEUERBIRD_EXOKERNEL_STDINT_H
 
 /* Try to use system stdint.h first if available */
 #if defined(__has_include)
   #if __has_include(<stdint.h>)
     #include_next <stdint.h>
-    #define PHOENIX_SYSTEM_STDINT_USED 1
+    #define FEUERBIRD_EXOKERNEL_SYSTEM_STDINT_USED 1
   #endif
 #endif
 
 /* Only define our types if system stdint.h is not available */
-#ifndef PHOENIX_SYSTEM_STDINT_USED
+#ifndef FEUERBIRD_EXOKERNEL_SYSTEM_STDINT_USED
 
 /* Avoid conflicts with system stdint.h */
 #ifndef _STDINT_H
@@ -81,6 +81,6 @@ typedef int64_t intmax_t;
 typedef uint64_t uintmax_t;
 #endif
 
-#endif /* !PHOENIX_SYSTEM_STDINT_USED */
+#endif /* !FEUERBIRD_EXOKERNEL_SYSTEM_STDINT_USED */
 
-#endif /* PHOENIX_STDINT_H */
+#endif /* FEUERBIRD_EXOKERNEL_STDINT_H */

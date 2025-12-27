@@ -1,4 +1,4 @@
-project('exov6', 'c',
+project('feuerbird_exokernel', 'c',
   default_options : [
     'c_std=c17',
     'warning_level=3',

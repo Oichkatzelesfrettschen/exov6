@@ -37,6 +37,8 @@ static int test_door_call_failure(void) {
 }
 
 int main(int argc, char *argv[]) {
+    (void)argc;
+    (void)argv;
     int failures = 0;
     
     printf("=== %s Test Suite (C17) ===\n", "Door");

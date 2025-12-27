@@ -1,10 +1,15 @@
 /**
  * @file stdio.c
  * @brief POSIX 2024 compliant stdio implementation
- * 
+ *
  * High-performance stdio implementation optimized for FeuerBird exokernel
  * with complete POSIX.1-2024 compatibility.
+ *
+ * Note: This implementation is for kernel/baremetal builds only.
+ * On hosted builds, use the system libc instead.
  */
+
+#ifdef EXO_KERNEL
 
 #include "stdio.h"
 #include "../posix.h"
@@ -550,3 +555,5 @@ static int snprintf_int(char *buf, int value) {
     buf[len] = '\0';
     return len;
 }
+
+#endif /* EXO_KERNEL */

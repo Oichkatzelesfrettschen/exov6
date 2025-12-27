@@ -1,7 +1,7 @@
 #!/bin/bash
 # Create POSIX shell builtin utilities that were missing
 
-UTILS_DIR="/Users/eirikr/Documents/GitHub/exov6/user"
+UTILS_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel/user"
 
 # These are shell builtins but POSIX requires them as utilities too
 

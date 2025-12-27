@@ -57,7 +57,7 @@ main(int argc, char *argv[])
     }
     
     // Sleep for specified duration
-    // In xv6, sleep() takes ticks, assuming 100 ticks per second
+    // In feuerbird, sleep() takes ticks, assuming 100 ticks per second
     sleep(seconds * 100);
     
     exit(0);

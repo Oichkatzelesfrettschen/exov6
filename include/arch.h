@@ -115,31 +115,33 @@ static inline void invlpg(void *va) {
     __asm__ volatile("invlpg (%0)" : : "r"(va) : "memory");
 }
 
-// Load GDT - needs both pointer and size
+// Load GDT/IDT - guarded to prevent conflict with arch_x86_64.h
+#ifndef _ARCH_GDT_IDT_DEFINED
+#define _ARCH_GDT_IDT_DEFINED
 static inline void lgdt(void *p, int size) {
     struct {
         uint16_t limit;
         uintptr_t base;
     } __attribute__((packed)) gdtr;
-    
+
     gdtr.limit = size - 1;
     gdtr.base = (uintptr_t)p;
-    
+
     __asm__ volatile("lgdt %0" : : "m"(gdtr) : "memory");
 }
 
-// Load IDT - needs both pointer and size
 static inline void lidt(void *p, int size) {
     struct {
         uint16_t limit;
         uintptr_t base;
     } __attribute__((packed)) idtr;
-    
+
     idtr.limit = size - 1;
     idtr.base = (uintptr_t)p;
-    
+
     __asm__ volatile("lidt %0" : : "m"(idtr) : "memory");
 }
+#endif /* _ARCH_GDT_IDT_DEFINED */
 
 // Load CR3 (page directory base)
 #ifdef __x86_64__

@@ -9,7 +9,7 @@ mmu.h
 elf.h
 date.h
 
-# entering xv6
+# entering feuerbird
 entry.S
 entryother.S
 main.c

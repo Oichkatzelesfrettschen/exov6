@@ -884,21 +884,21 @@
        8      2     44      1       8 copy@29-36@./tools/compiler_utils.c
        7      3     42      2       7 nodup@38-44@./tools/compiler_utils.c
       17      5     99      1      17 callsys@46-62@./tools/compiler_utils.c
-       5      1     32      0       5 now_ns@18-22@./tools/phoenix_metrics.c
-       1      1     11      1       1 phoenix_metrics_record_simd@24-24@./tools/phoenix_metrics.c
-       1      1     11      1       1 phoenix_metrics_record_scalar@25-25@./tools/phoenix_metrics.c
-       1      1     12      0       1 phoenix_metrics_record_ipc_start@27-27@./tools/phoenix_metrics.c
-       7      2     30      0       7 phoenix_metrics_record_ipc_end@28-34@./tools/phoenix_metrics.c
-       1      1     12      0       1 phoenix_metrics_record_ctx_switch_start@36-36@./tools/phoenix_metrics.c
-       7      2     30      0       7 phoenix_metrics_record_ctx_switch_end@37-43@./tools/phoenix_metrics.c
-       1      1      9      0       1 phoenix_metrics_get_simd_count@45-45@./tools/phoenix_metrics.c
-       1      1      9      0       1 phoenix_metrics_get_scalar_count@46-46@./tools/phoenix_metrics.c
-       3      2     15      0       3 phoenix_metrics_get_ipc_latency@47-49@./tools/phoenix_metrics.c
-       3      2     15      0       3 phoenix_metrics_get_ctx_switch@50-52@./tools/phoenix_metrics.c
-       9      1     34      0       9 phoenix_metrics_reset@54-62@./tools/phoenix_metrics.c
-      12      2     84      1      12 benchmark_variant@64-75@./tools/phoenix_metrics.c
-      19      6    120      0      19 benchmark_all_architectures@77-95@./tools/phoenix_metrics.c
-       4      1     13      0       4 main@98-101@./tools/phoenix_metrics.c
+       5      1     32      0       5 now_ns@18-22@./tools/feuerbird_metrics.c
+       1      1     11      1       1 feuerbird_metrics_record_simd@24-24@./tools/feuerbird_metrics.c
+       1      1     11      1       1 feuerbird_metrics_record_scalar@25-25@./tools/feuerbird_metrics.c
+       1      1     12      0       1 feuerbird_metrics_record_ipc_start@27-27@./tools/feuerbird_metrics.c
+       7      2     30      0       7 feuerbird_metrics_record_ipc_end@28-34@./tools/feuerbird_metrics.c
+       1      1     12      0       1 feuerbird_metrics_record_ctx_switch_start@36-36@./tools/feuerbird_metrics.c
+       7      2     30      0       7 feuerbird_metrics_record_ctx_switch_end@37-43@./tools/feuerbird_metrics.c
+       1      1      9      0       1 feuerbird_metrics_get_simd_count@45-45@./tools/feuerbird_metrics.c
+       1      1      9      0       1 feuerbird_metrics_get_scalar_count@46-46@./tools/feuerbird_metrics.c
+       3      2     15      0       3 feuerbird_metrics_get_ipc_latency@47-49@./tools/feuerbird_metrics.c
+       3      2     15      0       3 feuerbird_metrics_get_ctx_switch@50-52@./tools/feuerbird_metrics.c
+       9      1     34      0       9 feuerbird_metrics_reset@54-62@./tools/feuerbird_metrics.c
+      12      2     84      1      12 benchmark_variant@64-75@./tools/feuerbird_metrics.c
+      19      6    120      0      19 benchmark_all_architectures@77-95@./tools/feuerbird_metrics.c
+       4      1     13      0       4 main@98-101@./tools/feuerbird_metrics.c
       38      3    395      0      61 test_hmac_verify@9-69@./libos/tests/test_crypto.c
        4      1     12      0       4 main@71-74@./libos/tests/test_crypto.c
        1      1     25      3       1 libos_open@16-16@./libos/stubs/libposix.c
@@ -1847,8 +1847,8 @@ NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
     248       0.0     0.0        0.0         0     ./tools/gdbutil.py
      53      11.0     3.2       70.8         4     ./tools/header_graph.py
      57      10.2     3.6       59.4         5     ./tools/compiler_utils.c
-     89       5.0     1.7       29.1        15     ./tools/phoenix_metrics.c
-     16       0.0     0.0        0.0         0     ./tools/phoenix_metrics.h
+     89       5.0     1.7       29.1        15     ./tools/feuerbird_metrics.c
+     16       0.0     0.0        0.0         0     ./tools/feuerbird_metrics.h
       5       0.0     0.0        0.0         0     ./libos/capnp/capwrap.h
     217       0.0     0.0        0.0         0     ./libos/capnp/capnp_helpers.h
      46      21.0     2.0      203.5         2     ./libos/tests/test_crypto.c

@@ -2,38 +2,40 @@
 # Tests advanced mathematical kernel capabilities and 2025 cutting-edge concepts
 
 # Advanced mathematics test
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_advanced_mathematics.c")
-    phoenix_add_executable(test-advanced-mathematics
-        SOURCES test_advanced_mathematics.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
-            ${CMAKE_SOURCE_DIR}/kernel
-            ${CMAKE_SOURCE_DIR}/formal
-        DEPENDENCIES phoenix-libos
-    )
-    
-    target_link_libraries(test-advanced-mathematics PRIVATE m)
-    target_compile_features(test-advanced-mathematics PRIVATE c_std_17)
-    
-    set_target_properties(test-advanced-mathematics PROPERTIES 
-        OUTPUT_NAME "test-advanced-mathematics"
-        PREFIX ""
-    )
-    
-    # Add as CTest
-    add_test(NAME AdvancedMathematics 
-             COMMAND test-advanced-mathematics)
-endif()
+# NOTE: Disabled until quantum_ipc.h, lattice_capability.h, realtime_analysis.h,
+# and mathematical_verification.h are implemented
+# if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_advanced_mathematics.c")
+#     feuerbird_add_executable(test-advanced-mathematics
+#         SOURCES test_advanced_mathematics.c
+#         INCLUDES
+#             ${CMAKE_CURRENT_SOURCE_DIR}
+#             ${CMAKE_SOURCE_DIR}/include
+#             ${CMAKE_SOURCE_DIR}/kernel
+#             ${CMAKE_SOURCE_DIR}/formal
+#         DEPENDENCIES feuerbird-libos
+#     )
+#
+#     target_link_libraries(test-advanced-mathematics PRIVATE m)
+#     target_compile_features(test-advanced-mathematics PRIVATE c_std_17)
+#
+#     set_target_properties(test-advanced-mathematics PROPERTIES
+#         OUTPUT_NAME "test-advanced-mathematics"
+#         PREFIX ""
+#     )
+#
+#     # Add as CTest
+#     add_test(NAME AdvancedMathematics
+#              COMMAND test-advanced-mathematics)
+# endif()
 
 # Simple mathematical test
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_simple_mathematical.c")
-    phoenix_add_executable(test-simple-mathematical
+    feuerbird_add_executable(test-simple-mathematical
         SOURCES test_simple_mathematical.c
-        INCLUDES 
+        INCLUDES
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES phoenix-libos
+        DEPENDENCIES feuerbird-libos
     )
     
     target_link_libraries(test-simple-mathematical PRIVATE m)
@@ -73,6 +75,6 @@ if(TARGET test-simple-mathematical)
 endif()
 
 message(STATUS "Kernel mathematical tests configured:")
-message(STATUS "  - Advanced mathematics test: ✓")
+message(STATUS "  - Advanced mathematics test: DISABLED (pending quantum_ipc headers)")
 message(STATUS "  - Simple mathematical test: ✓")
-message(STATUS "  - 2025 cutting-edge algorithm tests: ✓")
+message(STATUS "  - 2025 cutting-edge algorithm tests: partial")

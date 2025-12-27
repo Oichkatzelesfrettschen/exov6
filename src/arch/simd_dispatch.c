@@ -1,5 +1,5 @@
 #include "simd_dispatch.h"
-#include "../tools/phoenix_metrics.h"
+#include "../tools/feuerbird_metrics.h"
 #include <stddef.h>
 #if defined(__linux__)
 #include <sys/auxv.h>
@@ -216,9 +216,9 @@ uint64_t simd_fib(uint32_t n) {
   if (!simd_initialized)
     simd_detect();
   if (fib_impl == fib_scalar)
-    phoenix_metrics_record_scalar(1);
+    feuerbird_metrics_record_scalar(1);
   else
-    phoenix_metrics_record_simd(1);
+    feuerbird_metrics_record_simd(1);
   return fib_impl(n);
 }
 
@@ -227,9 +227,9 @@ uint64_t simd_gcd(uint64_t a, uint64_t b) {
   if (!simd_initialized)
     simd_detect();
   if (gcd_impl == gcd_scalar)
-    phoenix_metrics_record_scalar(1);
+    feuerbird_metrics_record_scalar(1);
   else
-    phoenix_metrics_record_simd(1);
+    feuerbird_metrics_record_simd(1);
   return gcd_impl(a, b);
 }
 

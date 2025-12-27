@@ -3,12 +3,12 @@
 
 # Stress test IPC
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/stress_test_ipc.c")
-    phoenix_add_executable(stress-test-ipc
+    feuerbird_add_executable(stress-test-ipc
         SOURCES stress_test_ipc.c
-        INCLUDES 
+        INCLUDES
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
-        DEPENDENCIES phoenix-libos
+        DEPENDENCIES feuerbird-libos
     )
     
     target_link_libraries(stress-test-ipc PRIVATE m)

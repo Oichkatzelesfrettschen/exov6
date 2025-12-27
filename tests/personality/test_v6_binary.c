@@ -8,11 +8,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <signal.h>
 #include <sys/types.h>
+#include <string.h>
+
+// Undefine glibc's stat time macros to avoid conflicts with our V6 struct
+#undef st_atime
+#undef st_mtime
+#undef st_ctime
 
 // V6/V7 syscall numbers (different from modern)
 #define V6_SYS_exit     1

@@ -1,5 +1,5 @@
-#ifndef EXOV6_EXO_H
-#define EXOV6_EXO_H
+#ifndef FEUERBIRD_EXOKERNEL_EXO_H
+#define FEUERBIRD_EXOKERNEL_EXO_H
 
 /**
  * @file exo.h
@@ -72,4 +72,4 @@ exo_cap exo_alloc_page(void);
 [[nodiscard]] int exo_unbind_page(exo_cap c);
 #endif
 
-#endif /* EXOV6_EXO_H */
+#endif /* FEUERBIRD_EXOKERNEL_EXO_H */

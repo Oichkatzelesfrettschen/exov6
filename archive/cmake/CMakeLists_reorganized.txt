@@ -295,10 +295,10 @@ add_custom_command(
 
 # OS image
 add_custom_command(
-    OUTPUT xv6.img
-    COMMAND dd if=/dev/zero of=xv6.img count=10000 2>/dev/null
-    COMMAND dd if=bootblock of=xv6.img conv=notrunc 2>/dev/null
-    COMMAND dd if=kernel.elf of=xv6.img seek=1 conv=notrunc 2>/dev/null
+    OUTPUT feuerbird.img
+    COMMAND dd if=/dev/zero of=feuerbird.img count=10000 2>/dev/null
+    COMMAND dd if=bootblock of=feuerbird.img conv=notrunc 2>/dev/null
+    COMMAND dd if=kernel.elf of=feuerbird.img seek=1 conv=notrunc 2>/dev/null
     DEPENDS bootblock kernel.elf
 )
 
@@ -364,25 +364,25 @@ add_test(NAME pytest_suite
 set(QEMU_OPTIONS
     -serial mon:stdio
     -drive file=fs.img,index=1,media=disk,format=raw
-    -drive file=xv6.img,index=0,media=disk,format=raw
+    -drive file=feuerbird.img,index=0,media=disk,format=raw
     -smp 2 -m 512
 )
 
 add_custom_target(qemu
     COMMAND qemu-system-x86_64 ${QEMU_OPTIONS}
-    DEPENDS xv6.img fs.img
+    DEPENDS feuerbird.img fs.img
     COMMENT "Running in QEMU"
 )
 
 add_custom_target(qemu-nox
     COMMAND qemu-system-x86_64 -nographic ${QEMU_OPTIONS}
-    DEPENDS xv6.img fs.img
+    DEPENDS feuerbird.img fs.img
     COMMENT "Running in QEMU (no graphics)"
 )
 
 add_custom_target(qemu-gdb
     COMMAND qemu-system-x86_64 ${QEMU_OPTIONS} -S -gdb tcp::26000
-    DEPENDS xv6.img fs.img
+    DEPENDS feuerbird.img fs.img
     COMMENT "Running in QEMU with GDB"
 )
 
@@ -419,7 +419,7 @@ add_custom_target(analyze
 # ============================================================================
 
 install(TARGETS kernel.elf DESTINATION bin)
-install(FILES fs.img xv6.img DESTINATION share/feuerbird)
+install(FILES fs.img feuerbird.img DESTINATION share/feuerbird)
 install(DIRECTORY include/ DESTINATION include/feuerbird)
 
 # ============================================================================

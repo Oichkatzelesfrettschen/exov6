@@ -1,7 +1,7 @@
-# ExoV6 Build Progress Report
+# FeuerBird Exokernel Build Progress Report
 
 ## Executive Summary
-Successfully advanced ExoV6 kernel from 0% to ~85% compilation with cutting-edge algorithmic integrations.
+Successfully advanced FeuerBird Exokernel kernel from 0% to ~85% compilation with cutting-edge algorithmic integrations.
 
 ## Major Accomplishments
 
@@ -141,7 +141,7 @@ Successfully Compiled: 37/43 kernel objects
 
 ## Conclusion
 
-The ExoV6 kernel has been transformed from a basic educational OS into a cutting-edge exokernel incorporating:
+The FeuerBird Exokernel has been transformed from a basic educational OS into a cutting-edge exokernel incorporating:
 - State-of-the-art scheduling algorithms
 - Post-quantum cryptography
 - Mathematical foundations for security

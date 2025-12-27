@@ -1,6 +1,6 @@
 # FeuerBird POSIX User Guide
 
-This guide explains how to build the FeuerBird kernel, compile programs that use the libOS, and how the capability system maps to familiar POSIX interfaces. It supplements the more detailed [phoenixkernel.md](phoenixkernel.md) design notes.
+This guide explains how to build the FeuerBird kernel, compile programs that use the libOS, and how the capability system maps to familiar POSIX interfaces. It supplements the more detailed [feuerbirdkernel.md](feuerbirdkernel.md) design notes.
 
 ## Building the Kernel and LibOS
 

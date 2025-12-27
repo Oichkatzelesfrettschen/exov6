@@ -1,6 +1,6 @@
-# 🌟 **FeuerBird Unified POSIX 2024 Compatibility Plan**
+# FeuerBird Unified POSIX 2024 Compatibility Plan
 
-## 🎯 **Executive Summary**
+## Executive Summary
 
 Transform FeuerBird from an exokernel-specific system into a **maximally compatible POSIX 2024 platform** that provides:
 - **Native exokernel performance** for capability operations
@@ -15,7 +15,7 @@ Transform FeuerBird from an exokernel-specific system into a **maximally compati
 ### ✅ **What We Have**
 - **✅ POSIX 2024 Documentation**: Complete SUSv5 specification in `doc/standards/`
 - **✅ 222 POSIX Utilities**: Comprehensive command-line tool implementations
-- **✅ 47 ExoKernel Syscalls**: High-performance capability-based operations
+- **47 FeuerBird Exokernel Syscalls**: High-performance capability-based operations
 - **✅ LibOS Foundation**: Basic POSIX layer in `libos/posix/`
 - **✅ C17 Compliance**: Modern C standard throughout codebase
 
@@ -40,7 +40,7 @@ Transform FeuerBird from an exokernel-specific system into a **maximally compati
 ├──────────┴──────────┴──────────┴─────────────────────────┤
 │              SYSCALL PERSONALITY GATEWAY                 │
 │    ┌─────────┬─────────┬─────────┬─────────────────┐    │
-│    │  ExoV6  │ POSIX   │ Linux   │ BSD Personality │    │
+│    │FeuerBird│ POSIX   │ Linux   │ BSD Personality │    │
 │    │ Native  │  2024   │ Compat  │ Layer           │    │
 │    └─────────┴─────────┴─────────┴─────────────────┘    │
 ├─────────────────────────────────────────────────────────┤
@@ -66,9 +66,9 @@ static syscall_personality_t personalities[] = {
     {
         .name = "feuerbird",
         .max_syscall_nr = 47,
-        .syscall_table = exov6_syscall_table,
-        .struct_xlate = &exov6_structs,
-        .flag_mapper = &exov6_flags
+        .syscall_table = feuerbird_syscall_table,
+        .struct_xlate = &feuerbird_structs,
+        .flag_mapper = &feuerbird_flags
     },
     {
         .name = "posix2024", 
@@ -347,7 +347,7 @@ cat > tests/posix2024-compliance/test_runner.sh << 'EOF'
 #!/bin/bash
 # Run complete POSIX 2024 conformance test suite
 
-echo "🧪 FeuerBird POSIX 2024 Compliance Test Suite"
+echo "FeuerBird POSIX 2024 Compliance Test Suite"
 echo "============================================="
 
 # Test 1: Essential syscalls
@@ -370,7 +370,7 @@ echo "Testing multi-personality syscalls..."
 echo "Testing performance vs native..."
 ./test_performance_regression
 
-echo "✅ All POSIX 2024 compliance tests completed"
+echo "All POSIX 2024 compliance tests completed"
 EOF
 
 chmod +x tests/posix2024-compliance/test_runner.sh
@@ -458,8 +458,8 @@ void benchmark_syscall_performance(void) {
 - ✅ **Supports multi-personality syscalls** for maximum compatibility
 - ✅ **Offers machine-readable specifications** for automated tooling
 
-**The result: A world-class operating system that combines cutting-edge exokernel architecture with universal POSIX compatibility!** 🔥🐦
+**The result: A world-class operating system that combines cutting-edge exokernel architecture with universal POSIX compatibility!**
 
 ---
 
-*Generated: 2025-01-09 | FeuerBird ExoV6 Engineering Team*
+*Generated: 2025-01-09 | FeuerBird Exokernel Engineering Team*

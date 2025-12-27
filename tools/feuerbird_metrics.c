@@ -1,5 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
-#include "phoenix_metrics.h"
+#include "feuerbird_metrics.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,11 +21,11 @@ static uint64_t now_ns(void) {
     return (uint64_t)ts.tv_sec * 1000000000ull + ts.tv_nsec;
 }
 
-void phoenix_metrics_record_simd(uint64_t c) { simd_instr_count += c; }
-void phoenix_metrics_record_scalar(uint64_t c) { scalar_fallback_count += c; }
+void feuerbird_metrics_record_simd(uint64_t c) { simd_instr_count += c; }
+void feuerbird_metrics_record_scalar(uint64_t c) { scalar_fallback_count += c; }
 
-void phoenix_metrics_record_ipc_start(void) { tmp_start = now_ns(); }
-void phoenix_metrics_record_ipc_end(void) {
+void feuerbird_metrics_record_ipc_start(void) { tmp_start = now_ns(); }
+void feuerbird_metrics_record_ipc_end(void) {
     uint64_t end = now_ns();
     if (end > tmp_start) {
         ipc_latency_total += end - tmp_start;
@@ -33,8 +33,8 @@ void phoenix_metrics_record_ipc_end(void) {
     }
 }
 
-void phoenix_metrics_record_ctx_switch_start(void) { tmp_start = now_ns(); }
-void phoenix_metrics_record_ctx_switch_end(void) {
+void feuerbird_metrics_record_ctx_switch_start(void) { tmp_start = now_ns(); }
+void feuerbird_metrics_record_ctx_switch_end(void) {
     uint64_t end = now_ns();
     if (end > tmp_start) {
         ctx_switch_total += end - tmp_start;
@@ -42,16 +42,16 @@ void phoenix_metrics_record_ctx_switch_end(void) {
     }
 }
 
-uint64_t phoenix_metrics_get_simd_count(void) { return simd_instr_count; }
-uint64_t phoenix_metrics_get_scalar_count(void) { return scalar_fallback_count; }
-uint64_t phoenix_metrics_get_ipc_latency(void) {
+uint64_t feuerbird_metrics_get_simd_count(void) { return simd_instr_count; }
+uint64_t feuerbird_metrics_get_scalar_count(void) { return scalar_fallback_count; }
+uint64_t feuerbird_metrics_get_ipc_latency(void) {
     return ipc_samples ? ipc_latency_total / ipc_samples : 0;
 }
-uint64_t phoenix_metrics_get_ctx_switch(void) {
+uint64_t feuerbird_metrics_get_ctx_switch(void) {
     return ctx_switch_samples ? ctx_switch_total / ctx_switch_samples : 0;
 }
 
-void phoenix_metrics_reset(void) {
+void feuerbird_metrics_reset(void) {
     simd_instr_count = 0;
     scalar_fallback_count = 0;
     ipc_latency_total = 0;
@@ -94,7 +94,7 @@ void benchmark_all_architectures(void) {
     closedir(d);
 }
 
-#ifdef PHOENIX_METRICS_MAIN
+#ifdef FEUERBIRD_METRICS_MAIN
 int main(void) {
     benchmark_all_architectures();
     return 0;

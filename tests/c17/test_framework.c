@@ -1,7 +1,7 @@
 /**
  * @file test_framework.c
- * @brief Pure C17 test framework for exov6
- * 
+ * @brief Pure C17 test framework for feuerbird_exokernel
+ *
  * Provides common test utilities and assertions
  */
 

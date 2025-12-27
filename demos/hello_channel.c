@@ -4,7 +4,7 @@
 #include "capnp_helpers.h"
 #include "caplib.h"
 #include "libsmk_cap.h"
-#include "proto/hello.capnp.h"
+#include "hello.capnp.h"
 
 CHAN_DECLARE(hello_chan, Hello);
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
     Hello msg = {.value = 42};
     hello_chan_send(c, page, &msg);
     drop(cap);
-    exit();
+    exit(0);
   } else {
     Hello out = {0};
     hello_chan_recv(c, page, &out);
@@ -27,5 +27,5 @@ int main(int argc, char *argv[]) {
     drop(cap);
     hello_chan_destroy(c);
   }
-  exit();
+  exit(0);
 }

@@ -112,7 +112,7 @@ copy_file(const char *src, const char *dst)
     // - File permissions (chmod)
     // - Ownership (chown)
     // - Timestamps (utime)
-    // Currently not fully supported in xv6
+    // Currently not fully supported in feuerbird
   }
   
   close(fd_src);

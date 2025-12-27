@@ -48,5 +48,5 @@ main(int argc, char *argv[])
     ping_chan_recv(c, cap, &out);
     printf(1, "variable message: %s\n", out.data);
     ping_chan_destroy(c);
-    exit();
+    exit(0);
 }

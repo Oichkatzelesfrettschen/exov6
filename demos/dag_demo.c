@@ -1,48 +1,60 @@
+/**
+ * @file dag_demo.c
+ * @brief Standalone DAG scheduler demonstration
+ *
+ * This demo uses local stubs to demonstrate DAG scheduling concepts
+ * without depending on kernel headers.
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "libos/sched.h"
 
-typedef struct exo_cap { uint32_t pa; } exo_cap;
+/* Local capability stub - standalone demo */
+typedef struct demo_cap { uint32_t pa; } demo_cap;
 
-struct dag_node { int pending; int priority; };
+/* Local DAG node stub - standalone demo */
+struct demo_dag_node { int pending; int priority; };
 
-static void dag_node_init(struct dag_node *n, exo_cap ctx) {
+static void demo_dag_node_init(struct demo_dag_node *n, demo_cap ctx) {
   (void)ctx; n->pending = 0; n->priority = 0;
 }
-static void dag_node_add_dep(struct dag_node *parent, struct dag_node *child) {
+static void demo_dag_node_set_priority(struct demo_dag_node *n, int priority) {
+  n->priority = priority;
+}
+static void demo_dag_node_add_dep(struct demo_dag_node *parent, struct demo_dag_node *child) {
   (void)parent; (void)child;
 }
-static void dag_sched_submit(struct dag_node *node) {
+static void demo_dag_sched_submit(struct demo_dag_node *node) {
   printf("dag_sched_submit priority %d\n", node->priority);
 }
-static void exo_stream_yield(void) {
+static void demo_exo_stream_yield(void) {
   printf("exo_stream_yield called\n");
 }
 
-static struct dag_node a, b, c;
+static struct demo_dag_node a, b, c;
 
 static void setup(void) {
-  exo_cap cap = {0};
-  dag_node_init(&a, cap);
-  dag_node_set_priority(&a, 10);
-  dag_node_init(&b, cap);
-  dag_node_set_priority(&b, 5);
-  dag_node_init(&c, cap);
-  dag_node_set_priority(&c, 1);
-  dag_node_add_dep(&a, &c);
-  dag_node_add_dep(&b, &c);
-  dag_sched_submit(&a);
-  dag_sched_submit(&b);
-  dag_sched_submit(&c);
+  demo_cap cap = {0};
+  demo_dag_node_init(&a, cap);
+  demo_dag_node_set_priority(&a, 10);
+  demo_dag_node_init(&b, cap);
+  demo_dag_node_set_priority(&b, 5);
+  demo_dag_node_init(&c, cap);
+  demo_dag_node_set_priority(&c, 1);
+  demo_dag_node_add_dep(&a, &c);
+  demo_dag_node_add_dep(&b, &c);
+  demo_dag_sched_submit(&a);
+  demo_dag_sched_submit(&b);
+  demo_dag_sched_submit(&c);
 }
 
 int main(int argc, char *argv[]) {
   (void)argc; (void)argv;
   printf("DAG scheduler demo\n");
   setup();
-  exo_stream_yield();
-  exo_stream_yield();
-  exo_stream_yield();
+  demo_exo_stream_yield();
+  demo_exo_stream_yield();
+  demo_exo_stream_yield();
   return 0;
 }

@@ -1,10 +1,10 @@
 # FeuerBird - POSIX-2024 Compliant Exokernel Operating System
 
-**Phoenix Exokernel - Advanced Exokernel with Modern LLVM Toolchain**
+**FeuerBird Exokernel - Advanced Exokernel with Modern LLVM Toolchain**
 
 ## Overview
 
-FeuerBird is a POSIX-2024 (SUSv5) compliant exokernel operating system that experiments with decomposition of the traditional OS model into an exokernel architecture. It combines the educational heritage of MIT's xv6 with modern C17/C++17 standards and advanced LLVM toolchain features.
+FeuerBird is a POSIX-2024 (SUSv5) compliant exokernel operating system that experiments with decomposition of the traditional OS model into an exokernel architecture. It combines the educational heritage of MIT's teaching kernels with modern C17/C++17 standards and advanced LLVM toolchain features.
 
 ### Key Statistics
 - **POSIX Compliance**: 131/131 POSIX mandatory utilities implemented
@@ -21,7 +21,7 @@ FeuerBird is a POSIX-2024 (SUSv5) compliant exokernel operating system that expe
 
 ## Project Heritage
 
-**Note**: MIT has transitioned xv6 development to RISC-V (https://github.com/mit-pdos/xv6-riscv.git). This project continues the x86/x64 evolution with exokernel enhancements.
+**Note**: MIT has transitioned their teaching kernel development to RISC-V (https://github.com/mit-pdos/xv6-riscv.git). FeuerBird continues the x86/x64 evolution with exokernel enhancements.
 
 FeuerBird builds upon Dennis Ritchie's and Ken Thompson's Unix Version 6, reimplemented for modern x86-based multiprocessors using strict C17 standards. The project extends this foundation with:
 
@@ -81,7 +81,7 @@ cmake --build . --target qemu-gdb
 
 ## Architecture
 
-### Phoenix Exokernel Zones
+### FeuerBird Exokernel Zones
 1. **Architecture Layer**: HAL and platform-specific code
 2. **System Libraries**: DDEKit, networking graph structures  
 3. **Protocols**: IPC and communication protocols
@@ -163,9 +163,9 @@ cmake --build . --target posix-test
 ```
 
 ### Profiling
-The `phoenix_prof` tool measures performance metrics:
+The `feuerbird_prof` tool measures performance metrics:
 ```bash
-ninja -C build phoenix_prof
+ninja -C build feuerbird_prof
 # See doc/profiling_metrics.md for details
 ```
 
@@ -236,7 +236,7 @@ cmake --build . --target package
 
 FeuerBird builds upon the work of many contributors:
 
-**Original xv6**: Frans Kaashoek, Robert Morris, Russ Cox (MIT PDOS)
+**Original MIT PDOS Teaching Kernel**: Frans Kaashoek, Robert Morris, Russ Cox (MIT PDOS)
 
 **Core Contributors**: Russ Cox (context switching, locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, Austin Clements
 
@@ -277,4 +277,4 @@ The code constituting FeuerBird is Copyright 2006-2018 Frans Kaashoek, Robert Mo
 
 ---
 
-**Phoenix Exokernel**: Where modern systems programming meets educational clarity through the exokernel model.
+**FeuerBird Exokernel**: Where modern systems programming meets educational clarity through the exokernel model.

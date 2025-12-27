@@ -38,13 +38,12 @@ struct dag_node;
 // process table defined in proc.c
 extern struct ptable ptable;
 
+// Exokernel subsystem headers (ipc.h already included above)
 #include "exo_cpu.h"
 #include "exo_disk.h"
 #include "exo_ipc.h"
-#include "ipc.h"
 #include "exo_mem.h"
 #include "fastipc.h"
-#include "ipc.h"
 
 // bio.c
 void binit(void);

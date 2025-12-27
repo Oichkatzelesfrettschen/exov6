@@ -2,7 +2,7 @@
 
 /**
  * @file unified_chan.h
- * @brief Unified Channel Trait System for ExoV6
+ * @brief Unified Channel Trait System for FeuerBird Exokernel
  * 
  * Eliminates architectural redundancy by providing a composable channel
  * system with pluggable properties instead of three parallel implementations.

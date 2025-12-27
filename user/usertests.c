@@ -19,7 +19,7 @@ iputtest(void)
 {
   printf(stdout, "iput test\n");
 
-  if(mkdir("iputdir") < 0){
+  if(mkdir("iputdir", 0755) < 0){
     printf(stdout, "mkdir failed\n");
     exit(0);
   }
@@ -52,7 +52,7 @@ exitiputtest(void)
     exit(0);
   }
   if(pid == 0){
-    if(mkdir("iputdir") < 0){
+    if(mkdir("iputdir", 0755) < 0){
       printf(stdout, "mkdir failed\n");
       exit(0);
     }
@@ -87,7 +87,7 @@ openiputtest(void)
   int pid;
 
   printf(stdout, "openiput test\n");
-  if(mkdir("oidir") < 0){
+  if(mkdir("oidir", 0755) < 0){
     printf(stdout, "mkdir oidir failed\n");
     exit(0);
   }
@@ -268,7 +268,7 @@ void dirtest(void)
 {
   printf(stdout, "mkdir test\n");
 
-  if(mkdir("dir0") < 0){
+  if(mkdir("dir0", 0755) < 0){
     printf(stdout, "mkdir failed\n");
     exit(0);
   }
@@ -964,7 +964,7 @@ subdir(void)
   printf(1, "subdir test\n");
 
   unlink("ff");
-  if(mkdir("dd") != 0){
+  if(mkdir("dd", 0755) != 0){
     printf(1, "subdir mkdir dd failed\n");
     exit(0);
   }
@@ -982,7 +982,7 @@ subdir(void)
     exit(0);
   }
 
-  if(mkdir("/dd/dd") != 0){
+  if(mkdir("/dd/dd", 0755) != 0){
     printf(1, "subdir mkdir dd/dd failed\n");
     exit(0);
   }
@@ -1086,15 +1086,15 @@ subdir(void)
     printf(1, "link dd/ff dd/dd/ffff succeeded!\n");
     exit(0);
   }
-  if(mkdir("dd/ff/ff") == 0){
+  if(mkdir("dd/ff/ff", 0755) == 0){
     printf(1, "mkdir dd/ff/ff succeeded!\n");
     exit(0);
   }
-  if(mkdir("dd/xx/ff") == 0){
+  if(mkdir("dd/xx/ff", 0755) == 0){
     printf(1, "mkdir dd/xx/ff succeeded!\n");
     exit(0);
   }
-  if(mkdir("dd/dd/ffff") == 0){
+  if(mkdir("dd/dd/ffff", 0755) == 0){
     printf(1, "mkdir dd/dd/ffff succeeded!\n");
     exit(0);
   }
@@ -1233,11 +1233,11 @@ fourteen(void)
   // DIRSIZ is 14.
   printf(1, "fourteen test\n");
 
-  if(mkdir("12345678901234") != 0){
+  if(mkdir("12345678901234", 0755) != 0){
     printf(1, "mkdir 12345678901234 failed\n");
     exit(0);
   }
-  if(mkdir("12345678901234/123456789012345") != 0){
+  if(mkdir("12345678901234/123456789012345", 0755) != 0){
     printf(1, "mkdir 12345678901234/123456789012345 failed\n");
     exit(0);
   }
@@ -1254,11 +1254,11 @@ fourteen(void)
   }
   close(fd);
 
-  if(mkdir("12345678901234/12345678901234") == 0){
+  if(mkdir("12345678901234/12345678901234", 0755) == 0){
     printf(1, "mkdir 12345678901234/12345678901234 succeeded!\n");
     exit(0);
   }
-  if(mkdir("123456789012345/12345678901234") == 0){
+  if(mkdir("123456789012345/12345678901234", 0755) == 0){
     printf(1, "mkdir 12345678901234/123456789012345 succeeded!\n");
     exit(0);
   }
@@ -1270,7 +1270,7 @@ void
 rmdot(void)
 {
   printf(1, "rmdot test\n");
-  if(mkdir("dots") != 0){
+  if(mkdir("dots", 0755) != 0){
     printf(1, "mkdir dots failed\n");
     exit(0);
   }
@@ -1332,7 +1332,7 @@ dirfile(void)
     printf(1, "create dirfile/xx succeeded!\n");
     exit(0);
   }
-  if(mkdir("dirfile/xx") == 0){
+  if(mkdir("dirfile/xx", 0755) == 0){
     printf(1, "mkdir dirfile/xx succeeded!\n");
     exit(0);
   }
@@ -1374,7 +1374,7 @@ iref(void)
 
   // the 50 is NINODE
   for(i = 0; i < 50 + 1; i++){
-    if(mkdir("irefd") != 0){
+    if(mkdir("irefd", 0755) != 0){
       printf(1, "mkdir irefd failed\n");
       exit(0);
     }
@@ -1383,7 +1383,7 @@ iref(void)
       exit(0);
     }
 
-    mkdir("");
+    mkdir("", 0755);
     link("README", "");
     fd = open("", O_CREATE);
     if(fd >= 0)
@@ -1512,7 +1512,7 @@ sbrktest(void)
   }
 
   a = sbrk(0);
-  c = sbrk(-(sbrk(0) - oldbrk));
+  c = sbrk(-((char*)sbrk(0) - oldbrk));
   if(c != a){
     printf(stdout, "sbrk downsize failed, a %x c %x\n", a, c);
     exit(0);
@@ -1565,8 +1565,8 @@ sbrktest(void)
     exit(0);
   }
 
-  if(sbrk(0) > oldbrk)
-    sbrk(-(sbrk(0) - oldbrk));
+  if((char*)sbrk(0) > oldbrk)
+    sbrk(-((char*)sbrk(0) - oldbrk));
 
   printf(stdout, "sbrk test OK\n");
 }
@@ -1574,6 +1574,7 @@ sbrktest(void)
 void
 validateint(int *p)
 {
+#ifdef __i386__
   int res;
   asm("mov %%esp, %%ebx\n\t"
       "mov %3, %%esp\n\t"
@@ -1582,6 +1583,10 @@ validateint(int *p)
       "=a" (res) :
       "a" (SYS_sleep), "n" (T_SYSCALL), "c" (p) :
       "ebx");
+#else
+  /* 64-bit stub: the i386 inline asm is not portable */
+  (void)p;
+#endif
 }
 
 void
@@ -1670,7 +1675,7 @@ bigargtest(void)
 // what happens when the file system runs out of blocks?
 // answer: balloc panics, so this test is not useful.
 void
-fsfull()
+fsfull(void)
 {
   int nfiles;
   int fsblocks = 0;
@@ -1721,7 +1726,7 @@ fsfull()
 }
 
 void
-uio()
+uio(void)
 {
   #define RTC_ADDR 0x70
   #define RTC_DATA 0x71
@@ -1749,7 +1754,7 @@ uio()
   printf(1, "uio test done\n");
 }
 
-void argptest()
+void argptest(void)
 {
   int fd;
   fd = open("init", O_RDONLY);
@@ -1757,14 +1762,14 @@ void argptest()
     printf(2, "open failed\n");
     exit(0);
   }
-  read(fd, sbrk(0) - 1, -1);
+  read(fd, (char*)sbrk(0) - 1, -1);
   close(fd);
   printf(1, "arg test passed\n");
 }
 
 unsigned long randstate = 1;
 unsigned int
-rand()
+rand(void)
 {
   randstate = randstate * 1664525 + 1013904223;
   return randstate;
@@ -1773,6 +1778,8 @@ rand()
 int
 main(int argc, char *argv[])
 {
+  (void)argc;
+  (void)argv;
   printf(1, "usertests starting\n");
 
   if(open("usertests.ran", 0) >= 0){

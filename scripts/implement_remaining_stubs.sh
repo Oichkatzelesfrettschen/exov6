@@ -1,7 +1,7 @@
 #!/bin/bash
 # Complete remaining stub implementations
 
-UTILS_DIR="/Users/eirikr/Documents/GitHub/exov6/user"
+UTILS_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel/user"
 
 # 14. timeout - Run command with time limit
 cat > "${UTILS_DIR}/timeout.c" << 'EOF'

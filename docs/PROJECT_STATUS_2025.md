@@ -189,4 +189,4 @@ The FeuerBird exokernel project has made significant progress in establishing a 
 ---
 
 *Document created: January 2025*
-*Project repository: https://github.com/Oichkatzelesfrettschen/exov6*
+*Project repository: https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel*

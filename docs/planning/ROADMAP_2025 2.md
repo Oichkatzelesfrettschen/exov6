@@ -1,8 +1,8 @@
-# ExoV6 Development Roadmap 2025
+# FeuerBird Exokernel Development Roadmap 2025
 ## Architectural Re-Scoping and Synthesis
 
 ### Vision Statement
-Transform ExoV6 into a cutting-edge exokernel that synthesizes mathematical elegance with practical performance, integrating post-quantum security, advanced scheduling algorithms, and support for legacy through modern hardware.
+Transform FeuerBird Exokernel into a cutting-edge exokernel that synthesizes mathematical elegance with practical performance, integrating post-quantum security, advanced scheduling algorithms, and support for legacy through modern hardware.
 
 ## Phase 1: Immediate Build Completion (Now - Week 1)
 ### Priority: Get kernel.elf linking and booting

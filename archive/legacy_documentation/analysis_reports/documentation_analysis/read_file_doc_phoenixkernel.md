@@ -1,8 +1,8 @@
-# Analysis Report: `read_file` for `doc/phoenixkernel.md`
+# Analysis Report: `read_file` for `doc/feuerbirdkernel.md`
 
 ## Tool Call:
 ```
-default_api.read_file(absolute_path = "/Users/eirikr/Documents/GitHub/exov6/doc/phoenixkernel.md")
+default_api.read_file(absolute_path = "/Users/eirikr/Documents/GitHub/feuerbird_exokernel/doc/feuerbirdkernel.md")
 ```
 
 ## Output:

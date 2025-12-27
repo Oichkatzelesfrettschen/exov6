@@ -1,8 +1,8 @@
-# Granular CMake Architecture for ExoV6
+# Granular CMake Architecture for FeuerBird Exokernel
 
 ## Overview
 
-This document outlines the comprehensive zone-based CMake architecture for the ExoV6 exokernel project. The architecture provides granular build control, clear dependency management, and modular component organization.
+This document outlines the comprehensive zone-based CMake architecture for the FeuerBird Exokernel project. The architecture provides granular build control, clear dependency management, and modular component organization.
 
 ## Architectural Zones
 
@@ -15,7 +15,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Process management
   - IPC infrastructure
   - Hardware abstraction
-- **CMake Target**: `exov6-kernel`
+- **CMake Target**: `feuerbird-kernel`
 - **Dependencies**: `architecture`, `system-libs`
 
 ### 2. Library Operating System Zone (`libos/`)
@@ -27,7 +27,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Process management APIs
   - Resource accounting
   - Service registration
-- **CMake Target**: `exov6-libos`
+- **CMake Target**: `feuerbird-libos`
 - **Dependencies**: `userland-core`, `protocols`
 
 ### 3. Userland Zone (`user/`)
@@ -39,7 +39,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Channel library (`chan`)
   - Door library (`door`)
   - Math core (`math_core`)
-- **CMake Target**: `exov6-userland`
+- **CMake Target**: `feuerbird-userland`
 - **Dependencies**: `protocols`
 
 ### 4. Architecture Zone (`src/arch/`)
@@ -51,7 +51,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - PowerPC support
   - MCU support
   - SIMD dispatch
-- **CMake Target**: `exov6-arch`
+- **CMake Target**: `feuerbird-arch`
 - **Dependencies**: None (base layer)
 
 ### 5. System Libraries Zone (`src/`)
@@ -60,17 +60,17 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - DDEKit (Device Driver Environment Kit)
   - NStr Graph library
   - SIMD dispatch library
-- **CMake Target**: `exov6-syslibs`
+- **CMake Target**: `feuerbird-syslibs`
 - **Dependencies**: `architecture`
 
 ### 6. Tools and Utilities Zone (`tools/`)
 - **Purpose**: Build tools and development utilities
 - **Components**:
-  - Phoenix metrics
+  - FeuerBird metrics
   - Compiler utilities
   - Header graph analyzer
   - File organizer
-- **CMake Target**: `exov6-tools`
+- **CMake Target**: `feuerbird-tools`
 - **Dependencies**: None
 
 ### 7. Protocols Zone (`proto/`)
@@ -79,7 +79,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Cap'n Proto definitions
   - Bison parser specifications
   - Interface headers
-- **CMake Target**: `exov6-protocols`
+- **CMake Target**: `feuerbird-protocols`
 - **Dependencies**: None
 
 ### 8. Demos Zone (`demos/`)
@@ -90,7 +90,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Fibonacci calculator
   - Channel demonstrations
   - POSIX compatibility tests
-- **CMake Target**: `exov6-demos`
+- **CMake Target**: `feuerbird-demos`
 - **Dependencies**: `libos`, `userland`
 
 ### 9. Tests Zone (`tests/`)
@@ -100,7 +100,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Integration tests
   - Performance benchmarks
   - Stress tests
-- **CMake Target**: `exov6-tests`
+- **CMake Target**: `feuerbird-tests`
 - **Dependencies**: All zones
 
 ### 10. Formal Verification Zone (`formal/`)
@@ -109,7 +109,7 @@ This document outlines the comprehensive zone-based CMake architecture for the E
   - Coq proofs
   - TLA+ specifications
   - C model implementations
-- **CMake Target**: `exov6-formal`
+- **CMake Target**: `feuerbird-formal`
 - **Dependencies**: None
 
 ### 11. Engine Zone (`engine/`)
@@ -117,26 +117,26 @@ This document outlines the comprehensive zone-based CMake architecture for the E
 - **Components**:
   - Kernel mirror
   - User mirror
-- **CMake Target**: `exov6-engine`
+- **CMake Target**: `feuerbird-engine`
 - **Dependencies**: TBD
 
 ## Dependency Graph
 
 ```
-exov6-kernel ← exov6-arch
-              ← exov6-syslibs ← exov6-arch
-              ← exov6-protocols
+feuerbird-kernel ← feuerbird-arch
+                 ← feuerbird-syslibs ← feuerbird-arch
+                 ← feuerbird-protocols
 
-exov6-libos ← exov6-userland ← exov6-protocols
-            ← exov6-protocols
+feuerbird-libos ← feuerbird-userland ← feuerbird-protocols
+                ← feuerbird-protocols
 
-exov6-demos ← exov6-libos
-            ← exov6-userland
+feuerbird-demos ← feuerbird-libos
+                ← feuerbird-userland
 
-exov6-tests ← ALL ZONES
+feuerbird-tests ← ALL ZONES
 
-exov6-tools (independent)
-exov6-formal (independent)
+feuerbird-tools (independent)
+feuerbird-formal (independent)
 ```
 
 ## Build Features
@@ -163,7 +163,7 @@ exov6-formal (independent)
 ```
 CMakeLists.txt (root)
 ├── cmake/
-│   ├── ExoV6Config.cmake
+│   ├── FeuerBirdConfig.cmake
 │   ├── FindLLVMTools.cmake
 │   ├── CompilerDetection.cmake
 │   └── FeatureDetection.cmake

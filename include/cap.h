@@ -94,5 +94,11 @@ void cap_table_dec(cap_id_t id);
  */
 int cap_table_remove(cap_id_t id);
 
-/** Convenience alias for revoke semantics. */
+/** Convenience alias for revoke semantics.
+ * Note: User-space caplib.h declares cap_revoke(uint16_t) for legacy 16-bit IDs.
+ * This kernel version uses full 64-bit cap_id_t.
+ */
+#ifndef CAP_REVOKE_DECLARED
+#define CAP_REVOKE_DECLARED
 int cap_revoke(cap_id_t id);
+#endif

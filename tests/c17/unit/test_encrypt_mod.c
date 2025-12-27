@@ -31,6 +31,8 @@ static int test_xor_encrypt_decrypt_roundtrip(void) {
 }
 
 int main(int argc, char *argv[]) {
+    (void)argc;
+    (void)argv;
     int failures = 0;
     
     printf("=== %s Test Suite (C17) ===\n", "Encrypt Mod");

@@ -1,4 +1,4 @@
-# ExoV6 Modern CMake Build System - C17 + POSIX 2024
+# FeuerBird Exokernel Modern CMake Build System - C17 + POSIX 2024
 cmake_minimum_required(VERSION 3.20)
 
 # Set compilers and language before project declaration
@@ -10,10 +10,10 @@ if(NOT DEFINED CMAKE_C_COMPILER)
 endif()
 
 # Project declaration with modern CMake
-project(ExoV6
+project(FeuerBirdExokernel
     VERSION 1.0.0
     DESCRIPTION "POSIX 2024 Compliant Exokernel with Mathematical Security"
-    HOMEPAGE_URL "https://github.com/Oichkatzelesfrettschen/exov6"
+    HOMEPAGE_URL "https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel"
     LANGUAGES C ASM
 )
 
@@ -173,7 +173,7 @@ configure_file(
 # ═════════════════════════════════════════════════════════════════════
 
 # Function to add executable with consistent flags
-function(exov6_add_executable target)
+function(feuerbird_add_executable target)
     cmake_parse_arguments(EXE 
         "KERNEL;USERLAND" 
         "OUTPUT_NAME" 
@@ -210,7 +210,7 @@ function(exov6_add_executable target)
 endfunction()
 
 # Function to add library with consistent flags
-function(exov6_add_library target)
+function(feuerbird_add_library target)
     cmake_parse_arguments(LIB 
         "STATIC;SHARED;HEADER_ONLY" 
         "" 
@@ -259,7 +259,7 @@ option(BUILD_TOOLS "Build development tools" ON)
 option(BUILD_DEMOS "Build demonstration programs" ON)
 
 # HAL Library (Architecture abstraction)
-exov6_add_library(hal STATIC
+feuerbird_add_library(hal STATIC
     SOURCES
         src/hal/${ARCH}/hal_${ARCH}.c
     INCLUDES
@@ -306,13 +306,13 @@ endif()
 
 # Install HAL headers
 install(DIRECTORY include/hal/
-    DESTINATION include/exov6/hal
+    DESTINATION include/feuerbird/hal
     FILES_MATCHING PATTERN "*.h"
 )
 
 # Install architecture headers
 install(DIRECTORY include/arch/
-    DESTINATION include/exov6/arch
+    DESTINATION include/feuerbird/arch
     FILES_MATCHING PATTERN "*.h"
 )
 
@@ -337,7 +337,7 @@ if(QEMU_EXECUTABLE AND BUILD_KERNEL)
             -kernel $<TARGET_FILE:kernel>
         DEPENDS kernel
         USES_TERMINAL
-        COMMENT "Running ExoV6 in QEMU"
+        COMMENT "Running FeuerBird Exokernel in QEMU"
     )
     
     add_custom_target(qemu-debug
@@ -352,7 +352,7 @@ if(QEMU_EXECUTABLE AND BUILD_KERNEL)
             -kernel $<TARGET_FILE:kernel>
         DEPENDS kernel
         USES_TERMINAL
-        COMMENT "Running ExoV6 in QEMU with GDB server (port 1234)"
+        COMMENT "Running FeuerBird Exokernel in QEMU with GDB server (port 1234)"
     )
 endif()
 
@@ -361,7 +361,7 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 message(STATUS "═══════════════════════════════════════════════════════════")
-message(STATUS "ExoV6 Build Configuration")
+message(STATUS "FeuerBird Exokernel Build Configuration")
 message(STATUS "═══════════════════════════════════════════════════════════")
 message(STATUS "Version: ${PROJECT_VERSION}")
 message(STATUS "Architecture: ${ARCH}")

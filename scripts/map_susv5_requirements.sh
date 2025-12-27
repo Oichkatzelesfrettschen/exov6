@@ -2,7 +2,7 @@
 # Map SUSv5 POSIX-2024 requirements to our implementations
 # This script ensures each utility maps to its required features per the specification
 
-UTILS_DIR="/Users/eirikr/Documents/GitHub/exov6/user"
+UTILS_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel/user"
 SUSV5_DIR="/Users/eirikr/Library/Mobile Documents/com~apple~CloudDocs/_ORGANIZED_KINDA/Technical-Documentation/Standards/POSIX/susv5-html/utilities"
 
 # POSIX mandatory utilities per SUSv5 Issue 8 (IEEE Std 1003.1-2024)

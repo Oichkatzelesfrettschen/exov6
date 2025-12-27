@@ -1,4 +1,4 @@
-/* Phoenix Exokernel POSIX compatibility layer */
+/* FeuerBird Exokernel POSIX compatibility layer */
 #include <fcntl.h>        /* O_TRUNC, O_APPEND constants - must come first */
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -74,7 +74,7 @@ struct sigaction {
 };
 #endif
 
-/* Phoenix libOS functions - declare directly to avoid header conflicts */
+/* FeuerBird libOS functions - declare directly to avoid header conflicts */
 struct file *libfs_open(const char *path, int flags);
 int libfs_read(struct file *f, void *buf, size_t n);
 int libfs_write(struct file *f, const void *buf, size_t n);

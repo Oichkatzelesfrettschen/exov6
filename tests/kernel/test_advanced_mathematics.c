@@ -480,8 +480,8 @@ static void run_mathematical_test(mathematical_test_t* test) {
 }
 
 int main(void) {
-    printf("🔬 ExoV6 Advanced Mathematical Kernel Test Suite\n");
-    printf("==============================================\n\n");
+    printf("FeuerBird Exokernel Advanced Mathematical Kernel Test Suite\n");
+    printf("============================================================\n\n");
     
     printf("Testing cutting-edge 2025 mathematical features:\n");
     printf("• Femtokernel mathematical optimization (< 1KB)\n");

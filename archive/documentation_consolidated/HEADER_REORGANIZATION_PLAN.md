@@ -1,4 +1,4 @@
-# ExoV6 Header Reorganization Master Plan
+# FeuerBird Exokernel Header Reorganization Master Plan
 
 ## Executive Summary
 
@@ -139,15 +139,15 @@ struct file_internal {
 All headers MUST use traditional guards for C17 compatibility:
 
 ```c
-#ifndef EXOV6_ZONE_MODULE_H
-#define EXOV6_ZONE_MODULE_H
+#ifndef FEUERBIRD_ZONE_MODULE_H
+#define FEUERBIRD_ZONE_MODULE_H
 
 // content
 
-#endif /* EXOV6_ZONE_MODULE_H */
+#endif /* FEUERBIRD_ZONE_MODULE_H */
 ```
 
-Naming convention: `EXOV6_<ZONE>_<MODULE>_H`
+Naming convention: `FEUERBIRD_<ZONE>_<MODULE>_H`
 
 ## Build System Updates
 
@@ -236,4 +236,4 @@ After reorganization:
 
 ## Conclusion
 
-This reorganization aligns ExoV6 with exokernel principles while incorporating best practices from MIT's Aegis/XOK and NetBSD's anykernel architecture. The result will be a clean, maintainable, and secure header architecture supporting true capability-based isolation.
+This reorganization aligns FeuerBird Exokernel with exokernel principles while incorporating best practices from MIT's Aegis/XOK and NetBSD's anykernel architecture. The result will be a clean, maintainable, and secure header architecture supporting true capability-based isolation.

@@ -1,9 +1,12 @@
 /**
  * @file stdio.h
  * @brief POSIX 2024 compliant stdio implementation
- * 
+ *
  * Complete implementation of stdio functions per POSIX.1-2024
  * with FeuerBird exokernel optimizations.
+ *
+ * Note: When building on host, use system FILE type for compatibility.
+ * When building for kernel/baremetal, use posix_file struct.
  */
 
 #pragma once
@@ -11,6 +14,22 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdint.h>
+
+/*
+ * Type compatibility layer: On hosted builds we use the system FILE type.
+ * When building for kernel (EXO_KERNEL defined), we use our own types.
+ */
+#ifndef EXO_KERNEL
+/* Hosted build - just use system types */
+#include <stdio.h>
+typedef long posix_fpos_t;  /* Our internal fpos_t equivalent */
+#else
+/* Kernel/baremetal build - define our own types */
+struct posix_file;
+typedef struct posix_file FILE;
+typedef long fpos_t;
+typedef long posix_fpos_t;
+#endif
 
 // =============================================================================
 // POSIX 2024 STDIO CONSTANTS
@@ -27,19 +46,24 @@
 
 // File modes
 #define POSIX_IOFBF         0    // Full buffering
-#define POSIX_IOLBF         1    // Line buffering  
+#define POSIX_IOLBF         1    // Line buffering
 #define POSIX_IONBF         2    // No buffering
 
 // Standard streams
 extern FILE *posix_stdin;
-extern FILE *posix_stdout; 
+extern FILE *posix_stdout;
 extern FILE *posix_stderr;
 
 // =============================================================================
 // POSIX 2024 FILE STRUCTURE
 // =============================================================================
 
-typedef struct posix_file {
+/*
+ * On hosted builds, FILE is defined by <stdio.h> included above.
+ * We only define our posix_file struct for internal use.
+ * On kernel builds, we typedef FILE from posix_file.
+ */
+struct posix_file {
     int fd;                     // File descriptor
     int flags;                  // File flags
     int mode;                   // Buffering mode
@@ -50,10 +74,13 @@ typedef struct posix_file {
     int error;                  // Error indicator
     int eof;                    // EOF indicator
     struct posix_file *next;    // Linked list of open files
-} FILE;
+};
+
+#ifdef EXO_KERNEL
+typedef struct posix_file FILE;
 
 // =============================================================================
-// FILE OPERATIONS
+// FILE OPERATIONS (Kernel builds only - on host, use system stdio.h)
 // =============================================================================
 
 // File open/close
@@ -229,4 +256,4 @@ void posix_stdio_flush_all(void);
 void posix_stdio_init(void);
 void posix_stdio_cleanup(void);
 
-#endif // POSIX2024_STDIO_H
+#endif /* EXO_KERNEL */

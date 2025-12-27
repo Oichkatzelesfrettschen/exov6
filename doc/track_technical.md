@@ -1,6 +1,6 @@
 # Technical Track
 
-This guide outlines the low level FeuerBird interfaces and how programs interact with the libOS. It should be read together with the [FeuerBird kernel charter](phoenixkernel.md).
+This guide outlines the low level FeuerBird interfaces and how programs interact with the libOS. It should be read together with the [FeuerBird kernel charter](feuerbirdkernel.md).
 
 ## Kernel API Summary
 

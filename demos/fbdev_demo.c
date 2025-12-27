@@ -9,5 +9,5 @@ int main(void) {
     memset(buf, 0xff, sizeof(buf));
     ddekit_cap_send(fb, buf, sizeof(buf));
     printf(1, "fbdev demo complete\n");
-    exit();
+    exit(0);
 }

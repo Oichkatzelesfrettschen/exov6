@@ -17,10 +17,10 @@
 #define MESSAGES_PER_THREAD 10000
 #define MESSAGE_SIZES 5
 
-// Statistics
-static atomic_uint_fast64_t total_messages;
-static atomic_uint_fast64_t total_bytes;
-static atomic_uint_fast64_t total_errors;
+// Statistics (using atomic_uint64_t for portability across stdatomic implementations)
+static atomic_uint64_t total_messages;
+static atomic_uint64_t total_bytes;
+static atomic_uint64_t total_errors;
 
 // Capability structure
 typedef struct {

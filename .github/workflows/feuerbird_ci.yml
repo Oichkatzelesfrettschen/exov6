@@ -1,4 +1,4 @@
-name: Phoenix Exokernel Unified CI
+name: FeuerBird Exokernel Unified CI
 
 on:
   push:
@@ -12,7 +12,7 @@ env:
 
 jobs:
   unified-build:
-    name: Phoenix Exokernel Build & Test
+    name: FeuerBird Exokernel Build & Test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -76,7 +76,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
             ${{ matrix.config.cmake_flags }}
           
-      - name: Build Phoenix Exokernel (${{ matrix.config.name }})
+      - name: Build FeuerBird Exokernel (${{ matrix.config.name }})
         run: |
           set -euxo pipefail
           ninja -C build -j $(nproc)
@@ -149,7 +149,7 @@ jobs:
       - name: Build for ${{ matrix.arch }}
         run: |
           set -euxo pipefail
-          echo "Building Phoenix Exokernel for ${{ matrix.arch }}..."
+          echo "Building FeuerBird Exokernel for ${{ matrix.arch }}..."
           cmake -S . -B build-${{ matrix.arch }} -G Ninja \
             -DARCH=${{ matrix.arch }} \
             -DCMAKE_BUILD_TYPE=Release
@@ -186,18 +186,18 @@ jobs:
           cmake -S . -B validation -G Ninja -DCMAKE_BUILD_TYPE=Release
           ninja -C validation kernel
           
-      - name: Phoenix metrics
+      - name: FeuerBird metrics
         run: |
           set -euxo pipefail
-          if [ -f tools/phoenix_metrics.c ]; then
-            clang -std=c2x -O2 tools/phoenix_metrics.c -o tools/phoenix_metrics || true
-            ./tools/phoenix_metrics validation/kernel 1 || true
+          if [ -f tools/feuerbird_metrics.c ]; then
+            clang -std=c2x -O2 tools/feuerbird_metrics.c -o tools/feuerbird_metrics || true
+            ./tools/feuerbird_metrics validation/kernel 1 || true
           fi
           
       - name: Success report
         run: |
           set -euxo pipefail
-          echo "🎉 Phoenix Exokernel Unified CI PASSED"
+          echo "🎉 FeuerBird Exokernel Unified CI PASSED"
           echo "✅ CMake+ninja build system validated"
           echo "✅ LLVM toolchain (clang/lld/lto/polly) functional"
           echo "✅ Multi-configuration builds successful"

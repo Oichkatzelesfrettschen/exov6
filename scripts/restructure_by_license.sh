@@ -28,7 +28,7 @@ detect_license() {
     elif grep -q "Apache\|APACHE" "$file" 2>/dev/null; then
         echo "Apache"
     else
-        # Default to BSD for original xv6 code
+        # Default to BSD for original feuerbird code
         echo "BSD"
     fi
 }
@@ -115,7 +115,7 @@ cat > LICENSE_MAP.md << 'EOF'
 ## Directory Structure by License
 
 ### BSD License (`bsd/`)
-- Original xv6 code
+- Original FeuerBird code
 - Core kernel components
 - Basic POSIX utilities
 - LibOS POSIX layer

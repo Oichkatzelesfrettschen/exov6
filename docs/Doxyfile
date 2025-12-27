@@ -1,4 +1,4 @@
-PROJECT_NAME = exov6
+PROJECT_NAME = FeuerBird Exokernel
 OUTPUT_DIRECTORY = docs/build
 INPUT = src kernel
 RECURSIVE = YES

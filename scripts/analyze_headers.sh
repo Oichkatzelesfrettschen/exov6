@@ -1,5 +1,5 @@
 #!/bin/bash
-# Header dependency analysis script for ExoV6
+# Header dependency analysis script for FeuerBird Exokernel
 # Uses multiple tools to provide comprehensive analysis
 
 set -e
@@ -7,7 +7,7 @@ set -e
 PROJECT_ROOT="${1:-$(pwd)}"
 OUTPUT_DIR="${2:-build/header_analysis}"
 
-echo "=== ExoV6 Header Dependency Analysis ==="
+echo "=== FeuerBird Exokernel Header Dependency Analysis ==="
 echo "Project root: $PROJECT_ROOT"
 echo "Output directory: $OUTPUT_DIR"
 

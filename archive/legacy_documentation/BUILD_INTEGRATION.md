@@ -53,7 +53,7 @@ user/%.o: user/%.cpp
 #### Meson Updates
 ```meson
 # Add C++23 support
-project('exov6', ['c', 'cpp'],
+project('feuerbird_exokernel', ['c', 'cpp'],
   default_options : [
     'c_std=c17',
     'cpp_std=c++23',
@@ -224,7 +224,7 @@ posix-test: user
 
 # Performance benchmarks
 benchmark: kernel
-	./tools/phoenix_prof
+	./tools/feuerbird_prof
 
 # Static analysis
 analyze:

@@ -1,8 +1,8 @@
-# 🚀 ExoV6 Kernel: Complete Architectural Synthesis 2024
+# FeuerBird Exokernel: Complete Architectural Synthesis 2024
 
 ## Executive Summary
 
-ExoV6 represents a groundbreaking synthesis of exokernel architecture with modern security primitives, combining:
+FeuerBird Exokernel represents a groundbreaking synthesis of exokernel architecture with modern security primitives, combining:
 - **Pure C17** implementation (zero legacy code)
 - **Post-quantum cryptography** (Kyber/ML-KEM)
 - **Mathematical lattice** security model
@@ -363,8 +363,8 @@ void *numa_alloc(size_t size, int node);
 
 ```bash
 # Clone repository
-git clone https://github.com/exov6/exov6.git
-cd exov6
+git clone https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel.git
+cd feuerbird_exokernel
 
 # Build for your architecture
 mkdir build && cd build
@@ -404,4 +404,4 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 *"The exokernel architecture is founded on and motivated by a single principle: separate protection from management."* - Dawson Engler et al.
 
-**ExoV6**: Where 1995 meets 2024 in perfect C17 harmony.
+**FeuerBird Exokernel**: Where 1995 meets 2024 in perfect C17 harmony.

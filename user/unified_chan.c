@@ -5,6 +5,7 @@
 
 #include "unified_chan.h"
 #include "user.h"
+#include "caplib.h"
 #include <stdlib.h>
 
 /**

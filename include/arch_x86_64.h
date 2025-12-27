@@ -112,6 +112,10 @@ static inline void outsl(int port, const void *addr, int cnt) {
                    : "cc");
 }
 
+// Guard functions that may conflict with x86.h
+#ifndef _ARCH_X86_ADDITIONAL_DEFINED
+#define _ARCH_X86_ADDITIONAL_DEFINED
+
 // Interrupt control
 static inline void cli(void) {
   __asm__ volatile("cli" ::: "memory");
@@ -212,6 +216,8 @@ static inline uint32_t xchg(volatile uint32_t *ptr, uint32_t val) {
   return val;
 }
 
+#endif /* _ARCH_X86_ADDITIONAL_DEFINED */
+
 // String operations
 static inline void stosb(void *addr, int data, int cnt) {
   __asm__ volatile("cld; rep stosb"
@@ -236,9 +242,9 @@ static inline void stosq(void *addr, uint64_t data, int cnt) {
 
 #endif /* _ARCH_IO_FUNCTIONS_DEFINED */
 
-// CPUID instruction
-static inline void cpuid(uint32_t leaf, uint32_t *eax, uint32_t *ebx, 
-                         uint32_t *ecx, uint32_t *edx) {
+// CPUID instruction (named x86_cpuid to avoid conflict with kernel cpuid())
+static inline void x86_cpuid(uint32_t leaf, uint32_t *eax, uint32_t *ebx,
+                             uint32_t *ecx, uint32_t *edx) {
   __asm__ volatile("cpuid"
                    : "=a"(*eax), "=b"(*ebx), "=c"(*ecx), "=d"(*edx)
                    : "a"(leaf));
@@ -257,18 +263,33 @@ static inline void wrmsr(uint32_t msr, uint64_t val) {
   __asm__ volatile("wrmsr" : : "a"(low), "d"(high), "c"(msr));
 }
 
-// GDT/IDT operations
-static inline void lgdt(void *p) {
-  __asm__ volatile("lgdt (%0)" : : "r"(p) : "memory");
+// GDT/IDT operations - 2-argument form (guarded to prevent conflict with arch.h)
+#ifndef _ARCH_GDT_IDT_DEFINED
+#define _ARCH_GDT_IDT_DEFINED
+static inline void lgdt(void *p, int size) {
+  struct {
+    uint16_t limit;
+    uint64_t base;
+  } __attribute__((packed)) gdtr;
+  gdtr.limit = size - 1;
+  gdtr.base = (uint64_t)p;
+  __asm__ volatile("lgdt %0" : : "m"(gdtr) : "memory");
 }
 
-static inline void lidt(void *p) {
-  __asm__ volatile("lidt (%0)" : : "r"(p) : "memory");
+static inline void lidt(void *p, int size) {
+  struct {
+    uint16_t limit;
+    uint64_t base;
+  } __attribute__((packed)) idtr;
+  idtr.limit = size - 1;
+  idtr.base = (uint64_t)p;
+  __asm__ volatile("lidt %0" : : "m"(idtr) : "memory");
 }
 
 static inline void ltr(uint16_t sel) {
   __asm__ volatile("ltr %w0" : : "r"(sel) : "memory");
 }
+#endif /* _ARCH_GDT_IDT_DEFINED */
 
 // Fast system call support
 static inline void swapgs(void) {
@@ -281,5 +302,52 @@ static inline void swapgs(void) {
 #define lcr3(val) write_cr3(val)
 #define rcr3() read_cr3()
 #define rcr2() read_cr2()
+
+// ============================================================================
+// 64-bit IDT Gate Descriptors
+// ============================================================================
+
+// Gate types for 64-bit mode
+#define STS_IG64 0xE  // 64-bit Interrupt Gate
+#define STS_TG64 0xF  // 64-bit Trap Gate
+
+// 64-bit gate descriptor (16 bytes per entry)
+struct gatedesc64 {
+    uint16_t off_15_0;    // Offset bits 0-15
+    uint16_t cs;          // Code segment selector
+    uint8_t  ist : 3;     // Interrupt Stack Table offset
+    uint8_t  rsv0 : 5;    // Reserved (must be 0)
+    uint8_t  type : 4;    // Gate type (IG64 or TG64)
+    uint8_t  s : 1;       // Must be 0 for system segment
+    uint8_t  dpl : 2;     // Descriptor privilege level
+    uint8_t  p : 1;       // Present
+    uint16_t off_31_16;   // Offset bits 16-31
+    uint32_t off_63_32;   // Offset bits 32-63
+    uint32_t rsv1;        // Reserved (must be 0)
+} __attribute__((packed));
+
+// Set up a 64-bit interrupt/trap gate descriptor
+// istrap: 1 for trap gate, 0 for interrupt gate (clears IF)
+// sel: code segment selector
+// off: 64-bit handler address
+// d: descriptor privilege level
+#define SETGATE64(gate, istrap, sel, off, d)                              \
+    do {                                                                   \
+        uint64_t _off = (uint64_t)(off);                                  \
+        (gate).off_15_0 = _off & 0xFFFF;                                  \
+        (gate).cs = (sel);                                                \
+        (gate).ist = 0;                                                   \
+        (gate).rsv0 = 0;                                                  \
+        (gate).type = (istrap) ? STS_TG64 : STS_IG64;                     \
+        (gate).s = 0;                                                     \
+        (gate).dpl = (d);                                                 \
+        (gate).p = 1;                                                     \
+        (gate).off_31_16 = (_off >> 16) & 0xFFFF;                         \
+        (gate).off_63_32 = _off >> 32;                                    \
+        (gate).rsv1 = 0;                                                  \
+    } while (0)
+
+// External vectors array (defined in vectors64.S)
+extern uint64_t vectors[];
 
 #endif // __x86_64__

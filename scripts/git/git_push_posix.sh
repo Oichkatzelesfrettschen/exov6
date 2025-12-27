@@ -6,7 +6,7 @@ echo "This script will push our POSIX-2024 compliance work to GitHub"
 echo
 
 # Configuration
-REPO_DIR="/Users/eirikr/Documents/GitHub/exov6"
+REPO_DIR="/Users/eirikr/Documents/GitHub/feuerbird_exokernel"
 cd "$REPO_DIR" || exit 1
 
 # Function to handle merge conflicts intelligently
@@ -130,4 +130,4 @@ fi
 echo
 echo "=== Summary ==="
 echo "131/131 POSIX mandatory utilities implemented!"
-echo "Repository: https://github.com/Oichkatzelesfrettschen/exov6"
+echo "Repository: https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel"

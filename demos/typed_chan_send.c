@@ -2,7 +2,7 @@
 #include "user.h"
 #include "chan.h"
 #include "capnp_helpers.h"
-#include "proto/driver.capnp.h"
+#include "driver.capnp.h"
 
 CHAN_DECLARE(ping_chan, DriverPing);
 
@@ -15,5 +15,5 @@ main(int argc, char *argv[])
     exo_cap cap = {0};
     ping_chan_send(c, cap, &m);
     ping_chan_destroy(c);
-    exit();
+    exit(0);
 }

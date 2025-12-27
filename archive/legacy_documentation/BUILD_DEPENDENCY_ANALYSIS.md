@@ -1,4 +1,4 @@
-# BUILD DEPENDENCY ANALYSIS - ExoKernel v6
+# BUILD DEPENDENCY ANALYSIS - FeuerBird Exokernel
 ## Critical Compilation Order and Header Dependency Graph
 
 Generated: 2025-09-02
@@ -78,7 +78,7 @@ user/cp.c →
 
 ### Current Include Directory Structure
 ```
-/Users/eirikr/Documents/GitHub/exov6/
+/Users/eirikr/Documents/GitHub/feuerbird_exokernel/
 ├── include/                    # Main header directory
 │   ├── x86.h                  # Architecture-specific (conflicts)
 │   ├── types.h                # Core types

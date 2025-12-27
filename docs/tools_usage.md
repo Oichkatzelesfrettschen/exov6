@@ -1,7 +1,7 @@
 # Repository Tooling Guide
 
 This document details installation and execution steps for the assorted
-utility programs bundled with *exov6* along with the output of a sample run.
+utility programs bundled with *FeuerBird Exokernel* along with the output of a sample run.
 Each tool is designed for modern Unix environments and assumes an updated
 Debian/Ubuntu base.
 
@@ -78,14 +78,14 @@ gdb -q -ex "set script-extension off" -ex "source tools/gdbutil.py" -ex quit
 gcc -std=c2x tools/ncc.c tools/compiler_utils.c -o ncc
 ```
 
-### Phoenix Metrics Harness
+### FeuerBird Metrics Harness
 
-* **Source:** `tools/phoenix_metrics.c`
+* **Source:** `tools/feuerbird_metrics.c`
 * **Compile and Run:**
 
 ```bash
-gcc -std=c2x tools/phoenix_metrics.c -DPHOENIX_METRICS_MAIN -o phoenix_metrics
-./phoenix_metrics
+gcc -std=c2x tools/feuerbird_metrics.c -DFEUERBIRD_METRICS_MAIN -o feuerbird_metrics
+./feuerbird_metrics
 ```
 * **Sample Output:**
 

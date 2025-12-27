@@ -86,9 +86,9 @@ fi
 
 # Step 6: Create kernel/README.md documenting the unified structure
 cat > kernel/README.md << 'EOF'
-# The Phoenix Exokernel - Unified Kernel
+# The FeuerBird Exokernel - Unified Kernel
 
-This is THE ONE kernel implementation for the Phoenix Exokernel project.
+This is THE ONE kernel implementation for the FeuerBird Exokernel project.
 All kernel code has been unified, synthesized, and harmonized into this single directory.
 
 ## Structure

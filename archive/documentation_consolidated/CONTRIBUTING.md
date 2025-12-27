@@ -41,8 +41,8 @@ Maintain these critical metrics (detailed in README.md):
 ### Initial Setup
 ```bash
 # Clone repository
-git clone https://github.com/FeuerBird/exov6.git
-cd exov6
+git clone https://github.com/FeuerBird/feuerbird_exokernel.git
+cd feuerbird_exokernel
 
 # Install pre-commit hooks
 pip install pre-commit

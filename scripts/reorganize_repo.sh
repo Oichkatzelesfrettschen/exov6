@@ -1,16 +1,16 @@
 #!/bin/bash
 # Repository Reorganization Script
-# This script merges, harmonizes, and synthesizes the ExoV6 repository structure
+# This script merges, harmonizes, and synthesizes the FeuerBird Exokernel repository structure
 
 set -e
 
-echo "=== ExoV6 Repository Reorganization ==="
+echo "=== FeuerBird Exokernel Repository Reorganization ==="
 echo "Phase 1: Backup and preparation"
 
 # Create backup
-if [ ! -d "../exov6_backup_$(date +%Y%m%d)" ]; then
+if [ ! -d "../feuerbird_exokernel_backup_$(date +%Y%m%d)" ]; then
     echo "Creating backup..."
-    cp -r . "../exov6_backup_$(date +%Y%m%d)"
+    cp -r . "../feuerbird_exokernel_backup_$(date +%Y%m%d)"
 fi
 
 echo "Phase 2: Remove redundant engine directory"

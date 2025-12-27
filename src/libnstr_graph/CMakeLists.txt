@@ -1,7 +1,7 @@
 # src/libnstr_graph/CMakeLists.txt - NStr Graph Library
 
-# Create NStr Graph library using ExoV6 framework
-phoenix_add_library(phoenix-nstr-graph
+# Create NStr Graph library using FeuerBird Exokernel framework
+feuerbird_add_library(feuerbird-nstr-graph
     STATIC
     SOURCES nstr_graph.c
     INCLUDES 
@@ -10,7 +10,7 @@ phoenix_add_library(phoenix-nstr-graph
 )
 
 # Create shared library variant
-phoenix_add_library(phoenix-nstr-graph-shared
+feuerbird_add_library(feuerbird-nstr-graph-shared
     SHARED
     SOURCES nstr_graph.c
     INCLUDES 
@@ -19,11 +19,11 @@ phoenix_add_library(phoenix-nstr-graph-shared
 )
 
 # Set output name for shared library
-set_target_properties(phoenix-nstr-graph-shared PROPERTIES 
-    OUTPUT_NAME "phoenix-nstr-graph"
+set_target_properties(feuerbird-nstr-graph-shared PROPERTIES 
+    OUTPUT_NAME "feuerbird-nstr-graph"
     PREFIX "lib"
 )
 
 # Legacy aliases for backward compatibility
-add_library(nstr_graph ALIAS phoenix-nstr-graph)
-add_library(nstr_graph_shared ALIAS phoenix-nstr-graph-shared)
+add_library(nstr_graph ALIAS feuerbird-nstr-graph)
+add_library(nstr_graph_shared ALIAS feuerbird-nstr-graph-shared)

@@ -1,5 +1,6 @@
 #pragma once
 #include "kernel_compat.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {

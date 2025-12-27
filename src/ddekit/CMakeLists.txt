@@ -7,15 +7,15 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/badgerferret")
     list(APPEND DDEKIT_SOURCES ${BADGERFERRET_SOURCES})
 endif()
 
-# Create DDEKit library using ExoV6 framework
-phoenix_add_library(phoenix-ddekit
+# Create DDEKit library using FeuerBird Exokernel framework
+feuerbird_add_library(feuerbird-ddekit
     STATIC
     SOURCES ${DDEKIT_SOURCES}
     INCLUDES 
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-    DEPENDENCIES phoenix-architecture
+    DEPENDENCIES feuerbird-architecture
 )
 
 # Legacy alias for backward compatibility
-add_library(ddekit ALIAS phoenix-ddekit)
+add_library(ddekit ALIAS feuerbird-ddekit)

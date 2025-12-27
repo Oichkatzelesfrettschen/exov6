@@ -118,7 +118,7 @@ parse_symbolic_mode(const char *str, int current_mode)
 static int
 do_chmod(const char *path, int mode)
 {
-    // In xv6, we would need to implement sys_chmod
+    // In feuerbird, we would need to implement sys_chmod
     // For now, this is a stub
     
     // The actual implementation would:

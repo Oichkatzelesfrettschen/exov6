@@ -4,8 +4,8 @@
 #include "sys/stat.h"
 
 /* Prevent conflicts with system headers */
-#ifndef PHOENIX_USER_H_DECLS
-#define PHOENIX_USER_H_DECLS
+#ifndef FEUERBIRD_EXOKERNEL_USER_H_DECLS
+#define FEUERBIRD_EXOKERNEL_USER_H_DECLS
 
 /**
  * @brief Replace the current process image with a new program.
@@ -183,8 +183,12 @@ int pipe(int fd[2]);
  *
  * @param pid Target process identifier.
  * @return 0 on success, or -1 on error.
+ *
+ * Note: Guard against conflict with POSIX signal.h kill(pid_t, int)
  */
+#ifndef _SIGNAL_H
 int kill(int pid);
+#endif
 
 /**
  * @brief Remove a directory entry.
@@ -342,4 +346,4 @@ int atoi(const char *s);
  */
 void *memmove(void *vdst, const void *vsrc, size_t n);
 
-#endif /* PHOENIX_USER_H_DECLS */
+#endif /* FEUERBIRD_EXOKERNEL_USER_H_DECLS */

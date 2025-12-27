@@ -1,5 +1,6 @@
 # -*- gdb-script -*-
 
+# FeuerBird Exokernel GDB Utilities
 # Utility functions to pretty-print x86 segment/interrupt descriptors.
 # To load this file, run "source tools/gdbutil.py" in gdb.
 # printdesc and printdescs are the main entry points.
@@ -108,7 +109,7 @@ define outputsta
   end
 end
 
-# xv6-specific
+# FeuerBird segment definitions
 set $SEG_KCODE = 1
 set $SEG_KDATA = 2
 set $SEG_KCPU  = 3

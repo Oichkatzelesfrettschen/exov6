@@ -57,6 +57,8 @@ struct context {
 _Static_assert(sizeof(struct context) == 20, "struct context size incorrect");
 
 #if defined(__x86_64__)
+#ifndef CONTEXT64_DEFINED
+#define CONTEXT64_DEFINED
 struct context64 {
   unsigned long r15;
   unsigned long r14;
@@ -66,7 +68,10 @@ struct context64 {
   unsigned long rbp;
   unsigned long rip;
 };
+#endif /* CONTEXT64_DEFINED */
 #elif defined(__aarch64__)
+#ifndef CONTEXT64_DEFINED
+#define CONTEXT64_DEFINED
 struct context64 {
   unsigned long x19;
   unsigned long x20;
@@ -81,6 +86,7 @@ struct context64 {
   unsigned long fp;
   unsigned long lr;
 };
+#endif /* CONTEXT64_DEFINED */
 #endif
 
 
@@ -102,8 +108,22 @@ struct mailbox {
   int inited;
 };
 
+// Process flags (for LWP, vfork, clone, etc.)
+#define PROC_FLAG_LWP         0x0001  // Lightweight process (shares address space)
+#define PROC_FLAG_VFORK       0x0002  // Created via vfork (parent suspended)
+#define PROC_FLAG_CLONE       0x0004  // Created via clone() with custom flags
+#define PROC_FLAG_DETACHED    0x0008  // Detached (no parent notification)
+#define PROC_FLAG_INZONE      0x0010  // Running in a zone/jail
+#define PROC_FLAG_CAPMODE     0x0020  // Capability mode enabled (capsicum)
+#define PROC_FLAG_TRACED      0x0040  // Being traced (ptrace)
+#define PROC_FLAG_NOEXEC      0x0080  // No exec allowed (sandbox)
+#define PROC_FLAG_SYSTEM      0x0100  // System process
+#define PROC_FLAG_BRANDED     0x0200  // Running under a brand
+
 // Per-process state
 struct proc {
+  struct spinlock lock;          // Per-process lock (fine-grained locking)
+  uint32_t flags;                // Process flags (PROC_FLAG_*)
   size_t sz;                     // Size of process memory (bytes)
   pde_t* pgdir;                  // Page table
   char *kstack;                  // Bottom of kernel stack for this process
@@ -152,6 +172,10 @@ struct proc {
   
   /* OS brand for virtualization */
   int brand;                     /* OS personality (BRAND_*) */
+
+  /* Multi-personality syscall support */
+  int personality;               /* Syscall personality (PERSONALITY_*) */
+  uint32_t capabilities;         /* Process capability bitmask */
 };
 
 // Size will be recalculated after stabilization

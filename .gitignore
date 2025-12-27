@@ -1,56 +1,243 @@
-src-headers/fs 3.h
-engine/kernel/user.h
-.DS_Store
-# Build artifacts
+# ═══════════════════════════════════════════════════════════════════════════════
+# FeuerBird Exokernel - Unified .gitignore
+# Rising from the ashes with a clean, modern build infrastructure
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Build Directories (CMake, Meson, Ninja)
+# ─────────────────────────────────────────────────────────────────────────────────
 build/
+build-*/
+builddir/
+_build/
+_build-*/
+out/
+cmake-build-*/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Compiled Objects and Libraries
+# ─────────────────────────────────────────────────────────────────────────────────
 *.o
 *.a
 *.so
+*.so.*
+*.dylib
+*.dll
+*.lib
+*.obj
+*.pch
+*.gch
 
-# Python caches
-__pycache__/
-*.pyc
+# ─────────────────────────────────────────────────────────────────────────────────
+# Executable Binaries
+# ─────────────────────────────────────────────────────────────────────────────────
+*.exe
+*.out
+*.elf
+*.bin
+*.img
+*.iso
 
-# Node packages
-node_modules/
-
-# Documentation builds
-/docs/sphinx/build/
-/docs/build/
-
-# Build directories
-build*/
-builddir/
-_build/
-_build-cmake/
-_build-test/
-_build-audit/
-test-build/
-
-# Local caches
-.cache/
-openposixtestsuite/
-test_isolation/
-
-# Build artifacts that should not be tracked
-demo_integrated_mathematical_kernel
-demo-integrated-mathematical-kernel
-test_simple_mathematical
-test-simple-mathematical
-test_advanced_mathematics
-test-advanced-mathematics
-stress_test_ipc
-stress-test-ipc
-advanced_ipc_showcase
-advanced-ipc-showcase
-demo_ipc_showcase
-demo-ipc-showcase
-demo_standalone
-demo-standalone
-hello
-hello.plist
+# Specific kernel/demo binaries (at root level only)
+/kernel
+bootblock*
 bootable.img
 boot.bin
-bootblock*
+
+# Demo and test binaries
+demo_*
+demo-*
+test_*
+test-*
+stress_*
+stress-*
+hello
+hello.plist
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# IDE and Editor Files
+# ─────────────────────────────────────────────────────────────────────────────────
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+
+# Vim/Neovim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# OS-Specific Files
+# ─────────────────────────────────────────────────────────────────────────────────
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Python
+# ─────────────────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Node.js
+# ─────────────────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Rust
+# ─────────────────────────────────────────────────────────────────────────────────
+target/
+Cargo.lock
+**/*.rs.bk
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Documentation Builds
+# ─────────────────────────────────────────────────────────────────────────────────
+docs/sphinx/build/
+docs/build/
+docs/_build/
+docs/html/
+docs/latex/
+docs/xml/
+doxygen/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# CMake Generated Files
+# ─────────────────────────────────────────────────────────────────────────────────
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+install_manifest.txt
+*.cmake.in~
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Meson Generated Files
+# ─────────────────────────────────────────────────────────────────────────────────
+meson-logs/
+meson-private/
+meson-info/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Debug and Profiling
+# ─────────────────────────────────────────────────────────────────────────────────
+*.dSYM/
+*.su
+*.idb
+*.pdb
+*.ilk
+*.exp
+core
+core.*
+vgcore.*
+*.gcov
+*.gcda
+*.gcno
+perf.data
+perf.data.old
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Testing and Analysis
+# ─────────────────────────────────────────────────────────────────────────────────
+.cache/
+test_isolation/
+openposixtestsuite/
+*.tmp
 typescript
-uprogs_count.tmp
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Formal Verification (Coq)
+# ─────────────────────────────────────────────────────────────────────────────────
+*.vo
+*.vok
+*.vos
+*.glob
+.*.aux
+*.crashcoqide
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Generated Source Files
+# ─────────────────────────────────────────────────────────────────────────────────
+*.capnp.c
+*.capnp.h
+*_parser.c
+*_parser.h
+*.tab.c
+*.tab.h
+*.yy.c
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Backup and Temporary Files
+# ─────────────────────────────────────────────────────────────────────────────────
+*.bak
+*.backup
+*.orig
+*.rej
+*.old
+*_backup.*
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Legacy/Historical (kept for reference but ignored)
+# ─────────────────────────────────────────────────────────────────────────────────
+src-headers/
+engine/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Credentials and Secrets (NEVER commit these)
+# ─────────────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+secrets/
+credentials/

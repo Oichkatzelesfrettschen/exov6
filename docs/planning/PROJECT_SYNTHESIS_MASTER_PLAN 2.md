@@ -1,4 +1,4 @@
-# 🎯 ExoV6 Project Synthesis: Master Implementation Plan
+# FeuerBird Exokernel Project Synthesis: Master Implementation Plan
 
 ## 📊 Current State Analysis
 
@@ -216,7 +216,7 @@
 
 ### Directory Reorganization
 ```
-exov6/
+feuerbird_exokernel/
 ├── kernel/           # Minimal exokernel (<10K lines)
 │   ├── core/         # Essential mechanism
 │   ├── hal/          # Hardware abstraction

@@ -48,6 +48,10 @@ typedef uint64_t arch_reg_t;
 // I/O PORT OPERATIONS MODULE
 // =============================================================================
 
+// Guard against redefinition when included with arch.h
+#ifndef _ARCH_IO_FUNCTIONS_DEFINED
+#define _ARCH_IO_FUNCTIONS_DEFINED
+
 static inline unsigned char inb(ushort port) {
   unsigned char data;
   __asm__ volatile("inb %w1, %b0" : "=a"(data) : "Nd"(port) : "memory");
@@ -125,6 +129,8 @@ static inline void stosl(void *addr, int data, int cnt) {
                    : "memory", "cc");
 }
 
+#endif /* _ARCH_IO_FUNCTIONS_DEFINED */
+
 static inline void memcpy_fast(void *dst, const void *src, size_t cnt) {
 #ifdef __x86_64__
   __asm__ volatile("cld\n\t"
@@ -155,6 +161,10 @@ static inline void memcpy_fast(void *dst, const void *src, size_t cnt) {
 struct segdesc;
 struct gatedesc;
 
+// Guard against redefinition when included with arch.h
+#ifndef _ARCH_GDT_IDT_DEFINED
+#define _ARCH_GDT_IDT_DEFINED
+
 static inline void lgdt(struct segdesc *p, int size) {
   struct {
     uint16_t limit;
@@ -183,6 +193,36 @@ static inline void ltr(ushort sel) {
   __asm__ volatile("ltr %w0" : : "r"(sel) : "memory");
 }
 
+#endif /* _ARCH_GDT_IDT_DEFINED */
+
+// =============================================================================
+// TIMESTAMP AND PERFORMANCE MODULE (Always included, not guarded)
+// =============================================================================
+#ifndef _RDTSC_FUNCTIONS_DEFINED
+#define _RDTSC_FUNCTIONS_DEFINED
+static inline uint64_t rdtscp(uint32_t *aux) {
+  uint32_t low, high;
+  if (aux) {
+    __asm__ volatile("rdtscp" : "=a"(low), "=d"(high), "=c"(*aux) : : "memory");
+  } else {
+    __asm__ volatile("rdtscp" : "=a"(low), "=d"(high) : : "memory");
+  }
+  return ((uint64_t)high << 32) | low;
+}
+
+static inline uint64_t rdtsc(void) {
+  uint32_t low, high;
+  __asm__ volatile("rdtsc" : "=a"(low), "=d"(high) : : "memory");
+  return ((uint64_t)high << 32) | low;
+}
+#endif /* _RDTSC_FUNCTIONS_DEFINED */
+
+// Guard additional x86 functions that may be defined in arch_x86_64.h
+#ifndef _ARCH_X86_ADDITIONAL_DEFINED
+#define _ARCH_X86_ADDITIONAL_DEFINED
+
+// Skip read_flags if arch_x86_64.h already defined it as a macro
+#ifndef read_flags
 static inline arch_reg_t read_flags(void) {
   arch_reg_t flags;
 #ifdef __x86_64__
@@ -198,6 +238,7 @@ static inline arch_reg_t read_flags(void) {
 #endif
   return flags;
 }
+#endif /* read_flags macro guard */
 
 static inline void write_flags(arch_reg_t flags) {
 #if ARCH_BITS == 64
@@ -340,19 +381,6 @@ static inline void cpuid(uint leaf, uint *eax, uint *ebx, uint *ecx,
 }
 
 // =============================================================================
-// TIMESTAMP AND PERFORMANCE MODULE
-// =============================================================================
-static inline uint64_t rdtscp(uint32_t *aux) {
-  uint32_t low, high;
-  if (aux) {
-    __asm__ volatile("rdtscp" : "=a"(low), "=d"(high), "=c"(*aux) : : "memory");
-  } else {
-    __asm__ volatile("rdtscp" : "=a"(low), "=d"(high) : : "memory");
-  }
-  return ((uint64_t)high << 32) | low;
-}
-
-// =============================================================================
 // TRAP FRAME STRUCTURES
 // =============================================================================
 
@@ -417,3 +445,4 @@ struct trapframe {
 // into the GS segment register.
 #define loadgs(v) load_gs(v)
 
+#endif /* _ARCH_X86_ADDITIONAL_DEFINED */

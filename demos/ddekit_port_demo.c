@@ -12,5 +12,5 @@ int main(void) {
     exo_cap page = ddekit_cap_alloc_page();
     ddekit_cap_send(page, buf, sizeof(buf));
     printf(1, "ddekit port demo complete\n");
-    exit();
+    exit(0);
 }

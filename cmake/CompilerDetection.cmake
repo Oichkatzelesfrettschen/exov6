@@ -7,7 +7,7 @@ include(CheckCXXCompilerFlag)
 function(detect_and_configure_compiler)
     # Check if we're using Clang
     if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-        set(EXOV6_USING_CLANG TRUE PARENT_SCOPE)
+        set(FEUERBIRD_EXOKERNEL_USING_CLANG TRUE PARENT_SCOPE)
         message(STATUS "Detected Clang compiler: ${CMAKE_C_COMPILER_VERSION}")
         
         # Check for Clang-specific features
@@ -20,7 +20,7 @@ function(detect_and_configure_compiler)
         set(SUPPORTS_POLLY ${SUPPORTS_POLLY} PARENT_SCOPE)
         
     elseif(CMAKE_C_COMPILER_ID MATCHES "GNU")
-        set(EXOV6_USING_GCC TRUE PARENT_SCOPE)
+        set(FEUERBIRD_EXOKERNEL_USING_GCC TRUE PARENT_SCOPE)
         message(STATUS "Detected GCC compiler: ${CMAKE_C_COMPILER_VERSION}")
         
         # Check for GCC-specific features
@@ -29,7 +29,7 @@ function(detect_and_configure_compiler)
         
     else()
         message(WARNING "Unsupported compiler: ${CMAKE_C_COMPILER_ID}")
-        set(EXOV6_USING_UNKNOWN TRUE PARENT_SCOPE)
+        set(FEUERBIRD_EXOKERNEL_USING_UNKNOWN TRUE PARENT_SCOPE)
     endif()
     
     # Check for C23 support
@@ -52,7 +52,7 @@ endfunction()
 
 # Apply performance optimizations based on compiler capabilities
 function(apply_performance_optimizations target)
-    if(EXOV6_USING_CLANG)
+    if(FEUERBIRD_EXOKERNEL_USING_CLANG)
         # Clang-specific optimizations
         target_compile_options(${target} PRIVATE
             $<$<CONFIG:Release>:-O3>
@@ -71,7 +71,7 @@ function(apply_performance_optimizations target)
             )
         endif()
         
-    elseif(EXOV6_USING_GCC)
+    elseif(FEUERBIRD_EXOKERNEL_USING_GCC)
         # GCC-specific optimizations
         target_compile_options(${target} PRIVATE
             $<$<CONFIG:Release>:-O3>
@@ -94,7 +94,7 @@ endfunction()
 
 # Configure sanitizer support
 function(configure_sanitizers target)
-    if(EXOV6_USING_CLANG)
+    if(FEUERBIRD_EXOKERNEL_USING_CLANG)
         # AddressSanitizer
         check_c_compiler_flag("-fsanitize=address" SUPPORTS_ASAN)
         if(SUPPORTS_ASAN AND ENABLE_ASAN)

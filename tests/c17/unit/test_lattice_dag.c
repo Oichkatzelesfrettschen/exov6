@@ -31,6 +31,8 @@ static int test_lattice_complex_dag(void) {
 }
 
 int main(int argc, char *argv[]) {
+    (void)argc;
+    (void)argv;
     int failures = 0;
     
     printf("=== %s Test Suite (C17) ===\n", "Lattice Dag");

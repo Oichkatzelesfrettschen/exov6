@@ -1,4 +1,4 @@
-# Phoenix Exokernel - Advanced Exokernel with Granular CMake Architecture
+# FeuerBird Exokernel - Advanced Exokernel with Granular CMake Architecture
 cmake_minimum_required(VERSION 3.16)
 
 # Set compilers before project declaration
@@ -10,9 +10,9 @@ if(NOT DEFINED CMAKE_CXX_COMPILER)
 endif()
 
 # Declare project
-project(PhoenixExokernel 
+project(FeuerBirdExokernel
     VERSION 1.0.0
-    DESCRIPTION "Phoenix Exokernel - Advanced Exokernel with Modern LLVM Toolchain"
+    DESCRIPTION "FeuerBird Exokernel - Advanced Exokernel with Modern LLVM Toolchain"
     LANGUAGES C CXX ASM
 )
 
@@ -21,7 +21,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include our configuration modules
-include(PhoenixConfig)
+include(FeuerBirdConfig)
 include(FindLLVMTools)
 include(CompilerDetection)
 include(FeatureDetection)
@@ -62,7 +62,7 @@ option(BUILD_DOCS "Build documentation" OFF)
 # ═════════════════════════════════════════════════════════════════════
 
 # Detect and configure LLVM toolchain
-phoenix_detect_llvm_tools()
+feuerbird_detect_llvm_tools()
 
 # Generate configuration header
 generate_config_header()
@@ -134,7 +134,7 @@ if(QEMU_EXECUTABLE)
         COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -kernel $<TARGET_FILE:kernel>
         DEPENDS kernel
         USES_TERMINAL
-        COMMENT "Running Phoenix Exokernel in QEMU (no graphics)"
+        COMMENT "Running FeuerBird Exokernel in QEMU (no graphics)"
     )
     
     # Debug QEMU target
@@ -142,7 +142,7 @@ if(QEMU_EXECUTABLE)
         COMMAND ${QEMU_EXECUTABLE} -nographic -serial stdio -s -S -kernel $<TARGET_FILE:kernel>
         DEPENDS kernel
         USES_TERMINAL
-        COMMENT "Running Phoenix Exokernel in QEMU with GDB server"
+        COMMENT "Running FeuerBird Exokernel in QEMU with GDB server"
     )
     
     # KVM accelerated target (if available)
@@ -151,7 +151,7 @@ if(QEMU_EXECUTABLE)
             COMMAND ${QEMU_EXECUTABLE} -enable-kvm -nographic -serial stdio -kernel $<TARGET_FILE:kernel>
             DEPENDS kernel
             USES_TERMINAL
-            COMMENT "Running Phoenix Exokernel in QEMU with KVM acceleration"
+            COMMENT "Running FeuerBird Exokernel in QEMU with KVM acceleration"
         )
     endif()
 endif()
@@ -168,22 +168,22 @@ install(TARGETS kernel
 
 # Install development headers
 install(DIRECTORY include/
-    DESTINATION include/phoenix
+    DESTINATION include/feuerbird
     COMPONENT development
     FILES_MATCHING PATTERN "*.h"
 )
 
 # Install config header
-install(FILES "${CMAKE_BINARY_DIR}/include/phoenix_config.h"
-    DESTINATION include/phoenix
+install(FILES "${CMAKE_BINARY_DIR}/include/feuerbird_config.h"
+    DESTINATION include/feuerbird
     COMPONENT development
 )
 
 # Package configuration
-set(CPACK_PACKAGE_NAME "PhoenixExokernel")
+set(CPACK_PACKAGE_NAME "FeuerBirdExokernel")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_DESCRIPTION "${PROJECT_DESCRIPTION}")
-set(CPACK_PACKAGE_CONTACT "Phoenix Exokernel Development Team")
+set(CPACK_PACKAGE_CONTACT "FeuerBird Exokernel Development Team")
 set(CPACK_GENERATOR "TGZ;DEB;RPM")
 
 include(CPack)
@@ -193,13 +193,13 @@ include(CPack)
 # ═════════════════════════════════════════════════════════════════════
 
 message(STATUS "═══════════════════════════════════════════════════════════")
-message(STATUS "Phoenix Exokernel Configuration Summary")
+message(STATUS "FeuerBird Exokernel Configuration Summary")
 message(STATUS "═══════════════════════════════════════════════════════════")
 message(STATUS "Version: ${PROJECT_VERSION}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Compiler: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
 
-if(EXOV6_LLVM_TOOLS_AVAILABLE)
+if(FEUERBIRD_EXOKERNEL_LLVM_TOOLS_AVAILABLE)
     message(STATUS "LLVM toolchain: Available")
     if(USE_LLD)
         message(STATUS "  - LLD linker: Enabled")

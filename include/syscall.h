@@ -1,5 +1,8 @@
 #pragma once
 
+// Guard to prevent redefinition when both kernel/syscall.h and include/syscall.h are included
+#ifndef SYSCALL_ENUM_DEFINED
+#define SYSCALL_ENUM_DEFINED
 enum {
   SYS_fork = 1,
   SYS_exit,
@@ -47,3 +50,4 @@ enum {
   SYS_service_register,
   SYS_service_add_dependency,
 };
+#endif /* SYSCALL_ENUM_DEFINED */

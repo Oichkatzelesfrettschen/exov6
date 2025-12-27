@@ -2,7 +2,7 @@
 #include "user.h"
 #include "chan.h"
 #include "capnp_helpers.h"
-#include "proto/driver.capnp.h"
+#include "driver.capnp.h"
 
 CHAN_DECLARE(ping_chan, DriverPing);
 
@@ -16,5 +16,5 @@ main(int argc, char *argv[])
     ping_chan_recv(c, cap, &out);
     printf(1, "received %d\n", out.value);
     ping_chan_destroy(c);
-    exit();
+    exit(0);
 }

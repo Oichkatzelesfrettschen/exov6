@@ -1,6 +1,6 @@
 # C17 Test Suite - Pure CMake Build System
 cmake_minimum_required(VERSION 3.16)
-project(ExoV6Tests LANGUAGES C)
+project(FeuerBirdExokernelTests LANGUAGES C)
 
 # C17 standard enforcement
 set(CMAKE_C_STANDARD 17)
@@ -12,11 +12,13 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra")
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -fsanitize=address,undefined")
 set(CMAKE_C_FLAGS_RELEASE "-O2")
 
-# Include directories
+# Include directories - use CMAKE_SOURCE_DIR (project root)
+# Note: When included via add_subdirectory, CMAKE_SOURCE_DIR is project root
 include_directories(
-    ${CMAKE_SOURCE_DIR}/../../include
-    ${CMAKE_SOURCE_DIR}/../../kernel
-    ${CMAKE_SOURCE_DIR}/../../libos
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/kernel
+    ${CMAKE_SOURCE_DIR}/libos
+    ${CMAKE_BINARY_DIR}/include
 )
 
 # Test framework library

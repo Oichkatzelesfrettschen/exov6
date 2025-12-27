@@ -1,4 +1,4 @@
-# Build Directory Best Practices for ExoKernel OS
+# Build Directory Best Practices for FeuerBird Exokernel
 
 ## Overview
 Based on research and industry best practices for operating system kernel projects, this document outlines the optimal build directory structure for the FeuerBird ExoKernel project.
@@ -31,7 +31,7 @@ build/                      # Root build directory (git-ignored)
 ├── fs/                    # Filesystem staging
 │   └── bin/              # User programs for fs.img
 ├── images/                # Final output images
-│   ├── xv6.img          # Bootable OS image
+│   ├── feuerbird.img    # Bootable OS image
 │   ├── fs.img           # Filesystem image
 │   └── bootblock        # Boot sector
 └── test/                  # Test executables

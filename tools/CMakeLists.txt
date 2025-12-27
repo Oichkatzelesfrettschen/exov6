@@ -4,30 +4,28 @@
 # ANALYSIS AND METRICS TOOLS
 # ═════════════════════════════════════════════════════════════════════
 
-# Phoenix metrics tool
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/phoenix_metrics.c")
-    phoenix_add_executable(phoenix-metrics
-        SOURCES phoenix_metrics.c
-        INCLUDES 
-            ${CMAKE_CURRENT_SOURCE_DIR}
-            ${CMAKE_SOURCE_DIR}/include
-        DEFINITIONS PHOENIX_METRICS_MAIN
-    )
-    
-    set_target_properties(phoenix-metrics PROPERTIES 
-        OUTPUT_NAME "phoenix-metrics"
+# FeuerBird metrics tool
+# NOTE: Host tools should NOT include ${CMAKE_SOURCE_DIR}/include as it contains
+# freestanding kernel headers that shadow system headers (sys/stat.h, etc.)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/feuerbird_metrics.c")
+    add_executable(feuerbird-metrics feuerbird_metrics.c)
+    target_include_directories(feuerbird-metrics PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    target_compile_definitions(feuerbird-metrics PRIVATE FEUERBIRD_METRICS_MAIN)
+
+    set_target_properties(feuerbird-metrics PROPERTIES
+        OUTPUT_NAME "feuerbird-metrics"
         PREFIX ""
     )
-    
-    # Create phoenix_prof alias for backward compatibility
-    add_executable(phoenix_prof ALIAS phoenix-metrics)
+
+    # Create feuerbird_prof alias for backward compatibility
+    add_executable(feuerbird_prof ALIAS feuerbird-metrics)
 endif()
 
 # Compiler utilities
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/compiler_utils.c")
     # Host tool - use standard library and minimal includes
-    add_library(phoenix-compiler-utils STATIC compiler_utils.c)
-    target_include_directories(phoenix-compiler-utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    add_library(feuerbird-compiler-utils STATIC compiler_utils.c)
+    target_include_directories(feuerbird-compiler-utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 # ═════════════════════════════════════════════════════════════════════
@@ -108,7 +106,7 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncc.c")
     add_executable(ncc ncc.c)
     target_include_directories(ncc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-    target_link_libraries(ncc PRIVATE phoenix-compiler-utils)
+    target_link_libraries(ncc PRIVATE feuerbird-compiler-utils)
     
     set_target_properties(ncc PROPERTIES 
         OUTPUT_NAME "ncc"
@@ -168,10 +166,10 @@ if(Python3_FOUND AND EXISTS "${CMAKE_BINARY_DIR}/bin/file-organizer")
 endif()
 
 # Code metrics target
-if(TARGET phoenix-metrics)
+if(TARGET feuerbird-metrics)
     add_custom_target(code-metrics
-        COMMAND phoenix-metrics "${CMAKE_SOURCE_DIR}"
-        DEPENDS phoenix-metrics
+        COMMAND feuerbird-metrics "${CMAKE_SOURCE_DIR}"
+        DEPENDS feuerbird-metrics
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
         COMMENT "Generating code metrics"
     )
@@ -191,22 +189,22 @@ endif()
 # ═════════════════════════════════════════════════════════════════════
 
 # Install C++ tools
-if(TARGET phoenix-metrics)
-    install(TARGETS phoenix-metrics
+if(TARGET feuerbird-metrics)
+    install(TARGETS feuerbird-metrics
         RUNTIME DESTINATION bin
         COMPONENT tools
     )
 endif()
 
-if(TARGET phoenix-compiler-utils)
-    install(TARGETS phoenix-compiler-utils
+if(TARGET feuerbird-compiler-utils)
+    install(TARGETS feuerbird-compiler-utils
         RUNTIME DESTINATION bin
         COMPONENT tools
     )
 endif()
 
-if(TARGET phoenix-ncc)
-    install(TARGETS phoenix-ncc
+if(TARGET feuerbird-ncc)
+    install(TARGETS feuerbird-ncc
         RUNTIME DESTINATION bin
         COMPONENT tools
     )
@@ -245,34 +243,34 @@ endif()
 # EXPORTS
 # ═════════════════════════════════════════════════════════════════════
 
-set(EXOV6_TOOL_TARGETS
+set(FEUERBIRD_EXOKERNEL_TOOL_TARGETS
     PARENT_SCOPE
 )
 
 # Collect tool targets
 set(TOOL_TARGETS)
-if(TARGET phoenix-metrics)
-    list(APPEND TOOL_TARGETS phoenix-metrics)
+if(TARGET feuerbird-metrics)
+    list(APPEND TOOL_TARGETS feuerbird-metrics)
 endif()
-if(TARGET phoenix-compiler-utils)
-    list(APPEND TOOL_TARGETS phoenix-compiler-utils)
+if(TARGET feuerbird-compiler-utils)
+    list(APPEND TOOL_TARGETS feuerbird-compiler-utils)
 endif()
-if(TARGET phoenix-ncc)
-    list(APPEND TOOL_TARGETS phoenix-ncc)
+if(TARGET feuerbird-ncc)
+    list(APPEND TOOL_TARGETS feuerbird-ncc)
 endif()
 
 if(TOOL_TARGETS)
-    set(EXOV6_TOOL_TARGETS ${TOOL_TARGETS} PARENT_SCOPE)
+    set(FEUERBIRD_EXOKERNEL_TOOL_TARGETS ${TOOL_TARGETS} PARENT_SCOPE)
 endif()
 
 message(STATUS "Tools zone configured:")
-if(TARGET phoenix-metrics)
-    message(STATUS "  - Phoenix metrics: ✓")
+if(TARGET feuerbird-metrics)
+    message(STATUS "  - FeuerBird metrics: [OK]")
 endif()
-if(TARGET phoenix-compiler-utils)
+if(TARGET feuerbird-compiler-utils)
     message(STATUS "  - Compiler utilities: ✓")
 endif()
-if(TARGET phoenix-ncc)
+if(TARGET feuerbird-ncc)
     message(STATUS "  - Network compiler: ✓")
 endif()
 if(Python3_FOUND)

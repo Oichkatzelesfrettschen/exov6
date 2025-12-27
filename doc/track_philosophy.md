@@ -1,6 +1,6 @@
 # Philosophy Track
 
-This short note captures the guiding ideas behind FeuerBird without diving into internal details. It complements the [FeuerBird kernel charter](phoenixkernel.md).
+This short note captures the guiding ideas behind FeuerBird without diving into internal details. It complements the [FeuerBird kernel charter](feuerbirdkernel.md).
 
 FeuerBird embraces the exokernel philosophy of exposing hardware resources directly to user programs. Instead of enforcing a single view of files and processes, the kernel focuses on protection and delegation. User space libraries and supervisors are free to experiment with new abstractions or compatibility layers.
 

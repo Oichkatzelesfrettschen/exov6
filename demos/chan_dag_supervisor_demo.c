@@ -4,7 +4,7 @@
 #include "capnp_helpers.h"
 #include "dag.h"
 #include "libos/driver.h"
-#include "proto/driver.capnp.h"
+#include "driver.capnp.h"
 
 CHAN_DECLARE(ping_chan, DriverPing);
 
@@ -51,5 +51,5 @@ int main(int argc, char *argv[])
     wait();
 
     ping_chan_destroy(c);
-    exit();
+    exit(0);
 }

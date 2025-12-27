@@ -23,8 +23,12 @@ typedef struct context64 context_t;
 #endif /* EXO_CONTEXT_T */
 
 void swtch(context_t **old, context_t *new);
+
+#ifndef CAP_YIELD_DEFINED
+#define CAP_YIELD_DEFINED
 static inline void cap_yield(context_t **old, context_t *target) {
   swtch(old, target);
 }
+#endif
 
 int exo_yield_to(exo_cap target);

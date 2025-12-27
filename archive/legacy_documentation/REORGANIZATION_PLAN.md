@@ -33,7 +33,7 @@ demos/            | 30      | Good location, keep as-is
 ## Proposed Structure
 
 ```
-exov6/
+feuerbird_exokernel/
 ├── kernel/                  # Ring 0 exokernel
 │   ├── boot/               # Boot and initialization
 │   │   ├── bootasm.S

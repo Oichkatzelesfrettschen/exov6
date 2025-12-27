@@ -1,7 +1,7 @@
-# ExoV6 Grand Synthesis: The Complete Unix Renaissance
+# FeuerBird Exokernel Grand Synthesis: The Complete Unix Renaissance
 
 ## Executive Vision
-ExoV6 represents the ultimate synthesis of Unix philosophy with cutting-edge computer science, creating a POSIX 2024 (SUSv5) compliant exokernel that transcends traditional OS boundaries.
+FeuerBird Exokernel represents the ultimate synthesis of Unix philosophy with cutting-edge computer science, creating a POSIX 2024 (SUSv5) compliant exokernel that transcends traditional OS boundaries.
 
 ## Architectural Synthesis
 
@@ -331,7 +331,7 @@ user/
 
 ## Conclusion
 
-ExoV6 represents the pinnacle of operating system design, synthesizing 50+ years of Unix evolution with cutting-edge computer science research. It provides:
+FeuerBird Exokernel represents the pinnacle of operating system design, synthesizing 50+ years of Unix evolution with cutting-edge computer science research. It provides:
 
 1. **Complete POSIX 2024 compliance**
 2. **Exokernel flexibility and performance**
@@ -350,4 +350,4 @@ This is not just an operating system; it's a complete reimagining of what an OS 
 
 *"The whole is greater than the sum of its parts" - Aristotle*
 
-*"In ExoV6, we have created a system where the synthesis of all Unix concepts creates something transcendent - a true Unix Renaissance."*
+*"In FeuerBird Exokernel, we have created a system where the synthesis of all Unix concepts creates something transcendent - a true Unix Renaissance."*

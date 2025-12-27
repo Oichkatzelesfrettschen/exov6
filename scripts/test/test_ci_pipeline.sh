@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-echo "🔧 Phoenix Exokernel CI Pipeline Test"
+echo "🔧 FeuerBird Exokernel CI Pipeline Test"
 echo "Testing all configurations: baseline, LLVM, security, development"
 
 # Colors for output

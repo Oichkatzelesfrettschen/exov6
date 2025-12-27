@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Security validation tests for exokernel boundaries and post-quantum crypto.
+Security validation tests for FeuerBird Exokernel boundaries and post-quantum crypto.
 
 Tests capability authentication, lattice IPC security, and boundary enforcement.
 """
@@ -126,7 +126,7 @@ def main():
     print("=== Exokernel Security Boundary Audit ===\n")
     
     # Change to repository directory
-    os.chdir('/home/runner/work/exov6/exov6')
+    os.chdir('/home/runner/work/feuerbird_exokernel/feuerbird_exokernel')
     
     tests = [
         test_capability_authentication,
