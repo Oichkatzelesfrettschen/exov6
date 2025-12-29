@@ -158,6 +158,28 @@ The capability system forms a mathematical lattice where security is provable:
 
 ### Quick Start
 
+#### Docker Container Build (Recommended)
+
+```bash
+# Clone repository
+git clone https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel.git
+cd feuerbird_exokernel
+
+# Build optimized container
+./scripts/docker-build.sh build
+
+# Build kernel with CMake
+./scripts/docker-build.sh cmake Release
+
+# Or start interactive development shell
+./scripts/docker-build.sh shell
+```
+
+**Benefits**: Consistent environment, no local dependencies, optimized for speed  
+**See**: [docs/CONTAINER_BUILD.md](docs/CONTAINER_BUILD.md) for complete container documentation
+
+#### Native Build
+
 ```bash
 # Clone repository
 git clone https://github.com/Oichkatzelesfrettschen/feuerbird_exokernel.git

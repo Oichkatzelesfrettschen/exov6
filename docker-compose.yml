@@ -3,8 +3,6 @@
 # Optimized development and build workflows
 # ═══════════════════════════════════════════════════════════════════════════════
 
-version: '3.8'
-
 services:
   # ─────────────────────────────────────────────────────────────────────────────
   # Main build environment service
@@ -82,7 +80,7 @@ services:
         echo '═══════════════════════════════════════════════════════════════';
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE:-RelWithDebInfo} \
-          ${CMAKE_FLAGS:--DUSE_LLD=ON} &&
+          -DUSE_LLD=ON &&
         ninja -C build ${BUILD_TARGET:-kernel} &&
         echo '✅ Build completed successfully!'
       "
@@ -99,8 +97,7 @@ services:
         echo 'FeuerBird Exokernel - Meson Build';
         echo '═══════════════════════════════════════════════════════════════';
         meson setup builddir --reconfigure \
-          --buildtype=${MESON_BUILDTYPE:-debugoptimized} \
-          ${MESON_FLAGS} &&
+          --buildtype=${MESON_BUILDTYPE:-debugoptimized} &&
         ninja -C builddir ${BUILD_TARGET:-kernel} &&
         echo '✅ Build completed successfully!'
       "
