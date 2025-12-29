@@ -202,13 +202,15 @@ jobs:
           docker tag feuerbird-builder:ci feuerbird-builder:latest
       
       - name: Run Python tests
+        continue-on-error: true
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             feuerbird-builder:latest \
-            bash -c "pytest -v tests/ || true"
+            bash -c "pytest -v tests/"
       
       - name: Run CMake tests
+        continue-on-error: true
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
@@ -216,7 +218,7 @@ jobs:
             bash -c "
               cmake -B build -G Ninja && \
               ninja -C build && \
-              cd build && ctest --output-on-failure || true
+              cd build && ctest --output-on-failure
             "
   
   # ─────────────────────────────────────────────────────────────────────────────

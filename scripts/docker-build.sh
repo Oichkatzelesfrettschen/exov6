@@ -169,16 +169,29 @@ run_tests() {
     
     cd "${PROJECT_ROOT}"
     
+    # Note: Tests may fail in incomplete builds; this is informational
     docker run --rm \
         -v "${PROJECT_ROOT}:/workspace" \
         "${IMAGE_NAME}:latest" \
         bash -c "
             set -euo pipefail
+            TEST_FAILED=0
+            
+            # Run Python tests if available
             if [ -f pytest.ini ]; then
-                pytest -v tests/ || true
+                echo 'Running Python tests...'
+                pytest -v tests/ || TEST_FAILED=\$((TEST_FAILED + 1))
             fi
+            
+            # Run CMake tests if build exists
             if [ -d build ]; then
-                cd build && ctest --output-on-failure || true
+                echo 'Running CMake tests...'
+                cd build && ctest --output-on-failure || TEST_FAILED=\$((TEST_FAILED + 1))
+            fi
+            
+            if [ \$TEST_FAILED -gt 0 ]; then
+                echo 'Some tests failed or are not available yet'
+                exit 1
             fi
         "
 }

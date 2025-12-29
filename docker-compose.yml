@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile
       args:
         LLVM_VERSION: 18
-        MAKEFLAGS: "-j${NPROC:-$(nproc)}"
+        MAKEFLAGS: "-j${NPROC:-8}"
       # Enable BuildKit for better caching and parallel builds
       cache_from:
         - type=registry,ref=feuerbird/builder:latest
@@ -62,7 +62,7 @@ services:
       - CC=clang
       - CXX=clang++
       - CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE:-RelWithDebInfo}
-      - MAKEFLAGS=-j${NPROC:-$(nproc)}
+      - MAKEFLAGS=-j${NPROC:-8}
       - NINJA_STATUS=[%f/%t] 
       # Enable colored output
       - TERM=xterm-256color
