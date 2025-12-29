@@ -40,6 +40,12 @@
   - [specs/](../formal/specs/) - TLA+ specifications
   - [coq/](../formal/coq/) - Coq proofs and verification
 
+### Legacy Documentation
+- **[legacy/](legacy/)** - Historical documentation and design notes
+  - Older markdown files moved from previous doc/ structure
+  - Historical design discussions and implementation notes
+  - Kept for reference and historical context
+
 ## 🎯 Documentation by Topic
 
 ### Getting Started
