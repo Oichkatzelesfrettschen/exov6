@@ -128,23 +128,21 @@ ENV CC=clang \
 # ─────────────────────────────────────────────────────────────────────────────────
 # Install Python development tools
 # ─────────────────────────────────────────────────────────────────────────────────
+# NOTE: We use `--break-system-packages` here because this is a dedicated,
+# ephemeral builder image based on Ubuntu 24.04 with PEP 668 enabled.
+# The system Python environment in this container is not shared with other
+# applications or the host OS; it is used solely for build and test tooling.
+# Using this flag avoids conflicts with the `EXTERNALLY-MANAGED` protection while
+# keeping the image layout simple. If this image is ever reused as a general-purpose
+# base image, consider migrating these tools into a virtualenv.
+#
+# Python dependencies are version-pinned in docker-requirements.txt for supply
+# chain security and reproducible builds.
+COPY docker-requirements.txt /tmp/docker-requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install --break-system-packages --no-cache-dir \
-        # Build and testing tools
-        pytest \
-        pytest-cov \
-        pytest-xdist \
-        # Code quality tools
-        pre-commit \
-        black \
-        flake8 \
-        mypy \
-        # Documentation tools
-        sphinx \
-        sphinx-rtd-theme \
-        # Additional build tools
-        meson \
-        ninja
+        -r /tmp/docker-requirements.txt && \
+    rm /tmp/docker-requirements.txt
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Create non-root user for builds (security best practice)

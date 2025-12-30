@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile
       args:
         LLVM_VERSION: 18
-        MAKEFLAGS: "-j${NPROC:-8}"
+        MAKEFLAGS: "-j8"
       # Enable BuildKit for better caching and parallel builds
       cache_from:
         - type=registry,ref=feuerbird/builder:latest
@@ -42,7 +42,6 @@ services:
     # Enable all required capabilities for kernel development
     cap_add:
       - SYS_PTRACE
-      - SYS_ADMIN
     
     # Use host network for better performance in development
     # network_mode: host
@@ -62,7 +61,7 @@ services:
       - CC=clang
       - CXX=clang++
       - CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE:-RelWithDebInfo}
-      - MAKEFLAGS=-j${NPROC:-8}
+      - MAKEFLAGS=-j8
       - NINJA_STATUS=[%f/%t] 
       # Enable colored output
       - TERM=xterm-256color
@@ -117,9 +116,11 @@ services:
       - .:/workspace:ro
       - build-cache:/build:ro
     
-    # Enable KVM for hardware acceleration if available
-    devices:
-      - /dev/kvm:/dev/kvm
+    # NOTE: KVM device is commented out by default since it may not be available
+    # on all hosts. Uncomment the following lines if /dev/kvm is available for
+    # hardware-accelerated QEMU execution:
+    # devices:
+    #   - /dev/kvm:/dev/kvm
     
     cap_add:
       - SYS_PTRACE
