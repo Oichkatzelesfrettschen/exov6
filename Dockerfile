@@ -135,13 +135,6 @@ ENV CC=clang \
 # Using this flag avoids conflicts with the `EXTERNALLY-MANAGED` protection while
 # keeping the rest of the image layout simple. If this image is ever reused as a
 # general-purpose base image, consider migrating these tools into a virtualenv.
-# NOTE: We use `--break-system-packages` here because this is a dedicated,
-# ephemeral builder image based on Ubuntu 24.04 with PEP 668 enabled.
-# The system Python environment in this container is not shared with other
-# applications or the host OS; it is used solely for build and test tooling.
-# Using this flag avoids conflicts with the `EXTERNALLY-MANAGED` protection while
-# keeping the image layout simple. If this image is ever reused as a general-purpose
-# base image, consider migrating these tools into a virtualenv.
 #
 # Python dependencies are version-pinned in docker-requirements.txt for supply
 # chain security and reproducible builds.
