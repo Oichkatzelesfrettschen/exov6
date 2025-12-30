@@ -139,7 +139,7 @@ jobs:
               feuerbird-builder:latest \
               bash -c "
                 set -euo pipefail
-                meson setup builddir --reconfigure \
+                meson setup builddir \
                   --buildtype=${{ matrix.config.build_type }}
                 ninja -C builddir kernel
               "

@@ -95,7 +95,7 @@ services:
         echo '═══════════════════════════════════════════════════════════════';
         echo 'FeuerBird Exokernel - Meson Build';
         echo '═══════════════════════════════════════════════════════════════';
-        meson setup builddir --reconfigure \
+        meson setup builddir \
           --buildtype=${MESON_BUILDTYPE:-debugoptimized} &&
         ninja -C builddir ${BUILD_TARGET:-kernel} &&
         echo '✅ Build completed successfully!'
