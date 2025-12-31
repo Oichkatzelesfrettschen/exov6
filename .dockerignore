@@ -131,6 +131,7 @@ logs/
 Dockerfile*
 docker-compose*.yml
 .dockerignore
+!docker-requirements.txt
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Package Managers (if using in CI)
