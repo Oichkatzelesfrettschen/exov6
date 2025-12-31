@@ -140,7 +140,7 @@ ENV CC=clang \
 # chain security and reproducible builds.
 COPY docker-requirements.txt /tmp/docker-requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip3 install --break-system-packages --no-cache-dir \
+    pip3 install --break-system-packages \
         -r /tmp/docker-requirements.txt && \
     rm /tmp/docker-requirements.txt
 
