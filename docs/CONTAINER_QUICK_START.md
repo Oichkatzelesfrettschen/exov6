@@ -163,7 +163,7 @@ docker volume prune
 
 **Solution**: Rebuild the container:
 ```bash
-./scripts/docker-build.sh build --no-cache
+./scripts/docker-build.sh build
 ```
 
 ## Advanced Usage
