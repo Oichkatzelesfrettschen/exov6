@@ -165,7 +165,7 @@ jobs:
             file "${BUILD_DIR}/kernel"
           else
             echo "❌ Kernel binary not found"
-            find "${BUILD_DIR}" -name "*kernel*" || true
+            find "${BUILD_DIR}" -name "*kernel*"
             exit 1
           fi
       
