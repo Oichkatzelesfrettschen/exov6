@@ -1,0 +1,199 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# FeuerBird Exokernel - Docker Compose Configuration
+# Optimized development and build workflows
+# ═══════════════════════════════════════════════════════════════════════════════
+
+services:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Main build environment service
+  # ─────────────────────────────────────────────────────────────────────────────
+  builder:
+    build:
+      context: .
+      target: builder
+      dockerfile: Dockerfile
+      args:
+        LLVM_VERSION: 18
+        MAKEFLAGS: "-j8"
+      # Enable BuildKit for better caching and parallel builds
+      cache_from:
+        - type=registry,ref=feuerbird/builder:latest
+    image: feuerbird-builder:latest
+    container_name: feuerbird-builder
+    
+    # Mount source code for live development
+    volumes:
+      - .:/workspace:rw
+      - build-cache:/build:rw
+      # Cache directories for faster rebuilds
+      - cmake-cache:/workspace/build:rw
+      - meson-cache:/workspace/builddir:rw
+    
+    # Set resource limits for stability
+    deploy:
+      resources:
+        limits:
+          cpus: '${BUILD_CPUS:-8}'
+          memory: '${BUILD_MEMORY:-8G}'
+        reservations:
+          cpus: '${BUILD_CPUS_MIN:-2}'
+          memory: '${BUILD_MEMORY_MIN:-2G}'
+    
+    # Enable all required capabilities for kernel development
+    cap_add:
+      - SYS_PTRACE
+    
+    # Use host network for better performance in development
+    # network_mode: host
+    
+    # Keep container running for interactive use
+    tty: true
+    stdin_open: true
+    
+    # Default working directory
+    working_dir: /workspace
+    
+    # Override default command for interactive shell
+    command: /bin/bash
+    
+    # Environment variables
+    environment:
+      - CC=clang
+      - CXX=clang++
+      - CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE:-RelWithDebInfo}
+      - MAKEFLAGS=-j8
+      - NINJA_STATUS=[%f/%t] 
+      # Enable colored output
+      - TERM=xterm-256color
+  
+  # ─────────────────────────────────────────────────────────────────────────────
+  # CMake-based build service
+  # ─────────────────────────────────────────────────────────────────────────────
+  cmake-build:
+    extends: builder
+    container_name: feuerbird-cmake
+    command: >
+      bash -c "
+        echo '═══════════════════════════════════════════════════════════════';
+        echo 'FeuerBird Exokernel - CMake Build';
+        echo '═══════════════════════════════════════════════════════════════';
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE:-RelWithDebInfo} \
+          -DUSE_LLD=ON &&
+        ninja -C build ${BUILD_TARGET:-kernel} &&
+        echo '✅ Build completed successfully!'
+      "
+  
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Meson-based build service
+  # ─────────────────────────────────────────────────────────────────────────────
+  meson-build:
+    extends: builder
+    container_name: feuerbird-meson
+    command: >
+      bash -c "
+        echo '═══════════════════════════════════════════════════════════════';
+        echo 'FeuerBird Exokernel - Meson Build';
+        echo '═══════════════════════════════════════════════════════════════';
+        meson setup builddir \
+          --buildtype=${MESON_BUILDTYPE:-debugoptimized} &&
+        ninja -C builddir ${BUILD_TARGET:-kernel} &&
+        echo '✅ Build completed successfully!'
+      "
+  
+  # ─────────────────────────────────────────────────────────────────────────────
+  # QEMU testing service
+  # ─────────────────────────────────────────────────────────────────────────────
+  qemu-test:
+    build:
+      context: .
+      target: runtime
+      dockerfile: Dockerfile
+    image: feuerbird-runtime:latest
+    container_name: feuerbird-qemu
+    
+    volumes:
+      - .:/workspace:ro
+      - build-cache:/build:ro
+    
+    # NOTE: KVM device is commented out by default since it may not be available
+    # on all hosts. Uncomment the following lines if /dev/kvm is available for
+    # hardware-accelerated QEMU execution:
+    # devices:
+    #   - /dev/kvm:/dev/kvm
+    
+    cap_add:
+      - SYS_PTRACE
+      - NET_ADMIN
+    
+    tty: true
+    stdin_open: true
+    
+    working_dir: /workspace
+    
+    command: >
+      bash -c "
+        echo '═══════════════════════════════════════════════════════════════';
+        echo 'FeuerBird Exokernel - QEMU Test';
+        echo '═══════════════════════════════════════════════════════════════';
+        if [ -f build/kernel ]; then
+          qemu-system-x86_64 -nographic -serial stdio -kernel build/kernel
+        else
+          echo '❌ Kernel binary not found. Build first with cmake-build or meson-build.'
+          exit 1
+        fi
+      "
+  
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Development service with all tools
+  # ─────────────────────────────────────────────────────────────────────────────
+  dev:
+    extends: builder
+    container_name: feuerbird-dev
+    
+    # Additional volumes for development
+    volumes:
+      - .:/workspace:rw
+      - build-cache:/build:rw
+      - cmake-cache:/workspace/build:rw
+      - meson-cache:/workspace/builddir:rw
+      # Mount home directory for persistent shell history and configs
+      - dev-home:/home/builder:rw
+    
+    command: >
+      bash -c "
+        echo '═══════════════════════════════════════════════════════════════';
+        echo 'FeuerBird Exokernel - Development Environment';
+        echo '═══════════════════════════════════════════════════════════════';
+        echo '';
+        echo 'Available commands:';
+        echo '  cmake -B build -G Ninja && ninja -C build';
+        echo '  meson setup builddir && ninja -C builddir';
+        echo '  ninja -C build qemu-nox';
+        echo '  pytest tests/';
+        echo '  pre-commit run --all-files';
+        echo '';
+        echo 'Starting interactive shell...';
+        echo '';
+        exec /bin/bash
+      "
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Named volumes for persistent caching
+# ─────────────────────────────────────────────────────────────────────────────
+volumes:
+  build-cache:
+    driver: local
+  cmake-cache:
+    driver: local
+  meson-cache:
+    driver: local
+  dev-home:
+    driver: local
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Networks (default bridge is sufficient for most cases)
+# ─────────────────────────────────────────────────────────────────────────────
+networks:
+  default:
+    driver: bridge
