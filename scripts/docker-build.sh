@@ -132,7 +132,7 @@ run_build() {
                 "${IMAGE_NAME}:latest" \
                 bash -c "
                     set -euo pipefail
-                    meson setup builddir --reconfigure --buildtype=${build_type}
+                    meson setup builddir --buildtype=${build_type}
                     ninja -C builddir kernel
                 "
             ;;
