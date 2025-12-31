@@ -83,12 +83,13 @@ build_image() {
     
     # Build with progress output
     log_info "Building image ${IMAGE_NAME}..."
+    # Note: MAKEFLAGS (including -j$(nproc)) is determined inside the Dockerfile
+    # so that parallelism matches the CPU count available in the build container.
     if docker build \
         --target builder \
         --tag "${IMAGE_NAME}:latest" \
         --tag "${IMAGE_NAME}:$(date +%Y%m%d)" \
         --build-arg LLVM_VERSION=18 \
-        --build-arg MAKEFLAGS="-j$(nproc 2>/dev/null || echo 4)" \
         .; then
         log_success "Image built successfully: ${IMAGE_NAME}:latest"
     else
