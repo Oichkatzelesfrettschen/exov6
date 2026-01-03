@@ -159,9 +159,24 @@ RUN wget https://github.com/Z3Prover/z3/releases/download/z3-4.12.2/z3-4.12.2-x6
 # Install TLA+ Tools
 # ─────────────────────────────────────────────────────────────────────────────────
 RUN wget https://github.com/tlaplus/tlaplus/releases/download/v1.8.0/tla2tools.jar -O /usr/local/bin/tla2tools.jar && \
-    echo '#!/bin/bash\njava -jar /usr/local/bin/tla2tools.jar "$@"' > /usr/local/bin/tlc && \
-    chmod +x /usr/local/bin/tlc
+    cat << 'EOF' > /usr/local/bin/tlc
+#!/bin/bash
 
+# Ensure Java is available
+if ! command -v java >/dev/null 2>&1; then
+    echo "Error: 'java' is not installed or not found in PATH." >&2
+    exit 1
+fi
+
+# Ensure the TLA+ tools JAR is accessible
+if [ ! -r /usr/local/bin/tla2tools.jar ]; then
+    echo "Error: TLA+ tools JAR '/usr/local/bin/tla2tools.jar' not found or not readable." >&2
+    exit 1
+fi
+
+exec java -jar /usr/local/bin/tla2tools.jar "$@"
+EOF
+RUN chmod +x /usr/local/bin/tlc
 # ─────────────────────────────────────────────────────────────────────────────────
 # Install FlameGraph Tools
 # ─────────────────────────────────────────────────────────────────────────────────
