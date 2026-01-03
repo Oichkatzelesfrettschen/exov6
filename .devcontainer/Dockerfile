@@ -53,6 +53,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cppcheck \
     clang-tools-${LLVM_VERSION} \
     include-what-you-use \
+    # Advanced static analysis
+    sparse \
+    splint \
+    flawfinder \
+    rats \
+    # Formal verification tools
+    coq \
+    # Dynamic analysis
+    valgrind \
+    linux-tools-generic \
+    # Complexity analysis
+    python3-lizard \
+    # Code transformation
+    astyle \
+    uncrustify \
     # Coverage tools
     lcov \
     gcovr \
@@ -128,7 +143,40 @@ RUN pip3 install --break-system-packages \
     meson==1.6.1 \
     ninja==1.11.1.1 \
     cmake-format==0.6.13 \
-    cmakelang==0.6.13
+    cmakelang==0.6.13 \
+    semgrep==1.55.2 \
+    lizard==1.17.10
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Install Z3 Theorem Prover
+# ─────────────────────────────────────────────────────────────────────────────────
+RUN wget https://github.com/Z3Prover/z3/releases/download/z3-4.12.2/z3-4.12.2-x64-glibc-2.35.zip && \
+    unzip z3-4.12.2-x64-glibc-2.35.zip && \
+    cp z3-4.12.2-x64-glibc-2.35/bin/z3 /usr/local/bin/ && \
+    rm -rf z3-4.12.2-x64-glibc-2.35*
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Install TLA+ Tools
+# ─────────────────────────────────────────────────────────────────────────────────
+RUN wget https://github.com/tlaplus/tlaplus/releases/download/v1.8.0/tla2tools.jar -O /usr/local/bin/tla2tools.jar && \
+    echo '#!/bin/bash\njava -jar /usr/local/bin/tla2tools.jar "$@"' > /usr/local/bin/tlc && \
+    chmod +x /usr/local/bin/tlc
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Install FlameGraph Tools
+# ─────────────────────────────────────────────────────────────────────────────────
+RUN git clone https://github.com/brendangregg/FlameGraph /opt/flamegraph && \
+    ln -s /opt/flamegraph/flamegraph.pl /usr/local/bin/flamegraph.pl && \
+    ln -s /opt/flamegraph/stackcollapse-perf.pl /usr/local/bin/stackcollapse-perf.pl
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# Install Facebook Infer
+# ─────────────────────────────────────────────────────────────────────────────────
+RUN wget https://github.com/facebook/infer/releases/download/v1.1.0/infer-linux64-v1.1.0.tar.xz && \
+    tar -xJf infer-linux64-v1.1.0.tar.xz && \
+    mv infer-linux64-v1.1.0 /opt/infer && \
+    ln -s /opt/infer/bin/infer /usr/local/bin/infer && \
+    rm infer-linux64-v1.1.0.tar.xz
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Create development user
