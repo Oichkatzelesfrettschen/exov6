@@ -25,6 +25,9 @@ include(FeuerBirdConfig)
 include(FindLLVMTools)
 include(CompilerDetection)
 include(FeatureDetection)
+include(CCache)
+include(CodeCoverage)
+include(StaticAnalysis)
 
 # ═════════════════════════════════════════════════════════════════════
 # BUILD OPTIONS
