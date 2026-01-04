@@ -181,5 +181,9 @@ if(ENABLE_COVERAGE)
     endif()
 endif()
 
-# Export variables for subdirectories
-set(COVERAGE_ENABLED ${ENABLE_COVERAGE} PARENT_SCOPE)
+# Export variables for subdirectories (only if we have a parent scope)
+if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(COVERAGE_ENABLED ${ENABLE_COVERAGE} PARENT_SCOPE)
+else()
+    set(COVERAGE_ENABLED ${ENABLE_COVERAGE})
+endif()
