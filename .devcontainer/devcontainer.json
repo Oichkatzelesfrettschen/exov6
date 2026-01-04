@@ -1,0 +1,171 @@
+{
+  "name": "FeuerBird Exokernel Development",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  
+  // Container settings
+  "runArgs": [
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined",
+    "--privileged"
+  ],
+  
+  // Mount workspace and cache volumes
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "source=feuerbird-ccache,target=/home/vscode/.ccache,type=volume",
+    "source=feuerbird-cmake-cache,target=/home/vscode/.cmake,type=volume"
+  ],
+  
+  // Development user
+  "remoteUser": "vscode",
+  "containerUser": "vscode",
+  
+  // Environment variables
+  "remoteEnv": {
+    "CC": "clang",
+    "CXX": "clang++",
+    "CCACHE_DIR": "/home/vscode/.ccache",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+  },
+  
+  // VS Code customizations
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // C/C++ Configuration
+        "C_Cpp.default.cStandard": "c17",
+        "C_Cpp.default.cppStandard": "c++23",
+        "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
+        "C_Cpp.default.compilerPath": "/usr/bin/clang",
+        "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+        "C_Cpp.errorSquiggles": "enabled",
+        "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+        "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+        "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy",
+        "C_Cpp.codeAnalysis.clangTidy.args": [
+          "--config-file=${workspaceFolder}/.clang-tidy"
+        ],
+        
+        // Editor settings
+        "editor.formatOnSave": true,
+        "editor.rulers": [80, 120],
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.trimAutoWhitespace": true,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        
+        // CMake settings
+        "cmake.configureOnOpen": true,
+        "cmake.buildDirectory": "${workspaceFolder}/build",
+        "cmake.generator": "Ninja",
+        "cmake.configureArgs": [
+          "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+          "-DCMAKE_BUILD_TYPE=Debug"
+        ],
+        
+        // Python settings
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        
+        // Git settings
+        "git.autofetch": true,
+        "git.confirmSync": false,
+        "git.enableSmartCommit": true,
+        
+        // Terminal settings
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.scrollback": 10000,
+        
+        // File associations
+        "files.associations": {
+          "*.h": "c",
+          "*.c": "c",
+          "*.S": "gas",
+          "*.capnp": "capnp",
+          "CMakeLists.txt": "cmake",
+          "meson.build": "meson"
+        },
+        
+        // Search exclusions
+        "search.exclude": {
+          "**/build": true,
+          "**/build-*": true,
+          "**/.vscode": true,
+          "**/.git": true,
+          "**/node_modules": true,
+          "**/__pycache__": true,
+          "**/.pytest_cache": true
+        }
+      },
+      
+      "extensions": [
+        // C/C++ Development
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake",
+        "llvm-vs-code-extensions.vscode-clangd",
+        
+        // Build systems
+        "mesonbuild.mesonbuild",
+        
+        // Code quality
+        "xaver.clang-format",
+        "notskm.clang-tidy",
+        "ms-vscode.makefile-tools",
+        
+        // Python
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        
+        // Git
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        
+        // Documentation
+        "cschlosser.doxdocgen",
+        "trond-snekvik.simple-rst",
+        
+        // Productivity
+        "streetsidesoftware.code-spell-checker",
+        "wayou.vscode-todo-highlight",
+        "gruntfuggly.todo-tree",
+        "usernamehw.errorlens",
+        
+        // Debugging
+        "vadimcn.vscode-lldb",
+        
+        // Markdown
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        
+        // YAML/JSON
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml"
+      ]
+    }
+  },
+  
+  // Lifecycle scripts
+  "postCreateCommand": "echo '🔥 FeuerBird Exokernel dev container ready!'",
+  "postStartCommand": "git config --global --add safe.directory /workspace",
+  
+  // Port forwarding for potential web interfaces
+  "forwardPorts": [8080, 9090],
+  
+  // Features to install
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
+}
