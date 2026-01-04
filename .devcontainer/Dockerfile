@@ -148,17 +148,23 @@ RUN pip3 install --break-system-packages \
     lizard==1.17.10
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Install Z3 Theorem Prover
+# Install Z3 Theorem Prover with checksum verification
 # ─────────────────────────────────────────────────────────────────────────────────
-RUN wget https://github.com/Z3Prover/z3/releases/download/z3-4.12.2/z3-4.12.2-x64-glibc-2.35.zip && \
-    unzip z3-4.12.2-x64-glibc-2.35.zip && \
-    cp z3-4.12.2-x64-glibc-2.35/bin/z3 /usr/local/bin/ && \
-    rm -rf z3-4.12.2-x64-glibc-2.35*
+RUN Z3_VERSION=4.12.2 && \
+    Z3_SHA256=9f58f3710bd2094085951a75791550f547903d75fe7e2fcb373c5f03fc761b8f && \
+    wget https://github.com/Z3Prover/z3/releases/download/z3-${Z3_VERSION}/z3-${Z3_VERSION}-x64-glibc-2.35.zip && \
+    echo "${Z3_SHA256}  z3-${Z3_VERSION}-x64-glibc-2.35.zip" | sha256sum -c - && \
+    unzip z3-${Z3_VERSION}-x64-glibc-2.35.zip && \
+    cp z3-${Z3_VERSION}-x64-glibc-2.35/bin/z3 /usr/local/bin/ && \
+    rm -rf z3-${Z3_VERSION}-x64-glibc-2.35*
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Install TLA+ Tools
+# Install TLA+ Tools with checksum verification
 # ─────────────────────────────────────────────────────────────────────────────────
-RUN wget https://github.com/tlaplus/tlaplus/releases/download/v1.8.0/tla2tools.jar -O /usr/local/bin/tla2tools.jar && \
+RUN TLA_VERSION=1.8.0 && \
+    TLA_SHA256=99b8ac649829a0b19f3990a1d32a5dfc8de2f5f85ff3de2a05c0f9b3c5dabb61 && \
+    wget https://github.com/tlaplus/tlaplus/releases/download/v${TLA_VERSION}/tla2tools.jar -O /usr/local/bin/tla2tools.jar && \
+    echo "${TLA_SHA256}  /usr/local/bin/tla2tools.jar" | sha256sum -c - && \
     cat << 'EOF' > /usr/local/bin/tlc
 #!/bin/bash
 
@@ -177,21 +183,28 @@ fi
 exec java -jar /usr/local/bin/tla2tools.jar "$@"
 EOF
 RUN chmod +x /usr/local/bin/tlc
+
 # ─────────────────────────────────────────────────────────────────────────────────
-# Install FlameGraph Tools
+# Install FlameGraph Tools with pinned commit SHA
 # ─────────────────────────────────────────────────────────────────────────────────
-RUN git clone https://github.com/brendangregg/FlameGraph /opt/flamegraph && \
+RUN FLAMEGRAPH_COMMIT=cd9ee4c4449775a2f867acf31c84b7fe4b132ad5 && \
+    git clone https://github.com/brendangregg/FlameGraph /opt/flamegraph && \
+    cd /opt/flamegraph && \
+    git checkout ${FLAMEGRAPH_COMMIT} && \
     ln -s /opt/flamegraph/flamegraph.pl /usr/local/bin/flamegraph.pl && \
     ln -s /opt/flamegraph/stackcollapse-perf.pl /usr/local/bin/stackcollapse-perf.pl
 
 # ─────────────────────────────────────────────────────────────────────────────────
-# Install Facebook Infer
+# Install Facebook Infer with checksum verification
 # ─────────────────────────────────────────────────────────────────────────────────
-RUN wget https://github.com/facebook/infer/releases/download/v1.1.0/infer-linux64-v1.1.0.tar.xz && \
-    tar -xJf infer-linux64-v1.1.0.tar.xz && \
-    mv infer-linux64-v1.1.0 /opt/infer && \
+RUN INFER_VERSION=1.1.0 && \
+    INFER_SHA256=2f850e794d9f7bc87c3c9a827d85f5e5e88bb2e6088c4f05a9b3a69a96e3f6a5 && \
+    wget https://github.com/facebook/infer/releases/download/v${INFER_VERSION}/infer-linux64-v${INFER_VERSION}.tar.xz && \
+    echo "${INFER_SHA256}  infer-linux64-v${INFER_VERSION}.tar.xz" | sha256sum -c - && \
+    tar -xJf infer-linux64-v${INFER_VERSION}.tar.xz && \
+    mv infer-linux64-v${INFER_VERSION} /opt/infer && \
     ln -s /opt/infer/bin/infer /usr/local/bin/infer && \
-    rm infer-linux64-v1.1.0.tar.xz
+    rm infer-linux64-v${INFER_VERSION}.tar.xz
 
 # ─────────────────────────────────────────────────────────────────────────────────
 # Create development user
