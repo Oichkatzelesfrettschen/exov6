@@ -3,13 +3,13 @@
 
 # Integrated mathematical kernel demo
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/demo_integrated_mathematical_kernel.c")
-    phoenix_add_executable(demo-integrated-mathematical-kernel
+    feuerbird_add_executable(demo-integrated-mathematical-kernel
         SOURCES demo_integrated_mathematical_kernel.c
         INCLUDES 
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/kernel
-        DEPENDENCIES phoenix-libos
+        DEPENDENCIES feuerbird-libos
     )
     
     target_link_libraries(demo-integrated-mathematical-kernel PRIVATE m)

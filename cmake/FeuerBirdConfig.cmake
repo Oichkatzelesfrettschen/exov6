@@ -192,20 +192,11 @@ set(FEUERBIRD_EXOKERNEL_INCLUDE_DIRS
 )
 
 # ===========================================================================
-# LEGACY ALIASES
+# LEGACY ALIASES (REMOVED)
 # ===========================================================================
-
-# phoenix_add_executable is an alias for feuerbird_add_executable
-# (legacy compatibility)
-function(phoenix_add_executable name)
-    feuerbird_add_executable(${name} ${ARGN})
-endfunction()
-
-# phoenix_add_library is an alias for feuerbird_add_library
-# (legacy compatibility)
-function(phoenix_add_library name)
-    feuerbird_add_library(${name} ${ARGN})
-endfunction()
+# phoenix_* aliases were removed in the feuerbird rename consolidation.
+# All CMakeLists.txt files should use feuerbird_add_executable() and
+# feuerbird_add_library() directly.
 
 # ===========================================================================
 # STATUS MESSAGE

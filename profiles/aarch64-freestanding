@@ -1,0 +1,25 @@
+# FeuerBird Exokernel - AArch64 Freestanding Kernel Profile
+# Use: conan install . -pr:h profiles/aarch64-freestanding
+#
+# This profile is for cross-compiling the kernel to AArch64.
+# Requires: aarch64-linux-gnu-gcc or clang with aarch64 target.
+
+[settings]
+arch=armv8
+build_type=Release
+compiler=clang
+compiler.cppstd=17
+compiler.version=21
+os=None
+
+[options]
+feuerbird-exokernel/*:shared=False
+feuerbird-exokernel/*:use_simd=False
+feuerbird-exokernel/*:use_lld=True
+feuerbird-exokernel/*:use_lto=True
+feuerbird-exokernel/*:use_capnp=False
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+tools.build:compiler_executables={"c": "clang", "cpp": "clang++"}
+tools.cmake.cmaketoolchain:extra_variables={"CMAKE_SYSTEM_NAME": "Generic", "CMAKE_SYSTEM_PROCESSOR": "aarch64", "KERNEL_FREESTANDING": "ON"}

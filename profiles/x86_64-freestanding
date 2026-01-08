@@ -1,0 +1,25 @@
+# FeuerBird Exokernel - x86_64 Freestanding Kernel Profile
+# Use: conan install . -pr:h profiles/x86_64-freestanding
+#
+# This profile is for building the kernel in freestanding mode
+# without standard library dependencies.
+
+[settings]
+arch=x86_64
+build_type=Release
+compiler=clang
+compiler.cppstd=17
+compiler.version=21
+os=None
+
+[options]
+feuerbird-exokernel/*:shared=False
+feuerbird-exokernel/*:use_simd=True
+feuerbird-exokernel/*:use_lld=True
+feuerbird-exokernel/*:use_lto=True
+feuerbird-exokernel/*:use_capnp=False
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+tools.build:compiler_executables={"c": "clang", "cpp": "clang++"}
+tools.cmake.cmaketoolchain:extra_variables={"KERNEL_FREESTANDING": "ON"}
