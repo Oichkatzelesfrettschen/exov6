@@ -28,12 +28,7 @@
 #include <stdatomic.h>
 #include <stdbool.h>
 
-/* Forward declarations for standard library functions */
-static uint32_t strlen(const char *s) {
-    const char *p = s;
-    while (*p) p++;
-    return p - s;
-}
+/* strlen is provided by kernel/string.h - no local redefinition needed */
 
 /* Simple sqrt implementation for kernel use */
 static double sqrt(double x) {
@@ -1301,7 +1296,7 @@ q16_t octonion_norm_fixed(octonion_t a) {
 double octonion_norm_squared(octonion_t a) {
     double sum = 0.0;
     for (int i = 0; i < 8; i++) {
-        sum += a.v[i] * a.v[i];  /* Use .v[] array access */
+        sum += a.coeffs[i] * a.coeffs[i];  /* Use .coeffs[] array */
     }
     return sum;
 }

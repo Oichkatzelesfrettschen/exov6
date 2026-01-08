@@ -1,4 +1,7 @@
 #pragma once
+#ifndef EXOKERNEL_H_INCLUDED
+#define EXOKERNEL_H_INCLUDED
+
 #include <types.h>
 #include "exo.h"
 #include "syscall.h"
@@ -104,3 +107,5 @@ enum exo_syscall {
   EXO_SYSCALL_IRQ_WAIT = SYS_exo_irq_wait,
   EXO_SYSCALL_IRQ_ACK = SYS_exo_irq_ack,
 };
+
+#endif /* EXOKERNEL_H_INCLUDED */

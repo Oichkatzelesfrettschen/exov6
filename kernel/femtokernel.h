@@ -71,8 +71,9 @@ typedef struct femto_kernel_state {
     uint32_t quantum_entropy_pool;     // Post-quantum entropy
     uint16_t security_level;           // Current security level
     uint16_t reserved;                 // Future mathematical extensions
-    uint32_t padding1;                 // Padding to reach 64 bytes
-    uint32_t padding2;                 // Padding to reach 64 bytes
+    uint32_t padding1;                 // Padding (4 bytes)
+    uint32_t padding2;                 // Padding (4 bytes)
+    uint64_t padding3;                 // Padding to reach 64 bytes (8 bytes)
 } __attribute__((packed)) femto_kernel_state_t;
 
 /**

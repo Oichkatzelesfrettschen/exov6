@@ -42,6 +42,16 @@ file(GLOB KERNEL_CORE_SOURCES *.c)
 # Assembly sources
 file(GLOB KERNEL_ASM_SOURCES *.S)
 
+# 64-bit boot trampoline - DISABLED pending linker script updates
+# Multiboot2 requires:
+# 1. Low-memory boot section (AT 0x100000) for 32-bit code
+# 2. main64 entry point (kernel/boot/main64.c) enabled
+# 3. Proper identity + high-half page table setup
+# See: src/arch/x64/multiboot2.S (created 2025-01)
+# if(CMAKE_SIZEOF_VOID_P EQUAL 8 AND EXISTS "${CMAKE_SOURCE_DIR}/src/arch/x64/multiboot2.S")
+#     list(APPEND KERNEL_ASM_SOURCES "${CMAKE_SOURCE_DIR}/src/arch/x64/multiboot2.S")
+# endif()
+
 # Subdirectory sources - these contain the actual implementations
 # NOTE: Most subdirs have conflicting type definitions with main kernel
 # They need significant refactoring; for now, disable all subdirs and rely on
@@ -94,7 +104,10 @@ list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*mkfs.*")
 # Exclude q16 math files - use non-existent/SSE4.1+ SIMD intrinsics (needs proper SIMD detection)
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*q16_octonion.*")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*q16_fixed.*")
-# Exclude lambda_cap.c - has symbol conflicts (strlen redefinition) and struct mismatches
+# lambda_cap.c: COMPILATION FIXED (strlen, octonion.v->coeffs) 2025-01
+# LINKER ISSUES remain: cap_revoke, cap_table_remove (need cap.c integration),
+# q16_octonion_from_double (needs q16_octonion.c which requires SIMD detection)
+# TODO: Enable when capability table and q16_octonion modules are integrated
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*lambda_cap.*")
 # Exclude 32-bit assembly files (use 64-bit variants for x86_64 builds)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -133,7 +146,8 @@ list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*serialization_simple\\.c$")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*unified_channel\\.c$")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*unified_ipc\\.c$")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*zero_copy\\.c$")
-# Exclude capability_lattice - needs refactoring
+# capability_lattice.c is in kernel/capability/ subdir (disabled, see lines 46-48)
+# Exclusion retained for if/when subdirectory sources are re-enabled
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*capability_lattice\\.c$")
 # Exclude procfs - has dependency issues
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*procfs\\.c$")

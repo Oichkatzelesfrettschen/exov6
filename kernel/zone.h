@@ -3,6 +3,7 @@
 
 #include "spinlock.h"
 #include <stddef.h>
+#include <cap.h>
 
 /* Forward declarations */
 struct zone;

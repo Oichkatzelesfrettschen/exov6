@@ -19,7 +19,7 @@
 
 static femto_kernel_state_t g_femto_state;
 static femto_context_t g_femto_contexts[FEMTO_MAX_CONTEXTS];
-static atomic_uint_fast64_t g_performance_counter = 0;
+static atomic_uint64_t g_performance_counter = 0;
 
 // =============================================================================
 // MATHEMATICAL PERFORMANCE MONITORING

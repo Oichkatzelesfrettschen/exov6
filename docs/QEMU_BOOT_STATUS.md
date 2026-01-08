@@ -38,12 +38,32 @@ qemu-system-x86_64: Error loading uncompressed kernel without PVH ELF Note
 
 ## Solutions (Roadmap)
 
-### Option 1: Multiboot2 Support (Recommended)
+### Option 1: Multiboot2 Support (Recommended) - IN PROGRESS
 
-Multiboot2 supports 64-bit ELF directly. Requires:
-- Adding multiboot2 header to assembly
-- Using QEMU with GRUB2 bootloader
-- Updating linker script
+Multiboot2 supports 64-bit ELF directly.
+
+**Implementation Status (January 2025):**
+- [x] Created `src/arch/x64/multiboot2.S` with header and trampoline
+- [x] Linker script already has `.multiboot` section (kernel/kernel.ld:14)
+- [ ] **BLOCKED**: Low-memory boot section needed for 32-bit code
+- [ ] **BLOCKED**: main64 entry point needs to be enabled (kernel/boot/main64.c)
+- [ ] **BLOCKED**: Identity + high-half page table setup in boot section
+
+**Technical Issues Found:**
+1. 32-bit multiboot entry code uses addresses that must fit in 32 bits
+2. Kernel is linked at 0xFFFFFFFF80100000 (high-half virtual)
+3. Boot code needs separate low-memory (AT 0x100000) placement
+4. The linker script needs a `.boot` section with `AT(0x100000)`
+
+**Required Changes:**
+```
+# kernel/kernel.ld changes needed:
+.boot : AT(0x100000) {
+    *(.multiboot)
+    *(.boot32)      # 32-bit entry code
+    *(.boot_data)   # Page tables, GDT at low addresses
+}
+```
 
 ### Option 2: 32-to-64 Trampoline
 

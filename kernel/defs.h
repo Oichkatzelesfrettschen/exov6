@@ -244,22 +244,13 @@ int insert_pte(pde_t *, void *va, uint32_t perm, int flags);
 #endif
 
 // Exokernel extensions
-exo_cap exo_alloc_page(void);
-int exo_unbind_page(exo_cap);
+// Note: Functions exo_alloc_block, exo_bind_block, exo_alloc_hypervisor
+// have kernel-internal implementations in kernel/fs/fs.c with different
+// signatures than the user-API in exokernel.h. Include exokernel.h for
+// the standard API, or use the fs.c implementations directly.
 exo_cap cap_new(uint32_t id, uint32_t rights, uint32_t owner);
 int cap_verify(exo_cap);
-struct exo_blockcap exo_alloc_block(uint32_t dev, uint32_t rights);
-int exo_bind_block(struct exo_blockcap *, struct buf *, int);
-void exo_flush_block(struct exo_blockcap *, void *);
-exo_cap exo_alloc_irq(uint32_t irq, uint32_t rights);
-int exo_irq_wait(exo_cap cap, uint32_t *irqp);
-int exo_irq_ack(exo_cap cap);
 int irq_trigger(uint32_t irq);
-exo_cap exo_alloc_ioport(uint32_t port);
-exo_cap exo_bind_irq(uint32_t irq);
-exo_cap exo_alloc_dma(uint32_t chan);
-exo_cap exo_alloc_hypervisor(void);
-int hv_launch_guest(exo_cap cap, const char *path);
 
 void cap_table_init(void);
 cap_id_t cap_table_alloc(uint16_t type, uint32_t resource, uint32_t rights, uint32_t owner);

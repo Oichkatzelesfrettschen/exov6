@@ -160,9 +160,12 @@ _Static_assert(sizeof(struct segdesc) == 8, "struct segdesc size incorrect");
 #ifndef __ASSEMBLER__
 #ifdef __x86_64__
 typedef uint64_t pte_t;
+typedef uint64_t pde_t;
 typedef uint64_t pdpe_t;
 typedef uint64_t pml4e_t;
 #else
+// 32-bit page directory entry
+typedef uint32_t pde_t;
 // Use consistent 64-bit types from include/types.h
 // typedef uint32_t pte_t;  // Commented out - using types.h definition
 #endif
