@@ -1,17 +1,70 @@
-/* Linker script for ExoKernel v6 x86_64 */
+/* Linker script for ExoKernel v6 x86_64 with Multiboot2 Boot Support */
 
 OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64", "elf64-x86-64")
 OUTPUT_ARCH(i386:x86-64)
-ENTRY(_start)
+ENTRY(multiboot2_entry)
+
+/* Memory layout constants */
+BOOT_PHYS_BASE = 0x100000;           /* Physical load address (1MB) */
+KERNEL_VIRT_BASE = 0xFFFFFFFF80000000; /* High-half virtual base (-2GB) */
+KERNEL_PHYS_OFFSET = 0x100000;       /* Physical offset from VIRT_BASE */
 
 SECTIONS
 {
-  /* Link at high half of virtual address space */
-  . = 0xFFFFFFFF80100000;
+  /* =========================================================================
+   * BOOT SECTIONS - Identity mapped (VMA = LMA = physical address)
+   * These must be addressable by 32-bit code before paging is enabled
+   * ========================================================================= */
 
-  /* Ensure multiboot header is early in file */
-  .text : AT(0x100000) {
+  . = BOOT_PHYS_BASE;
+
+  /* PVH ELF note - required for QEMU x86_64 -kernel boot */
+  .note.Xen : {
+    KEEP(*(.note.Xen))
+  }
+
+  /* Multiboot2 header - must be in first 32KB of file */
+  .boot : {
+    PROVIDE(__boot_start = .);
     *(.multiboot)
+    . = ALIGN(16);
+  }
+
+  /* 32-bit boot code - runs before paging enabled */
+  .boot_text : {
+    *(.boot_text)
+    . = ALIGN(16);
+  }
+
+  /* Boot data - GDT, pointers, etc. */
+  .boot_data : {
+    *(.boot_data)
+    . = ALIGN(4096);
+  }
+
+  /* Boot BSS - page tables, stack (not loaded, zeroed) */
+  .boot_bss (NOLOAD) : {
+    PROVIDE(__boot_bss_start = .);
+    *(.boot_bss)
+    . = ALIGN(4096);
+    PROVIDE(__boot_bss_end = .);
+  }
+
+  PROVIDE(__boot_end = .);
+  __boot_size = __boot_end - __boot_start;
+
+  /* =========================================================================
+   * KERNEL SECTIONS - High-half virtual addresses
+   * VMA at KERNEL_VIRT_BASE + offset, LMA continues from boot sections
+   * ========================================================================= */
+
+  /* Calculate where kernel virtual addresses start */
+  . = KERNEL_VIRT_BASE + KERNEL_PHYS_OFFSET + __boot_size;
+  __kernel_virt_start = .;
+
+  /* Kernel text - code segment */
+  .text : AT(__boot_end) {
+    PROVIDE(__text_start = .);
     *(.text .stub .text.* .gnu.linkonce.t.*)
     . = ALIGN(0x1000);
     PROVIDE(etext = .);
@@ -27,18 +80,25 @@ SECTIONS
 
   /* Read-write data (initialized) */
   .data : {
+    PROVIDE(__data_start = .);
     *(.data .data.* .gnu.linkonce.d.*)
     PROVIDE(edata = .);
   }
 
   /* Uninitialized data (BSS) */
   .bss : {
+    PROVIDE(__bss_start = .);
     *(.dynbss)
     *(.bss .bss.* .gnu.linkonce.b.*)
     *(COMMON)
     . = ALIGN(0x1000);
+    PROVIDE(__bss_end = .);
     PROVIDE(end = .);
   }
+
+  /* =========================================================================
+   * DEBUG SECTIONS
+   * ========================================================================= */
 
   /* Debugging sections */
   .stab 0 : { *(.stab) }

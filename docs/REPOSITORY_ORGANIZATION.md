@@ -146,8 +146,8 @@ feuerbird_exokernel/
 
 ## Notes
 
-### Pre-existing Issues
-The repository has a pre-existing build system issue where `phoenix_add_executable()` and related CMake functions are not defined. This is not related to the reorganization and existed before these changes.
+### Build System Status
+The build system uses `feuerbird_add_executable()` and related CMake functions defined in `cmake/FeuerBirdConfig.cmake`. All build targets use the `feuerbird-*` naming convention.
 
 ### Git History
 All file moves were done using `git mv` to preserve history. Build artifacts were removed using `git rm` as they should never have been committed.

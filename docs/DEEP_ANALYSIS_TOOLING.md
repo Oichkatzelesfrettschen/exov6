@@ -252,16 +252,15 @@ Based on codebase analysis, identified inconsistencies:
 **Status:** Resolved
 
 #### Issue 2: Inconsistent Naming Conventions
-- `phoenix_*` functions vs `feuerbird_*`
 - Mixed snake_case and camelCase
 - Inconsistent prefix usage
 
 **Resolution:**
-- ✅ Added `phoenix_*` → `feuerbird_*` aliases
-- ✅ Documented naming standard
-- 📋 TODO: Gradual migration plan
+- ✅ Migrated all `phoenix_*` → `feuerbird_*` (January 2025)
+- ✅ Documented naming standard in NAMING_CONVENTIONS.md
+- ✅ All CMake functions now use `feuerbird_*` prefix
 
-**Status:** Partially resolved
+**Status:** Resolved
 
 #### Issue 3: Capability System Variations
 Multiple capability implementations found:

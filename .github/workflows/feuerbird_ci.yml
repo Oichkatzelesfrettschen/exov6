@@ -30,6 +30,9 @@ jobs:
           - name: "Development (Debug+Features)"
             cmake_flags: "-DUSE_SIMD=ON -DIPC_DEBUG=ON"
             build_type: "Debug"
+          - name: "Coverage"
+            cmake_flags: "-DENABLE_COVERAGE=ON -DUSE_SIMD=ON"
+            build_type: "Debug"
             
     steps:
       - name: Checkout code
@@ -110,19 +113,106 @@ jobs:
         if: matrix.config.name == 'Baseline Build'
         run: |
           set -euxo pipefail
-          # Run Python unit tests
-          PATH="/home/runner/.local/bin:$PATH" pytest -v tests/ || true
+          # Run Python unit tests (failures block CI)
+          PATH="/home/runner/.local/bin:$PATH" pytest -v tests/ --tb=short
+
+          # Run CMake tests (retry flaky tests up to 2 times)
+          cd build && ctest --output-on-failure -j $(nproc) --repeat until-pass:2
           
-          # Run any CMake tests if defined
-          cd build && ctest --output-on-failure -j $(nproc) || true
-          
-      - name: QEMU smoke test
+      - name: Kernel binary validation
         if: matrix.config.name == 'Baseline Build'
         run: |
           set -euxo pipefail
-          # Quick QEMU validation (timeout to prevent hanging)
-          timeout 30s ninja -C build qemu-nox || true
-          echo "✅ QEMU smoke test completed"
+          echo "=== Kernel Binary Validation ==="
+
+          # Find kernel binary
+          if [ -f build/kernel/kernel ]; then
+            KERNEL=build/kernel/kernel
+          elif [ -f build/kernel ]; then
+            KERNEL=build/kernel
+          else
+            echo "ERROR: Kernel binary not found"
+            exit 1
+          fi
+
+          # Verify ELF format
+          file "$KERNEL" | grep -q "ELF 64-bit" || {
+            echo "ERROR: Kernel is not a valid 64-bit ELF"
+            exit 1
+          }
+          echo "ELF format validated"
+
+          # Check for multiboot2 header (magic: 0xe85250d6)
+          if xxd "$KERNEL" | grep -q "d650 52e8"; then
+            echo "Multiboot2 header present"
+          else
+            echo "WARNING: Multiboot2 header not found (may be byte-order issue)"
+          fi
+
+          # Verify expected symbols are present
+          REQUIRED_SYMBOLS="main64 boot_success_marker cap_table_alloc cap_verify"
+          for sym in $REQUIRED_SYMBOLS; do
+            if nm "$KERNEL" | grep -q "$sym"; then
+              echo "Symbol $sym present"
+            else
+              echo "ERROR: Required symbol $sym missing"
+              exit 1
+            fi
+          done
+
+          # Report kernel size
+          SIZE=$(stat --printf="%s" "$KERNEL")
+          echo "Kernel size: $SIZE bytes ($((SIZE / 1024)) KB)"
+
+          # Verify reasonable size (between 50KB and 10MB)
+          if [ "$SIZE" -lt 51200 ] || [ "$SIZE" -gt 10485760 ]; then
+            echo "WARNING: Kernel size seems unusual"
+          fi
+
+          echo "Kernel binary validation PASSED"
+
+      - name: Generate coverage report
+        if: matrix.config.name == 'Coverage'
+        run: |
+          set -euxo pipefail
+          echo "=== Generating Coverage Report ==="
+
+          # Run tests to generate profdata (ctest already ran, but run again for coverage)
+          cd build
+          LLVM_PROFILE_FILE="coverage-%p.profraw" ctest --output-on-failure -j $(nproc) || true
+
+          # Merge profdata files
+          llvm-profdata-18 merge -sparse coverage-*.profraw -o coverage.profdata
+
+          # Generate coverage report
+          if [ -f kernel/kernel ]; then
+            llvm-cov-18 report kernel/kernel -instr-profile=coverage.profdata > coverage-summary.txt
+            llvm-cov-18 export kernel/kernel -instr-profile=coverage.profdata -format=lcov > coverage.info
+            cat coverage-summary.txt
+          fi
+
+      - name: Check coverage threshold
+        if: matrix.config.name == 'Coverage'
+        run: |
+          set -euxo pipefail
+          if [ -f build/coverage-summary.txt ]; then
+            # Extract total coverage percentage
+            COVERAGE=$(grep TOTAL build/coverage-summary.txt | awk '{print $NF}' | sed 's/%//' || echo "0")
+            echo "Total coverage: ${COVERAGE}%"
+
+            # Check threshold (start with 30% for initial enforcement, raise to 40% later)
+            THRESHOLD=30
+            if [ "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" -eq 1 ]; then
+              echo "WARNING: Coverage ${COVERAGE}% is below ${THRESHOLD}% threshold"
+              echo "Consider adding more tests to improve coverage"
+              # Don't fail yet - start with warning, enforce later
+              # exit 1
+            else
+              echo "Coverage ${COVERAGE}% meets ${THRESHOLD}% threshold"
+            fi
+          else
+            echo "WARNING: Coverage report not generated"
+          fi
 
   architecture-matrix:
     name: Multi-Architecture Test

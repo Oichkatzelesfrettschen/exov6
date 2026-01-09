@@ -1,3 +1,11 @@
+(* ExoCap - Exokernel Capability Verification *)
+(* Rocq Prover 9.x compatible *)
+
+From Stdlib Require Import NArith.
+From Stdlib Require Import Arith.
+
+Open Scope N_scope.
+
 Record exo_cap := { cid : nat; rights : N; owner : nat; tag : N }.
 
 Definition compute_tag (id : nat) (rights : N) (owner : nat) : N :=

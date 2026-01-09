@@ -232,17 +232,57 @@ static inline q16_octonion_t q16_octonion_conj(q16_octonion_t o) {
 }
 
 /* ============================================================================
+ * Core Norm Functions (Inline for kernel use)
+ * ============================================================================ */
+
+/**
+ * Squared norm (sum of squares of all components)
+ * Cost: 16 cycles (8 muls + 7 adds)
+ */
+static inline q16_t q16_octonion_norm_squared(q16_octonion_t o) {
+    q16_t sum = 0;
+    for (int i = 0; i < 8; i++) {
+        sum = q16_add(sum, q16_mul(o.v[i], o.v[i]));
+    }
+    return sum;
+}
+
+/**
+ * Fast fixed-point square root using Newton's method
+ * Converges in ~4 iterations for Q16.16 precision
+ */
+static inline q16_t q16_sqrt_fast(q16_t x) {
+    if (x <= 0) return 0;
+
+    /* Initial guess: use bit manipulation for reasonable starting point */
+    int32_t guess = x;
+    int32_t bit_shift = 0;
+    int32_t temp = x;
+    while (temp > 0) { temp >>= 1; bit_shift++; }
+    guess = (q16_t)(1 << ((bit_shift + Q16_SHIFT) / 2));
+
+    /* Newton iterations: guess = (guess + x/guess) / 2 */
+    for (int i = 0; i < 4; i++) {
+        if (guess == 0) break;
+        guess = (guess + q16_div(x, guess)) / 2;
+    }
+    return guess;
+}
+
+/**
+ * Norm (magnitude) using fast fixed-point square root
+ * Cost: ~40 cycles (norm_squared + sqrt iterations)
+ */
+static inline q16_t q16_octonion_norm(q16_octonion_t o) {
+    return q16_sqrt_fast(q16_octonion_norm_squared(o));
+}
+
+/* ============================================================================
  * Advanced Functions (Implemented in q16_octonion.c)
  * ============================================================================ */
 
 /* Octonion multiplication using Cayley-Dickson construction */
 q16_octonion_t q16_octonion_mul(q16_octonion_t a, q16_octonion_t b);
-
-/* Squared norm (sum of squares of all components) */
-q16_t q16_octonion_norm_squared(q16_octonion_t o);
-
-/* Norm (magnitude) using fast fixed-point square root */
-q16_t q16_octonion_norm(q16_octonion_t o);
 
 /* Multiplicative inverse */
 q16_octonion_t q16_octonion_inverse(q16_octonion_t o);

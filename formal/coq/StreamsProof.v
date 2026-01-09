@@ -1,6 +1,10 @@
-Require Import Coq.Lists.List.
-Require Import Coq.Arith.Arith.
-Require Import Coq.Init.Nat.
+(* StreamsProof - STREAMS Protocol Buffer Verification *)
+(* Rocq Prover 9.x compatible *)
+
+From Stdlib Require Import List.
+From Stdlib Require Import Arith.
+From Stdlib Require Import Nat.
+From Stdlib Require Import Lia.
 Import ListNotations.
 
 Definition STREAM_BUFSZ := 32%nat.
@@ -30,27 +34,21 @@ Lemma yield_preserves : forall s,
   stream_inv s -> sr s < sw s -> stream_inv (yield s).
 Proof.
   intros s [Hle [Hbound [pending [Hlen Hbuf]]]] Hlt.
-  unfold yield.
-  repeat split.
-  - lia.
-  - lia.
-  - exists (skipn 1 pending).
-    assert (Hlen': length pending = sw s - sr s) by auto.
-    assert (length pending >= 1) by (rewrite Hlen; lia).
-    rewrite skipn_length; [|lia].
-    split.
-    + rewrite Hlen. simpl. lia.
-    + intros i Hi.
-      specialize (Hbuf (S i)).
-      assert (Hsi: S i < length pending) by (simpl in Hi; lia).
-      specialize (Hbuf Hsi). simpl in Hbuf.
-      replace (sr s + S i) with (S (sr s + i)) in Hbuf by lia.
-      rewrite Nat.add_mod_idemp_l in Hbuf by lia.
-      rewrite Nat.mod_small in Hbuf.
-      * rewrite <- Hbuf. symmetry.
-        apply nth_skipn. exact Hi.
-      * assert (sr s + i < sr s + length pending) by lia.
-        rewrite Hlen in H0. lia.
+  unfold yield, stream_inv.
+  split; [simpl; lia|].
+  split; [simpl; lia|].
+  exists (skipn 1 pending).
+  assert (Hge1: length pending >= 1) by (rewrite Hlen; lia).
+  split.
+  - rewrite length_skipn. rewrite Hlen. simpl. lia.
+  - intros i Hi. cbn [sr sbuf].
+    rewrite length_skipn in Hi.
+    specialize (Hbuf (S i)).
+    assert (Hsi: S i < length pending) by lia.
+    specialize (Hbuf Hsi).
+    rewrite nth_skipn.
+    replace (S (sr s) + i) with (sr s + S i) by lia.
+    exact Hbuf.
 Qed.
 
 Lemma stop_releases : forall s,

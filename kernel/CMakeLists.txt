@@ -42,23 +42,19 @@ file(GLOB KERNEL_CORE_SOURCES *.c)
 # Assembly sources
 file(GLOB KERNEL_ASM_SOURCES *.S)
 
-# 64-bit boot trampoline - DISABLED pending linker script updates
-# Multiboot2 requires:
-# 1. Low-memory boot section (AT 0x100000) for 32-bit code
-# 2. main64 entry point (kernel/boot/main64.c) enabled
-# 3. Proper identity + high-half page table setup
-# See: src/arch/x64/multiboot2.S (created 2025-01)
-# if(CMAKE_SIZEOF_VOID_P EQUAL 8 AND EXISTS "${CMAKE_SOURCE_DIR}/src/arch/x64/multiboot2.S")
-#     list(APPEND KERNEL_ASM_SOURCES "${CMAKE_SOURCE_DIR}/src/arch/x64/multiboot2.S")
-# endif()
-
 # Subdirectory sources - these contain the actual implementations
 # NOTE: Most subdirs have conflicting type definitions with main kernel
 # They need significant refactoring; for now, disable all subdirs and rely on
 # architecture-layer implementations in src/arch
 set(KERNEL_SYNC_SOURCES)
 set(KERNEL_SCHED_SOURCES)
-set(KERNEL_IPC_SOURCES)
+# IPC sources - capability table is required for core kernel functionality
+# cap_table.c: capability table with epoch-based IDs (cap_table_alloc, cap_revoke, etc.)
+# cap.c: SipHash-based capability authentication (cap_new, cap_verify)
+set(KERNEL_IPC_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/ipc/cap_table.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/ipc/cap.c
+)
 set(KERNEL_FS_SOURCES)
 set(KERNEL_MEM_SOURCES)
 set(KERNEL_CAPABILITY_SOURCES)
@@ -68,6 +64,22 @@ set(KERNEL_DRIVERS_SOURCES)
 set(KERNEL_TIME_SOURCES)
 set(KERNEL_BOOT_SOURCES)
 set(KERNEL_EXEC_SOURCES)
+
+# 64-bit boot trampoline with multiboot2 support
+# Linker script updated (2025-01) with:
+# 1. Low-memory boot sections (.boot, .boot_text, .boot_data, .boot_bss)
+# 2. Identity + high-half page table mapping in multiboot2.S
+# 3. main64 entry point for 64-bit kernel handoff
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    # Add multiboot2 boot trampoline
+    if(EXISTS "${CMAKE_SOURCE_DIR}/src/arch/x64/multiboot2.S")
+        list(APPEND KERNEL_ASM_SOURCES "${CMAKE_SOURCE_DIR}/src/arch/x64/multiboot2.S")
+    endif()
+    # Add main64 entry point
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/boot/main64.c")
+        list(APPEND KERNEL_BOOT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/boot/main64.c")
+    endif()
+endif()
 
 # Architecture-specific sources from src/arch (already compiled into architecture libs)
 # These are included via library dependencies
@@ -105,10 +117,9 @@ list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*mkfs.*")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*q16_octonion.*")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*q16_fixed.*")
 # lambda_cap.c: COMPILATION FIXED (strlen, octonion.v->coeffs) 2025-01
-# LINKER ISSUES remain: cap_revoke, cap_table_remove (need cap.c integration),
-# q16_octonion_from_double (needs q16_octonion.c which requires SIMD detection)
-# TODO: Enable when capability table and q16_octonion modules are integrated
-list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*lambda_cap.*")
+# cap.c INTEGRATED (2025-01): cap_revoke, cap_table_remove now available
+# q16_octonion INTEGRATED (2025-01): norm functions now inline in q16_octonion.h
+# Lambda capability engine now included in kernel build
 # Exclude 32-bit assembly files (use 64-bit variants for x86_64 builds)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*/swtch\\.S$")
@@ -200,6 +211,11 @@ set_target_properties(kernel PROPERTIES
 # ═════════════════════════════════════════════════════════════════════
 
 # Feature-based compilation definitions
+# EXO_KERNEL: Indicates kernel build context for conditional compilation
+# - Disables floating-point octonion operations in lambda_cap.c
+# - Uses fixed-point Q16.16 octonion math instead
+target_compile_definitions(kernel PRIVATE EXO_KERNEL)
+
 if(USE_TICKET_LOCK)
     target_compile_definitions(kernel PRIVATE USE_TICKET_LOCK)
 endif()

@@ -1,3 +1,8 @@
+(* LambdaCap - Linear Capability Verification *)
+(* Rocq Prover 9.x compatible *)
+
+From Stdlib Require Import Bool.
+
 Record lambda_cap := { consumed : bool }.
 
 Definition lambda_cap_use (lc : lambda_cap) : lambda_cap * bool :=
@@ -42,11 +47,13 @@ Theorem use_once : forall lc lc1 r1 lc2 r2,
   r2 = false.
 Proof.
   intros lc lc1 r1 lc2 r2 Huse1 Hsucc1 Huse2.
-  apply use_consumes in Huse1; auto.
-  subst lc1.
-  apply use_fail_if_consumed in Huse2; auto.
-  destruct Huse2 as [Hfail _].
-  exact Hfail.
+  assert (Hconsumed: consumed lc1 = true).
+  { eapply use_consumes; eauto. }
+  destruct lc1 as [b1].
+  simpl in Hconsumed, Huse2.
+  rewrite Hconsumed in Huse2.
+  inversion Huse2.
+  reflexivity.
 Qed.
 
 Lemma delegate_no_consume : forall lc lc' r,
@@ -70,9 +77,13 @@ Theorem delegate_preserves_single_use : forall lc lc1 r1 lc2 r2 lc3 r3,
   lambda_cap_use lc2 = (lc3, r3) ->
   r3 = false.
 Proof.
-  intros lc lc1 r1 lc2 r2 lc3 r3 Hconsumed Hdel Hdelok Huse1 Husk Huse2.
-  apply delegate_no_consume in Hdel; auto.
-  destruct Hdel as [_ [Heq _]].
-  subst lc1.
-  eapply use_once; eauto.
+  intros lc lc1 r1 lc2 r2 lc3 r3 Hconsumed Hdel Hdelok Huse1 Hsucc Huse2.
+  assert (Hdel' := Hdel).
+  apply delegate_no_consume in Hdel'; auto.
+  destruct Hdel' as [_ [Heq _]].
+  rewrite Heq in Huse1.
+  eapply use_once.
+  - exact Huse1.
+  - exact Hsucc.
+  - exact Huse2.
 Qed.

@@ -1175,6 +1175,10 @@ void pi_channel_destroy(struct pi_channel *ch) {
 }
 
 /* ==================== COMPLETE OCTONION MATHEMATICS ==================== */
+#ifndef EXO_KERNEL
+/* Floating-point octonion operations - userspace only.
+ * Kernel builds use the fixed-point implementations from octonion.c
+ * and the Q16.16 operations from q16_octonion.h */
 
 /**
  * Create zero octonion
@@ -1234,6 +1238,7 @@ octonion_t octonion_conjugate(octonion_t a) {
     }
     return result;
 }
+#endif /* !EXO_KERNEL */
 
 /* Fixed-point arithmetic for kernel-safe cross-platform operation */
 #define FIXED_POINT_SHIFT 16
