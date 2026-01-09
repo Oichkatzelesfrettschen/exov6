@@ -35,6 +35,32 @@
   - [performance.md](development/performance.md) - Performance optimization guide
   - [testing.md](development/testing.md) - Testing procedures and frameworks
 
+### Phase 4 Documentation (Phase 4C - 2025)
+- **[LAMBDA_CAP_GUIDE.md](LAMBDA_CAP_GUIDE.md)** - Lambda Capability Engine user guide (Phase 3 integration)
+  - Pi-calculus process algebra and channels
+  - S-expression lambda calculus evaluation
+  - Superforce energy accounting and fuel management
+  - Affine/linear type semantics (single-use capabilities)
+  - Octonion state vectors and 8D composition
+  - Code examples and integration patterns
+
+- **[CONAN_USAGE.md](CONAN_USAGE.md)** - Conan 2.x build system guide
+  - Installation and quick start
+  - Build profiles (default, release, freestanding, debug)
+  - Conanfile configuration and dependency management
+  - Lockfiles for reproducible builds
+  - CI/CD integration (GitHub Actions, GitLab CI)
+  - Common workflows and troubleshooting
+
+- **[TESTING_STRATEGY.md](TESTING_STRATEGY.md)** - Comprehensive testing strategy
+  - Test framework overview (C17 custom, pytest, CTest)
+  - Test categories (unit, integration, POSIX, personality, kernel boot)
+  - Running tests locally and in CI
+  - Adding new tests and test organization
+  - Code coverage with LLVM (40% minimum threshold)
+  - Microbenchmarks and performance regression detection
+  - Debugging failed tests and troubleshooting
+
 ### Formal Specifications
 - **[formal/](../formal/)** - Mathematical models and formal specifications
   - [specs/](../formal/specs/) - TLA+ specifications
