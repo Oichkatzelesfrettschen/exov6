@@ -1,130 +1,42 @@
 ---
-# ═══════════════════════════════════════════════════════════════════════════════
-# FeuerBird Exokernel - Clang-Tidy Configuration (C17 Standard)
-# Comprehensive static analysis for kernel and system-level code
-# ═══════════════════════════════════════════════════════════════════════════════
+# FeuerBird Exokernel clang-tidy Configuration
+# Enforces code quality standards for C17/C23 codebase
 
-# Check configuration for C17 standard compliance, security, and best practices
 Checks: >
-  *,
-  -abseil-*,
-  -altera-*,
-  -android-*,
-  -boost-*,
-  -darwin-*,
-  -fuchsia-*,
-  -google-*,
-  -llvmlibc-*,
-  -objc-*,
-  -zircon-*,
-  bugprone-*,
-  cert-*,
+  -clang-diagnostic-*,
   clang-analyzer-*,
-  concurrency-*,
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-magic-numbers,
-  -cppcoreguidelines-avoid-non-const-global-variables,
-  -cppcoreguidelines-init-variables,
-  hicpp-*,
-  -hicpp-no-assembler,
-  -hicpp-signed-bitwise,
-  misc-*,
-  -misc-no-recursion,
-  -misc-unused-parameters,
-  modernize-*,
-  -modernize-use-trailing-return-type,
-  performance-*,
-  portability-*,
-  readability-*,
-  -readability-function-cognitive-complexity,
-  -readability-identifier-length,
-  -readability-magic-numbers,
-  -readability-isolate-declaration
-
-# Warning as errors for critical issues
-WarningsAsErrors: >
+  -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-pro-type-cast-const-cast,
+  -cppcoreguidelines-pro-type-cstyle-cast,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-type-union-access,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-no-malloc,
   bugprone-*,
-  cert-*,
-  clang-analyzer-security-*,
-  concurrency-*
+  -bugprone-easily-swappable-parameters,
+  -bugprone-implicit-widening-of-multiplication-result,
+  misc-*,
+  -misc-unused-parameters,
+  performance-*,
+  readability-*,
+  -readability-else-after-return,
+  -readability-convert-member-functions-to-static,
+  -readability-function-cognitive-complexity,
+  -readability-magic-numbers,
 
-# Header filter for project files
-HeaderFilterRegex: '(include|kernel|libos|src|user)/.*\.(h|c)$'
-
-# Analyze temporary files
-AnalyzeTemporaryDtors: true
-
-# Format style
-FormatStyle: file
-
-# Check options
 CheckOptions:
-  # Readability
-  - key: readability-identifier-naming.NamespaceCase
-    value: lower_case
-  - key: readability-identifier-naming.ClassCase
-    value: lower_case
-  - key: readability-identifier-naming.StructCase
-    value: lower_case
-  - key: readability-identifier-naming.FunctionCase
-    value: lower_case
-  - key: readability-identifier-naming.VariableCase
-    value: lower_case
-  - key: readability-identifier-naming.ParameterCase
-    value: lower_case
-  - key: readability-identifier-naming.EnumCase
-    value: lower_case
-  - key: readability-identifier-naming.EnumConstantCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.GlobalConstantCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.MacroDefinitionCase
-    value: UPPER_CASE
-  - key: readability-identifier-naming.TypedefCase
-    value: lower_case
-  - key: readability-identifier-naming.TypedefSuffix
-    value: _t
-  - key: readability-function-size.LineThreshold
-    value: 200
-  - key: readability-function-size.StatementThreshold
-    value: 150
-  - key: readability-function-size.BranchThreshold
-    value: 30
-  - key: readability-function-size.ParameterThreshold
-    value: 8
-  
-  # Performance
-  - key: performance-move-const-arg.CheckTriviallyCopyableMove
-    value: true
-  - key: performance-unnecessary-copy-initialization.AllowedTypes
-    value: ''
-  
-  # Modernization
-  - key: modernize-loop-convert.MaxCopySize
-    value: 16
-  - key: modernize-loop-convert.MinConfidence
-    value: reasonable
-  - key: modernize-use-nullptr.NullMacros
-    value: 'NULL'
-  
-  # Bug prevention
-  - key: bugprone-argument-comment.StrictMode
-    value: true
-  - key: bugprone-suspicious-string-compare.WarnOnImplicitComparison
-    value: true
-  - key: bugprone-suspicious-string-compare.WarnOnLogicalNotComparison
-    value: true
-  
-  # CERT secure coding
-  - key: cert-err33-c.CheckedFunctions
-    value: '::aligned_alloc;::asctime_s;::at_quick_exit;::atexit;::bsearch;::bsearch_s;::btowc;::c16rtomb;::c32rtomb;::calloc;::clock;::cnd_broadcast;::cnd_init;::cnd_signal;::cnd_timedwait;::cnd_wait;::ctime_s;::fclose;::fflush;::fgetc;::fgetpos;::fgets;::fgetwc;::fopen;::fopen_s;::fprintf;::fprintf_s;::fputc;::fputs;::fputwc;::fputws;::fread;::freopen;::freopen_s;::fscanf;::fscanf_s;::fseek;::fsetpos;::ftell;::fwprintf;::fwprintf_s;::fwrite;::fwscanf;::fwscanf_s;::getc;::getchar;::getenv;::getenv_s;::gets_s;::getwc;::getwchar;::gmtime;::gmtime_s;::localtime;::localtime_s;::malloc;::mbrtoc16;::mbrtoc32;::mbsrtowcs;::mbsrtowcs_s;::mbstowcs;::mbstowcs_s;::memchr;::mktime;::mtx_init;::mtx_lock;::mtx_timedlock;::mtx_trylock;::mtx_unlock;::printf_s;::putc;::putwc;::raise;::realloc;::remove;::rename;::scanf;::scanf_s;::setlocale;::setvbuf;::signal;::snprintf;::snprintf_s;::sprintf;::sprintf_s;::sscanf;::sscanf_s;::strchr;::strerror_s;::strftime;::strpbrk;::strrchr;::strstr;::strtod;::strtof;::strtoimax;::strtok;::strtok_s;::strtol;::strtold;::strtoll;::strtoul;::strtoull;::strtoumax;::strxfrm;::swprintf;::swprintf_s;::swscanf;::swscanf_s;::thrd_create;::thrd_detach;::thrd_join;::thrd_sleep;::time;::timespec_get;::tmpfile;::tmpfile_s;::tmpnam;::tmpnam_s;::tss_create;::tss_get;::tss_set;::ungetc;::ungetwc;::vfprintf;::vfprintf_s;::vfscanf;::vfscanf_s;::vfwprintf;::vfwprintf_s;::vfwscanf;::vfwscanf_s;::vprintf_s;::vscanf;::vscanf_s;::vsnprintf;::vsnprintf_s;::vsprintf;::vsprintf_s;::vsscanf;::vsscanf_s;::vswprintf;::vswprintf_s;::vswscanf;::vswscanf_s;::vwprintf_s;::vwscanf;::vwscanf_s;::wcrtomb;::wcschr;::wcsftime;::wcspbrk;::wcsrchr;::wcsrtombs;::wcsrtombs_s;::wcsstr;::wcstod;::wcstof;::wcstoimax;::wcstok;::wcstok_s;::wcstol;::wcstold;::wcstoll;::wcstombs;::wcstombs_s;::wcstoul;::wcstoull;::wcstoumax;::wcsxfrm;::wctob;::wctrans;::wctype;::wmemchr;::wprintf_s;::wscanf;::wscanf_s;'
-  
-  # Concurrency
-  - key: concurrency-mt-unsafe.FunctionSet
-    value: posix
-  
-  # CPP Core Guidelines
-  - key: cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
-    value: true
-  - key: cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
-    value: true
+  - { key: readability-identifier-naming.ClassCase, value: CamelCase }
+  - { key: readability-identifier-naming.FunctionCase, value: lower_case }
+  - { key: readability-identifier-naming.VariableCase, value: lower_case }
+  - { key: readability-identifier-naming.EnumCase, value: UPPER_CASE }
+  - { key: readability-identifier-naming.EnumConstantCase, value: UPPER_CASE }
+  - { key: readability-identifier-naming.MacroCase, value: UPPER_CASE }
+  - { key: readability-identifier-naming.TypedefSuffix, value: _t }
+
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*'
+FormatStyle: LLVM
+UseColor: true

@@ -61,6 +61,15 @@
   - Microbenchmarks and performance regression detection
   - Debugging failed tests and troubleshooting
 
+### Phase 5 Planning & Roadmap
+- **[PHASE5_ROADMAP.md](PHASE5_ROADMAP.md)** - Comprehensive Phase 5 development roadmap
+  - Phase 5A: Critical Functionality (capability_lattice, exokernel implementation)
+  - Phase 5B: Advanced Features (lattice IPC, fuzzing, performance optimization)
+  - Phase 5C: Production Readiness (procfs, ISO creation, deployment)
+  - Integration timeline and dependency graph
+  - Task breakdown with effort estimates
+  - Success metrics and risk assessment
+
 ### Formal Specifications
 - **[formal/](../formal/)** - Mathematical models and formal specifications
   - [specs/](../formal/specs/) - TLA+ specifications

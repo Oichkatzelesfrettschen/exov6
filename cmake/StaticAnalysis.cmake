@@ -28,15 +28,23 @@ if(ENABLE_CLANG_TIDY OR ENABLE_STATIC_ANALYSIS)
         else()
             message(WARNING ".clang-tidy config file not found, skipping clang-tidy")
         endif()
-        
-        # Add manual clang-tidy target
+
+        # Add manual clang-tidy target with report generation
+        file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/reports")
+
         add_custom_target(clang-tidy
             COMMAND ${CMAKE_COMMAND} -E echo "Running clang-tidy on all source files..."
-            COMMAND find ${CMAKE_SOURCE_DIR}/kernel ${CMAKE_SOURCE_DIR}/libos ${CMAKE_SOURCE_DIR}/src 
-                -name "*.c" -o -name "*.cpp" -o -name "*.h" | 
-                xargs ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR}
+            COMMAND ${CMAKE_COMMAND} -P "${CMAKE_SOURCE_DIR}/cmake/RunClangTidy.cmake"
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             COMMENT "Running clang-tidy static analysis"
+        )
+
+        # Add incremental clang-tidy target for CI
+        add_custom_target(clang-tidy-ci
+            COMMAND ${CMAKE_COMMAND} -E echo "Running clang-tidy (CI mode) with strict error checking..."
+            COMMAND ${CMAKE_COMMAND} -P "${CMAKE_SOURCE_DIR}/cmake/RunClangTidyCI.cmake"
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Running clang-tidy static analysis (CI mode)"
         )
     else()
         message(WARNING "clang-tidy not found, static analysis disabled")

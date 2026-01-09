@@ -214,11 +214,55 @@ jobs:
             echo "WARNING: Coverage report not generated"
           fi
 
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install LLVM toolchain
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            clang-18 clang-tools-18 \
+            ninja-build cmake
+
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
+
+      - name: Configure CMake for analysis
+        run: |
+          set -euxo pipefail
+          cmake -S . -B build-analysis -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Run clang-tidy (CI mode)
+        run: |
+          set -euxo pipefail
+          echo "=== Running clang-tidy Static Analysis (CI Mode) ==="
+          cd build-analysis
+          cmake --build . --target clang-tidy-ci 2>&1 || {
+            echo "Static analysis failed. See details above."
+            exit 1
+          }
+
+      - name: Upload clang-tidy report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: clang-tidy-report
+          path: build-analysis/reports/clang-tidy-ci-report.txt
+          if-no-files-found: ignore
+
   architecture-matrix:
     name: Multi-Architecture Test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    
+
     strategy:
       fail-fast: false
       matrix:
