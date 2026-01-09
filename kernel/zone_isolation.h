@@ -2,16 +2,17 @@
 
 /*
  * zone_isolation.h - Exokernel Zone Isolation and Protection Mechanisms
- * 
+ *
  * Enforces strict separation between:
  *  - Kernel Zone (Ring 0, privileged)
  *  - LibOS Zone (Ring 3, user-space OS services)
  *  - Application Zone (Ring 3, user applications)
- * 
+ *
  * Uses capability-based security for cross-zone communication
  */
 
 #include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include "cap.h"
 

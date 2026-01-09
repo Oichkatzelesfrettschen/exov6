@@ -102,3 +102,32 @@ int cap_table_remove(cap_id_t id);
 #define CAP_REVOKE_DECLARED
 int cap_revoke(cap_id_t id);
 #endif
+
+/**
+ * @brief Capability validation result codes.
+ * Used by zone_isolation.c and capability lattice operations.
+ */
+enum cap_validation_result {
+  VALIDATION_SUCCESS = 0,
+  VALIDATION_FAILED = 1,
+  VALIDATION_INVALID_ID = 2,
+  VALIDATION_EPOCH_MISMATCH = 3
+};
+
+/** Type alias for capability validation results. */
+typedef enum cap_validation_result cap_validation_result_t;
+
+/**
+ * @brief Validate a unified capability (with full entry retrieval).
+ * @param cap Capability identifier to validate.
+ * @param out_entry Output buffer for valid capability entry (on success).
+ * @return Validation result code (VALIDATION_SUCCESS or error).
+ *
+ * This function performs full validation including:
+ * - Type checking
+ * - Epoch verification
+ * - Rights verification
+ * - Owner verification
+ * Used by zone_isolation.c for cross-zone capability validation.
+ */
+cap_validation_result_t cap_validate_unified(cap_id_t cap, struct cap_entry *out_entry);

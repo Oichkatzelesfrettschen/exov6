@@ -149,6 +149,7 @@ int pipewrite(struct pipe *, struct file *, const char *, size_t);
 // proc.c
 void cpuid(uint32_t leaf, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
 _Noreturn void exit(int status);
+_Noreturn void kexit(int status);  /* Kernel exit - Phase 4B integration */
 int fork(void);
 int growproc(int);
 int kill(int);
@@ -161,6 +162,7 @@ _Noreturn void scheduler(void);
 void sched(void);
 void setproc(struct proc *);
 void sleep(void *chan, struct spinlock *);
+void ksleep(void *chan, struct spinlock *);  /* Kernel sleep - Phase 4B integration */
 void userinit(void);
 int wait(void);
 void wakeup(void *chan);

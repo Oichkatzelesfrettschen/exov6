@@ -21,7 +21,7 @@ new_slab(zone_t *z)
   struct slab *s = (struct slab*)cap_kalloc(&cap);
   if(!s)
     return 0;
-  s->cap = cap;
+  s->cap = cap.id;
   s->zone = z;
   s->zone_id = z->zone_id;
   s->inuse = 0;

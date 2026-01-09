@@ -51,6 +51,7 @@ set(KERNEL_SCHED_SOURCES)
 # IPC sources - capability table is required for core kernel functionality
 # cap_table.c: capability table with epoch-based IDs (cap_table_alloc, cap_revoke, etc.)
 # cap.c: SipHash-based capability authentication (cap_new, cap_verify)
+# endpoint.c: DEFERRED TO PHASE 5 - depends on full syscall infrastructure (see below)
 set(KERNEL_IPC_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ipc/cap_table.c
     ${CMAKE_CURRENT_SOURCE_DIR}/ipc/cap.c
@@ -59,7 +60,22 @@ set(KERNEL_FS_SOURCES)
 set(KERNEL_MEM_SOURCES)
 set(KERNEL_CAPABILITY_SOURCES)
 set(KERNEL_CORE_SUBDIR_SOURCES)
-set(KERNEL_SYS_SOURCES)
+# System call infrastructure - PHASE 5 DEFERRAL
+# Excluded: syscall.c contains a complete syscall dispatch table with ~60+ syscall handlers.
+# Most handlers are not implemented yet (sys_fork, sys_exec, sys_open, sys_read, sys_write,
+# sys_mappte, sys_exo_*, etc.). Integrating syscall.c creates linker errors for all missing
+# handlers. In Phase 5A-5B, when exo_impl.c and other core syscall handlers are integrated,
+# syscall.c can be safely compiled and will provide argument extraction (argptr, argint,
+# argstr) for all syscalls. Until then, we rely on kernel_core_stubs.c minimal stubs.
+# Dependencies for Phase 5 integration:
+#   - Core syscall handlers from exo_impl.c (sys_exo_yield_to, sys_exo_alloc_page, etc.)
+#   - File syscalls from fs layer (sys_open, sys_read, sys_write, sys_close, sys_stat)
+#   - Process syscalls from sched (sys_fork, sys_exec, sys_exit, sys_wait)
+#   - IPC syscalls (sys_endpoint_send, sys_endpoint_recv require endpoint.c)
+#   - All other syscall handlers referenced in syscall.c dispatch table
+# After Phase 5A, uncomment: ${CMAKE_CURRENT_SOURCE_DIR}/sys/syscall.c
+set(KERNEL_SYS_SOURCES
+)
 set(KERNEL_DRIVERS_SOURCES)
 set(KERNEL_TIME_SOURCES)
 set(KERNEL_BOOT_SOURCES)
@@ -124,12 +140,48 @@ list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*q16_fixed.*")
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*/swtch\\.S$")
 endif()
-# Exclude zone allocator files - have type mismatches and missing headers (vm.h)
+# Zone allocator files - PHASE 5 DEFERRAL
+# Excluded: stubs.c and zone.c have deep exokernel dependencies (cap_kalloc, pipewrite,
+#           exo_send, exo_recv, exo_alloc_page) that require Phase 5 implementation
+# Dependencies:
+#   stubs.c: VFS operations (filealloc, fileread, filewrite) depend on exo_send/recv
+#   zone.c: cap_kalloc() - capability-aware memory allocation (Phase 5)
+# Integration blocked until exo_impl.c, capability_lattice.c are implemented
+# Status: DISABLED until Phase 5 - exokernel substrate complete
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*zone\\.c$")
+# Zone isolation - PHASE 5 DEFERRAL
+# Excluded: cap_validate_unified() requires full capability validation system
+# Dependencies: cap_validate_unified() implementation in ipc/cap.c or capability/
+# Note: Header fixed (vm.h->memlayout.h, cap.h updated), but implementation incomplete
+# Status: DISABLED until Phase 5 - capability lattice complete
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*zone_isolation.*")
+# Endpoint IPC - PHASE 5 DEFERRAL
+# Excluded: endpoint.c syscall handlers (sys_endpoint_send, sys_endpoint_recv) require
+#           full syscall infrastructure. Currently, syscall.c dispatch table is disabled
+#           due to ~60+ unimplemented syscall handlers. In Phase 5A, when exo_impl.c,
+#           file syscalls, process syscalls, and other handlers are implemented,
+#           syscall.c can be integrated and endpoint.c becomes usable.
+# Dependencies for Phase 5A integration:
+#   - syscall.c: complete syscall dispatch table with argument extraction
+#   - exo_impl.c: core exokernel syscall handlers (sys_exo_yield_to, sys_exo_alloc_page, etc.)
+#   - File syscalls: sys_open, sys_read, sys_write, sys_close, sys_stat, etc.
+#   - Process syscalls: sys_fork, sys_exec, sys_exit, sys_wait, etc.
+# Note: endpoint.c IPC functions (endpoint_init, endpoint_send, endpoint_recv) are
+#       complete, but syscall handlers cannot be used until full syscall layer exists
+# Status: DISABLED until Phase 5A - full syscall infrastructure complete
+list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*endpoint\\.c$")
 # Exclude exo_impl.c - has struct/function pointer type mismatches
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*exo_impl.*")
-# Exclude stubs.c - has undeclared functions (kexit, ksleep)
+# stubs.c - PHASE 5 DEFERRAL
+# Excluded: VFS operations (filealloc, fileread, filewrite, fileclose, filestat)
+#           depend on exokernel primitives (exo_send, exo_recv, pipewrite, piperead,
+#           iput, readi, writei, begin_op, end_op) not available until Phase 5
+# Dependencies:
+#   - exo_send/exo_recv: requires exo_impl.c, IPC infrastructure (Phase 5)
+#   - pipe operations: requires full VFS layer with pipe support (Phase 5)
+#   - file operations: requires inode system, filesystem layer (Phase 5)
+# Integration blocked until Phase 5 - exokernel VFS substrate complete
+# Status: DISABLED until Phase 5 - exokernel IPC and filesystem complete
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*/stubs\\.c$")
 # Exclude 16/32-bit assembly that conflicts with 64-bit kernel (multiple 'start' definitions)
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*initcode\\.S$")
@@ -148,7 +200,11 @@ if(NOT USE_CAPNP)
     list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*capnp.*")
 endif()
 # Exclude IPC files with missing dependencies or type conflicts
-list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*endpoint\\.c$")
+# endpoint.c - PHASE 4B INTEGRATION COMPLETE
+# Status: ENABLED - endpoint_send, endpoint_recv, sys_endpoint_send, sys_endpoint_recv available
+# Dependencies satisfied: ksleep/wakeup declared, syscall entries in kernel/syscall.c
+# Note: Global endpoint queue used (static global_ep); userspace integration in Phase 5
+# list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*endpoint\\.c$")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*exo_ipc_queue\\.c$")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*lattice_ipc\\.c$")
 list(FILTER ALL_KERNEL_SOURCES EXCLUDE REGEX ".*lattice_kernel\\.c$")

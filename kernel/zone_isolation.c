@@ -6,7 +6,7 @@
 #include "defs.h"
 #include "spinlock.h"
 #include "kalloc.h"
-#include "vm.h"
+#include "memlayout.h"
 #include <string.h>
 #include <stdatomic.h>
 #include "proc.h"
@@ -17,7 +17,7 @@
 
 /* Zone table */
 static zone_desc_t zone_table[MAX_ZONES];
-static struct spinlock zone_lock;
+static struct spinlock zone_table_lock;
 static bool zone_initialized = false;
 
 /* Zone statistics */
@@ -30,7 +30,7 @@ static zone_stats_t zone_stats[MAX_ZONES];
  * Initialize zone isolation subsystem
  */
 void zone_isolation_init(void) {
-    initlock(&zone_lock, "zone_isolation");
+    initlock(&zone_table_lock, "zone_isolation");
     memset(zone_table, 0, sizeof(zone_table));
     memset(zone_stats, 0, sizeof(zone_stats));
     
@@ -51,13 +51,13 @@ int zone_register(zone_id_t id, void *base, size_t size, uint32_t prot) {
         return -1;  /* Only kernel zone can be registered before init */
     }
     
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     /* Find free slot */
     int slot = -1;
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
-            release(&zone_lock);
+            release(&zone_table_lock);
             return -2;  /* Zone already registered */
         }
         if (zone_table[i].id == 0 && slot == -1) {
@@ -66,7 +66,7 @@ int zone_register(zone_id_t id, void *base, size_t size, uint32_t prot) {
     }
     
     if (slot == -1) {
-        release(&zone_lock);
+        release(&zone_table_lock);
         return -3;  /* No free slots */
     }
     
@@ -82,7 +82,7 @@ int zone_register(zone_id_t id, void *base, size_t size, uint32_t prot) {
     zone_table[slot].flags.locked = 0;
     zone_table[slot].flags.quantum = 0;
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return 0;
 }
 
@@ -94,12 +94,12 @@ int zone_unregister(zone_id_t id) {
         return -1;  /* Cannot unregister kernel zone */
     }
     
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             if (zone_table[i].flags.locked) {
-                release(&zone_lock);
+                release(&zone_table_lock);
                 return -2;  /* Zone is locked */
             }
             
@@ -107,12 +107,12 @@ int zone_unregister(zone_id_t id) {
             memset(&zone_table[i], 0, sizeof(zone_desc_t));
             memset(&zone_stats[i], 0, sizeof(zone_stats_t));
             
-            release(&zone_lock);
+            release(&zone_table_lock);
             return 0;
         }
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return -3;  /* Zone not found */
 }
 
@@ -122,7 +122,7 @@ int zone_unregister(zone_id_t id) {
 zone_id_t zone_get_id(void *addr) {
     uintptr_t addr_val = (uintptr_t)addr;
     
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id != 0 && zone_table[i].flags.active) {
@@ -131,13 +131,13 @@ zone_id_t zone_get_id(void *addr) {
             
             if (addr_val >= base && addr_val < end) {
                 zone_id_t id = zone_table[i].id;
-                release(&zone_lock);
+                release(&zone_table_lock);
                 return id;
             }
         }
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return ZONE_INVALID;
 }
 
@@ -160,7 +160,7 @@ zone_check_result_t zone_check_access(zone_id_t from, zone_id_t to,
         return ZONE_CHECK_OK;
     }
     
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     /* Find source and destination zones */
     zone_desc_t *from_zone = NULL;
@@ -178,7 +178,7 @@ zone_check_result_t zone_check_access(zone_id_t from, zone_id_t to,
     }
     
     if (!from_zone || !to_zone) {
-        release(&zone_lock);
+        release(&zone_table_lock);
         return ZONE_CHECK_INVALID_ZONE;
     }
     
@@ -191,7 +191,7 @@ zone_check_result_t zone_check_access(zone_id_t from, zone_id_t to,
                     break;
                 }
             }
-            release(&zone_lock);
+            release(&zone_table_lock);
             return ZONE_CHECK_CAP_REQUIRED;
         }
         
@@ -206,7 +206,7 @@ zone_check_result_t zone_check_access(zone_id_t from, zone_id_t to,
                     break;
                 }
             }
-            release(&zone_lock);
+            release(&zone_table_lock);
             return ZONE_CHECK_DENIED;
         }
         
@@ -226,11 +226,11 @@ zone_check_result_t zone_check_access(zone_id_t from, zone_id_t to,
                 break;
             }
         }
-        release(&zone_lock);
+        release(&zone_table_lock);
         return ZONE_CHECK_DENIED;
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return ZONE_CHECK_OK;
 }
 
@@ -282,17 +282,17 @@ int zone_lock(zone_id_t id) {
         return 0;  /* Kernel zone is always locked */
     }
     
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             zone_table[i].flags.locked = 1;
-            release(&zone_lock);
+            release(&zone_table_lock);
             return 0;
         }
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return -1;  /* Zone not found */
 }
 
@@ -304,17 +304,17 @@ int zone_unlock(zone_id_t id) {
         return -1;  /* Cannot unlock kernel zone */
     }
     
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             zone_table[i].flags.locked = 0;
-            release(&zone_lock);
+            release(&zone_table_lock);
             return 0;
         }
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return -1;  /* Zone not found */
 }
 
@@ -322,17 +322,17 @@ int zone_unlock(zone_id_t id) {
  * Get zone descriptor
  */
 zone_desc_t *zone_get_desc(zone_id_t id) {
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             zone_desc_t *desc = &zone_table[i];
-            release(&zone_lock);
+            release(&zone_table_lock);
             return desc;
         }
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return NULL;
 }
 
@@ -340,7 +340,7 @@ zone_desc_t *zone_get_desc(zone_id_t id) {
  * Verify zone isolation integrity
  */
 bool zone_verify_isolation(void) {
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     /* Check for overlapping zones */
     for (int i = 0; i < MAX_ZONES; i++) {
@@ -357,7 +357,7 @@ bool zone_verify_isolation(void) {
             
             /* Check for overlap */
             if ((base1 < end2) && (base2 < end1)) {
-                release(&zone_lock);
+                release(&zone_table_lock);
                 return false;  /* Zones overlap */
             }
         }
@@ -368,7 +368,7 @@ bool zone_verify_isolation(void) {
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == ZONE_KERNEL) {
             if (!zone_table[i].flags.locked || !zone_table[i].flags.active) {
-                release(&zone_lock);
+                release(&zone_table_lock);
                 return false;  /* Kernel zone misconfigured */
             }
             kernel_found = true;
@@ -377,11 +377,11 @@ bool zone_verify_isolation(void) {
     }
     
     if (!kernel_found) {
-        release(&zone_lock);
+        release(&zone_table_lock);
         return false;  /* Kernel zone not found */
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return true;
 }
 
@@ -450,17 +450,17 @@ int zone_unmap(void *addr, size_t size) {
  * Get zone statistics
  */
 zone_stats_t *zone_get_stats(zone_id_t id) {
-    acquire(&zone_lock);
+    acquire(&zone_table_lock);
     
     for (int i = 0; i < MAX_ZONES; i++) {
         if (zone_table[i].id == id) {
             zone_stats_t *stats = &zone_stats[i];
-            release(&zone_lock);
+            release(&zone_table_lock);
             return stats;
         }
     }
     
-    release(&zone_lock);
+    release(&zone_table_lock);
     return NULL;
 }
 
